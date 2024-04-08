@@ -26,6 +26,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::actions;
 
 void InstrumentsActionsController::init()

@@ -96,7 +96,7 @@ FontFaceDU::~FontFaceDU()
     delete m_origin;
 }
 
-bool FontFaceDU::load(const FaceKey& key, const mu::io::path_t& path, bool isSymbolMode)
+bool FontFaceDU::load(const FaceKey& key, const io::path_t& path, bool isSymbolMode)
 {
     return m_origin->load(key, path, isSymbolMode);
 }

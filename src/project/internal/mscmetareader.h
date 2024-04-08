@@ -27,17 +27,17 @@
 #include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 
-namespace mu::deprecated {
+namespace muse::deprecated {
 class XmlReader;
 }
 
 namespace mu::project {
 class MscMetaReader : public IMscMetaReader
 {
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::io::IFileSystem, fileSystem)
 
 public:
-    RetVal<ProjectMeta> readMeta(const io::path_t& filePath) const;
+    muse::RetVal<ProjectMeta> readMeta(const muse::io::path_t& filePath) const;
 
 private:
 
@@ -67,9 +67,9 @@ private:
         size_t partsCount = 0;
     };
 
-    void doReadMeta(deprecated::XmlReader& xmlReader, ProjectMeta& meta) const;
-    RawMeta doReadBox(deprecated::XmlReader& xmlReader) const;
-    RawMeta doReadRawMeta(deprecated::XmlReader& xmlReader) const;
+    void doReadMeta(muse::deprecated::XmlReader& xmlReader, ProjectMeta& meta) const;
+    RawMeta doReadBox(muse::deprecated::XmlReader& xmlReader) const;
+    RawMeta doReadRawMeta(muse::deprecated::XmlReader& xmlReader) const;
     QString formatFromXml(const std::string& xml) const;
 
     QString format(const std::string& str) const;
@@ -77,8 +77,8 @@ private:
     QString simplified(const std::string& str) const;
     std::string cutXmlTags(const std::string& str) const;
 
-    QString readText(deprecated::XmlReader& xmlReader) const;
-    QString readMetaTagText(deprecated::XmlReader& xmlReader) const;
+    QString readText(muse::deprecated::XmlReader& xmlReader) const;
+    QString readMetaTagText(muse::deprecated::XmlReader& xmlReader) const;
 };
 }
 

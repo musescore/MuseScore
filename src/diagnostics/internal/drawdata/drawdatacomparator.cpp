@@ -30,6 +30,7 @@
 #include "../../diagnosticserrors.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 using namespace mu::diagnostics;
 
@@ -39,7 +40,7 @@ Diff DrawDataComparator::compare(const DrawDataPtr& ref, const DrawDataPtr& test
     return diff;
 }
 
-Ret DrawDataComparator::compare(const io::path_t& ref, const io::path_t& test, const io::path_t& outdiff)
+Ret DrawDataComparator::compare(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outdiff)
 {
     RetVal<DrawDataPtr> refData = DrawDataRW::readData(ref);
     if (!refData.ret) {
@@ -54,7 +55,7 @@ Ret DrawDataComparator::compare(const io::path_t& ref, const io::path_t& test, c
     Diff diff = DrawDataComp::compare(refData.val, testData.val);
 
     if (diff.empty()) {
-        return mu::make_ok();
+        return muse::make_ok();
     }
 
     io::FileInfo(outdiff).dir().mkpath();

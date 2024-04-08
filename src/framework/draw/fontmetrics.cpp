@@ -21,7 +21,7 @@
  */
 #include "fontmetrics.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 
 FontMetrics::FontMetrics(const Font& font)

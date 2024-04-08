@@ -36,6 +36,7 @@
 
 #include "view/braillemodel.h"
 
+using namespace muse;
 using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;

@@ -28,7 +28,7 @@ namespace mu::iex::musicxml {
 class MusicXmlReader : public project::INotationReader
 {
 public:
-    Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
+    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
 };
 }
 #endif // MU_IMPORTEXPORT_MUSICXMLREADER_H

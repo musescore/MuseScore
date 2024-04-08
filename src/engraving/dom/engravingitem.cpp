@@ -72,7 +72,7 @@
 #define LOG_PROP() if (0) LOGD()
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -353,7 +353,7 @@ Staff* EngravingItem::staff() const
 
 bool EngravingItem::hasStaff() const
 {
-    return m_track != mu::nidx;
+    return m_track != muse::nidx;
 }
 
 //---------------------------------------------------------
@@ -416,7 +416,7 @@ staff_idx_t EngravingItem::staffIdx() const
 void EngravingItem::setStaffIdx(staff_idx_t val)
 {
     voice_idx_t voiceIdx = voice();
-    m_track = staff2track(val, voiceIdx == mu::nidx ? 0 : voiceIdx);
+    m_track = staff2track(val, voiceIdx == muse::nidx ? 0 : voiceIdx);
 }
 
 staff_idx_t EngravingItem::staffIdxOrNextVisible() const
@@ -424,7 +424,7 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
     // for system objects, sometimes the staff they're on is hidden so we have to find the next
     // best staff for them
     if (!staff()) {
-        return mu::nidx;
+        return muse::nidx;
     }
 
     staff_idx_t si = staff()->idx();
@@ -450,7 +450,7 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
     }
     if (si <= firstVis) {
         // we already know this staff will be replaced by the original
-        return mu::nidx;
+        return muse::nidx;
     }
     bool foundStaff = false;
     if (!m->system()->staff(si)->show()) {
@@ -462,7 +462,7 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
                 for (staff_idx_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
                     if (i + 1 < soStaves.size() && idxNew >= score()->staffIdx(soStaves[i + 1]->part())) {
                         // This is the flag to not show this element
-                        si = mu::nidx;
+                        si = muse::nidx;
                         break;
                     } else if (m->system()->staff(idxNew)->show()) {
                         // Move current element to this staff and finish
@@ -478,7 +478,7 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
         // the staff this object should be on is visible, so npnp
         foundStaff = true;
     }
-    return foundStaff ? si : mu::nidx;
+    return foundStaff ? si : muse::nidx;
 }
 
 bool EngravingItem::isTopSystemObject() const
@@ -620,7 +620,7 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
-        return engravingConfiguration()->highlightSelectionColor(track() == mu::nidx ? 0 : voice());
+        return engravingConfiguration()->highlightSelectionColor(track() == muse::nidx ? 0 : voice());
     }
 
     bool marked = false;
@@ -629,7 +629,7 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster());
+        return engravingConfiguration()->selectionColor(track() == muse::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster());
     }
 
     if (!isVisible) {
@@ -655,12 +655,12 @@ PointF EngravingItem::pagePos() const
         return p;
     }
 
-    staff_idx_t idx = mu::nidx;
+    staff_idx_t idx = muse::nidx;
     if (systemFlag()) {
         idx = staffIdxOrNextVisible();
     }
 
-    if (idx == mu::nidx) {
+    if (idx == muse::nidx) {
         idx = vStaffIdx();
     }
 
@@ -708,13 +708,13 @@ PointF EngravingItem::canvasPos() const
         return p;
     }
 
-    staff_idx_t idx = mu::nidx;
+    staff_idx_t idx = muse::nidx;
 
     if (systemFlag()) {
         idx = staffIdxOrNextVisible();
     }
 
-    if (idx == mu::nidx) {
+    if (idx == muse::nidx) {
         idx = vStaffIdx();
     }
 
@@ -791,7 +791,7 @@ double EngravingItem::canvasX() const
 //    Note: p is in page coordinates
 //---------------------------------------------------------
 
-bool EngravingItem::contains(const mu::PointF& p) const
+bool EngravingItem::contains(const PointF& p) const
 {
     return shape().contains(p - pagePos());
 }
@@ -963,7 +963,7 @@ void EngravingItem::dump() const
 //   mimeData
 //---------------------------------------------------------
 
-ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
+muse::ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
 {
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
@@ -1018,7 +1018,7 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset, Fraction* 
 //   readMimeData
 //---------------------------------------------------------
 
-EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, PointF* dragOffset, Fraction* duration)
+EngravingItem* EngravingItem::readMimeData(Score* score, const muse::ByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
 
@@ -1578,7 +1578,7 @@ void EngravingItem::undoAddElement(EngravingItem* element, bool addToLinkedStave
 //   drawSymbol
 //---------------------------------------------------------
 
-void EngravingItem::drawSymbol(SymId id, Painter* p, const mu::PointF& o, double scale) const
+void EngravingItem::drawSymbol(SymId id, Painter* p, const PointF& o, double scale) const
 {
     score()->engravingFont()->draw(id, p, magS() * scale, o);
 }
@@ -2109,7 +2109,7 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
         Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
         System* system = meas->system();
         const staff_idx_t stIdx = staffIdxOrNextVisible();
-        if (stIdx == mu::nidx) {
+        if (stIdx == muse::nidx) {
             return { LineF() };
         }
         yp = system ? system->staffCanvasYpage(stIdx) : 0.0;
@@ -2379,10 +2379,10 @@ String EngravingItem::formatBarsAndBeats() const
     std::pair<int, float> barbeat = this->barbeat();
 
     if (barbeat.first != 0) {
-        result = mtrc("engraving", "Measure: %1").arg(barbeat.first);
+        result = muse::mtrc("engraving", "Measure: %1").arg(barbeat.first);
 
-        if (!mu::RealIsNull(barbeat.second)) {
-            result += u"; " + mtrc("engraving", "Beat: %1").arg(barbeat.second);
+        if (!muse::RealIsNull(barbeat.second)) {
+            result += u"; " + muse::mtrc("engraving", "Beat: %1").arg(barbeat.second);
         }
     }
 
@@ -2450,7 +2450,7 @@ EngravingItem::LayoutData* EngravingItem::mutldataInternal()
     return m_layoutData;
 }
 
-void EngravingItem::LayoutData::setBbox(const mu::RectF& r)
+void EngravingItem::LayoutData::setBbox(const RectF& r)
 {
     DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
     DO_ASSERT(!std::isnan(r.y()) && !std::isinf(r.y()));

@@ -27,6 +27,7 @@
 #include "translation.h"
 
 using namespace mu::appshell;
+using namespace muse;
 using namespace muse::languages;
 
 GeneralPreferencesModel::GeneralPreferencesModel(QObject* parent)
@@ -58,7 +59,7 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 
     m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](const ProgressResult& res) {
         if (res.ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
-            QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date.")
+            QString msg = muse::qtrc("appshell/preferences", "Your version of %1 is up to date.")
                           .arg(languagesService()->language(languageCode).name);
             interactive()->info(msg.toStdString(), std::string());
         }
@@ -91,7 +92,7 @@ QVariantList GeneralPreferencesModel::languages() const
 
     QVariantMap systemLanguageObj;
     systemLanguageObj["code"] = SYSTEM_LANGUAGE_CODE;
-    systemLanguageObj["name"] = mu::qtrc("appshell/preferences", "System default");
+    systemLanguageObj["name"] = muse::qtrc("appshell/preferences", "System default");
     result.prepend(systemLanguageObj);
 
     return result;
@@ -189,10 +190,10 @@ QVariantList GeneralPreferencesModel::startupModes() const
 GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes() const
 {
     static const QMap<StartupModeType, QString> modeTitles {
-        { StartupModeType::StartEmpty,  mu::qtrc("appshell/preferences", "Start empty") },
-        { StartupModeType::ContinueLastSession, mu::qtrc("appshell/preferences", "Continue last session") },
-        { StartupModeType::StartWithNewScore, mu::qtrc("appshell/preferences", "Start with new score") },
-        { StartupModeType::StartWithScore, mu::qtrc("appshell/preferences", "Start with score:") }
+        { StartupModeType::StartEmpty,  muse::qtrc("appshell/preferences", "Start empty") },
+        { StartupModeType::ContinueLastSession, muse::qtrc("appshell/preferences", "Continue last session") },
+        { StartupModeType::StartWithNewScore, muse::qtrc("appshell/preferences", "Start with new score") },
+        { StartupModeType::StartWithScore, muse::qtrc("appshell/preferences", "Start with score:") }
     };
 
     StartModeList modes;
@@ -215,8 +216,8 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
 
 QStringList GeneralPreferencesModel::scorePathFilter() const
 {
-    return { mu::qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
-             mu::qtrc("appshell/preferences", "All") + " (*)" };
+    return { muse::qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
+             muse::qtrc("appshell/preferences", "All") + " (*)" };
 }
 
 void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)

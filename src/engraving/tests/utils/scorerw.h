@@ -39,14 +39,14 @@ public:
     static void setRootPath(const String& path);
     static String rootPath();
 
-    using ImportFunc = std::function<Err(MasterScore* score, const io::path_t& path)>;
-    using ExportFunc = std::function<Err(Score* score, const io::path_t& path)>;
+    using ImportFunc = std::function<Err(MasterScore* score, const muse::io::path_t& path)>;
+    using ExportFunc = std::function<Err(Score* score, const muse::io::path_t& path)>;
 
     static MasterScore* readScore(const String& path, bool isAbsolutePath = false, ImportFunc importFunc = nullptr);
     static bool saveScore(Score* score, const String& name);
     static bool saveScore(Score* score, const String& name, ExportFunc exportFunc);
     static EngravingItem* writeReadElement(EngravingItem* element);
-    static bool saveMimeData(ByteArray mimeData, const String& saveName);
+    static bool saveMimeData(muse::ByteArray mimeData, const String& saveName);
 
 private:
     static String m_rootPath;

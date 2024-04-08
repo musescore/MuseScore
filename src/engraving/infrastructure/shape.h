@@ -41,15 +41,15 @@ class EngravingItem;
 //   ShapeElement
 //---------------------------------------------------------
 
-struct ShapeElement : public mu::RectF {
+struct ShapeElement : public RectF {
 public:
 
-    ShapeElement(const mu::RectF& f, const EngravingItem* p, bool ignoreForLayout)
-        : mu::RectF(f), m_item(p), m_ignoreForLayout(ignoreForLayout) {}
-    ShapeElement(const mu::RectF& f, const EngravingItem* p)
-        : mu::RectF(f), m_item(p) {}
-    ShapeElement(const mu::RectF& f)
-        : mu::RectF(f) {}
+    ShapeElement(const RectF& f, const EngravingItem* p, bool ignoreForLayout)
+        : RectF(f), m_item(p), m_ignoreForLayout(ignoreForLayout) {}
+    ShapeElement(const RectF& f, const EngravingItem* p)
+        : RectF(f), m_item(p) {}
+    ShapeElement(const RectF& f)
+        : RectF(f) {}
 
     const EngravingItem* item() const { return m_item; }
     void setItem(const EngravingItem* item) { m_item = item; }
@@ -77,9 +77,9 @@ public:
 
     Shape(Type t = Type::Fixed)
         : m_type(t) {}
-    Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed)
+    Shape(const RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed)
         : m_type(t) { setBBox(r, p); }
-    Shape(const std::vector<mu::RectF>& rects, const EngravingItem* p = nullptr);
+    Shape(const std::vector<RectF>& rects, const EngravingItem* p = nullptr);
 
     Type type() const { return m_type; }
     bool isComposite() const { return m_type == Type::Composite; }
@@ -103,17 +103,17 @@ public:
     }
 
     // Fixed
-    void setBBox(const mu::RectF& r, const EngravingItem* p = nullptr);
-    void addBBox(const mu::RectF& r);
+    void setBBox(const RectF& r, const EngravingItem* p = nullptr);
+    void addBBox(const RectF& r);
 
     // Composite
     void add(const Shape& s);
     void add(const ShapeElement& shapeEl);
-    void add(const mu::RectF& r, const EngravingItem* p, bool ignoreForLayout) { add(ShapeElement(r, p, ignoreForLayout)); }
-    void add(const mu::RectF& r, const EngravingItem* p) { add(ShapeElement(r, p)); }
-    void add(const mu::RectF& r) { add(ShapeElement(r)); }
+    void add(const RectF& r, const EngravingItem* p, bool ignoreForLayout) { add(ShapeElement(r, p, ignoreForLayout)); }
+    void add(const RectF& r, const EngravingItem* p) { add(ShapeElement(r, p)); }
+    void add(const RectF& r) { add(ShapeElement(r)); }
 
-    void remove(const mu::RectF&);
+    void remove(const RectF&);
     void remove(const Shape&);
     template<typename Predicate>
     inline bool remove_if(Predicate p)
@@ -138,18 +138,18 @@ public:
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
-    Shape& translate(const mu::PointF&);
+    Shape& translate(const PointF&);
     void translateX(double);
     void translateY(double);
-    Shape translated(const mu::PointF&) const;
-    Shape& scale(const mu::SizeF&);
-    Shape scaled(const mu::SizeF&) const;
+    Shape translated(const PointF&) const;
+    Shape& scale(const SizeF&);
+    Shape scaled(const SizeF&) const;
 
-    const mu::RectF& bbox() const;
+    const RectF& bbox() const;
     double minVerticalDistance(const Shape&) const;
     double verticalClearance(const Shape&, double minHorizontalDistance = 0) const;
-    double topDistance(const mu::PointF&) const;
-    double bottomDistance(const mu::PointF&) const;
+    double topDistance(const PointF&) const;
+    double bottomDistance(const PointF&) const;
     double left() const;
     double right() const;
     double top() const;
@@ -157,8 +157,8 @@ public:
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
 
-    bool contains(const mu::PointF&) const;
-    bool intersects(const mu::RectF& rr) const;
+    bool contains(const PointF&) const;
+    bool intersects(const RectF& rr) const;
     bool intersects(const Shape&) const;
     bool clearsVertically(const Shape& a) const;
 

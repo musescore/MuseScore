@@ -72,7 +72,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 // ====================================================
@@ -346,7 +346,7 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
             el = el->parentItem();
         }
         if (el->isChordRest()) {
-            if (track != mu::nidx && el->track() != track) {
+            if (track != muse::nidx && el->track() != track) {
                 continue;
             }
             if (cr) {
@@ -380,7 +380,7 @@ ChordRest* Selection::lastChordRest(track_idx_t track) const
             el = toNote(el)->chord();
         }
         if (el->isChordRest() && toChordRest(el)->segment()->isChordRestType()) {
-            if (track != mu::nidx && el->track() != track) {
+            if (track != muse::nidx && el->track() != track) {
                 continue;
             }
             if (cr) {
@@ -451,7 +451,7 @@ void Selection::clear()
 
 void Selection::remove(EngravingItem* el)
 {
-    const bool removed = mu::remove(m_el, el);
+    const bool removed = muse::remove(m_el, el);
     el->setSelected(false);
     if (removed) {
         updateState();
@@ -485,7 +485,7 @@ void Selection::appendChord(Chord* chord)
         LOGE() << "selection locked, reason: " << lockReason();
         return;
     }
-    if (chord->beam() && !mu::contains(m_el, static_cast<EngravingItem*>(chord->beam()))) {
+    if (chord->beam() && !muse::contains(m_el, static_cast<EngravingItem*>(chord->beam()))) {
         m_el.push_back(chord->beam());
     }
     if (chord->stem()) {
@@ -545,7 +545,7 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
 {
-    if (mu::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
+    if (muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
         return;
     }
 
@@ -628,7 +628,7 @@ void Selection::updateSelectedElements()
 
     // assert:
     size_t staves = m_score->nstaves();
-    if (m_staffStart == mu::nidx || m_staffStart >= staves || m_staffEnd == mu::nidx || m_staffEnd > staves
+    if (m_staffStart == muse::nidx || m_staffStart >= staves || m_staffEnd == muse::nidx || m_staffEnd > staves
         || m_staffStart >= m_staffEnd) {
         LOGD("updateSelectedElements: bad staff selection %zu - %zu, staves %zu", m_staffStart, m_staffEnd, staves);
         m_staffStart = 0;
@@ -831,7 +831,7 @@ void Selection::updateState()
             m_currentTick = e->tick();
         }
         // ignore system elements (e.g., frames)
-        if (e->track() != mu::nidx) {
+        if (e->track() != muse::nidx) {
             m_currentTrack = e->track();
         }
     }
@@ -862,9 +862,9 @@ String Selection::mimeType() const
     return String();
 }
 
-ByteArray Selection::mimeData() const
+muse::ByteArray Selection::mimeData() const
 {
-    ByteArray a;
+    muse::ByteArray a;
     switch (m_state) {
     case SelState::LIST:
         if (isSingle()) {
@@ -908,7 +908,7 @@ static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_id
     return Fraction(-1, 1);
 }
 
-ByteArray Selection::staffMimeData() const
+muse::ByteArray Selection::staffMimeData() const
 {
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
@@ -963,7 +963,7 @@ ByteArray Selection::staffMimeData() const
     return buffer.data();
 }
 
-ByteArray Selection::symbolListMimeData() const
+muse::ByteArray Selection::symbolListMimeData() const
 {
     struct MapData {
         EngravingItem* e;
@@ -1147,7 +1147,7 @@ ByteArray Selection::symbolListMimeData() const
 
     // scan the map, outputting elements each with a relative <track> tag on track change,
     // a relative tick and the number of CR segments to skip
-    track_idx_t currTrack = mu::nidx;
+    track_idx_t currTrack = muse::nidx;
     for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
         int numSegs;
         track_idx_t track = static_cast<track_idx_t>(iter->first >> 32);
@@ -1242,7 +1242,7 @@ std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
                     }
                     EngravingItem* e = seg->element(track);
                     if (e == 0 || e->type() != ElementType::CHORD
-                        || (selTrack != mu::nidx && selTrack != track)) {
+                        || (selTrack != muse::nidx && selTrack != track)) {
                         continue;
                     }
                     Chord* c = toChord(e);

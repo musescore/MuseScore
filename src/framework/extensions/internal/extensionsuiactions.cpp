@@ -27,16 +27,17 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::extensions;
 
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
-    muse::ui::UiCtxAny,
-    muse::shortcuts::CTX_ANY,
-    mu::TranslatableString("action", "&Manage plugins…"),
-    mu::TranslatableString("action", "Manage plugins…")
+    ui::UiCtxAny,
+    shortcuts::CTX_ANY,
+    TranslatableString("action", "&Manage plugins…"),
+    TranslatableString("action", "Manage plugins…")
     );
 
 const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
@@ -68,7 +69,7 @@ bool ExtensionsUiActions::actionEnabled(const UiAction&) const
     return true;
 }
 
-mu::async::Channel<ActionCodeList> ExtensionsUiActions::actionEnabledChanged() const
+async::Channel<ActionCodeList> ExtensionsUiActions::actionEnabledChanged() const
 {
     static async::Channel<muse::actions::ActionCodeList> ch;
     return ch;
@@ -79,7 +80,7 @@ bool ExtensionsUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> ExtensionsUiActions::actionCheckedChanged() const
+async::Channel<ActionCodeList> ExtensionsUiActions::actionCheckedChanged() const
 {
     static async::Channel<muse::actions::ActionCodeList> ch;
     return ch;

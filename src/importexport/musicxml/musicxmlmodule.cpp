@@ -35,6 +35,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::iex::musicxml;
 
 static void musicxml_init_qrc()

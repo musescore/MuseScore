@@ -72,7 +72,7 @@ void MasterPalette::addPalette(PalettePtr palette)
     psa->setRestrictHeight(false);
     QTreeWidgetItem* item = new QTreeWidgetItem(QStringList(widget->name()));
     item->setData(0, Qt::UserRole, stack->count());
-    item->setText(0, mu::qtrc("palette", widget->name().toUtf8().data()).replace("&&", "&"));
+    item->setText(0, muse::qtrc("palette", widget->name().toUtf8().data()).replace("&&", "&"));
     stack->addWidget(psa);
     treeWidget->addTopLevelItem(item);
 }
@@ -139,7 +139,7 @@ MasterPalette::MasterPalette(QWidget* parent)
     child->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->addChild(child);
 
-    std::vector<String> symbols = mu::keys(Smufl::smuflRanges());
+    std::vector<String> symbols = muse::keys(Smufl::smuflRanges());
     for (size_t i = 0; i < symbols.size(); i++) {
         QString symbol = symbols[i].toQString();
         if (symbol == Smufl::SMUFL_ALL_SYMBOLS) {
@@ -173,9 +173,9 @@ MasterPalette::MasterPalette(const MasterPalette& other)
 
 void MasterPalette::retranslate(bool firstTime)
 {
-    m_keyItem->setText(0, mu::qtrc("palette", "Key signatures"));
-    m_timeItem->setText(0, mu::qtrc("palette", "Time signatures"));
-    m_symbolItem->setText(0, mu::qtrc("palette", "Symbols"));
+    m_keyItem->setText(0, muse::qtrc("palette", "Key signatures"));
+    m_timeItem->setText(0, muse::qtrc("palette", "Time signatures"));
+    m_symbolItem->setText(0, muse::qtrc("palette", "Symbols"));
     if (!firstTime) {
         retranslateUi(this);
     }
@@ -191,7 +191,7 @@ void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 
     if (idx > m_idxAllSymbols) {
         if (!m_symbolWidgets.contains(idx)) {
-            std::vector<String> symbols = mu::keys(Smufl::smuflRanges());
+            std::vector<String> symbols = muse::keys(Smufl::smuflRanges());
             SymbolDialog* dialog = new SymbolDialog(symbols[idx - m_idxAllSymbols - 1].toQString());
             m_symbolWidgets[idx] = dialog;
             stack->addWidget(dialog);

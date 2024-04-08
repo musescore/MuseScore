@@ -5,6 +5,8 @@
 #include "global/log.h"
 #include "types/constants.h"
 
+using namespace muse;
+
 namespace mu::iex::guitarpro {
 GP67DomBuilder::GP67DomBuilder()
 {

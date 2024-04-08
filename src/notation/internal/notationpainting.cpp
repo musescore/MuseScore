@@ -71,7 +71,7 @@ ViewMode NotationPainting::viewMode() const
     return score()->layoutMode();
 }
 
-async::Notification NotationPainting::viewModeChanged() const
+muse::async::Notification NotationPainting::viewModeChanged() const
 {
     return m_viewModeChanged;
 }

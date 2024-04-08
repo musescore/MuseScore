@@ -89,10 +89,11 @@
 #include "notationselection.h"
 #include "scorecallbacks.h"
 
-using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::engraving;
+using namespace muse;
 using namespace muse::draw;
+using namespace muse::io;
 
 static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
 {
@@ -141,8 +142,8 @@ static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* 
         return PointF();
     }
 
-    mu::RectF bbox = text->canvasBoundingRect();
-    mu::PointF boundPos = mu::PointF(
+    muse::RectF bbox = text->canvasBoundingRect();
+    muse::PointF boundPos = muse::PointF(
         cursorPos.x() < bbox.left() ? bbox.left()
         : cursorPos.x() >= bbox.right() ? bbox.right() - 1 : cursorPos.x(),
         cursorPos.y() < bbox.top() ? bbox.top()
@@ -589,7 +590,7 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
 
 NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF& pos) const
 {
-    mu::engraving::staff_idx_t staffIndex = mu::nidx;
+    mu::engraving::staff_idx_t staffIndex = muse::nidx;
     mu::engraving::Segment* segment = nullptr;
     PointF offset;
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
@@ -893,7 +894,7 @@ void NotationInteraction::clearSelection()
     setHitElementContext(HitElementContext());
 }
 
-mu::async::Notification NotationInteraction::selectionChanged() const
+muse::async::Notification NotationInteraction::selectionChanged() const
 {
     return m_selectionChanged;
 }
@@ -1033,8 +1034,8 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     m_dragData.ed.lastPos = m_dragData.ed.pos;
 
-    m_dragData.ed.hRaster = configuration()->isSnappedToGrid(mu::Orientation::Horizontal);
-    m_dragData.ed.vRaster = configuration()->isSnappedToGrid(mu::Orientation::Vertical);
+    m_dragData.ed.hRaster = configuration()->isSnappedToGrid(muse::Orientation::Horizontal);
+    m_dragData.ed.vRaster = configuration()->isSnappedToGrid(muse::Orientation::Vertical);
     m_dragData.ed.delta = delta;
     m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
     m_dragData.ed.evtDelta = evtDelta;
@@ -1121,7 +1122,7 @@ void NotationInteraction::endDrag()
     //    }
 }
 
-mu::async::Notification NotationInteraction::dragChanged() const
+muse::async::Notification NotationInteraction::dragChanged() const
 {
     return m_dragChanged;
 }
@@ -2185,7 +2186,7 @@ void NotationInteraction::endDrop()
     setDropTarget(nullptr);
 }
 
-mu::async::Notification NotationInteraction::dropChanged() const
+muse::async::Notification NotationInteraction::dropChanged() const
 {
     return m_dropChanged;
 }
@@ -3010,7 +3011,7 @@ bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
         Qt::Key_Down
     };
 
-    return mu::contains(arrows, static_cast<Qt::Key>(event->key()));
+    return muse::contains(arrows, static_cast<Qt::Key>(event->key()));
 }
 
 bool NotationInteraction::handleKeyPress(QKeyEvent* event)
@@ -3140,22 +3141,22 @@ void NotationInteraction::redo()
     m_undoStack->redo(&m_editData);
 }
 
-mu::async::Notification NotationInteraction::textEditingStarted() const
+muse::async::Notification NotationInteraction::textEditingStarted() const
 {
     return m_textEditingStarted;
 }
 
-mu::async::Notification NotationInteraction::textEditingChanged() const
+muse::async::Notification NotationInteraction::textEditingChanged() const
 {
     return m_textEditingChanged;
 }
 
-mu::async::Channel<TextBase*> NotationInteraction::textEditingEnded() const
+muse::async::Channel<TextBase*> NotationInteraction::textEditingEnded() const
 {
     return m_textEditingEnded;
 }
 
-mu::async::Channel<ScoreConfigType> NotationInteraction::scoreConfigChanged() const
+muse::async::Channel<ScoreConfigType> NotationInteraction::scoreConfigChanged() const
 {
     return m_scoreConfigChanged;
 }
@@ -3165,7 +3166,7 @@ bool NotationInteraction::isGripEditStarted() const
     return m_editData.element && m_editData.curGrip != mu::engraving::Grip::NO_GRIP;
 }
 
-static int findGrip(const std::vector<mu::RectF>& grips, const mu::PointF& canvasPos)
+static int findGrip(const std::vector<muse::RectF>& grips, const muse::PointF& canvasPos)
 {
     if (grips.empty()) {
         return -1;
@@ -3343,14 +3344,14 @@ void NotationInteraction::editElement(QKeyEvent* event)
     // Brackets may be deleted and replaced
     bool isBracket = m_editData.element->isBracket();
     const mu::engraving::System* system = nullptr;
-    size_t bracketIndex = mu::nidx;
+    size_t bracketIndex = muse::nidx;
 
     if (isBracket) {
         const mu::engraving::Bracket* bracket = mu::engraving::toBracket(m_editData.element);
         system = bracket->system();
 
         if (system) {
-            bracketIndex = mu::indexOf(system->brackets(), bracket);
+            bracketIndex = muse::indexOf(system->brackets(), bracket);
         }
     } else if (m_editData.element->isHarmony()) {
         if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
@@ -3373,7 +3374,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
     if (handled) {
         event->accept();
 
-        if (isBracket && system && bracketIndex != mu::nidx) {
+        if (isBracket && system && bracketIndex != muse::nidx) {
             mu::engraving::EngravingItem* bracket = system->brackets().at(bracketIndex);
             m_editData.element = bracket;
             select({ bracket }, SelectType::SINGLE);
@@ -3474,10 +3475,10 @@ void NotationInteraction::joinSelectedMeasures()
     MScoreErrorsController::checkAndShowMScoreError();
 }
 
-mu::Ret NotationInteraction::canAddBoxes() const
+Ret NotationInteraction::canAddBoxes() const
 {
     if (selection()->isRange()) {
-        return mu::make_ok();
+        return muse::make_ok();
     }
 
     static const ElementTypeSet BOX_TYPES {
@@ -3486,11 +3487,11 @@ mu::Ret NotationInteraction::canAddBoxes() const
 
     for (const EngravingItem* element: selection()->elements()) {
         if (mu::engraving::toMeasure(element->findMeasure())) {
-            return mu::make_ok();
+            return muse::make_ok();
         }
 
-        if (mu::contains(BOX_TYPES, element->type())) {
-            return mu::make_ok();
+        if (muse::contains(BOX_TYPES, element->type())) {
+            return muse::make_ok();
         }
     }
 
@@ -3639,7 +3640,7 @@ void NotationInteraction::copySelection()
     }
 }
 
-mu::Ret NotationInteraction::repeatSelection()
+Ret NotationInteraction::repeatSelection()
 {
     const mu::engraving::Selection& selection = score()->selection();
     if (score()->noteEntryMode() && selection.isSingle()) {
@@ -3653,7 +3654,7 @@ mu::Ret NotationInteraction::repeatSelection()
             }
             apply();
         }
-        return mu::make_ok();
+        return muse::make_ok();
     }
 
     if (!selection.isRange()) {
@@ -4190,14 +4191,14 @@ void NotationInteraction::addTextToTopFrame(TextStyleType type)
     addText(type);
 }
 
-mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
+Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
 {
     if (isVerticalBoxTextStyle(type)) {
         return item && item->isVBox();
     }
 
     if (type == TextStyleType::FRAME) {
-        return item && item->isBox() ? mu::make_ok() : make_ret(Err::EmptySelection);
+        return item && item->isBox() ? muse::make_ok() : make_ret(Err::EmptySelection);
     }
 
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
@@ -4218,7 +4219,7 @@ mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const Engravin
         TextStyleType::TEMPO,
     };
 
-    if (mu::contains(needSelectNoteOrRestTypes, type)) {
+    if (muse::contains(needSelectNoteOrRestTypes, type)) {
         static const std::set<ElementType> requiredElementTypes {
             ElementType::NOTE,
             ElementType::REST,
@@ -4227,11 +4228,11 @@ mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const Engravin
             ElementType::CHORD,
         };
 
-        bool isNoteOrRestSelected = item && mu::contains(requiredElementTypes, item->type());
-        return isNoteOrRestSelected ? mu::make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
+        bool isNoteOrRestSelected = item && muse::contains(requiredElementTypes, item->type());
+        return isNoteOrRestSelected ? muse::make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
     }
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
@@ -4273,18 +4274,18 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
     }
 }
 
-mu::Ret NotationInteraction::canAddImageToItem(const EngravingItem* item) const
+Ret NotationInteraction::canAddImageToItem(const EngravingItem* item) const
 {
     return item && item->isMeasureBase();
 }
 
-void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingItem* item)
+void NotationInteraction::addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item)
 {
     if (imagePath.empty() || !item) {
         return;
     }
 
-    static std::map<io::path_t, ImageType> suffixToType {
+    static std::map<muse::io::path_t, ImageType> suffixToType {
         { "svg", ImageType::SVG },
         { "jpg", ImageType::RASTER },
         { "jpeg", ImageType::RASTER },
@@ -4294,9 +4295,9 @@ void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingI
         { "tiff", ImageType::RASTER },
     };
 
-    io::path_t suffix = io::suffix(imagePath);
+    muse::io::path_t suffix = io::suffix(imagePath);
 
-    ImageType type = mu::value(suffixToType, suffix, ImageType::NONE);
+    ImageType type = muse::value(suffixToType, suffix, ImageType::NONE);
     if (type == ImageType::NONE) {
         return;
     }
@@ -4314,7 +4315,7 @@ void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingI
     apply();
 }
 
-mu::Ret NotationInteraction::canAddFiguredBass() const
+Ret NotationInteraction::canAddFiguredBass() const
 {
     static const std::set<ElementType> requiredTypes {
         ElementType::NOTE,
@@ -4323,7 +4324,7 @@ mu::Ret NotationInteraction::canAddFiguredBass() const
     };
 
     bool isNoteOrRestSelected = elementsSelected(requiredTypes);
-    return isNoteOrRestSelected ? mu::make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
+    return isNoteOrRestSelected ? muse::make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
 }
 
 void NotationInteraction::addFiguredBass()
@@ -4649,7 +4650,7 @@ void NotationInteraction::resetHitElementContext()
 bool NotationInteraction::elementsSelected(const std::set<ElementType>& elementsTypes) const
 {
     const EngravingItem* element = selection()->element();
-    return element && mu::contains(elementsTypes, element->type());
+    return element && muse::contains(elementsTypes, element->type());
 }
 
 //! NOTE: Copied from ScoreView::lyricsTab
@@ -5600,12 +5601,12 @@ void NotationInteraction::addLyricsVerse()
     startEditText(lyrics, PointF());
 }
 
-mu::Ret NotationInteraction::canAddGuitarBend() const
+Ret NotationInteraction::canAddGuitarBend() const
 {
     Score* score = this->score();
     bool canAdd = score && score->selection().noteList().size() > 0;
 
-    return canAdd ? mu::make_ok() : make_ret(Err::NoteIsNotSelected);
+    return canAdd ? muse::make_ok() : make_ret(Err::NoteIsNotSelected);
 }
 
 void NotationInteraction::addGuitarBend(GuitarBendType bendType)
@@ -5949,7 +5950,7 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     m_showItemRequested.send(request);
 }
 
-mu::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::showItemRequested() const
+muse::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::showItemRequested() const
 {
     return m_showItemRequested;
 }

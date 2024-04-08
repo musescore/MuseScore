@@ -29,7 +29,7 @@ ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepo
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_CHORD_SYMBOL);
-    setTitle(mu::qtrc("inspector", "Chord symbol"));
+    setTitle(muse::qtrc("inspector", "Chord symbol"));
     setIcon(muse::ui::IconCode::Code::CHORD_SYMBOL);
     createProperties();
 }

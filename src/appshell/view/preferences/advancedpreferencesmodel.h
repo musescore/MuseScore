@@ -54,9 +54,9 @@ private:
     };
 
     void changeVal(int index, QVariant newVal);
-    QString typeToString(Val::Type type) const;
+    QString typeToString(muse::Val::Type type) const;
 
-    QList<Settings::Item> m_items;
+    QList<muse::Settings::Item> m_items;
 };
 }
 

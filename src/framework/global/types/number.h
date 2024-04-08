@@ -1,5 +1,5 @@
-#ifndef MU_GLOBAL_NUMBER_T_H
-#define MU_GLOBAL_NUMBER_T_H
+#ifndef MUSE_GLOBAL_NUMBER_T_H
+#define MUSE_GLOBAL_NUMBER_T_H
 
 #include <limits>
 #include <cassert>
@@ -7,7 +7,7 @@
 
 #include "global/logstream.h"
 
-namespace mu {
+namespace muse {
 // default
 inline constexpr double COMPARE_REAL_PREC(7);
 
@@ -65,9 +65,9 @@ public:
 
     number_t() = default;
     number_t(T v)
-        : m_val(mu::check_valid(v)) {}
+        : m_val(muse::check_valid(v)) {}
 
-    number_t<T>& operator=(T v) { m_val = mu::check_valid(v); return *this; }
+    number_t<T>& operator=(T v) { m_val = muse::check_valid(v); return *this; }
 
     inline operator T() const {
         return m_val;
@@ -80,44 +80,44 @@ public:
     inline double to_double() const { return static_cast<double>(m_val); }
     inline number_t<T> operator-() const { return number_t<T>(-m_val); }
 
-    inline bool is_zero() const { return mu::is_zero(m_val); }
+    inline bool is_zero() const { return muse::is_zero(m_val); }
     inline bool is_negative() const { return m_val < static_cast<T>(0); }
     inline bool is_positive() const { return m_val > static_cast<T>(0); }
 
-    inline bool operator ==(const number_t<T>& n) const { return mu::is_equal(m_val, n.m_val); }
-    inline bool operator !=(const number_t<T>& n) const { return !mu::is_equal(m_val, n.m_val); }
-    inline bool operator ==(T n) const { return mu::is_equal(m_val, n); }
-    inline bool operator !=(T n) const { return !mu::is_equal(m_val, n); }
+    inline bool operator ==(const number_t<T>& n) const { return muse::is_equal(m_val, n.m_val); }
+    inline bool operator !=(const number_t<T>& n) const { return !muse::is_equal(m_val, n.m_val); }
+    inline bool operator ==(T n) const { return muse::is_equal(m_val, n); }
+    inline bool operator !=(T n) const { return !muse::is_equal(m_val, n); }
 
     inline bool operator>(const number_t<T>& n) const { return m_val > n.m_val; }
     inline bool operator<(const number_t<T>& n) const { return m_val < n.m_val; }
     inline bool operator>(T n) const { return m_val > n; }
     inline bool operator<(T n) const { return m_val < n; }
 
-    inline bool operator>=(const number_t<T>& n) const { return m_val > n.m_val || mu::is_equal(m_val, n.m_val); }
-    inline bool operator<=(const number_t<T>& n) const { return m_val < n.m_val || mu::is_equal(m_val, n.m_val); }
-    inline bool operator>=(T n) const { return m_val > n || mu::is_equal(m_val, n); }
-    inline bool operator<=(T n) const { return m_val < n || mu::is_equal(m_val, n); }
+    inline bool operator>=(const number_t<T>& n) const { return m_val > n.m_val || muse::is_equal(m_val, n.m_val); }
+    inline bool operator<=(const number_t<T>& n) const { return m_val < n.m_val || muse::is_equal(m_val, n.m_val); }
+    inline bool operator>=(T n) const { return m_val > n || muse::is_equal(m_val, n); }
+    inline bool operator<=(T n) const { return m_val < n || muse::is_equal(m_val, n); }
 
     inline number_t<T> operator+(const number_t<T>& n) const { return number_t<T>(m_val + n.m_val); }
     inline number_t<T> operator-(const number_t<T>& n) const { return number_t<T>(m_val - n.m_val); }
     inline number_t<T> operator+(T n) const { return number_t<T>(m_val + n); }
     inline number_t<T> operator-(T n) const { return number_t<T>(m_val - n); }
 
-    inline number_t<T>& operator+=(const number_t<T>& n) { m_val += mu::check_valid(n.m_val); return *this; }
-    inline number_t<T>& operator-=(const number_t<T>& n) { m_val -= mu::check_valid(n.m_val); return *this; }
-    inline number_t<T>& operator+=(T n) { m_val += mu::check_valid(n); return *this; }
-    inline number_t<T>& operator-=(T n) { m_val -= mu::check_valid(n); return *this; }
+    inline number_t<T>& operator+=(const number_t<T>& n) { m_val += muse::check_valid(n.m_val); return *this; }
+    inline number_t<T>& operator-=(const number_t<T>& n) { m_val -= muse::check_valid(n.m_val); return *this; }
+    inline number_t<T>& operator+=(T n) { m_val += muse::check_valid(n); return *this; }
+    inline number_t<T>& operator-=(T n) { m_val -= muse::check_valid(n); return *this; }
 
     inline number_t<T> operator/(const number_t<T>& n) const { return number_t<T>(m_val / n.m_val); }
     inline number_t<T> operator*(const number_t<T>& n) const { return number_t<T>(m_val * n.m_val); }
     inline number_t<T> operator/(T n) const { return number_t<T>(m_val / n); }
     inline number_t<T> operator*(T n) const { return number_t<T>(m_val * n); }
 
-    inline number_t<T>& operator/=(const number_t<T>& n) { m_val /= mu::check_valid(n.m_val, T(1)); return *this; }
-    inline number_t<T>& operator*=(const number_t<T>& n) { m_val *= mu::check_valid(n.m_val); return *this; }
-    inline number_t<T>& operator/=(T n) { m_val /= mu::check_valid(n, T(1)); return *this; }
-    inline number_t<T>& operator*=(T n) { m_val *= mu::check_valid(n); return *this; }
+    inline number_t<T>& operator/=(const number_t<T>& n) { m_val /= muse::check_valid(n.m_val, T(1)); return *this; }
+    inline number_t<T>& operator*=(const number_t<T>& n) { m_val *= muse::check_valid(n.m_val); return *this; }
+    inline number_t<T>& operator/=(T n) { m_val /= muse::check_valid(n, T(1)); return *this; }
+    inline number_t<T>& operator*=(T n) { m_val *= muse::check_valid(n); return *this; }
 
 private:
 
@@ -182,10 +182,10 @@ inline number_t<T> divide(const number_t<T>& dividend, const number_t<T>& diviso
 }
 
 template<typename T>
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::number_t<T>& n)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::number_t<T>& n)
 {
     s << n.raw();
     return s;
 }
 
-#endif // MU_GLOBAL_NUMBER_T_H
+#endif // MUSE_GLOBAL_NUMBER_T_H

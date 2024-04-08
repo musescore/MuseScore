@@ -25,6 +25,8 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace muse;
+
 using ItemType = InstrumentsTreeItemType::ItemType;
 
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)

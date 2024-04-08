@@ -28,7 +28,7 @@ namespace mu::engraving {
 class HtmlParser
 {
 public:
-    static String parse(const String& name);
+    static muse::String parse(const muse::String& name);
 };
 }
 

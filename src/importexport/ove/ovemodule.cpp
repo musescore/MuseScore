@@ -29,6 +29,7 @@
 
 #include "internal/oveconfiguration.h"
 
+using namespace muse;
 using namespace mu::iex::ove;
 using namespace mu::project;
 

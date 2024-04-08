@@ -23,8 +23,8 @@
 
 #include <cstring>
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 Buffer::Buffer()
 {

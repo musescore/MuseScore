@@ -30,7 +30,7 @@ class PrintProvider : public IPrintProvider
 public:
     PrintProvider() = default;
 
-    Ret printNotation(notation::INotationPtr notation) override;
+    muse::Ret printNotation(notation::INotationPtr notation) override;
 };
 }
 

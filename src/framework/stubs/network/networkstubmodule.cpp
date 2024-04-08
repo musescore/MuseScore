@@ -26,7 +26,7 @@
 #include "networkmanagercreatorstub.h"
 
 using namespace muse::network;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string NetworkModule::moduleName() const
 {

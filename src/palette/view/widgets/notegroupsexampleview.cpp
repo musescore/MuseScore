@@ -57,7 +57,7 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
 
 // LOGD("NoteGroupsExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
-        XmlReader e(ByteArray::fromQByteArrayNoCopy(a));
+        XmlReader e(muse::ByteArray::fromQByteArrayNoCopy(a));
         PointF dragOffset;
         Fraction duration;      // dummy
         ElementType type = EngravingItem::readType(e, &dragOffset, &duration);

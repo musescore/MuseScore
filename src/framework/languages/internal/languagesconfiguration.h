@@ -31,7 +31,7 @@
 namespace muse::languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
-    Inject<mu::IGlobalConfiguration> globalConfiguration;
+    Inject<IGlobalConfiguration> globalConfiguration;
 
 public:
     void init();
@@ -50,7 +50,7 @@ public:
     io::path_t userLanguageFilePath(const QString& resourceName, const QString& languageCode) const override;
 
 private:
-    mu::Config m_config;
+    Config m_config;
     async::Channel<QString> m_currentLanguageCodeChanged;
 };
 }

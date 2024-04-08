@@ -23,7 +23,7 @@
 
 #include "interactiveapi.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
 InteractiveApi::InteractiveApi(IApiEngine* e)
     : ApiObject(e)

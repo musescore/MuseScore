@@ -19,39 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_ALLOCATOR_H
-#define MU_GLOBAL_ALLOCATOR_H
+#ifndef MUSE_GLOBAL_ALLOCATOR_H
+#define MUSE_GLOBAL_ALLOCATOR_H
 
 #include <cstdint>
 #include <vector>
 #include <list>
 #include <string>
 
-namespace mu {
+namespace muse {
 #define OBJECT_ALLOCATOR(Module, ClassName) \
 public: \
-    static ObjectAllocator& allocator() { \
-        static ObjectAllocator a(#Module, #ClassName, ObjectAllocator::destroyer<ClassName>); \
+    static muse::ObjectAllocator& allocator() { \
+        static muse::ObjectAllocator a(#Module, #ClassName, muse::ObjectAllocator::destroyer<ClassName>); \
         return a; \
     } \
     static void* operator new(size_t sz) { \
-        return ObjectAllocator::enabled() ? allocator().alloc(sz) : ::operator new(sz); \
+        return muse::ObjectAllocator::enabled() ? allocator().alloc(sz) : ::operator new(sz); \
     } \
     static void operator delete(void* ptr) { \
-        if (ObjectAllocator::enabled()) { \
+        if (muse::ObjectAllocator::enabled()) { \
             allocator().free(ptr); \
         } else { \
             ::operator delete(ptr); \
         } \
     } \
     static void* operator new[](size_t sz) { \
-        return ObjectAllocator::enabled() ? allocator().not_supported("new[]") : ::operator new[](sz); \
+        return muse::ObjectAllocator::enabled() ? allocator().not_supported("new[]") : ::operator new[](sz); \
     } \
     static void* operator new(size_t sz, void* ptr) { \
-        return ObjectAllocator::enabled() ? allocator().not_supported("new(size_t, void*)") : ::operator new(sz, ptr); \
+        return muse::ObjectAllocator::enabled() ? allocator().not_supported("new(size_t, void*)") : ::operator new(sz, ptr); \
     } \
     static void operator delete[](void* ptr) { \
-        if (ObjectAllocator::enabled()) { \
+        if (muse::ObjectAllocator::enabled()) { \
             allocator().not_supported("delete[]"); \
         } else { \
             ::operator delete[](ptr); \
@@ -169,4 +169,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_ALLOCATOR_H
+#endif // MUSE_GLOBAL_ALLOCATOR_H

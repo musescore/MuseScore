@@ -227,7 +227,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_IgnoredElements)
     };
 
     for (EngravingObject* child : chord->scanChildren()) {
-        if (mu::contains(IGNORED_TYPES, child->type())) {
+        if (muse::contains(IGNORED_TYPES, child->type())) {
             EngravingItem* item = toEngravingItem(child);
             EXPECT_TRUE(item->visible());
         }
@@ -244,7 +244,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_IgnoredElements)
     EXPECT_TRUE(note->visible());
 
     for (EngravingObject* child : chord->scanChildren()) {
-        if (mu::contains(IGNORED_TYPES, child->type())) {
+        if (muse::contains(IGNORED_TYPES, child->type())) {
             EngravingItem* item = toEngravingItem(child);
             EXPECT_TRUE(item->visible());
         }
@@ -551,7 +551,7 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     };
 
     for (const EngravingItem* item : items) {
-        if (mu::contains(alwaysVisibleItems, item->type())) {
+        if (muse::contains(alwaysVisibleItems, item->type())) {
             EXPECT_TRUE(item->visible());
         } else {
             EXPECT_FALSE(item->visible());

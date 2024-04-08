@@ -84,7 +84,8 @@
 
 #include "log.h"
 
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
@@ -1559,33 +1560,33 @@ int GuitarPro::harmonicOvertone(Note* note, float harmonicValue, int harmonicTyp
 {
     int result{ 0 };
 
-    if (mu::RealIsEqual(harmonicValue, 12.0f)) {
+    if (muse::RealIsEqual(harmonicValue, 12.0f)) {
         result = 12;
-    } else if (mu::RealIsEqual(harmonicValue, 7.0f) || mu::RealIsEqual(harmonicValue, 19.0f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 7.0f) || muse::RealIsEqual(harmonicValue, 19.0f)) {
         result = 19;
-    } else if (mu::RealIsEqual(harmonicValue, 5.0f) || mu::RealIsEqual(harmonicValue, 24.0f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 5.0f) || muse::RealIsEqual(harmonicValue, 24.0f)) {
         result = 24;
-    } else if (mu::RealIsEqual(harmonicValue, 3.9f)
-               || mu::RealIsEqual(harmonicValue, 4.0f)
-               || mu::RealIsEqual(harmonicValue, 9.0f)
-               || mu::RealIsEqual(harmonicValue, 16.0f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 3.9f)
+               || muse::RealIsEqual(harmonicValue, 4.0f)
+               || muse::RealIsEqual(harmonicValue, 9.0f)
+               || muse::RealIsEqual(harmonicValue, 16.0f)) {
         result = 28;
-    } else if (mu::RealIsEqual(harmonicValue, 3.2f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 3.2f)) {
         result = 31;
-    } else if (mu::RealIsEqual(harmonicValue, 2.7f)
-               || mu::RealIsEqual(harmonicValue, 5.8f)
-               || mu::RealIsEqual(harmonicValue, 9.6f)
-               || mu::RealIsEqual(harmonicValue, 14.7f)
-               || mu::RealIsEqual(harmonicValue, 21.7f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 2.7f)
+               || muse::RealIsEqual(harmonicValue, 5.8f)
+               || muse::RealIsEqual(harmonicValue, 9.6f)
+               || muse::RealIsEqual(harmonicValue, 14.7f)
+               || muse::RealIsEqual(harmonicValue, 21.7f)) {
         result = 34;
-    } else if (mu::RealIsEqual(harmonicValue, 2.3f)
-               || mu::RealIsEqual(harmonicValue, 2.4f)
-               || mu::RealIsEqual(harmonicValue, 8.2f)
-               || mu::RealIsEqual(harmonicValue, 17.0f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 2.3f)
+               || muse::RealIsEqual(harmonicValue, 2.4f)
+               || muse::RealIsEqual(harmonicValue, 8.2f)
+               || muse::RealIsEqual(harmonicValue, 17.0f)) {
         result = 36;
-    } else if (mu::RealIsEqual(harmonicValue, 2.0f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 2.0f)) {
         result = 38;
-    } else if (mu::RealIsEqual(harmonicValue, 1.8f)) {
+    } else if (muse::RealIsEqual(harmonicValue, 1.8f)) {
         result = 40;
     }
 
@@ -2742,8 +2743,8 @@ bool GuitarPro3::read(IODevice* io)
                 }
 
                 slide = -1;
-                if (mu::contains(slides, static_cast<int>(track))) {
-                    slide = mu::take(slides, static_cast<int>(track));
+                if (muse::contains(slides, static_cast<int>(track))) {
+                    slide = muse::take(slides, static_cast<int>(track));
                 }
 
                 int len = readChar();
@@ -3253,7 +3254,7 @@ static void createLinkedTabs(MasterScore* score)
 //   importScore
 //---------------------------------------------------------
 
-static Err importScore(MasterScore* score, mu::io::IODevice* io, bool experimental = false)
+static Err importScore(MasterScore* score, muse::io::IODevice* io, bool experimental = false)
 {
     if (!io->open(IODevice::ReadOnly)) {
         return Err::FileOpenError;
@@ -3372,7 +3373,7 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io, bool experiment
 //   importGTP
 //---------------------------------------------------------
 
-Err importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce, bool experimental)
+Err importGTP(MasterScore* score, muse::io::IODevice* io, bool createLinkedTabForce, bool experimental)
 {
     Err error = importScore(score, io, experimental);
 

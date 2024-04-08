@@ -41,10 +41,10 @@ public:
     virtual void toggleNoteInputMethod(NoteInputMethod method) = 0;
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
-    virtual Ret putNote(const PointF& pos, bool replace, bool insert) = 0;
-    virtual void removeNote(const PointF& pos) = 0;
-    virtual async::Notification noteInputStarted() const = 0;
-    virtual async::Notification noteInputEnded() const = 0;
+    virtual muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) = 0;
+    virtual void removeNote(const muse::PointF& pos) = 0;
+    virtual muse::async::Notification noteInputStarted() const = 0;
+    virtual muse::async::Notification noteInputEnded() const = 0;
 
     virtual void addTuplet(const TupletOptions& options) = 0;
 
@@ -64,10 +64,10 @@ public:
 
     virtual void resetInputPosition() = 0;
 
-    virtual RectF cursorRect() const = 0;
+    virtual muse::RectF cursorRect() const = 0;
 
-    virtual async::Notification noteAdded() const = 0;
-    virtual async::Notification stateChanged() const = 0;
+    virtual muse::async::Notification noteAdded() const = 0;
+    virtual muse::async::Notification stateChanged() const = 0;
 };
 
 using INotationNoteInputPtr = std::shared_ptr<INotationNoteInput>;

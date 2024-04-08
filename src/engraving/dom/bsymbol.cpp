@@ -95,7 +95,7 @@ void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 void BSymbol::remove(EngravingItem* e)
 {
     if (e->isSymbol() || e->isImage()) {
-        if (mu::remove(m_leafs, e)) {
+        if (muse::remove(m_leafs, e)) {
             e->removed();
         } else {
             LOGD("BSymbol::remove: element <%s> not found", e->typeName());
@@ -137,7 +137,7 @@ EngravingItem* BSymbol::drop(EditData& data)
 //   drag
 //---------------------------------------------------------
 
-mu::RectF BSymbol::drag(EditData& ed)
+RectF BSymbol::drag(EditData& ed)
 {
     RectF r(canvasBoundingRect());
     for (const EngravingItem* e : m_leafs) {
@@ -172,7 +172,7 @@ mu::RectF BSymbol::drag(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-std::vector<mu::LineF> BSymbol::dragAnchorLines() const
+std::vector<LineF> BSymbol::dragAnchorLines() const
 {
     return genericDragAnchorLines();
 }
@@ -181,10 +181,10 @@ std::vector<mu::LineF> BSymbol::dragAnchorLines() const
 //   pagePos
 //---------------------------------------------------------
 
-mu::PointF BSymbol::pagePos() const
+PointF BSymbol::pagePos() const
 {
     if (explicitParent() && (explicitParent()->type() == ElementType::SEGMENT)) {
-        mu::PointF p(pos());
+        PointF p(pos());
         System* system = segment()->measure()->system();
         if (system) {
             p.ry() += system->staff(staffIdx())->y() + system->y();
@@ -200,10 +200,10 @@ mu::PointF BSymbol::pagePos() const
 //   canvasPos
 //---------------------------------------------------------
 
-mu::PointF BSymbol::canvasPos() const
+PointF BSymbol::canvasPos() const
 {
     if (explicitParent() && (explicitParent()->type() == ElementType::SEGMENT)) {
-        mu::PointF p(pos());
+        PointF p(pos());
         Segment* s = toSegment(explicitParent());
 
         System* system = s->measure()->system();

@@ -302,7 +302,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
             QPointF p(st->pos());
             p = p / 32.0 * score->style().spatium();
             // text->setUserOff(st->pos());
-            text->setOffset(mu::PointF::fromQPointF(p));
+            text->setOffset(muse::PointF::fromQPointF(p));
             // LOGD("setText %s (%f %f)(%f %f) <%s>",
             //            qPrintable(st->font().family()),
             //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
@@ -320,7 +320,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                 break;
             }
             text->setAlign(Align(textalign, AlignV::BASELINE));
-            text->setOffset(mu::PointF(0.0, 2.0));
+            text->setOffset(muse::PointF(0.0, 2.0));
             text->setTrack(track);
             s->add(text);
         }
@@ -1270,7 +1270,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
     foreach (CapBracket cb, cap->brackets) {
         LOGD("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
-        Staff* staff = mu::value(score->staves(), cb.from);
+        Staff* staff = muse::value(score->staves(), cb.from);
         if (staff == 0) {
             LOGD("bad bracket 'from' value");
             continue;
@@ -1368,7 +1368,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         if (m && !m->lineBreak()) {
             LayoutBreak* lb = Factory::createLayoutBreak(m);
             lb->setLayoutBreakType(LayoutBreakType::LINE);
-            lb->setTrack(mu::nidx);             // this are system elements
+            lb->setTrack(muse::nidx);             // this are system elements
             m->add(lb);
         }
         systemTick = mtick;
@@ -2820,8 +2820,8 @@ Err importCapella(MasterScore* score, const QString& name)
     }
     catch (Capella::Error errNo) {
         if (!MScore::noGui) {
-            MessageBox::warning(mu::trc("iex_capella", "Import Capella"),
-                                mu::qtrc("iex_capella", "Import failed: %1").arg(cf.error(errNo)).toStdString(),
+            MessageBox::warning(muse::trc("iex_capella", "Import Capella"),
+                                muse::qtrc("iex_capella", "Import failed: %1").arg(cf.error(errNo)).toStdString(),
                                 { MessageBox::Ok });
         }
         fp.close();

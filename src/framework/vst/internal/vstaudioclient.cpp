@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::vst;
 using namespace muse::mpe;
 using namespace muse::audio;
@@ -358,7 +358,7 @@ bool VstAudioClient::fillOutputBuffer(samples_t sampleCount, float* output)
                     continue;
                 }
 
-                if (!mu::RealIsNull(sample)) {
+                if (!RealIsNull(sample)) {
                     hasMeaningSamples = true;
                 }
             }

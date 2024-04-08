@@ -32,7 +32,7 @@ struct BeatsPerMinute // beats per minute
     constexpr BeatsPerMinute(double v)
         : val(v) {}
 
-    inline bool operator ==(const BeatsPerMinute& other) const { return mu::RealIsEqual(val, other.val); }
+    inline bool operator ==(const BeatsPerMinute& other) const { return muse::RealIsEqual(val, other.val); }
     inline bool operator !=(const BeatsPerMinute& other) const { return !operator ==(other); }
     inline bool operator >(const BeatsPerMinute& other) const { return val > other.val; }
 
@@ -49,7 +49,7 @@ struct BeatsPerSecond // beats per second
     constexpr BeatsPerSecond(double v)
         : val(v) {}
 
-    inline bool operator ==(const BeatsPerSecond& other) const { return mu::RealIsEqual(val, other.val); }
+    inline bool operator ==(const BeatsPerSecond& other) const { return muse::RealIsEqual(val, other.val); }
     inline bool operator !=(const BeatsPerSecond& other) const { return !operator ==(other); }
     inline bool operator >(const BeatsPerSecond& other) const { return val > other.val; }
 

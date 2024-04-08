@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_GLOBAL_LOG_H
-#define MU_GLOBAL_LOG_H
+#ifndef MUSE_GLOBAL_LOG_H
+#define MUSE_GLOBAL_LOG_H
 
 #include <cstdlib> // IWYU pragma: export
 #include <cassert> // IWYU pragma: export
@@ -37,4 +37,4 @@
 #define MU_FALLTHROUGH() (void)0
 #endif
 
-#endif // MU_GLOBAL_LOG_H
+#endif // MUSE_GLOBAL_LOG_H

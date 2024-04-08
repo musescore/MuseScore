@@ -58,7 +58,7 @@ class AppMenuModel : public muse::uicomponents::AbstractMenuModel
     INJECT(IAppMenuModelHook, appMenuModelHook)
     INJECT(muse::extensions::IExtensionsProvider, extensionsProvider)
     INJECT(muse::update::IUpdateConfiguration, updateConfiguration)
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

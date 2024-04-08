@@ -37,17 +37,17 @@ class CrashpadClient;
 namespace mu::diagnostics {
 class CrashHandler
 {
-    Inject<IApplication> application;
-    Inject<io::IFileSystem> fileSystem;
+    Inject<muse::IApplication> application;
+    Inject<muse::io::IFileSystem> fileSystem;
 
 public:
     CrashHandler() = default;
     ~CrashHandler();
 
-    bool start(const io::path_t& handlerFilePath, const io::path_t& dumpsDir, const std::string& serverUrl);
+    bool start(const muse::io::path_t& handlerFilePath, const muse::io::path_t& dumpsDir, const std::string& serverUrl);
 
 private:
-    void removePendingLockFiles(const io::path_t& dumpsDir);
+    void removePendingLockFiles(const muse::io::path_t& dumpsDir);
 
     crashpad::CrashpadClient* m_client = nullptr;
 };

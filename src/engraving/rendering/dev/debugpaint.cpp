@@ -39,7 +39,7 @@ using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-static const muse::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
+static const Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
 /// Generates a seemingly random but stable color based on a pointer address.
 /// If we would use really random colors, they would change on every redraw.
@@ -73,7 +73,7 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
     RectF bbox = item->ldata()->bbox();
 
     if (item->isType(ElementType::SEGMENT)) {
-        if (mu::RealIsNull(bbox.height())) {
+        if (muse::RealIsNull(bbox.height())) {
             bbox.setHeight(10.0);
             LOGD() << "Segment bbox height is null";
         }

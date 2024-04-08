@@ -33,7 +33,7 @@
 namespace muse::audio {
 class SoundFontRepository : public ISoundFontRepository, public async::Asyncable
 {
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
     Inject<IAudioConfiguration> configuration;
     Inject<io::IFileSystem> fileSystem;
 

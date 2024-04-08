@@ -97,7 +97,7 @@ void FluidResolver::refresh()
     for (const auto& pair : soundFontRepository()->soundFonts()) {
         const SoundFontMeta& soundFont = pair.second;
 
-        std::string name = mu::io::completeBasename(soundFont.path).toStdString();
+        std::string name = io::completeBasename(soundFont.path).toStdString();
 
         {
             AudioResourceId id = name;

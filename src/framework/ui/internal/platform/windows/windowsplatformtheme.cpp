@@ -26,7 +26,7 @@
 #include <Windows.h>
 
 using namespace muse::ui;
-using namespace mu::async;
+using namespace muse::async;
 
 static const std::wstring windowsThemesKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes";
 static const std::wstring windowsThemesPersonalizeKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";

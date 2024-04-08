@@ -37,16 +37,17 @@ class INotationProject
 public:
     virtual ~INotationProject() = default;
 
-    virtual io::path_t path() const = 0;
-    virtual void setPath(const io::path_t& path) = 0;
-    virtual async::Notification pathChanged() const = 0;
+    virtual muse::io::path_t path() const = 0;
+    virtual void setPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Notification pathChanged() const = 0;
 
     virtual QString displayName() const = 0;
-    virtual async::Notification displayNameChanged() const = 0;
+    virtual muse::async::Notification displayNameChanged() const = 0;
 
-    virtual Ret load(const io::path_t& path,
-                     const io::path_t& stylePath = io::path_t(), bool forceMode = false, const std::string& format = "") = 0;
-    virtual Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
+    virtual muse::Ret load(const muse::io::path_t& path,
+                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+                           const std::string& format = "") = 0;
+    virtual muse::Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 
     virtual bool isCloudProject() const = 0;
     virtual const CloudProjectInfo& cloudInfo() const = 0;
@@ -62,14 +63,14 @@ public:
 
     virtual void markAsUnsaved() = 0;
 
-    virtual ValNt<bool> needSave() const = 0;
-    virtual Ret canSave() const = 0;
+    virtual muse::ValNt<bool> needSave() const = 0;
+    virtual muse::Ret canSave() const = 0;
 
     virtual bool needAutoSave() const = 0;
     virtual void setNeedAutoSave(bool val) = 0;
 
-    virtual Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) = 0;
-    virtual Ret writeToDevice(QIODevice* device) = 0;
+    virtual muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) = 0;
+    virtual muse::Ret writeToDevice(QIODevice* device) = 0;
 
     virtual ProjectMeta metaInfo() const = 0;
     virtual void setMetaInfo(const ProjectMeta& meta, bool undoable = false) = 0;

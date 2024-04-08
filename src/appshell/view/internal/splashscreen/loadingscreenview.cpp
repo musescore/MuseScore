@@ -51,7 +51,7 @@ LoadingScreenView::LoadingScreenView(QWidget* parent)
     setAttribute(Qt::WA_TranslucentBackground);
     resize(loadingScreenSize);
 
-    m_message = mu::qtrc("appshell", "Loading…\u200e");
+    m_message = muse::qtrc("appshell", "Loading…\u200e");
 }
 
 bool LoadingScreenView::event(QEvent* event)
@@ -96,5 +96,5 @@ void LoadingScreenView::draw(QPainter* painter)
 
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
                       Qt::AlignBottom | alignment | Qt::TextDontClip,
-                      mu::qtrc("appshell", "Version %1").arg(application()->fullVersion().toString()));
+                      muse::qtrc("appshell", "Version %1").arg(application()->fullVersion().toString()));
 }

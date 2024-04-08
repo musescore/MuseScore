@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_PATH_H
-#define MU_IO_PATH_H
+#ifndef MUSE_IO_PATH_H
+#define MUSE_IO_PATH_H
 
 #include <string>
 
@@ -32,7 +32,7 @@
 #include <QUrl>
 #endif
 
-namespace mu::io {
+namespace muse::io {
 struct path_t;
 using paths_t = std::vector<path_t>;
 struct path_t {
@@ -92,7 +92,7 @@ inline path_t operator+(const char* one, const path_t& other) { return path_t(on
 inline path_t operator+(const QString& one, const path_t& other) { return path_t(one) + other; }
 #endif
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::io::path_t& p)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::io::path_t& p)
 {
     s << p.toStdString();
     return s;
@@ -118,11 +118,4 @@ paths_t pathsFromString(const std::string& str, const std::string& delim = ";");
 std::string pathsToString(const paths_t& ps, const std::string& delim = ";");
 }
 
-namespace muse::io {
-using path_t = mu::io::path_t;
-using paths_t = mu::io::paths_t;
-
-inline std::string suffix(const path_t& path) { return mu::io::suffix(path); }
-}
-
-#endif // MU_IO_PATH_H
+#endif // MUSE_IO_PATH_H

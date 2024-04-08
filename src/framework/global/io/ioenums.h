@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_IOENUMS_H
-#define MU_IO_IOENUMS_H
+#ifndef MUSE_IO_IOENUMS_H
+#define MUSE_IO_IOENUMS_H
 
-namespace mu::io {
+namespace muse::io {
 enum class ScanMode {
     FilesInCurrentDir,
     FilesAndFoldersInCurrentDir,
@@ -36,4 +36,4 @@ enum class EntryType {
 };
 }
 
-#endif // MU_IO_IOENUMS_H
+#endif // MUSE_IO_IOENUMS_H

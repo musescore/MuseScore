@@ -169,7 +169,7 @@ String StringTunings::accessibleInfo() const
     int numOfStrings = static_cast<int>(stringList.size());
     for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
-        if (mu::contains(m_visibleStrings, index)) {
+        if (muse::contains(m_visibleStrings, index)) {
             const instrString str = stringList[index];
             String pitchStr = pitch2string(str.pitch, str.useFlat);
             if (pitchStr.empty()) {
@@ -177,8 +177,8 @@ String StringTunings::accessibleInfo() const
                 continue;
             }
 
-            info += mtrc("engraving", "String %1").arg(String::number(i + 1)) + u", "
-                    + mtrc("engraving", "Value %1").arg(pitchStr) + u"; ";
+            info += muse::mtrc("engraving", "String %1").arg(String::number(i + 1)) + u", "
+                    + muse::mtrc("engraving", "Value %1").arg(pitchStr) + u"; ";
         }
     }
 
@@ -258,7 +258,7 @@ String StringTunings::generateText() const
     int numOfStrings = static_cast<int>(stringList.size());
     for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
-        if (mu::contains(m_visibleStrings, index)) {
+        if (muse::contains(m_visibleStrings, index)) {
             const instrString str = stringList[index];
             String pitchStr = pitch2string(str.pitch, str.useFlat);
             if (pitchStr.empty()) {

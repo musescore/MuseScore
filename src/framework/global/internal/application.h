@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_APPLICATION_H
-#define MU_GLOBAL_APPLICATION_H
+#ifndef MUSE_GLOBAL_APPLICATION_H
+#define MUSE_GLOBAL_APPLICATION_H
 
 #include "../iapplication.h"
 
-namespace mu {
+namespace muse {
 class Application : public IApplication
 {
 public:
@@ -55,4 +55,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_APPLICATION_H
+#endif // MUSE_GLOBAL_APPLICATION_H

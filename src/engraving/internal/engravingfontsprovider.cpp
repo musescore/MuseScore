@@ -29,7 +29,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-void EngravingFontsProvider::addFont(const std::string& name, const std::string& family, const io::path_t& filePath)
+void EngravingFontsProvider::addFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath)
 {
     std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, filePath);
     m_symbolFonts.push_back(f);
@@ -38,9 +38,9 @@ void EngravingFontsProvider::addFont(const std::string& name, const std::string&
 
 std::shared_ptr<EngravingFont> EngravingFontsProvider::doFontByName(const std::string& name) const
 {
-    std::string name_lo = mu::strings::toLower(name);
+    std::string name_lo = muse::strings::toLower(name);
     for (const std::shared_ptr<EngravingFont>& f : m_symbolFonts) {
-        if (mu::strings::toLower(f->name()) == name_lo) {
+        if (muse::strings::toLower(f->name()) == name_lo) {
             return f;
         }
     }

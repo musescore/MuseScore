@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_INTERACTIVE_H
-#define MU_GLOBAL_INTERACTIVE_H
+#ifndef MUSE_GLOBAL_INTERACTIVE_H
+#define MUSE_GLOBAL_INTERACTIVE_H
 
 #include "async/asyncable.h"
 
@@ -30,7 +30,7 @@
 
 #include "../iinteractive.h"
 
-namespace mu {
+namespace muse {
 class Interactive : public IInteractive, public async::Asyncable
 {
     Inject<muse::ui::IInteractiveProvider> provider;
@@ -74,7 +74,7 @@ public:
                  int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const override;
 
     // progress
-    Ret showProgress(const std::string& title, mu::Progress* progress) const override;
+    Ret showProgress(const std::string& title, Progress* progress) const override;
 
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
@@ -119,4 +119,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_UIINTERACTIVE_H
+#endif // MUSE_GLOBAL_UIINTERACTIVE_H

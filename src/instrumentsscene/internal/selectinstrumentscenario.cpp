@@ -23,10 +23,11 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
-mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
+RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
 {
     QStringList params {
         "canSelectMultipleInstruments=true"
@@ -35,7 +36,7 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
     return selectInstruments(params);
 }
 
-mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
+RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
     QStringList params {
         "canSelectMultipleInstruments=false",
@@ -52,7 +53,7 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const Instrum
     return RetVal<Instrument>::make_ok(Instrument::fromTemplate(&templ));
 }
 
-mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
+RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
 {
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
     RetVal<Val> retVal = interactive()->open(uri.toStdString());

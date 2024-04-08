@@ -60,7 +60,7 @@ class Pedal final : public TextLineBase
     Sid getPropertyStyle(Pid) const override;
 
 protected:
-    mu::PointF linePos(Grip, System**) const override;
+    PointF linePos(Grip, System**) const override;
 
 public:
     static const String PEDAL_SYMBOL;

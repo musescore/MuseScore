@@ -49,13 +49,13 @@ bool VideoWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret VideoWriter::write(INotationProjectPtr, QIODevice&, const Options&)
+Ret VideoWriter::write(INotationProjectPtr, QIODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret VideoWriter::write(INotationProjectPtr project, const io::path_t& filePath, const Options&)
+Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const Options&)
 {
     Config cfg;
 
@@ -110,7 +110,7 @@ mu::Ret VideoWriter::write(INotationProjectPtr project, const io::path_t& filePa
     return ret;
 }
 
-mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const io::path_t& filePath, const Config& config)
+Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config)
 {
     // --score-video -o ./simple5.mp4 ./simple5.mscz
 
@@ -251,5 +251,5 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
 
     encoder.close();
 
-    return mu::make_ok();
+    return muse::make_ok();
 }

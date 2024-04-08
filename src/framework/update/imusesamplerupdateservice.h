@@ -38,10 +38,10 @@ class IMuseSamplerUpdateService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMuseSamplerUpdateService() = default;
 
-    virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
+    virtual RetVal<ReleaseInfo> checkForUpdate() = 0;
     virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
 
-    virtual mu::Progress updateProgress() = 0;
+    virtual Progress updateProgress() = 0;
 
     virtual void openMuseHub() = 0;
 };

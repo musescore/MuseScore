@@ -59,7 +59,7 @@ const int TPCS_PER_STEP           = (Tpc::TPC_MAX - Tpc::TPC_MIN + 1) / STEP_DEL
 
 //---------------------------------------------------------
 //   pitch2tpc
-//    Returns a default tpc for a given midi pitch.
+//    muse::Returns a default tpc for a given midi pitch.
 //    Midi pitch 60 is middle C.
 //---------------------------------------------------------
 

@@ -196,7 +196,7 @@ bool WasapiAudioDriver::resetToDefaultOutputDevice()
     return selectOutputDevice(DEFAULT_DEVICE_ID);
 }
 
-mu::async::Notification WasapiAudioDriver::outputDeviceChanged() const
+async::Notification WasapiAudioDriver::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
 }
@@ -208,7 +208,7 @@ AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
 
     AudioDeviceList result;
 
-    result.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
+    result.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
     // Get the string identifier of the audio renderer
     hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
@@ -232,7 +232,7 @@ AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
     return result;
 }
 
-mu::async::Notification WasapiAudioDriver::availableOutputDevicesChanged() const
+async::Notification WasapiAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
 }
@@ -260,7 +260,7 @@ bool WasapiAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
     return result;
 }
 
-mu::async::Notification WasapiAudioDriver::outputDeviceBufferSizeChanged() const
+async::Notification WasapiAudioDriver::outputDeviceBufferSizeChanged() const
 {
     return m_outputDeviceBufferSizeChanged;
 }

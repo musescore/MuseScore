@@ -482,7 +482,7 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
     }
 }
 
-mu::RectF StretchedBend::calculateBoundingRect() const
+RectF StretchedBend::calculateBoundingRect() const
 {
     RectF bRect;
     double sp = spatium();

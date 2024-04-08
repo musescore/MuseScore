@@ -33,9 +33,9 @@
 #include "internal/musesampleruiactions.h"
 #include "internal/musesampleractioncontroller.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
-using namespace mu::modularity;
+using namespace muse::modularity;
 using namespace muse::musesampler;
 
 std::string MuseSamplerModule::moduleName() const

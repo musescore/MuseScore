@@ -60,7 +60,7 @@ void CloudScoresModel::reload()
     beginResetModel();
 
     m_items.clear();
-    m_totalItems = mu::nidx;
+    m_totalItems = muse::nidx;
     m_desiredRowCount = 0;
 
     endResetModel();
@@ -88,7 +88,7 @@ void CloudScoresModel::setState(State state)
 
 bool CloudScoresModel::hasMore() const
 {
-    return m_totalItems == mu::nidx || m_items.size() < m_totalItems;
+    return m_totalItems == muse::nidx || m_items.size() < m_totalItems;
 }
 
 int CloudScoresModel::desiredRowCount() const

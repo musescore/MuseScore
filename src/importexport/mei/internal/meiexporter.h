@@ -84,8 +84,8 @@ private:
     bool writeScore();
     bool writeScoreDef();
     bool writePgHead(const engraving::VBox* vBox);
-    bool writeLines(pugi::xml_node node, const StringList& lines);
-    bool writeLinesWithSMuFL(pugi::xml_node node, const StringList& lines);
+    bool writeLines(pugi::xml_node node, const muse::StringList& lines);
+    bool writeLinesWithSMuFL(pugi::xml_node node, const muse::StringList& lines);
     bool writeScoreDefChange();
     bool writeStaffGrpStart(const engraving::Staff* staff, std::vector<int>& ends, const engraving::Part* part);
     bool writeStaffGrpEnd(const engraving::Staff* staff, std::vector<int>& ends);
@@ -111,7 +111,7 @@ private:
     bool writeGraceGrp(const engraving::Chord* chord, const engraving::Staff* staff, bool isAfter = false);
     bool writeNote(const engraving::Note* note, const engraving::Chord* chord, const engraving::Staff* staff, bool isChord);
     bool writeRest(const engraving::Rest* rest, const engraving::Staff* staff);
-    bool writeSyl(const engraving::Lyrics* lyrics, const String& text, ElisionType elision);
+    bool writeSyl(const engraving::Lyrics* lyrics, const muse::String& text, ElisionType elision);
     bool writeTuplet(const engraving::Tuplet* tuplet, const engraving::EngravingItem* item, bool& closing);
     bool writeVerses(const engraving::ChordRest* chordRest);
     bool writeVerse(const engraving::Lyrics* lyrics);
@@ -157,7 +157,7 @@ private:
     void addJumpToRepeatMarks();
     bool addFermataToMap(engraving::track_idx_t track, const engraving::Segment* segment, const engraving::Measure* measure);
     std::pair<libmei::xsdPositiveInteger_List, double> findTstampFor(const engraving::EngravingItem* item);
-    bool isNode(pugi::xml_node node, const String& name);
+    bool isNode(pugi::xml_node node, const muse::String& name);
     pugi::xml_node getLastChordRest(pugi::xml_node node);
     void addNodeToOpenControlEvents(pugi::xml_node node, const engraving::Spanner* spanner, const std::string& startid);
     void addEndidToControlEvents();
@@ -228,7 +228,7 @@ private:
     std::vector<int> m_layerCounterFor;
 
     /** map of abbreviations for element within layers */
-    inline static const std::map<layerElementCounter, String> s_layerXmlIdMap = {
+    inline static const std::map<layerElementCounter, muse::String> s_layerXmlIdMap = {
         { ACCID_L, u"a" },
         { BEAM_L, u"b" },
         { GRACEGRP_L, u"g" },

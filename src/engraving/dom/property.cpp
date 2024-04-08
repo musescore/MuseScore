@@ -493,7 +493,7 @@ const char* propertyName(Pid id)
 String propertyUserName(Pid id)
 {
     assert(propertyList[int(id)].id == id);
-    return mtrc("engraving", propertyList[int(id)].userName, "propertyName");
+    return muse::mtrc("engraving", propertyList[int(id)].userName, "propertyName");
 }
 
 //---------------------------------------------------------

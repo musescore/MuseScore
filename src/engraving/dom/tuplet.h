@@ -126,15 +126,15 @@ public:
     bool cross() const;
     staff_idx_t vStaffIdx() const override;
 
-    const mu::PointF& p1() const { return m_p1; }
-    mu::PointF& p1() { return m_p1; }
-    void setP1(const mu::PointF& p) { m_p1 = p; }
-    const mu::PointF& p2() const { return m_p2; }
-    mu::PointF& p2() { return m_p2; }
-    void setP2(const mu::PointF& p) { m_p2 = p; }
+    const PointF& p1() const { return m_p1; }
+    PointF& p1() { return m_p1; }
+    void setP1(const PointF& p) { m_p1 = p; }
+    const PointF& p2() const { return m_p2; }
+    PointF& p2() { return m_p2; }
+    void setP2(const PointF& p) { m_p2 = p; }
 
-    const mu::PointF& userP1() const { return m_userP1; }
-    const mu::PointF& userP2() const { return m_userP2; }
+    const PointF& userP1() const { return m_userP1; }
+    const PointF& userP2() const { return m_userP2; }
 
     void setVisible(bool f) override;
 
@@ -146,7 +146,7 @@ public:
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
     void sanitizeTuplet();
     void addMissingElements();
@@ -155,8 +155,8 @@ public:
 
     static int computeTupletDenominator(int numerator, Fraction totalDuration);
 
-    mu::PointF bracketL[4];
-    mu::PointF bracketR[3];
+    PointF bracketL[4];
+    PointF bracketR[3];
 private:
 
     friend class DurationElement;
@@ -188,8 +188,8 @@ private:
 
     Fraction m_tick;
 
-    mu::PointF m_p1, m_p2;
-    mu::PointF m_userP1, m_userP2;      // user offset
+    PointF m_p1, m_p2;
+    PointF m_userP1, m_userP2;      // user offset
     mutable int m_id;                   // used during read/write
 
     Text* m_number = nullptr;

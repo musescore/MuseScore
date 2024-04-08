@@ -46,10 +46,10 @@ public:
     void paint(muse::draw::Painter* painter);
 
 private:
-    RectF resolveMarkerRectByTick(muse::midi::tick_t tick) const;
+    muse::RectF resolveMarkerRectByTick(muse::midi::tick_t tick) const;
 
     LoopBoundaryType m_type = LoopBoundaryType::Unknown;
-    RectF m_rect;
+    muse::RectF m_rect;
     bool m_visible = false;
     INotationPtr m_notation;
 };

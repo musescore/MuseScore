@@ -44,16 +44,16 @@ public:
 
     void resetAllStyleValues(const StyleIdSet& exceptTheseOnes = {}) override;
 
-    async::Notification styleChanged() const override;
+    muse::async::Notification styleChanged() const override;
 
-    bool loadStyle(const mu::io::path_t&, bool allowAnyVersion) override;
-    bool saveStyle(const mu::io::path_t&) override;
+    bool loadStyle(const muse::io::path_t&, bool allowAnyVersion) override;
+    bool saveStyle(const muse::io::path_t&) override;
 
 private:
     mu::engraving::Score* score() const;
 
     IGetScore* m_getScore = nullptr;
-    async::Notification m_styleChanged;
+    muse::async::Notification m_styleChanged;
     INotationUndoStackPtr m_undoStack;
 };
 }

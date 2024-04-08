@@ -199,8 +199,8 @@ public:
     double headHeight() const;
     double tabHeadWidth(const StaffType* tab = 0) const;
     double tabHeadHeight(const StaffType* tab = 0) const;
-    mu::PointF stemDownNW() const;
-    mu::PointF stemUpSE() const;
+    PointF stemDownNW() const;
+    PointF stemUpSE() const;
     double bboxXShift() const;
     double noteheadCenterX() const;
     double bboxRightPos() const;
@@ -359,20 +359,20 @@ public:
 
     void addSpannerBack(Spanner* e)
     {
-        if (!mu::contains(m_spannerBack, e)) {
+        if (!muse::contains(m_spannerBack, e)) {
             m_spannerBack.push_back(e);
         }
     }
 
-    bool removeSpannerBack(Spanner* e) { return mu::remove(m_spannerBack, e); }
+    bool removeSpannerBack(Spanner* e) { return muse::remove(m_spannerBack, e); }
     void addSpannerFor(Spanner* e)
     {
-        if (!mu::contains(m_spannerFor, e)) {
+        if (!muse::contains(m_spannerFor, e)) {
             m_spannerFor.push_back(e);
         }
     }
 
-    bool removeSpannerFor(Spanner* e) { return mu::remove(m_spannerFor, e); }
+    bool removeSpannerFor(Spanner* e) { return muse::remove(m_spannerFor, e); }
 
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
@@ -435,11 +435,11 @@ public:
 
     bool hasAnotherStraightAboveOrBelow(bool above) const;
 
-    void addLineAttachPoint(mu::PointF point, EngravingItem* line);
+    void addLineAttachPoint(PointF point, EngravingItem* line);
     std::vector<LineAttachPoint>& lineAttachPoints() { return m_lineAttachPoints; }
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return m_lineAttachPoints; }
 
-    mu::PointF posInStaffCoordinates();
+    PointF posInStaffCoordinates();
 
     bool isTrillCueNote() const { return m_isTrillCueNote; }
     void setIsTrillCueNote(bool v);
@@ -468,7 +468,7 @@ private:
     Note(const Note&, bool link = false);
 
     void startDrag(EditData&) override;
-    mu::RectF drag(EditData& ed) override;
+    RectF drag(EditData& ed) override;
     void endDrag(EditData&) override;
     void editDrag(EditData& editData) override;
 

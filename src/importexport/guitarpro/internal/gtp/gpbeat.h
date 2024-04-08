@@ -151,8 +151,8 @@ public:
     void setGraceNotes(GraceNotes gn) { _graceNotes = gn; }
     GraceNotes graceNotes() const { return _graceNotes; }
 
-    void setFreeText(const String& s) { _freeText = s; }
-    const String& freeText() const { return _freeText; }
+    void setFreeText(const muse::String& s) { _freeText = s; }
+    const muse::String& freeText() const { return _freeText; }
 
     void setTime(int t) { _time = t; }
     int time() const { return _time; }
@@ -286,7 +286,7 @@ private:
     Brush _brush = Brush::None;
     GraceNotes _graceNotes = GraceNotes::None;
     int _time = -1;
-    String _freeText;
+    muse::String _freeText;
     VibratoWTremBar _vibratoWTremBar = VibratoWTremBar::None;
     VibratoLeftHand _vibratoLeftHand = VibratoLeftHand::None;
     Fadding _fadding = Fadding::None;

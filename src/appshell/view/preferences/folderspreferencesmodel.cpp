@@ -26,6 +26,7 @@
 #include "muse_framework_config.h"
 
 using namespace mu::appshell;
+using namespace muse;
 
 FoldersPreferencesModel::FoldersPreferencesModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -87,29 +88,29 @@ void FoldersPreferencesModel::load()
 
     m_folders = {
         {
-            FolderType::Scores, mu::qtrc("appshell/preferences", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+            FolderType::Scores, muse::qtrc("appshell/preferences", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
             projectConfiguration()->userProjectsPath().toQString()
         },
         {
-            FolderType::Styles, mu::qtrc("appshell/preferences", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+            FolderType::Styles, muse::qtrc("appshell/preferences", "Styles"), notationConfiguration()->userStylesPath().toQString(),
             notationConfiguration()->userStylesPath().toQString()
         },
         {
-            FolderType::Templates, mu::qtrc("appshell/preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+            FolderType::Templates, muse::qtrc("appshell/preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
             projectConfiguration()->userTemplatesPath().toQString()
         },
         {
-            FolderType::Plugins, mu::qtrc("appshell/preferences", "Plugins"), extensionsConfiguration()->pluginsUserPath().toQString(),
+            FolderType::Plugins, muse::qtrc("appshell/preferences", "Plugins"), extensionsConfiguration()->pluginsUserPath().toQString(),
             extensionsConfiguration()->pluginsUserPath().toQString()
         },
         {
-            FolderType::SoundFonts, mu::qtrc("appshell/preferences", "SoundFonts"), pathsToString(
+            FolderType::SoundFonts, muse::qtrc("appshell/preferences", "SoundFonts"), pathsToString(
                 audioConfiguration()->userSoundFontDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         },
 #ifdef MU_MODULE_VST
         {
-            FolderType::VST3, mu::qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
+            FolderType::VST3, muse::qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         }
 #endif
@@ -122,19 +123,19 @@ void FoldersPreferencesModel::load()
 
 void FoldersPreferencesModel::setupConnections()
 {
-    projectConfiguration()->userProjectsPathChanged().onReceive(this, [this](const io::path_t& path) {
+    projectConfiguration()->userProjectsPathChanged().onReceive(this, [this](const muse::io::path_t& path) {
         setFolderPaths(FolderType::Scores, path.toQString());
     });
 
-    notationConfiguration()->userStylesPathChanged().onReceive(this, [this](const io::path_t& path) {
+    notationConfiguration()->userStylesPathChanged().onReceive(this, [this](const muse::io::path_t& path) {
         setFolderPaths(FolderType::Styles, path.toQString());
     });
 
-    projectConfiguration()->userTemplatesPathChanged().onReceive(this, [this](const io::path_t& path) {
+    projectConfiguration()->userTemplatesPathChanged().onReceive(this, [this](const muse::io::path_t& path) {
         setFolderPaths(FolderType::Templates, path.toQString());
     });
 
-    extensionsConfiguration()->pluginsUserPathChanged().onReceive(this, [this](const io::path_t& path) {
+    extensionsConfiguration()->pluginsUserPathChanged().onReceive(this, [this](const muse::io::path_t& path) {
         setFolderPaths(FolderType::Plugins, path.toQString());
     });
 
@@ -152,22 +153,22 @@ void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderTyp
 {
     switch (folderType) {
     case FolderType::Scores: {
-        io::path_t folderPath = paths.toStdString();
+        muse::io::path_t folderPath = paths.toStdString();
         projectConfiguration()->setUserProjectsPath(folderPath);
         break;
     }
     case FolderType::Styles: {
-        io::path_t folderPath = paths.toStdString();
+        muse::io::path_t folderPath = paths.toStdString();
         notationConfiguration()->setUserStylesPath(folderPath);
         break;
     }
     case FolderType::Templates: {
-        io::path_t folderPath = paths.toStdString();
+        muse::io::path_t folderPath = paths.toStdString();
         projectConfiguration()->setUserTemplatesPath(folderPath);
         break;
     }
     case FolderType::Plugins: {
-        io::path_t folderPath = paths.toStdString();
+        muse::io::path_t folderPath = paths.toStdString();
         extensionsConfiguration()->setUserPluginsPath(folderPath);
         break;
     }
@@ -207,12 +208,12 @@ QModelIndex FoldersPreferencesModel::folderIndex(FoldersPreferencesModel::Folder
     return QModelIndex();
 }
 
-QString FoldersPreferencesModel::pathsToString(const mu::io::paths_t& paths) const
+QString FoldersPreferencesModel::pathsToString(const io::paths_t& paths) const
 {
     return QString::fromStdString(io::pathsToString(paths));
 }
 
-mu::io::paths_t FoldersPreferencesModel::pathsFromString(const QString& pathsStr) const
+io::paths_t FoldersPreferencesModel::pathsFromString(const QString& pathsStr) const
 {
     return io::pathsFromString(pathsStr.toStdString());
 }

@@ -463,13 +463,13 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // clone elements from underlying measure to mmr
         for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
-            if (!mu::contains(BREAK_TYPES, e->type())) {
+            if (!muse::contains(BREAK_TYPES, e->type())) {
                 continue;
             }
             // try to find a match in mmr
             bool found = false;
             for (EngravingItem* ee : s->annotations()) {
-                if (mu::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
+                if (muse::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
                     found = true;
                     break;
                 }
@@ -486,13 +486,13 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // this should not happen since the elements are linked?
         const auto annotations = s->annotations(); // make a copy since we alter the list
         for (EngravingItem* e : annotations) { // look at elements in mmr
-            if (!mu::contains(BREAK_TYPES, e->type())) {
+            if (!muse::contains(BREAK_TYPES, e->type())) {
                 continue;
             }
             // try to find a match in underlying measure
             bool found = false;
             for (EngravingItem* ee : underlyingSeg->annotations()) {
-                if (mu::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
+                if (muse::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
                     found = true;
                     break;
                 }
@@ -527,7 +527,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             if (!e->staff()->show()) {
                 continue;
             }
-            if (!mu::contains(BREAK_TYPES, e->type())) {
+            if (!muse::contains(BREAK_TYPES, e->type())) {
                 return false;
             }
         }
@@ -598,7 +598,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         Fraction measureEnd = m->endTick();
         bool spannerStartsInside = spannerStart >= measureStart && spannerStart < measureEnd;
         bool spannerEndsInside = spannerEnd >= measureStart && spannerEnd < measureEnd;
-        if (mu::contains(breakSpannerTypes, s->type()) && (spannerStartsInside || spannerEndsInside)) {
+        if (muse::contains(breakSpannerTypes, s->type()) && (spannerStartsInside || spannerEndsInside)) {
             return true;
         }
     }
@@ -614,7 +614,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
             Fraction measureEnd = prevMeas->endTick();
             bool spannerStartsInside = spannerStart > measureStart && spannerStart < measureEnd;
             bool spannerEndsInside = spannerEnd > measureStart && spannerEnd < measureEnd;
-            if (mu::contains(breakSpannerTypes, s->type()) && (spannerStartsInside || spannerEndsInside)) {
+            if (muse::contains(breakSpannerTypes, s->type()) && (spannerStartsInside || spannerEndsInside)) {
                 return true;
             }
         }
@@ -654,11 +654,11 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     }
 
     auto breakForAnnotation = [&](EngravingItem* e) {
-        if (mu::contains(ALWAYS_BREAK_TYPES, e->type())) {
+        if (muse::contains(ALWAYS_BREAK_TYPES, e->type())) {
             return true;
         }
         bool breakForElement = e->systemFlag() || e->staff()->show();
-        if (mu::contains(CONDITIONAL_BREAK_TYPES, e->type()) && breakForElement) {
+        if (muse::contains(CONDITIONAL_BREAK_TYPES, e->type()) && breakForElement) {
             return true;
         }
         return false;
@@ -2254,9 +2254,9 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
             double spacing = s->spacing();
             double widthWithoutSpacing = s->width() - spacing;
             double segmentStretch = s->stretch();
-            x += spacing * (mu::RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            x += spacing * (muse::RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s->mutldata()->setPosX(x);
-            x += widthWithoutSpacing * (mu::RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            x += widthWithoutSpacing * (muse::RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s = s->nextEnabled();
         }
     }
@@ -2630,7 +2630,7 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
         ldata->setBbox(ldata->bbox().adjusted(0, -extraSize, 0, extraSize));
     }
 
-    std::vector<mu::LineF> ll;
+    std::vector<LineF> ll;
     for (int i = 0; i < _lines; ++i) {
         if (alignRight) {
             ll.push_back(LineF(x2 - wPartial, y, x2, y));

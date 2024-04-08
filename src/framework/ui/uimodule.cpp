@@ -74,7 +74,7 @@
 #include "log.h"
 
 using namespace muse::ui;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static void ui_init_qrc()
 {
@@ -130,7 +130,7 @@ void UiModule::resolveImports()
 
 void UiModule::registerApi()
 {
-    using namespace mu::api;
+    using namespace muse::api;
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {

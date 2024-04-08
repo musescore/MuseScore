@@ -206,10 +206,10 @@ public:
     StaffType();
 
     StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
-              bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible, const muse::draw::Color& color);
+              bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible, const Color& color);
 
     StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
-              bool stemless, bool genTimesig, bool invisible, const muse::draw::Color& color, const String& durFontName, double durFontSize,
+              bool stemless, bool genTimesig, bool invisible, const Color& color, const String& durFontName, double durFontSize,
               double durFontUserY, double genDur, const String& fretFontName, double fretFontSize, double fretFontUserY,
               TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
               bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
@@ -242,11 +242,11 @@ public:
     double userMag() const { return m_userMag; }
     bool isSmall() const { return m_small; }
     bool invisible() const { return m_invisible; }
-    const muse::draw::Color& color() const { return m_color; }
+    const Color& color() const { return m_color; }
     void setUserMag(double val) { m_userMag = val; }
     void setSmall(bool val) { m_small = val; }
     void setInvisible(bool val) { m_invisible = val; }
-    void setColor(const muse::draw::Color& val) { m_color = val; }
+    void setColor(const Color& val) { m_color = val; }
     Spatium yoffset() const { return m_yoffset; }
     void setYoffset(Spatium val) { m_yoffset = val; }
     double spatium(const MStyle& style) const;
@@ -343,10 +343,10 @@ public:
     void  setShowBackTied(bool val) { m_showBackTied = val; }
 
     // utility functions for tab specially managed elements
-    mu::PointF chordStemPos(const Chord*) const;
+    PointF chordStemPos(const Chord*) const;
     double   chordRestStemPosY(const ChordRest*) const;
     double   chordStemPosX(const Chord*) const { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
-    mu::PointF chordStemPosBeam(const Chord*) const;
+    PointF chordStemPosBeam(const Chord*) const;
     double   chordStemLength(const Chord*) const;
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
@@ -381,7 +381,7 @@ private:
     Spatium m_yoffset;
     bool m_small = false;
     bool m_invisible = false;
-    muse::draw::Color m_color = engravingConfiguration()->defaultColor();
+    Color m_color = engravingConfiguration()->defaultColor();
 
     int m_lines = 5;
     int m_stepOffset = 0;

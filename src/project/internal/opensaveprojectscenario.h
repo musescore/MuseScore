@@ -39,40 +39,41 @@ class OpenSaveProjectScenario : public IOpenSaveProjectScenario
 {
     INJECT(IProjectConfiguration, configuration)
     INJECT(IProjectFilesController, projectFilesController)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
     INJECT(muse::cloud::IAudioComService, audioComService)
 
 public:
     OpenSaveProjectScenario() = default;
 
-    RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
-                                         SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
+    muse::RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
+                                               SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
 
-    RetVal<io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
-    RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const override;
-    RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const override;
-    RetVal<CloudAudioInfo> askShareAudioLocation(INotationProjectPtr project) const override;
+    muse::RetVal<muse::io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
+    muse::RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const override;
+    muse::RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const override;
+    muse::RetVal<CloudAudioInfo> askShareAudioLocation(INotationProjectPtr project) const override;
 
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
 
-    void showCloudOpenError(const Ret& ret) const override;
-    Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublishShare, bool alreadyAttempted) const override;
-    Ret showAudioCloudShareError(const Ret& ret) const override;
+    void showCloudOpenError(const muse::Ret& ret) const override;
+    muse::Ret showCloudSaveError(const muse::Ret& ret, const CloudProjectInfo& info, bool isPublishShare,
+                                 bool alreadyAttempted) const override;
+    muse::Ret showAudioCloudShareError(const muse::Ret& ret) const override;
 
 private:
-    RetVal<SaveLocationType> saveLocationType() const;
-    RetVal<SaveLocationType> askSaveLocationType() const;
+    muse::RetVal<SaveLocationType> saveLocationType() const;
+    muse::RetVal<SaveLocationType> askSaveLocationType() const;
 
     /// \param isPublishShare:
     ///     false -> this is part of a "Save to cloud" action
     ///     true -> this is part of a "Publish" action
-    RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const;
+    muse::RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const;
 
     bool warnBeforePublishing(bool isPublishShare, muse::cloud::Visibility visibility) const;
 
-    Ret warnCloudNotAvailableForUploading(bool isPublishShare) const;
-    Ret warnCloudNotAvailableForSharingAudio() const;
+    muse::Ret warnCloudNotAvailableForUploading(bool isPublishShare) const;
+    muse::Ret warnCloudNotAvailableForSharingAudio() const;
 };
 
 class QMLSaveLocationType

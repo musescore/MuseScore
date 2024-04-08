@@ -36,7 +36,7 @@ class ITemplatesRepository : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ITemplatesRepository() = default;
 
-    virtual RetVal<Templates> templates() const = 0;
+    virtual muse::RetVal<Templates> templates() const = 0;
 };
 }
 

@@ -25,9 +25,9 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
-struct mu::XmlDomData
+struct muse::XmlDomData
 {
     tinyxml2::XMLDocument doc;
     tinyxml2::XMLError err;

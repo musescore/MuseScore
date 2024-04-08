@@ -23,6 +23,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::workspace;
 
 void WorkspacesDataProvider::init()
@@ -35,7 +36,7 @@ void WorkspacesDataProvider::init()
     });
 }
 
-mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
+RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
 {
     IWorkspacePtr current = manager()->currentWorkspace();
     IF_ASSERT_FAILED(current) {
@@ -56,7 +57,7 @@ mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
     return def->rawData(key);
 }
 
-mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
+Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
 {
     IWorkspacePtr current = manager()->currentWorkspace();
     IF_ASSERT_FAILED(current) {
@@ -89,12 +90,12 @@ mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
     return ret;
 }
 
-mu::async::Notification WorkspacesDataProvider::dataChanged(DataKey key) const
+async::Notification WorkspacesDataProvider::dataChanged(DataKey key) const
 {
     return m_dataNotifications[key];
 }
 
-mu::async::Notification WorkspacesDataProvider::workspaceChanged() const
+async::Notification WorkspacesDataProvider::workspaceChanged() const
 {
     return m_workspaceChanged;
 }

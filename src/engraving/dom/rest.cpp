@@ -112,7 +112,7 @@ void Rest::hack_toRestType()
 //      replaced by special symbols with ledger lines
 //---------------------------------------------------------
 
-void Rest::setOffset(const mu::PointF& o)
+void Rest::setOffset(const PointF& o)
 {
     double _spatium = spatium();
     int line = lrint(o.y() / _spatium);
@@ -139,7 +139,7 @@ void Rest::setOffset(const mu::PointF& o)
 //   drag
 //---------------------------------------------------------
 
-mu::RectF Rest::drag(EditData& ed)
+RectF Rest::drag(EditData& ed)
 {
     // don't allow drag for Measure Rests, because they can't be easily laid out in correct position while dragging
     if (measure() && durationType().type() == DurationType::V_MEASURE) {
@@ -223,7 +223,7 @@ bool Rest::acceptDrop(EditData& data) const
         ElementType::GLISSANDO
     };
 
-    return e->isSpanner() && !mu::contains(ignoredTypes, type);
+    return e->isSpanner() && !muse::contains(ignoredTypes, type);
 }
 
 //---------------------------------------------------------
@@ -744,8 +744,8 @@ void Rest::setAccent(bool flag)
 
 String Rest::accessibleInfo() const
 {
-    String voice = mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
-    return mtrc("engraving", "%1; Duration: %2; %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
+    String voice = muse::mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
+    return muse::mtrc("engraving", "%1; Duration: %2; %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
 }
 
 //---------------------------------------------------------
@@ -756,12 +756,12 @@ String Rest::screenReaderInfo() const
 {
     Measure* m = measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
-    String voice = voices ? (u"; " + mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1)) : u"";
+    String voice = voices ? (u"; " + muse::mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1)) : u"";
     String crossStaff;
     if (staffMove() < 0) {
-        crossStaff = u"; " + mtrc("engraving", "Cross-staff above");
+        crossStaff = u"; " + muse::mtrc("engraving", "Cross-staff above");
     } else if (staffMove() > 0) {
-        crossStaff = u"; " + mtrc("engraving", "Cross-staff below");
+        crossStaff = u"; " + muse::mtrc("engraving", "Cross-staff below");
     }
     return String(u"%1 %2%3%4").arg(EngravingItem::accessibleInfo(), durationUserName(), crossStaff, voice);
 }

@@ -31,18 +31,18 @@ namespace mu::project {
 class NotationProject;
 class ProjectFileInfoProvider : public engraving::IFileInfoProvider
 {
-    INJECT(io::IFileSystem, filesystem)
+    INJECT(muse::io::IFileSystem, filesystem)
 public:
     explicit ProjectFileInfoProvider(NotationProject* project);
 
-    io::path_t path() const override;
-    io::path_t fileName(bool includingExtension = true) const override;
-    io::path_t absoluteDirPath() const override;
+    muse::io::path_t path() const override;
+    muse::io::path_t fileName(bool includingExtension = true) const override;
+    muse::io::path_t absoluteDirPath() const override;
 
-    String displayName() const override;
+    muse::String displayName() const override;
 
-    DateTime birthTime() const override;
-    DateTime lastModified() const override;
+    muse::DateTime birthTime() const override;
+    muse::DateTime lastModified() const override;
 
 private:
     NotationProject* m_project = nullptr;

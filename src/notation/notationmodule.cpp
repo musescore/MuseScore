@@ -86,7 +86,8 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::notation;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::uicomponents;
@@ -224,12 +225,12 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
         pr->reg("instruments", m_configuration->instrumentListPath());
 
         io::paths_t scoreOrderPaths = m_configuration->scoreOrderListPaths();
-        for (const io::path_t& p : scoreOrderPaths) {
+        for (const muse::io::path_t& p : scoreOrderPaths) {
             pr->reg("scoreOrder", p);
         }
 
         io::paths_t uscoreOrderPaths = m_configuration->userScoreOrderListPaths();
-        for (const io::path_t& p : uscoreOrderPaths) {
+        for (const muse::io::path_t& p : uscoreOrderPaths) {
             pr->reg("user scoreOrder", p);
         }
     }

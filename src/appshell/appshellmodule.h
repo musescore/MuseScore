@@ -35,7 +35,7 @@ class SessionsManager;
 #ifdef Q_OS_MAC
 class MacOSScrollingHook;
  #endif
-class AppShellModule : public modularity::IModuleSetup
+class AppShellModule : public muse::modularity::IModuleSetup
 {
 public:
     AppShellModule();
@@ -48,9 +48,9 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
 
-    void onPreInit(const IApplication::RunMode& mode) override;
-    void onInit(const IApplication::RunMode& mode) override;
-    void onAllInited(const IApplication::RunMode& mode) override;
+    void onPreInit(const muse::IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+    void onAllInited(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
 private:

@@ -34,7 +34,7 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::BRACKET)
 {
     setModelType(InspectorModelType::TYPE_BRACKET);
-    setTitle(mu::qtrc("inspector", "Bracket"));
+    setTitle(muse::qtrc("inspector", "Bracket"));
     setIcon(muse::ui::IconCode::Code::BRACKET);
     createProperties();
 
@@ -78,11 +78,11 @@ void BracketSettingsModel::onNotationChanged(const PropertyIdSet& changedPropert
 
 void BracketSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::BRACKET_COLUMN)) {
+    if (muse::contains(propertyIdSet, Pid::BRACKET_COLUMN)) {
         loadPropertyItem(m_bracketColumnPosition);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BRACKET_SPAN)) {
+    if (muse::contains(propertyIdSet, Pid::BRACKET_SPAN)) {
         loadPropertyItem(m_bracketSpanStaves);
     }
 }

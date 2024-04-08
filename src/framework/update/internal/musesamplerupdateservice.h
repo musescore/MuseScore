@@ -43,16 +43,16 @@ class MuseSamplerUpdateService : public IMuseSamplerUpdateService, public async:
     Inject<network::INetworkManagerCreator> networkManagerCreator;
     Inject<IUpdateConfiguration> configuration;
     Inject<io::IFileSystem> fileSystem;
-    Inject<mu::ISystemInfo> systemInfo;
+    Inject<ISystemInfo> systemInfo;
     Inject<languages::ILanguagesConfiguration> languagesConfiguration;
     Inject<musesampler::IMuseSamplerInfo> museSamplerInfo;
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
 
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;
     RetVal<ReleaseInfo> lastCheckResult() override;
 
-    mu::Progress updateProgress() override;
+    Progress updateProgress() override;
 
     void openMuseHub() override;
 
@@ -64,8 +64,8 @@ private:
     ReleaseInfo m_lastCheckResult;
     io::path_t m_installatorPath;
 
-    muse::network::INetworkManagerPtr m_networkManager;
-    mu::Progress m_updateProgress;
+    network::INetworkManagerPtr m_networkManager;
+    Progress m_updateProgress;
 };
 }
 

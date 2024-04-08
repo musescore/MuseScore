@@ -38,7 +38,7 @@
 #endif
 
 using namespace muse::workspace;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string WorkspaceModule::moduleName() const
 {

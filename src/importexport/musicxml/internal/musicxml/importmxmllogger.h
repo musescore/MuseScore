@@ -25,7 +25,7 @@
 
 #include "global/types/string.h"
 
-namespace mu {
+namespace muse {
 class XmlStreamReader;
 }
 
@@ -37,9 +37,9 @@ public:
         MXML_TRACE, MXML_INFO, MXML_ERROR
     };
     MxmlLogger() {}
-    void logDebugTrace(const mu::String& trace, const XmlStreamReader* xmlreader = 0);
-    void logDebugInfo(const String& info, const XmlStreamReader* xmlreader = 0);
-    void logError(const String& error, const XmlStreamReader* xmlreader = 0);
+    void logDebugTrace(const muse::String& trace, const muse::XmlStreamReader* xmlreader = 0);
+    void logDebugInfo(const muse::String& info, const muse::XmlStreamReader* xmlreader = 0);
+    void logError(const muse::String& error, const muse::XmlStreamReader* xmlreader = 0);
     void setLoggingLevel(const Level level) { m_level = level; }
 private:
     Level m_level = Level::MXML_INFO;

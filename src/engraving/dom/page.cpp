@@ -66,7 +66,7 @@ std::vector<EngravingItem*> Page::items(const RectF& rect)
     return bspTree.items(rect);
 }
 
-std::vector<EngravingItem*> Page::items(const mu::PointF& point)
+std::vector<EngravingItem*> Page::items(const PointF& point)
 {
     if (!m_bspTreeValid) {
         doRebuildBspTree();
@@ -370,30 +370,30 @@ String Page::replaceTextMacros(const String& s) const
                 d += masterScore()->fileInfo()->path().toString().toXmlEscaped();
                 break;
             case 'd':
-                d += Date::currentDate().toString(DateFormat::ISODate);
+                d += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
                 break;
             case 'D':
             {
                 String creationDate = score()->metaTag(u"creationDate");
                 if (creationDate.isEmpty()) {
-                    d += masterScore()->fileInfo()->birthTime().date().toString(DateFormat::ISODate);
+                    d += masterScore()->fileInfo()->birthTime().date().toString(muse::DateFormat::ISODate);
                 } else {
-                    d += Date::fromStringISOFormat(creationDate).toString(DateFormat::ISODate);
+                    d += muse::Date::fromStringISOFormat(creationDate).toString(muse::DateFormat::ISODate);
                 }
             }
             break;
             case 'm':
                 if (score()->dirty() || !masterScore()->saved()) {
-                    d += Time::currentTime().toString(DateFormat::ISODate);
+                    d += muse::Time::currentTime().toString(muse::DateFormat::ISODate);
                 } else {
-                    d += masterScore()->fileInfo()->lastModified().time().toString(DateFormat::ISODate);
+                    d += masterScore()->fileInfo()->lastModified().time().toString(muse::DateFormat::ISODate);
                 }
                 break;
             case 'M':
                 if (score()->dirty() || !masterScore()->saved()) {
-                    d += Date::currentDate().toString(DateFormat::ISODate);
+                    d += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
                 } else {
-                    d += masterScore()->fileInfo()->lastModified().date().toString(DateFormat::ISODate);
+                    d += masterScore()->fileInfo()->lastModified().date().toString(muse::DateFormat::ISODate);
                 }
                 break;
             case 'C': // only on first page

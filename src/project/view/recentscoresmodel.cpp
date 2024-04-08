@@ -29,6 +29,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::project;
 
 RecentScoresModel::RecentScoresModel(QObject* parent)
@@ -64,7 +65,7 @@ void RecentScoresModel::updateRecentScores()
     items.reserve(recentScores.size());
 
     QVariantMap addItem;
-    addItem[NAME_KEY] = mu::qtrc("project", "New score");
+    addItem[NAME_KEY] = muse::qtrc("project", "New score");
     addItem[IS_CREATE_NEW_KEY] = true;
     addItem[IS_NO_RESULTS_FOUND_KEY] = false;
     addItem[IS_CLOUD_KEY] = false;

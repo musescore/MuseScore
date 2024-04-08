@@ -29,9 +29,10 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::extensions;
 
-static const mu::Settings::Key USER_PLUGINS_PATH("plugins", "application/paths/myPlugins");
+static const muse::Settings::Key USER_PLUGINS_PATH("plugins", "application/paths/myPlugins");
 
 static const std::string EXTENSIONS_RESOURCE_NAME("EXTENSIONS");
 
@@ -47,22 +48,22 @@ void ExtensionsConfiguration::init()
     }
 }
 
-mu::io::path_t ExtensionsConfiguration::defaultPath() const
+io::path_t ExtensionsConfiguration::defaultPath() const
 {
     return globalConfiguration()->appDataPath() + "/extensions";
 }
 
-mu::io::path_t ExtensionsConfiguration::userPath() const
+io::path_t ExtensionsConfiguration::userPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/extensions";
 }
 
-mu::io::path_t ExtensionsConfiguration::pluginsDefaultPath() const
+io::path_t ExtensionsConfiguration::pluginsDefaultPath() const
 {
     return globalConfiguration()->appDataPath() + "/plugins";
 }
 
-mu::io::path_t ExtensionsConfiguration::pluginsUserPath() const
+io::path_t ExtensionsConfiguration::pluginsUserPath() const
 {
     return settings()->value(USER_PLUGINS_PATH).toPath();
 }
@@ -72,12 +73,12 @@ void ExtensionsConfiguration::setUserPluginsPath(const io::path_t& path)
     settings()->setSharedValue(USER_PLUGINS_PATH, Val(path));
 }
 
-mu::async::Channel<mu::io::path_t> ExtensionsConfiguration::pluginsUserPathChanged() const
+async::Channel<io::path_t> ExtensionsConfiguration::pluginsUserPathChanged() const
 {
     return m_pluginsUserPathChanged;
 }
 
-mu::Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Config>& configs)
+Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Config>& configs)
 {
     JsonArray arr;
     for (const auto& p : configs) {
@@ -103,13 +104,13 @@ mu::Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest
     return ret;
 }
 
-std::map<mu::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs() const
+std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs() const
 {
     ByteArray data;
     {
         TRACEFUNC;
 
-        mu::io::path_t configPath = pluginsUserPath() + "/config.json";
+        io::path_t configPath = pluginsUserPath() + "/config.json";
         mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
         Ret ret = io::File::readFile(configPath, data);
         if (!ret) {
@@ -133,7 +134,7 @@ std::map<mu::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs() c
 
     JsonArray arr = doc.rootArray();
 
-    std::map<mu::Uri, Manifest::Config> result;
+    std::map<Uri, Manifest::Config> result;
     for (size_t i = 0; i < arr.size(); ++i) {
         JsonObject obj = arr.at(i).toObject();
 

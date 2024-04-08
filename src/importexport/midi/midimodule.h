@@ -28,14 +28,14 @@
 
 namespace mu::iex::midi {
 class MidiConfiguration;
-class MidiModule : public modularity::IModuleSetup
+class MidiModule : public muse::modularity::IModuleSetup
 {
 public:
 
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<MidiConfiguration> m_configuration;

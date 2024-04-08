@@ -32,7 +32,7 @@ class MusicxmlValidation
 {
 public:
 
-    static engraving::Err validate(const String& name, const ByteArray& data);
+    static engraving::Err validate(const muse::String& name, const muse::ByteArray& data);
 };
 }
 

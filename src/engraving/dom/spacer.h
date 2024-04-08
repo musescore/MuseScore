@@ -69,7 +69,7 @@ public:
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

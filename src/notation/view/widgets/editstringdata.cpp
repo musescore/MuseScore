@@ -122,7 +122,7 @@ bool EditStringData::eventFilter(QObject* obj, QEvent* event)
 QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) const
 {
     return item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-           + (item->checkState() == Qt::Checked ? mu::qtrc("ui", "checked", "checkstate") : mu::qtrc("ui", "unchecked", "checkstate"));
+           + (item->checkState() == Qt::Checked ? muse::qtrc("ui", "checked", "checkstate") : muse::qtrc("ui", "unchecked", "checkstate"));
 }
 
 INotationSelectionPtr EditStringData::currentNotationSelection() const
@@ -231,10 +231,10 @@ void EditStringData::init()
 {
     numOfFrets->setValue(_frets);
 
-    stringList->setHorizontalHeaderLabels({ mu::qtrc("notation/editstringdata", "Always open"),
-                                            mu::qtrc("notation/editstringdata", "Pitch") });
-    QString toolTip = mu::qtrc("notation/editstringdata",
-                               "<b>Always open</b><br>On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.");
+    stringList->setHorizontalHeaderLabels({ muse::qtrc("notation/editstringdata", "Always open"),
+                                            muse::qtrc("notation/editstringdata", "Pitch") });
+    QString toolTip = muse::qtrc("notation/editstringdata",
+                                 "<b>Always open</b><br>On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.");
     stringList->horizontalHeaderItem(0)->setToolTip(toolTip);
     int numOfStrings = static_cast<int>(_strings.size());
     stringList->setRowCount(numOfStrings);
@@ -299,7 +299,7 @@ void EditStringData::initStringsData()
 
     Part* part = stringTunings->staff()->part();
 
-    auto it = mu::findLessOrEqual(part->instruments(), stringTunings->tick().ticks());
+    auto it = muse::findLessOrEqual(part->instruments(), stringTunings->tick().ticks());
     if (it == part->instruments().cend()) {
         return;
     }
@@ -347,5 +347,5 @@ void EditStringData::accept()
 
 QString EditStringData::midiCodeToStr(int midiCode)
 {
-    return QString::fromStdString(mu::pitchToString(midiCode));
+    return QString::fromStdString(muse::pitchToString(midiCode));
 }

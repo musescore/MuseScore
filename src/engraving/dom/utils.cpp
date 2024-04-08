@@ -1162,7 +1162,7 @@ SymIdList timeSigSymIdsFromString(const String& string)
 
     SymIdList list;
     for (size_t i = 0; i < string.size(); ++i) {
-        SymId sym = mu::value(dict, string.at(i), SymId::noSym);
+        SymId sym = muse::value(dict, string.at(i), SymId::noSym);
         if (sym != SymId::noSym) {
             list.push_back(sym);
         }
@@ -1199,7 +1199,7 @@ double yStaffDifference(const System* system1, staff_idx_t staffIdx1, const Syst
 bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff)
 {
     // Sanity checks
-    if (!item || item->staffIdx() == mu::nidx || startStaff == mu::nidx || endStaff == mu::nidx) {
+    if (!item || item->staffIdx() == muse::nidx || startStaff == muse::nidx || endStaff == muse::nidx) {
         return false;
     }
 
@@ -1229,7 +1229,7 @@ bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, 
 bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff)
 {
     // Sanity checks
-    if (!item || item->staffIdx() == mu::nidx || startStaff == mu::nidx || endStaff == mu::nidx) {
+    if (!item || item->staffIdx() == muse::nidx || startStaff == muse::nidx || endStaff == muse::nidx) {
         return false;
     }
 

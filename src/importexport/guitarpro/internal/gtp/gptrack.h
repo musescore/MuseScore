@@ -34,7 +34,7 @@ public:
 
     struct Diagram {
         int id{ 0 };
-        String name;
+        muse::String name;
         int stringCount{ 0 };
         int fretCount{ 0 };
         int baseFret{ 0 };
@@ -45,15 +45,15 @@ public:
 
     struct Sound {
         int programm{ 0 };
-        String name;
-        String label;
-        String path;
-        String role;
+        muse::String name;
+        muse::String label;
+        muse::String path;
+        muse::String role;
     };
 
     struct SoundAutomation {
-        String type;
-        String value;
+        muse::String type;
+        muse::String value;
         int bar = 0;
         bool linear = 0;
         float position = 0;
@@ -63,14 +63,14 @@ public:
         : _idx(idx) {}
     virtual ~GPTrack() = default;
 
-    void setName(const String& n) { _name = n; }
-    String name() const { return _name; }
+    void setName(const muse::String& n) { _name = n; }
+    muse::String name() const { return _name; }
 
-    void setShortName(const String& s) { _shortName = s; }
-    String shortName() const { return _shortName; }
+    void setShortName(const muse::String& s) { _shortName = s; }
+    muse::String shortName() const { return _shortName; }
 
-    void setInstrument(const String& s) { _instrument = s; }
-    String instrument() const { return _instrument; }
+    void setInstrument(const muse::String& s) { _instrument = s; }
+    muse::String instrument() const { return _instrument; }
 
     void setRSE(const RSE& r) { _rse = r; }
     const RSE& rse() const { return _rse; }
@@ -97,7 +97,7 @@ public:
     };
 
     void addSoundAutomation(SoundAutomation val) { _automations.insert({ { val.bar, val.position }, val }); }
-    const std::unordered_map<String, Sound>& sounds() { return _sounds; }
+    const std::unordered_map<muse::String, Sound>& sounds() { return _sounds; }
     const std::map<SoundAutomationPos, SoundAutomation>& soundAutomations() { return _automations; }
 
     std::vector<InstrumentString> strings() const
@@ -137,9 +137,9 @@ public:
 
 protected:
 
-    String _name;
-    String _shortName;
-    String _instrument;
+    muse::String _name;
+    muse::String _shortName;
+    muse::String _instrument;
     RSE _rse;
     int _programm{ 0 };
     int _midiChannel{ 0 };
@@ -147,7 +147,7 @@ protected:
     int _idx{ -1 };
     size_t _staffCount{ 1 };
     std::vector<StaffProperty> _staffProperty;
-    std::unordered_map<String, Sound> _sounds;
+    std::unordered_map<muse::String, Sound> _sounds;
     std::map<SoundAutomationPos, SoundAutomation> _automations;
     int _transpose{ 0 };
     std::unordered_map<int, Diagram> _diagrams;

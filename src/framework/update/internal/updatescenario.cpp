@@ -36,7 +36,7 @@
 
 static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 
-using namespace mu;
+using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;
 
@@ -150,7 +150,7 @@ void UpdateScenario::setIgnoredMuseSamplerUpdate(const std::string& version)
 
 void UpdateScenario::doCheckForAppUpdate(bool manual)
 {
-    m_appCheckProgressChannel = std::make_shared<mu::Progress>();
+    m_appCheckProgressChannel = std::make_shared<Progress>();
     m_appCheckProgressChannel->started.onNotify(this, [this]() {
         m_appCheckProgress = true;
     });
@@ -203,7 +203,7 @@ void UpdateScenario::th_checkForAppUpdate()
 
 void UpdateScenario::doCheckForMuseSamplerUpdate(bool manual)
 {
-    m_museSamplerCheckProgressChannel = std::make_shared<mu::Progress>();
+    m_museSamplerCheckProgressChannel = std::make_shared<Progress>();
     m_museSamplerCheckProgressChannel->started.onNotify(this, [this]() {
         m_museSamplerCheckProgress = true;
     });
@@ -271,14 +271,14 @@ void UpdateScenario::processUpdateResult(int errorCode)
 
 void UpdateScenario::showNoAppUpdateMsg()
 {
-    QString str = mu::qtrc("update", "You already have the latest version of MuseScore. "
-                                     "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
+    QString str = muse::qtrc("update", "You already have the latest version of MuseScore. "
+                                       "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
 
-    interactive()->info(mu::trc("update", "You’re up to date!"), text, { okBtn }, okBtn.btn,
+    interactive()->info(muse::trc("update", "You’re up to date!"), text, { okBtn }, okBtn.btn,
                         IInteractive::Option::WithIcon);
 }
 
@@ -328,8 +328,8 @@ void UpdateScenario::showMuseSamplerReleaseInfo(const ReleaseInfo& info)
 
 void UpdateScenario::showServerErrorMsg()
 {
-    interactive()->error(mu::trc("update", "Cannot connect to server"),
-                         mu::trc("update", "Sorry - please try again later"));
+    interactive()->error(muse::trc("update", "Cannot connect to server"),
+                         muse::trc("update", "Sorry - please try again later"));
 }
 
 void UpdateScenario::downloadRelease()
@@ -343,15 +343,15 @@ void UpdateScenario::downloadRelease()
     closeAppAndStartInstallation(rv.val.toString());
 }
 
-void UpdateScenario::closeAppAndStartInstallation(const io::path_t& installerPath)
+void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& installerPath)
 {
-    std::string info = mu::trc("update", "MuseScore needs to close to complete the installation. "
-                                         "If you have any unsaved changes, you will be prompted to save them before MuseScore closes.");
+    std::string info = muse::trc("update", "MuseScore needs to close to complete the installation. "
+                                           "If you have any unsaved changes, you will be prompted to save them before MuseScore closes.");
 
     int closeBtn = int(IInteractive::Button::CustomButton) + 1;
     IInteractive::Result result = interactive()->info("", info,
                                                       { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                        IInteractive::ButtonData(closeBtn, mu::trc("update", "Close"), true) },
+                                                        IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
                                                       closeBtn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {

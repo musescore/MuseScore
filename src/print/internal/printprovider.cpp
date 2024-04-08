@@ -28,6 +28,7 @@
 
 using namespace mu;
 using namespace mu::print;
+using namespace muse;
 using namespace muse::draw;
 using namespace mu::notation;
 
@@ -58,7 +59,7 @@ Ret PrintProvider::printNotation(INotationPtr notation)
 
     QPrintDialog pd(&printerDev, 0);
     if (!pd.exec()) {
-        return mu::make_ret(Ret::Code::Cancel);
+        return muse::make_ret(Ret::Code::Cancel);
     }
 
     Painter painter(&printerDev, "print");
@@ -75,5 +76,5 @@ Ret PrintProvider::printNotation(INotationPtr notation)
 
     painter.endDraw();
 
-    return mu::make_ret(Ret::Code::Ok);
+    return muse::make_ok();
 }

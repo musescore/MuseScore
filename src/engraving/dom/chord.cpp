@@ -410,7 +410,7 @@ void Chord::undoUnlink()
 
 Chord::~Chord()
 {
-    DeleteAll(m_articulations);
+    muse::DeleteAll(m_articulations);
 
     if (tremoloTwoChord()) {
         if (tremoloTwoChord()->chord1() == this) {
@@ -429,8 +429,8 @@ Chord::~Chord()
         delete ll;
         ll = llNext;
     }
-    DeleteAll(m_graceNotes);
-    DeleteAll(m_notes);
+    muse::DeleteAll(m_graceNotes);
+    muse::DeleteAll(m_notes);
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -882,7 +882,7 @@ void Chord::remove(EngravingItem* e)
     case ElementType::ORNAMENT:
     {
         Articulation* a = toArticulation(e);
-        if (!mu::remove(m_articulations, a)) {
+        if (!muse::remove(m_articulations, a)) {
             LOGD("ChordRest::remove(): articulation not found");
         }
     }
@@ -1491,13 +1491,13 @@ double Chord::calcDefaultStemLength()
         double bottomLine = lineDistance * (staffLineCount - 1.0);
         double target = 0.0;
         double midLine = middleLine / 4.0 * lineDistance;
-        if (mu::RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
+        if (muse::RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
             // need to extend to middle line, or to opposite line if staff is < 2sp tall
             if (bottomLine < 2 * _spatium) {
                 target = ldata()->up ? topLine : bottomLine;
             } else {
                 double twoSpIn = ldata()->up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
-                target = mu::RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
+                target = muse::RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
             }
         } else {
             // need to extend to second line in staff, or to opposite line if staff has < 3 lines
@@ -1738,7 +1738,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 //   pagePos
 //---------------------------------------------------------
 
-mu::PointF Chord::pagePos() const
+PointF Chord::pagePos() const
 {
     if (isGrace()) {
         PointF p(pos());
@@ -2444,9 +2444,9 @@ void Chord::removeMarkings(bool keepTremolo)
     if (arpeggio()) {
         remove(arpeggio());
     }
-    DeleteAll(graceNotes());
+    muse::DeleteAll(graceNotes());
     graceNotes().clear();
-    DeleteAll(articulations());
+    muse::DeleteAll(articulations());
     articulations().clear();
     for (Note* n : notes()) {
         for (EngravingItem* e : n->el()) {

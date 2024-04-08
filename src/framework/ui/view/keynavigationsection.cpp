@@ -63,7 +63,7 @@ const IKeyNavigation::Index& KeyNavigationSection::index() const
     return AbstractKeyNavigation::index();
 }
 
-mu::async::Channel<IKeyNavigation::Index> KeyNavigationSection::indexChanged() const
+async::Channel<IKeyNavigation::Index> KeyNavigationSection::indexChanged() const
 {
     return AbstractKeyNavigation::indexChanged();
 }
@@ -73,7 +73,7 @@ bool KeyNavigationSection::enabled() const
     return AbstractKeyNavigation::enabled();
 }
 
-mu::async::Channel<bool> KeyNavigationSection::enabledChanged() const
+async::Channel<bool> KeyNavigationSection::enabledChanged() const
 {
     return AbstractKeyNavigation::enabledChanged();
 }
@@ -88,7 +88,7 @@ void KeyNavigationSection::setActive(bool arg)
     AbstractKeyNavigation::setActive(arg);
 }
 
-mu::async::Channel<bool> KeyNavigationSection::activeChanged() const
+async::Channel<bool> KeyNavigationSection::activeChanged() const
 {
     return AbstractKeyNavigation::activeChanged();
 }
@@ -115,7 +115,7 @@ void KeyNavigationSection::addSubSection(KeyNavigationSubSection* sub)
     }
 }
 
-mu::async::Channel<SectionSubSectionControl> KeyNavigationSection::forceActiveRequested() const
+async::Channel<SectionSubSectionControl> KeyNavigationSection::forceActiveRequested() const
 {
     return m_forceActiveRequested;
 }
@@ -139,7 +139,7 @@ const std::set<IKeyNavigationSubSection*>& KeyNavigationSection::subsections() c
     return m_subsections;
 }
 
-mu::async::Notification KeyNavigationSection::subsectionsListChanged() const
+async::Notification KeyNavigationSection::subsectionsListChanged() const
 {
     return m_subsectionsListChanged;
 }

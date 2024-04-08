@@ -25,6 +25,7 @@
 
 using namespace mu::project;
 using namespace mu::notation;
+using namespace muse;
 
 namespace mu::project {
 inline bool operator==(const Template& templ1, const Template& templ2)

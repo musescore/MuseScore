@@ -24,7 +24,7 @@
 
 #include "thirdparty/kors_profiler/profiler/profiler.h" // IWYU pragma: export
 
-namespace mu::profiler {
+namespace muse::profiler {
 using Profiler = kors::profiler::Profiler;
 }
 

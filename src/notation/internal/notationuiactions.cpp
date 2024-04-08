@@ -29,6 +29,7 @@
 
 using namespace mu;
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
@@ -2593,12 +2594,12 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> NotationUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> NotationUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<ActionCodeList> NotationUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> NotationUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

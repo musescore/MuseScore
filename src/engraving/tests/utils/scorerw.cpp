@@ -37,7 +37,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 String ScoreRW::m_rootPath;
@@ -54,10 +54,10 @@ String ScoreRW::rootPath()
 
 MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportFunc importFunc)
 {
-    io::path_t path = isAbsolutePath ? name : (rootPath() + u"/" + name);
+    muse::io::path_t path = isAbsolutePath ? name : (rootPath() + u"/" + name);
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
-    std::string suffix = io::suffix(path);
+    std::string suffix = muse::io::suffix(path);
 
     ScoreLoad sl;
     Err rv;
@@ -116,7 +116,7 @@ bool ScoreRW::saveScore(Score* score, const String& name, ExportFunc exportFunc)
         return false;
     }
 
-    io::path_t path =  name;
+    muse::io::path_t path =  name;
     Err rv = exportFunc(score, path);
 
     if (rv != Err::NoError) {
@@ -151,7 +151,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     return element;
 }
 
-bool ScoreRW::saveMimeData(ByteArray mimeData, const String& saveName)
+bool ScoreRW::saveMimeData(muse::ByteArray mimeData, const String& saveName)
 {
     File f(saveName);
     if (!f.open(IODevice::WriteOnly)) {

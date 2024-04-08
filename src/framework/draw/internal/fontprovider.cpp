@@ -25,7 +25,7 @@
 
 using namespace muse::draw;
 
-int FontProvider::addSymbolFont(const mu::String& family, const mu::io::path_t& path)
+int FontProvider::addSymbolFont(const mu::String& family, const io::path_t& path)
 {
     //! NOTE Adding fonts in the fontsmodule
     UNUSED(family);
@@ -33,7 +33,7 @@ int FontProvider::addSymbolFont(const mu::String& family, const mu::io::path_t& 
     return 1;
 }
 
-int FontProvider::addTextFont(const mu::io::path_t& path)
+int FontProvider::addTextFont(const io::path_t& path)
 {
     //! NOTE Adding fonts in the fontsmodule
     UNUSED(path);
@@ -94,30 +94,30 @@ double FontProvider::horizontalAdvance(const muse::draw::Font& f, const mu::Char
     return fontsEngine()->horizontalAdvance(f, ch.unicode());
 }
 
-mu::RectF FontProvider::boundingRect(const muse::draw::Font& f, const mu::String& string) const
+RectF FontProvider::boundingRect(const muse::draw::Font& f, const mu::String& string) const
 {
     return fontsEngine()->boundingRect(f, string.toStdU32String());
 }
 
-mu::RectF FontProvider::boundingRect(const muse::draw::Font& f, const mu::Char& ch) const
+RectF FontProvider::boundingRect(const muse::draw::Font& f, const mu::Char& ch) const
 {
     return fontsEngine()->boundingRect(f, ch.unicode());
 }
 
-mu::RectF FontProvider::boundingRect(const muse::draw::Font& f, const mu::RectF& r, int flags, const mu::String& string) const
+RectF FontProvider::boundingRect(const muse::draw::Font& f, const RectF& r, int flags, const mu::String& string) const
 {
     UNUSED(r);
     UNUSED(flags);
     return boundingRect(f, string);
 }
 
-mu::RectF FontProvider::tightBoundingRect(const muse::draw::Font& f, const mu::String& string) const
+RectF FontProvider::tightBoundingRect(const muse::draw::Font& f, const mu::String& string) const
 {
     return fontsEngine()->tightBoundingRect(f, string.toStdU32String());
 }
 
 // Score symbols
-mu::RectF FontProvider::symBBox(const muse::draw::Font& f, char32_t ucs4, double DPI_F) const
+RectF FontProvider::symBBox(const muse::draw::Font& f, char32_t ucs4, double DPI_F) const
 {
     UNUSED(DPI_F);
     return fontsEngine()->symBBox(f, ucs4);

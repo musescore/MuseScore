@@ -24,6 +24,7 @@
 #include "engraving/dom/system.h"
 
 using namespace mu::notation;
+using namespace muse;
 
 void PlaybackCursor::paint(muse::draw::Painter* painter)
 {
@@ -45,7 +46,7 @@ void PlaybackCursor::move(muse::midi::tick_t tick)
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-mu::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) const
+muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) const
 {
     if (!m_notation) {
         return RectF();
@@ -140,7 +141,7 @@ void PlaybackCursor::setVisible(bool arg)
     m_visible = arg;
 }
 
-const mu::RectF& PlaybackCursor::rect() const
+const muse::RectF& PlaybackCursor::rect() const
 {
     return m_rect;
 }

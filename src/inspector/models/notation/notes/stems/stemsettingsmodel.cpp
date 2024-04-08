@@ -33,7 +33,7 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STEM);
-    setTitle(mu::qtrc("inspector", "Stem"));
+    setTitle(muse::qtrc("inspector", "Stem"));
 
     createProperties();
 }
@@ -135,26 +135,26 @@ void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyId
 {
     loadProperties(changedPropertyIdSet);
 
-    if (mu::contains(changedStyleIdSet, Sid::useStraightNoteFlags)) {
+    if (muse::contains(changedStyleIdSet, Sid::useStraightNoteFlags)) {
         emit useStraightNoteFlagsChanged();
     }
 }
 
 void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
+    if (muse::contains(propertyIdSet, Pid::LINE_WIDTH)) {
         loadPropertyItem(m_thickness, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::USER_LEN)) {
+    if (muse::contains(propertyIdSet, Pid::USER_LEN)) {
         loadPropertyItem(m_length, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::STEM_DIRECTION)) {
+    if (muse::contains(propertyIdSet, Pid::STEM_DIRECTION)) {
         loadPropertyItem(m_stemDirection);
     }
 
-    if (mu::contains(propertyIdSet, Pid::OFFSET)) {
+    if (muse::contains(propertyIdSet, Pid::OFFSET)) {
         loadPropertyItem(m_offset);
     }
 }

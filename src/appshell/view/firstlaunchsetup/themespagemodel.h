@@ -30,7 +30,7 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::appshell {
-class ThemesPageModel : public QObject, public async::Asyncable
+class ThemesPageModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

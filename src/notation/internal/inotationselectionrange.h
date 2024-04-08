@@ -47,8 +47,8 @@ public:
 
     virtual std::vector<const Part*> selectedParts() const = 0;
 
-    virtual std::vector<RectF> boundingArea() const = 0;
-    virtual bool containsPoint(const PointF& point) const = 0;
+    virtual std::vector<muse::RectF> boundingArea() const = 0;
+    virtual bool containsPoint(const muse::PointF& point) const = 0;
 };
 
 using INotationSelectionRangePtr = std::shared_ptr<INotationSelectionRange>;

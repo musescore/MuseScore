@@ -22,6 +22,7 @@
 #include "paletteconfigurationstub.h"
 
 using namespace mu::palette;
+using namespace muse;
 
 double PaletteConfigurationStub::paletteSpatium() const
 {
@@ -37,18 +38,18 @@ void PaletteConfigurationStub::setPaletteScaling(double)
 {
 }
 
-mu::ValCh<bool> PaletteConfigurationStub::isSinglePalette() const
+ValCh<bool> PaletteConfigurationStub::isSinglePalette() const
 {
-    return mu::ValCh<bool>();
+    return ValCh<bool>();
 }
 
 void PaletteConfigurationStub::setIsSinglePalette(bool)
 {
 }
 
-mu::ValCh<bool> PaletteConfigurationStub::isSingleClickToOpenPalette() const
+ValCh<bool> PaletteConfigurationStub::isSingleClickToOpenPalette() const
 {
-    return mu::ValCh<bool>();
+    return ValCh<bool>();
 }
 
 void PaletteConfigurationStub::setIsSingleClickToOpenPalette(bool)
@@ -75,19 +76,19 @@ QColor PaletteConfigurationStub::accentColor() const
     return QColor();
 }
 
-mu::async::Notification PaletteConfigurationStub::colorsChanged() const
+muse::async::Notification PaletteConfigurationStub::colorsChanged() const
 {
-    return mu::async::Notification();
+    return muse::async::Notification();
 }
 
-mu::io::path_t PaletteConfigurationStub::keySignaturesDirPath() const
+muse::io::path_t PaletteConfigurationStub::keySignaturesDirPath() const
 {
-    return mu::io::path_t();
+    return muse::io::path_t();
 }
 
-mu::io::path_t PaletteConfigurationStub::timeSignaturesDirPath() const
+muse::io::path_t PaletteConfigurationStub::timeSignaturesDirPath() const
 {
-    return mu::io::path_t();
+    return muse::io::path_t();
 }
 
 bool PaletteConfigurationStub::useFactorySettings() const
@@ -100,18 +101,18 @@ bool PaletteConfigurationStub::enableExperimental() const
     return false;
 }
 
-mu::ValCh<IPaletteConfiguration::PaletteConfig> PaletteConfigurationStub::paletteConfig(const QString&) const
+ValCh<IPaletteConfiguration::PaletteConfig> PaletteConfigurationStub::paletteConfig(const QString&) const
 {
-    return mu::ValCh<IPaletteConfiguration::PaletteConfig>();
+    return ValCh<IPaletteConfiguration::PaletteConfig>();
 }
 
 void PaletteConfigurationStub::setPaletteConfig(const QString&, const IPaletteConfiguration::PaletteConfig&)
 {
 }
 
-mu::ValCh<IPaletteConfiguration::PaletteCellConfig> PaletteConfigurationStub::paletteCellConfig(const QString&) const
+ValCh<IPaletteConfiguration::PaletteCellConfig> PaletteConfigurationStub::paletteCellConfig(const QString&) const
 {
-    return mu::ValCh<IPaletteConfiguration::PaletteCellConfig>();
+    return ValCh<IPaletteConfiguration::PaletteCellConfig>();
 }
 
 void PaletteConfigurationStub::setPaletteCellConfig(const QString&, const IPaletteConfiguration::PaletteCellConfig&)

@@ -26,7 +26,7 @@
 
 using namespace mu::project;
 
-void WindowsRecentFilesController::prependPlatformRecentFile(const io::path_t& path)
+void WindowsRecentFilesController::prependPlatformRecentFile(const muse::io::path_t& path)
 {
     std::wstring pathString = path.toStdWString();
     SHAddToRecentDocs(SHARD_PATHW, pathString.c_str());

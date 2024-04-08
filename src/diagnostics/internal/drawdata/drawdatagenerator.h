@@ -41,14 +41,14 @@ class DrawDataGenerator
 public:
     DrawDataGenerator() = default;
 
-    Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const GenOpt& opt = GenOpt());
-    Ret processFile(const io::path_t& scoreFile, const io::path_t& outFile, const GenOpt& opt = GenOpt());
+    muse::Ret processDir(const muse::io::path_t& scoreDir, const muse::io::path_t& outDir, const GenOpt& opt = GenOpt());
+    muse::Ret processFile(const muse::io::path_t& scoreFile, const muse::io::path_t& outFile, const GenOpt& opt = GenOpt());
 
-    muse::draw::DrawDataPtr genDrawData(const io::path_t& scorePath, const GenOpt& opt = GenOpt()) const;
-    muse::draw::Pixmap genImage(const io::path_t& scorePath) const;
+    muse::draw::DrawDataPtr genDrawData(const muse::io::path_t& scorePath, const GenOpt& opt = GenOpt()) const;
+    muse::draw::Pixmap genImage(const muse::io::path_t& scorePath) const;
 
 private:
-    bool loadScore(engraving::MasterScore* score, const io::path_t& path) const;
+    bool loadScore(engraving::MasterScore* score, const muse::io::path_t& path) const;
     void applyOptions(engraving::MasterScore* score, const GenOpt& opt) const;
 };
 }

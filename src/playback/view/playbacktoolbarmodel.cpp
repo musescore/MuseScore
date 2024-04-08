@@ -28,10 +28,11 @@
 #include "playback/internal/playbackuiactions.h"
 
 using namespace mu::playback;
+using namespace mu::notation;
+using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;
-using namespace mu::notation;
 using namespace muse::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");

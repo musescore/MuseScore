@@ -21,7 +21,7 @@
  */
 #include "processapi.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
 static std::vector<std::string> toArgs(const QStringList& list)
 {

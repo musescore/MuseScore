@@ -69,7 +69,7 @@ inline bool isAudioExport(const std::string& suffix)
         "mp3", "wav", "ogg", "flac",
     };
 
-    return mu::contains(audioSuffixes, suffix);
+    return muse::contains(audioSuffixes, suffix);
 }
 }
 

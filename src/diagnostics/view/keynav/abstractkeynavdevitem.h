@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 namespace mu::diagnostics {
-class AbstractKeyNavDevItem : public QObject, public async::Asyncable
+class AbstractKeyNavDevItem : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name CONSTANT)

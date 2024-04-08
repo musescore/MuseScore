@@ -50,9 +50,9 @@ public:
 
 private:
     void listenVisibilityChanged();
-    void createAndAddPart(const ID& masterPartId);
+    void createAndAddPart(const muse::ID& masterPartId);
 
-    size_t resolveNewPartIndex(const ID& partId) const;
+    size_t resolveNewPartIndex(const muse::ID& partId) const;
 
     QString m_instrumentId;
     bool m_isInited = false;

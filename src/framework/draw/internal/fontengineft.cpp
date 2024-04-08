@@ -35,7 +35,7 @@
 
 static FT_Library ftlib = nullptr;
 
-using namespace mu::io;
+using namespace muse::io;
 using namespace muse::draw;
 
 static bool _init_ft()

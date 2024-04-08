@@ -30,7 +30,7 @@
 #include "pianokeyboardtypes.h"
 
 namespace mu::notation {
-class PianoKeyboardController : public async::Asyncable
+class PianoKeyboardController : public muse::async::Asyncable
 {
     INJECT(context::IGlobalContext, context)
 
@@ -43,7 +43,7 @@ public:
     void setPressedKey(std::optional<piano_key_t> key);
 
     KeyState keyState(piano_key_t key) const;
-    async::Notification keyStatesChanged() const;
+    muse::async::Notification keyStatesChanged() const;
 
     bool isFromMidi() const;
 
@@ -62,7 +62,7 @@ private:
 
     bool m_isFromMidi = false;
 
-    async::Notification m_keyStatesChanged;
+    muse::async::Notification m_keyStatesChanged;
 };
 }
 

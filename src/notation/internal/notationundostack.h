@@ -37,15 +37,15 @@ namespace mu::notation {
 class NotationUndoStack : public INotationUndoStack
 {
 public:
-    NotationUndoStack(IGetScore* getScore, async::Notification notationChanged);
+    NotationUndoStack(IGetScore* getScore, muse::async::Notification notationChanged);
 
     bool canUndo() const override;
     void undo(mu::engraving::EditData*) override;
-    async::Notification undoNotification() const override;
+    muse::async::Notification undoNotification() const override;
 
     bool canRedo() const override;
     void redo(mu::engraving::EditData*) override;
-    async::Notification redoNotification() const override;
+    muse::async::Notification redoNotification() const override;
 
     void prepareChanges() override;
     void rollbackChanges() override;
@@ -57,8 +57,8 @@ public:
     void unlock() override;
     bool isLocked() const override;
 
-    async::Notification stackChanged() const override;
-    async::Channel<ChangesRange> changesChannel() const override;
+    muse::async::Notification stackChanged() const override;
+    muse::async::Channel<ChangesRange> changesChannel() const override;
 
 private:
     void notifyAboutNotationChanged();
@@ -72,10 +72,10 @@ private:
 
     IGetScore* m_getScore = nullptr;
 
-    async::Notification m_notationChanged;
-    async::Notification m_stackStateChanged;
-    async::Notification m_undoNotification;
-    async::Notification m_redoNotification;
+    muse::async::Notification m_notationChanged;
+    muse::async::Notification m_stackStateChanged;
+    muse::async::Notification m_undoNotification;
+    muse::async::Notification m_redoNotification;
 };
 }
 

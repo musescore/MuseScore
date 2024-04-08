@@ -48,7 +48,7 @@ bool VstPluginMetaReader::canReadMeta(const io::path_t& pluginPath) const
     return io::suffix(pluginPath) == VST3_PACKAGE_EXTENSION;
 }
 
-mu::RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t& pluginPath) const
+RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t& pluginPath) const
 {
     PluginModulePtr module = createModule(pluginPath);
     if (!module) {
@@ -64,7 +64,7 @@ mu::RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t
         }
 
         muse::audio::AudioResourceMeta meta;
-        meta.id = mu::io::completeBasename(pluginPath).toStdString();
+        meta.id = io::completeBasename(pluginPath).toStdString();
         meta.type = muse::audio::AudioResourceType::VstPlugin;
         meta.attributes.emplace(muse::audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()));
         meta.vendor = classInfo.vendor();

@@ -47,7 +47,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 //---------------------------------------------------------
@@ -84,7 +84,7 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     metaTags().insert({ u"translator", u"" });
     metaTags().insert({ u"source", u"" });
     metaTags().insert({ u"copyright", u"" });
-    metaTags().insert({ u"creationDate", Date::currentDate().toString(DateFormat::ISODate) });
+    metaTags().insert({ u"creationDate", muse::Date::currentDate().toString(muse::DateFormat::ISODate) });
 }
 
 MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
@@ -104,7 +104,7 @@ MasterScore::~MasterScore()
     delete m_sigmap;
     delete m_tempomap;
     delete m_undoStack;
-    DeleteAll(m_excerpts);
+    muse::DeleteAll(m_excerpts);
 }
 
 //---------------------------------------------------------
@@ -223,7 +223,7 @@ void MasterScore::addExcerpt(Excerpt* ex, size_t index)
         initParts(ex);
     }
 
-    excerpts().insert(excerpts().begin() + (index == mu::nidx ? excerpts().size() : index), ex);
+    excerpts().insert(excerpts().begin() + (index == muse::nidx ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }
 
@@ -233,7 +233,7 @@ void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 
 void MasterScore::removeExcerpt(Excerpt* ex)
 {
-    if (mu::remove(excerpts(), ex)) {
+    if (muse::remove(excerpts(), ex)) {
         setExcerptsChanged(true);
         // delete ex;
     } else {
@@ -254,7 +254,7 @@ MasterScore* MasterScore::clone()
 
     buffer.close();
 
-    ByteArray scoreData = buffer.data();
+    muse::ByteArray scoreData = buffer.data();
     MasterScore* score = new MasterScore(style(), m_project);
 
     XmlReader r(scoreData);
@@ -328,8 +328,8 @@ void MasterScore::setLayoutAll(staff_idx_t staff, const EngravingItem* e)
 
     if (e && e->score() == this) {
         // TODO: map staff number properly
-        const staff_idx_t startStaff = staff == mu::nidx ? 0 : staff;
-        const staff_idx_t endStaff = staff == mu::nidx ? (nstaves() - 1) : staff;
+        const staff_idx_t startStaff = staff == muse::nidx ? 0 : staff;
+        const staff_idx_t endStaff = staff == muse::nidx ? (nstaves() - 1) : staff;
         m_cmdState.setStaff(startStaff);
         m_cmdState.setStaff(endStaff);
 

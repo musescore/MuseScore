@@ -31,7 +31,7 @@
 #include "audio/iaudiodriver.h"
 
 namespace mu::appshell {
-class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
+class CommonAudioApiConfigurationModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

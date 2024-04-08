@@ -35,7 +35,7 @@
 using namespace muse::autobot::api;
 using namespace muse::autobot;
 
-AutobotApi::AutobotApi(mu::api::IApiEngine* e)
+AutobotApi::AutobotApi(muse::api::IApiEngine* e)
     : ApiObject(e)
 {
 }

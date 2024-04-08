@@ -28,14 +28,14 @@
 
 namespace mu::iex::imagesexport {
 class ImagesExportConfiguration;
-class ImagesExportModule : public modularity::IModuleSetup
+class ImagesExportModule : public muse::modularity::IModuleSetup
 {
 public:
 
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<ImagesExportConfiguration> m_configuration;

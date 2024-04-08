@@ -433,7 +433,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     psa->setRestrictHeight(false);
 
     tabWidget->clear();
-    tabWidget->addTab(psa, mu::qtrc("palette", "Common symbols"));
+    tabWidget->addTab(psa, muse::qtrc("palette", "Common symbols"));
 
     psa = new PaletteScrollArea(m_pSmufl);
     psa->setRestrictHeight(false);
@@ -442,7 +442,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     m_lws = new QListWidget;
 
     QStringList keys;
-    std::vector<String> symbols = mu::keys(Smufl::smuflRanges());
+    std::vector<String> symbols = muse::keys(Smufl::smuflRanges());
     for (const String& s : symbols) {
         keys << s.toQString();
     }
@@ -453,7 +453,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     ws->addWidget(m_lws);
     ws->addWidget(psa);
 
-    tabWidget->addTab(ws, mu::qtrc("palette", "Musical symbols"));
+    tabWidget->addTab(ws, muse::qtrc("palette", "Musical symbols"));
 
     psa = new PaletteScrollArea(m_pUnicode);
     psa->setRestrictHeight(false);
@@ -464,7 +464,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
 
     int index = 0;
     for (const UnicodeRange& range : unicodeRanges) {
-        QListWidgetItem* newItem = new QListWidgetItem(mu::qtrc("palette/unicodeRanges", range.name));
+        QListWidgetItem* newItem = new QListWidgetItem(muse::qtrc("palette/unicodeRanges", range.name));
         newItem->setData(Qt::UserRole, index);
         m_lwu->addItem(newItem);
         if (index == 0) {
@@ -476,7 +476,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     wu->addWidget(m_lwu);
     wu->addWidget(psa);
 
-    tabWidget->addTab(wu, mu::qtrc("palette", "Unicode symbols"));
+    tabWidget->addTab(wu, muse::qtrc("palette", "Unicode symbols"));
 
     connect(m_lws, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateSmufl);
     connect(m_lwu, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateUnicode);
@@ -695,7 +695,7 @@ void SpecialCharactersDialog::populateSmufl()
 {
     int row = m_lws->currentRow();
 
-    QString key = mu::keys(Smufl::smuflRanges()).at(row).toQString();
+    QString key = muse::keys(Smufl::smuflRanges()).at(row).toQString();
     QStringList smuflNames = Smufl::smuflRanges().at(key).toQStringList();
 
     m_pSmufl->clear();

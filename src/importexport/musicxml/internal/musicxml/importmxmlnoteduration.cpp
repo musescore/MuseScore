@@ -192,7 +192,7 @@ String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const 
  Parse the /score-partwise/part/measure/note/duration node.
  */
 
-void MxmlNoteDuration::duration(XmlStreamReader& e)
+void MxmlNoteDuration::duration(muse::XmlStreamReader& e)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
 
@@ -210,7 +210,7 @@ void MxmlNoteDuration::duration(XmlStreamReader& e)
  Return true if handled.
  */
 
-bool MxmlNoteDuration::readProperties(XmlStreamReader& e)
+bool MxmlNoteDuration::readProperties(muse::XmlStreamReader& e)
 {
     const AsciiStringView tag(e.name());
     //LOGD("tag %s", muPrintable(tag.toString()));
@@ -236,7 +236,7 @@ bool MxmlNoteDuration::readProperties(XmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/time-modification node.
  */
 
-void MxmlNoteDuration::timeModification(XmlStreamReader& e)
+void MxmlNoteDuration::timeModification(muse::XmlStreamReader& e)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::timeModification", &e);
 
@@ -256,7 +256,7 @@ void MxmlNoteDuration::timeModification(XmlStreamReader& e)
             // but would be accepted by setType()
             String strNormalType = e.readText();
             if (strNormalType != u"measure") {
-                ByteArray ba = strNormalType.toAscii();
+                muse::ByteArray ba = strNormalType.toAscii();
                 m_normalType.setType(TConv::fromXml(ba.constChar(), DurationType::V_INVALID));
             }
         } else {

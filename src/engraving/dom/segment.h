@@ -134,7 +134,7 @@ public:
     Segment* prev1(SegmentType) const;
     Segment* prev1MM(SegmentType) const;
 
-    Segment* nextCR(track_idx_t track = mu::nidx, bool sameStaff = false) const;
+    Segment* nextCR(track_idx_t track = muse::nidx, bool sameStaff = false) const;
 
     ChordRest* nextChordRest(track_idx_t track, bool backwards = false) const;
 
@@ -155,7 +155,7 @@ public:
     System* system() const { return toSystem(explicitParent()->explicitParent()); }
     double x() const override { return ldata()->pos().x(); }
 
-    mu::RectF contentRect() const;
+    RectF contentRect() const;
 
     void insertStaff(staff_idx_t staff);
     void removeStaff(staff_idx_t staff);

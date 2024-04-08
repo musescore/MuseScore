@@ -43,7 +43,7 @@
 #include "types/commontypes.h"
 
 namespace mu::inspector {
-class AbstractInspectorModel : public QObject, public async::Asyncable
+class AbstractInspectorModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -209,7 +209,7 @@ protected:
 
     void updateNotation();
     notation::INotationPtr currentNotation() const;
-    async::Notification currentNotationChanged() const;
+    muse::async::Notification currentNotationChanged() const;
     bool isMasterNotation() const;
 
     notation::INotationSelectionPtr selection() const;

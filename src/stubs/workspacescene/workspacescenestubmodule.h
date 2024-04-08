@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::workspacescene {
-class WorkspaceSceneModule : public modularity::IModuleSetup
+class WorkspaceSceneModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

@@ -33,7 +33,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-XmlWriter::XmlWriter(mu::io::IODevice* device)
+XmlWriter::XmlWriter(muse::io::IODevice* device)
     : XmlStreamWriter(device)
 {
 }
@@ -301,7 +301,7 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     }
 }
 
-void XmlWriter::tagPoint(const AsciiStringView& name, const mu::PointF& p)
+void XmlWriter::tagPoint(const AsciiStringView& name, const PointF& p)
 {
     tag(name, { { "x", p.x() }, { "y", p.y() } });
 }

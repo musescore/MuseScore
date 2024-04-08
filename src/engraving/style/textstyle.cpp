@@ -1280,7 +1280,7 @@ const std::vector<TextStyleType>& editableTextStyles()
 {
     if (_editableTextStyles.empty()) {
         _editableTextStyles = allTextStyles();
-        mu::remove(_editableTextStyles, TextStyleType::DYNAMICS);
+        muse::remove(_editableTextStyles, TextStyleType::DYNAMICS);
     }
     return _editableTextStyles;
 }

@@ -26,7 +26,7 @@
 
 #include "io/ifilesystem.h"
 
-namespace mu::io {
+namespace muse::io {
 class FileSystemMock : public IFileSystem
 {
 public:

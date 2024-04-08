@@ -115,7 +115,7 @@ String Fingering::accessibleInfo() const
 {
     String rez = EngravingItem::accessibleInfo();
     if (textStyleType() == TextStyleType::STRING_NUMBER) {
-        rez += u' ' + mtrc("engraving", "String number");
+        rez += u' ' + muse::mtrc("engraving", "String number");
     }
     return String(u"%1: %2").arg(rez, plainText());
 }

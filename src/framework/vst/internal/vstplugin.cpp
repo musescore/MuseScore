@@ -27,9 +27,9 @@
 #include "log.h"
 #include "async/async.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::vst;
-using namespace mu::async;
+using namespace muse::async;
 
 static const std::string_view COMPONENT_STATE_KEY = "componentState";
 static const std::string_view CONTROLLER_STATE_KEY = "controllerState";

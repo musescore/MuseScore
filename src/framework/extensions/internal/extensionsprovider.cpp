@@ -57,11 +57,11 @@ void ExtensionsProvider::reloadPlugins()
     ManifestList plugins = pluginsLoader.loadManifesList(configuration()->pluginsDefaultPath(),
                                                          configuration()->pluginsUserPath());
 
-    mu::join(m_manifests, plugins);
+    muse::join(m_manifests, plugins);
 
     std::map<Uri, Manifest::Config> configs = configuration()->manifestConfigs();
     for (Manifest& m : m_manifests) {
-        m.config = mu::value(configs, m.uri);
+        m.config = muse::value(configs, m.uri);
     }
 
     m_manifestListChanged.notify();
@@ -82,7 +82,7 @@ ManifestList ExtensionsProvider::manifestList(Filter filter) const
     return m_manifests;
 }
 
-mu::async::Notification ExtensionsProvider::manifestListChanged() const
+muse::async::Notification ExtensionsProvider::manifestListChanged() const
 {
     return m_manifestListChanged;
 }
@@ -101,7 +101,7 @@ const Manifest& ExtensionsProvider::manifest(const Uri& uri) const
     return _dymmy;
 }
 
-mu::async::Channel<Manifest> ExtensionsProvider::manifestChanged() const
+muse::async::Channel<Manifest> ExtensionsProvider::manifestChanged() const
 {
     return m_manifestChanged;
 }
@@ -128,7 +128,7 @@ Action ExtensionsProvider::action(const UriQuery& q) const
     return Action();
 }
 
-mu::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
+muse::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
 {
     bool ok = false;
     std::map<Uri, Manifest::Config> allconfigs;
@@ -152,7 +152,7 @@ mu::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
     return ret;
 }
 
-mu::Ret ExtensionsProvider::perform(const UriQuery& uri)
+muse::Ret ExtensionsProvider::perform(const UriQuery& uri)
 {
     Action a = action(uri);
     switch (a.type) {
@@ -172,13 +172,13 @@ mu::Ret ExtensionsProvider::perform(const UriQuery& uri)
     return make_ret(Ret::Code::UnknownError);
 }
 
-mu::Ret ExtensionsProvider::run(const UriQuery& uri)
+muse::Ret ExtensionsProvider::run(const UriQuery& uri)
 {
     Action a = action(uri);
     return run(a);
 }
 
-mu::Ret ExtensionsProvider::run(const Action& a)
+muse::Ret ExtensionsProvider::run(const Action& a)
 {
     if (!a.isValid()) {
         return make_ret(Err::ExtNotFound);

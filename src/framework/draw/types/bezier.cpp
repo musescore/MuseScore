@@ -23,7 +23,7 @@
 #include "bezier.h"
 #include "global/realfn.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 
 Bezier::Bezier(double x1, double y1,
@@ -54,7 +54,7 @@ void Bezier::coefficients(double t, double& a, double& b, double& c, double& d)
 
 Bezier Bezier::bezierOnInterval(double t0, double t1) const
 {
-    if (mu::RealIsNull(t0) && mu::RealIsEqual(t1, 1)) {
+    if (RealIsNull(t0) && RealIsEqual(t1, 1)) {
         return *this;
     }
     Bezier bezier = *this;

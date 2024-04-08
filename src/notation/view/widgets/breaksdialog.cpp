@@ -40,7 +40,7 @@ BreaksDialog::BreaksDialog(QWidget* parent)
 
     //: `%1` will be replaced with a number input field.
     //: Text before it will appear before that number field, text after will appear after the field.
-    QString text = mu::qtrc("notation/add-remove-system-breaks", "Break systems every %1 measures");
+    QString text = muse::qtrc("notation/add-remove-system-breaks", "Break systems every %1 measures");
     QStringList pieces = text.split(QStringLiteral("%1"));
 
     IF_ASSERT_FAILED(pieces.size() >= 2) {

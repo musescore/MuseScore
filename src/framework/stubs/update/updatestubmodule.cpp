@@ -28,7 +28,7 @@
 #include "updateservicestub.h"
 
 using namespace muse::update;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static std::shared_ptr<UpdateScenarioStub> s_scenario = std::make_shared<UpdateScenarioStub>();
 static std::shared_ptr<UpdateServiceStub> s_service = std::make_shared<UpdateServiceStub>();

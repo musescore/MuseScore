@@ -71,11 +71,11 @@ enum GraceReading {
 class MeiImporter
 {
     INJECT_STATIC(mu::iex::mei::IMeiConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::io::IFileSystem, fileSystem)
 
 public:
     MeiImporter(engraving::Score* s) { m_score = s; }
-    bool read(const io::path_t& path);
+    bool read(const muse::io::path_t& path);
 
 private:
     /**
@@ -85,8 +85,8 @@ private:
     bool readScore(pugi::xml_node root);
     bool readScoreDef(pugi::xml_node scoreDefNode, bool isInitial);
     bool readPgHead(pugi::xml_node pgHeadNode);
-    bool readLines(pugi::xml_node parentNode, StringList& lines, size_t& line);
-    bool readLinesWithSmufl(pugi::xml_node parentNode, StringList& lines);
+    bool readLines(pugi::xml_node parentNode, muse::StringList& lines, size_t& line);
+    bool readLinesWithSmufl(pugi::xml_node parentNode, muse::StringList& lines);
     bool readStaffDefs(pugi::xml_node parentNode);
     bool readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int column, size_t& idx);
     bool readSectionElements(pugi::xml_node parentNode);
@@ -161,7 +161,7 @@ private:
      */
     void addEndBarLineToMeasure(engraving::Measure* measure, engraving::BarLineType barLineType);
     void addLayoutBreakToMeasure(engraving::Measure* measure, engraving::LayoutBreakType layoutBreakType);
-    void addTextToTitleFrame(engraving::VBox*& vBox, const String& str, engraving::TextStyleType textStyleType);
+    void addTextToTitleFrame(engraving::VBox*& vBox, const muse::String& str, engraving::TextStyleType textStyleType);
     void addSpannerEnds();
 
     /**
@@ -170,7 +170,7 @@ private:
     int getStaffIndex(int staffN);
     int getVoiceIndex(int staffIdx, int layerN);
     void addLog(const std::string& msg, pugi::xml_node node);
-    bool isNode(pugi::xml_node node, const String& name);
+    bool isNode(pugi::xml_node node, const muse::String& name);
     engraving::ChordRest* addChordRest(pugi::xml_node node, engraving::Measure* measure, int track, const libmei::Element& meiElement,
                                        int& ticks, bool isRest);
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);

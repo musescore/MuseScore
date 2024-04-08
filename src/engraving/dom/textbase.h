@@ -180,13 +180,13 @@ public:
     const TextBlock& curLine() const;
     TextBlock& curLine();
 
-    mu::RectF cursorRect() const;
+    RectF cursorRect() const;
     bool movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor, int count = 1);
     void selectWord();
     void moveCursorToEnd() { movePosition(TextCursor::MoveOperation::End); }
     void moveCursorToStart() { movePosition(TextCursor::MoveOperation::Start); }
     Char currentCharacter() const;
-    bool set(const mu::PointF& p, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor);
+    bool set(const PointF& p, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor);
     String selectedText(bool withFormat = false) const;
     String extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
     void updateCursorFormat();
@@ -217,7 +217,7 @@ class TextFragment
     INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
     mutable CharFormat format;
-    mu::PointF pos;                    // y is relative to TextBlock->y()
+    PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;
 
     bool operator ==(const TextFragment& f) const;
@@ -248,8 +248,8 @@ public:
     const std::list<TextFragment>& fragments() const { return m_fragments; }
     std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
-    const mu::RectF& boundingRect() const { return m_bbox; }
-    mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
+    const RectF& boundingRect() const { return m_bbox; }
+    RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
     void insert(TextCursor*, const String&);
     void insertEmptyFragmentIfNeeded(TextCursor*);
@@ -276,7 +276,7 @@ private:
     std::list<TextFragment> m_fragments;
     double m_y = 0.0;
     double m_lineSpacing = 0.0;
-    mu::RectF m_bbox;
+    RectF m_bbox;
     bool m_eol = false;
 };
 
@@ -301,7 +301,7 @@ public:
     Text& operator=(const Text&) = delete;
 
     virtual void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const mu::PointF& pos, const String& text);
+    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
 
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
@@ -353,11 +353,11 @@ public:
 
     virtual void paste(EditData& ed, const String& txt);
 
-    mu::RectF pageRectangle() const;
+    RectF pageRectangle() const;
 
     void dragTo(EditData&);
 
-    std::vector<mu::LineF> dragAnchorLines() const override;
+    std::vector<LineF> dragAnchorLines() const override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -434,15 +434,15 @@ public:
     friend class TextCursor;
     using EngravingObject::undoChangeProperty;
 
-    muse::draw::Color textColor() const;
+    Color textColor() const;
     FrameType frameType() const { return m_frameType; }
     void setFrameType(FrameType val) { m_frameType = val; }
     double textLineSpacing() const { return m_textLineSpacing; }
     void setTextLineSpacing(double val) { m_textLineSpacing = val; }
-    muse::draw::Color bgColor() const { return m_bgColor; }
-    void setBgColor(const muse::draw::Color& val) { m_bgColor = val; }
-    muse::draw::Color frameColor() const { return m_frameColor; }
-    void setFrameColor(const muse::draw::Color& val) { m_frameColor = val; }
+    Color bgColor() const { return m_bgColor; }
+    void setBgColor(const Color& val) { m_bgColor = val; }
+    Color frameColor() const { return m_frameColor; }
+    void setFrameColor(const Color& val) { m_frameColor = val; }
     Spatium frameWidth() const { return m_frameWidth; }
     void setFrameWidth(Spatium val) { m_frameWidth = val; }
     Spatium paddingWidth() const { return m_paddingWidth; }
@@ -454,7 +454,7 @@ public:
         std::vector<TextBlock> blocks;
         bool layoutInvalid = true;
 
-        mu::RectF frame;
+        RectF frame;
 
         size_t rows() const { return blocks.size(); }
         const TextBlock& textBlock(size_t i) const { return blocks.at(i); }
@@ -487,7 +487,7 @@ protected:
 
 private:
 
-    void drawSelection(muse::draw::Painter*, const mu::RectF&) const;
+    void drawSelection(muse::draw::Painter*, const RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     String genText(const LayoutData* ldata) const;
     void genText();
@@ -510,8 +510,8 @@ private:
 
     FrameType m_frameType = FrameType::NO_FRAME;
     double m_textLineSpacing = 1.0;
-    muse::draw::Color m_bgColor;
-    muse::draw::Color m_frameColor;
+    Color m_bgColor;
+    Color m_frameColor;
     Spatium m_frameWidth;
     Spatium m_paddingWidth;
     int m_frameRound = 0;

@@ -23,7 +23,7 @@
 
 #include "translation.h"
 
-using namespace mu;
+using namespace muse;
 
 static constexpr const char* sharpNotes[] = {
     QT_TRANSLATE_NOOP("global", "C"),
@@ -55,7 +55,7 @@ static constexpr const char* flatNotes[] = {
     QT_TRANSLATE_NOOP("global", "B")
 };
 
-std::string mu::pitchToString(int pitch, bool addoctave, bool useFlats /* = false */)
+std::string muse::pitchToString(int pitch, bool addoctave, bool useFlats /* = false */)
 {
     if (pitch < 0 || pitch > 127) {
         return std::string();
@@ -66,7 +66,7 @@ std::string mu::pitchToString(int pitch, bool addoctave, bool useFlats /* = fals
     int i = pitch % 12;
     if (addoctave) {
         int octave = (pitch / 12) - 1;
-        return mu::trc("global", source[i]) + std::to_string(octave);
+        return muse::trc("global", source[i]) + std::to_string(octave);
     }
-    return mu::trc("global", source[i]);
+    return muse::trc("global", source[i]);
 }

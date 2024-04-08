@@ -46,10 +46,10 @@ public:
     QString name() const override;
     void setName(const QString& name) override;
     void undoSetName(const QString& name) override;
-    async::Notification nameChanged() const override;
+    muse::async::Notification nameChanged() const override;
 
     bool hasFileName() const override;
-    const String& fileName() const override;
+    const muse::String& fileName() const override;
 
     INotationPtr notation() override;
     IExcerptNotationPtr clone() const override;

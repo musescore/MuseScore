@@ -290,14 +290,14 @@ public:
     double position(const StringList& names, ChordTokenClass ctc) const;
 
     bool read(const String&);
-    bool read(io::IODevice* device);
+    bool read(muse::io::IODevice* device);
     bool write(const String&) const;
-    bool write(io::IODevice* device) const;
+    bool write(muse::io::IODevice* device) const;
     bool loaded() const;
     void unload();
 
     const ChordDescription* description(int id) const;
-    ChordSymbol symbol(const String& s) const { return mu::value(m_symbols, s); }
+    ChordSymbol symbol(const String& s) const { return muse::value(m_symbols, s); }
 
     void setCustomChordList(bool t) { m_customChordList = t; }
     bool customChordList() const { return m_customChordList; }

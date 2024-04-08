@@ -41,9 +41,9 @@ namespace mu::engraving {
 class Score;
 class Selection;
 
-class NotationBraille : public mu::braille::INotationBraille, public async::Asyncable
+class NotationBraille : public mu::braille::INotationBraille, public muse::async::Asyncable
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(braille::IBrailleConfiguration, brailleConfiguration)
@@ -67,15 +67,15 @@ public:
     void setInputNoteDuration(notation::Duration d);
     void setTupletDuration(int tuplet, notation::Duration d);
 
-    ValCh<std::string> brailleInfo() const override;
-    ValCh<int> cursorPosition() const override;
-    ValCh<int> currentItemPositionStart() const override;
-    ValCh<int> currentItemPositionEnd() const override;
-    ValCh<std::string> keys() const override;
-    ValCh<bool> enabled() const override;
-    ValCh<braille::BrailleIntervalDirection> intervalDirection() const override;
-    ValCh<int> mode() const override;
-    ValCh<std::string> cursorColor() const override;
+    muse::ValCh<std::string> brailleInfo() const override;
+    muse::ValCh<int> cursorPosition() const override;
+    muse::ValCh<int> currentItemPositionStart() const override;
+    muse::ValCh<int> currentItemPositionEnd() const override;
+    muse::ValCh<std::string> keys() const override;
+    muse::ValCh<bool> enabled() const override;
+    muse::ValCh<braille::BrailleIntervalDirection> intervalDirection() const override;
+    muse::ValCh<int> mode() const override;
+    muse::ValCh<std::string> cursorColor() const override;
 
     void setEnabled(const bool enabled) override;
     void setIntervalDirection(const braille::BrailleIntervalDirection direction) override;
@@ -110,7 +110,7 @@ private:
     void setCurrentEngravingItem(EngravingItem* el, bool select);
 
     void updateTableForLyricsFromPreferences();
-    io::path_t tablesDefaultDirPath() const;
+    muse::io::path_t tablesDefaultDirPath() const;
 
     IntervalDirection currentIntervalDirection();
 
@@ -120,17 +120,17 @@ private:
     BrailleEngravingItemList m_beil;
     BrailleInputState m_braille_input;
 
-    ValCh<std::string> m_brailleInfo;
-    ValCh<int> m_cursorPosition;
-    ValCh<int> m_currentItemPositionStart;
-    ValCh<int> m_currentItemPositionEnd;
-    ValCh<std::string> m_keys;
-    ValCh<bool> m_enabled;
-    ValCh<int> m_mode;
-    ValCh<braille::BrailleIntervalDirection> m_intervalDirection;
-    ValCh<std::string> m_cursorColor;
+    muse::ValCh<std::string> m_brailleInfo;
+    muse::ValCh<int> m_cursorPosition;
+    muse::ValCh<int> m_currentItemPositionStart;
+    muse::ValCh<int> m_currentItemPositionEnd;
+    muse::ValCh<std::string> m_keys;
+    muse::ValCh<bool> m_enabled;
+    muse::ValCh<int> m_mode;
+    muse::ValCh<braille::BrailleIntervalDirection> m_intervalDirection;
+    muse::ValCh<std::string> m_cursorColor;
 
-    async::Notification m_selectionChanged;
+    muse::async::Notification m_selectionChanged;
 };
 }
 

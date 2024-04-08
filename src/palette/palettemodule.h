@@ -32,7 +32,7 @@ class PaletteActionsController;
 class PaletteUiActions;
 class PaletteConfiguration;
 class PaletteWorkspaceSetup;
-class PaletteModule : public modularity::IModuleSetup
+class PaletteModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -43,8 +43,8 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
 
-    void onInit(const IApplication::RunMode& mode) override;
-    void onAllInited(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+    void onAllInited(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
 private:

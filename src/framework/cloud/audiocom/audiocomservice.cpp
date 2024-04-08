@@ -34,7 +34,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
 
@@ -124,7 +124,7 @@ RequestHeaders AudioComService::headers(const QString& token) const
     return headers;
 }
 
-mu::Ret AudioComService::downloadAccountInfo()
+Ret AudioComService::downloadAccountInfo()
 {
     TRACEFUNC;
 
@@ -156,7 +156,7 @@ mu::Ret AudioComService::downloadAccountInfo()
         setAccountInfo(AccountInfo());
     }
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 bool AudioComService::doUpdateTokens()
@@ -242,7 +242,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
     return progress;
 }
 
-mu::Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat)
+Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat)
 {
     TRACEFUNC;
 

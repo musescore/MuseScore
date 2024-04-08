@@ -60,13 +60,13 @@ public:
     void setDrawCircledTip(bool arg) { m_drawCircledTip = arg; }
     double circledTipRadius() const { return m_circledTipRadius; }
     void setCircledTipRadius(double r) { m_circledTipRadius = r; }
-    mu::PointF circledTip() const { return m_circledTip; }
-    void setCircledTip(const mu::PointF& p) { m_circledTip = p; }
+    PointF circledTip() const { return m_circledTip; }
+    void setCircledTip(const PointF& p) { m_circledTip = p; }
 
     EngravingItem* propertyDelegate(Pid) override;
 
     int gripsCount() const override;
-    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
@@ -84,7 +84,7 @@ private:
     EngravingItem* drop(EditData&) override;
 
     bool m_drawCircledTip = false;
-    mu::PointF m_circledTip;
+    PointF m_circledTip;
     double m_circledTipRadius = 0.0;
 };
 

@@ -21,6 +21,8 @@
  */
 #include "notationparts.h"
 
+#include "translation.h"
+
 #include "engraving/dom/factory.h"
 #include "engraving/dom/undo.h"
 #include "engraving/dom/excerpt.h"
@@ -29,9 +31,9 @@
 #include "igetscore.h"
 
 #include "log.h"
-#include "translation.h"
 
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -43,7 +45,7 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
 
     if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
         //: %1=name ("Horn"), %2=transposition ("C alto"). Example: "Horn in C alto"
-        return mu::qtrc("notation", "%1 in %2", "Transposing instrument displayed in the score")
+        return muse::qtrc("notation", "%1 in %2", "Transposing instrument displayed in the score")
                .arg(instrumentName, trait.name);
     }
 
@@ -63,12 +65,12 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
 
     if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
         //: %1=name ("Horn"), %2=transposition ("C alto"), %3=number ("2"). Example: "Horn in C alto 2"
-        return mu::qtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the score")
+        return muse::qtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the score")
                .arg(instrumentName, trait.name, number);
     }
 
     //: %1=name ("Flute"), %2=number ("2"). Example: "Flute 2"
-    return mu::qtrc("notation", "%1 %2", "One of several instruments displayed in the score")
+    return muse::qtrc("notation", "%1 %2", "One of several instruments displayed in the score")
            .arg(instrumentName, number);
 }
 
@@ -494,7 +496,7 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     return true;
 }
 
-bool NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const mu::ID& destinationPartId)
+bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId)
 {
     TRACEFUNC;
 
@@ -551,7 +553,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
 
     startEdit();
 
-    size_t partIndex = mu::indexOf(score()->parts(), part);
+    size_t partIndex = muse::indexOf(score()->parts(), part);
     score()->cmdRemovePart(part);
     doInsertPart(newPart, partIndex);
 
@@ -915,11 +917,11 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
 
     std::vector<Staff*> allStaves = score()->staves();
 
-    mu::remove_if(allStaves, [&staves](const Staff* staff) {
+    muse::remove_if(allStaves, [&staves](const Staff* staff) {
         return std::find(staves.cbegin(), staves.cend(), staff) != staves.cend();
     });
 
-    size_t dstIndex = mu::indexOf(allStaves, destinationStaff);
+    size_t dstIndex = muse::indexOf(allStaves, destinationStaff);
     if (mode == InsertMode::After) {
         dstIndex++;
     }
@@ -1094,7 +1096,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
         mu::engraving::Part* currentPart = pi.isExistingPart ? partModifiable(pi.partId) : score()->parts()[partIndex];
 
         for (mu::engraving::Staff* staff : currentPart->staves()) {
-            mu::engraving::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
+            mu::engraving::staff_idx_t actualStaffIndex = muse::indexOf(score()->staves(), staff);
             staffMapping.push_back(actualStaffIndex);
         }
         ++partIndex;

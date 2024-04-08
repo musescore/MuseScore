@@ -34,7 +34,7 @@ class IProjectMigrator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectMigrator() = default;
 
-    virtual Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) = 0;
+    virtual muse::Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) = 0;
 };
 }
 

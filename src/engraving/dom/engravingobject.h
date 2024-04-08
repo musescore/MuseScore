@@ -38,10 +38,6 @@
 #include "../infrastructure/rtti.h"
 #include "../infrastructure/eid.h"
 
-namespace mu {
-class TranslatableString;
-}
-
 namespace mu::diagnostics {
 class EngravingElementsProvider;
 }

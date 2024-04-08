@@ -154,7 +154,7 @@ void Excerpt::writeNameToMetaTags()
     }
 }
 
-async::Notification Excerpt::nameChanged() const
+muse::async::Notification Excerpt::nameChanged() const
 {
     return m_nameChanged;
 }
@@ -180,13 +180,13 @@ void Excerpt::setFileName(const String& fileName)
 
 void Excerpt::updateFileName(size_t index)
 {
-    if (index == mu::nidx && m_masterScore) {
-        index = mu::indexOf(m_masterScore->excerpts(), this);
+    if (index == muse::nidx && m_masterScore) {
+        index = muse::indexOf(m_masterScore->excerpts(), this);
     }
 
-    const String escapedName = io::escapeFileName(m_name).toString();
+    const String escapedName = muse::io::escapeFileName(m_name).toString();
 
-    if (index == mu::nidx) {
+    if (index == muse::nidx) {
         m_fileName = escapedName;
     } else {
         m_fileName = String(u"%1_%2").arg(String::number(index), escapedName);
@@ -589,7 +589,7 @@ void MasterScore::initParts(Excerpt* excerpt)
             }
 
             Staff* linkedMasterStaff = toStaff(le);
-            if (mu::contains(assignedStavesIds, linkedMasterStaff->id())) {
+            if (muse::contains(assignedStavesIds, linkedMasterStaff->id())) {
                 continue;
             }
 
@@ -754,7 +754,7 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
         ne->setPropertyFlags(Pid::OFFSET, PropertyFlags::STYLED);
         ne->resetProperty(Pid::OFFSET);
     }
-    ne->setTrack(strack == mu::nidx ? 0 : strack);
+    ne->setTrack(strack == muse::nidx ? 0 : strack);
     ne->setScore(score);
 }
 
@@ -804,7 +804,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         for (track_idx_t srcTrack = 0; srcTrack < tracks; ++srcTrack) {
             TupletMap tupletMap;            // tuplets cannot cross measure boundaries
 
-            track_idx_t strack = mu::value(trackList, srcTrack, mu::nidx);
+            track_idx_t strack = muse::value(trackList, srcTrack, muse::nidx);
 
             TremoloTwoChord* tremolo = 0;
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
@@ -813,7 +813,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                     if (e->generated() || e->excludeFromOtherParts()) {
                         continue;
                     }
-                    if ((e->track() == srcTrack && strack != mu::nidx && !e->systemFlag())
+                    if ((e->track() == srcTrack && strack != muse::nidx && !e->systemFlag())
                         || (e->systemFlag() && srcTrack == 0 && e->track() == srcTrack)) {
                         EngravingItem* ne = e->linkedClone();
                         processLinkedClone(ne, score, strack);
@@ -837,12 +837,12 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                 }
 
                 //If track is not mapped skip the following
-                if (mu::value(trackList, srcTrack, mu::nidx) == mu::nidx) {
+                if (muse::value(trackList, srcTrack, muse::nidx) == muse::nidx) {
                     continue;
                 }
 
                 //There are probably more destination tracks for the same source
-                std::vector<track_idx_t> t = mu::values(trackList, srcTrack);
+                std::vector<track_idx_t> t = muse::values(trackList, srcTrack);
 
                 for (track_idx_t track : t) {
                     //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
@@ -1034,14 +1034,14 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                 continue;
             }
         }
-        track_idx_t track = mu::nidx;
-        if (e->track() != mu::nidx) {
+        track_idx_t track = muse::nidx;
+        if (e->track() != muse::nidx) {
             // try to map track
-            track = mu::value(trackList, e->track(), mu::nidx);
+            track = muse::value(trackList, e->track(), muse::nidx);
             if (e->systemFlag() && !e->isTopSystemObject()) {
                 continue;
             }
-            if (track == mu::nidx) {
+            if (track == muse::nidx) {
                 // even if track not in excerpt, we need to clone system elements
                 if (e->systemFlag() && e->track() == 0) {
                     track = 0;
@@ -1122,8 +1122,8 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             continue;
         }
 
-        track_idx_t dstTrack  = mu::nidx;
-        track_idx_t dstTrack2 = mu::nidx;
+        track_idx_t dstTrack  = muse::nidx;
+        track_idx_t dstTrack2 = muse::nidx;
 
         if (isSystemTextLine(s)) {
             //always export voltas to first staff in part
@@ -1131,12 +1131,12 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             dstTrack2 = 0;
             cloneSpanner(s, dstScore, dstTrack, dstTrack2);
         } else {
-            if (mu::value(trackList, s->track(), mu::nidx) == mu::nidx
-                || mu::value(trackList, s->track2(), mu::nidx) == mu::nidx) {
+            if (muse::value(trackList, s->track(), muse::nidx) == muse::nidx
+                || muse::value(trackList, s->track2(), muse::nidx) == muse::nidx) {
                 continue;
             }
-            std::vector<track_idx_t> track1 = mu::values(trackList, s->track());
-            std::vector<track_idx_t> track2 = mu::values(trackList, s->track2());
+            std::vector<track_idx_t> track1 = muse::values(trackList, s->track());
+            std::vector<track_idx_t> track2 = muse::values(trackList, s->track2());
 
             if (track1.size() != track2.size()) {
                 continue;
@@ -1230,7 +1230,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             l->unlink();
                         }
                     }
-                    DeleteAll(ncr->lyrics());
+                    muse::DeleteAll(ncr->lyrics());
                     ncr->lyrics().clear();
 
                     ncr->checkStaffMoveValidity();
@@ -1367,8 +1367,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
         for (auto i : score->spanner()) {
             Spanner* s = i.second;
             staff_idx_t staffIdx = s->staffIdx();
-            track_idx_t dstTrack = mu::nidx;
-            track_idx_t dstTrack2 = mu::nidx;
+            track_idx_t dstTrack = muse::nidx;
+            track_idx_t dstTrack2 = muse::nidx;
             if (!isSystemTextLine(s)) {
                 //export other spanner if staffidx matches
                 if (srcStaffIdx == staffIdx) {
@@ -1376,7 +1376,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
                 }
             }
-            if (dstTrack == mu::nidx) {
+            if (dstTrack == muse::nidx) {
                 continue;
             }
             cloneSpanner(s, score, dstTrack, dstTrack2);
@@ -1420,21 +1420,21 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         if (!oex && !ex) {
             map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         } else if (oex && !ex) {
-            track_idx_t k = mu::key(otracks, i, mu::nidx);
-            if (k != mu::nidx) {
+            track_idx_t k = muse::key(otracks, i, muse::nidx);
+            if (k != muse::nidx) {
                 map.insert({ i, k });
             }
         } else if (!oex && ex) {
-            for (track_idx_t j : mu::values(tracks, i)) {
+            for (track_idx_t j : muse::values(tracks, i)) {
                 if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                     map.insert({ i, j });
                     break;
                 }
             }
         } else if (oex && ex) {
-            track_idx_t k = mu::key(otracks, i, mu::nidx);
-            if (k != mu::nidx) {
-                for (track_idx_t j : mu::values(tracks, k)) {
+            track_idx_t k = muse::key(otracks, i, muse::nidx);
+            if (k != muse::nidx) {
+                for (track_idx_t j : muse::values(tracks, k)) {
                     if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                         map.insert({ i, j });
                         break;
@@ -1460,7 +1460,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     {
         double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
         double newSpatium = newElement->spatium();
-        if (!mu::RealIsEqual(oldSpatium, newSpatium)) {
+        if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
             newElement->spatiumChanged(oldSpatium, newSpatium);
         }
     };
@@ -1469,7 +1469,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
 
-        for (track_idx_t srcTrack : mu::keys(map)) {
+        for (track_idx_t srcTrack : muse::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = map.at(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
@@ -1610,8 +1610,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         }
 
         staff_idx_t staffIdx = s->staffIdx();
-        track_idx_t dstTrack = mu::nidx;
-        track_idx_t dstTrack2 = mu::nidx;
+        track_idx_t dstTrack = muse::nidx;
+        track_idx_t dstTrack2 = muse::nidx;
 
         if (isSystemTextLine(s)) {
             if (!scoreContainsSpanner(score, s)) {
@@ -1621,16 +1621,16 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         } else {
             // export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
-                if (mu::contains(map, s->track())) {
+                if (muse::contains(map, s->track())) {
                     dstTrack  = map.at(s->track());
                 }
-                if (mu::contains(map, s->track2())) {
+                if (muse::contains(map, s->track2())) {
                     dstTrack2 = map.at(s->track2());
                 }
             }
         }
 
-        if (dstTrack == mu::nidx) {
+        if (dstTrack == muse::nidx) {
             continue;
         }
 

@@ -32,7 +32,7 @@
 #include "ui/uitypes.h"
 
 namespace mu::notation {
-class NotationUiActions : public muse::ui::IUiActionsModule, public async::Asyncable
+class NotationUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
 {
     INJECT(context::IUiContextResolver, uicontextResolver)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
@@ -46,10 +46,10 @@ public:
     const muse::ui::UiActionList& actionsList() const override;
 
     bool actionEnabled(const muse::ui::UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
+    muse::async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
     bool actionChecked(const muse::ui::UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
+    muse::async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
     static DurationType actionDurationType(const muse::actions::ActionCode& actionCode);
     static AccidentalType actionAccidentalType(const muse::actions::ActionCode& actionCode);
@@ -68,8 +68,8 @@ private:
     bool isScoreConfigChecked(const muse::actions::ActionCode& code, const ScoreConfig& cfg) const;
 
     std::shared_ptr<NotationActionController> m_controller;
-    async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
-    async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
+    muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
+    muse::async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
 };
 }
 

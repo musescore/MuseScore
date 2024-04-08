@@ -26,9 +26,9 @@
 
 namespace muse::workspace {
 enum class Err {
-    Undefined       = int(mu::Ret::Code::Undefined),
-    NoError         = int(mu::Ret::Code::Ok),
-    UnknownError    = int(mu::Ret::Code::WorkspaceFirst),
+    Undefined       = int(Ret::Code::Undefined),
+    NoError         = int(Ret::Code::Ok),
+    UnknownError    = int(Ret::Code::WorkspaceFirst),
 
     NotLoaded       = 1502,
 
@@ -36,7 +36,7 @@ enum class Err {
     FailedUnPack    = 1511,
 };
 
-inline mu::Ret make_ret(Err e)
+inline Ret make_ret(Err e)
 {
     return Ret(static_cast<int>(e));
 }

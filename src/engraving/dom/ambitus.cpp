@@ -301,7 +301,7 @@ double Ambitus::headWidth() const
 //   pagePos
 //---------------------------------------------------------
 
-mu::PointF Ambitus::pagePos() const
+PointF Ambitus::pagePos() const
 {
     if (explicitParent() == 0) {
         return pos();
@@ -550,7 +550,7 @@ EngravingItem* Ambitus::prevSegmentElement()
 String Ambitus::accessibleInfo() const
 {
     return EngravingItem::accessibleInfo() + u"; "
-           + mtrc("engraving", "Top pitch: %1; Bottom pitch: %2")
+           + muse::mtrc("engraving", "Top pitch: %1; Bottom pitch: %2")
            .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(topOctave()),
                 tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(bottomOctave()));
 }

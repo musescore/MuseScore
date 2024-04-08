@@ -23,6 +23,7 @@
 
 #include "translation.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::appshell;
 
@@ -97,14 +98,14 @@ void FirstLaunchSetupModel::setCurrentPageIndex(int index)
 bool FirstLaunchSetupModel::askAboutClosingEarly()
 {
     IInteractive::ButtonDatas buttons {
-        IInteractive::ButtonData(IInteractive::Button::Cancel, mu::trc("global", "Cancel")),
-        IInteractive::ButtonData(IInteractive::Button::Continue, mu::trc("appshell/gettingstarted", "Keep going"), /*accentButton*/ true)
+        IInteractive::ButtonData(IInteractive::Button::Cancel, muse::trc("global", "Cancel")),
+        IInteractive::ButtonData(IInteractive::Button::Continue, muse::trc("appshell/gettingstarted", "Keep going"), /*accentButton*/ true)
     };
 
     IInteractive::Result result
-        = interactive()->warning(mu::trc("appshell/gettingstarted", "Are you sure you want to cancel?"),
-                                 mu::trc("appshell/gettingstarted", "If you choose to cancel, then be sure to check out "
-                                                                    "our free Muse Sounds playback library on musescore.org."),
+        = interactive()->warning(muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?"),
+                                 muse::trc("appshell/gettingstarted", "If you choose to cancel, then be sure to check out "
+                                                                      "our free Muse Sounds playback library on musescore.org."),
                                  buttons,
                                  int(IInteractive::Button::Cancel));
 

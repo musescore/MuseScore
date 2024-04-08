@@ -37,7 +37,7 @@ using namespace mu::engraving;
 using namespace muse::mpe;
 using namespace muse;
 
-static const mu::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
+static const muse::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
 
 static constexpr int HAIRPIN_STEPS = 24;
 
@@ -89,7 +89,7 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
 
         for (const auto& pair : f_to_fff_curve) {
             mpe::timestamp_t time = timestampFromTicks(score, f_to_fff_startTick + pair.first + tickPositionOffset);
-            ASSERT_FALSE(mu::contains(expectedDynamics, time));
+            ASSERT_FALSE(muse::contains(expectedDynamics, time));
             expectedDynamics.emplace(time, static_cast<int>(f) + pair.second);
         }
     }
@@ -103,7 +103,7 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
 
     for (const auto& pair : ppp_to_p_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
-        ASSERT_FALSE(mu::contains(expectedDynamics, time));
+        ASSERT_FALSE(muse::contains(expectedDynamics, time));
         expectedDynamics.emplace(time, static_cast<int>(ppp) + pair.second);
     }
 
@@ -136,9 +136,9 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
     PlaybackParamMap params = ctx.playbackParamMap(score);
 
     // [THEN] Expected params
-    PlaybackParamList studio  { { mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Studio") } };
-    PlaybackParamList pop { { mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Pop") } };
-    PlaybackParamList orchestral  { { mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Orchestral") } };
+    PlaybackParamList studio  { { mpe::SOUND_PRESET_PARAM_CODE, Val("Studio") } };
+    PlaybackParamList pop { { mpe::SOUND_PRESET_PARAM_CODE, Val("Pop") } };
+    PlaybackParamList orchestral  { { mpe::SOUND_PRESET_PARAM_CODE, Val("Orchestral") } };
 
     PlaybackParamMap expectedParams {
         { timestampFromTicks(score, 960), studio },

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_GLOBAL_RET_H
-#define MU_GLOBAL_RET_H
+#ifndef MUSE_GLOBAL_RET_H
+#define MUSE_GLOBAL_RET_H
 
 #include <string>
 #include <map>
@@ -31,7 +31,7 @@
 #include <QString>
 #endif
 
-namespace mu {
+namespace muse {
 class Ret
 {
 public:
@@ -134,28 +134,28 @@ private:
     std::map<std::string, std::any> m_data;
 };
 
-inline mu::Ret make_ok()
+inline muse::Ret make_ok()
 {
     return Ret(static_cast<int>(Ret::Code::Ok));
 }
 
-inline mu::Ret make_ret(Ret::Code e)
+inline muse::Ret make_ret(Ret::Code e)
 {
     return Ret(static_cast<int>(e));
 }
 
-inline mu::Ret make_ret(Ret::Code e, const std::string& text)
+inline muse::Ret make_ret(Ret::Code e, const std::string& text)
 {
     return Ret(static_cast<int>(e), text);
 }
 
-inline mu::Ret make_ret(int e, const std::string& text)
+inline muse::Ret make_ret(int e, const std::string& text)
 {
     return Ret(e, text);
 }
 
 #ifndef NO_QT_SUPPORT
-inline mu::Ret make_ret(Ret::Code e, const QString& text)
+inline muse::Ret make_ret(Ret::Code e, const QString& text)
 {
     return Ret(static_cast<int>(e), text.toStdString());
 }
@@ -168,8 +168,4 @@ inline bool check_ret(const Ret& r, Ret::Code c)
 }
 }
 
-namespace muse {
-using Ret = mu::Ret;
-}
-
-#endif // MU_GLOBAL_RET_H
+#endif // MUSE_GLOBAL_RET_H

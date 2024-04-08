@@ -71,7 +71,8 @@
 #endif
 
 using namespace mu::appshell;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::dock;
 

@@ -21,41 +21,42 @@
  */
 #include "networkmanagerstub.h"
 
+using namespace muse;
 using namespace muse::network;
 
-mu::Ret NetworkManagerStub::get(const QUrl&, IncomingDevice*, const RequestHeaders&)
+Ret NetworkManagerStub::get(const QUrl&, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::head(const QUrl&, const RequestHeaders&)
+Ret NetworkManagerStub::head(const QUrl&, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::post(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
+Ret NetworkManagerStub::post(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::put(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
+Ret NetworkManagerStub::put(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::patch(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
+Ret NetworkManagerStub::patch(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::del(const QUrl&, IncomingDevice*, const RequestHeaders&)
+Ret NetworkManagerStub::del(const QUrl&, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Progress NetworkManagerStub::progress() const
+Progress NetworkManagerStub::progress() const
 {
-    return mu::Progress();
+    return Progress();
 }
 
 void NetworkManagerStub::abort()

@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_INTERACTIVEMOCK_H
-#define MU_GLOBAL_INTERACTIVEMOCK_H
+#ifndef MUSE_GLOBAL_INTERACTIVEMOCK_H
+#define MUSE_GLOBAL_INTERACTIVEMOCK_H
 
 #include <gmock/gmock.h>
 
 #include "iinteractive.h"
 
-namespace mu {
+namespace muse {
 class InteractiveMock : public IInteractive
 {
 public:
@@ -50,7 +50,7 @@ public:
     MOCK_METHOD(Result, error, (const std::string&, const Text&, const std::string&, const ButtonDatas&, int, const Options&),
                 (const, override));
 
-    MOCK_METHOD(Ret, showProgress, (const std::string&, mu::Progress*), (const, override));
+    MOCK_METHOD(Ret, showProgress, (const std::string&, Progress*), (const, override));
 
     MOCK_METHOD(io::path_t, selectOpeningFile, (const QString&, const io::path_t&, const std::vector<std::string>&), (override));
     MOCK_METHOD(io::path_t, selectSavingFile, (const QString&, const io::path_t&, const std::vector<std::string>&, bool), (override));
@@ -86,4 +86,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_INTERACTIVEMOCK_H
+#endif // MUSE_GLOBAL_INTERACTIVEMOCK_H

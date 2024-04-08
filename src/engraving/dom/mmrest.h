@@ -47,9 +47,9 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue getProperty(Pid) const override;
 
-    mu::RectF numberRect() const override;
+    RectF numberRect() const override;
 
-    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
+    PointF numberPosition(const RectF& numberBbox) const;
 
     struct LayoutData : public Rest::LayoutData {
         int number = 0;                     // number of measures represented

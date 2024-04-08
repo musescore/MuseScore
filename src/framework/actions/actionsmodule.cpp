@@ -43,7 +43,7 @@ void ActionsModule::registerExports()
 
 void ActionsModule::registerApi()
 {
-    using namespace mu::api;
+    using namespace muse::api;
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {

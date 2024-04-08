@@ -37,7 +37,7 @@ class PartListModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
 
@@ -70,7 +70,7 @@ signals:
 private:
     void openExcerpts(const QList<int>& rows) const;
 
-    Ret doValidatePartTitle(int partIndex, const QString& title) const;
+    muse::Ret doValidatePartTitle(int partIndex, const QString& title) const;
 
     bool isExcerptIndexValid(int index) const;
 

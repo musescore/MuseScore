@@ -274,7 +274,7 @@ mpe::PitchCurve BendsRenderer::buildPitchCurve(mpe::timestamp_t bendStartTime, m
                                                const PitchOffsets& pitchOffsets, const BendTimeFactorMap& timeFactorMap)
 {
     auto findFactorsAtTime = [&timeFactorMap](mpe::timestamp_t time) -> const BendTimeFactors& {
-        auto it = mu::findLessOrEqual(timeFactorMap, time);
+        auto it = muse::findLessOrEqual(timeFactorMap, time);
         if (it == timeFactorMap.end()) {
             static const BendTimeFactors dummy;
             return dummy;

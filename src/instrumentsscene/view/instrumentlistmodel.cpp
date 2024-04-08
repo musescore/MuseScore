@@ -181,7 +181,7 @@ void InstrumentListModel::init(const QString& genreId, const QString& groupId)
     loadInstruments();
 }
 
-QString InstrumentListModel::resolveInstrumentGroupId(const String& instrumentId) const
+QString InstrumentListModel::resolveInstrumentGroupId(const muse::String& instrumentId) const
 {
     for (const InstrumentTemplate* templ : repository()->instrumentTemplates()) {
         if (templ->id == instrumentId) {
@@ -198,7 +198,7 @@ void InstrumentListModel::loadGenres()
 
     static InstrumentGenre allInstrumentsGenre;
     allInstrumentsGenre.id = ALL_INSTRUMENTS_GENRE_ID;
-    allInstrumentsGenre.name = mu::qtrc("instruments", "All instruments");
+    allInstrumentsGenre.name = muse::qtrc("instruments", "All instruments");
 
     m_genres << &allInstrumentsGenre;
 

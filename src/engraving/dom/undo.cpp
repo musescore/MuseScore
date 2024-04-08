@@ -217,7 +217,7 @@ void UndoCommand::redo(EditData* ed)
 
 void UndoCommand::appendChildren(UndoCommand* other)
 {
-    mu::join(childList, other->childList);
+    muse::join(childList, other->childList);
     other->childList.clear();
 }
 
@@ -280,7 +280,7 @@ void UndoCommand::filterChildren(UndoCommand::Filter f, EngravingItem* target)
 void UndoCommand::unwind()
 {
     while (!childList.empty()) {
-        UndoCommand* c = mu::takeLast(childList);
+        UndoCommand* c = muse::takeLast(childList);
         LOG_UNDO() << "unwind: " << c->name();
         c->undo(0);
         delete c;
@@ -310,7 +310,7 @@ UndoStack::~UndoStack()
     for (auto c : list) {
         c->cleanup(idx++ < curIdx);
     }
-    DeleteAll(list);
+    muse::DeleteAll(list);
 }
 
 bool UndoStack::locked() const
@@ -390,17 +390,17 @@ void UndoStack::push1(UndoCommand* cmd)
 void UndoStack::remove(size_t idx)
 {
     assert(idx <= curIdx);
-    assert(curIdx != mu::nidx);
+    assert(curIdx != muse::nidx);
     // remove redo stack
     while (list.size() > curIdx) {
-        UndoCommand* cmd = mu::takeLast(list);
+        UndoCommand* cmd = muse::takeLast(list);
         stateList.pop_back();
         cmd->cleanup(false);      // delete elements for which UndoCommand() holds ownership
         delete cmd;
 //            --curIdx;
     }
     while (list.size() > idx) {
-        UndoCommand* cmd = mu::takeLast(list);
+        UndoCommand* cmd = muse::takeLast(list);
         stateList.pop_back();
         cmd->cleanup(true);
         delete cmd;
@@ -463,7 +463,7 @@ void UndoStack::endMacro(bool rollback)
     } else {
         // remove redo stack
         while (list.size() > curIdx) {
-            UndoCommand* cmd = mu::takeLast(list);
+            UndoCommand* cmd = muse::takeLast(list);
             stateList.pop_back();
             cmd->cleanup(false);        // delete elements for which UndoCommand() holds ownership
             delete cmd;
@@ -489,7 +489,7 @@ void UndoStack::reopen()
     assert(curCmd == 0);
     assert(curIdx > 0);
     --curIdx;
-    curCmd = mu::takeAt(list, curIdx);
+    curCmd = muse::takeAt(list, curIdx);
     stateList.erase(stateList.begin() + curIdx);
     for (auto i : curCmd->commands()) {
         LOG_UNDO() << "   " << i->name();
@@ -542,7 +542,7 @@ bool UndoMacro::canRecordSelectedElement(const EngravingItem* e)
 
 void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
 {
-    info.staffStart = info.staffEnd = mu::nidx;
+    info.staffStart = info.staffEnd = muse::nidx;
     info.elements.clear();
 
     if (sel.isList()) {
@@ -569,7 +569,7 @@ void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
         for (EngravingItem* e : info.elements) {
             sel.add(e);
         }
-    } else if (info.staffStart != mu::nidx) {
+    } else if (info.staffStart != muse::nidx) {
         sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd);
     }
 }
@@ -703,11 +703,11 @@ void CloneVoice::undo(EditData*)
 {
     Score* s = d->score();
     Fraction ticks = d->tick() + lTick - sf->tick();
-    track_idx_t sTrack = otrack == mu::nidx ? dtrack : otrack;   // use the correct source / destination if deleting the source
-    track_idx_t dTrack = otrack == mu::nidx ? strack : dtrack;
+    track_idx_t sTrack = otrack == muse::nidx ? dtrack : otrack;   // use the correct source / destination if deleting the source
+    track_idx_t dTrack = otrack == muse::nidx ? strack : dtrack;
 
     // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
-    if (otrack != mu::nidx && linked) {
+    if (otrack != muse::nidx && linked) {
         for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
             EngravingItem* el = seg->element(dTrack);
             if (el && el->isChordRest()) {
@@ -717,7 +717,7 @@ void CloneVoice::undo(EditData*)
         }
     }
 
-    if (otrack == mu::nidx && !linked) {
+    if (otrack == muse::nidx && !linked) {
         // On the first run get going the undo redo action for adding/deleting elements and slurs
         if (first) {
             s->cloneVoice(sTrack, dTrack, sf, ticks, linked);
@@ -755,7 +755,7 @@ void CloneVoice::redo(EditData*)
     Fraction ticks = d->tick() + lTick - sf->tick();
 
     // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
-    if (otrack != mu::nidx && linked) {
+    if (otrack != muse::nidx && linked) {
         for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
             EngravingItem* el = seg->element(dtrack);
             if (el && el->isChordRest()) {
@@ -765,7 +765,7 @@ void CloneVoice::redo(EditData*)
         }
     }
 
-    if (otrack == mu::nidx && !linked) {
+    if (otrack == muse::nidx && !linked) {
         // On the first run get going the undo redo action for adding/deleting elements and slurs
         if (first) {
             s->cloneVoice(strack, dtrack, sf, ticks, linked);
@@ -930,7 +930,7 @@ bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) 
     case Filter::AddElement:
         return target == element;
     case Filter::AddElementLinked:
-        return mu::contains(target->linkList(), static_cast<EngravingObject*>(element));
+        return muse::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
     }
@@ -1106,7 +1106,7 @@ bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* targe
     case Filter::RemoveElement:
         return target == element;
     case Filter::RemoveElementLinked:
-        return mu::contains(target->linkList(), static_cast<EngravingObject*>(element));
+        return muse::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
     }
@@ -1150,8 +1150,8 @@ RemovePart::RemovePart(Part* p, size_t partIdx)
     m_part = p;
     m_partIdx = partIdx;
 
-    if (m_partIdx == mu::nidx) {
-        m_partIdx = mu::indexOf(m_part->score()->parts(), m_part);
+    if (m_partIdx == muse::nidx) {
+        m_partIdx = muse::indexOf(m_part->score()->parts(), m_part);
     }
 }
 
@@ -1186,7 +1186,7 @@ AddPartToExcerpt::AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx)
 
 void AddPartToExcerpt::undo(EditData*)
 {
-    mu::remove(m_excerpt->parts(), m_part);
+    muse::remove(m_excerpt->parts(), m_part);
 
     if (Score* score = m_excerpt->excerptScore()) {
         score->removePart(m_part);
@@ -1346,7 +1346,7 @@ SortStaves::SortStaves(Score* s, const std::vector<staff_idx_t>& l)
     score = s;
 
     for (staff_idx_t i = 0; i < l.size(); i++) {
-        rlist.push_back(mu::indexOf(l, i));
+        rlist.push_back(muse::indexOf(l, i));
     }
     list  = l;
 }
@@ -2281,7 +2281,7 @@ void InsertRemoveMeasures::removeMeasures()
     for (MeasureBase* mb = lm;; mb = mb->prev()) {
         System* system = mb->system();
         if (system) {
-            if (!mu::contains(systemList, system)) {
+            if (!muse::contains(systemList, system)) {
                 systemList.push_back(system);
             }
             system->removeMeasure(mb);
@@ -2446,7 +2446,7 @@ std::vector<const EngravingObject*> AddExcerpt::objectItems() const
 RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
     : excerpt(ex)
 {
-    index = mu::indexOf(excerpt->masterScore()->excerpts(), excerpt);
+    index = muse::indexOf(excerpt->masterScore()->excerpts(), excerpt);
 }
 
 RemoveExcerpt::~RemoveExcerpt()

@@ -66,13 +66,13 @@ public:
     bool readOnly() const;
 
     MasterScore* masterScore() const;
-    Ret setupMasterScore(bool forceMode);
+    muse::Ret setupMasterScore(bool forceMode);
 
-    Ret loadMscz(const MscReader& msc, SettingsCompat& settingsCompat, bool ignoreVersionError);
+    muse::Ret loadMscz(const MscReader& msc, SettingsCompat& settingsCompat, bool ignoreVersionError);
     bool writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail);
 
     bool isCorruptedUponLoading() const;
-    Ret checkCorrupted() const;
+    muse::Ret checkCorrupted() const;
 
 private:
     friend class MasterScore;
@@ -81,7 +81,7 @@ private:
 
     void init(const MStyle& style);
 
-    Ret doSetupMasterScore(bool forceMode);
+    muse::Ret doSetupMasterScore(bool forceMode);
 
     MasterScore* m_masterScore = nullptr;
 

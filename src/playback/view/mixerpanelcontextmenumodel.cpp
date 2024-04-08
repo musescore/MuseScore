@@ -26,6 +26,7 @@
 
 using namespace mu;
 using namespace mu::playback;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace muse::actions;

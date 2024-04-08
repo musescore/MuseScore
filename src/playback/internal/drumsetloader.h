@@ -35,7 +35,7 @@
 #include "musesampler/imusesamplerinfo.h"
 
 namespace mu::playback {
-class DrumsetLoader : public async::Asyncable
+class DrumsetLoader : public muse::async::Asyncable
 {
     Inject<notation::IInstrumentsRepository> instrumentsRepository;
     Inject<muse::musesampler::IMuseSamplerInfo> museSampler;

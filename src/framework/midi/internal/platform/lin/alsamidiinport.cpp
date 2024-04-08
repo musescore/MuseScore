@@ -37,6 +37,7 @@ struct muse::midi::AlsaMidiInPort::Alsa {
     int port = -1;
 };
 
+using namespace muse;
 using namespace muse::midi;
 
 void AlsaMidiInPort::init()
@@ -81,7 +82,7 @@ MidiDeviceList AlsaMidiInPort::availableDevices() const
 
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, muse::trc("midi", "No device") });
 
     snd_seq_client_info_t* cinfo;
     snd_seq_port_info_t* pinfo;
@@ -133,12 +134,12 @@ MidiDeviceList AlsaMidiInPort::availableDevices() const
     return ret;
 }
 
-mu::async::Notification AlsaMidiInPort::availableDevicesChanged() const
+async::Notification AlsaMidiInPort::availableDevicesChanged() const
 {
     return m_availableDevicesChanged;
 }
 
-mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
+Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
 {
     if (!deviceExists(deviceID)) {
         return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
@@ -152,7 +153,7 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
         m_deviceChanged.notify();
     };
 
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
         std::vector<int> deviceParams = splitDeviceId(deviceID);
@@ -221,17 +222,17 @@ MidiDeviceID AlsaMidiInPort::deviceID() const
     return m_deviceID;
 }
 
-mu::async::Notification AlsaMidiInPort::deviceChanged() const
+async::Notification AlsaMidiInPort::deviceChanged() const
 {
     return m_deviceChanged;
 }
 
-mu::async::Channel<tick_t, Event> AlsaMidiInPort::eventReceived() const
+async::Channel<tick_t, Event> AlsaMidiInPort::eventReceived() const
 {
     return m_eventReceived;
 }
 
-mu::Ret AlsaMidiInPort::run()
+Ret AlsaMidiInPort::run()
 {
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);

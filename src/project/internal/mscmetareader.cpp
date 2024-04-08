@@ -31,11 +31,12 @@
 
 #include "log.h"
 
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::project;
 using namespace mu::engraving;
 
-mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path_t& filePath) const
+RetVal<ProjectMeta> MscMetaReader::readMeta(const muse::io::path_t& filePath) const
 {
     RetVal<ProjectMeta> meta;
 

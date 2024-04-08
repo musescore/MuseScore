@@ -21,7 +21,7 @@
  */
 #include "synthesizerstub.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 
@@ -39,7 +39,7 @@ unsigned int SynthesizerStub::audioChannelsCount() const
     return 2;
 }
 
-mu::async::Channel<unsigned int> SynthesizerStub::audioChannelsCountChanged() const
+async::Channel<unsigned int> SynthesizerStub::audioChannelsCountChanged() const
 {
     return async::Channel<unsigned int>();
 }

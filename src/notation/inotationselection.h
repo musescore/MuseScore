@@ -40,7 +40,7 @@ public:
     virtual bool isRange() const = 0;
     virtual SelectionState state() const = 0;
 
-    virtual mu::Ret canCopy() const = 0;
+    virtual muse::Ret canCopy() const = 0;
     virtual QMimeData* mimeData() const = 0;
 
     virtual EngravingItem* element() const = 0;
@@ -48,7 +48,7 @@ public:
 
     virtual std::vector<Note*> notes(NoteFilter filter = NoteFilter::All) const = 0;
 
-    virtual RectF canvasBoundingRect() const = 0;
+    virtual muse::RectF canvasBoundingRect() const = 0;
 
     virtual INotationSelectionRangePtr range() const = 0;
 

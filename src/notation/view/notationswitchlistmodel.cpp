@@ -30,7 +30,7 @@ using namespace mu::project;
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_notationChangedReceiver = std::make_unique<async::Asyncable>();
+    m_notationChangedReceiver = std::make_unique<muse::async::Asyncable>();
 }
 
 void NotationSwitchListModel::load()
@@ -288,17 +288,17 @@ QVariantList NotationSwitchListModel::contextMenuItems(int index) const
     }
 
     QVariantList result {
-        QVariantMap { { "id", "close-tab" }, { "title", mu::qtrc("notation", "Close tab") } },
+        QVariantMap { { "id", "close-tab" }, { "title", muse::qtrc("notation", "Close tab") } },
     };
 
     bool canCloseOtherTabs = rowCount() > 2 || (rowCount() == 2 && isMasterNotation(m_notations[index]));
     if (canCloseOtherTabs) {
-        result << QVariantMap { { "id", "close-other-tabs" }, { "title", mu::qtrc("notation", "Close other tabs") } };
+        result << QVariantMap { { "id", "close-other-tabs" }, { "title", muse::qtrc("notation", "Close other tabs") } };
     }
 
     bool canCloseAllTabs = rowCount() > 1;
     if (canCloseAllTabs) {
-        result << QVariantMap { { "id", "close-all-tabs" }, { "title", mu::qtrc("notation", "Close all tabs") } };
+        result << QVariantMap { { "id", "close-all-tabs" }, { "title", muse::qtrc("notation", "Close all tabs") } };
     }
 
     return result;

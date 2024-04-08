@@ -39,13 +39,13 @@ public:
 
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;
-    virtual async::Notification viewModeChanged() const = 0;
+    virtual muse::async::Notification viewModeChanged() const = 0;
 
     virtual int pageCount() const = 0;
-    virtual SizeF pageSizeInch() const = 0;
-    virtual SizeF pageSizeInch(const Options& opt) const = 0;
+    virtual muse::SizeF pageSizeInch() const = 0;
+    virtual muse::SizeF pageSizeInch(const Options& opt) const = 0;
 
-    virtual void paintView(muse::draw::Painter* painter, const RectF& frameRect, bool isPrinting) = 0;
+    virtual void paintView(muse::draw::Painter* painter, const muse::RectF& frameRect, bool isPrinting) = 0;
     virtual void paintPdf(muse::draw::Painter* painter, const Options& opt) = 0;
     virtual void paintPrint(muse::draw::Painter* painter, const Options& opt) = 0;
     virtual void paintPng(muse::draw::Painter* painter, const Options& opt) = 0;

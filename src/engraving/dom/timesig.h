@@ -96,8 +96,8 @@ public:
     bool largeParentheses() const { return m_largeParentheses; }
     void setLargeParentheses(bool v) { m_largeParentheses = v; }
 
-    const mu::ScaleF& scale() const { return m_scale; }
-    void setScale(const mu::ScaleF& s) { m_scale = s; }
+    const ScaleF& scale() const { return m_scale; }
+    void setScale(const ScaleF& s) { m_scale = s; }
 
     void setFrom(const TimeSig*);
 
@@ -120,10 +120,10 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         SymIdList ns;
         SymIdList ds;
-        mu::PointF pz;
-        mu::PointF pn;
-        mu::PointF pointLargeLeftParen;
-        mu::PointF pointLargeRightParen;
+        PointF pz;
+        PointF pn;
+        PointF pointLargeLeftParen;
+        PointF pointLargeRightParen;
     };
     DECLARE_LAYOUTDATA_METHODS(TimeSig)
 
@@ -143,7 +143,7 @@ private:
     Fraction m_stretch;        // localSig / globalSig
     Groups m_groups;
 
-    mu::ScaleF m_scale;
+    ScaleF m_scale;
     TimeSigType m_timeSigType = TimeSigType::NORMAL;
     bool m_showCourtesySig = false;
     bool m_largeParentheses = false;

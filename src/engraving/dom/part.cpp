@@ -241,7 +241,7 @@ void Part::insertStaff(Staff* staff, staff_idx_t idx)
 
 void Part::removeStaff(Staff* staff)
 {
-    if (!mu::remove(m_staves, staff)) {
+    if (!muse::remove(m_staves, staff)) {
         LOGD("Part::removeStaff: not found %p", staff);
         return;
     }
@@ -435,7 +435,7 @@ const StringData* Part::stringData(const Fraction& tick, staff_idx_t staffIdx) c
 
     bool reflectTranspositionInLinkedTab = true;
 
-    const Staff* staff = staffIdx != mu::nidx ? score()->staff(staffIdx) : nullptr;
+    const Staff* staff = staffIdx != muse::nidx ? score()->staff(staffIdx) : nullptr;
     if (staff && staff->isTabStaff(tick)) {
         if (const Staff* primaryStaff = staff->primaryStaff()) {
             reflectTranspositionInLinkedTab = primaryStaff->reflectTranspositionInLinkedTab();
@@ -445,7 +445,7 @@ const StringData* Part::stringData(const Fraction& tick, staff_idx_t staffIdx) c
     StringTunings* stringTunings = nullptr;
 
     if (reflectTranspositionInLinkedTab) {
-        auto it = findLessOrEqual(m_stringTunings, tick.ticks());
+        auto it = muse::findLessOrEqual(m_stringTunings, tick.ticks());
         if (it != m_stringTunings.end()) {
             stringTunings = it->second;
         }
@@ -638,7 +638,7 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
 track_idx_t Part::startTrack() const
 {
     IF_ASSERT_FAILED(!m_staves.empty()) {
-        return mu::nidx;
+        return muse::nidx;
     }
 
     return m_staves.front()->idx() * VOICES;
@@ -651,7 +651,7 @@ track_idx_t Part::startTrack() const
 track_idx_t Part::endTrack() const
 {
     IF_ASSERT_FAILED(!m_staves.empty()) {
-        return mu::nidx;
+        return muse::nidx;
     }
 
     return m_staves.back()->idx() * VOICES + VOICES;

@@ -35,7 +35,7 @@ public:
     FontFaceFT();
     ~FontFaceFT();
 
-    bool load(const FaceKey& key, const mu::io::path_t& path, bool isSymbolMode) override;
+    bool load(const FaceKey& key, const io::path_t& path, bool isSymbolMode) override;
 
     const FaceKey& key() const override;
     bool isSymbolMode() const override;

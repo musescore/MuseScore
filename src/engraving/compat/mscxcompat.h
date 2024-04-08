@@ -26,9 +26,9 @@
 #include "../engravingproject.h"
 
 namespace mu::engraving::compat {
-Ret mscxToMscz(const String& mscxFilePath, ByteArray* msczData);
-Ret loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError = false);
-Ret loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError = false);
+muse::Ret mscxToMscz(const muse::String& mscxFilePath, muse::ByteArray* msczData);
+muse::Ret loadMsczOrMscx(MasterScore* score, const muse::String& path, bool ignoreVersionError = false);
+muse::Ret loadMsczOrMscx(EngravingProjectPtr project, const muse::String& path, bool ignoreVersionError = false);
 }
 
 #endif // MU_ENGRAVING_MSCXCOMPAT_H

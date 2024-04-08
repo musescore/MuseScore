@@ -28,11 +28,12 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::extensions;
 using namespace muse::extensions::legacy;
 using namespace muse::extensions::apiv1;
 
-mu::Ret ExtPluginRunner::run(const Action& action)
+Ret ExtPluginRunner::run(const Action& action)
 {
     io::path_t qmlPath = action.main;
 
@@ -59,5 +60,5 @@ mu::Ret ExtPluginRunner::run(const Action& action)
 
     plugin->runPlugin();
 
-    return mu::make_ok();
+    return muse::make_ok();
 }

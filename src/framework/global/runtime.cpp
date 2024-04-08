@@ -24,12 +24,12 @@
 
 static thread_local std::string s_threadName;
 
-void mu::runtime::setThreadName(const std::string& name)
+void muse::runtime::setThreadName(const std::string& name)
 {
     s_threadName = name;
 }
 
-const std::string& mu::runtime::threadName()
+const std::string& muse::runtime::threadName()
 {
     if (s_threadName.empty()) {
         static thread_local std::string id = toString(std::this_thread::get_id());

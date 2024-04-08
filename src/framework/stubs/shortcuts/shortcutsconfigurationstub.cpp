@@ -21,6 +21,7 @@
  */
 #include "shortcutsconfigurationstub.h"
 
+using namespace muse;
 using namespace muse::shortcuts;
 
 QString ShortcutsConfigurationStub::currentKeyboardLayout() const
@@ -32,19 +33,19 @@ void ShortcutsConfigurationStub::setCurrentKeyboardLayout(const QString&)
 {
 }
 
-mu::io::path_t ShortcutsConfigurationStub::shortcutsUserAppDataPath() const
+io::path_t ShortcutsConfigurationStub::shortcutsUserAppDataPath() const
 {
-    return mu::io::path_t();
+    return io::path_t();
 }
 
-mu::io::path_t ShortcutsConfigurationStub::shortcutsAppDataPath() const
+io::path_t ShortcutsConfigurationStub::shortcutsAppDataPath() const
 {
-    return mu::io::path_t();
+    return io::path_t();
 }
 
-mu::io::path_t ShortcutsConfigurationStub::midiMappingUserAppDataPath() const
+io::path_t ShortcutsConfigurationStub::midiMappingUserAppDataPath() const
 {
-    return mu::io::path_t();
+    return io::path_t();
 }
 
 bool ShortcutsConfigurationStub::advanceToNextNoteOnKeyRelease() const

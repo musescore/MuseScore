@@ -41,7 +41,7 @@ namespace muse::mi {
 class MultiInstancesProvider : public IMultiInstancesProvider, public muse::actions::Actionable, public async::Asyncable
 {
     Inject<muse::actions::IActionsDispatcher> dispatcher;
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
     Inject<muse::ui::IMainWindow> mainWindow;
 
     //! NOTE May be missing because it must be implemented outside the framework
@@ -91,17 +91,17 @@ private:
 
     bool isInited() const;
 
-    void onMsg(const mu::ipc::Msg& msg);
+    void onMsg(const muse::ipc::Msg& msg);
 
-    mu::ipc::IpcLock* lock(const std::string& name);
+    muse::ipc::IpcLock* lock(const std::string& name);
 
-    mu::ipc::IpcChannel* m_ipcChannel = nullptr;
+    muse::ipc::IpcChannel* m_ipcChannel = nullptr;
     std::string m_selfID;
 
     async::Notification m_instancesChanged;
     async::Channel<std::string> m_resourceChanged;
 
-    std::map<std::string, mu::ipc::IpcLock*> m_locks;
+    std::map<std::string, muse::ipc::IpcLock*> m_locks;
 };
 }
 

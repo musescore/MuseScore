@@ -38,7 +38,7 @@ class QItemSelectionModel;
 
 namespace mu::notation {
 class NoteInputBarCustomiseItem;
-class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemListModel, public async::Asyncable
+class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 

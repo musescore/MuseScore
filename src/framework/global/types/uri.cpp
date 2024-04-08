@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 const Uri::Scheme Uri::MuseScore("musescore");
 const Uri::Scheme Uri::Http("http");
@@ -196,7 +196,7 @@ const UriQuery::Params& UriQuery::params() const
     return m_params;
 }
 
-mu::Val UriQuery::param(const std::string& key, const Val& def) const
+Val UriQuery::param(const std::string& key, const Val& def) const
 {
     auto it = m_params.find(key);
     if (it == m_params.end()) {

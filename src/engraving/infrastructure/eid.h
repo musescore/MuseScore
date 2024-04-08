@@ -58,7 +58,7 @@ private:
 };
 }
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::engraving::EID& v)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const mu::engraving::EID& v)
 {
     s << "[" << static_cast<int>(v.type()) << "] " << v.id();
     return s;

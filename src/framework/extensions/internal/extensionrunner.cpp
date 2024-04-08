@@ -26,9 +26,10 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::extensions;
 
-mu::Ret ExtensionRunner::run(const Action& action)
+Ret ExtensionRunner::run(const Action& action)
 {
     ScriptEngine engine(action.apiversion);
     engine.setScriptPath(action.main);

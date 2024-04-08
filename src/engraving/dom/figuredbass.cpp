@@ -41,7 +41,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -662,7 +662,7 @@ FiguredBass::FiguredBass(Segment* parent)
     }
     setOnNote(true);
     setTicks(Fraction(0, 1));
-    DeleteAll(m_items);
+    muse::DeleteAll(m_items);
     m_items.clear();
 }
 
@@ -742,7 +742,7 @@ void FiguredBass::regenerateText()
     }
 
     // split text into lines and create an item for each line
-    StringList list = txt.split(u'\n', mu::SkipEmptyParts);
+    StringList list = txt.split(u'\n', muse::SkipEmptyParts);
     clearItems();
     String normalizedText;
     int idx = 0;
@@ -894,7 +894,7 @@ void FiguredBass::clearItems()
             continue;
         }
         if (linkedObject == this) {
-            DeleteAll(m_items);
+            muse::DeleteAll(m_items);
             m_items.clear();
         } else {
             bool isThisTextLinked = getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
@@ -904,7 +904,7 @@ void FiguredBass::clearItems()
                 continue;
             }
             FiguredBass* linkedFb = toFiguredBass(linkedObject);
-            DeleteAll(linkedFb->m_items);
+            muse::DeleteAll(linkedFb->m_items);
             linkedFb->m_items.clear();
         }
     }

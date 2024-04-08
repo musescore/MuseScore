@@ -49,7 +49,7 @@ public:
         : m_startDynamic(start), m_hairpinSegment(hs), m_endDynamic(end) {}
 
     void startDrag(EditData&) override;
-    mu::RectF drag(EditData&) override;
+    muse::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
     static std::unique_ptr<ElementGroup> detectFor(HairpinSegment* hs, std::function<bool(const EngravingItem*)> isDragged);
@@ -75,7 +75,7 @@ public:
         : m_leftHairpin(left), m_dynamic(d), m_rightHairpin(right) {}
 
     void startDrag(EditData&) override;
-    mu::RectF drag(EditData&) override;
+    muse::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
@@ -99,7 +99,7 @@ public:
         : m_dynamic(d), m_expression(e) {}
 
     void startDrag(EditData& ed) override;
-    mu::RectF drag(EditData& ed) override;
+    muse::RectF drag(EditData& ed) override;
     void endDrag(EditData& ed) override;
 
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);

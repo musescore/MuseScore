@@ -28,7 +28,7 @@ namespace mu::project {
 class WindowsRecentFilesController : public RecentFilesController
 {
 public:
-    void prependPlatformRecentFile(const io::path_t& path) override;
+    void prependPlatformRecentFile(const muse::io::path_t& path) override;
 };
 }
 

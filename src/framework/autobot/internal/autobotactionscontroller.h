@@ -31,7 +31,7 @@ namespace muse::autobot {
 class AutobotActionsController : public muse::actions::Actionable
 {
     INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(mu::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
 public:
     AutobotActionsController() = default;
@@ -39,7 +39,7 @@ public:
     void init();
 
 private:
-    void openUri(const mu::UriQuery& uri, bool isSingle = true);
+    void openUri(const muse::UriQuery& uri, bool isSingle = true);
 };
 }
 

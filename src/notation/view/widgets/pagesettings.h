@@ -37,7 +37,7 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase
     Q_OBJECT
 
     INJECT(mu::context::IGlobalContext, globalContext)
-    INJECT(mu::IGlobalConfiguration, configuration)
+    INJECT(muse::IGlobalConfiguration, configuration)
 
 public:
     explicit PageSettings(QWidget* parent = 0);

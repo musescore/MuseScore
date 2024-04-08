@@ -16,7 +16,7 @@ class IEngravingFontsProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingFontsProvider() = default;
 
-    virtual void addFont(const std::string& name, const std::string& family, const io::path_t& filePath) = 0;
+    virtual void addFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) = 0;
     virtual IEngravingFontPtr fontByName(const std::string& name) const = 0;
     virtual std::vector<IEngravingFontPtr> fonts() const = 0;
 

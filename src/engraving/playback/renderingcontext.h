@@ -119,7 +119,7 @@ struct NominalNoteCtx {
                                   note->playingTuning())),
         chordCtx(ctx)
     {
-        if (mu::RealIsEqual(userVelocityFraction, 0.f)) {
+        if (muse::RealIsEqual(userVelocityFraction, 0.f)) {
             return;
         }
 

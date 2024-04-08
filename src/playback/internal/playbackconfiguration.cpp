@@ -30,6 +30,7 @@
 
 using namespace mu;
 using namespace mu::playback;
+using namespace muse;
 using namespace muse::audio;
 
 static const std::string moduleName("playback");
@@ -171,7 +172,7 @@ void PlaybackConfiguration::setMixerSectionVisible(MixerSectionType sectionType,
     settings()->setSharedValue(mixerSectionVisibleKey(sectionType), Val(visible));
 }
 
-mu::async::Channel<MixerSectionType, bool> PlaybackConfiguration::isMixerSectionVisibleChanged() const
+muse::async::Channel<MixerSectionType, bool> PlaybackConfiguration::isMixerSectionVisibleChanged() const
 {
     return m_isMixerSectionVisibleChanged;
 }
@@ -186,7 +187,7 @@ void PlaybackConfiguration::setAuxSendVisible(aux_channel_idx_t index, bool visi
     settings()->setSharedValue(auxSendVisibleKey(index), Val(visible));
 }
 
-mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxSendVisibleChanged() const
+muse::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxSendVisibleChanged() const
 {
     return m_isAuxSendVisibleChanged;
 }
@@ -201,13 +202,13 @@ void PlaybackConfiguration::setAuxChannelVisible(aux_channel_idx_t index, bool v
     settings()->setSharedValue(auxChannelVisibleKey(index), Val(visible));
 }
 
-mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxChannelVisibleChanged() const
+muse::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxChannelVisibleChanged() const
 {
     return m_isAuxChannelVisibleChanged;
 }
 
 gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, AudioSourceType sourceType,
-                                                  const String& instrumentSoundId) const
+                                                  const muse::String& instrumentSoundId) const
 {
     TRACEFUNC;
 
@@ -216,7 +217,7 @@ gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, Audio
     if (sourceType == AudioSourceType::MuseSampler) {
         if (index == REVERB_CHANNEL_IDX) {
             float lvl = musesamplerInfo()->defaultReverbLevel(instrumentSoundId);
-            return mu::RealIsNull(lvl) ? DEFAULT_VALUE : lvl;
+            return muse::RealIsNull(lvl) ? DEFAULT_VALUE : lvl;
         }
     } else if (sourceType == AudioSourceType::Vsti) {
         return 0.f;
@@ -235,7 +236,7 @@ void PlaybackConfiguration::setMuteHiddenInstruments(bool mute)
     settings()->setSharedValue(MUTE_HIDDEN_INSTRUMENTS, Val(mute));
 }
 
-mu::async::Channel<bool> PlaybackConfiguration::muteHiddenInstrumentsChanged() const
+muse::async::Channel<bool> PlaybackConfiguration::muteHiddenInstrumentsChanged() const
 {
     return m_muteHiddenInstrumentsChanged;
 }
@@ -252,7 +253,7 @@ const SoundProfileName& PlaybackConfiguration::museSoundProfileName() const
 
 SoundProfileName PlaybackConfiguration::defaultProfileForNewProjects() const
 {
-    return String::fromStdString(settings()->value(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS).toString());
+    return muse::String::fromStdString(settings()->value(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS).toString());
 }
 
 void PlaybackConfiguration::setDefaultProfileForNewProjects(const SoundProfileName& name)

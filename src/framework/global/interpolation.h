@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_INTERPOLATION_H
-#define MU_GLOBAL_INTERPOLATION_H
+#ifndef MUSE_GLOBAL_INTERPOLATION_H
+#define MUSE_GLOBAL_INTERPOLATION_H
 
 #include <vector>
 
-namespace mu {
+namespace muse {
 class Interpolation
 {
 public:
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_INTERPOLATION_H
+#endif // MUSE_GLOBAL_INTERPOLATION_H

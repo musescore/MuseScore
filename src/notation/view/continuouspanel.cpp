@@ -45,6 +45,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::draw;
 using namespace mu::notation;
 using namespace mu::engraving::rendering::dev;

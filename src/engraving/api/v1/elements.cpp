@@ -60,7 +60,7 @@ void EngravingItem::setOffsetY(qreal offY)
 
 QRectF EngravingItem::bbox() const
 {
-    mu::RectF bbox = element()->ldata()->bbox();
+    RectF bbox = element()->ldata()->bbox();
     qreal spatium = element()->spatium();
     return QRectF(bbox.x() / spatium, bbox.y() / spatium, bbox.width() / spatium, bbox.height() / spatium);
 }

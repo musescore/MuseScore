@@ -91,7 +91,7 @@ void Lasso::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
+std::vector<PointF> Lasso::gripsPositions(const EditData&) const
 {
     const auto box(ldata()->bbox());
     return {

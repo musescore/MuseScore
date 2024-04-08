@@ -68,7 +68,7 @@ namespace mu::engraving {
 
 SysStaff::~SysStaff()
 {
-    DeleteAll(instrumentNames);
+    muse::DeleteAll(instrumentNames);
 }
 
 //---------------------------------------------------------
@@ -125,8 +125,8 @@ System::~System()
             mb->resetExplicitParent();
         }
     }
-    DeleteAll(m_staves);
-    DeleteAll(m_brackets);
+    muse::DeleteAll(m_staves);
+    muse::DeleteAll(m_brackets);
     delete m_systemDividerLeft;
     delete m_systemDividerRight;
 }
@@ -313,7 +313,7 @@ staff_idx_t System::firstVisibleStaffFrom(staff_idx_t startStaffIdx) const
         }
     }
 
-    return mu::nidx;
+    return muse::nidx;
 }
 
 staff_idx_t System::nextVisibleStaff(staff_idx_t staffIdx) const
@@ -442,7 +442,7 @@ void System::add(EngravingItem* el)
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
-        if (mu::contains(m_spannerSegments, ss)) {
+        if (muse::contains(m_spannerSegments, ss)) {
             LOGD("System::add() %s %p already there", ss->typeName(), ss);
         } else
 #endif
@@ -477,7 +477,7 @@ void System::remove(EngravingItem* el)
 {
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
-        mu::remove(m_staves[el->staffIdx()]->instrumentNames, toInstrumentName(el));
+        muse::remove(m_staves[el->staffIdx()]->instrumentNames, toInstrumentName(el));
         toInstrumentName(el)->setSysStaff(0);
         break;
     case ElementType::BEAM:
@@ -486,7 +486,7 @@ void System::remove(EngravingItem* el)
     case ElementType::BRACKET:
     {
         Bracket* b = toBracket(el);
-        if (!mu::remove(m_brackets, b)) {
+        if (!muse::remove(m_brackets, b)) {
             LOGD("System::remove: bracket not found");
         }
     }
@@ -512,7 +512,7 @@ void System::remove(EngravingItem* el)
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
-        if (!mu::remove(m_spannerSegments, toSpannerSegment(el))) {
+        if (!muse::remove(m_spannerSegments, toSpannerSegment(el))) {
             LOGD("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             assert(score() == el->score());
         }
@@ -637,7 +637,7 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
     }
     for (SpannerSegment* ss : m_spannerSegments) {
         staff_idx_t staffIdx = ss->spanner()->staffIdx();
-        if (staffIdx == mu::nidx) {
+        if (staffIdx == muse::nidx) {
             LOGD("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
             staffIdx = 0;
         }
@@ -786,7 +786,7 @@ staff_idx_t System::firstVisibleSysStaff() const
             return i;
         }
     }
-    return mu::nidx;
+    return muse::nidx;
 }
 
 //---------------------------------------------------------
@@ -801,7 +801,7 @@ staff_idx_t System::lastVisibleSysStaff() const
             return static_cast<staff_idx_t>(i);
         }
     }
-    return mu::nidx;
+    return muse::nidx;
 }
 
 //---------------------------------------------------------
@@ -812,7 +812,7 @@ staff_idx_t System::lastVisibleSysStaff() const
 double System::minTop() const
 {
     staff_idx_t si = firstVisibleSysStaff();
-    SysStaff* s = si == mu::nidx ? nullptr : staff(si);
+    SysStaff* s = si == muse::nidx ? nullptr : staff(si);
     if (s) {
         return -s->skyline().north().max();
     }
@@ -830,7 +830,7 @@ double System::minBottom() const
         return vbox()->bottomGap();
     }
     staff_idx_t si = lastVisibleSysStaff();
-    SysStaff* s = si == mu::nidx ? nullptr : staff(si);
+    SysStaff* s = si == muse::nidx ? nullptr : staff(si);
     if (s) {
         return s->skyline().south().max() - s->bbox().height();
     }
@@ -845,7 +845,7 @@ double System::minBottom() const
 double System::spacerDistance(bool up) const
 {
     staff_idx_t staff = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
-    if (staff == mu::nidx) {
+    if (staff == muse::nidx) {
         return 0.0;
     }
     double dist = 0.0;
@@ -874,7 +874,7 @@ double System::spacerDistance(bool up) const
 
 Spacer* System::upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const
 {
-    if (staffIdx == mu::nidx) {
+    if (staffIdx == muse::nidx) {
         return nullptr;
     }
 
@@ -905,7 +905,7 @@ Spacer* System::upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const
 
 Spacer* System::downSpacer(staff_idx_t staffIdx) const
 {
-    if (staffIdx == mu::nidx) {
+    if (staffIdx == muse::nidx) {
         return nullptr;
     }
 
@@ -1083,7 +1083,7 @@ staff_idx_t System::firstSysStaffOfPart(const Part* part) const
         }
         staffIdx += p->nstaves();
     }
-    return mu::nidx;   // Part not found.
+    return muse::nidx;   // Part not found.
 }
 
 //---------------------------------------------------------
@@ -1098,7 +1098,7 @@ staff_idx_t System::firstVisibleSysStaffOfPart(const Part* part) const
             return idx;
         }
     }
-    return mu::nidx;   // No visible staves on this part.
+    return muse::nidx;   // No visible staves on this part.
 }
 
 //---------------------------------------------------------
@@ -1108,8 +1108,8 @@ staff_idx_t System::firstVisibleSysStaffOfPart(const Part* part) const
 staff_idx_t System::lastSysStaffOfPart(const Part* part) const
 {
     staff_idx_t firstIdx = firstSysStaffOfPart(part);
-    if (firstIdx == mu::nidx) {
-        return mu::nidx;     // Part not found.
+    if (firstIdx == muse::nidx) {
+        return muse::nidx;     // Part not found.
     }
     return firstIdx + part->nstaves() - 1;
 }
@@ -1121,15 +1121,15 @@ staff_idx_t System::lastSysStaffOfPart(const Part* part) const
 staff_idx_t System::lastVisibleSysStaffOfPart(const Part* part) const
 {
     staff_idx_t firstStaffIdx = firstSysStaffOfPart(part);
-    if (firstStaffIdx == mu::nidx) {
-        return mu::nidx;
+    if (firstStaffIdx == muse::nidx) {
+        return muse::nidx;
     }
     for (int idx = static_cast<int>(lastSysStaffOfPart(part)); idx >= static_cast<int>(firstStaffIdx); --idx) {
         if (staff(idx)->show()) {
             return idx;
         }
     }
-    return mu::nidx;    // No visible staves on this part.
+    return muse::nidx;    // No visible staves on this part.
 }
 
 //---------------------------------------------------------

@@ -31,7 +31,7 @@
 
 namespace mu::diagnostics {
 class AbstractKeyNavDevItem;
-class DiagnosticNavigationModel : public QObject, public async::Asyncable
+class DiagnosticNavigationModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

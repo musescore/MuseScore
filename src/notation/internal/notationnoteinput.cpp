@@ -39,7 +39,8 @@
 #include "log.h"
 
 using namespace mu::notation;
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 
 NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
@@ -266,7 +267,7 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     if (el == nullptr
         || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
         // if no note/rest is selected, start with voice 0
-        engraving::track_idx_t track = is.track() == mu::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
+        engraving::track_idx_t track = is.track() == muse::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
         // try to find an appropriate measure to start in
         Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);
@@ -357,7 +358,7 @@ void NotationNoteInput::padNote(const Pad& pad)
     MScoreErrorsController::checkAndShowMScoreError();
 }
 
-mu::Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
+Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
     TRACEFUNC;
 
@@ -468,7 +469,7 @@ void NotationNoteInput::resetInputPosition()
 {
     mu::engraving::InputState& inputState = score()->inputState();
 
-    inputState.setTrack(mu::nidx);
+    inputState.setTrack(muse::nidx);
     inputState.setString(-1);
     inputState.setSegment(nullptr);
 
@@ -497,7 +498,7 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     notifyAboutStateChanged();
 }
 
-mu::RectF NotationNoteInput::cursorRect() const
+muse::RectF NotationNoteInput::cursorRect() const
 {
     TRACEFUNC;
 
@@ -516,7 +517,7 @@ mu::RectF NotationNoteInput::cursorRect() const
         return {};
     }
 
-    mu::engraving::track_idx_t track = inputState.track() == mu::nidx ? 0 : inputState.track();
+    mu::engraving::track_idx_t track = inputState.track() == muse::nidx ? 0 : inputState.track();
     mu::engraving::staff_idx_t staffIdx = track / mu::engraving::VOICES;
 
     const Staff* staff = score()->staff(staffIdx);
@@ -551,7 +552,7 @@ mu::RectF NotationNoteInput::cursorRect() const
 
     RectF result = RectF(x, y, w, h);
 
-    if (configuration()->canvasOrientation().val == mu::Orientation::Horizontal) {
+    if (configuration()->canvasOrientation().val == muse::Orientation::Horizontal) {
         result.translate(system->page()->pos());
     }
 

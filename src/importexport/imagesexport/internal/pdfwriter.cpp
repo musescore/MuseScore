@@ -32,7 +32,8 @@
 using namespace mu::iex::imagesexport;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
 
@@ -41,7 +42,7 @@ std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const
     return { UnitType::PER_PART, UnitType::MULTI_PART };
 }
 
-mu::Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     UnitType unitType = unitTypeFromOptions(options);
     IF_ASSERT_FAILED(unitType == UnitType::PER_PART) {
@@ -78,7 +79,7 @@ mu::Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
     return true;
 }
 
-mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destinationDevice, const Options& options)
+Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(!notations.empty()) {
         return make_ret(Ret::Code::UnknownError);
@@ -135,7 +136,7 @@ mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& de
 void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const
 {
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
-    pdfWriter.setCreator(QString("MuseScore Version: ") + application()->version().toString());
+    pdfWriter.setCreator(QString("MuseScore Version: ") + application()->version().toString().toQString());
     pdfWriter.setTitle(title);
     pdfWriter.setPageMargins(QMarginsF());
     pdfWriter.setPageLayout(QPageLayout(QPageSize(size, QPageSize::Inch), QPageLayout::Orientation::Portrait, QMarginsF()));

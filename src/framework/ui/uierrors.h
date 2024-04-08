@@ -33,7 +33,7 @@ enum class Err {
     CreateFailed    = 102
 };
 
-inline mu::Ret make_ret(Err e)
+inline Ret make_ret(Err e)
 {
     return Ret(static_cast<int>(e));
 }

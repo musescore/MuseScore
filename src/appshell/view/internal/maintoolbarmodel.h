@@ -32,12 +32,12 @@
 #include "iglobalconfiguration.h"
 
 namespace mu::appshell {
-class MainToolBarModel : public QAbstractListModel, public async::Asyncable
+class MainToolBarModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);

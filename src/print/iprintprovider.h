@@ -37,7 +37,7 @@ class IPrintProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPrintProvider() = default;
 
-    virtual Ret printNotation(notation::INotationPtr notation) = 0;
+    virtual muse::Ret printNotation(notation::INotationPtr notation) = 0;
 };
 }
 

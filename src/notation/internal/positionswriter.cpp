@@ -38,7 +38,8 @@
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 constexpr std::string_view SCORE_TAG("score");
 constexpr std::string_view ELEMENTS_TAG("elements");
@@ -46,7 +47,7 @@ constexpr std::string_view ELEMENT_TAG("element");
 constexpr std::string_view EVENTS_TAG("events");
 constexpr std::string_view EVENT_TAG("event");
 
-static void writeElementPosition(mu::deprecated::XmlWriter& writer, const std::string& id, const mu::PointF& pos, const mu::PointF& sPos,
+static void writeElementPosition(deprecated::XmlWriter& writer, const std::string& id, const muse::PointF& pos, const muse::PointF& sPos,
                                  page_idx_t pageIndex)
 {
     writer.writeStartElement(ELEMENT_TAG);
@@ -59,7 +60,7 @@ static void writeElementPosition(mu::deprecated::XmlWriter& writer, const std::s
     writer.writeEndElement();
 }
 
-static void writeEventPosition(mu::deprecated::XmlWriter& writer, const std::string& id, int time)
+static void writeEventPosition(deprecated::XmlWriter& writer, const std::string& id, int time)
 {
     writer.writeStartElement(EVENT_TAG);
     writer.writeAttribute("elid", id);
@@ -67,7 +68,7 @@ static void writeEventPosition(mu::deprecated::XmlWriter& writer, const std::str
     writer.writeEndElement();
 }
 
-static void writeMeasureEvents(mu::deprecated::XmlWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
+static void writeMeasureEvents(deprecated::XmlWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
 {
     for (mu::engraving::Segment* s = m->first(mu::engraving::SegmentType::ChordRest); s;
          s = s->next(mu::engraving::SegmentType::ChordRest)) {
@@ -95,7 +96,7 @@ bool PositionsWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -111,7 +112,7 @@ mu::Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationD
     QBuffer buf(&qdata);
     buf.open(QIODevice::WriteOnly);
 
-    mu::deprecated::XmlWriter writer(&buf);
+    deprecated::XmlWriter writer(&buf);
 
     writer.writeStartDocument();
     writer.writeStartElement(SCORE_TAG);
@@ -128,7 +129,7 @@ mu::Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationD
     return true;
 }
 
-mu::Ret PositionsWriter::writeList(const INotationPtrList&, io::IODevice&, const Options&)
+Ret PositionsWriter::writeList(const INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
@@ -159,7 +160,7 @@ QHash<void*, int> PositionsWriter::elementIds(const mu::engraving::Score* score)
     return elementIds;
 }
 
-void PositionsWriter::writeElementsPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeElementsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     writer.writeStartElement(ELEMENTS_TAG);
 
@@ -175,7 +176,7 @@ void PositionsWriter::writeElementsPositions(mu::deprecated::XmlWriter& writer, 
     writer.writeEndElement();
 }
 
-void PositionsWriter::writeSegmentsPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeSegmentsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
@@ -207,7 +208,7 @@ void PositionsWriter::writeSegmentsPositions(mu::deprecated::XmlWriter& writer, 
     }
 }
 
-void PositionsWriter::writeMeasuresPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeMeasuresPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
@@ -227,7 +228,7 @@ void PositionsWriter::writeMeasuresPositions(mu::deprecated::XmlWriter& writer, 
     }
 }
 
-void PositionsWriter::writeEventsPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeEventsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     QHash<void*, int> elementIds = this->elementIds(score);
 

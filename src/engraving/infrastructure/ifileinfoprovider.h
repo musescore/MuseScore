@@ -33,14 +33,14 @@ class IFileInfoProvider
 public:
     virtual ~IFileInfoProvider() = default;
 
-    virtual io::path_t path() const = 0; //! Absolute path
-    virtual io::path_t fileName(bool includingExtension = true) const = 0;
-    virtual io::path_t absoluteDirPath() const = 0; //! Absolute path of the containing folder
+    virtual muse::io::path_t path() const = 0; //! Absolute path
+    virtual muse::io::path_t fileName(bool includingExtension = true) const = 0;
+    virtual muse::io::path_t absoluteDirPath() const = 0; //! Absolute path of the containing folder
 
-    virtual String displayName() const = 0;
+    virtual muse::String displayName() const = 0;
 
-    virtual DateTime birthTime() const = 0;
-    virtual DateTime lastModified() const = 0;
+    virtual muse::DateTime birthTime() const = 0;
+    virtual muse::DateTime lastModified() const = 0;
 };
 
 using IFileInfoProviderPtr = std::shared_ptr<IFileInfoProvider>;

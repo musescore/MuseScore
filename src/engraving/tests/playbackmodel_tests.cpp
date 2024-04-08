@@ -47,7 +47,7 @@ using namespace muse;
 static const String PLAYBACK_MODEL_TEST_FILES_DIR("playbackmodel_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
 
-class Engraving_PlaybackModelTests : public ::testing::Test, public async::Asyncable
+class Engraving_PlaybackModelTests : public ::testing::Test, public muse::async::Asyncable
 {
 protected:
     void SetUp() override
@@ -218,7 +218,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
 
     // [THEN] Amount of events per timestamp matches expectations
     auto isExpectedTimestamp = [&expectedSizePerTimestamp](timestamp_t timestamp) {
-        if (mu::contains(expectedSizePerTimestamp, timestamp)) {
+        if (muse::contains(expectedSizePerTimestamp, timestamp)) {
             return testing::AssertionSuccess();
         } else {
             return testing::AssertionFailure() << "timestamp " << timestamp << " is not contained in expectedSizePerTimestamp";

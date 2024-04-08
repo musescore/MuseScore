@@ -24,6 +24,7 @@
 #include "log.h"
 
 using namespace mu::playback;
+using namespace muse;
 
 PlaybackLoadingModel::PlaybackLoadingModel(QObject* parent)
     : QObject(parent)

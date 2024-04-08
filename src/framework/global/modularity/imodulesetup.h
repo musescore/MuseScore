@@ -27,7 +27,7 @@
 
 #include "../iapplication.h"
 
-namespace mu::modularity {
+namespace muse::modularity {
 class IModuleSetup
 {
 public:
@@ -52,10 +52,6 @@ public:
 
     virtual void onStartApp() {}
 };
-}
-
-namespace muse::modularity {
-using IModuleSetup = mu::modularity::IModuleSetup;
 }
 
 #endif // MU_MODULARITY_IMODULESETUP_H

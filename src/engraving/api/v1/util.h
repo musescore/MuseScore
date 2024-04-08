@@ -81,7 +81,7 @@ public:
      * and an empty string is returned.
      */
     Q_INVOKABLE QString read();
-    /** Returns true if the file exists */
+    /** muse::Returns true if the file exists */
     Q_INVOKABLE bool exists();
     /**
      * Writes a string to the file.
@@ -92,11 +92,11 @@ public:
     Q_INVOKABLE bool write(const QString& data);
     /** Removes the file */
     Q_INVOKABLE bool remove();
-    /** Returns user's home directory */
+    /** muse::Returns user's home directory */
     Q_INVOKABLE QString homePath() { QDir dir; return dir.homePath(); }
-    /** Returns a path suitable for a temporary file */
+    /** muse::Returns a path suitable for a temporary file */
     Q_INVOKABLE QString tempPath() { QDir dir; return dir.tempPath(); }
-    /** Returns the file's last modification time */
+    /** muse::Returns the file's last modification time */
     Q_INVOKABLE int modifiedTime();
 
     /// \cond MS_INTERNAL
@@ -179,13 +179,13 @@ class ScoreView : public uicomponents::QuickPaintedView, public engraving::MuseS
 
     virtual void setScore(mu::engraving::Score*) override;
 
-    virtual void dataChanged(const mu::RectF&) override { update(); }
+    virtual void dataChanged(const RectF&) override { update(); }
     virtual void updateAll() override { update(); }
 
     virtual void paint(QPainter*) override;
 
     virtual QRectF boundingRect() const override { return _boundingRect; }
-    virtual void drawBackground(muse::draw::Painter*, const mu::RectF&) const override {}
+    virtual void drawBackground(muse::draw::Painter*, const RectF&) const override {}
 
 public slots:
     //@ --
@@ -205,7 +205,7 @@ public:
     void setColor(const QColor& c) { _color = c; }
     qreal scale() const { return mag; }
     void setScale(qreal v) { mag = v; }
-    virtual const mu::Rect geometry() const override { return mu::Rect(x(), y(), width(), height()); }
+    virtual const muse::Rect geometry() const override { return muse::Rect(x(), y(), width(), height()); }
     /// \endcond
 };
 } // namespace mu::plugins::api

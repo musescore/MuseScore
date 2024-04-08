@@ -28,6 +28,7 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;
@@ -90,9 +91,9 @@ QVariant NotationStatusBarModel::currentWorkspaceItem()
     item->setId(QString::fromStdString(item->action().code));
 
     UiAction action;
-    action.title
-        = TranslatableString::untranslatable("%1 %2").arg(TranslatableString("workspace", "Workspace:"),
-                                                          String::fromStdString(workspaceConfiguration()->currentWorkspaceName()));
+    action.title = muse::TranslatableString::untranslatable("%1 %2")
+                   .arg(muse::TranslatableString("workspace", "Workspace:"),
+                        String::fromStdString(workspaceConfiguration()->currentWorkspaceName()));
     item->setAction(action);
 
     return QVariant::fromValue(item);
@@ -115,7 +116,7 @@ QVariant NotationStatusBarModel::currentViewMode()
         if (ALL_MODE_MAP.key(modeItem->id().toStdString()) == viewMode) {
             if (viewMode == ViewMode::LINE || viewMode == ViewMode::SYSTEM) {
                 // In continuous view, we don't want to see "horizontal" or "vertical" (those should only be visible in the menu)
-                modeItem->setTitle(TranslatableString("notation", "Continuous view"));
+                modeItem->setTitle(muse::TranslatableString("notation", "Continuous view"));
             }
 
             return QVariant::fromValue(modeItem);
@@ -226,7 +227,7 @@ void NotationStatusBarModel::onCurrentNotationChanged()
     }
 
     notation()->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& range) {
-        if (mu::contains(range.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
+        if (muse::contains(range.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
             emit concertPitchActionChanged();
         }
     });
@@ -288,10 +289,10 @@ MenuItemList NotationStatusBarModel::makeAvailableZoomList()
     ZoomType currZoomType = currentZoomType();
 
     auto zoomPercentageTitle = [](int percentage) {
-        return TranslatableString::untranslatable("%1%").arg(percentage);
+        return muse::TranslatableString::untranslatable("%1%").arg(percentage);
     };
 
-    auto buildZoomItem = [=](ZoomType type, const TranslatableString& title = {}, int value = 0) {
+    auto buildZoomItem = [=](ZoomType type, const muse::TranslatableString& title = {}, int value = 0) {
         MenuItem* menuItem = new MenuItem(this);
         menuItem->setId(QString::number(static_cast<int>(type)) + QString::number(value));
 

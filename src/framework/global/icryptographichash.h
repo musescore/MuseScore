@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_ICRYPTOGRAPHICHASH_H
-#define MU_GLOBAL_ICRYPTOGRAPHICHASH_H
+#ifndef MUSE_GLOBAL_ICRYPTOGRAPHICHASH_H
+#define MUSE_GLOBAL_ICRYPTOGRAPHICHASH_H
 
 #include "modularity/imoduleinterface.h"
 #include "types/bytearray.h"
 
-namespace mu {
+namespace muse {
 class ICryptographicHash : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ICryptographicHash)
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_ICRYPTOGRAPHICHASH_H
+#endif // MUSE_GLOBAL_ICRYPTOGRAPHICHASH_H

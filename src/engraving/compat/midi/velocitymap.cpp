@@ -197,7 +197,7 @@ void VelocityMap::addHairpin(Fraction stick, Fraction etick, int change, ChangeM
 
 void VelocityMap::sortHairpins()
 {
-    for (auto& tick : mu::uniqueKeys(*this)) {
+    for (auto& tick : muse::uniqueKeys(*this)) {
         // hairpinEvents will contain all the hairpins at this tick
         std::vector<VelocityEvent> hairpinEvents;
         auto values = this->equal_range(tick);

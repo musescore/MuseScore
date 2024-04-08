@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_GLOBALCONFIGURATIONMOCK_H
-#define MU_GLOBAL_GLOBALCONFIGURATIONMOCK_H
+#ifndef MUSE_GLOBAL_GLOBALCONFIGURATIONMOCK_H
+#define MUSE_GLOBAL_GLOBALCONFIGURATIONMOCK_H
 
 #include <gmock/gmock.h>
 
 #include "iglobalconfiguration.h"
 
-namespace mu {
+namespace muse {
 class GlobalConfigurationMock : public IGlobalConfiguration
 {
 public:
@@ -54,4 +54,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_GLOBALCONFIGURATIONMOCK_H
+#endif // MUSE_GLOBAL_GLOBALCONFIGURATIONMOCK_H

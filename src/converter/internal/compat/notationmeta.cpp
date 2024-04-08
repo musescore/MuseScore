@@ -32,6 +32,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::converter;
 using namespace mu::engraving;
 
@@ -40,7 +41,7 @@ static QString boolToString(bool b)
     return b ? "true" : "false";
 }
 
-mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
+RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

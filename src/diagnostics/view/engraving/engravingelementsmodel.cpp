@@ -30,6 +30,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::diagnostics;
 using namespace mu::engraving;
 
@@ -159,7 +160,7 @@ QVariantMap EngravingElementsModel::makeData(const mu::engraving::EngravingObjec
         return QVariantMap();
     }
 
-    auto formatRect = [](const mu::RectF& r) {
+    auto formatRect = [](const muse::RectF& r) {
         QString str = "[";
         str += DataFormatter::formatReal(r.x(), 1) + u", ";
         str += DataFormatter::formatReal(r.y(), 1) + u", ";
@@ -168,7 +169,7 @@ QVariantMap EngravingElementsModel::makeData(const mu::engraving::EngravingObjec
         return str;
     };
 
-    auto formatPoint= [](const mu::PointF& p) {
+    auto formatPoint= [](const muse::PointF& p) {
         QString str = "[";
         str += DataFormatter::formatReal(p.x(), 1) + u", ";
         str += DataFormatter::formatReal(p.y(), 1) + u"]";

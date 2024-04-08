@@ -26,9 +26,9 @@
 
 namespace mu::converter {
 enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::ConverterFirst), // 1300
+    Undefined       = int(muse::Ret::Code::Undefined),
+    NoError         = int(muse::Ret::Code::Ok),
+    UnknownError    = int(muse::Ret::Code::ConverterFirst), // 1300
 
     BatchJobFileFailedOpen = 1301,
     BatchJobFileFailedParse = 1302,
@@ -43,14 +43,14 @@ enum class Err {
     OutFileFailedWrite = 1331,
 };
 
-inline Ret make_ret(Err e)
+inline muse::Ret make_ret(Err e)
 {
-    return Ret(static_cast<int>(e));
+    return muse::Ret(static_cast<int>(e));
 }
 
-inline Ret make_ret(Err e, const std::string& text)
+inline muse::Ret make_ret(Err e, const std::string& text)
 {
-    return Ret(static_cast<int>(e), text);
+    return muse::Ret(static_cast<int>(e), text);
 }
 }
 

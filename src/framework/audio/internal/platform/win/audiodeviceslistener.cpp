@@ -68,12 +68,12 @@ AudioDevicesListener::~AudioDevicesListener()
     }
 }
 
-mu::async::Notification AudioDevicesListener::devicesChanged() const
+async::Notification AudioDevicesListener::devicesChanged() const
 {
     return m_devicesChanged;
 }
 
-mu::async::Notification AudioDevicesListener::defaultDeviceChanged() const
+async::Notification AudioDevicesListener::defaultDeviceChanged() const
 {
     return m_defaultDeviceChanged;
 }

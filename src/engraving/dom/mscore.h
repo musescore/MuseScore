@@ -32,22 +32,22 @@ static constexpr size_t VOICES = 4;
 
 inline constexpr track_idx_t staff2track(staff_idx_t staffIdx, voice_idx_t voiceIdx = 0)
 {
-    return staffIdx != mu::nidx ? staffIdx * VOICES + voiceIdx : mu::nidx;
+    return staffIdx != muse::nidx ? staffIdx * VOICES + voiceIdx : muse::nidx;
 }
 
 inline constexpr staff_idx_t track2staff(track_idx_t track)
 {
-    return track != mu::nidx ? track / VOICES : mu::nidx;
+    return track != muse::nidx ? track / VOICES : muse::nidx;
 }
 
 inline constexpr voice_idx_t track2voice(track_idx_t track)
 {
-    return track != mu::nidx ? track % VOICES : mu::nidx;
+    return track != muse::nidx ? track % VOICES : muse::nidx;
 }
 
 inline constexpr track_idx_t trackZeroVoice(track_idx_t track)
 {
-    return track != mu::nidx ? (track / VOICES) * VOICES : mu::nidx;
+    return track != muse::nidx ? (track / VOICES) * VOICES : muse::nidx;
 }
 
 inline constexpr bool isUpVoice(voice_idx_t voiceIdx)
@@ -85,7 +85,7 @@ static constexpr char mimeStaffListFormat[]  = "application/musescore/stafflist"
 static constexpr int INVALID_STRING_INDEX = -1; // no ordinal for a physical string (0 = topmost in instrument)
 static constexpr int INVALID_FRET_INDEX   = -1; // no ordinal for a fret
 
-static constexpr ID INVALID_ID = 0;
+static constexpr muse::ID INVALID_ID = 0;
 
 //---------------------------------------------------------
 //   TransposeDirection

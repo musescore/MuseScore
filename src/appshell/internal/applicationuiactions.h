@@ -33,7 +33,7 @@
 #include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
-class ApplicationUiActions : public muse::ui::IUiActionsModule, public async::Asyncable
+class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
 {
     INJECT(muse::ui::IMainWindow, mainWindow)
     INJECT(muse::dock::IDockWindowProvider, dockWindowProvider)
@@ -48,10 +48,10 @@ public:
     const muse::ui::UiActionList& actionsList() const override;
 
     bool actionEnabled(const muse::ui::UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
+    muse::async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
     bool actionChecked(const muse::ui::UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
+    muse::async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
     static const QMap<muse::actions::ActionCode, DockName>& toggleDockActions();
 
@@ -61,8 +61,8 @@ private:
     static const muse::ui::UiActionList m_actions;
 
     std::shared_ptr<ApplicationActionController> m_controller;
-    async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
-    async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
+    muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
+    muse::async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
 };
 }
 

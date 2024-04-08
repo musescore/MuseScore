@@ -21,6 +21,7 @@
  */
 #include "midiremotestub.h"
 
+using namespace muse;
 using namespace muse::shortcuts;
 
 const MidiMappingList& MidiRemoteStub::midiMappings() const
@@ -29,16 +30,16 @@ const MidiMappingList& MidiRemoteStub::midiMappings() const
     return l;
 }
 
-mu::Ret MidiRemoteStub::setMidiMappings(const MidiMappingList&)
+Ret MidiRemoteStub::setMidiMappings(const MidiMappingList&)
 {
-    return mu::make_ret(Ret::Code::NotImplemented);
+    return muse::make_ret(Ret::Code::NotImplemented);
 }
 
 void MidiRemoteStub::resetMidiMappings()
 {
 }
 
-mu::async::Notification MidiRemoteStub::midiMappingsChanged() const
+async::Notification MidiRemoteStub::midiMappingsChanged() const
 {
     return async::Notification();
 }
@@ -56,7 +57,7 @@ void MidiRemoteStub::setCurrentActionEvent(const muse::midi::Event&)
 {
 }
 
-mu::Ret MidiRemoteStub::process(const muse::midi::Event&)
+Ret MidiRemoteStub::process(const muse::midi::Event&)
 {
-    return mu::make_ret(Ret::Code::NotImplemented);
+    return muse::make_ret(Ret::Code::NotImplemented);
 }

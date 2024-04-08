@@ -182,13 +182,13 @@ public:
     QList<QWidget*> dashSpecificWidgets;
 };
 
-static const TranslatableString lineStyles[] = {
+static const muse::TranslatableString lineStyles[] = {
     //: line style
-    TranslatableString("notation/editstyle", "Continuous"),
+    muse::TranslatableString("notation/editstyle", "Continuous"),
     //: line style
-    TranslatableString("notation/editstyle", "Dashed"),
+    muse::TranslatableString("notation/editstyle", "Dashed"),
     //: line style
-    TranslatableString("notation/editstyle", "Dotted"),
+    muse::TranslatableString("notation/editstyle", "Dotted"),
 };
 
 static void fillDirectionComboBox(QComboBox* comboBox)
@@ -217,7 +217,7 @@ EditStyle::EditStyle(QWidget* parent)
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setModal(true);
 
-    buttonApplyToAllParts = buttonBox->addButton(mu::qtrc("notation/editstyle", "Apply to all parts"), QDialogButtonBox::ApplyRole);
+    buttonApplyToAllParts = buttonBox->addButton(muse::qtrc("notation/editstyle", "Apply to all parts"), QDialogButtonBox::ApplyRole);
     WidgetUtils::setWidgetIcon(buttonTogglePagelist, IconCode::Code::ARROW_RIGHT);
 
     // ====================================================
@@ -714,7 +714,7 @@ EditStyle::EditStyle(QWidget* parent)
         lineStyleSelect->lineStyleComboBox->clear();
 
         int idx = 0;
-        for (const TranslatableString& lineStyle : lineStyles) {
+        for (const muse::TranslatableString& lineStyle : lineStyles) {
             lineStyleSelect->lineStyleComboBox->addItem(lineStyle.qTranslated(), idx);
             ++idx;
         }
@@ -738,8 +738,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(mu::qtrc("notation/editstyle", "Above"), int(PlacementV::ABOVE));
-        cb->addItem(mu::qtrc("notation/editstyle", "Below"), int(PlacementV::BELOW));
+        cb->addItem(muse::qtrc("notation/editstyle", "Above"), int(PlacementV::ABOVE));
+        cb->addItem(muse::qtrc("notation/editstyle", "Below"), int(PlacementV::BELOW));
     }
 
     horizontalPlacementComboBoxes = {
@@ -749,30 +749,30 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : horizontalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(mu::qtrc("notation/editstyle", "Left"),   int(PlacementH::LEFT));
-        cb->addItem(mu::qtrc("notation/editstyle", "Center"), int(PlacementH::CENTER));
-        cb->addItem(mu::qtrc("notation/editstyle", "Right"),  int(PlacementH::RIGHT));
+        cb->addItem(muse::qtrc("notation/editstyle", "Left"),   int(PlacementH::LEFT));
+        cb->addItem(muse::qtrc("notation/editstyle", "Center"), int(PlacementH::CENTER));
+        cb->addItem(muse::qtrc("notation/editstyle", "Right"),  int(PlacementH::RIGHT));
     }
 
     mmRestRangeBracketType->clear();
-    mmRestRangeBracketType->addItem(mu::qtrc("notation/editstyle", "None"),        int(MMRestRangeBracketType::NONE));
-    mmRestRangeBracketType->addItem(mu::qtrc("notation/editstyle", "Brackets"),    int(MMRestRangeBracketType::BRACKETS));
-    mmRestRangeBracketType->addItem(mu::qtrc("notation/editstyle", "Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
+    mmRestRangeBracketType->addItem(muse::qtrc("notation/editstyle", "None"),        int(MMRestRangeBracketType::NONE));
+    mmRestRangeBracketType->addItem(muse::qtrc("notation/editstyle", "Brackets"),    int(MMRestRangeBracketType::BRACKETS));
+    mmRestRangeBracketType->addItem(muse::qtrc("notation/editstyle", "Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
 
     autoplaceVerticalAlignRange->clear();
-    autoplaceVerticalAlignRange->addItem(mu::qtrc("notation/editstyle", "Segment"), int(VerticalAlignRange::SEGMENT));
-    autoplaceVerticalAlignRange->addItem(mu::qtrc("notation/editstyle", "Measure"), int(VerticalAlignRange::MEASURE));
-    autoplaceVerticalAlignRange->addItem(mu::qtrc("notation/editstyle", "System"),  int(VerticalAlignRange::SYSTEM));
+    autoplaceVerticalAlignRange->addItem(muse::qtrc("notation/editstyle", "Segment"), int(VerticalAlignRange::SEGMENT));
+    autoplaceVerticalAlignRange->addItem(muse::qtrc("notation/editstyle", "Measure"), int(VerticalAlignRange::MEASURE));
+    autoplaceVerticalAlignRange->addItem(muse::qtrc("notation/editstyle", "System"),  int(VerticalAlignRange::SYSTEM));
 
     tupletNumberType->clear();
-    tupletNumberType->addItem(mu::qtrc("notation/editstyle", "Number"), int(TupletNumberType::SHOW_NUMBER));
-    tupletNumberType->addItem(mu::qtrc("notation/editstyle", "Ratio"), int(TupletNumberType::SHOW_RELATION));
-    tupletNumberType->addItem(mu::qtrc("notation/editstyle", "None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
+    tupletNumberType->addItem(muse::qtrc("notation/editstyle", "Number"), int(TupletNumberType::SHOW_NUMBER));
+    tupletNumberType->addItem(muse::qtrc("notation/editstyle", "Ratio"), int(TupletNumberType::SHOW_RELATION));
+    tupletNumberType->addItem(muse::qtrc("notation/editstyle", "None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
 
     tupletBracketType->clear();
-    tupletBracketType->addItem(mu::qtrc("notation/editstyle", "Automatic"), int(TupletBracketType::AUTO_BRACKET));
-    tupletBracketType->addItem(mu::qtrc("notation/editstyle", "Bracket"), int(TupletBracketType::SHOW_BRACKET));
-    tupletBracketType->addItem(mu::qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
+    tupletBracketType->addItem(muse::qtrc("notation/editstyle", "Automatic"), int(TupletBracketType::AUTO_BRACKET));
+    tupletBracketType->addItem(muse::qtrc("notation/editstyle", "Bracket"), int(TupletBracketType::SHOW_BRACKET));
+    tupletBracketType->addItem(muse::qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
     musicalSymbolFont->clear();
     dynamicsFont->clear();
@@ -823,7 +823,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     // Define string here instead of in the .ui file to avoid MSVC compiler warning C4125, which would
     // be triggered by the decimal digit immediately following a non-ASCII character (curly quote).
-    oneMeasureRepeatShow1->setText(mu::qtrc("EditStyleBase", "Show ‘1’ on 1-measure repeats"));
+    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show ‘1’ on 1-measure repeats"));
 
     // ====================================================
     // BEAMS (QML)
@@ -879,24 +879,24 @@ EditStyle::EditStyle(QWidget* parent)
     // ====================================================
 
     voicingSelectWidget->interpretBox->clear();
-    voicingSelectWidget->interpretBox->addItem(mu::qtrc("notation/editstyle", "Jazz"), int(0));   // two-item combobox for boolean style variant
-    voicingSelectWidget->interpretBox->addItem(mu::qtrc("notation/editstyle", "Literal"), int(1));   // true = literal
+    voicingSelectWidget->interpretBox->addItem(muse::qtrc("notation/editstyle", "Jazz"), int(0));   // two-item combobox for boolean style variant
+    voicingSelectWidget->interpretBox->addItem(muse::qtrc("notation/editstyle", "Literal"), int(1));   // true = literal
 
     voicingSelectWidget->voicingBox->clear();
-    voicingSelectWidget->voicingBox->addItem(mu::qtrc("notation/editstyle", "Automatic"), int(Voicing::AUTO));
-    voicingSelectWidget->voicingBox->addItem(mu::qtrc("notation/editstyle", "Root only"), int(Voicing::ROOT_ONLY));
-    voicingSelectWidget->voicingBox->addItem(mu::qtrc("notation/editstyle", "Close"), int(Voicing::CLOSE));
-    voicingSelectWidget->voicingBox->addItem(mu::qtrc("notation/editstyle", "Drop two"), int(Voicing::DROP_2));
-    voicingSelectWidget->voicingBox->addItem(mu::qtrc("notation/editstyle", "Six note"), int(Voicing::SIX_NOTE));
-    voicingSelectWidget->voicingBox->addItem(mu::qtrc("notation/editstyle", "Four note"), int(Voicing::FOUR_NOTE));
-    voicingSelectWidget->voicingBox->addItem(mu::qtrc("notation/editstyle", "Three note"), int(Voicing::THREE_NOTE));
+    voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Automatic"), int(Voicing::AUTO));
+    voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Root only"), int(Voicing::ROOT_ONLY));
+    voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Close"), int(Voicing::CLOSE));
+    voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Drop two"), int(Voicing::DROP_2));
+    voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Six note"), int(Voicing::SIX_NOTE));
+    voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Four note"), int(Voicing::FOUR_NOTE));
+    voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Three note"), int(Voicing::THREE_NOTE));
 
     voicingSelectWidget->durationBox->clear();
-    voicingSelectWidget->durationBox->addItem(mu::qtrc("notation/editstyle", "Until next chord symbol"),
+    voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Until next chord symbol"),
                                               int(HDuration::UNTIL_NEXT_CHORD_SYMBOL));
-    voicingSelectWidget->durationBox->addItem(mu::qtrc("notation/editstyle", "Until end of measure"),
+    voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Until end of measure"),
                                               int(HDuration::STOP_AT_MEASURE_END));
-    voicingSelectWidget->durationBox->addItem(mu::qtrc("notation/editstyle", "Chord/rest duration"),
+    voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Chord/rest duration"),
                                               int(HDuration::SEGMENT_DURATION));
 
     // ====================================================
@@ -1003,9 +1003,9 @@ EditStyle::EditStyle(QWidget* parent)
     }
 
     textStyleFrameType->clear();
-    textStyleFrameType->addItem(mu::qtrc("notation/editstyle", "None", "no frame for text"), int(FrameType::NO_FRAME));
-    textStyleFrameType->addItem(mu::qtrc("notation/editstyle", "Rectangle"), int(FrameType::SQUARE));
-    textStyleFrameType->addItem(mu::qtrc("notation/editstyle", "Circle"), int(FrameType::CIRCLE));
+    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "None", "no frame for text"), int(FrameType::NO_FRAME));
+    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(FrameType::SQUARE));
+    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Circle"), int(FrameType::CIRCLE));
 
     WidgetUtils::setWidgetIcon(resetTextStyleName, IconCode::Code::UNDO);
     connect(resetTextStyleName, &QToolButton::clicked, this, &EditStyle::resetUserStyleName);
@@ -1204,57 +1204,57 @@ void EditStyle::retranslate()
 {
     retranslateUi(this);
 
-    buttonApplyToAllParts->setText(mu::qtrc("notation/editstyle", "Apply to all parts"));
+    buttonApplyToAllParts->setText(muse::qtrc("notation/editstyle", "Apply to all parts"));
 
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         int idx = 0;
-        for (const TranslatableString& lineStyle : lineStyles) {
+        for (const muse::TranslatableString& lineStyle : lineStyles) {
             lineStyleSelect->lineStyleComboBox->setItemText(idx, lineStyle.qTranslated());
             ++idx;
         }
     }
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
-        cb->setItemText(0, mu::qtrc("notation/editstyle", "Above"));
-        cb->setItemText(1, mu::qtrc("notation/editstyle", "Below"));
+        cb->setItemText(0, muse::qtrc("notation/editstyle", "Above"));
+        cb->setItemText(1, muse::qtrc("notation/editstyle", "Below"));
     }
 
     for (QComboBox* cb : horizontalPlacementComboBoxes) {
-        cb->setItemText(0, mu::qtrc("notation/editstyle", "Left"));
-        cb->setItemText(1, mu::qtrc("notation/editstyle", "Center"));
-        cb->setItemText(2, mu::qtrc("notation/editstyle", "Right"));
+        cb->setItemText(0, muse::qtrc("notation/editstyle", "Left"));
+        cb->setItemText(1, muse::qtrc("notation/editstyle", "Center"));
+        cb->setItemText(2, muse::qtrc("notation/editstyle", "Right"));
     }
 
-    mmRestRangeBracketType->setItemText(0, mu::qtrc("notation/editstyle", "None"));
-    mmRestRangeBracketType->setItemText(1, mu::qtrc("notation/editstyle", "Brackets"));
-    mmRestRangeBracketType->setItemText(2, mu::qtrc("notation/editstyle", "Parentheses"));
+    mmRestRangeBracketType->setItemText(0, muse::qtrc("notation/editstyle", "None"));
+    mmRestRangeBracketType->setItemText(1, muse::qtrc("notation/editstyle", "Brackets"));
+    mmRestRangeBracketType->setItemText(2, muse::qtrc("notation/editstyle", "Parentheses"));
 
-    autoplaceVerticalAlignRange->setItemText(0, mu::qtrc("notation/editstyle", "Segment"));
-    autoplaceVerticalAlignRange->setItemText(1, mu::qtrc("notation/editstyle", "Measure"));
-    autoplaceVerticalAlignRange->setItemText(2, mu::qtrc("notation/editstyle", "System"));
+    autoplaceVerticalAlignRange->setItemText(0, muse::qtrc("notation/editstyle", "Segment"));
+    autoplaceVerticalAlignRange->setItemText(1, muse::qtrc("notation/editstyle", "Measure"));
+    autoplaceVerticalAlignRange->setItemText(2, muse::qtrc("notation/editstyle", "System"));
 
-    tupletNumberType->setItemText(0, mu::qtrc("notation/editstyle", "Number"));
-    tupletNumberType->setItemText(1, mu::qtrc("notation/editstyle", "Ratio"));
-    tupletNumberType->setItemText(2, mu::qtrc("notation/editstyle", "None", "no tuplet number type"));
+    tupletNumberType->setItemText(0, muse::qtrc("notation/editstyle", "Number"));
+    tupletNumberType->setItemText(1, muse::qtrc("notation/editstyle", "Ratio"));
+    tupletNumberType->setItemText(2, muse::qtrc("notation/editstyle", "None", "no tuplet number type"));
 
-    tupletBracketType->setItemText(0, mu::qtrc("notation/editstyle", "Automatic"));
-    tupletBracketType->setItemText(1, mu::qtrc("notation/editstyle", "Bracket"));
-    tupletBracketType->setItemText(2, mu::qtrc("notation/editstyle", "None", "no tuplet bracket type"));
+    tupletBracketType->setItemText(0, muse::qtrc("notation/editstyle", "Automatic"));
+    tupletBracketType->setItemText(1, muse::qtrc("notation/editstyle", "Bracket"));
+    tupletBracketType->setItemText(2, muse::qtrc("notation/editstyle", "None", "no tuplet bracket type"));
 
-    voicingSelectWidget->interpretBox->setItemText(0, mu::qtrc("notation/editstyle", "Jazz"));
-    voicingSelectWidget->interpretBox->setItemText(1, mu::qtrc("notation/editstyle", "Literal"));
+    voicingSelectWidget->interpretBox->setItemText(0, muse::qtrc("notation/editstyle", "Jazz"));
+    voicingSelectWidget->interpretBox->setItemText(1, muse::qtrc("notation/editstyle", "Literal"));
 
-    voicingSelectWidget->voicingBox->setItemText(0, mu::qtrc("notation/editstyle", "Automatic"));
-    voicingSelectWidget->voicingBox->setItemText(1, mu::qtrc("notation/editstyle", "Root only"));
-    voicingSelectWidget->voicingBox->setItemText(2, mu::qtrc("notation/editstyle", "Close"));
-    voicingSelectWidget->voicingBox->setItemText(3, mu::qtrc("notation/editstyle", "Drop two"));
-    voicingSelectWidget->voicingBox->setItemText(4, mu::qtrc("notation/editstyle", "Six note"));
-    voicingSelectWidget->voicingBox->setItemText(5, mu::qtrc("notation/editstyle", "Four note"));
-    voicingSelectWidget->voicingBox->setItemText(6, mu::qtrc("notation/editstyle", "Three note"));
+    voicingSelectWidget->voicingBox->setItemText(0, muse::qtrc("notation/editstyle", "Automatic"));
+    voicingSelectWidget->voicingBox->setItemText(1, muse::qtrc("notation/editstyle", "Root only"));
+    voicingSelectWidget->voicingBox->setItemText(2, muse::qtrc("notation/editstyle", "Close"));
+    voicingSelectWidget->voicingBox->setItemText(3, muse::qtrc("notation/editstyle", "Drop two"));
+    voicingSelectWidget->voicingBox->setItemText(4, muse::qtrc("notation/editstyle", "Six note"));
+    voicingSelectWidget->voicingBox->setItemText(5, muse::qtrc("notation/editstyle", "Four note"));
+    voicingSelectWidget->voicingBox->setItemText(6, muse::qtrc("notation/editstyle", "Three note"));
 
-    voicingSelectWidget->durationBox->setItemText(0, mu::qtrc("notation/editstyle", "Until next chord symbol"));
-    voicingSelectWidget->durationBox->setItemText(1, mu::qtrc("notation/editstyle", "Until end of measure"));
-    voicingSelectWidget->durationBox->setItemText(2, mu::qtrc("notation/editstyle", "Chord/rest duration"));
+    voicingSelectWidget->durationBox->setItemText(0, muse::qtrc("notation/editstyle", "Until next chord symbol"));
+    voicingSelectWidget->durationBox->setItemText(1, muse::qtrc("notation/editstyle", "Until end of measure"));
+    voicingSelectWidget->durationBox->setItemText(2, muse::qtrc("notation/editstyle", "Chord/rest duration"));
 
     setHeaderFooterToolTip();
 
@@ -1266,9 +1266,9 @@ void EditStyle::retranslate()
         ++idx;
     }
 
-    textStyleFrameType->setItemText(0, mu::qtrc("notation/editstyle", "None", "no frame for text"));
-    textStyleFrameType->setItemText(1, mu::qtrc("notation/editstyle", "Rectangle"));
-    textStyleFrameType->setItemText(2, mu::qtrc("notation/editstyle", "Circle"));
+    textStyleFrameType->setItemText(0, muse::qtrc("notation/editstyle", "None", "no frame for text"));
+    textStyleFrameType->setItemText(1, muse::qtrc("notation/editstyle", "Rectangle"));
+    textStyleFrameType->setItemText(2, muse::qtrc("notation/editstyle", "Circle"));
 }
 
 //---------------------------------------------------------
@@ -1281,48 +1281,48 @@ void EditStyle::setHeaderFooterToolTip()
     // jumping thru hoops here to make the job of translators easier, yet have a nice display
     QString toolTipHeaderFooter
         = QString("<html><head></head><body><p><b>")
-          + mu::qtrc("notation/editstyle", "Special symbols in header/footer")
+          + muse::qtrc("notation/editstyle", "Special symbols in header/footer")
           + QString("</b></p>")
           + QString("<table><tr><td>$p</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Page number, except on first page")
+          + muse::qtrc("notation/editstyle", "Page number, except on first page")
           + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Page number, if there is more than one page")
+          + muse::qtrc("notation/editstyle", "Page number, if there is more than one page")
           + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Page number, on all pages")
+          + muse::qtrc("notation/editstyle", "Page number, on all pages")
           + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Number of pages")
+          + muse::qtrc("notation/editstyle", "Number of pages")
           + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "File name")
+          + muse::qtrc("notation/editstyle", "File name")
           + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "File path+name")
+          + muse::qtrc("notation/editstyle", "File path+name")
           + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Part name, except on first page")
+          + muse::qtrc("notation/editstyle", "Part name, except on first page")
           + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Part name, on all pages")
+          + muse::qtrc("notation/editstyle", "Part name, on all pages")
           + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Current date")
+          + muse::qtrc("notation/editstyle", "Current date")
           + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Creation date")
+          + muse::qtrc("notation/editstyle", "Creation date")
           + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Last modification time")
+          + muse::qtrc("notation/editstyle", "Last modification time")
           + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Last modification date")
+          + muse::qtrc("notation/editstyle", "Last modification date")
           + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Copyright, on first page only")
+          + muse::qtrc("notation/editstyle", "Copyright, on first page only")
           + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Copyright, on all pages")
+          + muse::qtrc("notation/editstyle", "Copyright, on all pages")
           + QString("</i></td></tr><tr><td>$v</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "MuseScore version this score was last saved with")
+          + muse::qtrc("notation/editstyle", "MuseScore version this score was last saved with")
           + QString("</i></td></tr><tr><td>$r</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "MuseScore revision this score was last saved with")
+          + muse::qtrc("notation/editstyle", "MuseScore revision this score was last saved with")
           + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "The $ sign itself")
+          + muse::qtrc("notation/editstyle", "The $ sign itself")
           + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
-          + mu::qtrc("notation/editstyle", "Metadata tag, see below")
+          + muse::qtrc("notation/editstyle", "Metadata tag, see below")
           + QString("</i></td></tr></table><p>")
-          + mu::qtrc("notation/editstyle", "Available metadata tags and their current values")
+          + muse::qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + mu::qtrc("notation/editstyle", "(in File > Project properties…):")
+          + muse::qtrc("notation/editstyle", "(in File > Project properties…):")
           + QString("</p><table>");
 
     // show all tags for current score/part
@@ -1989,7 +1989,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (cb) {
             return PointF::fromQPointF(cb->offset());
         } else {
-            ASSERT_X("unhandled mu::PointF");
+            ASSERT_X("unhandled muse::PointF");
         }
     } break;
     case P_TYPE::DIRECTION_V: {
@@ -2127,7 +2127,7 @@ void EditStyle::setValues()
         case P_TYPE::POINT: {
             OffsetSelect* as = qobject_cast<OffsetSelect*>(sw.widget);
             if (as) {
-                as->setOffset(val.value<mu::PointF>().toQPointF());
+                as->setOffset(val.value<muse::PointF>().toQPointF());
             }
         } break;
         default: {
@@ -2144,7 +2144,7 @@ void EditStyle::setValues()
 
     //TODO: convert the rest:
 
-    ByteArray ba = styleValue(StyleId::swingUnit).value<String>().toAscii();
+    muse::ByteArray ba = styleValue(StyleId::swingUnit).value<String>().toAscii();
     DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
 
     if (unit == DurationType::V_EIGHTH) {
@@ -2237,10 +2237,10 @@ void EditStyle::setValues()
 
 void EditStyle::selectChordDescriptionFile()
 {
-    io::path_t dir = configuration()->userStylesPath();
-    std::vector<std::string> filter = { mu::trc("notation", "MuseScore chord symbol style files") + " (*.xml)" };
+    muse::io::path_t dir = configuration()->userStylesPath();
+    std::vector<std::string> filter = { muse::trc("notation", "MuseScore chord symbol style files") + " (*.xml)" };
 
-    mu::io::path_t path = interactive()->selectOpeningFile(mu::qtrc("notation", "Load style"), dir, filter);
+    muse::io::path_t path = interactive()->selectOpeningFile(muse::qtrc("notation", "Load style"), dir, filter);
     if (path.empty()) {
         return;
     }
@@ -2583,7 +2583,7 @@ void EditStyle::textStyleChanged(int row)
             PropertyValue val = styleValue(a.sid);
             textStyleSpatiumDependent->setChecked(val.toBool());
             resetTextStyleSpatiumDependent->setEnabled(val != defaultStyleValue(a.sid));
-            textStyleOffset->setSuffix(val.toBool() ? mu::qtrc("global", "sp") : mu::qtrc("global", "mm"));
+            textStyleOffset->setSuffix(val.toBool() ? muse::qtrc("global", "sp") : muse::qtrc("global", "mm"));
         }
         break;
 

@@ -70,7 +70,7 @@
 
 #include "log.h"
 
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
@@ -206,8 +206,8 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
 
     slide = -1;
     int track = staffIdx * VOICES + voice;
-    if (mu::contains(slides, track)) {
-        slide = mu::take(slides, track);
+    if (muse::contains(slides, track)) {
+        slide = muse::take(slides, track);
     }
 
     int pause = -1;
@@ -1525,7 +1525,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                         //  fixing gp5 bug with not storying let ring for tied notes
                         if (m_letRingForChords.find(chord2) != m_letRingForChords.end()) {
                             result.letRing = true;
-                            mu::remove(m_letRingForChords, chord2);
+                            muse::remove(m_letRingForChords, chord2);
                         }
 
                         tie->setEndNote(note);
@@ -1538,8 +1538,8 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                             tieHarmonic->setEndNote(endHarmonicNote);
                             startHarmonicNote->add(tieHarmonic);
 
-                            mu::remove(m_harmonicNotes, startHarmonicNote);
-                            mu::remove(m_harmonicNotes, endHarmonicNote);
+                            muse::remove(m_harmonicNotes, startHarmonicNote);
+                            muse::remove(m_harmonicNotes, endHarmonicNote);
                         }
 
                         note->setFret(note2->fret());
@@ -1551,7 +1551,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                             TremoloSingleChord* t = Factory::createTremoloSingleChord(score->dummy()->chord());
                             t->setTremoloType(type);
                             chord->add(t);
-                            mu::remove(m_tremolosInChords, chord2);
+                            muse::remove(m_tremolosInChords, chord2);
                             m_tremolosInChords[chord] = type;
                         }
 

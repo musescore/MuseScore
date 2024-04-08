@@ -35,7 +35,7 @@ public:
     int midiShortestNote() const override; // ticks
     void setMidiShortestNote(int ticks) override;
 
-    void setMidiImportOperationsFile(const std::optional<io::path_t>& filePath) const override;
+    void setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const override;
 
     // export
     bool isExpandRepeats() const override;

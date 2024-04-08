@@ -38,7 +38,7 @@ class FileDialog : public QObject
     Q_PROPERTY(QString folder READ folder WRITE setFolder NOTIFY folderChanged FINAL)
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged FINAL)
 
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
 
 public:
     FileDialog(QObject* parent = nullptr);

@@ -30,40 +30,40 @@ namespace mu::project {
 class ProjectConfigurationMock : public project::IProjectConfiguration
 {
 public:
-    MOCK_METHOD(io::path_t, recentFilesJsonPath, (), (const, override));
-    MOCK_METHOD(ByteArray, compatRecentFilesData, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, recentFilesJsonPath, (), (const, override));
+    MOCK_METHOD(muse::ByteArray, compatRecentFilesData, (), (const, override));
 
-    MOCK_METHOD(io::path_t, myFirstProjectPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, myFirstProjectPath, (), (const, override));
 
-    MOCK_METHOD(io::paths_t, availableTemplateDirs, (), (const, override));
-    MOCK_METHOD(io::path_t, templateCategoriesJsonPath, (const io::path_t&), (const, override));
+    MOCK_METHOD(muse::io::paths_t, availableTemplateDirs, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, templateCategoriesJsonPath, (const muse::io::path_t&), (const, override));
 
-    MOCK_METHOD(io::path_t, userTemplatesPath, (), (const, override));
-    MOCK_METHOD(void, setUserTemplatesPath, (const io::path_t&), (override));
-    MOCK_METHOD(async::Channel<io::path_t>, userTemplatesPathChanged, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, userTemplatesPath, (), (const, override));
+    MOCK_METHOD(void, setUserTemplatesPath, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, userTemplatesPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path_t, lastOpenedProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setLastOpenedProjectsPath, (const io::path_t&), (override));
+    MOCK_METHOD(muse::io::path_t, lastOpenedProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setLastOpenedProjectsPath, (const muse::io::path_t&), (override));
 
-    MOCK_METHOD(io::path_t, lastSavedProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setLastSavedProjectsPath, (const io::path_t&), (override));
+    MOCK_METHOD(muse::io::path_t, lastSavedProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setLastSavedProjectsPath, (const muse::io::path_t&), (override));
 
-    MOCK_METHOD(io::path_t, userProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setUserProjectsPath, (const io::path_t&), (override));
-    MOCK_METHOD(async::Channel<io::path_t>, userProjectsPathChanged, (), (const, override));
-    MOCK_METHOD(io::path_t, defaultUserProjectsPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, userProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setUserProjectsPath, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, userProjectsPathChanged, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, defaultUserProjectsPath, (), (const, override));
 
     MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
 
-    MOCK_METHOD(bool, isCloudProject, (const io::path_t& projectPath), (const, override));
-    MOCK_METHOD(bool, isLegacyCloudProject, (const io::path_t& projectPath), (const, override));
-    MOCK_METHOD(io::path_t, cloudProjectPath, (int scoreId), (const, override));
-    MOCK_METHOD(int, cloudScoreIdFromPath, (const io::path_t& projectPath), (const, override));
+    MOCK_METHOD(bool, isCloudProject, (const muse::io::path_t& projectPath), (const, override));
+    MOCK_METHOD(bool, isLegacyCloudProject, (const muse::io::path_t& projectPath), (const, override));
+    MOCK_METHOD(muse::io::path_t, cloudProjectPath, (int scoreId), (const, override));
+    MOCK_METHOD(int, cloudScoreIdFromPath, (const muse::io::path_t& projectPath), (const, override));
 
-    MOCK_METHOD(io::path_t, cloudProjectSavingPath, (int scoreId), (const, override));
+    MOCK_METHOD(muse::io::path_t, cloudProjectSavingPath, (int scoreId), (const, override));
 
-    MOCK_METHOD(io::path_t, defaultSavingFilePath, (INotationProjectPtr, const std::string&, const std::string&), (const, override));
+    MOCK_METHOD(muse::io::path_t, defaultSavingFilePath, (INotationProjectPtr, const std::string&, const std::string&), (const, override));
 
     MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));
@@ -81,7 +81,7 @@ public:
     MOCK_METHOD(void, setHomeScoresPageTabIndex, (int), (override));
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
-    MOCK_METHOD(async::Notification, templatePreviewBackgroundChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, templatePreviewBackgroundChanged, (), (const, override));
 
     MOCK_METHOD(PreferredScoreCreationMode, preferredScoreCreationMode, (), (const, override));
     MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
@@ -91,15 +91,15 @@ public:
 
     MOCK_METHOD(bool, isAutoSaveEnabled, (), (const, override));
     MOCK_METHOD(void, setAutoSaveEnabled, (bool), (override));
-    MOCK_METHOD(async::Channel<bool>, autoSaveEnabledChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, autoSaveEnabledChanged, (), (const, override));
 
     MOCK_METHOD(int, autoSaveIntervalMinutes, (), (const, override));
     MOCK_METHOD(void, setAutoSaveInterval, (int), (override));
-    MOCK_METHOD(async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
 
     MOCK_METHOD(bool, alsoShareAudioCom, (), (const, override));
     MOCK_METHOD(void, setAlsoShareAudioCom, (bool), (override));
-    MOCK_METHOD(async::Channel<bool>, alsoShareAudioComChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, alsoShareAudioComChanged, (), (const, override));
 
     MOCK_METHOD(bool, showAlsoShareAudioComDialog, (), (const, override));
     MOCK_METHOD(void, setShowAlsoShareAudioComDialog, (bool), (override));
@@ -107,7 +107,7 @@ public:
     MOCK_METHOD(bool, hasAskedAlsoShareAudioCom, (), (const, override));
     MOCK_METHOD(void, setHasAskedAlsoShareAudioCom, (bool), (override));
 
-    MOCK_METHOD(io::path_t, newProjectTemporaryPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, newProjectTemporaryPath, (), (const, override));
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 
@@ -128,9 +128,9 @@ public:
     MOCK_METHOD(int, numberOfSavesToGenerateAudio, (), (const, override));
     MOCK_METHOD(void, setNumberOfSavesToGenerateAudio, (int), (override));
 
-    MOCK_METHOD(io::path_t, temporaryMp3FilePathTemplate, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, temporaryMp3FilePathTemplate, (), (const, override));
 
-    MOCK_METHOD(io::path_t, projectBackupPath, (const io::path_t&), (const, override));
+    MOCK_METHOD(muse::io::path_t, projectBackupPath, (const muse::io::path_t&), (const, override));
 
     MOCK_METHOD(bool, showCloudIsNotAvailableWarning, (), (const, override));
     MOCK_METHOD(void, setShowCloudIsNotAvailableWarning, (bool), (override));

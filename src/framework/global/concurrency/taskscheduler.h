@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_GLOBAL_TASKCHEDULER_H
-#define MU_GLOBAL_TASKCHEDULER_H
+#ifndef MUSE_GLOBAL_TASKCHEDULER_H
+#define MUSE_GLOBAL_TASKCHEDULER_H
 
 #include <condition_variable>
 #include <functional>
@@ -36,7 +36,7 @@
 
 #include "log.h"
 
-namespace mu {
+namespace muse {
 typedef std::invoke_result_t<decltype(std::thread::hardware_concurrency)> thread_pool_size_t;
 
 class TaskScheduler
@@ -202,4 +202,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_TASKCHEDULER_H
+#endif // MUSE_GLOBAL_TASKCHEDULER_H

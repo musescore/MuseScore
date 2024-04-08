@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_CONFIGREADER_H
-#define MU_GLOBAL_CONFIGREADER_H
+#ifndef MUSE_GLOBAL_CONFIGREADER_H
+#define MUSE_GLOBAL_CONFIGREADER_H
 
 #include "io/path.h"
 #include "types/config.h"
 
-namespace mu {
+namespace muse {
 class ConfigReader
 {
 public:
@@ -34,4 +34,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_CONFIGREADER_H
+#endif // MUSE_GLOBAL_CONFIGREADER_H

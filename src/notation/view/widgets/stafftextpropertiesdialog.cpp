@@ -53,9 +53,9 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     m_originStaffText = st;
 
     if (st->systemFlag()) {
-        setWindowTitle(mu::qtrc("notation/stafftextproperties", "System text properties"));
+        setWindowTitle(muse::qtrc("notation/stafftextproperties", "System text properties"));
     } else {
-        setWindowTitle(mu::qtrc("notation/stafftextproperties", "Staff text properties"));
+        setWindowTitle(muse::qtrc("notation/stafftextproperties", "Staff text properties"));
     }
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);

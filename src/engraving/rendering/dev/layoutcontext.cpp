@@ -533,7 +533,7 @@ void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staf
     m_score->setLayout(tick1, tick2, staff1, staff2, e);
 }
 
-void LayoutContext::addRefresh(const mu::RectF& r)
+void LayoutContext::addRefresh(const RectF& r)
 {
     IF_ASSERT_FAILED(m_score) {
         return;

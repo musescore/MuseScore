@@ -120,7 +120,7 @@ void SpannerSegment::spatiumChanged(double ov, double nv)
 //   mimeData
 //---------------------------------------------------------
 
-ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
+muse::ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 {
     if (dragOffset.isNull()) { // where is dragOffset used?
         return spanner()->mimeData(dragOffset);
@@ -1465,8 +1465,8 @@ bool Spanner::isUserModified() const
 
 void Spanner::eraseSpannerSegments()
 {
-    DeleteAll(m_segments);
-    DeleteAll(m_unusedSegments);
+    muse::DeleteAll(m_segments);
+    muse::DeleteAll(m_unusedSegments);
     m_segments.clear();
     m_unusedSegments.clear();
 }
@@ -1497,14 +1497,14 @@ String SpannerSegment::formatBarsAndBeats() const
 String SpannerSegment::formatStartBarsAndBeats(const Segment* segment) const
 {
     std::pair<int, float> barbeat = segment->barbeat();
-    return mtrc("engraving", "Start measure: %1; Start beat: %2")
+    return muse::mtrc("engraving", "Start measure: %1; Start beat: %2")
            .arg(String::number(barbeat.first), String::number(barbeat.second));
 }
 
 String SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
 {
     std::pair<int, float> barbeat = segment->barbeat();
-    return mtrc("engraving", "End measure: %1; End beat: %2")
+    return muse::mtrc("engraving", "End measure: %1; End beat: %2")
            .arg(String::number(barbeat.first), String::number(barbeat.second));
 }
 

@@ -24,10 +24,11 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
-mu::Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     const SoundTrackFormat format {
         SoundTrackType::MP3,

@@ -45,7 +45,7 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace muse::autobot;
-using namespace mu::api;
+using namespace muse::api;
 
 std::string AutobotModule::moduleName() const
 {

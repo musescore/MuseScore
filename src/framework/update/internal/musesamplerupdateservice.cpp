@@ -38,7 +38,7 @@
 using namespace muse::update;
 using namespace muse::network;
 
-mu::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()
+muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
     result.ret = make_ret(Err::NoUpdate);
@@ -90,7 +90,7 @@ mu::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()
     return result;
 }
 
-mu::RetVal<ReleaseInfo> MuseSamplerUpdateService::lastCheckResult()
+muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::lastCheckResult()
 {
     if (m_lastCheckResult.isValid()) {
         return RetVal<ReleaseInfo>::make_ok(m_lastCheckResult);
@@ -99,7 +99,7 @@ mu::RetVal<ReleaseInfo> MuseSamplerUpdateService::lastCheckResult()
     return RetVal<ReleaseInfo>();
 }
 
-mu::Progress MuseSamplerUpdateService::updateProgress()
+muse::Progress MuseSamplerUpdateService::updateProgress()
 {
     return m_updateProgress;
 }
@@ -131,7 +131,7 @@ void MuseSamplerUpdateService::openMuseHub()
 #endif
 }
 
-mu::RetVal<ReleaseInfo> MuseSamplerUpdateService::parseRelease(const QByteArray& json) const
+muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::parseRelease(const QByteArray& json) const
 {
     RetVal<ReleaseInfo> result;
 

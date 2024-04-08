@@ -28,11 +28,11 @@ namespace muse::update {
 class UpdateServiceStub : public IAppUpdateService
 {
 public:
-    mu::RetVal<ReleaseInfo> checkForUpdate() override;
+    RetVal<ReleaseInfo> checkForUpdate() override;
 
     RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;
-    mu::Progress updateProgress() override;
+    Progress updateProgress() override;
 };
 }
 

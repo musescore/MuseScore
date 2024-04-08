@@ -26,7 +26,7 @@
 #include "midiconfigurationstub.h"
 
 using namespace muse::midi;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string MidiModule::moduleName() const
 {

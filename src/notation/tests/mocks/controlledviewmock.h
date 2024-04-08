@@ -34,30 +34,30 @@ public:
     MOCK_METHOD(qreal, width, (), (const, override));
     MOCK_METHOD(qreal, height, (), (const, override));
 
-    MOCK_METHOD(PointF, viewportTopLeft, (), (const, override));
+    MOCK_METHOD(muse::PointF, viewportTopLeft, (), (const, override));
 
     MOCK_METHOD(bool, moveCanvas, (qreal, qreal), (override));
     MOCK_METHOD(void, moveCanvasHorizontal, (qreal), (override));
     MOCK_METHOD(void, moveCanvasVertical, (qreal), (override));
 
-    MOCK_METHOD(RectF, notationContentRect, (), (const, override));
+    MOCK_METHOD(muse::RectF, notationContentRect, (), (const, override));
     MOCK_METHOD(qreal, currentScaling, (), (const, override));
-    MOCK_METHOD(void, setScaling, (qreal, const PointF&, bool), (override));
+    MOCK_METHOD(void, setScaling, (qreal, const muse::PointF&, bool), (override));
 
-    MOCK_METHOD(PointF, toLogical, (const PointF&), (const, override));
-    MOCK_METHOD(PointF, toLogical, (const QPointF&), (const, override));
-    MOCK_METHOD(PointF, fromLogical, (const PointF&), (const, override));
-    MOCK_METHOD(RectF, fromLogical, (const RectF&), (const, override));
+    MOCK_METHOD(muse::PointF, toLogical, (const muse::PointF&), (const, override));
+    MOCK_METHOD(muse::PointF, toLogical, (const QPointF&), (const, override));
+    MOCK_METHOD(muse::PointF, fromLogical, (const muse::PointF&), (const, override));
+    MOCK_METHOD(muse::RectF, fromLogical, (const muse::RectF&), (const, override));
 
     MOCK_METHOD(bool, isNoteEnterMode, (), (const, override));
-    MOCK_METHOD(void, showShadowNote, (const PointF&), (override));
+    MOCK_METHOD(void, showShadowNote, (const muse::PointF&), (override));
 
     MOCK_METHOD(void, showContextMenu, (const ElementType&, const QPointF&), (override));
     MOCK_METHOD(void, hideContextMenu, (), (override));
 
-    MOCK_METHOD(void, showElementPopup, (const ElementType&, const RectF&), (override));
+    MOCK_METHOD(void, showElementPopup, (const ElementType&, const muse::RectF&), (override));
     MOCK_METHOD(void, hideElementPopup, (), (override));
-    MOCK_METHOD(void, toggleElementPopup, (const ElementType&, const RectF&), (override));
+    MOCK_METHOD(void, toggleElementPopup, (const ElementType&, const muse::RectF&), (override));
 
     MOCK_METHOD(INotationInteractionPtr, notationInteraction, (), (const, override));
     MOCK_METHOD(INotationPlaybackPtr, notationPlayback, (), (const, override));

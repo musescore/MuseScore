@@ -32,7 +32,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {
-class PaletteRootModel : public QObject, public muse::actions::Actionable, public async::Asyncable
+class PaletteRootModel : public QObject, public muse::actions::Actionable, public muse::async::Asyncable
 {
     Q_OBJECT
 

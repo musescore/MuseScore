@@ -51,18 +51,18 @@ static io::paths_t pluginPathsFromDefaultLocation()
 }
 }
 
-mu::io::paths_t VstPluginsScanner::scanPlugins() const
+io::paths_t VstPluginsScanner::scanPlugins() const
 {
     TRACEFUNC;
 
-    mu::io::paths_t result = pluginPathsFromDefaultLocation();
-    mu::io::paths_t plugins = pluginPathsFromCustomLocations(configuration()->userVstDirectories());
+    io::paths_t result = pluginPathsFromDefaultLocation();
+    io::paths_t plugins = pluginPathsFromCustomLocations(configuration()->userVstDirectories());
     result.insert(result.end(), std::make_move_iterator(plugins.begin()), std::make_move_iterator(plugins.end()));
 
     return result;
 }
 
-mu::io::paths_t VstPluginsScanner::pluginPathsFromCustomLocations(const io::paths_t& customPaths) const
+io::paths_t VstPluginsScanner::pluginPathsFromCustomLocations(const io::paths_t& customPaths) const
 {
     io::paths_t result;
 

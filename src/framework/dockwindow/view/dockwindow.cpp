@@ -40,7 +40,7 @@
 #include "log.h"
 
 using namespace muse::dock;
-using namespace mu::async;
+using namespace muse::async;
 
 namespace muse::dock {
 static const QList<Location> POSSIBLE_LOCATIONS {

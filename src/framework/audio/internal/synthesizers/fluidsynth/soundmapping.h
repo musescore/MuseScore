@@ -792,8 +792,8 @@ inline const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupDat
     const std::map<SoundMappingKey, midi::Programs>& mapping = mappingByCategory(setupData.category);
 
     mpe::SoundSubCategories subCategorySet = setupData.subCategorySet;
-    mu::remove(subCategorySet, mpe::SoundSubCategory::Primary);
-    mu::remove(subCategorySet, mpe::SoundSubCategory::Secondary);
+    muse::remove(subCategorySet, mpe::SoundSubCategory::Primary);
+    muse::remove(subCategorySet, mpe::SoundSubCategory::Secondary);
 
     auto search = mapping.find({ setupData.id, subCategorySet });
 
@@ -989,7 +989,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
             mpe::SoundId::Viol, mpe::SoundId::PardessusViol, mpe::SoundId::ViolaDaGamba, mpe::SoundId::Violone
         };
 
-        if (mu::contains(VIOL_SECTION, setupData.id)) {
+        if (muse::contains(VIOL_SECTION, setupData.id)) {
             return BASIC_VIOL_SECTION;
         }
 

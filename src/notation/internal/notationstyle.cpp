@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace mu::notation;
-using namespace mu::async;
+using namespace muse::async;
 
 NotationStyle::NotationStyle(IGetScore* getScore, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack)
@@ -102,7 +102,7 @@ Notification NotationStyle::styleChanged() const
     return m_styleChanged;
 }
 
-bool NotationStyle::loadStyle(const mu::io::path_t& path, bool allowAnyVersion)
+bool NotationStyle::loadStyle(const muse::io::path_t& path, bool allowAnyVersion)
 {
     m_undoStack->prepareChanges();
     bool result = score()->loadStyle(path.toQString(), allowAnyVersion);
@@ -115,7 +115,7 @@ bool NotationStyle::loadStyle(const mu::io::path_t& path, bool allowAnyVersion)
     return result;
 }
 
-bool NotationStyle::saveStyle(const mu::io::path_t& path)
+bool NotationStyle::saveStyle(const muse::io::path_t& path)
 {
     return score()->saveStyle(path.toQString());
 }

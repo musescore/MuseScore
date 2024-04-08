@@ -44,16 +44,16 @@ public:
     virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
-    virtual bool showShadowNote(const PointF& pos) = 0;
+    virtual bool showShadowNote(const muse::PointF& pos) = 0;
     virtual void hideShadowNote() = 0;
-    virtual RectF shadowNoteRect() const = 0;
+    virtual muse::RectF shadowNoteRect() const = 0;
 
     // Visibility
     virtual void toggleVisible() = 0;
 
     // Hit
-    virtual EngravingItem* hitElement(const PointF& pos, float width) const = 0;
-    virtual Staff* hitStaff(const PointF& pos) const = 0;
+    virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
+    virtual Staff* hitStaff(const muse::PointF& pos) const = 0;
 
     struct HitElementContext
     {
@@ -79,7 +79,7 @@ public:
     virtual void selectLastElement() = 0;
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
-    virtual async::Notification selectionChanged() const = 0;
+    virtual muse::async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
     // SelectionFilter
@@ -89,10 +89,10 @@ public:
     // Drag
     using IsDraggable = std::function<bool (const EngravingItem*)>;
     virtual bool isDragStarted() const = 0;
-    virtual void startDrag(const std::vector<EngravingItem*>& elems, const PointF& eoffset, const IsDraggable& isDrag) = 0;
-    virtual void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) = 0;
+    virtual void startDrag(const std::vector<EngravingItem*>& elems, const muse::PointF& eoffset, const IsDraggable& isDrag) = 0;
+    virtual void drag(const muse::PointF& fromPos, const muse::PointF& toPos, DragMode mode) = 0;
     virtual void endDrag() = 0;
-    virtual async::Notification dragChanged() const = 0;
+    virtual muse::async::Notification dragChanged() const = 0;
 
     virtual bool isDragCopyStarted() const = 0;
     virtual bool dragCopyAllowed(const EngravingItem* element) const = 0;
@@ -103,12 +103,12 @@ public:
     //! TODO Change KeyboardModifiers to modes
     virtual void startDrop(const QByteArray& edata) = 0;
     virtual bool startDrop(const QUrl& url) = 0;
-    virtual bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
-    virtual bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+    virtual bool isDropAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
+    virtual bool drop(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
     virtual void setDropTarget(const EngravingItem* item, bool notify = true) = 0;
-    virtual void setDropRect(const RectF& rect) = 0;
+    virtual void setDropRect(const muse::RectF& rect) = 0;
     virtual void endDrop() = 0;
-    virtual async::Notification dropChanged() const = 0;
+    virtual muse::async::Notification dropChanged() const = 0;
 
     virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
     virtual void undo() = 0;
@@ -135,23 +135,23 @@ public:
     virtual bool isTextSelected() const = 0;
     virtual bool isTextEditingStarted() const = 0;
     virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
-    virtual void startEditText(EngravingItem* element, const PointF& elementPos = PointF()) = 0;
+    virtual void startEditText(EngravingItem* element, const muse::PointF& elementPos = muse::PointF()) = 0;
     virtual void editText(QInputMethodEvent* event) = 0;
     virtual void endEditText() = 0;
-    virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;
+    virtual void changeTextCursorPosition(const muse::PointF& newCursorPos) = 0;
     virtual void selectText(mu::engraving::SelectTextType type) = 0;
     virtual const TextBase* editedText() const = 0;
-    virtual async::Notification textEditingStarted() const = 0;
-    virtual async::Notification textEditingChanged() const = 0;
-    virtual async::Channel<TextBase*> textEditingEnded() const = 0;
+    virtual muse::async::Notification textEditingStarted() const = 0;
+    virtual muse::async::Notification textEditingChanged() const = 0;
+    virtual muse::async::Channel<TextBase*> textEditingEnded() const = 0;
 
     // Display
-    virtual async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
+    virtual muse::async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
 
     // Grip edit
     virtual bool isGripEditStarted() const = 0;
-    virtual bool isHitGrip(const PointF& pos) const = 0;
-    virtual void startEditGrip(const PointF& pos) = 0;
+    virtual bool isHitGrip(const muse::PointF& pos) const = 0;
+    virtual void startEditGrip(const muse::PointF& pos) = 0;
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
     virtual void endEditGrip() = 0;
 
@@ -165,12 +165,12 @@ public:
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
 
-    virtual Ret canAddBoxes() const = 0;
+    virtual muse::Ret canAddBoxes() const = 0;
     virtual void addBoxes(BoxType boxType, int count, AddBoxesTarget target) = 0;
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool insertAfter) = 0;
 
     virtual void copySelection() = 0;
-    virtual mu::Ret repeatSelection() = 0;
+    virtual muse::Ret repeatSelection() = 0;
     virtual void copyLyrics() = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;
     virtual void swapSelection() = 0;
@@ -206,13 +206,13 @@ public:
 
     virtual void addTextToTopFrame(TextStyleType type) = 0;
 
-    virtual Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
+    virtual muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
     virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;
 
-    virtual Ret canAddImageToItem(const EngravingItem* item) const = 0;
-    virtual void addImageToItem(const io::path_t& imagePath, EngravingItem* item) = 0;
+    virtual muse::Ret canAddImageToItem(const EngravingItem* item) const = 0;
+    virtual void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) = 0;
 
-    virtual Ret canAddFiguredBass() const = 0;
+    virtual muse::Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;
 
     virtual void addStretch(qreal value) = 0;
@@ -247,7 +247,7 @@ public:
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
 
-    virtual Ret canAddGuitarBend() const = 0;
+    virtual muse::Ret canAddGuitarBend() const = 0;
     virtual void addGuitarBend(GuitarBendType bendType) = 0;
 
     // Text navigation
@@ -287,13 +287,13 @@ public:
 
     struct ShowItemRequest {
         const EngravingItem* item = nullptr;
-        RectF showRect;
+        muse::RectF showRect;
     };
 
     virtual void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) = 0;
-    virtual async::Channel<ShowItemRequest> showItemRequested() const = 0;
+    virtual muse::async::Channel<ShowItemRequest> showItemRequested() const = 0;
 
-    virtual void setGetViewRectFunc(const std::function<RectF()>& func) = 0;
+    virtual void setGetViewRectFunc(const std::function<muse::RectF()>& func) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

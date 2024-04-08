@@ -38,14 +38,15 @@
 
 using namespace mu;
 using namespace mu::playback;
+using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 
 static const QString VST_MENU_ITEM_ID("VST3");
-static const QString SOUNDFONTS_MENU_ITEM_ID = mu::qtrc("playback", "SoundFonts");
+static const QString SOUNDFONTS_MENU_ITEM_ID = muse::qtrc("playback", "SoundFonts");
 static const QString MUSE_MENU_ITEM_ID("Muse Sounds");
 
-static const String MS_BASIC_SOUNDFONT_NAME(u"MS Basic");
+static const muse::String MS_BASIC_SOUNDFONT_NAME(u"MS Basic");
 
 InputResourceItem::InputResourceItem(QObject* parent)
     : AbstractAudioResourceItem(parent)
@@ -167,16 +168,19 @@ bool InputResourceItem::hasNativeEditorSupport() const
 
 QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const
 {
-    String currentPack = m_currentInputParams.resourceMeta.attributeVal(u"musePack");
-    String currentVendorName = m_currentInputParams.resourceMeta.attributeVal(u"museVendorName");
+    muse::String currentPack = m_currentInputParams.resourceMeta.attributeVal(u"musePack");
+    muse::String currentVendorName = m_currentInputParams.resourceMeta.attributeVal(u"museVendorName");
 
     QVariantList subItemsByType;
     for (const auto& pair : resourcesByVendor) {
-        std::map<String, std::map<String, std::vector<std::tuple<int, String, const AudioResourceMeta&> > > > vendorMap;
+        std::map<muse::String,
+                 std::map<muse::String,
+                          std::vector<
+                              std::tuple<int, muse::String, const AudioResourceMeta&> > > > vendorMap;
         for (const AudioResourceMeta& resourceMeta : pair.second) {
-            const String& pack = resourceMeta.attributeVal(u"musePack");
-            const String& name = resourceMeta.attributeVal(u"museName");
-            const String& vendorName = resourceMeta.attributeVal(u"museVendorName");
+            const muse::String& pack = resourceMeta.attributeVal(u"musePack");
+            const muse::String& name = resourceMeta.attributeVal(u"museName");
+            const muse::String& vendorName = resourceMeta.attributeVal(u"museVendorName");
             int unique_id = resourceMeta.attributeVal(u"museUID").toInt();
 
             vendorMap[vendorName][pack].push_back({ unique_id, name, resourceMeta });
@@ -253,7 +257,7 @@ QVariantMap InputResourceItem::buildVstMenuItem(const ResourceByVendorMap& resou
 QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const
 {
     // Get info about current resource
-    const String& currentSoundFontName = m_currentInputParams.resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
+    const muse::String& currentSoundFontName = m_currentInputParams.resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
     std::optional<midi::Program> currentPreset = std::nullopt;
     {
         if (!currentSoundFontName.empty()) {
@@ -268,26 +272,26 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
     }
 
     // Group resources by SoundFont name
-    std::map<String, AudioResourceMetaList> resourcesBySoundFont;
+    std::map<muse::String, AudioResourceMetaList> resourcesBySoundFont;
 
     for (const auto& pair : resourcesByVendor) {
         for (const AudioResourceMeta& resourceMeta : pair.second) {
-            const String& soundFontName = resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
+            const muse::String& soundFontName = resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
 
             resourcesBySoundFont[soundFontName].push_back(resourceMeta);
         }
     }
 
     // Sort SoundFonts by name and add them to the menu
-    std::vector<String> soundFonts = mu::keys(resourcesBySoundFont);
-    std::sort(soundFonts.begin(), soundFonts.end(), [](const String& s1, const String& s2) {
-        return strings::lessThanCaseInsensitive(s1, s2);
+    std::vector<muse::String> soundFonts = muse::keys(resourcesBySoundFont);
+    std::sort(soundFonts.begin(), soundFonts.end(), [](const muse::String& s1, const muse::String& s2) {
+        return muse::strings::lessThanCaseInsensitive(s1, s2);
     });
 
     QVariantList soundFontItems;
     std::string currentSoundFontId = m_currentInputParams.resourceMeta.id;
 
-    for (const String& soundFont : soundFonts) {
+    for (const muse::String& soundFont : soundFonts) {
         // currentSoundFontId will be equal to soundFont in the case of "choose automatically" for older files (this is a temporary fix)
         // See: https://github.com/musescore/MuseScore/pull/20316#issuecomment-1841326774
         bool isCurrentSoundFont = currentSoundFontName == soundFont || currentSoundFontId == soundFont.toStdString();
@@ -342,7 +346,7 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
 
             QString presetName = resourceMeta.attributeVal(PRESET_NAME_ATTRIBUTE);
             if (presetName.isEmpty()) {
-                presetName = mu::qtrc("playback", "Bank %1, preset %2").arg(item.preset.bank).arg(item.preset.program);
+                presetName = muse::qtrc("playback", "Bank %1, preset %2").arg(item.preset.bank).arg(item.preset.program);
             }
 
             return buildMenuItem(QString::fromStdString(resourceMeta.id),
@@ -364,8 +368,8 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
             }
 
             // Temporary fix, see: https://github.com/musescore/MuseScore/issues/20142
-            String title = menuItem.value("title").toString();
-            if (title.contains(String("Expr."))) {
+            muse::String title = menuItem.value("title").toString();
+            if (title.contains(muse::String(u"Expr."))) {
                 continue;
             }
 
@@ -396,7 +400,7 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
     // Prepend the "Choose automatically" item
     categoryItems.prepend(buildSeparator());
     categoryItems.prepend(buildMenuItem(QString::fromStdString(chooseAutomaticMeta.id),
-                                        mu::qtrc("playback", "Choose automatically"),
+                                        muse::qtrc("playback", "Choose automatically"),
                                         isCurrentSoundFont && !currentPreset.has_value()));
 
     return buildMenuItem(menuId,
@@ -405,8 +409,10 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
                          categoryItems);
 }
 
-QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, const audio::AudioResourceMetaList& availableResources,
-                                                      bool isCurrentSoundFont, const std::optional<midi::Program>& currentPreset) const
+QVariantMap InputResourceItem::buildSoundFontMenuItem(const muse::String& soundFont,
+                                                      const audio::AudioResourceMetaList& availableResources,
+                                                      bool isCurrentSoundFont,
+                                                      const std::optional<midi::Program>& currentPreset) const
 {
     // Group resources by bank, and use this to sort them
     std::map<int, std::map<int, AudioResourceMeta> > resourcesByBank;
@@ -436,7 +442,7 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, c
 
             QString presetName = presetPair.second.attributeVal(PRESET_NAME_ATTRIBUTE);
             if (presetName.isEmpty()) {
-                presetName = mu::qtrc("playback", "Preset %1").arg(presetPair.first);
+                presetName = muse::qtrc("playback", "Preset %1").arg(presetPair.first);
             }
 
             presetItems << buildMenuItem(QString::fromStdString(presetPair.second.id),
@@ -444,8 +450,8 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, c
                                          isCurrentPreset);
         }
 
-        bankItems << buildMenuItem(soundFont + u"\\" + String::number(bankPair.first),
-                                   mu::qtrc("playback", "Bank %1").arg(bankPair.first),
+        bankItems << buildMenuItem(soundFont + u"\\" + muse::String::number(bankPair.first),
+                                   muse::qtrc("playback", "Bank %1").arg(bankPair.first),
                                    isCurrentBank,
                                    presetItems);
     }
@@ -453,7 +459,7 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, c
     // Prepend the "Choose automatically" item
     bankItems.prepend(buildSeparator());
     bankItems.prepend(buildMenuItem(QString::fromStdString(chooseAutomaticMeta.id),
-                                    mu::qtrc("playback", "Choose automatically"),
+                                    muse::qtrc("playback", "Choose automatically"),
                                     isCurrentSoundFont && !currentPreset.has_value()));
 
     return buildMenuItem(soundFont + u"\\menu",

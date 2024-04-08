@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 static const std::string VAL_TRUE("true");
 static const std::string VAL_FALSE("false");

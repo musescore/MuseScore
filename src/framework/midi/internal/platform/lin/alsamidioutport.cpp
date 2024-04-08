@@ -36,6 +36,7 @@ struct muse::midi::AlsaMidiOutPort::Alsa {
     int port = -1;
 };
 
+using namespace muse;
 using namespace muse::midi;
 
 void AlsaMidiOutPort::init()
@@ -80,7 +81,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
     std::vector<MidiDevice> ret;
 
-    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, muse::trc("midi", "No device") });
 
     snd_seq_client_info_t* cinfo;
     snd_seq_port_info_t* pinfo;
@@ -132,12 +133,12 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
     return ret;
 }
 
-mu::async::Notification AlsaMidiOutPort::availableDevicesChanged() const
+async::Notification AlsaMidiOutPort::availableDevicesChanged() const
 {
     return m_availableDevicesChanged;
 }
 
-mu::Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
+Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
     if (!deviceExists(deviceID)) {
         return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
@@ -147,7 +148,7 @@ mu::Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
         m_deviceChanged.notify();
     };
 
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
         std::vector<int> deviceParams = splitDeviceId(deviceID);
@@ -214,7 +215,7 @@ MidiDeviceID AlsaMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
-mu::async::Notification AlsaMidiOutPort::deviceChanged() const
+async::Notification AlsaMidiOutPort::deviceChanged() const
 {
     return m_deviceChanged;
 }
@@ -224,7 +225,7 @@ bool AlsaMidiOutPort::supportsMIDI20Output() const
     return false;
 }
 
-mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
+Ret AlsaMidiOutPort::sendEvent(const Event& e)
 {
     // LOGI() << e.to_string();
 
@@ -235,7 +236,7 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
     if (e.isChannelVoice20()) {
         auto events = e.toMIDI10();
         for (auto& event : events) {
-            mu::Ret ret = sendEvent(event);
+            Ret ret = sendEvent(event);
             if (!ret) {
                 return ret;
             }

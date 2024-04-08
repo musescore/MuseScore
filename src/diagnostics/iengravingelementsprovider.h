@@ -51,7 +51,7 @@ public:
     // debug draw
     virtual void select(const mu::engraving::EngravingObject* e, bool arg) = 0;
     virtual bool isSelected(const mu::engraving::EngravingObject* e) const = 0;
-    virtual async::Channel<const mu::engraving::EngravingObject*, bool> selectChanged() const = 0;
+    virtual muse::async::Channel<const mu::engraving::EngravingObject*, bool> selectChanged() const = 0;
 };
 }
 

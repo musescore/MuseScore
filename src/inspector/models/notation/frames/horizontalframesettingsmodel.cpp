@@ -31,7 +31,7 @@ HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IEle
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_HORIZONTAL_FRAME);
-    setTitle(mu::qtrc("inspector", "Horizontal frame"));
+    setTitle(muse::qtrc("inspector", "Horizontal frame"));
     setIcon(muse::ui::IconCode::Code::HORIZONTAL_FRAME);
     createProperties();
 }
@@ -76,19 +76,19 @@ void HorizontalFrameSettingsModel::onNotationChanged(const PropertyIdSet& change
 
 void HorizontalFrameSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::BOX_WIDTH)) {
+    if (muse::contains(propertyIdSet, Pid::BOX_WIDTH)) {
         loadPropertyItem(m_frameWidth, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::TOP_GAP)) {
+    if (muse::contains(propertyIdSet, Pid::TOP_GAP)) {
         loadPropertyItem(m_leftGap);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
+    if (muse::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
         loadPropertyItem(m_rightGap);
     }
 
-    if (mu::contains(propertyIdSet, Pid::CREATE_SYSTEM_HEADER)) {
+    if (muse::contains(propertyIdSet, Pid::CREATE_SYSTEM_HEADER)) {
         loadPropertyItem(m_shouldDisplayKeysAndBrackets);
     }
 }

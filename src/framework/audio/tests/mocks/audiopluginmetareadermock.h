@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_AUDIOPLUGINMETAREADERMOCK_H
-#define MU_GLOBAL_AUDIOPLUGINMETAREADERMOCK_H
+#ifndef MUSE_AUDIO_AUDIOPLUGINMETAREADERMOCK_H
+#define MUSE_AUDIO_AUDIOPLUGINMETAREADERMOCK_H
 
 #include <gmock/gmock.h>
 
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_AUDIOPLUGINMETAREADERMOCK_H
+#endif // MUSE_AUDIO_AUDIOPLUGINMETAREADERMOCK_H

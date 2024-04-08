@@ -108,7 +108,7 @@ bool NavigationUiActions::actionEnabled(const UiAction&) const
     return true;
 }
 
-mu::async::Channel<ActionCodeList> NavigationUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> NavigationUiActions::actionEnabledChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;
@@ -119,7 +119,7 @@ bool NavigationUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> NavigationUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> NavigationUiActions::actionCheckedChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;

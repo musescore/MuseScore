@@ -33,7 +33,7 @@
 namespace muse::update {
 class UpdateConfiguration : public IUpdateConfiguration, public async::Asyncable
 {
-    Inject<mu::IGlobalConfiguration> globalConfiguration;
+    Inject<IGlobalConfiguration> globalConfiguration;
 
 public:
     void init();
@@ -61,11 +61,11 @@ public:
     std::string museScoreUrl() const override;
     std::string museScorePrivacyPolicyUrl() const override;
 
-    io::path_t updateDataPath() const override;
+    muse::io::path_t updateDataPath() const override;
 
 private:
 
-    mu::Config m_config;
+    Config m_config;
 };
 }
 

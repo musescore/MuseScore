@@ -30,7 +30,7 @@
 namespace muse::cloud {
 class CloudConfiguration : public ICloudConfiguration
 {
-    INJECT(mu::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

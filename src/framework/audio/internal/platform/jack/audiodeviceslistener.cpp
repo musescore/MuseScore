@@ -57,7 +57,7 @@ void AudioDevicesListener::stop()
     m_devicesUpdateThread = nullptr;
 }
 
-mu::async::Notification AudioDevicesListener::devicesChanged() const
+async::Notification AudioDevicesListener::devicesChanged() const
 {
     return m_devicesChanged;
 }

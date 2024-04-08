@@ -46,7 +46,7 @@
 #include <QMessageBox>
 
 using namespace mu::palette;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -123,12 +123,12 @@ struct SymbolIcon {
         QPixmap image(w, h);
         image.fill(Qt::transparent);
         muse::draw::Painter painter(&image, "generateicon");
-        const mu::RectF& bbox = EditDrumsetDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
+        const muse::RectF& bbox = EditDrumsetDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);
         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag * bbox.left();
         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag * bbox.top();
-        const mu::PointF& stPtPos = mu::PointF(xStShift, yStShift);
+        const muse::PointF& stPtPos = muse::PointF(xStShift, yStShift);
         EditDrumsetDialog::engravingFonts()->fallbackFont()->draw(id, &painter, mag, stPtPos);
         icon.addPixmap(image);
         return SymbolIcon(id, icon);
@@ -642,9 +642,9 @@ void EditDrumsetDialog::updateExample()
 
 void EditDrumsetDialog::load()
 {
-    std::vector<std::string> filter = { mu::trc("palette", "MuseScore drumset file") + " (*.drm)" };
-    mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load drumset"), dir, filter);
+    std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
+    muse::io::path_t dir = notationConfiguration()->userStylesPath();
+    muse::io::path_t fname = interactive()->selectOpeningFile(muse::qtrc("palette", "Load drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -661,13 +661,13 @@ void EditDrumsetDialog::load()
         if (e.name() == "museScore") {
             if (e.attribute("version") != Constants::MSC_VERSION_STR) {
                 auto result = interactive()->warning(
-                    mu::trc("palette", "Drumset file too old"),
-                    mu::trc("palette", "MuseScore may not be able to load this drumset file."), {
-                    IInteractive::Button::Cancel,
-                    IInteractive::Button::Ignore
-                }, IInteractive::Button::Cancel);
+                    muse::trc("palette", "Drumset file too old"),
+                    muse::trc("palette", "MuseScore may not be able to load this drumset file."), {
+                    muse::IInteractive::Button::Cancel,
+                    muse::IInteractive::Button::Ignore
+                }, muse::IInteractive::Button::Cancel);
 
-                if (result.standardButton() != IInteractive::Button::Ignore) { // covers Cancel and Esc
+                if (result.standardButton() != muse::IInteractive::Button::Ignore) { // covers Cancel and Esc
                     return;
                 }
             }
@@ -691,9 +691,9 @@ void EditDrumsetDialog::load()
 
 void EditDrumsetDialog::save()
 {
-    std::vector<std::string> filter = { mu::trc("palette", "MuseScore drumset file") + " (*.drm)" };
-    mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectSavingFile(mu::qtrc("palette", "Save drumset"), dir, filter);
+    std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
+    muse::io::path_t dir = notationConfiguration()->userStylesPath();
+    muse::io::path_t fname = interactive()->selectSavingFile(muse::qtrc("palette", "Save drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -701,8 +701,8 @@ void EditDrumsetDialog::save()
 
     File f(fname);
     if (!f.open(IODevice::WriteOnly)) {
-        QString s = mu::qtrc("palette", "Opening file\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
-        interactive()->error(mu::trc("palette", "Open file"), s.toStdString());
+        QString s = muse::qtrc("palette", "Opening file\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
+        interactive()->error(muse::trc("palette", "Open file"), s.toStdString());
         return;
     }
     valueChanged();    //save last changes in name
@@ -712,8 +712,8 @@ void EditDrumsetDialog::save()
     m_editedDrumset.save(xml);
     xml.endElement();
     if (f.hasError()) {
-        QString s = mu::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
-        interactive()->error(mu::trc("palette", "Write drumset"), s.toStdString());
+        QString s = muse::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
+        interactive()->error(muse::trc("palette", "Write drumset"), s.toStdString());
     }
 }
 

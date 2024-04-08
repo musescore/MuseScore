@@ -27,7 +27,7 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
 
-namespace mu {
+namespace muse {
 class XmlStreamReader;
 }
 
@@ -227,6 +227,6 @@ extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern const Articulation* findLaissezVibrer(const Chord* chord);
 extern String errorStringWithLocation(int line, int col, const String& error);
-extern String checkAtEndElement(const XmlStreamReader& e, const String& expName);
+extern String checkAtEndElement(const muse::XmlStreamReader& e, const String& expName);
 } // namespace Ms
 #endif

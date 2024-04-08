@@ -25,6 +25,7 @@
 #include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 using namespace mu::diagnostics;
@@ -77,9 +78,9 @@ bool DiagnosticsActions::actionEnabled(const UiAction&) const
     return true;
 }
 
-mu::async::Channel<ActionCodeList> DiagnosticsActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> DiagnosticsActions::actionEnabledChanged() const
 {
-    static async::Channel<ActionCodeList> ch;
+    static muse::async::Channel<ActionCodeList> ch;
     return ch;
 }
 
@@ -88,8 +89,8 @@ bool DiagnosticsActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> DiagnosticsActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> DiagnosticsActions::actionCheckedChanged() const
 {
-    static async::Channel<ActionCodeList> ch;
+    static muse::async::Channel<ActionCodeList> ch;
     return ch;
 }

@@ -28,7 +28,6 @@
 
 #include "log.h"
 
-using namespace mu;
 using namespace muse::draw;
 
 namespace muse::draw::comp {
@@ -78,7 +77,7 @@ static bool isEqual(const double& v1, const double& v2, double tolerance)
         double delta = RealFloor(v1, DEFAULT_PREC) - RealFloor(v2, DEFAULT_PREC);
         return std::fabs(delta) < tolerance;
     }
-    return mu::RealIsEqual(RealFloor(v1, DEFAULT_PREC), RealFloor(v2, DEFAULT_PREC));
+    return RealIsEqual(RealFloor(v1, DEFAULT_PREC), RealFloor(v2, DEFAULT_PREC));
 }
 
 static bool isEqual(const PointF& p1, const PointF& p2, double tolerance)
@@ -134,7 +133,7 @@ static bool isEqual(const Pen& p1, const Pen& p2)
         return false;
     }
 
-    if (!mu::RealIsEqual(p1.widthF(), p2.widthF())) {
+    if (!RealIsEqual(p1.widthF(), p2.widthF())) {
         return false;
     }
 
@@ -165,7 +164,7 @@ static bool isEqual(const Font& f1, const Font& f2)
         return false;
     }
 
-    if (!mu::RealIsEqual(f1.pointSizeF(), f2.pointSizeF())) {
+    if (!RealIsEqual(f1.pointSizeF(), f2.pointSizeF())) {
         return false;
     }
 
@@ -592,22 +591,22 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
     // collect objects (save order)
     std::vector<const DrawData::Item*> objs;
     for (const comp::Path& p : cd.paths) {
-        if (!mu::contains(objs, p.obj)) {
+        if (!muse::contains(objs, p.obj)) {
             objs.push_back(p.obj);
         }
     }
     for (const comp::Polygon& p : cd.polygons) {
-        if (!mu::contains(objs, p.obj)) {
+        if (!muse::contains(objs, p.obj)) {
             objs.push_back(p.obj);
         }
     }
     for (const comp::Text& p : cd.texts) {
-        if (!mu::contains(objs, p.obj)) {
+        if (!muse::contains(objs, p.obj)) {
             objs.push_back(p.obj);
         }
     }
     for (const comp::Pixmap& p : cd.pixmaps) {
-        if (!mu::contains(objs, p.obj)) {
+        if (!muse::contains(objs, p.obj)) {
             objs.push_back(p.obj);
         }
     }

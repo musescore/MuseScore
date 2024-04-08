@@ -411,7 +411,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         if (s->primaryStaff() && s->primaryStaff()->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {
             continue;
         }
-        if (mu::contains(sl, s)) {
+        if (muse::contains(sl, s)) {
             continue;
         }
         bool alreadyThere = false;
@@ -509,7 +509,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         }
         if (transposeChordNames) {
             for (EngravingItem* e : segment->annotations()) {
-                if ((e->type() != ElementType::HARMONY) || (!mu::contains(tracks, e->track()))) {
+                if ((e->type() != ElementType::HARMONY) || (!muse::contains(tracks, e->track()))) {
                     continue;
                 }
                 // TODO also source interval should reflect modified key (f.ex. by prefer flat)
@@ -793,7 +793,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         // TODO: special handling for linked staves within a score
         // could be useful for capo
         Score* score = ls->score();
-        if (mu::contains(scores, score)) {
+        if (muse::contains(scores, score)) {
             continue;
         }
         scores.insert(score);

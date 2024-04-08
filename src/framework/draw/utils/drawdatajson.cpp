@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 
 static int rtoi(double v)
@@ -512,7 +512,7 @@ ByteArray DrawDataJson::toJson(const DrawDataPtr& data, bool prettify)
     return JsonDocument(root).toJson(prettify ? JsonDocument::Format::Indented : JsonDocument::Format::Compact);
 }
 
-mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
+RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
 {
     std::string err;
     JsonDocument doc = JsonDocument::fromJson(json, &err);

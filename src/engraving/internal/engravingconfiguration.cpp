@@ -36,6 +36,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
 
@@ -71,7 +72,7 @@ void EngravingConfiguration::init()
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
 
         settings()->setDefaultValue(key, Val(DEFAULT_VOICE_COLORS[voice].toQColor()));
-        settings()->setDescription(key, mu::qtrc("engraving", "Voice %1 color").arg(voice + 1).toStdString());
+        settings()->setDescription(key, muse::qtrc("engraving", "Voice %1 color").arg(voice + 1).toStdString());
         settings()->setCanBeManuallyEdited(key, true);
         settings()->valueChanged(key).onReceive(this, [this, voice](const Val& val) {
             Color color = val.toQColor();
@@ -84,27 +85,27 @@ void EngravingConfiguration::init()
     }
 }
 
-mu::io::path_t EngravingConfiguration::appDataPath() const
+muse::io::path_t EngravingConfiguration::appDataPath() const
 {
     return globalConfiguration()->appDataPath();
 }
 
-mu::io::path_t EngravingConfiguration::defaultStyleFilePath() const
+muse::io::path_t EngravingConfiguration::defaultStyleFilePath() const
 {
     return settings()->value(DEFAULT_STYLE_FILE_PATH).toPath();
 }
 
-void EngravingConfiguration::setDefaultStyleFilePath(const io::path_t& path)
+void EngravingConfiguration::setDefaultStyleFilePath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
-mu::io::path_t EngravingConfiguration::partStyleFilePath() const
+muse::io::path_t EngravingConfiguration::partStyleFilePath() const
 {
     return settings()->value(PART_STYLE_FILE_PATH).toPath();
 }
 
-void EngravingConfiguration::setPartStyleFilePath(const io::path_t& path)
+void EngravingConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
 }
@@ -151,7 +152,7 @@ SizeF EngravingConfiguration::defaultPageSize() const
     return size;
 }
 
-mu::String EngravingConfiguration::iconsFontFamily() const
+muse::String EngravingConfiguration::iconsFontFamily() const
 {
     return String::fromStdString(uiConfiguration()->iconsFontFamily());
 }
@@ -254,7 +255,7 @@ void EngravingConfiguration::setSelectionColor(voice_idx_t voiceIndex, Color col
     settings()->setSharedValue(VOICE_COLORS[voiceIndex].key, Val(color.toQColor()));
 }
 
-mu::async::Channel<voice_idx_t, Color> EngravingConfiguration::selectionColorChanged() const
+muse::async::Channel<voice_idx_t, Color> EngravingConfiguration::selectionColorChanged() const
 {
     return m_voiceColorChanged;
 }
@@ -274,7 +275,7 @@ void EngravingConfiguration::setScoreInversionEnabled(bool value)
     settings()->setSharedValue(INVERT_SCORE_COLOR, Val(value));
 }
 
-mu::async::Notification EngravingConfiguration::scoreInversionChanged() const
+muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
 {
     return m_scoreInversionChanged;
 }
@@ -289,7 +290,7 @@ void EngravingConfiguration::setDebuggingOptions(const DebuggingOptions& options
     m_debuggingOptions.set(options);
 }
 
-mu::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
+muse::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
 {
     return m_debuggingOptions.notification;
 }

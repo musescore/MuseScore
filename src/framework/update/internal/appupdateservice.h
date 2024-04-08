@@ -41,9 +41,9 @@ class AppUpdateService : public IAppUpdateService, public async::Asyncable
 {
     Inject<network::INetworkManagerCreator> networkManagerCreator;
     Inject<io::IFileSystem> fileSystem;
-    Inject<mu::ISystemInfo> systemInfo;
+    Inject<ISystemInfo> systemInfo;
     Inject<IApplication> application;
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
     Inject<IUpdateConfiguration> configuration;
 
 public:
@@ -51,7 +51,7 @@ public:
 
     RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;
-    mu::Progress updateProgress() override;
+    Progress updateProgress() override;
 
 private:
     friend class AppUpdateServiceTests;
@@ -59,10 +59,10 @@ private:
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 
     std::string platformFileSuffix() const;
-    mu::ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
+    ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
     QJsonObject resolveReleaseAsset(const QJsonObject& release) const;
 
-    PrevReleasesNotesList previousReleasesNotes(const mu::Version& updateVersion) const;
+    PrevReleasesNotesList previousReleasesNotes(const Version& updateVersion) const;
     PrevReleasesNotesList parsePreviousReleasesNotes(const QByteArray& json) const;
 
     void clear();
@@ -71,7 +71,7 @@ private:
     io::path_t m_installatorPath;
 
     network::INetworkManagerPtr m_networkManager;
-    mu::Progress m_updateProgress;
+    Progress m_updateProgress;
 };
 }
 

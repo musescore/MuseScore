@@ -42,7 +42,7 @@
 #include "log.h"
 
 using namespace muse::extensions;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static void extensions_init_qrc()
 {

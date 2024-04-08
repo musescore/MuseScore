@@ -38,7 +38,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
 
@@ -224,7 +224,7 @@ void AbstractCloudService::onUserAuthorized()
     }
 }
 
-mu::RetVal<QUrl> AbstractCloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
+RetVal<QUrl> AbstractCloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
 {
     if (m_accessToken.isEmpty()) {
         return make_ret(cloud::Err::AccessTokenIsEmpty);
@@ -301,10 +301,10 @@ void AbstractCloudService::signOut()
     clearTokens();
 }
 
-mu::RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, const std::string& text)
+RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, const std::string& text)
 {
     if (m_userAuthorized.val) {
-        return mu::make_ok();
+        return muse::make_ok();
     }
 
     UriQuery query("musescore://cloud/requireauthorization");
@@ -314,17 +314,17 @@ mu::RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, 
     return interactive()->open(query);
 }
 
-mu::ValCh<bool> AbstractCloudService::userAuthorized() const
+ValCh<bool> AbstractCloudService::userAuthorized() const
 {
     return m_userAuthorized;
 }
 
-mu::ValCh<AccountInfo> AbstractCloudService::accountInfo() const
+ValCh<AccountInfo> AbstractCloudService::accountInfo() const
 {
     return m_accountInfo;
 }
 
-mu::Ret AbstractCloudService::checkCloudIsAvailable() const
+Ret AbstractCloudService::checkCloudIsAvailable() const
 {
     QBuffer receivedData;
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
@@ -351,7 +351,7 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
 {
     Ret ret = requestCallback();
     if (ret) {
-        return mu::make_ok();
+        return muse::make_ok();
     }
 
     if (statusCode(ret) == USER_UNAUTHORIZED_STATUS_CODE) {
@@ -408,7 +408,7 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
     return rawRet;
 }
 
-int AbstractCloudService::statusCode(const mu::Ret& ret) const
+int AbstractCloudService::statusCode(const Ret& ret) const
 {
     std::any status = ret.data(STATUS_KEY);
     return status.has_value() ? std::any_cast<int>(status) : 0;

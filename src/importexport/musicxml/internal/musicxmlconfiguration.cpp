@@ -24,6 +24,7 @@
 #include "settings.h"
 
 using namespace mu;
+using namespace muse;
 using namespace mu::iex::musicxml;
 
 static const std::string module_name("iex_musicxml");

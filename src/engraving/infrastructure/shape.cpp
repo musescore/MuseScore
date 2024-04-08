@@ -388,7 +388,7 @@ double Shape::bottomDistance(const PointF& p) const
     return dist;
 }
 
-void Shape::setBBox(const mu::RectF& r, const EngravingItem* p)
+void Shape::setBBox(const RectF& r, const EngravingItem* p)
 {
     IF_ASSERT_FAILED(type() == Type::Fixed) {
         return;
@@ -401,14 +401,14 @@ void Shape::setBBox(const mu::RectF& r, const EngravingItem* p)
     }
 }
 
-void Shape::addBBox(const mu::RectF& r)
+void Shape::addBBox(const RectF& r)
 {
 //    IF_ASSERT_FAILED(type() == Type::Fixed) {
 //        return;
 //    }
 
     if (m_elements.empty()) {
-        m_elements.push_back(mu::RectF());
+        m_elements.push_back(RectF());
     }
 
     m_elements[0].unite(r);
@@ -461,7 +461,7 @@ void Shape::remove(const Shape& s)
 
 void Shape::removeInvisibles()
 {
-    mu::remove_if(m_elements, [](ShapeElement& shapeElement) {
+    muse::remove_if(m_elements, [](ShapeElement& shapeElement) {
         return !shapeElement.item() || !shapeElement.item()->visible();
     });
     invalidateBBox();
@@ -469,8 +469,8 @@ void Shape::removeInvisibles()
 
 void Shape::removeTypes(const std::set<ElementType>& types)
 {
-    mu::remove_if(m_elements, [&types](ShapeElement& shapeElement) {
-        return shapeElement.item() && mu::contains(types, shapeElement.item()->type());
+    muse::remove_if(m_elements, [&types](ShapeElement& shapeElement) {
+        return shapeElement.item() && muse::contains(types, shapeElement.item()->type());
     });
     invalidateBBox();
 }
@@ -526,9 +526,9 @@ void Shape::paint(Painter& painter) const
 
 void mu::engraving::dump(const ShapeElement& se, std::stringstream& ss)
 {
-    const mu::RectF* r = &se;
+    const RectF* r = &se;
     ss << "item: " << (se.item() ? se.item()->typeName() : "no") << " rect: ";
-    mu::dump(*r, ss);
+    muse::dump(*r, ss);
 }
 
 void mu::engraving::dump(const Shape& sh, std::stringstream& ss)

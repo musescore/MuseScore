@@ -42,10 +42,10 @@ public:
 
     virtual void resetAllStyleValues(const StyleIdSet& exceptTheseOnes = {}) = 0;
 
-    virtual async::Notification styleChanged() const = 0;
+    virtual muse::async::Notification styleChanged() const = 0;
 
-    virtual bool loadStyle(const mu::io::path_t&, bool allowAnyVersion) = 0;
-    virtual bool saveStyle(const mu::io::path_t&) = 0;
+    virtual bool loadStyle(const muse::io::path_t&, bool allowAnyVersion) = 0;
+    virtual bool saveStyle(const muse::io::path_t&) = 0;
 };
 
 using INotationStylePtr = std::shared_ptr<INotationStyle>;

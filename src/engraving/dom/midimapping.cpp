@@ -109,14 +109,14 @@ int MasterScore::getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, uns
         return p * 16 + ch;
     } else if (ch != -1 && p == -1) {
         for (int port = 0;; port++) {
-            if (!mu::contains(occupiedMidiChannels, port * 16 + ch)) {
+            if (!muse::contains(occupiedMidiChannels, port * 16 + ch)) {
                 occupiedMidiChannels.insert(port * 16 + ch);
                 return port * 16 + ch;
             }
         }
     } else if (ch == -1 && p != -1) {
         for (int channel = 0; channel < 16; channel++) {
-            if (channel != 9 && !mu::contains(occupiedMidiChannels, p * 16 + channel)) {
+            if (channel != 9 && !muse::contains(occupiedMidiChannels, p * 16 + channel)) {
                 occupiedMidiChannels.insert(p * 16 + channel);
                 return p * 16 + channel;
             }
@@ -124,7 +124,7 @@ int MasterScore::getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, uns
     }
 
     for (;; searchMidiMappingFrom++) {
-        if (searchMidiMappingFrom % 16 != 9 && !mu::contains(occupiedMidiChannels, int(searchMidiMappingFrom))) {
+        if (searchMidiMappingFrom % 16 != 9 && !muse::contains(occupiedMidiChannels, int(searchMidiMappingFrom))) {
             occupiedMidiChannels.insert(searchMidiMappingFrom);
             return searchMidiMappingFrom;
         }
@@ -138,7 +138,7 @@ int MasterScore::getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, uns
 int MasterScore::getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels)
 {
     for (int i = 0;; i++) {
-        if (!mu::contains(occupiedMidiChannels, i * 16 + 9)) {
+        if (!muse::contains(occupiedMidiChannels, i * 16 + 9)) {
             occupiedMidiChannels.insert(i * 16 + 9);
             return i * 16 + 9;
         }
@@ -215,7 +215,7 @@ void MasterScore::removeDeletedMidiMapping()
     int mappingSize = int(m_midiMapping.size());
     for (int index = 0; index < mappingSize; index++) {
         Part* part = midiMapping(index)->part();
-        if (!mu::contains(parts(), part)) {
+        if (!muse::contains(parts(), part)) {
             removeOffset++;
             continue;
         }
@@ -224,7 +224,7 @@ void MasterScore::removeDeletedMidiMapping()
         for (const auto& pair : part->instruments()) {
             const Instrument* instr = pair.second;
             channelExists = (m_midiMapping[index].articulation()->channel() != -1
-                             && mu::contains(instr->channel(), m_midiMapping[index].m_masterChannel)
+                             && muse::contains(instr->channel(), m_midiMapping[index].m_masterChannel)
                              && !(m_midiMapping[index].port() == -1 && m_midiMapping[index].channel() == -1));
             if (channelExists) {
                 break;

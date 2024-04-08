@@ -29,8 +29,9 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::ui;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 MainWindowBridge::MainWindowBridge(QObject* parent)
     : QObject(parent), m_window(nullptr)
@@ -134,7 +135,7 @@ bool MainWindowBridge::isFullScreen() const
     return m_isFullScreen;
 }
 
-mu::async::Notification MainWindowBridge::isFullScreenChanged() const
+async::Notification MainWindowBridge::isFullScreenChanged() const
 {
     return m_isFullScreenChanged;
 }

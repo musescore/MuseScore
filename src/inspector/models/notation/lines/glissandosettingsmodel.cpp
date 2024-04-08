@@ -29,7 +29,7 @@ GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementReposito
     : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::GLISSANDO)
 {
     setModelType(InspectorModelType::TYPE_GLISSANDO);
-    setTitle(mu::qtrc("inspector", "Glissando"));
+    setTitle(muse::qtrc("inspector", "Glissando"));
     setIcon(muse::ui::IconCode::Code::GLISSANDO);
 
     createProperties();
@@ -53,8 +53,8 @@ PropertyItem* GlissandoSettingsModel::text() const
 QVariantList GlissandoSettingsModel::possibleLineTypes() const
 {
     QMap<mu::engraving::GlissandoType, QString> types {
-        { mu::engraving::GlissandoType::STRAIGHT, mu::qtrc("inspector", "Straight") },
-        { mu::engraving::GlissandoType::WAVY, mu::qtrc("inspector", "Wavy") }
+        { mu::engraving::GlissandoType::STRAIGHT, muse::qtrc("inspector", "Straight") },
+        { mu::engraving::GlissandoType::WAVY, muse::qtrc("inspector", "Wavy") }
     };
 
     QVariantList result;

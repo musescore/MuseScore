@@ -113,7 +113,7 @@ void GraceChordsRenderer::renderGraceNoteEvents(const std::vector<Chord*>& grace
     timestamp_t timestamp = graceCtx.graceNotesTimestampFrom;
 
     for (const Chord* graceChord : graceChords) {
-        duration_t duration = mu::RealRound(
+        duration_t duration = muse::RealRound(
             graceCtx.durationFactor * durationFromTempoAndTicks(ctx.beatsPerSecond.val, graceChord->durationTypeTicks().ticks()), 0);
 
         for (const Note* graceNote : graceChord->notes()) {

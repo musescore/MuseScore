@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_ZIPCONTAINER_H
-#define MU_GLOBAL_ZIPCONTAINER_H
+#ifndef MUSE_GLOBAL_ZIPCONTAINER_H
+#define MUSE_GLOBAL_ZIPCONTAINER_H
 
 #include <ctime>
 #include <string>
 
 #include "io/iodevice.h"
 
-namespace mu {
+namespace muse {
 class ZipContainer
 {
 public:
@@ -86,4 +86,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_ZIPCONTAINER_H
+#endif // MUSE_GLOBAL_ZIPCONTAINER_H

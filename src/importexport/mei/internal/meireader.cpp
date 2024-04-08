@@ -30,16 +30,17 @@
 #include "meiimporter.h"
 #include "meiconverter.h"
 
+using namespace muse;
 using namespace mu::iex::mei;
 using namespace mu::engraving;
 
-mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Options& options)
+Ret MeiReader::read(MasterScore* score, const muse::io::path_t& path, const Options& options)
 {
     Err result = this->import(score, path, options);
-    return (result == Err::NoError) ? mu::make_ok() : make_ret(result, path);
+    return (result == Err::NoError) ? muse::make_ok() : make_ret(result, path);
 }
 
-Err MeiReader::import(MasterScore* score, const io::path_t& path, const Options& options)
+Err MeiReader::import(MasterScore* score, const muse::io::path_t& path, const Options& options)
 {
     if (!fileSystem()->exists(path)) {
         return Err::FileNotFound;
@@ -60,8 +61,8 @@ Err MeiReader::import(MasterScore* score, const io::path_t& path, const Options&
 
     if (!forceMode && !MScore::noGui && hasWarnings) {
         const String text
-            = mu::qtrc("iex_mei", "%n problem(s) occured and the import may be incomplete.", nullptr,
-                       static_cast<int>(Convert::logs.size()));
+            = muse::qtrc("iex_mei", "%n problem(s) occured and the import may be incomplete.", nullptr,
+                         static_cast<int>(Convert::logs.size()));
         if (!this->askToLoadDespiteWarnings(text, Convert::logs.join(u"\n"))) {
             return Err::FileBadFormat;
         }
@@ -76,7 +77,7 @@ Err MeiReader::import(MasterScore* score, const io::path_t& path, const Options&
 bool MeiReader::askToLoadDespiteWarnings(const String& text, const String& detailedText)
 {
     IInteractive::Button btn = interactive()->warning(
-        text.toStdString(), mu::trc("iex_mei", "Do you want to try to load this MEI file anyway?"), detailedText.toStdString(), {
+        text.toStdString(), muse::trc("iex_mei", "Do you want to try to load this MEI file anyway?"), detailedText.toStdString(), {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Yes)
     }, (int)IInteractive::Button::Yes).standardButton();

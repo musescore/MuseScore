@@ -41,12 +41,12 @@
 #include <QPolygonF>
 #endif
 
-namespace mu {
+namespace muse {
 template<typename T>
 inline bool isEqual(T a1, T a2)
 {
     if constexpr (std::is_same<T, double>::value) {
-        return mu::RealIsEqual(a1, a2);
+        return RealIsEqual(a1, a2);
     } else {
         return a1 == a2;
     }
@@ -95,7 +95,7 @@ public:
     {
         // Need some extra precision if the length is very small.
         double len = double(m_x) * double(m_x) + double(m_y) * double(m_y);
-        if (mu::RealIsNull(len - 1.0f) || mu::RealIsNull(len)) {
+        if (RealIsNull(len - 1.0f) || RealIsNull(len)) {
             return;
         }
 
@@ -762,26 +762,17 @@ RectX<T> RectX<T>::normalized() const
 }
 
 template<typename T>
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::RectX<T>& r)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::RectX<T>& r)
 {
-    s << mu::dump(r);
+    s << muse::dump(r);
     return s;
 }
 
 template<typename T>
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::PointX<T>& p)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::PointX<T>& p)
 {
-    s << mu::dump(p);
+    s << muse::dump(p);
     return s;
-}
-
-namespace muse {
-using RectF = mu::RectF;
-using Size = mu::Size;
-using SizeF = mu::SizeF;
-using PointF = mu::PointF;
-using LineF = mu::LineF;
-using PolygonF = mu::PolygonF;
 }
 
 #endif // MUSE_DRAW_GEOMETRY_H

@@ -779,9 +779,9 @@ String FretDiagram::accessibleInfo() const
 {
     String chordName;
     if (m_harmony) {
-        chordName = mtrc("engraving", "with chord symbol %1").arg(m_harmony->harmonyName());
+        chordName = muse::mtrc("engraving", "with chord symbol %1").arg(m_harmony->harmonyName());
     } else {
-        chordName = mtrc("engraving", "without chord symbol");
+        chordName = muse::mtrc("engraving", "without chord symbol");
     }
     return String(u"%1 %2").arg(translatedTypeUserName(), chordName);
 }
@@ -794,16 +794,16 @@ String FretDiagram::screenReaderInfo() const
 {
     String detailedInfo;
     for (int i = 0; i < m_strings; i++) {
-        String stringIdent = mtrc("engraving", "string %1").arg(i + 1);
+        String stringIdent = muse::mtrc("engraving", "string %1").arg(i + 1);
 
         const FretItem::Marker& m = marker(i);
         String markerName;
         switch (m.mtype) {
         case FretMarkerType::CIRCLE:
-            markerName = mtrc("engraving", "circle marker");
+            markerName = muse::mtrc("engraving", "circle marker");
             break;
         case FretMarkerType::CROSS:
-            markerName = mtrc("engraving", "cross marker");
+            markerName = muse::mtrc("engraving", "cross marker");
             break;
         case FretMarkerType::NONE:
         default:
@@ -835,7 +835,7 @@ String FretDiagram::screenReaderInfo() const
             int max = int(fretsWithDots.size());
             for (int j = 0; j < max; j++) {
                 if (j == max - 1) {
-                    fretInfo = mtrc("engraving", "%1 and %2").arg(fretInfo).arg(fretsWithDots[j]);
+                    fretInfo = muse::mtrc("engraving", "%1 and %2").arg(fretInfo).arg(fretsWithDots[j]);
                 } else {
                     fretInfo = String(u"%1 %2").arg(fretInfo).arg(fretsWithDots[j]);
                 }
@@ -843,7 +843,7 @@ String FretDiagram::screenReaderInfo() const
         }
 
         //: Omit the "%n " for the singular translation (and the "(s)" too)
-        String dotsInfo = mtrc("engraving", "%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
+        String dotsInfo = muse::mtrc("engraving", "%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
 
         detailedInfo = String(u"%1 %2 %3 %4").arg(detailedInfo, stringIdent, markerName, dotsInfo);
     }
@@ -855,19 +855,19 @@ String FretDiagram::screenReaderInfo() const
             continue;
         }
 
-        String fretInfo = mtrc("engraving", "fret %1").arg(iter.first);
+        String fretInfo = muse::mtrc("engraving", "fret %1").arg(iter.first);
 
         String newBarreInfo;
         if (b.startString == 0 && (b.endString == -1 || b.endString == m_strings - 1)) {
-            newBarreInfo = mtrc("engraving", "barré %1").arg(fretInfo);
+            newBarreInfo = muse::mtrc("engraving", "barré %1").arg(fretInfo);
         } else {
-            String startPart = mtrc("engraving", "beginning string %1").arg(b.startString + 1);
+            String startPart = muse::mtrc("engraving", "beginning string %1").arg(b.startString + 1);
             String endPart;
             if (b.endString != -1) {
-                endPart = mtrc("engraving", "and ending string %1").arg(b.endString + 1);
+                endPart = muse::mtrc("engraving", "and ending string %1").arg(b.endString + 1);
             }
 
-            newBarreInfo = mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
+            newBarreInfo = muse::mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
         }
 
         barreInfo = String(u"%1 %2").arg(barreInfo, newBarreInfo);
@@ -876,16 +876,16 @@ String FretDiagram::screenReaderInfo() const
     detailedInfo = String(u"%1 %2").arg(detailedInfo, barreInfo);
 
     if (detailedInfo.trimmed().size() == 0) {
-        detailedInfo = mtrc("engraving", "no content");
+        detailedInfo = muse::mtrc("engraving", "no content");
     }
 
     String chordName = m_harmony
-                       ? mtrc("engraving", "with chord symbol %1").arg(m_harmony->generateScreenReaderInfo())
-                       : mtrc("engraving", "without chord symbol");
+                       ? muse::mtrc("engraving", "with chord symbol %1").arg(m_harmony->generateScreenReaderInfo())
+                       : muse::mtrc("engraving", "without chord symbol");
 
     String basicInfo = String(u"%1 %2").arg(translatedTypeUserName(), chordName);
 
-    String generalInfo = mtrc("engraving", "%n string(s) total", "", m_strings);
+    String generalInfo = muse::mtrc("engraving", "%n string(s) total", "", m_strings);
 
     String res = String(u"%1 %2 %3").arg(basicInfo, generalInfo, detailedInfo);
 

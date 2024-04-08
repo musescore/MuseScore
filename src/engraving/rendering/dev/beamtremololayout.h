@@ -88,7 +88,7 @@ private:
                                       int staffLines, bool isStartDictator, bool isFlat, bool isAscending);
     static void addMiddleLineSlant(const BeamBase::LayoutData* ldata, int& dictator, int& pointer, int beamCount, int middleLine,
                                    int interval, int desiredSlant);
-    static void add8thSpaceSlant(BeamBase::LayoutData* ldata, mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
+    static void add8thSpaceSlant(BeamBase::LayoutData* ldata, PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                                  int interval, int middleLine, bool Flat);
     static bool noSlope(const Beam* beam);
     static int strokeCount(const BeamBase::LayoutData* ldata, ChordRest* cr);

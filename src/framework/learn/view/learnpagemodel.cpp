@@ -75,23 +75,23 @@ void LearnPageModel::setSearchText(const QString& text)
 QVariantMap LearnPageModel::classesAuthor() const
 {
     QVariantMap author;
-    author["name"] = mu::qtrc("learn", "Marc Sabatella");
-    author["role"] = mu::qtrc("learn", "Instructor");
-    author["position"] = mu::qtrc("learn", "Creator, Mastering MuseScore");
-    author["description"] = mu::qtrc("learn", "Welcome to Mastering MuseScore – the most comprehensive resource "
-                                              "for learning the world’s most popular music notation software! "
-                                              "My name is Marc Sabatella, and I have been helping develop, support, "
-                                              "and promote MuseScore since its initial release over ten years ago."
-                                              "\n\nWhether you are just getting started with music notation software, "
-                                              "or are a power user eager to explore advanced engraving and playback techniques, "
-                                              "my flagship online course Mastering MuseScore "
-                                              "covers everything you need to know to get the most out of MuseScore. "
-                                              "\n\nIn addition, Mastering MuseScore features a supportive community of musicians, "
-                                              "with discussion spaces, live streams, "
-                                              "and other related courses and services to help you create your best music. "
-                                              "Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!");
+    author["name"] = muse::qtrc("learn", "Marc Sabatella");
+    author["role"] = muse::qtrc("learn", "Instructor");
+    author["position"] = muse::qtrc("learn", "Creator, Mastering MuseScore");
+    author["description"] = muse::qtrc("learn", "Welcome to Mastering MuseScore – the most comprehensive resource "
+                                                "for learning the world’s most popular music notation software! "
+                                                "My name is Marc Sabatella, and I have been helping develop, support, "
+                                                "and promote MuseScore since its initial release over ten years ago."
+                                                "\n\nWhether you are just getting started with music notation software, "
+                                                "or are a power user eager to explore advanced engraving and playback techniques, "
+                                                "my flagship online course Mastering MuseScore "
+                                                "covers everything you need to know to get the most out of MuseScore. "
+                                                "\n\nIn addition, Mastering MuseScore features a supportive community of musicians, "
+                                                "with discussion spaces, live streams, "
+                                                "and other related courses and services to help you create your best music. "
+                                                "Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!");
     author["avatarUrl"] = "qrc:/qml/MuseScore/Learn/resources/marc_sabatella.JPG";
-    author["organizationName"] = mu::qtrc("learn", "Mastering MuseScore");
+    author["organizationName"] = muse::qtrc("learn", "Mastering MuseScore");
     author["organizationUrl"] = "https://www.masteringmusescore.com/musescore4";
 
     return author;

@@ -514,8 +514,8 @@ enum class GuitarBendShowHoldLine {
 struct ScoreChangesRange {
     int tickFrom = -1;
     int tickTo = -1;
-    staff_idx_t staffIdxFrom = mu::nidx;
-    staff_idx_t staffIdxTo = mu::nidx;
+    staff_idx_t staffIdxFrom = muse::nidx;
+    staff_idx_t staffIdxTo = muse::nidx;
 
     std::set<const EngravingItem*> changedItems;
     ElementTypeSet changedTypes;
@@ -525,7 +525,7 @@ struct ScoreChangesRange {
     bool isValidBoundary() const
     {
         bool tickRangeValid = (tickFrom != -1 && tickTo != -1);
-        bool staffRangeValid = (staffIdxFrom != mu::nidx && staffIdxTo != mu::nidx);
+        bool staffRangeValid = (staffIdxFrom != muse::nidx && staffIdxTo != muse::nidx);
 
         return tickRangeValid && staffRangeValid;
     }

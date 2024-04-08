@@ -95,7 +95,7 @@ public:
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     struct LayoutData : public EngravingItem::LayoutData {
         // cache
@@ -119,8 +119,8 @@ private:
     Arpeggio(Chord* parent);
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
-    std::vector<mu::LineF> dragAnchorLines() const override;
-    std::vector<mu::LineF> gripAnchorLines(Grip) const override;
+    std::vector<LineF> dragAnchorLines() const override;
+    std::vector<LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
     void startEditDrag(EditData&) override;
 

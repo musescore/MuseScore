@@ -37,9 +37,9 @@ class FontProvider : public IFontProvider
 public:
     FontProvider() = default;
 
-    int addSymbolFont(const mu::String& family, const mu::io::path_t& path) override;
-    int addTextFont(const mu::io::path_t& path) override;
-    void insertSubstitution(const mu::String& familyName, const mu::String& to) override;
+    int addSymbolFont(const String& family, const io::path_t& path) override;
+    int addTextFont(const io::path_t& path) override;
+    void insertSubstitution(const String& familyName, const String& to) override;
 
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
@@ -47,20 +47,20 @@ public:
     double ascent(const Font& f) const override;
     double descent(const Font& f) const override;
 
-    bool inFont(const Font& f, mu::Char ch) const override;
+    bool inFont(const Font& f, Char ch) const override;
     bool inFontUcs4(const Font& f, char32_t ucs4) const override;
 
     // Text
-    double horizontalAdvance(const Font& f, const mu::String& string) const override;
-    double horizontalAdvance(const Font& f, const mu::Char& ch) const override;
+    double horizontalAdvance(const Font& f, const String& string) const override;
+    double horizontalAdvance(const Font& f, const Char& ch) const override;
 
-    mu::RectF boundingRect(const Font& f, const mu::String& string) const override;
-    mu::RectF boundingRect(const Font& f, const mu::Char& ch) const override;
-    mu::RectF boundingRect(const Font& f, const mu::RectF& r, int flags, const mu::String& string) const override;
-    mu::RectF tightBoundingRect(const Font& f, const mu::String& string) const override;
+    RectF boundingRect(const Font& f, const String& string) const override;
+    RectF boundingRect(const Font& f, const Char& ch) const override;
+    RectF boundingRect(const Font& f, const RectF& r, int flags, const String& string) const override;
+    RectF tightBoundingRect(const Font& f, const String& string) const override;
 
     // Score symbols
-    mu::RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const override;
+    RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const override;
     double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const override;
 };
 }

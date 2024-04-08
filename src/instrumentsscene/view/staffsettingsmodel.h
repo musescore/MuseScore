@@ -82,7 +82,7 @@ private:
     notation::INotationPartsPtr notationParts() const;
     notation::INotationPartsPtr masterNotationParts() const;
 
-    ID m_staffId;
+    muse::ID m_staffId;
     QList<bool> m_voicesVisibility;
     notation::StaffConfig m_config;
 };

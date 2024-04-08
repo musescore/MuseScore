@@ -21,7 +21,7 @@
  */
 #include "contextapi.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
 ContextApi::ContextApi(IApiEngine* e)
     : ApiObject(e)

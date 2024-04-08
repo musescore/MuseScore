@@ -150,7 +150,7 @@ void Articulation::setUp(bool val)
 //   typeUserName
 //---------------------------------------------------------
 
-TranslatableString Articulation::typeUserName() const
+muse::TranslatableString Articulation::typeUserName() const
 {
     if (m_textType != ArticulationTextType::NO_TEXT) {
         return TConv::userName(m_textType);

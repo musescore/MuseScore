@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_VAL_H
-#define MU_GLOBAL_VAL_H
+#ifndef MUSE_GLOBAL_VAL_H
+#define MUSE_GLOBAL_VAL_H
 
 #include <string>
 #include <variant>
@@ -36,7 +36,7 @@
 #include <QVariant>
 #endif
 
-namespace mu {
+namespace muse {
 class Val;
 using ValList = std::vector<Val>;
 using ValMap = std::map<std::string, Val>;
@@ -119,10 +119,4 @@ private:
 };
 }
 
-namespace muse {
-using Val = mu::Val;
-using ValList = mu::ValList;
-using ValMap = mu::ValMap;
-}
-
-#endif // MU_GLOBAL_VAL_H
+#endif // MUSE_GLOBAL_VAL_H

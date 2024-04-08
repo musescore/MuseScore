@@ -53,7 +53,7 @@ KeyState PianoKeyboardController::keyState(piano_key_t key) const
     return KeyState::None;
 }
 
-mu::async::Notification PianoKeyboardController::keyStatesChanged() const
+muse::async::Notification PianoKeyboardController::keyStatesChanged() const
 {
     return m_keyStatesChanged;
 }

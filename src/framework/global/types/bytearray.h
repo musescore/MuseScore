@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_BYTEARRAY_H
-#define MU_GLOBAL_BYTEARRAY_H
+#ifndef MUSE_GLOBAL_BYTEARRAY_H
+#define MUSE_GLOBAL_BYTEARRAY_H
 
 #include <cstdint>
 #include <memory>
@@ -30,7 +30,7 @@
 #include <QByteArray>
 #endif
 
-namespace mu {
+namespace muse {
 class ByteArray
 {
 public:
@@ -108,8 +108,4 @@ private:
 };
 }
 
-namespace muse {
-using ByteArray = mu::ByteArray;
-}
-
-#endif // MU_GLOBAL_BYTEARRAY_H
+#endif // MUSE_GLOBAL_BYTEARRAY_H

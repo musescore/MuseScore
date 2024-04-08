@@ -33,7 +33,7 @@ namespace mu::converter {
 class NotationMeta
 {
 public:
-    static RetVal<std::string> metaJson(notation::INotationPtr notation);
+    static muse::RetVal<std::string> metaJson(notation::INotationPtr notation);
 
 private:
     static QString title(const mu::engraving::Score* score);

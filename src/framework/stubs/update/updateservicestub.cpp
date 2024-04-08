@@ -21,14 +21,15 @@
  */
 #include "updateservicestub.h"
 
+using namespace muse;
 using namespace muse::update;
 
-mu::RetVal<ReleaseInfo> UpdateServiceStub::checkForUpdate()
+RetVal<ReleaseInfo> UpdateServiceStub::checkForUpdate()
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::RetVal<mu::io::path_t> UpdateServiceStub::downloadRelease()
+RetVal<io::path_t> UpdateServiceStub::downloadRelease()
 {
     return make_ret(Ret::Code::NotSupported);
 }
@@ -37,7 +38,7 @@ void UpdateServiceStub::cancelUpdate()
 {
 }
 
-mu::Progress UpdateServiceStub::updateProgress()
+Progress UpdateServiceStub::updateProgress()
 {
-    return mu::Progress();
+    return Progress();
 }

@@ -36,7 +36,7 @@ namespace mu::engraving::compat {
 
 class PageFormat
 {
-    mu::SizeF _size;
+    muse::SizeF _size;
     double _printableWidth;          // _width - left margin - right margin
     double _evenLeftMargin;          // values in inch
     double _oddLeftMargin;
@@ -49,10 +49,10 @@ class PageFormat
 public:
     PageFormat() {}
 
-    const SizeF& size() const { return _size; } // size in inch
+    const muse::SizeF& size() const { return _size; } // size in inch
     double width() const { return _size.width(); }
     double height() const { return _size.height(); }
-    void setSize(const SizeF& s) { _size = s; }
+    void setSize(const muse::SizeF& s) { _size = s; }
 
     void read206(XmlReader&);
 

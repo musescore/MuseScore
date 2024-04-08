@@ -4,6 +4,8 @@
 
 #include "global/log.h"
 
+using namespace muse;
+
 namespace mu::iex::guitarpro {
 std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNode* trackNode, XmlDomNode* versionNode)
 {

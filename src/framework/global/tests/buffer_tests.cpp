@@ -26,8 +26,8 @@
 
 #include "io/buffer.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 class Global_IO_BufferTests : public ::testing::Test
 {

@@ -45,7 +45,7 @@ public:
     RectF ellipseRect() const;
 
     struct LayoutData : public EngravingItem::LayoutData {
-        mu::RectF rect;
+        RectF rect;
         double offsetFromUpNote = 0.0;
         double sideOffset = 0.0;
     };

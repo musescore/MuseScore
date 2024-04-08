@@ -41,14 +41,15 @@
 using namespace mu::iex::imagesexport;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     TRACEFUNC;
 
@@ -69,7 +70,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
     const std::vector<mu::engraving::Page*>& pages = score->pages();
     double pixelRationBackup = mu::engraving::MScore::pixelRatio;
 
-    const size_t PAGE_NUMBER = mu::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    const size_t PAGE_NUMBER = muse::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
     if (PAGE_NUMBER >= pages.size()) {
         return false;
     }
@@ -105,8 +106,8 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / printer.logicalDpiX();
 
-    const bool TRANSPARENT_BACKGROUND = mu::value(options, OptionKey::TRANSPARENT_BACKGROUND,
-                                                  Val(configuration()->exportSvgWithTransparentBackground())).toBool();
+    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                    Val(configuration()->exportSvgWithTransparentBackground())).toBool();
     if (!TRANSPARENT_BACKGROUND) {
         painter.fillRect(pageRect, muse::draw::Color::WHITE);
     }
@@ -170,9 +171,9 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
                     qreal lastX = sl->ldata()->bbox().right()
                                   + sl->pagePos().x()
                                   - concatenatedSL->pagePos().x();
-                    std::vector<mu::LineF> lines = concatenatedSL->lines();
+                    std::vector<muse::LineF> lines = concatenatedSL->lines();
                     for (size_t l = 0, c = lines.size(); l < c; l++) {
-                        lines[l].setP2(mu::PointF(lastX, lines[l].p2().y()));
+                        lines[l].setP2(muse::PointF(lastX, lines[l].p2().y()));
                     }
                     concatenatedSL->setLines(lines);
                 }
@@ -186,7 +187,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
         }
     }
 
-    BeatsColors beatsColors = parseBeatsColors(mu::value(options, OptionKey::BEATS_COLORS, Val()).toQVariant());
+    BeatsColors beatsColors = parseBeatsColors(muse::value(options, OptionKey::BEATS_COLORS, Val()).toQVariant());
 
     // 2nd pass: Set color for elements on beats
     int beatIndex = 0;

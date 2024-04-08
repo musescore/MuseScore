@@ -126,7 +126,7 @@ public:
     virtual void undo(EditData*);
     virtual void redo(EditData*);
     void appendChild(UndoCommand* cmd) { childList.push_back(cmd); }
-    UndoCommand* removeChild() { return mu::takeLast(childList); }
+    UndoCommand* removeChild() { return muse::takeLast(childList); }
     size_t childCount() const { return childList.size(); }
     void unwind();
     const std::list<UndoCommand*>& commands() const { return childList; }
@@ -157,10 +157,10 @@ public:
         std::vector<EngravingItem*> elements;
         Fraction tickStart;
         Fraction tickEnd;
-        staff_idx_t staffStart = mu::nidx;
-        staff_idx_t staffEnd = mu::nidx;
+        staff_idx_t staffStart = muse::nidx;
+        staff_idx_t staffEnd = muse::nidx;
 
-        bool isValid() const { return !elements.empty() || staffStart != mu::nidx; }
+        bool isValid() const { return !elements.empty() || staffStart != muse::nidx; }
     };
 
     UndoMacro(Score* s);
@@ -261,7 +261,7 @@ class RemovePart : public UndoCommand
     OBJECT_ALLOCATOR(engraving, RemovePart)
 
     Part* m_part = nullptr;
-    size_t m_partIdx = mu::nidx;
+    size_t m_partIdx = muse::nidx;
 
 public:
     RemovePart(Part*, size_t partIdx);
@@ -315,7 +315,7 @@ class InsertStaff : public UndoCommand
     OBJECT_ALLOCATOR(engraving, InsertStaff)
 
     Staff* staff = nullptr;
-    staff_idx_t ridx = mu::nidx;
+    staff_idx_t ridx = muse::nidx;
 
 public:
     InsertStaff(Staff*, staff_idx_t idx);
@@ -333,7 +333,7 @@ class RemoveStaff : public UndoCommand
     OBJECT_ALLOCATOR(engraving, RemoveStaff)
 
     Staff* staff = nullptr;
-    staff_idx_t ridx = mu::nidx;
+    staff_idx_t ridx = muse::nidx;
     bool wasSystemObjectStaff = false;
 
 public:
@@ -353,7 +353,7 @@ class InsertMStaff : public UndoCommand
 
     Measure* measure = nullptr;
     MStaff* mstaff = nullptr;
-    staff_idx_t idx = mu::nidx;
+    staff_idx_t idx = muse::nidx;
 
 public:
     InsertMStaff(Measure*, MStaff*, staff_idx_t);
@@ -388,8 +388,8 @@ class InsertStaves : public UndoCommand
     OBJECT_ALLOCATOR(engraving, InsertStaves)
 
     Measure* measure = nullptr;
-    staff_idx_t a = mu::nidx;
-    staff_idx_t b = mu::nidx;
+    staff_idx_t a = muse::nidx;
+    staff_idx_t b = muse::nidx;
 
 public:
     InsertStaves(Measure*, staff_idx_t, staff_idx_t);
@@ -406,8 +406,8 @@ class RemoveStaves : public UndoCommand
     OBJECT_ALLOCATOR(engraving, RemoveStaves)
 
     Measure* measure = nullptr;
-    staff_idx_t a = mu::nidx;
-    staff_idx_t b = mu::nidx;
+    staff_idx_t a = muse::nidx;
+    staff_idx_t b = muse::nidx;
 
 public:
     RemoveStaves(Measure*, staff_idx_t, staff_idx_t);
@@ -553,9 +553,9 @@ class ExchangeVoice : public UndoCommand
     OBJECT_ALLOCATOR(engraving, ExchangeVoice)
 
     Measure* measure = nullptr;
-    track_idx_t val1 = mu::nidx;
-    track_idx_t val2 = mu::nidx;
-    staff_idx_t staff = mu::nidx;
+    track_idx_t val1 = muse::nidx;
+    track_idx_t val2 = muse::nidx;
+    staff_idx_t staff = muse::nidx;
 
 public:
     ExchangeVoice(Measure*, track_idx_t val1, track_idx_t val2, staff_idx_t staff);
@@ -574,8 +574,8 @@ class CloneVoice : public UndoCommand
     Segment* sf = nullptr;
     Fraction lTick;
     Segment* d = nullptr;               //Destination
-    track_idx_t strack = mu::nidx;
-    track_idx_t dtrack = mu::nidx;
+    track_idx_t strack = muse::nidx;
+    track_idx_t dtrack = muse::nidx;
     track_idx_t otrack;
     bool linked = false;
     bool first = true;        //first redo
@@ -960,7 +960,7 @@ class RemoveExcerpt : public UndoCommand
     OBJECT_ALLOCATOR(engraving, RemoveExcerpt)
 
     Excerpt* excerpt = nullptr;
-    size_t index = mu::nidx;
+    size_t index = muse::nidx;
     bool deleteExcerpt = false;
 
 public:
@@ -1137,7 +1137,7 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::ChangePropertyLinked && mu::contains(target->linkList(), element);
+        return f == UndoCommand::Filter::ChangePropertyLinked && muse::contains(target->linkList(), element);
     }
 };
 
@@ -1255,7 +1255,7 @@ class ChangeParent : public UndoCommand
 
     EngravingItem* element = nullptr;
     EngravingItem* parent = nullptr;
-    staff_idx_t staffIdx = mu::nidx;
+    staff_idx_t staffIdx = muse::nidx;
 
     void flip(EditData*) override;
 
@@ -1292,7 +1292,7 @@ class ChangeMeasureRepeatCount : public UndoCommand
 
     Measure* m = nullptr;
     int count = 0;
-    staff_idx_t staffIdx = mu::nidx;
+    staff_idx_t staffIdx = muse::nidx;
 
     void flip(EditData*) override;
 

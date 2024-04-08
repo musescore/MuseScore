@@ -26,7 +26,6 @@
 
 #include "log.h"
 
-using namespace mu;
 using namespace muse::audio;
 using namespace muse::audio::encode;
 

@@ -33,7 +33,7 @@
 
 namespace mu::palette {
 class DrumsetPaletteAdapter;
-class DrumsetPanelView : public muse::uicomponents::WidgetView, public async::Asyncable
+class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::async::Asyncable
 {
     Q_OBJECT
 

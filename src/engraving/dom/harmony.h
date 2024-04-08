@@ -44,19 +44,19 @@ struct TextSegment {
     muse::draw::Font m_font;
     String text;
     double x, y = 0;         // Position of segments relative to each other.
-    mu::PointF offset;       // Offset for placing within the TextBase.
+    PointF offset;       // Offset for placing within the TextBase.
     bool select = false;
 
     double width() const;
-    mu::RectF boundingRect() const;
-    mu::RectF tightBoundingRect() const;
-    mu::PointF pos() const { return mu::PointF(x, y) + offset; }
+    RectF boundingRect() const;
+    RectF tightBoundingRect() const;
+    PointF pos() const { return PointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
     TextSegment(const muse::draw::Font& f, double _x, double _y)
         : m_font(f), x(_x), y(_y), select(false) {}
     TextSegment(const String&, const muse::draw::Font&, double x, double y);
-    void set(const String&, const muse::draw::Font&, double x, double y, mu::PointF offset);
+    void set(const String&, const muse::draw::Font&, double x, double y, PointF offset);
     void setText(const String& t) { text = t; }
 };
 

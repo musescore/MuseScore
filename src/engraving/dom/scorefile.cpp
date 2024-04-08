@@ -36,7 +36,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::read400;

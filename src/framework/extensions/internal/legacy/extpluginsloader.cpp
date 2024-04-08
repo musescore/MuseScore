@@ -27,6 +27,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::extensions;
 using namespace muse::extensions::legacy;
 
@@ -70,7 +71,7 @@ ManifestList ExtPluginsLoader::manifesList(const io::path_t& rootPath) const
     return manifests;
 }
 
-mu::io::paths_t ExtPluginsLoader::qmlsPaths(const io::path_t& rootPath) const
+io::paths_t ExtPluginsLoader::qmlsPaths(const io::path_t& rootPath) const
 {
     RetVal<io::paths_t> paths = io::Dir::scanFiles(rootPath, { "*.qml" });
     if (!paths.ret) {

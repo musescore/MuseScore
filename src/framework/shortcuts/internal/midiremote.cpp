@@ -28,6 +28,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::shortcuts;
 using namespace muse::midi;
 
@@ -57,7 +58,7 @@ const MidiMappingList& MidiRemote::midiMappings() const
     return m_midiMappings;
 }
 
-mu::Ret MidiRemote::setMidiMappings(const MidiMappingList& midiMappings)
+Ret MidiRemote::setMidiMappings(const MidiMappingList& midiMappings)
 {
     if (m_midiMappings == midiMappings) {
         return true;
@@ -82,7 +83,7 @@ void MidiRemote::resetMidiMappings()
     m_midiMappingsChanged.notify();
 }
 
-mu::async::Notification MidiRemote::midiMappingsChanged() const
+async::Notification MidiRemote::midiMappingsChanged() const
 {
     return m_midiMappingsChanged;
 }
@@ -103,7 +104,7 @@ void MidiRemote::setCurrentActionEvent(const Event& ev)
     NOT_IMPLEMENTED;
 }
 
-mu::Ret MidiRemote::process(const Event& ev)
+Ret MidiRemote::process(const Event& ev)
 {
     if (needIgnoreEvent(ev)) {
         return Ret(Ret::Code::Undefined);

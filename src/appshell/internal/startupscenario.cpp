@@ -27,11 +27,12 @@
 #include "log.h"
 
 using namespace mu::appshell;
+using namespace muse;
 using namespace muse::actions;
 
-static const mu::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
-static const mu::Uri HOME_URI("musescore://home");
-static const mu::Uri NOTATION_URI("musescore://notation");
+static const muse::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
+static const muse::Uri HOME_URI("musescore://home");
+static const muse::Uri NOTATION_URI("musescore://notation");
 
 static StartupModeType modeTypeTromString(const std::string& str)
 {
@@ -98,7 +99,7 @@ void StartupScenario::run()
 
     Uri startupUri = startupPageUri(modeType);
 
-    async::Channel<Uri> opened = interactive()->opened();
+    muse::async::Channel<Uri> opened = interactive()->opened();
     opened.onReceive(this, [this, opened, modeType](const Uri&) {
         static bool once = false;
         if (once) {
@@ -109,7 +110,7 @@ void StartupScenario::run()
         onStartupPageOpened(modeType);
 
         async::Async::call(this, [this, opened]() {
-            async::Channel<Uri> mut = opened;
+            muse::async::Channel<Uri> mut = opened;
             mut.resetOnReceive(this);
             m_startupCompleted = true;
         });
@@ -164,7 +165,7 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     }
 }
 
-mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
+muse::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
 {
     switch (modeType) {
     case StartupModeType::StartEmpty:
@@ -186,8 +187,8 @@ void StartupScenario::openScore(const project::ProjectFile& file)
 
 void StartupScenario::restoreLastSession()
 {
-    IInteractive::Result result = interactive()->question(mu::trc("appshell", "The previous session quit unexpectedly."),
-                                                          mu::trc("appshell", "Do you want to restore the session?"),
+    IInteractive::Result result = interactive()->question(muse::trc("appshell", "The previous session quit unexpectedly."),
+                                                          muse::trc("appshell", "Do you want to restore the session?"),
                                                           { IInteractive::Button::No, IInteractive::Button::Yes });
 
     if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
@@ -200,7 +201,7 @@ void StartupScenario::restoreLastSession()
 
 void StartupScenario::removeProjectsUnsavedChanges(const io::paths_t& projectsPaths)
 {
-    for (const io::path_t& path : projectsPaths) {
+    for (const muse::io::path_t& path : projectsPaths) {
         projectAutoSaver()->removeProjectUnsavedChanges(path);
     }
 }

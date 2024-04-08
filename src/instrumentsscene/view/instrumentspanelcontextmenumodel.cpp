@@ -30,6 +30,7 @@
 using namespace mu::context;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace muse::actions;
@@ -86,11 +87,11 @@ void InstrumentsPanelContextMenuModel::loadInstrumentOrders()
     m_orders = instrumentsRepository()->orders();
 
     const ScoreOrder& custom = customOrder();
-    if (m_orders.empty() || !mu::contains(m_orders, custom)) {
+    if (m_orders.empty() || !muse::contains(m_orders, custom)) {
         m_orders.push_back(custom);
     }
 
-    if (!mu::contains(m_orders, currentOrder)) {
+    if (!muse::contains(m_orders, currentOrder)) {
         currentOrder.customized = false;
         m_orders.push_back(currentOrder);
     }

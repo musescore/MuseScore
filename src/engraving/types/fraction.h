@@ -27,7 +27,7 @@
 #include <limits>
 #include <numeric>
 
-#include "types/string.h"
+#include "../types/types.h"
 
 #include "constants.h"
 
@@ -257,11 +257,11 @@ public:
     // A very small fraction, corresponds to 1 MIDI tick
     static constexpr Fraction eps() { return Fraction(1, Constants::DIVISION * 4); }
 
-    String toString() const { return String(u"%1/%2").arg(m_numerator, m_denominator); }
-    static Fraction fromString(const String& str)
+    muse::String toString() const { return muse::String(u"%1/%2").arg(m_numerator, m_denominator); }
+    static Fraction fromString(const muse::String& str)
     {
         const size_t i = str.indexOf(u'/');
-        return (i == mu::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
+        return (i == muse::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
     }
 
     constexpr double toDouble() const { return static_cast<double>(m_numerator) / static_cast<double>(m_denominator); }

@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::palette {
-class PaletteModule : public modularity::IModuleSetup
+class PaletteModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

@@ -46,7 +46,7 @@ public:
     int hookType() const { return m_hookType; }
 
     Chord* chord() const { return toChord(explicitParent()); }
-    mu::PointF smuflAnchor() const;
+    PointF smuflAnchor() const;
 
     //! @p index: the number of flags (positive: upwards, negative: downwards)
     //! @p straight: whether to use straight flags

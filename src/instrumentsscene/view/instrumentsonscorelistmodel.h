@@ -73,7 +73,7 @@ private:
 
     void loadOrders();
 
-    int resolveInstrumentSequenceNumber(const String& instrumentId) const;
+    int resolveInstrumentSequenceNumber(const muse::String& instrumentId) const;
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
     void insertInstrument(ItemList& instruments, InstrumentItem* newInstrument);

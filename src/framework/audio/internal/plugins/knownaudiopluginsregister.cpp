@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
 
 namespace muse::audio {
@@ -56,7 +56,7 @@ static JsonObject metaToJson(const AudioResourceMeta& meta)
     JsonObject result;
 
     result.set("id", meta.id);
-    result.set("type", mu::value(RESOURCE_TYPE_TO_STRING_MAP, meta.type, "Undefined"));
+    result.set("type", muse::value(RESOURCE_TYPE_TO_STRING_MAP, meta.type, "Undefined"));
     result.set("hasNativeEditorSupport", meta.hasNativeEditorSupport);
 
     if (!meta.vendor.empty()) {
@@ -87,7 +87,7 @@ static AudioResourceMeta metaFromJson(const JsonObject& object)
     AudioResourceMeta result;
 
     result.id = object.value("id").toStdString();
-    result.type = mu::key(RESOURCE_TYPE_TO_STRING_MAP, object.value("type").toStdString());
+    result.type = muse::key(RESOURCE_TYPE_TO_STRING_MAP, object.value("type").toStdString());
     result.vendor = object.value("vendor").toStdString();
     result.hasNativeEditorSupport = object.value("hasNativeEditorSupport").toBool();
 
@@ -100,7 +100,7 @@ static AudioResourceMeta metaFromJson(const JsonObject& object)
 }
 }
 
-mu::Ret KnownAudioPluginsRegister::load()
+Ret KnownAudioPluginsRegister::load()
 {
     TRACEFUNC;
 
@@ -111,7 +111,7 @@ mu::Ret KnownAudioPluginsRegister::load()
     io::path_t knownAudioPluginsPath = configuration()->knownAudioPluginsFilePath();
     if (!fileSystem()->exists(knownAudioPluginsPath)) {
         m_loaded = true;
-        return mu::make_ok();
+        return muse::make_ok();
     }
 
     RetVal<ByteArray> file = fileSystem()->readFile(knownAudioPluginsPath);
@@ -143,13 +143,13 @@ mu::Ret KnownAudioPluginsRegister::load()
     }
 
     m_loaded = true;
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 std::vector<AudioPluginInfo> KnownAudioPluginsRegister::pluginInfoList(PluginInfoAccepted accepted) const
 {
     if (!accepted) {
-        return mu::values(m_pluginInfoMap);
+        return muse::values(m_pluginInfoMap);
     }
 
     std::vector<AudioPluginInfo> result;
@@ -163,7 +163,7 @@ std::vector<AudioPluginInfo> KnownAudioPluginsRegister::pluginInfoList(PluginInf
     return result;
 }
 
-const mu::io::path_t& KnownAudioPluginsRegister::pluginPath(const AudioResourceId& resourceId) const
+const io::path_t& KnownAudioPluginsRegister::pluginPath(const AudioResourceId& resourceId) const
 {
     auto it = m_pluginInfoMap.find(resourceId);
     if (it == m_pluginInfoMap.end()) {
@@ -176,15 +176,15 @@ const mu::io::path_t& KnownAudioPluginsRegister::pluginPath(const AudioResourceI
 
 bool KnownAudioPluginsRegister::exists(const io::path_t& pluginPath) const
 {
-    return mu::contains(m_pluginPaths, pluginPath);
+    return muse::contains(m_pluginPaths, pluginPath);
 }
 
 bool KnownAudioPluginsRegister::exists(const AudioResourceId& resourceId) const
 {
-    return mu::contains(m_pluginInfoMap, resourceId);
+    return muse::contains(m_pluginInfoMap, resourceId);
 }
 
-mu::Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
+Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
 {
     IF_ASSERT_FAILED(m_loaded) {
         return false;
@@ -204,19 +204,19 @@ mu::Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
     return ret;
 }
 
-mu::Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resourceId)
+Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resourceId)
 {
     IF_ASSERT_FAILED(m_loaded) {
         return false;
     }
 
     if (!exists(resourceId)) {
-        return mu::make_ok();
+        return muse::make_ok();
     }
 
     for (const auto& pair : m_pluginInfoMap) {
         if (pair.first == resourceId) {
-            mu::remove(m_pluginPaths, pair.second.path);
+            muse::remove(m_pluginPaths, pair.second.path);
         }
     }
 
@@ -226,7 +226,7 @@ mu::Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resou
     return ret;
 }
 
-mu::Ret KnownAudioPluginsRegister::writePluginsInfo()
+Ret KnownAudioPluginsRegister::writePluginsInfo()
 {
     TRACEFUNC;
 

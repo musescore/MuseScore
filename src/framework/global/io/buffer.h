@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_BUFFER_H
-#define MU_IO_BUFFER_H
+#ifndef MUSE_IO_BUFFER_H
+#define MUSE_IO_BUFFER_H
 
 #include "../types/bytearray.h"
 #include "iodevice.h"
 
-namespace mu::io {
+namespace muse::io {
 class Buffer : public IODevice
 {
 public:
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_IO_BUFFER_H
+#endif // MUSE_IO_BUFFER_H

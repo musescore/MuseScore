@@ -30,7 +30,7 @@
 #include "modularity/ioc.h"
 #include "autobot/iautobot.h"
 
-namespace mu::api {
+namespace muse::api {
 class ContextApi : public ApiObject
 {
     Q_OBJECT

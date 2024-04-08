@@ -30,6 +30,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::notation;
 
 static NotationParts* get_impl(const INotationPartsPtr& parts)
@@ -156,7 +157,7 @@ bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     return true;
 }
 
-bool MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceStaffId, const mu::ID& destinationPartId)
+bool MasterNotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId)
 {
     TRACEFUNC;
 

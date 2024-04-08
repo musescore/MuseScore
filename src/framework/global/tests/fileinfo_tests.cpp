@@ -28,7 +28,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-using namespace mu::io;
+using namespace muse::io;
 
 class Global_IO_FileInfoTests : public ::testing::Test
 {

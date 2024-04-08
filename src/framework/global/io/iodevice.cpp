@@ -29,8 +29,8 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 bool IODevice::open(IODevice::OpenMode mode)
 {

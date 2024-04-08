@@ -5,6 +5,7 @@
 
 #include "stringutils.h"
 
+using namespace muse;
 using namespace mu::playback;
 
 //!Note Some resources like VST plugins are not able to work in a couple of msecs
@@ -93,7 +94,7 @@ bool AbstractAudioResourceItem::hasNativeEditorSupport() const
     return false;
 }
 
-const mu::UriQuery& AbstractAudioResourceItem::editorUri() const
+const muse::UriQuery& AbstractAudioResourceItem::editorUri() const
 {
     return m_editorUri;
 }

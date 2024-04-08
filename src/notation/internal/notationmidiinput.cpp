@@ -72,7 +72,7 @@ void NotationMidiInput::onMidiEventReceived(const muse::midi::Event& event)
     }
 }
 
-mu::async::Channel<std::vector<const Note*> > NotationMidiInput::notesReceived() const
+muse::async::Channel<std::vector<const Note*> > NotationMidiInput::notesReceived() const
 {
     return m_notesReceivedChannel;
 }

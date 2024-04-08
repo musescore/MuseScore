@@ -27,7 +27,7 @@
 #include "recentfilescontrollerstub.h"
 
 using namespace mu::project;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string ProjectModule::moduleName() const
 {

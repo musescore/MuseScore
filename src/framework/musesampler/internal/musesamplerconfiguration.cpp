@@ -26,7 +26,7 @@
 
 #include <cstdlib>
 
-using namespace mu;
+using namespace muse;
 using namespace muse::musesampler;
 
 static const Settings::Key USER_MUSESAMPLER_PATH("musesampler", "application/paths/museSampler");

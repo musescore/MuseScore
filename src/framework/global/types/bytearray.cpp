@@ -24,7 +24,7 @@
 #include <cstring>
 #include <cassert>
 
-using namespace mu;
+using namespace muse;
 
 ByteArray::ByteArray()
 {

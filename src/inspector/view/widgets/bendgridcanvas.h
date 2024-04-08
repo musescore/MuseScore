@@ -38,7 +38,7 @@
 #include "ui/view/qmlaccessible.h"
 
 namespace mu::inspector {
-class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public async::Asyncable
+class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable
 {
     Q_OBJECT
 

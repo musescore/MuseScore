@@ -25,6 +25,7 @@
 #include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::autobot;
@@ -52,7 +53,7 @@ bool AutobotActions::actionEnabled(const UiAction&) const
     return true;
 }
 
-mu::async::Channel<ActionCodeList> AutobotActions::actionEnabledChanged() const
+async::Channel<ActionCodeList> AutobotActions::actionEnabledChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;
@@ -63,7 +64,7 @@ bool AutobotActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> AutobotActions::actionCheckedChanged() const
+async::Channel<ActionCodeList> AutobotActions::actionCheckedChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;

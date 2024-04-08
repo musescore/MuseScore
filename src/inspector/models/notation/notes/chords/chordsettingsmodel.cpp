@@ -30,7 +30,7 @@ ChordSettingsModel::ChordSettingsModel(QObject* parent, IElementRepositoryServic
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_CHORD);
-    setTitle(mu::qtrc("inspector", "Chord"));
+    setTitle(muse::qtrc("inspector", "Chord"));
 
     createProperties();
 }

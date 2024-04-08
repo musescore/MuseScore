@@ -58,7 +58,7 @@ public:
 
     const String& name() const;
     void setName(const String& name, bool saveAndNotify = true);
-    async::Notification nameChanged() const;
+    muse::async::Notification nameChanged() const;
 
     // The name used to store this excerpt in the msc file/folder.
     // When reading/writing, the engraving module sets this value, so that other
@@ -66,7 +66,7 @@ public:
     bool hasFileName() const;
     const String& fileName() const;
     void setFileName(const String& fileName);
-    void updateFileName(size_t index = mu::nidx);
+    void updateFileName(size_t index = muse::nidx);
 
     std::vector<Part*>& parts() { return m_parts; }
     const std::vector<Part*>& parts() const { return m_parts; }
@@ -106,7 +106,7 @@ private:
     Score* m_excerptScore = nullptr;
     String m_name;
     String m_fileName;
-    async::Notification m_nameChanged;
+    muse::async::Notification m_nameChanged;
     std::vector<Part*> m_parts;
     TracksMap m_tracksMapping;
     bool m_inited = false;

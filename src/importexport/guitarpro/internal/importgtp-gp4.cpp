@@ -55,7 +55,7 @@
 
 #include "log.h"
 
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
@@ -848,8 +848,8 @@ bool GuitarPro4::read(IODevice* io)
             }
             for (int beat = 0; beat < beats; ++beat) {
                 slide = -1;
-                if (mu::contains(slides, static_cast<int>(track))) {
-                    slide = mu::take(slides, static_cast<int>(track));
+                if (muse::contains(slides, static_cast<int>(track))) {
+                    slide = muse::take(slides, static_cast<int>(track));
                 }
 
                 uint8_t beatBits = readUInt8();

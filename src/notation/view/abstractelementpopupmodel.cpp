@@ -64,14 +64,14 @@ PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::
     return ELEMENT_POPUP_TYPES.value(elementType, PopupModelType::TYPE_UNDEFINED);
 }
 
-mu::PointF AbstractElementPopupModel::fromLogical(PointF point) const
+muse::PointF AbstractElementPopupModel::fromLogical(muse::PointF point) const
 {
-    return currentNotation()->viewState() ? currentNotation()->viewState()->matrix().map(point) : PointF();
+    return currentNotation()->viewState() ? currentNotation()->viewState()->matrix().map(point) : muse::PointF();
 }
 
-mu::RectF AbstractElementPopupModel::fromLogical(RectF rect) const
+muse::RectF AbstractElementPopupModel::fromLogical(muse::RectF rect) const
 {
-    return currentNotation()->viewState() ? currentNotation()->viewState()->matrix().map(rect) : RectF();
+    return currentNotation()->viewState() ? currentNotation()->viewState()->matrix().map(rect) : muse::RectF();
 }
 
 INotationUndoStackPtr AbstractElementPopupModel::undoStack() const
@@ -184,7 +184,7 @@ void AbstractElementPopupModel::init()
 
     undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
         for (ElementType type : dependentElementTypes()) {
-            if (contains(range.changedTypes, type)) {
+            if (muse::contains(range.changedTypes, type)) {
                 emit dataChanged();
                 updateItemRect();
             }

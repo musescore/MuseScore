@@ -538,7 +538,7 @@ String Clef::accessibleInfo() const
     if (type == ClefType::INVALID) {
         return String();
     }
-    return mtrc("engraving", TConv::translatedUserName(clefType()));
+    return muse::mtrc("engraving", TConv::translatedUserName(clefType()));
 }
 
 //---------------------------------------------------------

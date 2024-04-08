@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ASYNC_PROCESSEVENTS_H
-#define MU_ASYNC_PROCESSEVENTS_H
+#ifndef MUSE_ASYNC_PROCESSEVENTS_H
+#define MUSE_ASYNC_PROCESSEVENTS_H
 
 #include "../thirdparty/kors_async/async/processevents.h"
 
-namespace mu::async {
+namespace muse::async {
 inline void processEvents()
 {
     kors::async::processEvents();
@@ -36,4 +36,4 @@ inline void onMainThreadInvoke(const std::function<void(const std::function<void
 }
 }
 
-#endif // MU_ASYNC_PROCESSEVENTS_H
+#endif // MUSE_ASYNC_PROCESSEVENTS_H

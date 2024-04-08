@@ -38,8 +38,9 @@
 #include "brailleinputparser.h"
 #include "louis.h"
 
+using namespace muse;
+using namespace muse::io;
 using namespace mu::braille;
-using namespace mu::io;
 using namespace mu::notation;
 
 namespace mu::engraving {
@@ -193,47 +194,47 @@ mu::engraving::Selection* NotationBraille::selection()
     return &score()->selection();
 }
 
-mu::ValCh<std::string> NotationBraille::brailleInfo() const
+ValCh<std::string> NotationBraille::brailleInfo() const
 {
     return m_brailleInfo;
 }
 
-mu::ValCh<int> NotationBraille::cursorPosition() const
+ValCh<int> NotationBraille::cursorPosition() const
 {
     return m_cursorPosition;
 }
 
-mu::ValCh<int> NotationBraille::currentItemPositionStart() const
+ValCh<int> NotationBraille::currentItemPositionStart() const
 {
     return m_currentItemPositionStart;
 }
 
-mu::ValCh<int> NotationBraille::currentItemPositionEnd() const
+ValCh<int> NotationBraille::currentItemPositionEnd() const
 {
     return m_currentItemPositionEnd;
 }
 
-mu::ValCh<std::string> NotationBraille::keys() const
+ValCh<std::string> NotationBraille::keys() const
 {
     return m_keys;
 }
 
-mu::ValCh<bool> NotationBraille::enabled() const
+ValCh<bool> NotationBraille::enabled() const
 {
     return m_enabled;
 }
 
-mu::ValCh<BrailleIntervalDirection> NotationBraille::intervalDirection() const
+ValCh<BrailleIntervalDirection> NotationBraille::intervalDirection() const
 {
     return m_intervalDirection;
 }
 
-mu::ValCh<int> NotationBraille::mode() const
+ValCh<int> NotationBraille::mode() const
 {
     return m_mode;
 }
 
-mu::ValCh<std::string> NotationBraille::cursorColor() const
+ValCh<std::string> NotationBraille::cursorColor() const
 {
     return m_cursorColor;
 }
@@ -859,12 +860,12 @@ void NotationBraille::toggleMode()
     case BrailleMode::Navigation:
         setMode(BrailleMode::BrailleInput);
         interaction()->noteInput()->startNoteInput();
-        stateTitle = mu::trc("notation", "Note input mode");
+        stateTitle = muse::trc("notation", "Note input mode");
         break;
     case BrailleMode::BrailleInput:
         setMode(BrailleMode::Navigation);
         interaction()->noteInput()->endNoteInput();
-        stateTitle = mu::trc("notation", "Normal mode");
+        stateTitle = muse::trc("notation", "Normal mode");
         break;
     }
 

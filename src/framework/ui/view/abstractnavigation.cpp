@@ -27,6 +27,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::accessibility;
 
@@ -96,7 +97,7 @@ void AbstractNavigation::setIndex(const INavigation::Index& index)
     }
 }
 
-mu::async::Channel<INavigation::Index> AbstractNavigation::indexChanged() const
+async::Channel<INavigation::Index> AbstractNavigation::indexChanged() const
 {
     return m_indexChanged;
 }
@@ -181,7 +182,7 @@ bool AbstractNavigation::enabled() const
     return m_enabled;
 }
 
-mu::async::Channel<bool> AbstractNavigation::enabledChanged() const
+async::Channel<bool> AbstractNavigation::enabledChanged() const
 {
     return m_enabledChanged;
 }
@@ -206,7 +207,7 @@ bool AbstractNavigation::active() const
     return m_active;
 }
 
-mu::async::Channel<bool> AbstractNavigation::activeChanged() const
+async::Channel<bool> AbstractNavigation::activeChanged() const
 {
     return m_activeChanged;
 }

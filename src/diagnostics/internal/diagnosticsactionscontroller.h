@@ -33,7 +33,7 @@ namespace mu::diagnostics {
 class DiagnosticsActionsController : public muse::actions::Actionable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
 
 public:
@@ -42,7 +42,7 @@ public:
     void init();
 
 private:
-    void openUri(const mu::UriQuery& uri, bool isSingle = true);
+    void openUri(const muse::UriQuery& uri, bool isSingle = true);
     void saveDiagnosticFiles();
 };
 }

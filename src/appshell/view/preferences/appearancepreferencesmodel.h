@@ -30,7 +30,7 @@
 #include "async/asyncable.h"
 
 namespace mu::appshell {
-class AppearancePreferencesModel : public QObject, public async::Asyncable
+class AppearancePreferencesModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -46,7 +46,8 @@ using namespace mu::converter;
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 static const std::string PNG_WRITER_NAME = "png";
 static const std::string SVG_WRITER_NAME = "svg";
@@ -64,8 +65,8 @@ static const std::string DEV_INFO_NAME = "devinfo";
 static constexpr bool ADD_SEPARATOR = true;
 static constexpr auto NO_STYLE = "";
 
-Ret BackendApi::exportScoreMedia(const io::path_t& in, const io::path_t& out, const io::path_t& highlightConfigPath,
-                                 const io::path_t& stylePath,
+Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
+                                 const muse::io::path_t& stylePath,
                                  bool forceMode)
 {
     TRACEFUNC
@@ -99,7 +100,7 @@ Ret BackendApi::exportScoreMedia(const io::path_t& in, const io::path_t& out, co
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMeta(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
+Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -120,7 +121,7 @@ Ret BackendApi::exportScoreMeta(const io::path_t& in, const io::path_t& out, con
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreParts(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
+Ret BackendApi::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -139,7 +140,8 @@ Ret BackendApi::exportScoreParts(const io::path_t& in, const io::path_t& out, co
     return ret;
 }
 
-Ret BackendApi::exportScorePartsPdfs(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
+Ret BackendApi::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
+                                     bool forceMode)
 {
     TRACEFUNC
 
@@ -160,8 +162,8 @@ Ret BackendApi::exportScorePartsPdfs(const io::path_t& in, const io::path_t& out
     return ret;
 }
 
-Ret BackendApi::exportScoreTranspose(const io::path_t& in, const io::path_t& out, const std::string& optionsJson,
-                                     const io::path_t& stylePath,
+Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+                                     const muse::io::path_t& stylePath,
                                      bool forceMode)
 {
     TRACEFUNC
@@ -188,7 +190,7 @@ Ret BackendApi::exportScoreTranspose(const io::path_t& in, const io::path_t& out
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::openOutputFile(QFile& file, const io::path_t& out)
+Ret BackendApi::openOutputFile(QFile& file, const muse::io::path_t& out)
 {
     bool ok = false;
     if (!out.empty()) {
@@ -201,8 +203,8 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path_t& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& path,
-                                                             const io::path_t& stylePath,
+RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::path_t& path,
+                                                             const muse::io::path_t& stylePath,
                                                              bool forceMode)
 {
     TRACEFUNC
@@ -244,7 +246,7 @@ PageList BackendApi::pages(const INotationPtr notation)
     return elements->pages();
 }
 
-QVariantMap BackendApi::readBeatsColors(const io::path_t& filePath)
+QVariantMap BackendApi::readBeatsColors(const muse::io::path_t& filePath)
 {
     TRACEFUNC
 
@@ -318,7 +320,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
+Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
                                 bool addSeparator)
 {
     TRACEFUNC
@@ -470,7 +472,7 @@ Ret BackendApi::devInfo(const notation::INotationPtr notation, BackendJsonWriter
     return make_ret(Ret::Code::Ok);
 }
 
-mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtr notation)
+RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtr notation)
 {
     auto writer = writers()->writer(writerName);
     if (!writer) {
@@ -497,8 +499,8 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
     return result;
 }
 
-mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtrList notations,
-                                                 const INotationWriter::Options& options)
+RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtrList notations,
+                                             const INotationWriter::Options& options)
 {
     auto writer = writers()->writer(writerName);
     if (!writer) {
@@ -541,7 +543,7 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
         partsTitles << partTitle;
 
         QVariantMap meta;
-        for (const String& key: mu::keys(partMetaTags)) {
+        for (const String& key: muse::keys(partMetaTags)) {
             meta[key] = partMetaTags[key].toQString();
         }
 
@@ -795,7 +797,7 @@ void BackendApi::initPotentialExcerpts(notation::IMasterNotationPtr masterNotati
     renderExcerptsContents(masterNotation);
 }
 
-Ret BackendApi::updateSource(const io::path_t& in, const std::string& newSource, bool forceMode)
+Ret BackendApi::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)
 {
     RetVal<INotationProjectPtr> project = openProject(in, NO_STYLE, forceMode);
     if (!project.ret) {

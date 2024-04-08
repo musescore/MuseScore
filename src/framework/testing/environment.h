@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_TESTING_ENVIRONMENT_H
-#define MU_TESTING_ENVIRONMENT_H
+#ifndef MUSE_TESTING_ENVIRONMENT_H
+#define MUSE_TESTING_ENVIRONMENT_H
 
 #include <functional>
 #include <vector>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::testing {
+namespace muse::testing {
 class Environment
 {
 public:
@@ -65,4 +65,4 @@ public:
 };
 }
 
-#endif // MU_TESTING_ENVIRONMENT_H
+#endif // MUSE_TESTING_ENVIRONMENT_H

@@ -65,9 +65,9 @@ public:
 
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 
-    mu::RectF numberRect() const override;
+    RectF numberRect() const override;
 
-    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
+    PointF numberPosition(const RectF& numberBbox) const;
 
     struct LayoutData : public Rest::LayoutData {
         SymId symId = SymId::noSym;

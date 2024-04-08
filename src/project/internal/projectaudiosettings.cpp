@@ -29,6 +29,7 @@
 #include "types/bytearray.h"
 
 using namespace mu::project;
+using namespace muse;
 using namespace muse::audio;
 using namespace mu::engraving;
 using namespace mu::playback;
@@ -65,7 +66,7 @@ void ProjectAudioSettings::setMasterAudioOutputParams(const AudioOutputParams& p
 
 bool ProjectAudioSettings::containsAuxOutputParams(aux_channel_idx_t index) const
 {
-    return mu::contains(m_auxOutputParams, index);
+    return muse::contains(m_auxOutputParams, index);
 }
 
 const AudioOutputParams& ProjectAudioSettings::auxOutputParams(aux_channel_idx_t index) const
@@ -140,8 +141,8 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
     bool paramsChanged = it == m_trackOutputParamsMap.cend();
 
     if (!paramsChanged) {
-        paramsChanged |= !mu::RealIsEqual(it->second.volume, params.volume);
-        paramsChanged |= !mu::RealIsEqual(it->second.balance, params.balance);
+        paramsChanged |= !muse::RealIsEqual(it->second.volume, params.volume);
+        paramsChanged |= !muse::RealIsEqual(it->second.balance, params.balance);
         paramsChanged |= (it->second.fxChain != params.fxChain);
         paramsChanged |= (it->second.auxSends != params.auxSends);
     }
@@ -176,7 +177,7 @@ void ProjectAudioSettings::setAuxSoloMuteState(aux_channel_idx_t index, const So
     m_settingsChanged.notify();
 }
 
-mu::async::Channel<aux_channel_idx_t, IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::auxSoloMuteStateChanged() const
+muse::async::Channel<aux_channel_idx_t, IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::auxSoloMuteStateChanged() const
 {
     return m_auxSoloMuteStateChanged;
 }
@@ -211,12 +212,12 @@ void ProjectAudioSettings::setActiveSoundProfile(const playback::SoundProfileNam
     m_settingsChanged.notify();
 }
 
-mu::async::Notification ProjectAudioSettings::settingsChanged() const
+muse::async::Notification ProjectAudioSettings::settingsChanged() const
 {
     return m_settingsChanged;
 }
 
-mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
+Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 {
     ByteArray json = reader.readAudioSettingsJsonFile();
     if (json.empty()) {
@@ -264,7 +265,7 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer, notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr)
+Ret ProjectAudioSettings::write(engraving::MscWriter& writer, notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr)
 {
     QJsonObject rootObj;
     rootObj["master"] = outputParamsToJson(m_masterOutputParams);

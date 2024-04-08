@@ -37,9 +37,9 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::ui;
-using namespace mu::async;
+using namespace muse::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
 static const Settings::Key UI_CURRENT_THEME_CODE_KEY("ui", "ui/application/currentThemeCode");
@@ -526,7 +526,7 @@ void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& va
     writeThemes(modifiedThemes);
 }
 
-Notification UiConfiguration::currentThemeChanged() const
+muse::async::Notification UiConfiguration::currentThemeChanged() const
 {
     return m_currentThemeChanged;
 }
@@ -569,7 +569,7 @@ void UiConfiguration::setBodyFontSize(int size)
     settings()->setSharedValue(UI_FONT_SIZE_KEY, Val(size));
 }
 
-Notification UiConfiguration::fontChanged() const
+muse::async::Notification UiConfiguration::fontChanged() const
 {
     return m_fontChanged;
 }
@@ -591,7 +591,7 @@ int UiConfiguration::iconsFontSize(IconSizeType type) const
     return bodyFontSize;
 }
 
-Notification UiConfiguration::iconsFontChanged() const
+muse::async::Notification UiConfiguration::iconsFontChanged() const
 {
     return m_iconsFontChanged;
 }
@@ -606,7 +606,7 @@ int UiConfiguration::musicalFontSize() const
     return settings()->value(UI_MUSICAL_FONT_SIZE_KEY).toInt();
 }
 
-Notification UiConfiguration::musicalFontChanged() const
+muse::async::Notification UiConfiguration::musicalFontChanged() const
 {
     return m_musicalFontChanged;
 }
@@ -693,7 +693,7 @@ double UiConfiguration::logicalDpi() const
     return screen->logicalDotsPerInch();
 }
 
-mu::ValNt<QByteArray> UiConfiguration::pageState(const QString& pageName) const
+ValNt<QByteArray> UiConfiguration::pageState(const QString& pageName) const
 {
     ValNt<QByteArray> result;
     result.val = m_uiArrangement.state(pageName);
@@ -717,7 +717,7 @@ void UiConfiguration::setWindowGeometry(const QByteArray& geometry)
     m_uiArrangement.setState(WINDOW_GEOMETRY_KEY, geometry);
 }
 
-Notification UiConfiguration::windowGeometryChanged() const
+muse::async::Notification UiConfiguration::windowGeometryChanged() const
 {
     return m_windowGeometryChanged;
 }
@@ -745,7 +745,7 @@ void UiConfiguration::setIsVisible(const QString& key, bool val)
     m_uiArrangement.setValue(key, QString::number(val ? 1 : 0));
 }
 
-mu::async::Notification UiConfiguration::isVisibleChanged(const QString& key) const
+async::Notification UiConfiguration::isVisibleChanged(const QString& key) const
 {
     return m_uiArrangement.valueChanged(key);
 }
@@ -766,7 +766,7 @@ void UiConfiguration::setToolConfig(const QString& toolName, const ToolConfig& c
     m_uiArrangement.setToolConfig(toolName, config);
 }
 
-mu::async::Notification UiConfiguration::toolConfigChanged(const QString& toolName) const
+async::Notification UiConfiguration::toolConfigChanged(const QString& toolName) const
 {
     return m_uiArrangement.toolConfigChanged(toolName);
 }

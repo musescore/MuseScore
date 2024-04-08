@@ -1672,13 +1672,13 @@ private:
 
     struct StyleValue {
         Sid _idx;
-        AsciiStringView _name;         // xml name for read()/write()
+        muse::AsciiStringView _name;         // xml name for read()/write()
         PropertyValue _defaultValue;
 
     public:
         Sid  styleIdx() const { return _idx; }
         int idx() const { return int(_idx); }
-        const AsciiStringView& name() const { return _name; }
+        const muse::AsciiStringView& name() const { return _name; }
         P_TYPE valueType() const { return _defaultValue.type(); }
         const PropertyValue& defaultValue() const { return _defaultValue; }
     };

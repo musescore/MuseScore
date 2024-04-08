@@ -99,7 +99,7 @@ enum class SoundProfileType {
     Custom
 };
 
-using SoundProfileName = String;
+using SoundProfileName = muse::String;
 using SoundProfileData = std::map<muse::mpe::PlaybackSetupData, muse::audio::AudioResourceMeta>;
 
 struct SoundProfile {

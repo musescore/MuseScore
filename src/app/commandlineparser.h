@@ -72,7 +72,7 @@ public:
         } exportVideo;
 
         struct {
-            std::optional<io::path_t> operationsFile;
+            std::optional<muse::io::path_t> operationsFile;
         } importMidi;
 
         struct {
@@ -82,7 +82,7 @@ public:
 
         struct {
             std::optional<bool> revertToFactorySettings;
-            std::optional<mu::logger::Level> loggerLevel;
+            std::optional<muse::logger::Level> loggerLevel;
         } app;
 
         struct {
@@ -148,7 +148,7 @@ public:
     };
 
     struct AudioPluginRegistration {
-        io::path_t pluginPath;
+        muse::io::path_t pluginPath;
         bool failedPlugin = false;
         int failCode = 0;
     };
@@ -157,7 +157,7 @@ public:
     void parse(int argc, char** argv);
     void processBuiltinArgs(const QCoreApplication& app);
 
-    IApplication::RunMode runMode() const;
+    muse::IApplication::RunMode runMode() const;
 
     // Options
     const Options& options() const;
@@ -172,7 +172,7 @@ private:
     void printLongVersion() const;
 
     QCommandLineParser m_parser;
-    IApplication::RunMode m_runMode = IApplication::RunMode::GuiApp;
+    muse::IApplication::RunMode m_runMode = muse::IApplication::RunMode::GuiApp;
     Options m_options;
 
     ConverterTask m_converterTask;

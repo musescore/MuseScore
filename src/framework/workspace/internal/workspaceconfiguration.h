@@ -30,7 +30,7 @@
 namespace muse::workspace {
 class WorkspaceConfiguration : public IWorkspaceConfiguration, public async::Asyncable
 {
-    INJECT(mu::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

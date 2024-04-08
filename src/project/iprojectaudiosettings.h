@@ -55,14 +55,14 @@ public:
 
     virtual const SoloMuteState& auxSoloMuteState(muse::audio::aux_channel_idx_t index) const = 0;
     virtual void setAuxSoloMuteState(muse::audio::aux_channel_idx_t index, const SoloMuteState& state) = 0;
-    virtual async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const = 0;
+    virtual muse::async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const = 0;
 
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
 
     virtual const playback::SoundProfileName& activeSoundProfile() const = 0;
     virtual void setActiveSoundProfile(const playback::SoundProfileName& profileName) = 0;
 
-    virtual async::Notification settingsChanged() const = 0;
+    virtual muse::async::Notification settingsChanged() const = 0;
 };
 
 using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;

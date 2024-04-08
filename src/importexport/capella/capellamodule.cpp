@@ -29,6 +29,7 @@
 
 using namespace mu::iex::capella;
 using namespace mu::project;
+using namespace muse::modularity;
 
 std::string CapellaModule::moduleName() const
 {
@@ -37,7 +38,7 @@ std::string CapellaModule::moduleName() const
 
 void CapellaModule::resolveImports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "cap", "capx" }, std::make_shared<CapellaReader>());
     }

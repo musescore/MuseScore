@@ -34,10 +34,10 @@ extern Err importCapella(MasterScore*, const QString& name);
 extern Err importCapXml(MasterScore*, const QString& name);
 }
 
-mu::Ret CapellaReader::read(MasterScore* score, const io::path_t& path, const Options&)
+muse::Ret CapellaReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     Err err = Err::FileUnknownType;
-    std::string suffix = mu::io::suffix(path);
+    std::string suffix = muse::io::suffix(path);
     if (suffix == "cap") {
         err = importCapella(score, path.toQString());
     } else if (suffix == "capx") {

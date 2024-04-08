@@ -31,7 +31,7 @@ namespace mu::iex::midi {
 extern Err importMidi(MasterScore*, const QString& name);
 }
 
-mu::Ret NotationMidiReader::read(MasterScore* score, const io::path_t& path, const Options&)
+muse::Ret NotationMidiReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     Err err = importMidi(score, path.toQString());
     return make_ret(err, path);

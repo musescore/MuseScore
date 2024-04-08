@@ -340,8 +340,8 @@ public:
     void setUseDrumset(bool val);
     void setAmateurPitchRange(int a, int b) { m_minPitchA = a; m_maxPitchA = b; }
     void setProfessionalPitchRange(int a, int b) { m_minPitchP = a; m_maxPitchP = b; }
-    InstrChannel* channel(int idx) { return mu::value(m_channel, idx); }
-    const InstrChannel* channel(int idx) const { return mu::value(m_channel, idx); }
+    InstrChannel* channel(int idx) { return muse::value(m_channel, idx); }
+    const InstrChannel* channel(int idx) const { return muse::value(m_channel, idx); }
     InstrChannel* playbackChannel(int idx, MasterScore*);
     const InstrChannel* playbackChannel(int idx, const MasterScore*) const;
     size_t cleffTypeCount() const;
@@ -356,7 +356,7 @@ public:
 
     const std::vector<InstrChannel*>& channel() const { return m_channel; }
     void appendChannel(InstrChannel* c) { m_channel.push_back(c); }
-    void removeChannel(InstrChannel* c) { mu::remove(m_channel, c); }
+    void removeChannel(InstrChannel* c) { muse::remove(m_channel, c); }
     void clearChannels() { m_channel.clear(); }
 
     void setMidiActions(const std::list<NamedEventList>& l) { m_midiActions = l; }

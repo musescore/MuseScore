@@ -33,16 +33,16 @@ using IconCode = muse::ui::IconCode::Code;
 OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::OTTAVA)
 {
-    setTitle(mu::qtrc("inspector", "Ottava"));
+    setTitle(muse::qtrc("inspector", "Ottava"));
     setModelType(InspectorModelType::TYPE_OTTAVA);
     setIcon(muse::ui::IconCode::Code::OTTAVA);
 
     setPossibleStartHookTypes({});
 
     static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, mu::qtrc("inspector", "Normal") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, mu::qtrc("inspector", "Hooked 90°") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, mu::qtrc("inspector", "Hooked 45°") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°") }
     };
 
     setPossibleEndHookTypes(endHookTypes);
@@ -63,12 +63,12 @@ PropertyItem* OttavaSettingsModel::showNumbersOnly() const
 QVariantList OttavaSettingsModel::possibleOttavaTypes() const
 {
     QMap<mu::engraving::OttavaType, QString> ottavaTypes {
-        { mu::engraving::OttavaType::OTTAVA_8VA, mu::qtrc("inspector", "8va alta") },
-        { mu::engraving::OttavaType::OTTAVA_8VB, mu::qtrc("inspector", "8va bassa") },
-        { mu::engraving::OttavaType::OTTAVA_15MA, mu::qtrc("inspector", "15ma alta") },
-        { mu::engraving::OttavaType::OTTAVA_15MB, mu::qtrc("inspector", "15ma bassa") },
-        { mu::engraving::OttavaType::OTTAVA_22MA, mu::qtrc("inspector", "22ma alta") },
-        { mu::engraving::OttavaType::OTTAVA_22MB, mu::qtrc("inspector", "22ma bassa") }
+        { mu::engraving::OttavaType::OTTAVA_8VA, muse::qtrc("inspector", "8va alta") },
+        { mu::engraving::OttavaType::OTTAVA_8VB, muse::qtrc("inspector", "8va bassa") },
+        { mu::engraving::OttavaType::OTTAVA_15MA, muse::qtrc("inspector", "15ma alta") },
+        { mu::engraving::OttavaType::OTTAVA_15MB, muse::qtrc("inspector", "15ma bassa") },
+        { mu::engraving::OttavaType::OTTAVA_22MA, muse::qtrc("inspector", "22ma alta") },
+        { mu::engraving::OttavaType::OTTAVA_22MB, muse::qtrc("inspector", "22ma bassa") }
     };
 
     QVariantList result;

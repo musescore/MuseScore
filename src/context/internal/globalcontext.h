@@ -31,23 +31,23 @@ public:
 
     void setCurrentProject(const project::INotationProjectPtr& project) override;
     project::INotationProjectPtr currentProject() const override;
-    async::Notification currentProjectChanged() const override;
+    muse::async::Notification currentProjectChanged() const override;
 
     notation::IMasterNotationPtr currentMasterNotation() const override;
-    async::Notification currentMasterNotationChanged() const override;
+    muse::async::Notification currentMasterNotationChanged() const override;
 
     void setCurrentNotation(const notation::INotationPtr& notation) override;
     notation::INotationPtr currentNotation() const override;
-    async::Notification currentNotationChanged() const override;
+    muse::async::Notification currentNotationChanged() const override;
 
 private:
     void doSetCurrentNotation(const notation::INotationPtr& notation);
 
     project::INotationProjectPtr m_currentProject;
-    async::Notification m_currentProjectChanged;
+    muse::async::Notification m_currentProjectChanged;
 
     notation::INotationPtr m_currentNotation;
-    async::Notification m_currentNotationChanged;
+    muse::async::Notification m_currentNotationChanged;
 };
 }
 

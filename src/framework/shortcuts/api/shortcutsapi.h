@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_API_SHORTCUTSAPI_H
-#define MUSE_API_SHORTCUTSAPI_H
+#ifndef MUSE_SHORTCUTS_API_SHORTCUTSAPI_H
+#define MUSE_SHORTCUTS_API_SHORTCUTSAPI_H
 
 #include "api/apiobject.h"
 
@@ -28,17 +28,17 @@
 #include "shortcuts/ishortcutscontroller.h"
 
 namespace muse::api {
-class ShortcutsApi : public mu::api::ApiObject
+class ShortcutsApi : public api::ApiObject
 {
     Q_OBJECT
 
     INJECT(shortcuts::IShortcutsController, shortcutsController)
 
 public:
-    explicit ShortcutsApi(mu::api::IApiEngine* e);
+    explicit ShortcutsApi(api::IApiEngine* e);
 
     Q_INVOKABLE void activate(const QString& sequence);
 };
 }
 
-#endif // MU_API_SHORTCUTSAPI_H
+#endif // MUSE_SHORTCUTS_API_SHORTCUTSAPI_H

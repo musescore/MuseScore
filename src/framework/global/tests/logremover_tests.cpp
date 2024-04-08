@@ -24,7 +24,7 @@
 
 #include "logremover.h"
 
-namespace mu {
+namespace muse {
 class Global_LogRemoverTests : public ::testing::Test
 {
 public:

@@ -30,8 +30,8 @@
 
 using namespace mu::engraving::apiv1;
 
-EngravingApiV1::EngravingApiV1(mu::api::IApiEngine* e)
-    : mu::api::ApiObject(e)
+EngravingApiV1::EngravingApiV1(muse::api::IApiEngine* e)
+    : muse::api::ApiObject(e)
 {
 }
 

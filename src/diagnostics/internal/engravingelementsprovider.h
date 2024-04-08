@@ -50,7 +50,7 @@ public:
     // debug draw
     void select(const mu::engraving::EngravingObject* e, bool arg) override;
     bool isSelected(const mu::engraving::EngravingObject* e) const override;
-    async::Channel<const mu::engraving::EngravingObject*, bool> selectChanged() const override;
+    muse::async::Channel<const mu::engraving::EngravingObject*, bool> selectChanged() const override;
 
     void checkTree(mu::engraving::Score* score);
 
@@ -71,7 +71,7 @@ private:
     EngravingObjectList m_elements;
 
     EngravingObjectList m_selected;
-    async::Channel<const mu::engraving::EngravingObject*, bool> m_selectChanged;
+    muse::async::Channel<const mu::engraving::EngravingObject*, bool> m_selectChanged;
 };
 }
 

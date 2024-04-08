@@ -22,7 +22,7 @@
 #include "languagesservicestub.h"
 
 using namespace muse::languages;
-using namespace mu;
+using namespace muse;
 
 const LanguagesHash& LanguagesServiceStub::languages() const
 {
@@ -57,7 +57,7 @@ const Language& LanguagesServiceStub::placeholderLanguage() const
     return pl;
 }
 
-mu::Progress LanguagesServiceStub::update(const QString&)
+Progress LanguagesServiceStub::update(const QString&)
 {
     return Progress();
 }

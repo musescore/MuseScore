@@ -100,7 +100,7 @@ Instrument::Instrument(const Instrument& i)
 
 void Instrument::operator=(const Instrument& i)
 {
-    DeleteAll(m_channel);
+    muse::DeleteAll(m_channel);
     m_channel.clear();
     delete m_drumset;
 
@@ -135,7 +135,7 @@ void Instrument::operator=(const Instrument& i)
 
 Instrument::~Instrument()
 {
-    DeleteAll(m_channel);
+    muse::DeleteAll(m_channel);
     delete m_drumset;
     m_drumset = nullptr;
 }
@@ -157,8 +157,8 @@ String Instrument::recognizeMusicXmlId() const
     std::list<String> nameList;
 
     nameList.push_back(m_trackName);
-    mu::join(nameList, m_longNames.toStringList());
-    mu::join(nameList, m_shortNames.toStringList());
+    muse::join(nameList, m_longNames.toStringList());
+    muse::join(nameList, m_shortNames.toStringList());
 
     const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, m_useDrumset);
 
@@ -261,8 +261,8 @@ int Instrument::recognizeMidiProgram() const
     std::list<String> nameList;
 
     nameList.push_back(m_trackName);
-    mu::join(nameList, m_longNames.toStringList());
-    mu::join(nameList, m_shortNames.toStringList());
+    muse::join(nameList, m_longNames.toStringList());
+    muse::join(nameList, m_shortNames.toStringList());
 
     InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
 

@@ -23,6 +23,7 @@
 
 #include "global/settings.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::diagnostics;
 
@@ -55,7 +56,7 @@ void DiagnosticsConfiguration::setShouldWarnBeforeSavingDiagnosticFiles(bool val
     settings()->setSharedValue(SHOULD_WARN_BEFORE_SAVING_DIAGNOSTIC_FILES, Val(val));
 }
 
-mu::io::path_t DiagnosticsConfiguration::diagnosticFilesDefaultSavingPath() const
+muse::io::path_t DiagnosticsConfiguration::diagnosticFilesDefaultSavingPath() const
 {
     return globalConfiguration()->homePath();
 }

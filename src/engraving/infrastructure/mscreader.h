@@ -28,7 +28,7 @@
 #include "io/iodevice.h"
 #include "mscio.h"
 
-namespace mu {
+namespace muse {
 class ZipReader;
 }
 
@@ -39,9 +39,9 @@ public:
 
     struct Params
     {
-        io::IODevice* device = nullptr;
-        io::path_t filePath;
-        String mainFileName;
+        muse::io::IODevice* device = nullptr;
+        muse::io::path_t filePath;
+        muse::String mainFileName;
         MscIoMode mode = MscIoMode::Zip;
     };
 
@@ -52,92 +52,92 @@ public:
     void setParams(const Params& params);
     const Params& params() const;
 
-    Ret open();
+    muse::Ret open();
     void close();
     bool isOpened() const;
 
-    ByteArray readStyleFile() const;
-    ByteArray readScoreFile() const;
+    muse::ByteArray readStyleFile() const;
+    muse::ByteArray readScoreFile() const;
 
-    std::vector<String> excerptFileNames() const;
-    ByteArray readExcerptStyleFile(const String& excerptFileName) const;
-    ByteArray readExcerptFile(const String& excerptFileName) const;
+    std::vector<muse::String> excerptFileNames() const;
+    muse::ByteArray readExcerptStyleFile(const muse::String& excerptFileName) const;
+    muse::ByteArray readExcerptFile(const muse::String& excerptFileName) const;
 
-    ByteArray readChordListFile() const;
-    ByteArray readThumbnailFile() const;
+    muse::ByteArray readChordListFile() const;
+    muse::ByteArray readThumbnailFile() const;
 
-    std::vector<String> imageFileNames() const;
-    ByteArray readImageFile(const String& fileName) const;
+    std::vector<muse::String> imageFileNames() const;
+    muse::ByteArray readImageFile(const muse::String& fileName) const;
 
-    ByteArray readAudioFile() const;
-    ByteArray readAudioSettingsJsonFile(const io::path_t& pathPrefix = "") const;
-    ByteArray readViewSettingsJsonFile(const io::path_t& pathPrefix = "") const;
+    muse::ByteArray readAudioFile() const;
+    muse::ByteArray readAudioSettingsJsonFile(const muse::io::path_t& pathPrefix = "") const;
+    muse::ByteArray readViewSettingsJsonFile(const muse::io::path_t& pathPrefix = "") const;
 
 private:
 
     struct IReader {
         virtual ~IReader() = default;
 
-        virtual Ret open(io::IODevice* device, const io::path_t& filePath) = 0;
+        virtual muse::Ret open(muse::io::IODevice* device, const muse::io::path_t& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
         //! NOTE In the case of reading from a directory,
         //! it may happen that we are not reading a container (a directory with a certain structure),
         //! but only one file among others (`.mscx` from MU 3.x)
         virtual bool isContainer() const = 0;
-        virtual StringList fileList() const = 0;
-        virtual bool fileExists(const String& fileName) const = 0;
-        virtual ByteArray fileData(const String& fileName) const = 0;
+        virtual muse::StringList fileList() const = 0;
+        virtual bool fileExists(const muse::String& fileName) const = 0;
+        virtual muse::ByteArray fileData(const muse::String& fileName) const = 0;
     };
 
     struct ZipFileReader : public IReader
     {
         ~ZipFileReader() override;
-        Ret open(io::IODevice* device, const io::path_t& filePath) override;
+        muse::Ret open(muse::io::IODevice* device, const muse::io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
-        StringList fileList() const override;
-        bool fileExists(const String& fileName) const override;
-        ByteArray fileData(const String& fileName) const override;
+        muse::StringList fileList() const override;
+        bool fileExists(const muse::String& fileName) const override;
+        muse::ByteArray fileData(const muse::String& fileName) const override;
     private:
-        io::IODevice* m_device = nullptr;
+        muse::io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
-        ZipReader* m_zip = nullptr;
+        muse::ZipReader* m_zip = nullptr;
     };
 
     struct DirReader : public IReader
     {
-        Ret open(io::IODevice* device, const io::path_t& filePath) override;
+        muse::Ret open(muse::io::IODevice* device, const muse::io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
-        StringList fileList() const override;
-        bool fileExists(const String& fileName) const override;
-        ByteArray fileData(const String& fileName) const override;
+        muse::StringList fileList() const override;
+        bool fileExists(const muse::String& fileName) const override;
+        muse::ByteArray fileData(const muse::String& fileName) const override;
     private:
-        io::path_t m_rootPath;
+        muse::io::path_t m_rootPath;
     };
 
     struct XmlFileReader : public IReader
     {
-        Ret open(io::IODevice* device, const io::path_t& filePath) override;
+        muse::Ret open(muse::io::IODevice* device, const muse::io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
-        StringList fileList() const override;
-        bool fileExists(const String& fileName) const override;
-        ByteArray fileData(const String& fileName) const override;
+        muse::StringList fileList() const override;
+        bool fileExists(const muse::String& fileName) const override;
+        muse::ByteArray fileData(const muse::String& fileName) const override;
     private:
-        io::IODevice* m_device = nullptr;
+        muse::io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
     };
 
     IReader* reader() const;
-    bool fileExists(const String& fileName) const;
-    ByteArray fileData(const String& fileName) const;
+    bool fileExists(const muse::String& fileName) const;
+    muse::ByteArray fileData(const muse::String& fileName) const;
 
-    String mainFileName() const;
+    muse::String mainFileName() const;
 
     Params m_params;
     mutable IReader* m_reader = nullptr;

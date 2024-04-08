@@ -30,7 +30,7 @@ SectionBreakSettingsModel::SectionBreakSettingsModel(QObject* parent, IElementRe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SECTIONBREAK);
-    setTitle(mu::qtrc("inspector", "Section break"));
+    setTitle(muse::qtrc("inspector", "Section break"));
     setIcon(muse::ui::IconCode::Code::SECTION_BREAK);
     createProperties();
 }

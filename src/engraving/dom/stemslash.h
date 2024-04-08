@@ -47,7 +47,7 @@ public:
     Chord* chord() const { return (Chord*)explicitParent(); }
 
     struct LayoutData : public EngravingItem::LayoutData {
-        mu::LineF line;
+        LineF line;
         double stemWidth = 0.0;
     };
     DECLARE_LAYOUTDATA_METHODS(StemSlash)

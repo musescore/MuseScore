@@ -21,8 +21,8 @@
  */
 #include "dir.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 Dir::Dir(const path_t& path)
     : m_path(path)
@@ -69,12 +69,12 @@ path_t Dir::fromNativeSeparators(const path_t& pathName)
 #if defined(Q_OS_WIN)
     String path = pathName.toString();
     size_t i = path.indexOf(u'\\');
-    if (i != mu::nidx) {
+    if (i != muse::nidx) {
         String n(path);
         if (n.startsWith(u"\\\\?\\")) {
             n.remove(0, 4);
             i = n.indexOf(u'\\');
-            if (i == mu::nidx) {
+            if (i == muse::nidx) {
                 return n;
             }
         }

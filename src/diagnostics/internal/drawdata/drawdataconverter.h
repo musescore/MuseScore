@@ -33,10 +33,10 @@ class DrawDataConverter
 public:
     DrawDataConverter() = default;
 
-    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile);
-    Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile);
+    muse::Ret drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile);
+    muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile);
 
-    Ret saveAsPng(const muse::draw::DrawDataPtr& data, const io::path_t& path);
+    muse::Ret saveAsPng(const muse::draw::DrawDataPtr& data, const muse::io::path_t& path);
 
     muse::draw::Pixmap drawDataToPixmap(const muse::draw::DrawDataPtr& data);
     void drawOnPixmap(muse::draw::Pixmap& px, const muse::draw::DrawDataPtr& data, const muse::draw::Color& overlay = muse::draw::Color());

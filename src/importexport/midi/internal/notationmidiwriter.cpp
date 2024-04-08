@@ -29,7 +29,8 @@
 #include "log.h"
 
 using namespace mu::iex::midi;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -45,7 +46,7 @@ bool NotationMidiWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret NotationMidiWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret NotationMidiWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -76,7 +77,7 @@ mu::Ret NotationMidiWriter::write(INotationPtr notation, io::IODevice& destinati
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-mu::Ret NotationMidiWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
+Ret NotationMidiWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

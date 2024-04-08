@@ -26,7 +26,7 @@
 #include "articulationprofilesrepositorystub.h"
 
 using namespace muse::mpe;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string MpeModule::moduleName() const
 {

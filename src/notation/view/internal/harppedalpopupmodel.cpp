@@ -136,11 +136,11 @@ QRectF HarpPedalPopupModel::staffPos() const
     if (staves.size() > 0) {
         engraving::StaffLines* topStaff = staves.front();
         engraving::StaffLines* bottomStaff = staves.back();
-        RectF staffRect
-            = RectF(measure->canvasBoundingRect().x(),
-                    topStaff->canvasBoundingRect().y(),
-                    measure->canvasBoundingRect().width(),
-                    bottomStaff->canvasBoundingRect().bottomLeft().y() - topStaff->canvasBoundingRect().topLeft().y());
+        muse::RectF staffRect
+            = muse::RectF(measure->canvasBoundingRect().x(),
+                          topStaff->canvasBoundingRect().y(),
+                          measure->canvasBoundingRect().width(),
+                          bottomStaff->canvasBoundingRect().bottomLeft().y() - topStaff->canvasBoundingRect().topLeft().y());
 
         return fromLogical(staffRect).toQRectF();
     }

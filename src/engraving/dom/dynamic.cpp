@@ -274,7 +274,7 @@ bool Dynamic::isEditAllowed(EditData& ed) const
         Key_Down
     };
 
-    return mu::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
+    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
 }
 
 //-------------------------------------------------------------------
@@ -333,7 +333,7 @@ void Dynamic::manageBarlineCollisions()
         return;
     }
 
-    staff_idx_t barLineStaff = mu::nidx;
+    staff_idx_t barLineStaff = muse::nidx;
     if (placeAbove()) {
         // need to find the barline from the staff above
         // taking into account there could be invisible staves
@@ -350,7 +350,7 @@ void Dynamic::manageBarlineCollisions()
         barLineStaff = staffIdx();
     }
 
-    if (barLineStaff == mu::nidx) {
+    if (barLineStaff == muse::nidx) {
         return;
     }
 

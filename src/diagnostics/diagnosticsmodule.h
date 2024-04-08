@@ -32,16 +32,16 @@
 namespace mu::diagnostics {
 class DiagnosticsConfiguration;
 class DiagnosticsActionsController;
-class DiagnosticsModule : public modularity::IModuleSetup
+class DiagnosticsModule : public muse::modularity::IModuleSetup
 {
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::io::IFileSystem, fileSystem)
 
 public:
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
     void registerUiTypes() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<DiagnosticsConfiguration> m_configuration;

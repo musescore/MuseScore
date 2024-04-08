@@ -21,6 +21,7 @@
  */
 #include "multiinstancesstubprovider.h"
 
+using namespace muse;
 using namespace muse::mi;
 
 // Project opening
@@ -89,7 +90,7 @@ void MultiInstancesStubProvider::notifyAboutResourceChanged(const std::string&)
 {
 }
 
-mu::async::Channel<std::string> MultiInstancesStubProvider::resourceChanged()
+async::Channel<std::string> MultiInstancesStubProvider::resourceChanged()
 {
     return async::Channel<std::string>();
 }
@@ -112,9 +113,9 @@ std::vector<InstanceMeta> MultiInstancesStubProvider::instances() const
     return v;
 }
 
-mu::async::Notification MultiInstancesStubProvider::instancesChanged() const
+async::Notification MultiInstancesStubProvider::instancesChanged() const
 {
-    static mu::async::Notification n;
+    static async::Notification n;
     return n;
 }
 

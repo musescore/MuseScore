@@ -27,7 +27,7 @@
 
 #include "settings.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::update;
 
 static const std::string module_name("update");
@@ -50,7 +50,7 @@ static QString userAgent()
     osName = "Linux";
 #endif
 
-    static Inject<IApplication> app;
+    static muse::Inject<muse::IApplication> app;
 
     QString osVersion = QSysInfo::productVersion();
     QString cpuArchitecture = QSysInfo::currentCpuArchitecture();
@@ -158,7 +158,7 @@ std::string UpdateConfiguration::museScorePrivacyPolicyUrl() const
     return globalConfiguration()->museScoreUrl() + PRIVACY_POLICY_URL_PATH;
 }
 
-mu::io::path_t UpdateConfiguration::updateDataPath() const
+muse::io::path_t UpdateConfiguration::updateDataPath() const
 {
 #if defined(Q_OS_LINUX)
     return globalConfiguration()->downloadsPath() + "/";

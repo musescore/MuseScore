@@ -21,6 +21,7 @@
  */
 #include "soundfontrepositorystub.h"
 
+using namespace muse;
 using namespace muse::audio;
 
 const synth::SoundFontPaths& SoundFontRepositoryStub::soundFontPaths() const
@@ -35,12 +36,12 @@ const synth::SoundFontsMap& SoundFontRepositoryStub::soundFonts() const
     return map;
 }
 
-mu::async::Notification SoundFontRepositoryStub::soundFontsChanged() const
+async::Notification SoundFontRepositoryStub::soundFontsChanged() const
 {
     return async::Notification();
 }
 
-mu::Ret SoundFontRepositoryStub::addSoundFont(const synth::SoundFontPath&)
+Ret SoundFontRepositoryStub::addSoundFont(const synth::SoundFontPath&)
 {
     return make_ret(Ret::Code::NotSupported);
 }

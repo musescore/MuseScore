@@ -32,12 +32,12 @@
 namespace mu::notation {
 class IGetScore;
 class Notation;
-class NotationAccessibility : public INotationAccessibility, public async::Asyncable
+class NotationAccessibility : public INotationAccessibility, public muse::async::Asyncable
 {
 public:
     NotationAccessibility(const Notation* notation);
 
-    ValCh<std::string> accessibilityInfo() const override;
+    muse::ValCh<std::string> accessibilityInfo() const override;
 
     void setMapToScreenFunc(const mu::engraving::AccessibleMapToScreenFunc& func) override;
 
@@ -57,7 +57,7 @@ private:
     QString singleElementAccessibilityInfo() const;
 
     const IGetScore* m_getScore = nullptr;
-    ValCh<std::string> m_accessibilityInfo;
+    muse::ValCh<std::string> m_accessibilityInfo;
 };
 }
 

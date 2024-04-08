@@ -37,7 +37,7 @@
 
 namespace muse::autobot {
 class JsModuleLoader;
-class ScriptEngine : public mu::api::IApiEngine
+class ScriptEngine : public muse::api::IApiEngine
 {
     INJECT(io::IFileSystem, fileSystem)
 public:

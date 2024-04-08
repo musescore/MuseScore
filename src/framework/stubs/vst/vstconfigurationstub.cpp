@@ -22,9 +22,10 @@
 
 #include "vstconfigurationstub.h"
 
+using namespace muse;
 using namespace muse::vst;
 
-mu::io::paths_t VstConfigurationStub::userVstDirectories() const
+io::paths_t VstConfigurationStub::userVstDirectories() const
 {
     return {};
 }
@@ -33,8 +34,8 @@ void VstConfigurationStub::setUserVstDirectories(const io::paths_t&)
 {
 }
 
-mu::async::Channel<mu::io::paths_t> VstConfigurationStub::userVstDirectoriesChanged() const
+async::Channel<io::paths_t> VstConfigurationStub::userVstDirectoriesChanged() const
 {
-    static mu::async::Channel<mu::io::paths_t> stub;
+    static async::Channel<io::paths_t> stub;
     return stub;
 }

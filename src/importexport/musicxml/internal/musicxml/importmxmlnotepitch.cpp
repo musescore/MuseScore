@@ -46,7 +46,7 @@ namespace mu::engraving {
 
 // TODO: split in reading parameters versus creation
 
-static Accidental* accidental(XmlStreamReader& e, Score* score)
+static Accidental* accidental(muse::XmlStreamReader& e, Score* score)
 {
     const bool cautionary = e.asciiAttribute("cautionary") == "yes";
     const bool editorial = e.asciiAttribute("editorial") == "yes";
@@ -85,7 +85,7 @@ static Accidental* accidental(XmlStreamReader& e, Score* score)
  Handle <display-step> and <display-octave> for <rest> and <unpitched>
  */
 
-void MxmlNotePitch::displayStepOctave(XmlStreamReader& e)
+void MxmlNotePitch::displayStepOctave(muse::XmlStreamReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "display-step") {
@@ -120,7 +120,7 @@ void MxmlNotePitch::displayStepOctave(XmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/pitch node.
  */
 
-void MxmlNotePitch::pitch(XmlStreamReader& e)
+void MxmlNotePitch::pitch(muse::XmlStreamReader& e)
 {
     // defaults
     m_step = -1;
@@ -174,7 +174,7 @@ void MxmlNotePitch::pitch(XmlStreamReader& e)
  Return true if handled.
  */
 
-bool MxmlNotePitch::readProperties(XmlStreamReader& e, Score* score)
+bool MxmlNotePitch::readProperties(muse::XmlStreamReader& e, Score* score)
 {
     const AsciiStringView tag(e.name());
 

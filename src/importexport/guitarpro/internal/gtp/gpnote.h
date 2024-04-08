@@ -128,11 +128,11 @@ public:
     void setSlides(const std::bitset<6>& s) { _slides = s; }
     const std::bitset<6>& slides() const { return _slides; }
 
-    void setLeftFingering(const String& ch) { _leftFingering = ch; }
-    const String& leftFingering() const { return _leftFingering; }
+    void setLeftFingering(const muse::String& ch) { _leftFingering = ch; }
+    const muse::String& leftFingering() const { return _leftFingering; }
 
-    void setRightFingering(const String& ch) { _rightFingering = ch; }
-    const String& rightFingering() const { return _rightFingering; }
+    void setRightFingering(const muse::String& ch) { _rightFingering = ch; }
+    const muse::String& rightFingering() const { return _rightFingering; }
 
     void setShowStringNumber(bool show) { m_showStringNumber = show; }
     bool showStringNumber() const { return m_showStringNumber; }
@@ -180,8 +180,8 @@ private:
     std::bitset<4> _accent{ 0 };
     //[0] shifSlide, [1] - legatoSlide, [2] - slideDownWard, [3] - slidewUpWard, [4] - slideInFormBelow, [5] - slideInFormAbove,
     std::bitset<6> _slides{ 0 };
-    String _leftFingering;
-    String _rightFingering;
+    muse::String _leftFingering;
+    muse::String _rightFingering;
     VibratoType _vibrato{ VibratoType::None };
     Trill _trill;
     Ornament _ornament{ Ornament::None };

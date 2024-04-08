@@ -29,6 +29,8 @@ MessageBox::Button MessageBox::warning(const std::string& title, const std::stri
 {
 #ifndef ENGRAVING_NO_INTERACTIVE
 
+    using namespace muse;
+
     std::vector<IInteractive::Button> realButtons;
     if (buttons.find(Cancel) != buttons.cend()) {
         realButtons.push_back(IInteractive::Button::Cancel);

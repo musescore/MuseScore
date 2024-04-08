@@ -32,7 +32,7 @@
 #include "defer.h"
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::midi;
 
 struct muse::midi::CoreMidiInPort::Core {
@@ -75,7 +75,7 @@ MidiDeviceList CoreMidiInPort::availableDevices() const
 {
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, muse::trc("midi", "No device") });
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     ItemCount sources = MIDIGetNumberOfSources();
@@ -275,7 +275,7 @@ Ret CoreMidiInPort::connect(const MidiDeviceID& deviceID)
         disconnect();
     }
 
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
         if (!m_core->client) {

@@ -25,7 +25,7 @@
 #include "vstconfigurationstub.h"
 
 using namespace muse::vst;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string VSTModule::moduleName() const
 {

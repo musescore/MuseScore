@@ -96,7 +96,7 @@ void RealizeHarmonyDialog::toggleChordTable()
 {
     int visible = chordTable->isVisible();
     chordTable->setVisible(!visible);
-    showButton->setText(!visible ? mu::qtrc("global", "Show less…") : mu::qtrc("global", "Show more…"));
+    showButton->setText(!visible ? muse::qtrc("global", "Show less…") : muse::qtrc("global", "Show more…"));
 }
 
 //---------------------------------------------------------
@@ -132,10 +132,10 @@ void RealizeHarmonyDialog::setChordList(const QList<Harmony*>& hlist)
 
         noteNames = tpc2name(rootTpc, mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO);
         mu::engraving::RealizedHarmony::PitchMap map = h->getRealizedHarmony().notes();
-        for (int pitch : mu::keys(map)) {
+        for (int pitch : muse::keys(map)) {
             intervals += QString::number((pitch - mu::engraving::tpc2pitch(rootTpc)) % 128 % 12) + " ";
         }
-        for (int tpc : mu::values(map)) {
+        for (int tpc : muse::values(map)) {
             noteNames += u", " + mu::engraving::tpc2name(tpc, mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO);
         }
 

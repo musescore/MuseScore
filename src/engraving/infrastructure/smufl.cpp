@@ -31,7 +31,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::engraving;
 
 std::array<Smufl::Code, size_t(SymId::lastSym) + 1> Smufl::s_symIdCodes { {  } };

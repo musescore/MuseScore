@@ -105,7 +105,7 @@ unsigned int AudioStream::copySamplesToBuffer(float* buffer, unsigned int fromSa
     return count / m_channels;
 }
 
-bool AudioStream::loadWAV(mu::io::path_t path)
+bool AudioStream::loadWAV(io::path_t path)
 {
     drwav wav;
     if (!drwav_init_file(&wav, path.c_str(), NULL)) {
@@ -123,7 +123,7 @@ bool AudioStream::loadWAV(mu::io::path_t path)
     return true;
 }
 
-bool AudioStream::loadMP3(mu::io::path_t path)
+bool AudioStream::loadMP3(io::path_t path)
 {
     drmp3 mp3;
 
@@ -161,7 +161,7 @@ bool AudioStream::loadMP3FromMemory(const void* pData, size_t dataSize)
     return true;
 }
 
-bool AudioStream::loadOGG(mu::io::path_t path)
+bool AudioStream::loadOGG(io::path_t path)
 {
     int vorbis_error;
     stb_vorbis* vorbisData = stb_vorbis_open_filename(path.c_str(), &vorbis_error, NULL);

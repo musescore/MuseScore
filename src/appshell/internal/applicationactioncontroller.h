@@ -43,25 +43,25 @@
 
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public IApplicationActionController, public muse::actions::Actionable,
-    public async::Asyncable
+    public muse::async::Asyncable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(muse::ui::IUiActionsRegister, actionsRegister)
     INJECT(muse::ui::IMainWindow, mainWindow)
     INJECT(muse::languages::ILanguagesService, languagesService)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project::IProjectFilesController, projectFilesController)
     INJECT(muse::audio::ISoundFontRepository, soundFontRepository)
     INJECT(IStartupScenario, startupScenario)
-    INJECT(IApplication, application)
+    INJECT(muse::IApplication, application)
 
 public:
     void preInit();
     void init();
 
-    ValCh<bool> isFullScreen() const;
+    muse::ValCh<bool> isFullScreen() const;
 
     void onDragEnterEvent(QDragEnterEvent* event) override;
     void onDragMoveEvent(QDragMoveEvent* event) override;
@@ -72,7 +72,7 @@ private:
 
     void setupConnections();
 
-    bool quit(bool isAllInstances, const io::path_t& installerPath = io::path_t());
+    bool quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
     void restart();
 
     void toggleFullScreen();
@@ -88,7 +88,7 @@ private:
 
     bool m_quiting = false;
 
-    async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
+    muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

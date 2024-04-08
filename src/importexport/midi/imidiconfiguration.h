@@ -39,7 +39,7 @@ public:
     virtual int midiShortestNote() const = 0; //ticks
     virtual void setMidiShortestNote(int ticks) = 0;
 
-    virtual void setMidiImportOperationsFile(const std::optional<io::path_t>& filePath) const = 0;
+    virtual void setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const = 0;
 
     // export
     virtual bool isExpandRepeats() const = 0;

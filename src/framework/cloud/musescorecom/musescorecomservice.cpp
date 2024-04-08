@@ -34,7 +34,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
 
@@ -123,7 +123,7 @@ RequestHeaders MuseScoreComService::headers() const
     return headers;
 }
 
-mu::Ret MuseScoreComService::downloadAccountInfo()
+Ret MuseScoreComService::downloadAccountInfo()
 {
     TRACEFUNC;
 
@@ -158,7 +158,7 @@ mu::Ret MuseScoreComService::downloadAccountInfo()
         setAccountInfo(AccountInfo());
     }
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 bool MuseScoreComService::doUpdateTokens()
@@ -193,12 +193,12 @@ bool MuseScoreComService::doUpdateTokens()
     return true;
 }
 
-mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(const QUrl& sourceUrl)
+RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(const QUrl& sourceUrl)
 {
     return downloadScoreInfo(idFromCloudUrl(sourceUrl).toUint64());
 }
 
-mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
+RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
 {
     TRACEFUNC;
 
@@ -244,7 +244,7 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     return result;
 }
 
-mu::async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
+async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
 {
     return async::Promise<ScoresList>([this, scoresPerBatch, batchNumber](auto resolve, auto reject) {
         QVariantMap params;
@@ -327,8 +327,8 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     return progress;
 }
 
-mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
-                                             const QString& hash, const QString& secret)
+Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
+                                         const QString& hash, const QString& secret)
 {
     TRACEFUNC;
 
@@ -411,8 +411,8 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     return progress;
 }
 
-mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                                          Visibility visibility, const QUrl& sourceUrl, int revisionId)
+RetVal<ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+                                                  Visibility visibility, const QUrl& sourceUrl, int revisionId)
 {
     TRACEFUNC;
 
@@ -520,8 +520,8 @@ mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr upl
     return result;
 }
 
-mu::Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
-                                           const QUrl& sourceUrl)
+Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
+                                       const QUrl& sourceUrl)
 {
     TRACEFUNC;
 

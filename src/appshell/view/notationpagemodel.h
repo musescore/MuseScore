@@ -34,7 +34,7 @@
 #include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
-class NotationPageModel : public QObject, public async::Asyncable, public muse::actions::Actionable
+class NotationPageModel : public QObject, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 

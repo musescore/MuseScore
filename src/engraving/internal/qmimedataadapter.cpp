@@ -49,9 +49,9 @@ bool QMimeDataAdapter::hasFormat(const std::string& mimeType) const
     return m_data->hasFormat(QString::fromStdString(mimeType));
 }
 
-ByteArray QMimeDataAdapter::data(const std::string& mimeType) const
+muse::ByteArray QMimeDataAdapter::data(const std::string& mimeType) const
 {
-    return ByteArray::fromQByteArray(m_data->data(QString::fromStdString(mimeType)));
+    return muse::ByteArray::fromQByteArray(m_data->data(QString::fromStdString(mimeType)));
 }
 
 bool QMimeDataAdapter::hasImage() const

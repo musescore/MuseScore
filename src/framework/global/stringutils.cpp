@@ -24,7 +24,7 @@
 #include <cctype>
 #include <algorithm>
 
-bool mu::strings::replace(std::string& str, const std::string& from, const std::string& to)
+bool muse::strings::replace(std::string& str, const std::string& from, const std::string& to)
 {
     size_t start_pos = str.find(from);
     if (start_pos == std::string::npos) {
@@ -34,7 +34,7 @@ bool mu::strings::replace(std::string& str, const std::string& from, const std::
     return true;
 }
 
-void mu::strings::split(const std::string& str, std::vector<std::string>& out, const std::string& delim)
+void muse::strings::split(const std::string& str, std::vector<std::string>& out, const std::string& delim)
 {
     std::size_t current, previous = 0;
     current = str.find(delim);
@@ -48,7 +48,7 @@ void mu::strings::split(const std::string& str, std::vector<std::string>& out, c
     out.push_back(str.substr(previous, current - previous));
 }
 
-std::string mu::strings::join(const std::vector<std::string>& strs, const std::string& sep)
+std::string muse::strings::join(const std::vector<std::string>& strs, const std::string& sep)
 {
     std::string str;
     bool first = true;
@@ -62,27 +62,27 @@ std::string mu::strings::join(const std::vector<std::string>& strs, const std::s
     return str;
 }
 
-void mu::strings::ltrim(std::string& s)
+void muse::strings::ltrim(std::string& s)
 {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
         return !std::isspace(ch);
     }));
 }
 
-void mu::strings::rtrim(std::string& s)
+void muse::strings::rtrim(std::string& s)
 {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
         return !std::isspace(ch);
     }).base(), s.end());
 }
 
-void mu::strings::trim(std::string& s)
+void muse::strings::trim(std::string& s)
 {
     ltrim(s);
     rtrim(s);
 }
 
-std::string mu::strings::toLower(const std::string& source)
+std::string muse::strings::toLower(const std::string& source)
 {
     std::string str = source;
     std::for_each(str.begin(), str.end(), [](char& c) {
@@ -91,7 +91,7 @@ std::string mu::strings::toLower(const std::string& source)
     return str;
 }
 
-bool mu::strings::startsWith(const std::string& str, const std::string& start)
+bool muse::strings::startsWith(const std::string& str, const std::string& start)
 {
     if (str.size() < start.size()) {
         return false;
@@ -106,7 +106,7 @@ bool mu::strings::startsWith(const std::string& str, const std::string& start)
     return true;
 }
 
-bool mu::strings::endsWith(const std::string& str, const std::string& ending)
+bool muse::strings::endsWith(const std::string& str, const std::string& ending)
 {
     if (ending.size() > str.size()) {
         return false;
@@ -115,7 +115,7 @@ bool mu::strings::endsWith(const std::string& str, const std::string& ending)
     return ss.compare(ending.c_str()) == 0;
 }
 
-std::string mu::strings::leftJustified(const std::string& val, size_t width)
+std::string muse::strings::leftJustified(const std::string& val, size_t width)
 {
     std::string str;
     str.resize(width, ' ');
@@ -126,7 +126,7 @@ std::string mu::strings::leftJustified(const std::string& val, size_t width)
     return str;
 }
 
-bool mu::strings::lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs)
+bool muse::strings::lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs)
 {
     int cmp = toLower(lhs).compare(toLower(rhs));
     if (cmp == 0) {
@@ -136,7 +136,7 @@ bool mu::strings::lessThanCaseInsensitive(const std::string& lhs, const std::str
     return cmp < 0;
 }
 
-bool mu::strings::lessThanCaseInsensitive(const String& lhs, const String& rhs)
+bool muse::strings::lessThanCaseInsensitive(const String& lhs, const String& rhs)
 {
     String lhsLower = lhs.toLower(), rhsLower = rhs.toLower();
     if (lhsLower == rhsLower) {

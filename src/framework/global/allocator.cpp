@@ -28,7 +28,7 @@
 #include "stringutils.h"
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 int ObjectAllocator::s_used = 0;
 size_t ObjectAllocator::DEFAULT_BLOCK_SIZE(1024 * 256); // 256 kB
@@ -239,7 +239,7 @@ void AllocatorsRegister::cleanupAll(const std::string& module)
     }
 }
 
-#define FORMAT(str, width) mu::strings::leftJustified(str, width)
+#define FORMAT(str, width) muse::strings::leftJustified(str, width)
 #define TITLE(str) FORMAT(std::string(str), 20)
 #define VALUE(val) FORMAT(std::to_string(val), 20)
 

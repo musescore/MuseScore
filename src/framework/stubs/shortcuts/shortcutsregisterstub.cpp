@@ -21,6 +21,7 @@
  */
 #include "shortcutsregisterstub.h"
 
+using namespace muse;
 using namespace muse::shortcuts;
 
 const ShortcutList& ShortcutsRegisterStub::shortcuts() const
@@ -29,7 +30,7 @@ const ShortcutList& ShortcutsRegisterStub::shortcuts() const
     return list;
 }
 
-mu::Ret ShortcutsRegisterStub::setShortcuts(const ShortcutList&)
+Ret ShortcutsRegisterStub::setShortcuts(const ShortcutList&)
 {
     return make_ret(Ret::Code::NotImplemented);
 }
@@ -38,12 +39,12 @@ void ShortcutsRegisterStub::resetShortcuts()
 {
 }
 
-mu::async::Notification ShortcutsRegisterStub::shortcutsChanged() const
+async::Notification ShortcutsRegisterStub::shortcutsChanged() const
 {
     return async::Notification();
 }
 
-mu::Ret ShortcutsRegisterStub::setAdditionalShortcuts(const std::string&, const ShortcutList&)
+Ret ShortcutsRegisterStub::setAdditionalShortcuts(const std::string&, const ShortcutList&)
 {
     return make_ret(Ret::Code::NotImplemented);
 }
@@ -70,12 +71,12 @@ ShortcutList ShortcutsRegisterStub::shortcutsForSequence(const std::string&) con
     return {};
 }
 
-mu::Ret ShortcutsRegisterStub::importFromFile(const io::path_t&)
+Ret ShortcutsRegisterStub::importFromFile(const io::path_t&)
 {
     return make_ret(Ret::Code::NotImplemented);
 }
 
-mu::Ret ShortcutsRegisterStub::exportToFile(const io::path_t&) const
+Ret ShortcutsRegisterStub::exportToFile(const io::path_t&) const
 {
     return make_ret(Ret::Code::NotImplemented);
 }
@@ -89,7 +90,7 @@ void ShortcutsRegisterStub::setActive(bool)
 {
 }
 
-mu::async::Notification ShortcutsRegisterStub::activeChanged() const
+async::Notification ShortcutsRegisterStub::activeChanged() const
 {
     return async::Notification();
 }

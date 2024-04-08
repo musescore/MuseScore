@@ -122,7 +122,7 @@ Fraction XmlReader::readFraction()
     AsciiStringView s = readAsciiText();
     if (!s.empty()) {
         size_t i = s.indexOf('/');
-        if (i == mu::nidx) {
+        if (i == muse::nidx) {
             return Fraction::fromTicks(s.toInt());
         } else {
             String str = String::fromAscii(s.ascii());

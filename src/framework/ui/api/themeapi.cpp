@@ -91,7 +91,7 @@ struct FontConfig
 };
 
 ThemeApi::ThemeApi()
-    : mu::api::ApiObject(nullptr)
+    : api::ApiObject(nullptr)
 {
     setObjectName("UiTheme");
 }

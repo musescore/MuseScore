@@ -29,6 +29,7 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::ui;
 
 static constexpr int INVALID_INDEX = -1;
@@ -162,8 +163,8 @@ QStringList AppearancePreferencesModel::allFonts() const
 
 QStringList AppearancePreferencesModel::wallpaperPathFilter() const
 {
-    return { mu::qtrc("appshell/preferences", "Images") + " (*.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
-             mu::qtrc("appshell/preferences", "All") + " (*)" };
+    return { muse::qtrc("appshell/preferences", "Images") + " (*.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
+             muse::qtrc("appshell/preferences", "All") + " (*)" };
 }
 
 QString AppearancePreferencesModel::wallpapersDir() const

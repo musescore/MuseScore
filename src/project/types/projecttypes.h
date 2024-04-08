@@ -47,7 +47,7 @@ struct ProjectCreateOptions
     QString lyricist;
     QString copyright;
 
-    io::path_t templatePath;
+    muse::io::path_t templatePath;
 
     notation::ScoreCreateOptions scoreOptions;
 };
@@ -108,8 +108,8 @@ struct CloudAudioInfo {
 
 struct ExportInfo {
     QString id;
-    io::path_t projectPath;
-    io::path_t exportPath;
+    muse::io::path_t projectPath;
+    muse::io::path_t exportPath;
     INotationWriter::UnitType unitType;
     std::vector<notation::INotationPtr> notations;
 
@@ -132,12 +132,12 @@ struct SaveLocation
 {
     SaveLocationType type = SaveLocationType::Undefined;
 
-    std::variant<io::path_t, CloudProjectInfo> data;
+    std::variant<muse::io::path_t, CloudProjectInfo> data;
 
     bool isLocal() const
     {
         return type == SaveLocationType::Local
-               && std::holds_alternative<io::path_t>(data);
+               && std::holds_alternative<muse::io::path_t>(data);
     }
 
     bool isCloud() const
@@ -151,14 +151,14 @@ struct SaveLocation
         return isLocal() || isCloud();
     }
 
-    const io::path_t& localPath() const
+    const muse::io::path_t& localPath() const
     {
         IF_ASSERT_FAILED(isLocal()) {
-            static io::path_t null;
+            static muse::io::path_t null;
             return null;
         }
 
-        return std::get<io::path_t>(data);
+        return std::get<muse::io::path_t>(data);
     }
 
     const CloudProjectInfo& cloudInfo() const
@@ -173,10 +173,10 @@ struct SaveLocation
 
     SaveLocation() = default;
 
-    SaveLocation(SaveLocationType type, const std::variant<io::path_t, CloudProjectInfo>& data = {})
+    SaveLocation(SaveLocationType type, const std::variant<muse::io::path_t, CloudProjectInfo>& data = {})
         : type(type), data(data) {}
 
-    SaveLocation(const io::path_t& localPath)
+    SaveLocation(const muse::io::path_t& localPath)
         : type(SaveLocationType::Local), data(localPath) {}
 
     SaveLocation(const CloudProjectInfo& cloudInfo)
@@ -192,7 +192,7 @@ struct ProjectFile {
     ProjectFile(const QUrl& url, const QString& displayNameOverride = {})
         : url(url), displayNameOverride(displayNameOverride) {}
 
-    ProjectFile(const io::path_t& path, const QString& displayNameOverride = {})
+    ProjectFile(const muse::io::path_t& path, const QString& displayNameOverride = {})
         : url(path.toQUrl()), displayNameOverride(displayNameOverride) {}
 
     bool isNull() const
@@ -220,14 +220,14 @@ struct ProjectFile {
             return displayNameOverride;
         }
 
-        return io::filename(path(), includingExtension).toQString();
+        return muse::io::filename(path(), includingExtension).toQString();
     }
 
-    io::path_t path() const
+    muse::io::path_t path() const
     {
         assert(url.isEmpty() || url.isLocalFile());
 
-        return io::path_t(url);
+        return muse::io::path_t(url);
     }
 
     bool operator ==(const ProjectFile& other) const
@@ -245,12 +245,12 @@ struct ProjectFile {
 using ProjectFilesList = std::vector<ProjectFile>;
 
 struct RecentFile {
-    io::path_t path;
+    muse::io::path_t path;
     QString displayNameOverride = {};
 
     RecentFile() = default;
 
-    RecentFile(const io::path_t& path, const QString& displayNameOverride = {})
+    RecentFile(const muse::io::path_t& path, const QString& displayNameOverride = {})
         : path(path), displayNameOverride(displayNameOverride) {}
 
     static RecentFile fromProjectFile(const ProjectFile& projectFile)
@@ -274,7 +274,7 @@ struct RecentFile {
             return displayNameOverride;
         }
 
-        return io::filename(path, includingExtension).toQString();
+        return muse::io::filename(path, includingExtension).toQString();
     }
 
     bool operator ==(const RecentFile& other) const
@@ -302,7 +302,7 @@ using Templates = QList<Template>;
 
 struct ProjectBeingDownloaded {
     int scoreId = 0;
-    mu::ProgressPtr progress;
+    muse::ProgressPtr progress;
 };
 
 class GenerateAudioTimePeriod

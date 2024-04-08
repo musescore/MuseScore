@@ -79,7 +79,7 @@ struct Action {
     Type type = Type::Undefined;
     bool modal = DEFAULT_MODAL;
     String title;
-    mu::io::path_t main;
+    io::path_t main;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
 
@@ -115,7 +115,7 @@ struct Manifest {
     String title;
     String description;
     String category;
-    mu::io::path_t thumbnail;
+    io::path_t thumbnail;
     String version;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;

@@ -36,6 +36,7 @@ struct muse::midi::WinMidiOutPort::Win {
     int deviceID;
 };
 
+using namespace muse;
 using namespace muse::midi;
 
 static std::string errorString(MMRESULT ret)
@@ -88,7 +89,7 @@ MidiDeviceList WinMidiOutPort::availableDevices() const
     std::lock_guard lock(m_devicesMutex);
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, muse::trc("midi", "No device") });
 
     int numDevs = midiOutGetNumDevs();
     if (numDevs == 0) {
@@ -116,12 +117,12 @@ MidiDeviceList WinMidiOutPort::availableDevices() const
     return ret;
 }
 
-mu::async::Notification WinMidiOutPort::availableDevicesChanged() const
+async::Notification WinMidiOutPort::availableDevicesChanged() const
 {
     return m_availableDevicesChanged;
 }
 
-mu::Ret WinMidiOutPort::connect(const MidiDeviceID& deviceID)
+Ret WinMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
     DEFER {
         m_deviceChanged.notify();
@@ -148,7 +149,7 @@ mu::Ret WinMidiOutPort::connect(const MidiDeviceID& deviceID)
 
     LOGD() << "Connected to " << m_deviceID;
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 void WinMidiOutPort::disconnect()
@@ -174,7 +175,7 @@ MidiDeviceID WinMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
-mu::async::Notification WinMidiOutPort::deviceChanged() const
+async::Notification WinMidiOutPort::deviceChanged() const
 {
     return m_deviceChanged;
 }
@@ -184,7 +185,7 @@ bool WinMidiOutPort::supportsMIDI20Output() const
     return false;
 }
 
-mu::Ret WinMidiOutPort::sendEvent(const Event& e)
+Ret WinMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);

@@ -39,7 +39,7 @@
 namespace muse::update {
 class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
     Inject<actions::IActionsDispatcher> dispatcher;
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
     Inject<IUpdateConfiguration> configuration;
@@ -79,10 +79,10 @@ private:
     void closeAppAndStartInstallation(const io::path_t& installerPath);
 
     bool m_appCheckProgress = false;
-    mu::ProgressPtr m_appCheckProgressChannel = nullptr;
+    ProgressPtr m_appCheckProgressChannel = nullptr;
 
     bool m_museSamplerCheckProgress = false;
-    mu::ProgressPtr m_museSamplerCheckProgressChannel = nullptr;
+    ProgressPtr m_museSamplerCheckProgressChannel = nullptr;
 };
 }
 

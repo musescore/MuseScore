@@ -30,7 +30,7 @@
 #include "iprojectfilescontroller.h"
 
 namespace mu::project {
-class CloudScoreStatusWatcher : public QObject, async::Asyncable
+class CloudScoreStatusWatcher : public QObject, muse::async::Asyncable
 {
     Q_OBJECT
 

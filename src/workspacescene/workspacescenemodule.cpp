@@ -29,7 +29,8 @@
 #include "view/newworkspacemodel.h"
 
 using namespace mu::workspacescene;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 
 static void workspacescene_init_qrc()
 {

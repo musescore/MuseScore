@@ -125,18 +125,18 @@ public:
     int gripsCount() const override;
     Grip initialEditModeGrip() const override;
     Grip defaultGrip() const override;
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
     bool isMovable() const override { return true; }
     bool isEditable() const override { return true; }
     void endEdit(EditData&) override;
     void editDrag(EditData&) override;
 
-    const mu::PointF& startAnchor() const { return m_startAnchor; }
-    mu::PointF& startAnchor() { return m_startAnchor; }
-    void setStartAnchor(const mu::PointF& p) { m_startAnchor = p; }
-    const mu::PointF& endAnchor() const { return m_endAnchor; }
-    mu::PointF& endAnchor() { return m_endAnchor; }
-    void setEndAnchor(const mu::PointF& p) { m_endAnchor = p; }
+    const PointF& startAnchor() const { return m_startAnchor; }
+    PointF& startAnchor() { return m_startAnchor; }
+    void setStartAnchor(const PointF& p) { m_startAnchor = p; }
+    const PointF& endAnchor() const { return m_endAnchor; }
+    PointF& endAnchor() { return m_endAnchor; }
+    void setEndAnchor(const PointF& p) { m_endAnchor = p; }
 
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
@@ -169,8 +169,8 @@ private:
     std::vector<BeamSegment*> m_beamSegments;
     bool m_playTremolo = true;
 
-    mu::PointF m_startAnchor;
-    mu::PointF m_endAnchor;
+    PointF m_startAnchor;
+    PointF m_endAnchor;
 
     int m_lines = 0;         // derived from _subtype
     TremoloStyle m_style = TremoloStyle::DEFAULT;

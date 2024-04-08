@@ -28,7 +28,7 @@
 #include "ipclock.h"
 #include "ipclog.h"
 
-namespace mu::ipc {
+namespace muse::ipc {
 IpcSocket::~IpcSocket()
 {
     delete m_socket;
@@ -81,7 +81,7 @@ bool IpcSocket::connect(const QString& serverName)
     return true;
 }
 
-mu::async::Notification IpcSocket::disconnected()
+async::Notification IpcSocket::disconnected()
 {
     return m_disconnected;
 }
@@ -175,7 +175,7 @@ void IpcSocket::onIpcMsg(const Msg& receivedMsg)
     }
 }
 
-mu::async::Channel<Msg> IpcSocket::msgReceived() const
+async::Channel<Msg> IpcSocket::msgReceived() const
 {
     return m_msgReceived;
 }
@@ -185,7 +185,7 @@ QList<ID> IpcSocket::instances() const
     return m_instances;
 }
 
-mu::async::Notification IpcSocket::instancesChanged() const
+async::Notification IpcSocket::instancesChanged() const
 {
     return m_instancesChanged;
 }

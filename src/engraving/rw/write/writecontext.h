@@ -87,7 +87,7 @@ private:
 
     Fraction _curTick    { 0, 1 };           // used to optimize output
     Fraction _tickDiff   { 0, 1 };
-    track_idx_t _curTrack = mu::nidx;
+    track_idx_t _curTrack = muse::nidx;
     int _trackDiff       { 0 };             // saved track is curTrack-trackDiff
 
     bool _clipboardmode  { false };     // used to modify write() behaviour

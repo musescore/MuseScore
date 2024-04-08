@@ -29,6 +29,7 @@
 
 using namespace mu;
 using namespace mu::palette;
+using namespace muse;
 using namespace muse::ui;
 
 static const std::string MODULE_NAME("palette");
@@ -39,7 +40,7 @@ static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "applica
 void PaletteConfiguration::init()
 {
     settings()->setDefaultValue(PALETTE_SCALE, Val(1.0));
-    settings()->setDescription(PALETTE_SCALE, mu::qtrc("palette", "Palette scale").toStdString());
+    settings()->setDescription(PALETTE_SCALE, muse::qtrc("palette", "Palette scale").toStdString());
     settings()->setCanBeManuallyEdited(PALETTE_SCALE, true, Val(0.5), Val(5.0));
 
     settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
@@ -76,7 +77,7 @@ double PaletteConfiguration::paletteSpatium() const
     return PALETTE_SPATIUM;
 }
 
-mu::ValCh<bool> PaletteConfiguration::isSinglePalette() const
+ValCh<bool> PaletteConfiguration::isSinglePalette() const
 {
     return m_isSinglePalette;
 }
@@ -86,7 +87,7 @@ void PaletteConfiguration::setIsSinglePalette(bool isSingle)
     settings()->setSharedValue(PALETTE_USE_SINGLE, Val(isSingle));
 }
 
-mu::ValCh<bool> PaletteConfiguration::isSingleClickToOpenPalette() const
+ValCh<bool> PaletteConfiguration::isSingleClickToOpenPalette() const
 {
     return m_isSingleClickToOpenPalette;
 }
@@ -121,17 +122,17 @@ QColor PaletteConfiguration::themeColor(ThemeStyleKey key) const
     return uiConfiguration()->currentTheme().values[key].toString();
 }
 
-mu::async::Notification PaletteConfiguration::colorsChanged() const
+muse::async::Notification PaletteConfiguration::colorsChanged() const
 {
     return uiConfiguration()->currentThemeChanged();
 }
 
-mu::io::path_t PaletteConfiguration::keySignaturesDirPath() const
+muse::io::path_t PaletteConfiguration::keySignaturesDirPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/keysigs";
 }
 
-mu::io::path_t PaletteConfiguration::timeSignaturesDirPath() const
+muse::io::path_t PaletteConfiguration::timeSignaturesDirPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/timesigs";
 }
@@ -146,7 +147,7 @@ bool PaletteConfiguration::enableExperimental() const
     return globalConfiguration()->enableExperimental();
 }
 
-mu::ValCh<PaletteConfiguration::PaletteConfig> PaletteConfiguration::paletteConfig(const QString& paletteId) const
+ValCh<PaletteConfiguration::PaletteConfig> PaletteConfiguration::paletteConfig(const QString& paletteId) const
 {
     if (!m_paletteConfigs.contains(paletteId)) {
         m_paletteConfigs[paletteId] = ValCh<PaletteConfig>();
@@ -160,7 +161,7 @@ void PaletteConfiguration::setPaletteConfig(const QString& paletteId, const Pale
     m_paletteConfigs[paletteId].set(config);
 }
 
-mu::ValCh<PaletteConfiguration::PaletteCellConfig> PaletteConfiguration::paletteCellConfig(const QString& cellId) const
+ValCh<PaletteConfiguration::PaletteCellConfig> PaletteConfiguration::paletteCellConfig(const QString& cellId) const
 {
     if (!m_paletteCellsConfigs.contains(cellId)) {
         m_paletteCellsConfigs[cellId] = ValCh<PaletteCellConfig>();

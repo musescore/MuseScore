@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 struct ZipWriter::Impl
 {

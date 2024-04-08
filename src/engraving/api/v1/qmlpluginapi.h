@@ -79,7 +79,7 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
 
     INJECT(muse::actions::IActionsDispatcher, actionsDispatcher)
     INJECT(mu::context::IGlobalContext, context)
-    INJECT(mu::IApplication, application)
+    INJECT(muse::IApplication, application)
 
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
@@ -264,7 +264,7 @@ public:
 
     void setup(QQmlEngine* e) override;
     void runPlugin() override { emit run(); }
-    async::Notification closeRequest() const override { return m_closeRequested; }
+    muse::async::Notification closeRequest() const override { return m_closeRequested; }
 
     void endCmd(const QMap<QString, QVariant>& stateInfo) { emit scoreStateChanged(stateInfo); }
 
@@ -336,7 +336,7 @@ private:
     bool m_requiresScore = true;
     QString m_thumbnailName;
     QString m_categoryCode;
-    async::Notification m_closeRequested;
+    muse::async::Notification m_closeRequested;
 };
 
 #undef DECLARE_API_ENUM

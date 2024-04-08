@@ -30,9 +30,9 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::extensions;
-using namespace mu::api;
+using namespace muse::api;
 
 ScriptEngine::ScriptEngine(int apiverion)
 {
@@ -213,7 +213,7 @@ Ret ScriptEngine::doCall(const QString& funcName, const QJSValueList& args, QJSV
     return ret;
 }
 
-mu::Ret ScriptEngine::jsValueToRet(const QJSValue& val)
+Ret ScriptEngine::jsValueToRet(const QJSValue& val)
 {
     if (val.isError()) {
         QString fileName = val.property("fileName").toString();

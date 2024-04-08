@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_RUNTIME_H
-#define MU_GLOBAL_RUNTIME_H
+#ifndef MUSE_GLOBAL_RUNTIME_H
+#define MUSE_GLOBAL_RUNTIME_H
 
 #include <thread>
 #include <sstream>
 
-namespace mu::runtime {
+namespace muse::runtime {
 inline constexpr bool isDebug()
 {
 #ifndef NDEBUG
@@ -52,4 +52,4 @@ void setThreadName(const std::string& name);
 const std::string& threadName();
 }
 
-#endif // MU_GLOBAL_RUNTIME_H
+#endif // MUSE_GLOBAL_RUNTIME_H

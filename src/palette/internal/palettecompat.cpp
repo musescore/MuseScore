@@ -116,7 +116,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
             containsStringTunings = true;
         } else if (element->isActionIcon()) {
             const ActionIcon* icon = toActionIcon(element.get());
-            if (contains(BENDS_ACTION_TYPES, icon->actionType())) {
+            if (muse::contains(BENDS_ACTION_TYPES, icon->actionType())) {
                 containsGuitarBends = true;
             }
         }

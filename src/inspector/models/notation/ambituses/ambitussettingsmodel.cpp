@@ -31,7 +31,7 @@ AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_AMBITUS);
-    setTitle(mu::qtrc("inspector", "Ambitus"));
+    setTitle(muse::qtrc("inspector", "Ambitus"));
     setIcon(muse::ui::IconCode::Code::AMBITUS);
     createProperties();
 }

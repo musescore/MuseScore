@@ -25,9 +25,9 @@
 #include "iinteractiveuriregister.h"
 
 template<>
-struct std::hash<mu::Uri>
+struct std::hash<muse::Uri>
 {
-    std::size_t operator()(const mu::Uri& uri) const noexcept
+    std::size_t operator()(const muse::Uri& uri) const noexcept
     {
         return std::hash<std::string> {}(uri.toString());
     }

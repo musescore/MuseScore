@@ -89,7 +89,7 @@ Notation::Notation(mu::engraving::Score* score)
         notifyAboutNotationChanged();
     });
 
-    configuration()->canvasOrientation().ch.onReceive(this, [this](mu::Orientation) {
+    configuration()->canvasOrientation().ch.onReceive(this, [this](muse::Orientation) {
         if (m_score && m_score->autoLayoutEnabled()) {
             m_score->doLayout();
         }
@@ -118,7 +118,7 @@ Notation::~Notation()
 
 void Notation::init()
 {
-    bool isVertical = configuration()->canvasOrientation().val == mu::Orientation::Vertical;
+    bool isVertical = configuration()->canvasOrientation().val == muse::Orientation::Vertical;
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 }
 
@@ -132,7 +132,7 @@ void Notation::setScore(Score* score)
     m_scoreInited.notify();
 }
 
-mu::async::Notification Notation::scoreInited() const
+muse::async::Notification Notation::scoreInited() const
 {
     return m_scoreInited;
 }
@@ -224,7 +224,7 @@ void Notation::setIsOpen(bool open)
     m_openChanged.notify();
 }
 
-mu::async::Notification Notation::openChanged() const
+muse::async::Notification Notation::openChanged() const
 {
     return m_openChanged;
 }
@@ -254,7 +254,7 @@ void Notation::setViewMode(const ViewMode& viewMode)
     m_painting->setViewMode(viewMode);
 }
 
-mu::async::Notification Notation::viewModeChanged() const
+muse::async::Notification Notation::viewModeChanged() const
 {
     return m_painting->viewModeChanged();
 }
@@ -304,7 +304,7 @@ INotationStylePtr Notation::style() const
     return m_style;
 }
 
-mu::async::Notification Notation::notationChanged() const
+muse::async::Notification Notation::notationChanged() const
 {
     return m_notationChanged;
 }

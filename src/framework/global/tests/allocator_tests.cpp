@@ -25,9 +25,9 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
-namespace mu {
+namespace muse {
 class ItemBase
 {
     OBJECT_ALLOCATOR(test, ItemBase)

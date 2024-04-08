@@ -35,7 +35,7 @@ HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositorySe
     : TextLineSettingsModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_HAIRPIN);
-    setTitle(mu::qtrc("inspector", "Hairpin"));
+    setTitle(muse::qtrc("inspector", "Hairpin"));
     setIcon(muse::ui::IconCode::Code::HAIRPIN);
 
     createProperties();
@@ -113,15 +113,15 @@ void HairpinSettingsModel::onNotationChanged(const PropertyIdSet& changedPropert
 
 void HairpinSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::HAIRPIN_CIRCLEDTIP)) {
+    if (muse::contains(propertyIdSet, Pid::HAIRPIN_CIRCLEDTIP)) {
         loadPropertyItem(m_isNienteCircleVisible);
     }
 
-    if (mu::contains(propertyIdSet, Pid::HAIRPIN_HEIGHT)) {
+    if (muse::contains(propertyIdSet, Pid::HAIRPIN_HEIGHT)) {
         loadPropertyItem(m_height, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::HAIRPIN_CONT_HEIGHT)) {
+    if (muse::contains(propertyIdSet, Pid::HAIRPIN_CONT_HEIGHT)) {
         loadPropertyItem(m_continuousHeight, formatDoubleFunc);
     }
 }

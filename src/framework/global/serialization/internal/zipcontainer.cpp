@@ -39,13 +39,13 @@
 #define ZDEBUG if (0) LOGD
 #endif
 
-using namespace mu::io;
+using namespace muse::io;
 
 typedef unsigned long int ulong;
 typedef unsigned short int ushort;
 typedef unsigned int uint;
 
-namespace mu {
+namespace muse {
 static inline uint readUInt(const uint8_t* data)
 {
     return (data[0]) + (data[1] << 8) + (data[2] << 16) + (data[3] << 24);

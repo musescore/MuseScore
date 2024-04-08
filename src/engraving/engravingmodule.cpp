@@ -59,7 +59,8 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::draw;
 
 static void engraving_init_qrc()
@@ -124,9 +125,9 @@ void EngravingModule::registerApi()
 #ifndef ENGRAVING_NO_API
     apiv1::PluginAPI::registerQmlTypes();
 
-    auto api = ioc()->resolve<mu::api::IApiRegister>(moduleName());
+    auto api = ioc()->resolve<muse::api::IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.engraving.v1", new mu::api::ApiCreator<apiv1::EngravingApiV1>());
+        api->regApiCreator(moduleName(), "api.engraving.v1", new muse::api::ApiCreator<apiv1::EngravingApiV1>());
     }
 #endif
 }
@@ -172,7 +173,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         m_engravingfonts->loadAllFonts();
 
         // Text
-        const std::vector<io::path_t> textFonts = {
+        const std::vector<muse::io::path_t> textFonts = {
             ":/fonts/musejazz/MuseJazzText.otf",
             ":/fonts/campania/Campania.otf",
             ":/fonts/edwin/Edwin-Roman.otf",
@@ -198,7 +199,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         };
 
         std::shared_ptr<IFontProvider> fontProvider = ioc()->resolve<IFontProvider>("fonts");
-        for (const io::path_t& font : textFonts) {
+        for (const muse::io::path_t& font : textFonts) {
             int loadStatusCode = fontProvider->addTextFont(font);
             if (loadStatusCode == -1) {
                 LOGE() << "Fatal error: cannot load internal font " << font;

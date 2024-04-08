@@ -33,8 +33,8 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 
 static const std::string SETTINGS_RESOURCE_NAME("SETTINGS");
 

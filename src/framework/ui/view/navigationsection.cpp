@@ -26,6 +26,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::ui;
 
 NavigationSection::NavigationSection(QObject* parent)
@@ -67,7 +68,7 @@ void NavigationSection::setIndex(const Index& index)
     AbstractNavigation::setIndex(index);
 }
 
-mu::async::Channel<INavigation::Index> NavigationSection::indexChanged() const
+async::Channel<INavigation::Index> NavigationSection::indexChanged() const
 {
     return AbstractNavigation::indexChanged();
 }
@@ -89,7 +90,7 @@ bool NavigationSection::enabled() const
     return enbl;
 }
 
-mu::async::Channel<bool> NavigationSection::enabledChanged() const
+async::Channel<bool> NavigationSection::enabledChanged() const
 {
     return AbstractNavigation::enabledChanged();
 }
@@ -104,7 +105,7 @@ void NavigationSection::setActive(bool arg)
     AbstractNavigation::setActive(arg);
 }
 
-mu::async::Channel<bool> NavigationSection::activeChanged() const
+async::Channel<bool> NavigationSection::activeChanged() const
 {
     return AbstractNavigation::activeChanged();
 }
@@ -185,7 +186,7 @@ const std::set<INavigationPanel*>& NavigationSection::panels() const
     return m_panels;
 }
 
-mu::async::Notification NavigationSection::panelsListChanged() const
+async::Notification NavigationSection::panelsListChanged() const
 {
     return m_panelsListChanged;
 }

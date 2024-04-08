@@ -57,17 +57,17 @@ QVariantList BraillePreferencesModel::intervalDirections() const
     return QVariantList {
         QVariantMap {
             //: Braille chord interval direction: automatic (based on clef)
-            { "text", mu::qtrc("appshell/preferences", "Auto") },
+            { "text", muse::qtrc("appshell/preferences", "Auto") },
             { "value", static_cast<int>(BrailleIntervalDirection::Auto) },
         },
         QVariantMap {
             //: Braille chord interval direction: up (ascending)
-            { "text", mu::qtrc("appshell/preferences", "Up") },
+            { "text", muse::qtrc("appshell/preferences", "Up") },
             { "value", static_cast<int>(BrailleIntervalDirection::Up) },
         },
         QVariantMap {
             //: Braille chord interval direction: down (descending)
-            { "text", mu::qtrc("appshell/preferences", "Down") },
+            { "text", muse::qtrc("appshell/preferences", "Down") },
             { "value", static_cast<int>(BrailleIntervalDirection::Down) },
         },
     };

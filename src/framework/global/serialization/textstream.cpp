@@ -22,7 +22,7 @@
 #include "textstream.h"
 #include <sstream>
 
-using namespace mu;
+using namespace muse;
 
 static constexpr int TEXTSTREAM_BUFFERSIZE = 16384;
 

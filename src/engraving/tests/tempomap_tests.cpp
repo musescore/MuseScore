@@ -84,7 +84,7 @@ TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 
     // [THEN] Applied tempo matches with our expectations
     for (const auto& pair : *tempoMap) {
-        EXPECT_TRUE(mu::RealIsEqual(mu::RealRound(pair.second.tempo.val, 2), mu::RealRound(expectedTempo.val, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(pair.second.tempo.val, 2), muse::RealRound(expectedTempo.val, 2)));
     }
 }
 
@@ -113,7 +113,7 @@ TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 
     // [THEN] Applied tempo matches with our expectations
     for (const auto& pair : *tempoMap) {
-        EXPECT_TRUE(mu::RealIsEqual(mu::RealRound(pair.second.tempo.val, 2), mu::RealRound(expectedTempoMap.at(pair.first).val, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(pair.second.tempo.val, 2), muse::RealRound(expectedTempoMap.at(pair.first).val, 2)));
     }
 }
 
@@ -147,11 +147,11 @@ TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
     EXPECT_EQ(tempoMap->size(), expectedTempoMap.size());
 
     // [THEN] Applied tempo matches with our expectations
-    for (int tick : mu::keys(*tempoMap)) {
+    for (int tick : muse::keys(*tempoMap)) {
         double expectedBps = expectedTempoMap[tick].val;
 
-        EXPECT_TRUE(mu::RealIsEqual(mu::RealRound(tempoMap->tempo(tick).val, 2), mu::RealRound(expectedBps * multiplier, 2)));
-        EXPECT_TRUE(mu::RealIsEqual(mu::RealRound(tempoMap->at(tick).tempo.val, 2), mu::RealRound(expectedBps, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->tempo(tick).val, 2), muse::RealRound(expectedBps * multiplier, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->at(tick).tempo.val, 2), muse::RealRound(expectedBps, 2)));
     }
 }
 
@@ -181,7 +181,7 @@ TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 
     // [THEN] Applied tempo matches with our expectations
     for (const auto& pair : expectedTempoMap) {
-        EXPECT_TRUE(mu::RealIsEqual(mu::RealRound(tempoMap->at(pair.first).tempo.val, 2), mu::RealRound(pair.second.val, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->at(pair.first).tempo.val, 2), muse::RealRound(pair.second.val, 2)));
     }
 }
 
@@ -210,7 +210,7 @@ TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
 
     // [THEN] Applied tempo matches with our expectations
     for (const auto& pair : expectedTempoMap) {
-        EXPECT_TRUE(mu::RealIsEqual(mu::RealRound(tempoMap->at(pair.first).tempo.val, 2), mu::RealRound(pair.second.val, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->at(pair.first).tempo.val, 2), muse::RealRound(pair.second.val, 2)));
     }
 }
 
@@ -253,6 +253,6 @@ TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_DOESNT_OVERWRITE_OTHER_TEMP
 
     // [THEN] Applied tempo matches with our expectations
     for (const auto& pair : expectedTempoMap) {
-        EXPECT_TRUE(mu::RealIsEqual(mu::RealRound(tempoMap->at(pair.first).tempo.val, 2), mu::RealRound(pair.second.val, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->at(pair.first).tempo.val, 2), muse::RealRound(pair.second.val, 2)));
     }
 }

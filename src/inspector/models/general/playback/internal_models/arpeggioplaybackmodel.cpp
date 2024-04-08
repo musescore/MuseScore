@@ -30,7 +30,7 @@ using namespace mu::inspector;
 ArpeggioPlaybackModel::ArpeggioPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(mu::qtrc("inspector", "Arpeggio"));
+    setTitle(muse::qtrc("inspector", "Arpeggio"));
     setModelType(InspectorModelType::TYPE_ARPEGGIO);
 
     createProperties();

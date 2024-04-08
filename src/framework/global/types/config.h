@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_CONFIG_H
-#define MU_GLOBAL_CONFIG_H
+#ifndef MUSE_GLOBAL_CONFIG_H
+#define MUSE_GLOBAL_CONFIG_H
 
 #include "types/val.h"
 
-namespace mu {
+namespace muse {
 //! NOTE Some modules have configuration files, this is their model
 struct Config {
     Config() = default;
@@ -50,4 +50,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_CONFIG_H
+#endif // MUSE_GLOBAL_CONFIG_H

@@ -42,7 +42,7 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::PlaylistIsEmpty: return Ret(retCode, mu::trc("learn", "The received playlist is empty."));
+    case Err::PlaylistIsEmpty: return Ret(retCode, muse::trc("learn", "The received playlist is empty."));
     }
 
     return Ret(static_cast<int>(e));

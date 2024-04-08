@@ -52,9 +52,9 @@ public:
     //int idx     { 0    };
     std::vector<InstrumentName*> instrumentNames;
 
-    const mu::RectF& bbox() const { return m_bbox; }
-    mu::RectF& bbox() { return m_bbox; }
-    void setbbox(const mu::RectF& r) { m_bbox = r; }
+    const RectF& bbox() const { return m_bbox; }
+    RectF& bbox() { return m_bbox; }
+    void setbbox(const RectF& r) { m_bbox = r; }
     void setbbox(double x, double y, double w, double h) { m_bbox.setRect(x, y, w, h); }
     double y() const { return m_bbox.y() + m_yOff; }
     void setYOff(double offset) { m_yOff = offset; }
@@ -74,7 +74,7 @@ public:
     Skyline& skyline() { return m_skyline; }
 
 private:
-    mu::RectF m_bbox;               // Bbox of StaffLines.
+    RectF m_bbox;               // Bbox of StaffLines.
     Skyline m_skyline;
     double m_yOff = 0.0;            // offset of top staff line within bbox
     double m_yPos = 0.0;            // y position of bbox after System::layout2
@@ -132,9 +132,9 @@ public:
     void removeStaff(int);
     void adjustStavesNumber(size_t nstaves);
 
-    staff_idx_t searchStaff(double y, staff_idx_t preferredStaff = mu::nidx, double spacingFactor = 0.5) const;
-    Fraction snap(const Fraction& tick, const mu::PointF p) const;
-    Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
+    staff_idx_t searchStaff(double y, staff_idx_t preferredStaff = muse::nidx, double spacingFactor = 0.5) const;
+    Fraction snap(const Fraction& tick, const PointF p) const;
+    Fraction snapNote(const Fraction& tick, const PointF p, int staff) const;
 
     const std::vector<MeasureBase*>& measures() const { return m_ml; }
     std::vector<MeasureBase*>& measures() { return m_ml; }

@@ -23,10 +23,9 @@
 
 #include "log.h"
 
-using namespace mu::api;
 using namespace muse::extensions::api;
 
-ExtApi::ExtApi(IApiEngine* engine, QObject* parent)
+ExtApi::ExtApi(muse::api::IApiEngine* engine, QObject* parent)
     : QObject(parent), m_engine(engine)
 {
 }

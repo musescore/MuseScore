@@ -65,7 +65,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
 
 void MeasureBase::clearElements()
 {
-    DeleteAll(m_el);
+    muse::DeleteAll(m_el);
     m_el.clear();
 }
 
@@ -98,7 +98,7 @@ void MeasureBase::setScore(Score* score)
 
 MeasureBase::~MeasureBase()
 {
-    DeleteAll(m_el);
+    muse::DeleteAll(m_el);
 }
 
 //---------------------------------------------------------
@@ -355,7 +355,7 @@ void MeasureBase::triggerLayout() const
     const MeasureBase* mb = top();
     // avoid triggering layout before getting added to a score
     if (mb->prev() || mb->next()) {
-        score()->setLayout(mb->tick(), mu::nidx, mb);
+        score()->setLayout(mb->tick(), muse::nidx, mb);
     }
 }
 
@@ -368,10 +368,10 @@ void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*),
     if (isMeasure()) {
         for (EngravingItem* e : m_el) {
             staff_idx_t staffIdx = e->staffIdx();
-            if (staffIdx != mu::nidx && staffIdx >= score()->staves().size()) {
+            if (staffIdx != muse::nidx && staffIdx >= score()->staves().size()) {
                 LOGD("MeasureBase::scanElements: bad staffIdx %zu in element %s", staffIdx, e->typeName());
             }
-            if ((e->track() == mu::nidx) || e->systemFlag() || toMeasure(this)->visible(staffIdx)) {
+            if ((e->track() == muse::nidx) || e->systemFlag() || toMeasure(this)->visible(staffIdx)) {
                 e->scanElements(data, func, all);
             }
         }
@@ -527,7 +527,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
-        lb->setTrack(mu::nidx);           // this are system elements
+        lb->setTrack(muse::nidx);           // this are system elements
         lb->setParent(mb);
         score()->undoAddElement(lb);
     }

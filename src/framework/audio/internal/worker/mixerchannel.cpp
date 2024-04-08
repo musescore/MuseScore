@@ -28,9 +28,9 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
-using namespace mu::async;
+using namespace muse::async;
 
 MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate)
     : m_trackId(trackId),

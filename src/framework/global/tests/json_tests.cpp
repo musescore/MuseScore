@@ -29,7 +29,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-using namespace mu;
+using namespace muse;
 
 class Global_Ser_Json : public ::testing::Test
 {

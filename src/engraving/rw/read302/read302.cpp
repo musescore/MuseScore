@@ -55,7 +55,7 @@ using namespace mu::engraving::compat;
 bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        ctx.setTrack(mu::nidx);
+        ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
             read400::StaffRead::readStaff(score, e, ctx);
@@ -203,8 +203,8 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
     ctx.reconnectBrokenConnectors();
-    if (e.error() != XmlStreamReader::NoError) {
-        if (e.error() == XmlStreamReader::CustomError) {
+    if (e.error() != muse::XmlStreamReader::NoError) {
+        if (e.error() == muse::XmlStreamReader::CustomError) {
             LOGE() << e.errorString();
         } else {
             LOGE() << String(u"XML read error at line %1, column %2: %3").arg(e.lineNumber(), e.columnNumber())
@@ -271,7 +271,7 @@ Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!readScore302(score, e, ctx)) {
-                if (e.error() == XmlStreamReader::CustomError) {
+                if (e.error() == muse::XmlStreamReader::CustomError) {
                     return Err::FileCriticallyCorrupted;
                 }
                 return Err::FileBadFormat;

@@ -1,6 +1,6 @@
 #include "fontproviderstub.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 
 int FontProviderStub::addSymbolFont(const String&, const io::path_t&)

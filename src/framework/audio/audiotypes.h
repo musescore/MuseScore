@@ -55,7 +55,7 @@ using TrackName = std::string;
 
 using aux_channel_idx_t = uint8_t;
 
-using PlaybackData = std::variant<mpe::PlaybackData, mu::io::IODevice*>;
+using PlaybackData = std::variant<mpe::PlaybackData, io::IODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
 static constexpr TrackId INVALID_TRACK_ID = -1;
@@ -257,7 +257,7 @@ struct AuxSendParams {
 
     bool operator ==(const AuxSendParams& other) const
     {
-        return mu::RealIsEqual(signalAmount, other.signalAmount) && active == other.active;
+        return RealIsEqual(signalAmount, other.signalAmount) && active == other.active;
     }
 };
 
@@ -275,8 +275,8 @@ struct AudioOutputParams {
     bool operator ==(const AudioOutputParams& other) const
     {
         return fxChain == other.fxChain
-               && mu::RealIsEqual(volume, other.volume)
-               && mu::RealIsEqual(balance, other.balance)
+               && RealIsEqual(volume, other.volume)
+               && RealIsEqual(balance, other.balance)
                && auxSends == other.auxSends
                && solo == other.solo
                && muted == other.muted
@@ -348,7 +348,7 @@ struct AudioSignalsNotifier {
 
         volume_dbfs_t validatedPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
 
-        if (mu::RealIsEqual(signalVal.pressure, validatedPressure)) {
+        if (RealIsEqual(signalVal.pressure, validatedPressure)) {
             return;
         }
 

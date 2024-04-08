@@ -30,14 +30,14 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::actions::api {
-class DispatcherApi : public mu::api::ApiObject
+class DispatcherApi : public muse::api::ApiObject
 {
     Q_OBJECT
 
     Inject<IActionsDispatcher> dispatcher;
 
 public:
-    explicit DispatcherApi(mu::api::IApiEngine* e);
+    explicit DispatcherApi(muse::api::IApiEngine* e);
 
     Q_INVOKABLE void dispatch(const QString& action, const QVariantList& args = QVariantList());
 };

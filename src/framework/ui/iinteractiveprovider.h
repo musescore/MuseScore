@@ -38,21 +38,21 @@ class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInteractiveProvider() = default;
 
-    virtual RetVal<Val> question(const std::string& title, const mu::IInteractive::Text& text, const mu::IInteractive::ButtonDatas& buttons,
-                                 int defBtn = int(mu::IInteractive::Button::NoButton), const mu::IInteractive::Options& options = {}) = 0;
+    virtual RetVal<Val> question(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
+                                 int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) = 0;
 
-    virtual RetVal<Val> info(const std::string& title, const mu::IInteractive::Text& text, const mu::IInteractive::ButtonDatas& buttons,
-                             int defBtn = int(mu::IInteractive::Button::NoButton), const mu::IInteractive::Options& options = {}) = 0;
+    virtual RetVal<Val> info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
+                             int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) = 0;
 
-    virtual RetVal<Val> warning(const std::string& title, const mu::IInteractive::Text& text, const std::string& detailedText = {},
-                                const mu::IInteractive::ButtonDatas& buttons = {}, int defBtn = int(mu::IInteractive::Button::NoButton),
-                                const mu::IInteractive::Options& options = {}) = 0;
+    virtual RetVal<Val> warning(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
+                                const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
+                                const IInteractive::Options& options = {}) = 0;
 
-    virtual RetVal<Val> error(const std::string& title, const mu::IInteractive::Text& text, const std::string& detailedText = {},
-                              const mu::IInteractive::ButtonDatas& buttons = {}, int defBtn = int(mu::IInteractive::Button::NoButton),
-                              const mu::IInteractive::Options& options = {}) = 0;
+    virtual RetVal<Val> error(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
+                              const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
+                              const IInteractive::Options& options = {}) = 0;
 
-    virtual Ret showProgress(const std::string& title, mu::Progress* progress) = 0;
+    virtual Ret showProgress(const std::string& title, Progress* progress) = 0;
 
     virtual RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                  const std::vector<std::string>& filter) = 0;

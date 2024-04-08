@@ -35,10 +35,11 @@
 #include "translation.h"
 #include "log.h"
 
+using namespace muse;
 using namespace muse::update;
 using namespace muse::network;
 
-mu::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
+muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
     result.ret = make_ret(Err::NoUpdate);
@@ -83,7 +84,7 @@ mu::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
     ReleaseInfo releaseInfo = releaseInfoRetVal.val;
     releaseInfo.previousReleasesNotes = previousReleasesNotes(update);
 
-    result.ret = mu::make_ok();
+    result.ret = muse::make_ok();
     result.val = std::move(releaseInfo);
 
     m_lastCheckResult = result.val;
@@ -91,7 +92,7 @@ mu::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
     return result;
 }
 
-mu::RetVal<mu::io::path_t> AppUpdateService::downloadRelease()
+muse::RetVal<muse::io::path_t> AppUpdateService::downloadRelease()
 {
     RetVal<io::path_t> result;
 
@@ -107,7 +108,7 @@ mu::RetVal<mu::io::path_t> AppUpdateService::downloadRelease()
 
             //: Means that the download is currently in progress.
             //: %1 will be replaced by the version number of the version that is being downloaded.
-            mu::qtrc("update", "Downloading MuseScore %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
+            muse::qtrc("update", "Downloading MuseScore %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
     });
 
     Ret ret = m_networkManager->get(fileUrl, &buff);
@@ -117,7 +118,7 @@ mu::RetVal<mu::io::path_t> AppUpdateService::downloadRelease()
     }
 
     io::path_t installerPath = configuration()->updateDataPath() + "/" + m_lastCheckResult.fileName;
-    fileSystem()->makePath(mu::io::absoluteDirpath(installerPath));
+    fileSystem()->makePath(muse::io::absoluteDirpath(installerPath));
 
     ret = fileSystem()->writeFile(installerPath, ByteArray::fromQByteArrayNoCopy(buff.data()));
     if (ret) {
@@ -135,12 +136,12 @@ void AppUpdateService::cancelUpdate()
     }
 }
 
-mu::Progress AppUpdateService::updateProgress()
+Progress AppUpdateService::updateProgress()
 {
     return m_updateProgress;
 }
 
-mu::RetVal<ReleaseInfo> AppUpdateService::parseRelease(const QByteArray& json) const
+RetVal<ReleaseInfo> AppUpdateService::parseRelease(const QByteArray& json) const
 {
     RetVal<ReleaseInfo> result;
 
@@ -161,7 +162,7 @@ mu::RetVal<ReleaseInfo> AppUpdateService::parseRelease(const QByteArray& json) c
         return result;
     }
 
-    result.ret = mu::make_ok();
+    result.ret = muse::make_ok();
 
     result.val.fileName = assetObj.value("name").toString().toStdString();
     result.val.fileUrl = assetObj.value("browser_download_url").toString().toStdString();
@@ -187,7 +188,7 @@ std::string AppUpdateService::platformFileSuffix() const
     return "";
 }
 
-mu::ISystemInfo::CpuArchitecture AppUpdateService::assetArch(const QString& asset) const
+ISystemInfo::CpuArchitecture AppUpdateService::assetArch(const QString& asset) const
 {
     if (asset.contains("aarch64")) {
         return ISystemInfo::CpuArchitecture::Arm64;

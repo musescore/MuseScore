@@ -174,7 +174,7 @@ extern std::vector<MidiArticulation> midiArticulations;
 extern std::vector<InstrumentGroup*> instrumentGroups;
 extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
-extern bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath);
+extern bool loadInstrumentTemplates(const muse::io::path_t& instrTemplatesPath);
 extern InstrumentTemplate* searchTemplate(const String& name);
 extern InstrumentIndex searchTemplateIndexForTrackName(const String& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const String& id);

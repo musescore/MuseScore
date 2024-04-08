@@ -54,7 +54,7 @@ public:
     }
 
     double EvalY(const double t) const { return -(t * t) * (2.0 * t - 3.0); }
-    mu::PointF Eval(const double t) const { return { EvalX(t), EvalY(t) }; }
+    muse::PointF Eval(const double t) const { return { EvalX(t), EvalY(t) }; }
     double tFromX(const double x) const;
     double tFromY(const double y) const;
     double YfromX(const double x) const { return EvalY(tFromX(x)); }

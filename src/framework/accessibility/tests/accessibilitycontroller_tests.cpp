@@ -35,7 +35,7 @@ using ::testing::_;
 using ::testing::SaveArg;
 using ::testing::DoAll;
 
-using namespace mu;
+using namespace muse;
 using namespace muse::accessibility;
 
 class Accessibility_ControllerTests : public ::testing::Test

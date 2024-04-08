@@ -138,7 +138,7 @@ int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
 {
     if (m_staffNumberToIndex.size() == 0) {
         return staffNumber - 1;
-    } else if (mu::contains(m_staffNumberToIndex, staffNumber)) {
+    } else if (muse::contains(m_staffNumberToIndex, staffNumber)) {
         return m_staffNumberToIndex.at(staffNumber);
     } else {
         return -1;

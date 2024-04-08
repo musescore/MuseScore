@@ -436,7 +436,7 @@ Note* Glissando::guessFinalNote(Chord* chord, Note* startNote)
         }
         // normal case: try to return the note in the next chord that is in the
         // same position as the start note relative to the end chord
-        size_t startNoteIdx = mu::indexOf(chord->notes(), startNote);
+        size_t startNoteIdx = muse::indexOf(chord->notes(), startNote);
         size_t endNoteIdx = std::min(startNoteIdx, target->notes().size() - 1);
         return target->notes().at(endNoteIdx);
     }

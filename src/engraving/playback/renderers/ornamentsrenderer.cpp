@@ -408,11 +408,11 @@ void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx
 
 float DisclosurePattern::subNoteDurationTicks(const double bps) const
 {
-    if (mu::RealIsEqualOrMore(bps, PRESTISSIMO_BPS_BOUND)) {
+    if (muse::RealIsEqualOrMore(bps, PRESTISSIMO_BPS_BOUND)) {
         return boundaries.highTempoDurationTicks;
     }
 
-    if (mu::RealIsEqualOrMore(bps, MODERATO_BPS_BOUND)) {
+    if (muse::RealIsEqualOrMore(bps, MODERATO_BPS_BOUND)) {
         return boundaries.mediumTempoDurationTicks;
     }
 
@@ -429,8 +429,8 @@ DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const 
 
     float subNoteTicks = subNoteDurationTicks(bps);
 
-    result.prefixDurationTicks = mu::RealRound(prefixPitchOffsets.size() * subNoteTicks, 0);
-    result.suffixDurationTicks = mu::RealRound(suffixPitchOffsets.size() * subNoteTicks, 0);
+    result.prefixDurationTicks = muse::RealRound(prefixPitchOffsets.size() * subNoteTicks, 0);
+    result.suffixDurationTicks = muse::RealRound(suffixPitchOffsets.size() * subNoteTicks, 0);
 
     return result;
 }

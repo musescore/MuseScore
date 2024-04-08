@@ -31,7 +31,7 @@ namespace mu::iex::bb {
 extern Err importBB(MasterScore* score, const QString& name);
 }
 
-mu::Ret NotationBBReader::read(MasterScore* score, const io::path_t& path, const Options&)
+muse::Ret NotationBBReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     Err err = importBB(score, path.toQString());
     return make_ret(err, path);

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_STRING_H
-#define MU_GLOBAL_STRING_H
+#ifndef MUSE_GLOBAL_STRING_H
+#define MUSE_GLOBAL_STRING_H
 
 #include <memory>
 #include <cstring>
@@ -38,7 +38,7 @@
 #include <QStringList>
 #endif
 
-namespace mu {
+namespace muse {
 enum CaseSensitivity {
     CaseInsensitive = 0,
     CaseSensitive = 1
@@ -205,7 +205,7 @@ public:
     String();
     String(const char16_t* str);
     String(const Char& ch);
-    String(const Char* unicode, size_t size = mu::nidx);
+    String(const Char* unicode, size_t size = muse::nidx);
 
 #ifndef NO_QT_SUPPORT
     String(const QString& str) { *this = fromQString(str); }
@@ -242,7 +242,7 @@ public:
     String& operator +=(const char16_t* s);
     inline String& operator +=(char16_t s) { return append(s); }
 
-    inline String operator+(const mu::String& s) const { String t(*this); t += s; return t; }
+    inline String operator+(const muse::String& s) const { String t(*this); t += s; return t; }
     inline String operator+(const char16_t* s) const { String t(*this); t += s; return t; }
     inline String operator+(char16_t s) const { String t(*this); t += s; return t; }
 
@@ -260,14 +260,14 @@ public:
     static String fromUtf8(const ByteArray& data);
     ByteArray toUtf8() const;
 
-    static String fromAscii(const char* str, size_t size = mu::nidx);
+    static String fromAscii(const char* str, size_t size = muse::nidx);
     ByteArray toAscii(bool* ok = nullptr) const;
 
     static String fromStdString(const std::string& str);
     std::string toStdString() const;
     std::u16string toStdU16String() const;
 
-    static String fromUcs4(const char32_t* str, size_t size = mu::nidx);
+    static String fromUcs4(const char32_t* str, size_t size = muse::nidx);
     static String fromUcs4(char32_t chr);
     std::u32string toStdU32String() const;
 
@@ -285,7 +285,7 @@ public:
     size_t indexOf(const Char& ch, size_t from = 0) const;
     size_t indexOf(const String& str, size_t from = 0) const;
     size_t indexOf(const char16_t* str, size_t from = 0) const;
-    size_t lastIndexOf(const Char& ch, size_t from = mu::nidx) const;
+    size_t lastIndexOf(const Char& ch, size_t from = muse::nidx) const;
 
     //! NOTE Now implemented only compare with ASCII
     bool startsWith(const String& str, CaseSensitivity cs = CaseSensitive) const;
@@ -305,7 +305,7 @@ public:
     String& remove(const std::regex& rx) { return replace(rx, String()); }
     String& remove(const Char& ch);
     String& remove(char16_t ch);
-    String& remove(size_t position, size_t n = mu::nidx);
+    String& remove(size_t position, size_t n = muse::nidx);
     void chop(size_t n);
     void truncate(size_t position);
 
@@ -331,7 +331,7 @@ public:
     String arg(double val1, double val2) const { return arg(number(val1), number(val2)); }
     String arg(double val1, double val2, double val3) const { return arg(number(val1), number(val2), number(val3)); }
 
-    String mid(size_t pos, size_t count = mu::nidx) const;
+    String mid(size_t pos, size_t count = muse::nidx) const;
     String left(size_t n) const;
     String right(size_t n) const;
 
@@ -387,8 +387,8 @@ public:
     StringList& operator <<(const StringList& l) { return append(l); }
     StringList& append(const StringList& l);
 
-    size_t indexOf(const String& s) const { return mu::indexOf(*this, s); }
-    bool contains(const String& s) const { return mu::contains(*this, s); }
+    size_t indexOf(const String& s) const { return muse::indexOf(*this, s); }
+    bool contains(const String& s) const { return muse::contains(*this, s); }
     StringList filter(const String& str) const;
     String join(const String& sep) const;
 
@@ -469,22 +469,22 @@ inline String operator+(const char16_t* s1, const String& s2) { String t(s1); t 
 // ============================
 // Char (UTF-16)
 // ============================
-inline bool operator ==(const char16_t c1, const mu::Char c2) { return c2 == c1; }
-inline bool operator !=(const char16_t c1, const mu::Char c2) { return c2 != c1; }
+inline bool operator ==(const char16_t c1, const muse::Char c2) { return c2 == c1; }
+inline bool operator !=(const char16_t c1, const muse::Char c2) { return c2 != c1; }
 
 // ============================
 // String (UTF-16)
 // ============================
-inline bool operator ==(const char16_t* s1, const mu::String& s2) { return s2 == s1; }
-inline bool operator !=(const char16_t* s1, const mu::String& s2) { return s2 != s1; }
+inline bool operator ==(const char16_t* s1, const muse::String& s2) { return s2 == s1; }
+inline bool operator !=(const char16_t* s1, const muse::String& s2) { return s2 != s1; }
 
 template<>
-struct std::hash<mu::String>
+struct std::hash<muse::String>
 {
-    std::size_t operator()(const mu::String& s) const noexcept { return s.hash(); }
+    std::size_t operator()(const muse::String& s) const noexcept { return s.hash(); }
 };
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::String& str)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::String& str)
 {
     s << str.toUtf8().constChar();
     return s;
@@ -493,10 +493,10 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::String& s
 // ============================
 // AsciiStringView (ASCII)
 // ============================
-inline bool operator ==(const char* s1, const mu::AsciiStringView& s2) { return s2 == s1; }
-inline bool operator !=(const char* s1, const mu::AsciiStringView& s2) { return s2 != s1; }
+inline bool operator ==(const char* s1, const muse::AsciiStringView& s2) { return s2 == s1; }
+inline bool operator !=(const char* s1, const muse::AsciiStringView& s2) { return s2 != s1; }
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiStringView& str)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::AsciiStringView& str)
 {
     s << str.ascii();
     return s;
@@ -506,10 +506,4 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiStri
 #  define muPrintable(string) string.toUtf8().constChar()
 #endif
 
-namespace muse {
-using Char = mu::Char;
-using String = mu::String;
-using StringList = mu::StringList;
-}
-
-#endif // MU_GLOBAL_STRING_H
+#endif // MUSE_GLOBAL_STRING_H

@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
 struct SingletonApiCreator : public IApiRegister::ICreator
 {

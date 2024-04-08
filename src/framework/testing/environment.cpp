@@ -24,7 +24,7 @@
 
 #include "framework/global/globalmodule.h"
 
-using namespace mu::testing;
+using namespace muse::testing;
 
 Environment::Modules Environment::m_dependencyModules;
 Environment::PreInit Environment::m_preInit;
@@ -47,7 +47,7 @@ void Environment::setPostInit(const PostInit& postInit)
 
 void Environment::setup()
 {
-    static mu::GlobalModule globalModule;
+    static muse::GlobalModule globalModule;
 
     IApplication::RunMode runMode = IApplication::RunMode::GuiApp;
 
@@ -55,16 +55,16 @@ void Environment::setup()
     globalModule.registerExports();
     globalModule.registerUiTypes();
 
-    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerResources();
     }
 
-    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerExports();
     }
 
     globalModule.resolveImports();
-    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerUiTypes();
         m->resolveImports();
     }
@@ -72,7 +72,7 @@ void Environment::setup()
     globalModule.onPreInit(runMode);
     //! NOTE Now we can use logger and profiler
 
-    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->onPreInit(runMode);
     }
 
@@ -81,17 +81,17 @@ void Environment::setup()
     }
 
     globalModule.onInit(runMode);
-    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->onInit(runMode);
     }
 
     globalModule.onAllInited(runMode);
-    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->onAllInited(runMode);
     }
 
     globalModule.onStartApp();
-    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->onStartApp();
     }
 

@@ -87,7 +87,7 @@ public:
     void fillSegments();    // converting points from file to bend segments
 
     void fillStretchedSegments(bool untilNextSegment);
-    mu::RectF calculateBoundingRect() const;
+    RectF calculateBoundingRect() const;
 
     static std::vector<Note*> notesWithStretchedBend(Chord* chord);
     static void prepareBends(std::vector<StretchedBend*>& bends);

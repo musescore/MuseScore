@@ -41,13 +41,13 @@ public:
     virtual double advance(SymId id, double mag) const = 0;
 
     virtual RectF bbox(SymId id, double mag) const = 0;
-    virtual RectF bbox(SymId id, const mu::SizeF&) const = 0;
+    virtual RectF bbox(SymId id, const SizeF&) const = 0;
     virtual RectF bbox(const SymIdList& sl, double mag) const = 0;
-    virtual RectF bbox(const SymIdList& s, const mu::SizeF& mag) const = 0;
+    virtual RectF bbox(const SymIdList& s, const SizeF& mag) const = 0;
     virtual Shape shape(const SymIdList& s, double mag) const = 0;
-    virtual Shape shape(const SymIdList& s, const mu::SizeF& mag) const = 0;
+    virtual Shape shape(const SymIdList& s, const SizeF& mag) const = 0;
     virtual Shape shapeWithCutouts(SymId id, double mag) = 0;
-    virtual Shape shapeWithCutouts(SymId id, const mu::SizeF& mag) = 0;
+    virtual Shape shapeWithCutouts(SymId id, const SizeF& mag) = 0;
 
     virtual PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const = 0;
 

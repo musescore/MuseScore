@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IPC_IPCCHANNEL_H
-#define MU_IPC_IPCCHANNEL_H
+#ifndef MUSE_IPC_IPCCHANNEL_H
+#define MUSE_IPC_IPCCHANNEL_H
 
 #include <functional>
 
@@ -33,7 +33,7 @@
 #include "async/channel.h"
 #include "async/notification.h"
 
-namespace mu::ipc {
+namespace muse::ipc {
 //! NOTE Inter-Process Communication Channel
 class IpcSocket;
 class IpcServer;
@@ -74,4 +74,4 @@ private:
 };
 }
 
-#endif // MU_IPC_IPCCHANNEL_H
+#endif // MUSE_IPC_IPCCHANNEL_H

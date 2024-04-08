@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_CRYPTOGRAPHICHASH_H
-#define MU_GLOBAL_CRYPTOGRAPHICHASH_H
+#ifndef MUSE_GLOBAL_CRYPTOGRAPHICHASH_H
+#define MUSE_GLOBAL_CRYPTOGRAPHICHASH_H
 
 #include "icryptographichash.h"
 
-namespace mu {
+namespace muse {
 class CryptographicHash : public ICryptographicHash
 {
 public:
@@ -34,4 +34,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_CRYPTOGRAPHICHASH_H
+#endif // MUSE_GLOBAL_CRYPTOGRAPHICHASH_H

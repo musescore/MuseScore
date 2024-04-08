@@ -28,6 +28,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::app;
 
 static QStringList prepareArguments(int argc, char** argv)
@@ -202,7 +203,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("d")) {
-        m_options.app.loggerLevel = mu::logger::Level::Debug;
+        m_options.app.loggerLevel = logger::Level::Debug;
     }
 
     if (m_parser.isSet("D")) {
@@ -487,7 +488,7 @@ void CommandLineParser::processBuiltinArgs(const QCoreApplication& app)
     m_parser.process(app);
 }
 
-mu::IApplication::RunMode CommandLineParser::runMode() const
+IApplication::RunMode CommandLineParser::runMode() const
 {
     return m_runMode;
 }

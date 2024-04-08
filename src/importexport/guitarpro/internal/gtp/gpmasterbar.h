@@ -63,7 +63,7 @@ public:
         };
 
         Type type = Type::Repeat;
-        String name;
+        muse::String name;
     };
 
     ~GPMasterBar() = default;
@@ -94,8 +94,8 @@ public:
     void setAlternativeEnding(std::vector<int>&& r) { _alternateEndings.swap(r); }
     const std::vector<int>& alternateEnding() const { return _alternateEndings; }
 
-    void setSection(std::pair<String, String>&& s) { _section.swap(s); }
-    const std::pair<String, String>& section() const { return _section; }
+    void setSection(std::pair<muse::String, muse::String>&& s) { _section.swap(s); }
+    const std::pair<muse::String, muse::String>& section() const { return _section; }
 
     void setDirections(std::vector<Direction>&& d) { _directions.swap(d); }
     const std::vector<Direction>& directions() const { return _directions; }
@@ -119,7 +119,7 @@ private:
     TripletFeelType _tripletFeel = TripletFeelType::None;
     BarlineType _barlineType = BarlineType::NORMAL;
     bool _freeTime = false;
-    std::pair<String, String> _section;
+    std::pair<muse::String, muse::String> _section;
     Direction _direction;
 };
 } // namespace mu::iex::guitarpro

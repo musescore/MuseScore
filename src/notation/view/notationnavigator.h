@@ -46,12 +46,12 @@ class NotationNavigatorCursorView : public QQuickPaintedItem
 public:
     NotationNavigatorCursorView(QQuickItem* parent = nullptr);
 
-    void setRect(const RectF& cursorRect);
+    void setRect(const muse::RectF& cursorRect);
 
 private:
     virtual void paint(QPainter* painter) override;
 
-    RectF m_cursorRect;
+    muse::RectF m_cursorRect;
 };
 
 class NotationNavigator : public AbstractNotationPaintView
@@ -96,15 +96,15 @@ private:
 
     void paintPageNumbers(QPainter* painter);
 
-    bool moveCanvasToRect(const RectF& viewRect);
+    bool moveCanvasToRect(const muse::RectF& viewRect);
 
     bool isVerticalOrientation() const;
 
     PageList pages() const;
 
-    RectF m_cursorRect;
+    muse::RectF m_cursorRect;
     NotationNavigatorCursorView* m_cursorRectView = nullptr;
-    PointF m_startMove;
+    muse::PointF m_startMove;
 };
 }
 

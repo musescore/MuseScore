@@ -32,9 +32,10 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, io::IODevice& dstDevice, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, io::IODevice& dstDevice, const Options& options = Options()) override;
-    mu::engraving::Err writeScore(mu::engraving::Score* score, const io::path_t& path);
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
+                        const Options& options = Options()) override;
+    mu::engraving::Err writeScore(mu::engraving::Score* score, const muse::io::path_t& path);
 };
 } // namespace
 

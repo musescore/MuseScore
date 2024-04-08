@@ -29,7 +29,7 @@ inline void LogWarning(const char* fmt, ...)
     vsnprintf(&str[0], STRING_FORMAT_MAX_LEN, fmt, args);
     va_end(args);
     str.resize(strlen(str.data()));
-    mu::iex::mei::Convert::logs.push_back(mu::String::fromStdString(str));
+    mu::iex::mei::Convert::logs.push_back(muse::String::fromStdString(str));
 }
 
 /**

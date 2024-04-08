@@ -181,7 +181,7 @@ QString EditShortcutModel::conflictWarning() const
         return QString();
     }
 
-    return mu::qtrc("shortcuts", "This shortcut is already assigned to: <b>%1</b>").arg(title);
+    return muse::qtrc("shortcuts", "This shortcut is already assigned to: <b>%1</b>").arg(title);
 }
 
 void EditShortcutModel::applyNewSequence()
@@ -201,12 +201,12 @@ void EditShortcutModel::applyNewSequence()
         return;
     }
 
-    QString str = conflictWarn + "<br><br>" + mu::qtrc("shortcuts", "Are you sure you want to assign it to <b>%1</b> instead?")
+    QString str = conflictWarn + "<br><br>" + muse::qtrc("shortcuts", "Are you sure you want to assign it to <b>%1</b> instead?")
                   .arg(m_originShortcutTitle);
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
 
-    IInteractive::Button btn = interactive()->warning(mu::trc("shortcuts", "Reassign shortcut"), text, {
+    IInteractive::Button btn = interactive()->warning(muse::trc("shortcuts", "Reassign shortcut"), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Ok)
     }, (int)IInteractive::Button::Ok).standardButton();

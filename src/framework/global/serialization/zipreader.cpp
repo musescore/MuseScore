@@ -24,8 +24,8 @@
 #include "global/io/file.h"
 #include "internal/zipcontainer.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 struct ZipReader::Impl
 {

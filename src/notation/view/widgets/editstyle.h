@@ -40,7 +40,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
 
     INJECT(mu::context::IGlobalContext, globalContext)
     INJECT(mu::notation::INotationConfiguration, configuration)
-    INJECT(mu::IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(muse::ui::IUiEngine, uiEngine)
     INJECT(mu::engraving::IEngravingFontsProvider, engravingFonts)
     INJECT(muse::accessibility::IAccessibilityController, accessibilityController)

@@ -35,7 +35,7 @@ class IMasterNotation
 {
 public:
 
-    virtual Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) = 0;
+    virtual muse::Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) = 0;
     virtual void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) = 0;
     virtual engraving::MasterScore* masterScore() const = 0;
     virtual void setMasterScore(engraving::MasterScore* masterScore) = 0;
@@ -47,7 +47,7 @@ public:
     virtual IExcerptNotationPtr createEmptyExcerpt(const QString& name = QString()) const = 0;
 
     virtual const ExcerptNotationList& excerpts() const = 0;
-    virtual async::Notification excerptsChanged() const = 0;
+    virtual muse::async::Notification excerptsChanged() const = 0;
     virtual const ExcerptNotationList& potentialExcerpts() const = 0;
 
     virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
@@ -59,7 +59,7 @@ public:
 
     virtual INotationPartsPtr parts() const = 0;
     virtual bool hasParts() const = 0;
-    virtual async::Notification hasPartsChanged() const = 0;
+    virtual muse::async::Notification hasPartsChanged() const = 0;
 
     virtual INotationPlaybackPtr playback() const = 0;
 };

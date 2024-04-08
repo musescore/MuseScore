@@ -27,6 +27,7 @@
 #include "types/translatablestring.h"
 
 using namespace mu::playback;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
@@ -188,12 +189,12 @@ bool PlaybackUiActions::actionChecked(const UiAction& act) const
     return m_controller->actionChecked(act.code);
 }
 
-mu::async::Channel<ActionCodeList> PlaybackUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> PlaybackUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<ActionCodeList> PlaybackUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> PlaybackUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

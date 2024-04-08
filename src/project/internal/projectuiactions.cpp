@@ -25,6 +25,7 @@
 #include "context/shortcutcontext.h"
 
 using namespace mu::project;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
@@ -154,12 +155,12 @@ bool ProjectUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> ProjectUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> ProjectUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<ActionCodeList> ProjectUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> ProjectUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

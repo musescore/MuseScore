@@ -33,7 +33,7 @@ public:
     DrawDataComparator() = default;
 
     muse::draw::Diff compare(const muse::draw::DrawDataPtr& ref, const muse::draw::DrawDataPtr& test);
-    Ret compare(const io::path_t& ref, const io::path_t& test, const io::path_t& outdiff);
+    muse::Ret compare(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outdiff);
 };
 }
 

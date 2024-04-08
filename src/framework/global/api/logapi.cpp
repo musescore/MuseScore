@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
 LogApi::LogApi(api::IApiEngine* e)
     : ApiObject(e)

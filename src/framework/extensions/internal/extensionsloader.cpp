@@ -30,10 +30,11 @@
 
 #include "log.h"
 
+using namespace muse;
+using namespace muse::extensions;
+
 const std::string MANIFEST("manifest.json");
 const std::string DEV_EXTENSIONS("extensions/dev/");
-
-using namespace muse::extensions;
 
 ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const
 {
@@ -50,7 +51,7 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
             continue;
         }
 
-        if (!mu::runtime::isDebug() && mu::strings::startsWith(m.uri.path(), DEV_EXTENSIONS)) {
+        if (!runtime::isDebug() && muse::strings::startsWith(m.uri.path(), DEV_EXTENSIONS)) {
             continue;
         }
 
@@ -62,7 +63,7 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
             continue;
         }
 
-        if (!mu::runtime::isDebug() && mu::strings::startsWith(m.uri.path(), DEV_EXTENSIONS)) {
+        if (!runtime::isDebug() && muse::strings::startsWith(m.uri.path(), DEV_EXTENSIONS)) {
             continue;
         }
 
@@ -85,7 +86,7 @@ ManifestList ExtensionsLoader::manifesList(const io::path_t& rootPath) const
     return manifests;
 }
 
-mu::io::paths_t ExtensionsLoader::manifestPaths(const io::path_t& rootPath) const
+io::paths_t ExtensionsLoader::manifestPaths(const io::path_t& rootPath) const
 {
     RetVal<io::paths_t> paths = io::Dir::scanFiles(rootPath, { MANIFEST });
     if (!paths.ret) {

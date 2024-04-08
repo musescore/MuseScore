@@ -30,6 +30,7 @@
 
 using namespace mu::project;
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::actions;
 
 TemplatePaintView::TemplatePaintView(QQuickItem* parent)

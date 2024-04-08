@@ -30,10 +30,10 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::palette {
-class PaletteConfiguration : public IPaletteConfiguration, public async::Asyncable
+class PaletteConfiguration : public IPaletteConfiguration, public muse::async::Asyncable
 {
     INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();
@@ -43,38 +43,38 @@ public:
 
     double paletteSpatium() const override;
 
-    ValCh<bool> isSinglePalette() const override;
+    muse::ValCh<bool> isSinglePalette() const override;
     void setIsSinglePalette(bool isSingle) override;
 
-    ValCh<bool> isSingleClickToOpenPalette() const override;
+    muse::ValCh<bool> isSingleClickToOpenPalette() const override;
     void setIsSingleClickToOpenPalette(bool isSingleClick) override;
 
     QColor elementsBackgroundColor() const override;
     QColor elementsColor() const override;
     QColor gridColor() const override;
     QColor accentColor() const override;
-    async::Notification colorsChanged() const override;
+    muse::async::Notification colorsChanged() const override;
 
-    io::path_t keySignaturesDirPath() const override;
-    io::path_t timeSignaturesDirPath() const override;
+    muse::io::path_t keySignaturesDirPath() const override;
+    muse::io::path_t timeSignaturesDirPath() const override;
 
     bool useFactorySettings() const override;
     bool enableExperimental() const override;
 
-    ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const override;
+    muse::ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const override;
     void setPaletteConfig(const QString& paletteId, const PaletteConfig& config) override;
 
-    ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const override;
+    muse::ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const override;
     void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) override;
 
 private:
     QColor themeColor(muse::ui::ThemeStyleKey key) const;
 
-    ValCh<bool> m_isSinglePalette;
-    ValCh<bool> m_isSingleClickToOpenPalette;
+    muse::ValCh<bool> m_isSinglePalette;
+    muse::ValCh<bool> m_isSingleClickToOpenPalette;
 
-    mutable QHash<QString, ValCh<PaletteConfig> > m_paletteConfigs;
-    mutable QHash<QString, ValCh<PaletteCellConfig> > m_paletteCellsConfigs;
+    mutable QHash<QString, muse::ValCh<PaletteConfig> > m_paletteConfigs;
+    mutable QHash<QString, muse::ValCh<PaletteCellConfig> > m_paletteCellsConfigs;
 };
 }
 

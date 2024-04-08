@@ -29,9 +29,9 @@ bool PlaybackControllerStub::isPlayAllowed() const
     return false;
 }
 
-mu::async::Notification PlaybackControllerStub::isPlayAllowedChanged() const
+muse::async::Notification PlaybackControllerStub::isPlayAllowedChanged() const
 {
-    return mu::async::Notification();
+    return muse::async::Notification();
 }
 
 bool PlaybackControllerStub::isPlaying() const
@@ -39,9 +39,9 @@ bool PlaybackControllerStub::isPlaying() const
     return false;
 }
 
-mu::async::Notification PlaybackControllerStub::isPlayingChanged() const
+muse::async::Notification PlaybackControllerStub::isPlayingChanged() const
 {
-    return mu::async::Notification();
+    return muse::async::Notification();
 }
 
 void PlaybackControllerStub::seek(const muse::midi::tick_t)
@@ -56,14 +56,14 @@ void PlaybackControllerStub::reset()
 {
 }
 
-mu::async::Notification PlaybackControllerStub::playbackPositionChanged() const
+muse::async::Notification PlaybackControllerStub::playbackPositionChanged() const
 {
-    return mu::async::Notification();
+    return muse::async::Notification();
 }
 
-mu::async::Channel<uint32_t> PlaybackControllerStub::midiTickPlayed() const
+muse::async::Channel<uint32_t> PlaybackControllerStub::midiTickPlayed() const
 {
-    return mu::async::Channel<uint32_t>();
+    return muse::async::Channel<uint32_t>();
 }
 
 float PlaybackControllerStub::playbackPositionInSeconds() const
@@ -76,9 +76,9 @@ muse::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() co
     return 0;
 }
 
-mu::async::Notification PlaybackControllerStub::currentTrackSequenceIdChanged() const
+muse::async::Notification PlaybackControllerStub::currentTrackSequenceIdChanged() const
 {
-    return mu::async::Notification();
+    return muse::async::Notification();
 }
 
 const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrumentTrackIdMap() const
@@ -93,12 +93,12 @@ const IPlaybackController::AuxTrackIdMap& PlaybackControllerStub::auxTrackIdMap(
     return m;
 }
 
-mu::async::Channel<muse::audio::TrackId> PlaybackControllerStub::trackAdded() const
+muse::async::Channel<muse::audio::TrackId> PlaybackControllerStub::trackAdded() const
 {
     return {};
 }
 
-mu::async::Channel<muse::audio::TrackId> PlaybackControllerStub::trackRemoved() const
+muse::async::Channel<muse::audio::TrackId> PlaybackControllerStub::trackRemoved() const
 {
     return {};
 }
@@ -108,15 +108,15 @@ std::string PlaybackControllerStub::auxChannelName(muse::audio::aux_channel_idx_
     return "";
 }
 
-mu::async::Channel<muse::audio::aux_channel_idx_t, std::string> PlaybackControllerStub::auxChannelNameChanged() const
+muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> PlaybackControllerStub::auxChannelNameChanged() const
 {
     return {};
 }
 
-mu::async::Promise<muse::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
+muse::async::Promise<muse::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
 {
-    return async::Promise<muse::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
-        return reject(int(Ret::Code::UnknownError), "stub");
+    return muse::async::Promise<muse::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
+        return reject(int(muse::Ret::Code::UnknownError), "stub");
     });
 }
 
@@ -147,7 +147,7 @@ bool PlaybackControllerStub::actionChecked(const ActionCode&) const
     return false;
 }
 
-mu::async::Channel<ActionCode> PlaybackControllerStub::actionCheckedChanged() const
+muse::async::Channel<ActionCode> PlaybackControllerStub::actionCheckedChanged() const
 {
     return {};
 }
@@ -157,7 +157,7 @@ QTime PlaybackControllerStub::totalPlayTime() const
     return {};
 }
 
-mu::async::Notification PlaybackControllerStub::totalPlayTimeChanged() const
+muse::async::Notification PlaybackControllerStub::totalPlayTimeChanged() const
 {
     return {};
 }
@@ -167,7 +167,7 @@ mu::notation::Tempo PlaybackControllerStub::currentTempo() const
     return {};
 }
 
-mu::async::Notification PlaybackControllerStub::currentTempoChanged() const
+muse::async::Notification PlaybackControllerStub::currentTempoChanged() const
 {
     return {};
 }
@@ -191,7 +191,7 @@ void PlaybackControllerStub::setTempoMultiplier(double)
 {
 }
 
-mu::Progress PlaybackControllerStub::loadingProgress() const
+muse::Progress PlaybackControllerStub::loadingProgress() const
 {
     return {};
 }

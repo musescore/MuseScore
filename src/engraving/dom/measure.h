@@ -225,8 +225,8 @@ public:
 
     Chord* findChord(Fraction tick, track_idx_t track);
     ChordRest* findChordRest(Fraction tick, track_idx_t track);
-    Fraction snap(const Fraction& tick, const mu::PointF p) const;
-    Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
+    Fraction snap(const Fraction& tick, const PointF p) const;
+    Fraction snapNote(const Fraction& tick, const PointF p, int staff) const;
 
     Segment* searchSegment(double x, SegmentType st, track_idx_t strack, track_idx_t etrack, const Segment* preferredSegment = nullptr,
                            double spacingFactor = 0.5) const;
@@ -266,7 +266,7 @@ public:
 
     void connectTremolo();
 
-    void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, muse::draw::Color color = muse::draw::Color());
+    void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, Color color = Color());
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void createVoice(int track);
@@ -296,7 +296,7 @@ public:
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }
-    mu::RectF staffabbox(staff_idx_t staffIdx) const;
+    RectF staffabbox(staff_idx_t staffIdx) const;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

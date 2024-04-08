@@ -54,17 +54,17 @@ public:
 
     const SoloMuteState& auxSoloMuteState(muse::audio::aux_channel_idx_t index) const override;
     void setAuxSoloMuteState(muse::audio::aux_channel_idx_t index, const SoloMuteState& state) override;
-    async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const override;
+    muse::async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const override;
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
     const playback::SoundProfileName& activeSoundProfile() const override;
     void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;
 
-    async::Notification settingsChanged() const override;
+    muse::async::Notification settingsChanged() const override;
 
-    Ret read(const engraving::MscReader& reader);
-    Ret write(engraving::MscWriter& writer, notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr);
+    muse::Ret read(const engraving::MscReader& reader);
+    muse::Ret write(engraving::MscWriter& writer, notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr);
 
     //! NOTE Used for new or imported project (score)
     void makeDefault();
@@ -108,12 +108,12 @@ private:
 
     std::map<muse::audio::aux_channel_idx_t, muse::audio::AudioOutputParams> m_auxOutputParams;
     std::unordered_map<muse::audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStatesMap;
-    async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStateChanged;
+    muse::async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStateChanged;
 
     std::unordered_map<engraving::InstrumentTrackId, muse::audio::AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, muse::audio::AudioOutputParams> m_trackOutputParamsMap;
 
-    async::Notification m_settingsChanged;
+    muse::async::Notification m_settingsChanged;
 
     mu::playback::SoundProfileName m_activeSoundProfileName;
 };

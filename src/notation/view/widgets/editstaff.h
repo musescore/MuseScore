@@ -41,7 +41,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
     Q_OBJECT
 
     INJECT(context::IGlobalContext, globalContext)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(ISelectInstrumentsScenario, selectInstrumentsScenario)
 
 public:

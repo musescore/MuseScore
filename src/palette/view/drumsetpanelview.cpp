@@ -49,7 +49,7 @@ public:
         m_drumsetPaletteWidget->updateDrumset();
     }
 
-    async::Channel<QString> pitchNameChanged() const
+    muse::async::Channel<QString> pitchNameChanged() const
     {
         return m_drumsetPaletteWidget->pitchNameChanged();
     }

@@ -103,9 +103,9 @@ public:
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset
     static SymId subtype2symbol(AccidentalType);
-    static mu::AsciiStringView subtype2name(AccidentalType);
+    static AsciiStringView subtype2name(AccidentalType);
     static AccidentalType value2subtype(AccidentalVal);
-    static AccidentalType name2subtype(const mu::AsciiStringView&);
+    static AccidentalType name2subtype(const AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);
 

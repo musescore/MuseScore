@@ -33,7 +33,7 @@
 
 namespace mu::inspector {
 class IElementRepositoryService;
-class InspectorListModel : public QAbstractListModel, public mu::async::Asyncable
+class InspectorListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 

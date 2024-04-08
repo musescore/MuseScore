@@ -26,7 +26,7 @@
 #include "thirdparty/kors_logger/src/logdefdest.h" // IWYU pragma: export
 #include "thirdparty/kors_logger/src/log_base.h" // IWYU pragma: export
 
-namespace mu::logger {
+namespace muse::logger {
 using Logger = kors::logger::Logger;
 using Type = kors::logger::Type;
 using Level = kors::logger::Level;

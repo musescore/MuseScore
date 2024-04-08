@@ -73,7 +73,7 @@ class PaletteWidget : public QWidget
     INJECT_STATIC(muse::ui::IUiActionsRegister, actionsRegister)
     INJECT_STATIC(context::IGlobalContext, globalContext)
     INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
 public:

@@ -41,7 +41,7 @@ public:
     virtual const synth::SoundFontsMap& soundFonts() const = 0;
     virtual async::Notification soundFontsChanged() const = 0;
 
-    virtual mu::Ret addSoundFont(const synth::SoundFontPath& path) = 0;
+    virtual Ret addSoundFont(const synth::SoundFontPath& path) = 0;
 };
 }
 

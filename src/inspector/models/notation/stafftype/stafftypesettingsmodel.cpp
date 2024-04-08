@@ -31,7 +31,7 @@ StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementReposito
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STAFF_TYPE_CHANGES);
-    setTitle(mu::qtrc("inspector", "Staff type changes"));
+    setTitle(muse::qtrc("inspector", "Staff type changes"));
     setIcon(muse::ui::IconCode::Code::STAFF_TYPE_CHANGE);
     createProperties();
 }
@@ -69,7 +69,7 @@ void StaffTypeSettingsModel::loadProperties()
     loadPropertyItem(m_isSmall);
     loadPropertyItem(m_verticalOffset, formatDoubleFunc);
     loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_lineCount);

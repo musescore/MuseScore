@@ -19,16 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ASYNC_ASYNC_H
-#define MU_ASYNC_ASYNC_H
+#ifndef MUSE_ASYNC_ASYNC_H
+#define MUSE_ASYNC_ASYNC_H
 
 #include "../thirdparty/kors_async/async/async.h"
-namespace mu::async {
-using Async = kors::async::Async;
-}
-
 namespace muse::async {
 using Async = kors::async::Async;
 }
 
-#endif // MU_ASYNC_ASYNC_H
+#endif // MUSE_ASYNC_ASYNC_H

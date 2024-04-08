@@ -32,7 +32,7 @@ class IGPDomBuilder
 {
 public:
     virtual ~IGPDomBuilder() = default;
-    virtual void buildGPDomModel(XmlDomElement* domElem) = 0;
+    virtual void buildGPDomModel(muse::XmlDomElement* domElem) = 0;
     virtual std::unique_ptr<GPDomModel> getGPDomModel() = 0;
 };
 } // namespace mu::iex::guitarpro

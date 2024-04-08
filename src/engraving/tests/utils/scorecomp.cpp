@@ -27,7 +27,7 @@
 
 #include "scorerw.h"
 
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const String& compareWithLocalPath)
@@ -39,7 +39,7 @@ bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const Str
     return compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
 }
 
-bool ScoreComp::saveCompareMimeData(ByteArray mimeData, const String& saveName, const String& compareWithLocalPath)
+bool ScoreComp::saveCompareMimeData(muse::ByteArray mimeData, const muse::String& saveName, const muse::String& compareWithLocalPath)
 {
     if (!ScoreRW::saveMimeData(mimeData, saveName)) {
         return false;

@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
 static const Settings::Key DEV_MODE_ENABLED_KEY("global", "application/devModeEnabled");

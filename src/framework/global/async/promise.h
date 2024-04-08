@@ -19,19 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ASYNC_PROMISE_H
-#define MU_ASYNC_PROMISE_H
+#ifndef MUSE_ASYNC_PROMISE_H
+#define MUSE_ASYNC_PROMISE_H
 
 #include "../thirdparty/kors_async/async/promise.h"
-
-namespace mu::async {
-template<typename ... T>
-using Promise = kors::async::Promise<T...>;
-}
 
 namespace muse::async {
 template<typename ... T>
 using Promise = kors::async::Promise<T...>;
 }
 
-#endif // MU_ASYNC_PROMISE_H
+#endif // MUSE_ASYNC_PROMISE_H

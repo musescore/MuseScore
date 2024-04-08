@@ -35,6 +35,7 @@
 #include "twrite.h"
 #include "staffwrite.h"
 
+using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::write;
 
@@ -145,7 +146,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         xml.tag("page-offset", score->pageNumberOffset());
     }
     xml.tag("Division", Constants::DIVISION);
-    ctx.setCurTrack(mu::nidx);
+    ctx.setCurTrack(muse::nidx);
 
     hook.onWriteStyle302(score, xml);
 
@@ -179,7 +180,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     if (!score->m_systemObjectStaves.empty()) {
         bool saveSysObjStaves = false;
         for (Staff* s : score->m_systemObjectStaves) {
-            IF_ASSERT_FAILED(s->idx() != mu::nidx) {
+            IF_ASSERT_FAILED(s->idx() != muse::nidx) {
                 continue;
             }
             saveSysObjStaves = true;
@@ -189,7 +190,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
             // write which staves currently have system objects above them
             xml.startElement("SystemObjects");
             for (Staff* s : score->m_systemObjectStaves) {
-                IF_ASSERT_FAILED(s->idx() != mu::nidx) {
+                IF_ASSERT_FAILED(s->idx() != muse::nidx) {
                     continue;
                 }
                 // TODO: when we add more granularity to system object display, construct this string per staff
@@ -250,7 +251,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
             StaffWrite::writeStaff(st, xml, ctx, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
-    ctx.setCurTrack(mu::nidx);
+    ctx.setCurTrack(muse::nidx);
 
     hook.onWriteExcerpts302(score, xml, ctx, selectionOnly);
 

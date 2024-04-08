@@ -68,7 +68,7 @@ public:
         }
         bool operator==(const Element& e) const
         {
-            return mu::RealIsEqual(x, e.x) && mu::RealIsEqual(y, e.y) && type == e.type;
+            return RealIsEqual(x, e.x) && RealIsEqual(y, e.y) && type == e.type;
         }
 
         inline bool operator!=(const Element& e) const { return !operator==(e); }
@@ -182,7 +182,7 @@ private:
 
 inline void dump(const PainterPath& p, std::stringstream& ss)
 {
-    ss << "bbox: " << mu::dump(p.boundingRect()) << "\n"
+    ss << "bbox: " << muse::dump(p.boundingRect()) << "\n"
        << "fillRule: " << int(p.fillRule()) << "\n"
        << "elements: " << p.elementCount() << "\n";
     for (size_t i = 0; i < p.elementCount(); ++i) {

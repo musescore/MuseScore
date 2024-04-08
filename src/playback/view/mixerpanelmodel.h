@@ -38,7 +38,7 @@
 #include "internal/mixerchannelitem.h"
 
 namespace mu::playback {
-class MixerPanelModel : public QAbstractListModel, public async::Asyncable
+class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 

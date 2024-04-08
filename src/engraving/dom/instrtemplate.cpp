@@ -42,7 +42,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -145,7 +145,7 @@ static TraitType traitTypeFromString(const String& str)
         { u"course", TraitType::Course }
     };
 
-    return mu::value(types, str.toLower(), TraitType::Unknown);
+    return muse::value(types, str.toLower(), TraitType::Unknown);
 }
 
 //---------------------------------------------------------
@@ -155,7 +155,7 @@ static TraitType traitTypeFromString(const String& str)
 void InstrumentGroup::read(XmlReader& e)
 {
     id       = e.attribute("id");
-    name     = mtrc("engraving/instruments/group", e.attribute("name"));
+    name     = muse::mtrc("engraving/instruments/group", e.attribute("name"));
     extended = e.intAttribute("extended", 0);
 
     while (e.readNextStartElement()) {
@@ -180,7 +180,7 @@ void InstrumentGroup::read(XmlReader& e)
                 LOGD("instrument reference not found <%s>", e.text().toUtf8().data());
             }
         } else if (tag == "name") {
-            name = mtrc("engraving/instruments/group", e.readAsciiText().ascii());
+            name = muse::mtrc("engraving/instruments/group", e.readAsciiText().ascii());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else {
@@ -198,7 +198,7 @@ void InstrumentGroup::read(XmlReader& e)
 
 void InstrumentGroup::clear()
 {
-    DeleteAll(instrumentTemplates);
+    muse::DeleteAll(instrumentTemplates);
     instrumentTemplates.clear();
 }
 
@@ -428,7 +428,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
 String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text)
 {
     String disambiguation = instrumentId + u' ' + nameType;
-    return mtrc("engraving/instruments", text, disambiguation);
+    return muse::mtrc("engraving/instruments", text, disambiguation);
 }
 
 void InstrumentTemplate::read(XmlReader& e)
@@ -646,11 +646,11 @@ void clearInstrumentTemplates()
     for (InstrumentGroup* g : instrumentGroups) {
         g->clear();
     }
-    DeleteAll(instrumentGroups);
+    muse::DeleteAll(instrumentGroups);
     instrumentGroups.clear();
-    DeleteAll(instrumentGenres);
+    muse::DeleteAll(instrumentGenres);
     instrumentGenres.clear();
-    DeleteAll(instrumentFamilies);
+    muse::DeleteAll(instrumentFamilies);
     instrumentFamilies.clear();
     midiArticulations.clear();
     instrumentOrders.clear();
@@ -660,7 +660,7 @@ void clearInstrumentTemplates()
 //   loadInstrumentTemplates
 //---------------------------------------------------------
 
-bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath)
+bool loadInstrumentTemplates(const muse::io::path_t& instrTemplatesPath)
 {
     File qf(instrTemplatesPath);
     if (!qf.open(IODevice::ReadOnly)) {
@@ -762,8 +762,8 @@ InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& name
 
                 int matchStrength = 0
                                     + (4 * (it->trackName == name ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                                    + (2 * (mu::contains(it->longNames, StaffName(name)) ? 1 : 0))
-                                    + (1 * (mu::contains(it->shortNames, StaffName(name)) ? 1 : 0)); // least weight to short name
+                                    + (2 * (muse::contains(it->longNames, StaffName(name)) ? 1 : 0))
+                                    + (1 * (muse::contains(it->shortNames, StaffName(name)) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 assert(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
@@ -779,11 +779,11 @@ InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& name
 
     if (!bestMatch) {
         for (const String& name : nameList) {
-            if (name.contains(u"drum", mu::CaseInsensitive)) {
+            if (name.contains(u"drum", muse::CaseInsensitive)) {
                 return searchTemplate(u"drumset");
             }
 
-            if (name.contains(u"piano", mu::CaseInsensitive)) {
+            if (name.contains(u"piano", muse::CaseInsensitive)) {
                 return searchTemplate(u"piano");
             }
         }
@@ -879,7 +879,7 @@ void InstrumentGenre::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = mtrc("engraving/instruments/genre", e.readText());
+            name = muse::mtrc("engraving/instruments/genre", e.readText());
         } else {
             e.unknown();
         }
@@ -899,7 +899,7 @@ void InstrumentFamily::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = mtrc("engraving/instruments/family", e.readText());
+            name = muse::mtrc("engraving/instruments/family", e.readText());
         } else {
             e.unknown();
         }

@@ -30,6 +30,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::appshell;
 using namespace muse::ui;
 using namespace muse::actions;
@@ -296,12 +297,12 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
     return window ? window->isDockOpen(dockName) : false;
 }
 
-mu::async::Channel<ActionCodeList> ApplicationUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> ApplicationUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<ActionCodeList> ApplicationUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> ApplicationUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace muse::extensions;
-using namespace mu::async;
+using namespace muse::async;
 
 static constexpr int INVALID_INDEX = -1;
 
@@ -100,7 +100,7 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
         }
 
         //: No keyboard shortcut is assigned to this plugin.
-        return mu::qtrc("extensions", "Not defined");
+        return muse::qtrc("extensions", "Not defined");
     }
 
     return QVariant();

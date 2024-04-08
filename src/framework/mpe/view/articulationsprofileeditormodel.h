@@ -38,7 +38,7 @@ class ArticulationsProfileEditorModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(mu::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IArticulationProfilesRepository, profilesRepository)
 
     Q_PROPERTY(QString currentPath READ currentPath WRITE setCurrentPath NOTIFY currentPathChanged)

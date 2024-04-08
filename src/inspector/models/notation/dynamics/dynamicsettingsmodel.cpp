@@ -31,7 +31,7 @@ DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepository
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_DYNAMIC);
-    setTitle(mu::qtrc("inspector ", "Dynamics"));
+    setTitle(muse::qtrc("inspector ", "Dynamics"));
     setIcon(muse::ui::IconCode::Code::DYNAMIC_FORTE);
     createProperties();
 }
@@ -70,7 +70,7 @@ void DynamicsSettingsModel::loadProperties()
 {
     loadPropertyItem(m_avoidBarLines);
     loadPropertyItem(m_dynamicSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
     loadPropertyItem(m_centerOnNotehead);
     loadPropertyItem(m_placement);

@@ -118,7 +118,7 @@ void HairpinWithDynamicsDragGroup::startDrag(EditData& ed)
     }
 }
 
-mu::RectF HairpinWithDynamicsDragGroup::drag(EditData& ed)
+RectF HairpinWithDynamicsDragGroup::drag(EditData& ed)
 {
     RectF r;
 

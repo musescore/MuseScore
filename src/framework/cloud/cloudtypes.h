@@ -148,16 +148,16 @@ struct ScoresList {
     } meta;
 };
 
-constexpr mu::ID INVALID_ID = 0;
+constexpr muse::ID INVALID_ID = 0;
 
-inline mu::ID idFromCloudUrl(const QUrl& sourceUrl)
+inline muse::ID idFromCloudUrl(const QUrl& sourceUrl)
 {
     QStringList parts = sourceUrl.toString().split("/");
     if (parts.isEmpty()) {
         return INVALID_ID;
     }
 
-    return mu::ID(parts.last());
+    return muse::ID(parts.last());
 }
 }
 

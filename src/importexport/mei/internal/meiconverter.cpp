@@ -59,6 +59,7 @@
 
 using namespace mu::iex::mei;
 using namespace mu;
+using namespace muse;
 
 StringList Convert::logs;
 

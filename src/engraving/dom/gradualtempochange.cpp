@@ -131,7 +131,7 @@ double GradualTempoChange::tempoChangeFactor() const
         return m_tempoChangeFactor.value();
     }
 
-    return mu::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
+    return muse::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
 }
 
 PropertyValue GradualTempoChange::getProperty(Pid id) const
@@ -209,7 +209,7 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
     case Pid::TEMPO_EASING_METHOD:
         return ChangeMethod::NORMAL;
     case Pid::TEMPO_CHANGE_FACTOR:
-        return mu::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
+        return muse::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
 
     default:
         return TextLineBase::propertyDefault(propertyId);

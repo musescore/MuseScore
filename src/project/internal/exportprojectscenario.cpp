@@ -28,7 +28,8 @@
 #include "defer.h"
 #include "log.h"
 
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::project;
 using namespace mu::notation;
 
@@ -46,8 +47,8 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
     return writer->supportedUnitTypes();
 }
 
-mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                                INotationWriter::UnitType unitType, io::path_t defaultPath) const
+RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
+                                                              INotationWriter::UnitType unitType, muse::io::path_t defaultPath) const
 {
     INotationProjectPtr project = context()->currentProject();
 
@@ -67,10 +68,10 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
 
         if (containsMaster) {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + mu::trc("project/export", "Score_and_Parts");
+            filenameAddition = "-" + muse::trc("project/export", "Score_and_Parts");
         } else {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + mu::trc("project/export", "Parts");
+            filenameAddition = "-" + muse::trc("project/export", "Parts");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
@@ -87,15 +88,15 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
         defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
     }
 
-    RetVal<io::path_t> exportPath;
-    exportPath.val = interactive()->selectSavingFile(mu::qtrc("project/export", "Export"), defaultPath,
+    RetVal<muse::io::path_t> exportPath;
+    exportPath.val = interactive()->selectSavingFile(muse::qtrc("project/export", "Export"), defaultPath,
                                                      exportType.filter(), isCreatingOnlyOneFile);
     exportPath.ret = !exportPath.val.empty();
 
     return exportPath;
 }
 
-bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t destinationPath,
+bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const muse::io::path_t destinationPath,
                                          INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
     std::string suffix = io::suffix(destinationPath);
@@ -164,7 +165,7 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
         setViewModes(notations, viewModes);
 
         if (writerProgress) {
-            m_exportProgress.finished.send(mu::make_ok());
+            m_exportProgress.finished.send(muse::make_ok());
             writerProgress->progressChanged.resetOnReceive(this);
             m_exportProgress.finished.resetOnReceive(this);
         }
@@ -188,10 +189,10 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
             for (size_t page = 0; page < pageCount; ++page) {
                 options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
 
-                io::path_t definitivePath = isCreatingOnlyOneFile
-                                            ? destinationPath
-                                            : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
-                                                                 static_cast<int>(page));
+                muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                                  ? destinationPath
+                                                  : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
+                                                                       static_cast<int>(page));
 
                 auto exportFunction = [writer, notation, options](io::IODevice& destinationDevice) {
                         return writer->write(notation, destinationDevice, options);
@@ -208,9 +209,10 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     } break;
     case INotationWriter::UnitType::PER_PART: {
         for (const INotationPtr& notation : notations) {
-            io::path_t definitivePath = isCreatingOnlyOneFile
-                                        ? destinationPath
-                                        : completeExportPath(destinationPath, notation, isMainNotation(notation), isExportingOnlyOneScore);
+            muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                              ? destinationPath
+                                              : completeExportPath(destinationPath, notation, isMainNotation(
+                                                                       notation), isExportingOnlyOneScore);
 
             auto exportFunction = [writer, notation, options](IODevice& destinationDevice) {
                     return writer->write(notation, destinationDevice, options);
@@ -326,10 +328,10 @@ IMasterNotationPtr ExportProjectScenario::masterNotation() const
     return context()->currentMasterNotation();
 }
 
-mu::io::path_t ExportProjectScenario::completeExportPath(const io::path_t& basePath, INotationPtr notation, bool isMain,
-                                                         bool isExportingOnlyOneScore, int pageIndex) const
+muse::io::path_t ExportProjectScenario::completeExportPath(const muse::io::path_t& basePath, INotationPtr notation, bool isMain,
+                                                           bool isExportingOnlyOneScore, int pageIndex) const
 {
-    io::path_t result = io::dirpath(basePath) + "/" + io::completeBasename(basePath);
+    muse::io::path_t result = io::dirpath(basePath) + "/" + io::completeBasename(basePath);
 
     if (!isMain && !isExportingOnlyOneScore) {
         result += "-" + io::escapeFileName(notation->name()).toStdString();
@@ -358,13 +360,13 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
         constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
         IInteractive::Result result = interactive()->question(
-            mu::trc("project/export", "File already exists"),
-            mu::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
+            muse::trc("project/export", "File already exists"),
+            muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
-                IInteractive::ButtonData(Replace, mu::trc("project/export", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, mu::trc("project/export", "Replace all")),
-                IInteractive::ButtonData(Skip, mu::trc("project/export", "Skip")),
-                IInteractive::ButtonData(SkipAll, mu::trc("project/export", "Skip all"))
+                IInteractive::ButtonData(Replace, muse::trc("project/export", "Replace")),
+                IInteractive::ButtonData(ReplaceAll, muse::trc("project/export", "Replace all")),
+                IInteractive::ButtonData(Skip, muse::trc("project/export", "Skip")),
+                IInteractive::ButtonData(SkipAll, muse::trc("project/export", "Skip all"))
             });
 
         switch (result.button()) {
@@ -387,14 +389,14 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
     IInteractive::Result result = interactive()->question(
-        mu::trc("project/export", "Error"),
-        mu::qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
+        muse::trc("project/export", "Error"),
+        muse::qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
     return result.standardButton() == IInteractive::Button::Retry;
 }
 
-mu::Ret ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::function<Ret(io::IODevice&)> exportFunction) const
+Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::function<Ret(io::IODevice&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
         return make_ret(Ret::Code::InternalError);
@@ -435,12 +437,12 @@ mu::Ret ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::fu
         break;
     }
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 {
-    std::string title = isAudioExport ? mu::trc("project/export", "Exporting audio…") : mu::trc("project/export", "Exporting…");
+    std::string title = isAudioExport ? muse::trc("project/export", "Exporting audio…") : muse::trc("project/export", "Exporting…");
 
     Ret ret = interactive()->showProgress(title, &m_exportProgress);
     if (!ret) {
@@ -448,7 +450,7 @@ void ExportProjectScenario::showExportProgress(bool isAudioExport) const
     }
 }
 
-void ExportProjectScenario::openFolder(const io::path_t& path) const
+void ExportProjectScenario::openFolder(const muse::io::path_t& path) const
 {
     Ret ret = interactive()->revealInFileBrowser(path.toQString());
 

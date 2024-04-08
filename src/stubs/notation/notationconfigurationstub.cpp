@@ -33,9 +33,9 @@ void NotationConfigurationStub::setBackgroundColor(const QColor&)
 {
 }
 
-io::path_t NotationConfigurationStub::backgroundWallpaperPath() const
+muse::io::path_t NotationConfigurationStub::backgroundWallpaperPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 const QPixmap& NotationConfigurationStub::backgroundWallpaper() const
@@ -44,7 +44,7 @@ const QPixmap& NotationConfigurationStub::backgroundWallpaper() const
     return p;
 }
 
-void NotationConfigurationStub::setBackgroundWallpaperPath(const io::path_t&)
+void NotationConfigurationStub::setBackgroundWallpaperPath(const muse::io::path_t&)
 {
 }
 
@@ -61,9 +61,9 @@ void NotationConfigurationStub::resetBackground()
 {
 }
 
-async::Notification NotationConfigurationStub::backgroundChanged() const
+muse::async::Notification NotationConfigurationStub::backgroundChanged() const
 {
-    static async::Notification n;
+    static muse::async::Notification n;
     return n;
 }
 
@@ -76,9 +76,9 @@ void NotationConfigurationStub::setForegroundColor(const QColor&)
 {
 }
 
-io::path_t NotationConfigurationStub::foregroundWallpaperPath() const
+muse::io::path_t NotationConfigurationStub::foregroundWallpaperPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 const QPixmap& NotationConfigurationStub::foregroundWallpaper() const
@@ -87,7 +87,7 @@ const QPixmap& NotationConfigurationStub::foregroundWallpaper() const
     return p;
 }
 
-void NotationConfigurationStub::setForegroundWallpaperPath(const io::path_t&)
+void NotationConfigurationStub::setForegroundWallpaperPath(const muse::io::path_t&)
 {
 }
 
@@ -104,15 +104,15 @@ void NotationConfigurationStub::resetForeground()
 {
 }
 
-async::Notification NotationConfigurationStub::foregroundChanged() const
+muse::async::Notification NotationConfigurationStub::foregroundChanged() const
 {
-    static async::Notification n;
+    static muse::async::Notification n;
     return n;
 }
 
-io::path_t NotationConfigurationStub::wallpapersDefaultDirPath() const
+muse::io::path_t NotationConfigurationStub::wallpapersDefaultDirPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 QColor NotationConfigurationStub::borderColor() const
@@ -216,36 +216,36 @@ int NotationConfigurationStub::fontSize() const
     return 20;
 }
 
-io::path_t NotationConfigurationStub::userStylesPath() const
+muse::io::path_t NotationConfigurationStub::userStylesPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-void NotationConfigurationStub::setUserStylesPath(const io::path_t&)
+void NotationConfigurationStub::setUserStylesPath(const muse::io::path_t&)
 {
 }
 
-async::Channel<io::path_t> NotationConfigurationStub::userStylesPathChanged() const
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::userStylesPathChanged() const
 {
-    static async::Channel<io::path_t> ch;
+    static muse::async::Channel<muse::io::path_t> ch;
     return ch;
 }
 
-io::path_t NotationConfigurationStub::defaultStyleFilePath() const
+muse::io::path_t NotationConfigurationStub::defaultStyleFilePath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-void NotationConfigurationStub::setDefaultStyleFilePath(const io::path_t&)
+void NotationConfigurationStub::setDefaultStyleFilePath(const muse::io::path_t&)
 {
 }
 
-io::path_t NotationConfigurationStub::partStyleFilePath() const
+muse::io::path_t NotationConfigurationStub::partStyleFilePath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-void NotationConfigurationStub::setPartStyleFilePath(const io::path_t&)
+void NotationConfigurationStub::setPartStyleFilePath(const muse::io::path_t&)
 {
 }
 
@@ -276,9 +276,9 @@ void NotationConfigurationStub::setIsPlayRepeatsEnabled(bool)
 {
 }
 
-async::Notification NotationConfigurationStub::isPlayRepeatsChanged() const
+muse::async::Notification NotationConfigurationStub::isPlayRepeatsChanged() const
 {
-    static async::Notification n;
+    static muse::async::Notification n;
     return n;
 }
 
@@ -291,9 +291,9 @@ void NotationConfigurationStub::setIsPlayChordSymbolsEnabled(bool)
 {
 }
 
-async::Notification NotationConfigurationStub::isPlayChordSymbolsChanged() const
+muse::async::Notification NotationConfigurationStub::isPlayChordSymbolsChanged() const
 {
-    static async::Notification n;
+    static muse::async::Notification n;
     return n;
 }
 
@@ -325,13 +325,13 @@ double NotationConfigurationStub::notationScaling() const
     return 1.0;
 }
 
-ValCh<mu::Orientation> NotationConfigurationStub::canvasOrientation() const
+ValCh<muse::Orientation> NotationConfigurationStub::canvasOrientation() const
 {
-    static ValCh<mu::Orientation> vch;
+    static ValCh<muse::Orientation> vch;
     return vch;
 }
 
-void NotationConfigurationStub::setCanvasOrientation(mu::Orientation)
+void NotationConfigurationStub::setCanvasOrientation(muse::Orientation)
 {
 }
 
@@ -344,9 +344,9 @@ void NotationConfigurationStub::setIsLimitCanvasScrollArea(bool)
 {
 }
 
-async::Notification NotationConfigurationStub::isLimitCanvasScrollAreaChanged() const
+muse::async::Notification NotationConfigurationStub::isLimitCanvasScrollAreaChanged() const
 {
-    static async::Notification n;
+    static muse::async::Notification n;
     return n;
 }
 
@@ -385,9 +385,9 @@ void NotationConfigurationStub::setTestModeEnabled(std::optional<bool>)
 {
 }
 
-io::path_t NotationConfigurationStub::instrumentListPath() const
+muse::io::path_t NotationConfigurationStub::instrumentListPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 io::paths_t NotationConfigurationStub::scoreOrderListPaths() const
@@ -395,9 +395,9 @@ io::paths_t NotationConfigurationStub::scoreOrderListPaths() const
     return io::paths_t();
 }
 
-async::Notification NotationConfigurationStub::scoreOrderListPathsChanged() const
+muse::async::Notification NotationConfigurationStub::scoreOrderListPathsChanged() const
 {
-    static async::Notification n;
+    static muse::async::Notification n;
     return n;
 }
 
@@ -410,21 +410,21 @@ void NotationConfigurationStub::setUserScoreOrderListPaths(const io::paths_t&)
 {
 }
 
-bool NotationConfigurationStub::isSnappedToGrid(mu::Orientation) const
+bool NotationConfigurationStub::isSnappedToGrid(muse::Orientation) const
 {
     return false;
 }
 
-void NotationConfigurationStub::setIsSnappedToGrid(mu::Orientation, bool)
+void NotationConfigurationStub::setIsSnappedToGrid(muse::Orientation, bool)
 {
 }
 
-int NotationConfigurationStub::gridSizeSpatium(mu::Orientation) const
+int NotationConfigurationStub::gridSizeSpatium(muse::Orientation) const
 {
     return 20;
 }
 
-void NotationConfigurationStub::setGridSize(mu::Orientation, int)
+void NotationConfigurationStub::setGridSize(muse::Orientation, int)
 {
 }
 
@@ -465,11 +465,11 @@ void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
 {
 }
 
-io::path_t NotationConfigurationStub::styleFileImportPath() const
+muse::io::path_t NotationConfigurationStub::styleFileImportPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-void NotationConfigurationStub::setStyleFileImportPath(const io::path_t&)
+void NotationConfigurationStub::setStyleFileImportPath(const muse::io::path_t&)
 {
 }

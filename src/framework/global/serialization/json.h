@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_JSON_H
-#define MU_GLOBAL_JSON_H
+#ifndef MUSE_GLOBAL_JSON_H
+#define MUSE_GLOBAL_JSON_H
 
 #include <memory>
 
-#include "types/bytearray.h"
-#include "types/string.h"
+#include "../types/bytearray.h"
+#include "../types/string.h"
 
-namespace mu {
+namespace muse {
 struct JsonData;
 class JsonArray;
 class JsonObject;
@@ -207,11 +207,4 @@ private:
 };
 }
 
-namespace muse {
-using JsonArray = mu::JsonArray;
-using JsonObject = mu::JsonObject;
-using JsonValue = mu::JsonValue;
-using JsonDocument = mu::JsonDocument;
-}
-
-#endif // MU_GLOBAL_JSON_H
+#endif // MUSE_GLOBAL_JSON_H

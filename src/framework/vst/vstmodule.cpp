@@ -46,7 +46,7 @@
 #include "view/vstfxeditorview.h"
 
 using namespace muse::vst;
-using namespace mu::modularity;
+using namespace muse::modularity;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 using namespace muse::audio;
@@ -115,7 +115,7 @@ void VSTModule::registerUiTypes()
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
 }
 
-void VSTModule::onInit(const mu::IApplication::RunMode&)
+void VSTModule::onInit(const IApplication::RunMode&)
 {
     s_configuration->init();
     s_pluginModulesRepo->init();

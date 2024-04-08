@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ASYNC_NOTIFYLIST_H
-#define MU_ASYNC_NOTIFYLIST_H
+#ifndef MUSE_ASYNC_NOTIFYLIST_H
+#define MUSE_ASYNC_NOTIFYLIST_H
 
 #include <vector>
 #include <cassert>
@@ -29,7 +29,7 @@
 
 #include "asyncable.h"
 
-namespace mu::async {
+namespace muse::async {
 template<typename T>
 using ChangedNotifier = kors::async::ChangedNotifier<T>;
 
@@ -151,4 +151,4 @@ private:
 };
 }
 
-#endif // MU_ASYNC_NOTIFYLIST_H
+#endif // MUSE_ASYNC_NOTIFYLIST_H

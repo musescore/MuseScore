@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_Types_StringTests : public ::testing::Test
 {

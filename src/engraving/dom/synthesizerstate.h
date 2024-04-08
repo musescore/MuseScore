@@ -40,10 +40,10 @@ class XmlReader;
 
 struct IdValue {
     int id = 0;
-    String data;
+    muse::String data;
 
     IdValue() {}
-    IdValue(int _id, const String& _data)
+    IdValue(int _id, const muse::String& _data)
         : id(_id), data(_data) {}
 };
 
@@ -56,16 +56,16 @@ class SynthesizerGroup : public std::list<IdValue>
     OBJECT_ALLOCATOR(engraving, SynthesizerGroup)
 
 public:
-    const String& name() const { return m_name; }
-    void setName(const String& s) { m_name = s; }
+    const muse::String& name() const { return m_name; }
+    void setName(const muse::String& s) { m_name = s; }
 
     SynthesizerGroup()
         : std::list<IdValue>() {}
     SynthesizerGroup(const char* n, std::list<IdValue> l)
-        : std::list<IdValue>(l), m_name(String::fromUtf8(n)) {}
+        : std::list<IdValue>(l), m_name(muse::String::fromUtf8(n)) {}
 
 private:
-    String m_name;
+    muse::String m_name;
 };
 
 //---------------------------------------------------------
@@ -87,7 +87,7 @@ public:
 
     void write(XmlWriter&, bool force = false) const;
     void read(XmlReader&);
-    SynthesizerGroup group(const String& name) const;
+    SynthesizerGroup group(const muse::String& name) const;
     bool isDefaultSynthSoundfont();
     int ccToUse() const;
     int method() const;

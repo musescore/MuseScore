@@ -29,8 +29,8 @@
 #include "log.h"
 #endif
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 class Global_IO_IODeviceTests : public ::testing::Test
 {

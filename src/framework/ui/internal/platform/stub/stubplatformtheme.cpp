@@ -23,7 +23,7 @@
 #include "stubplatformtheme.h"
 
 using namespace muse::ui;
-using namespace mu::async;
+using namespace muse::async;
 
 void StubPlatformTheme::startListening()
 {

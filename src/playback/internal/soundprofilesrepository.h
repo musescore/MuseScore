@@ -33,7 +33,7 @@
 #include "iplaybackconfiguration.h"
 
 namespace mu::playback {
-class SoundProfilesRepository : public ISoundProfilesRepository, public async::Asyncable
+class SoundProfilesRepository : public ISoundProfilesRepository, public muse::async::Asyncable
 {
     INJECT_STATIC(muse::audio::IPlayback, playback)
     INJECT_STATIC(IPlaybackConfiguration, config)

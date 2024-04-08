@@ -25,6 +25,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace muse;
 
 AbstractInstrumentsPanelTreeItem::AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type,
                                                                    IMasterNotationPtr masterNotation,
@@ -42,7 +43,7 @@ AbstractInstrumentsPanelTreeItem::~AbstractInstrumentsPanelTreeItem()
     }
 }
 
-mu::ID AbstractInstrumentsPanelTreeItem::id() const
+muse::ID AbstractInstrumentsPanelTreeItem::id() const
 {
     return m_id;
 }

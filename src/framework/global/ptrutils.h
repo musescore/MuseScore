@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_PTRUTILS_H
-#define MU_GLOBAL_PTRUTILS_H
+#ifndef MUSE_GLOBAL_PTRUTILS_H
+#define MUSE_GLOBAL_PTRUTILS_H
 
 #include "runtime.h"
 #include "log.h"
 
-namespace mu::ptr {
+namespace muse::ptr {
 template<typename T, typename E> T* checked_cast(E* source)
 {
 #ifndef NDEBUG
@@ -53,4 +53,4 @@ template<typename T, typename E> const T* checked_cast(const E* source)
 }
 }
 
-#endif // MU_GLOBAL_PTRUTILS_H
+#endif // MUSE_GLOBAL_PTRUTILS_H

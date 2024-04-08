@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 
 static constexpr double NEAR_CLIP = 0.000001;
@@ -244,16 +244,16 @@ Transform::TransformationType Transform::type() const
     }
     switch (m_dirty) {
     case TransformationType::Project:
-        if (!mu::RealIsNull(m_13) || !mu::RealIsNull(m_23) || !mu::RealIsNull(m_33 - 1)) {
+        if (!RealIsNull(m_13) || !RealIsNull(m_23) || !RealIsNull(m_33 - 1)) {
             m_type = TransformationType::Project;
             break;
         }
     // fall through
     case TransformationType::Shear:
     case TransformationType::Rotate:
-        if (!mu::RealIsNull(m_affine.m_12) || !mu::RealIsNull(m_affine.m_21)) {
+        if (!RealIsNull(m_affine.m_12) || !RealIsNull(m_affine.m_21)) {
             const double dot = m_affine.m_11 * m_affine.m_12 + m_affine.m_21 * m_affine.m_22;
-            if (mu::RealIsNull(dot)) {
+            if (RealIsNull(dot)) {
                 m_type = TransformationType::Rotate;
             } else {
                 m_type = TransformationType::Shear;
@@ -262,13 +262,13 @@ Transform::TransformationType Transform::type() const
         }
     // fall through
     case TransformationType::Scale:
-        if (!mu::RealIsNull(m_affine.m_11 - 1) || !mu::RealIsNull(m_affine.m_22 - 1)) {
+        if (!RealIsNull(m_affine.m_11 - 1) || !RealIsNull(m_affine.m_22 - 1)) {
             m_type = TransformationType::Scale;
             break;
         }
     // fall through
     case TransformationType::Translate:
-        if (!mu::RealIsNull(m_affine.m_dx) || !mu::RealIsNull(m_affine.m_dy)) {
+        if (!RealIsNull(m_affine.m_dx) || !RealIsNull(m_affine.m_dy)) {
             m_type = TransformationType::Translate;
             break;
         }
@@ -458,7 +458,7 @@ Transform& Transform::rotate(double a)
 {
     constexpr double deg2rad = 0.017453292519943295769; // pi/180
 
-    if (mu::RealIsNull(a)) {
+    if (RealIsNull(a)) {
         return *this;
     }
 #ifdef MUSE_MODULE_DRAW_TRACE
@@ -470,11 +470,11 @@ Transform& Transform::rotate(double a)
 
     double sina = 0.0;
     double cosa = 0.0;
-    if (mu::RealIsEqual(a, 90.) || mu::RealIsEqual(a, -270.)) {
+    if (RealIsEqual(a, 90.) || RealIsEqual(a, -270.)) {
         sina = 1.;
-    } else if (mu::RealIsEqual(a, 270.) || mu::RealIsEqual(a, -90.)) {
+    } else if (RealIsEqual(a, 270.) || RealIsEqual(a, -90.)) {
         sina = -1.;
-    } else if (mu::RealIsEqual(a, 180.)) {
+    } else if (RealIsEqual(a, 180.)) {
         cosa = -1.;
     } else {
         double b = deg2rad * a;
@@ -585,7 +585,7 @@ Transform& Transform::rotateRadians(double a)
 
 Transform& Transform::translate(double dx, double dy)
 {
-    if (mu::RealIsNull(dx) && mu::RealIsNull(dy)) {
+    if (RealIsNull(dx) && RealIsNull(dy)) {
         return *this;
     }
 #ifdef MUSE_MODULE_DRAW_TRACE
@@ -624,7 +624,7 @@ Transform& Transform::translate(double dx, double dy)
 
 Transform& Transform::scale(double sx, double sy)
 {
-    if (mu::RealIsEqual(sx, 1) && mu::RealIsEqual(sy, 1)) {
+    if (RealIsEqual(sx, 1) && RealIsEqual(sy, 1)) {
         return *this;
     }
 #ifdef MUSE_MODULE_DRAW_TRACE
@@ -661,7 +661,7 @@ Transform& Transform::scale(double sx, double sy)
 
 Transform& Transform::shear(double sh, double sv)
 {
-    if (mu::RealIsNull(sh) && mu::RealIsNull(sv)) {
+    if (RealIsNull(sh) && RealIsNull(sv)) {
         return *this;
     }
 #ifdef MUSE_MODULE_DRAW_TRACE
@@ -718,8 +718,8 @@ Transform Transform::inverted() const
         invert.m_affine.m_dy = -m_affine.m_dy;
         break;
     case TransformationType::Scale:
-        inv = !mu::RealIsNull(m_affine.m_11);
-        inv &= !mu::RealIsNull(m_affine.m_22);
+        inv = !RealIsNull(m_affine.m_11);
+        inv &= !RealIsNull(m_affine.m_22);
         if (inv) {
             invert.m_affine.m_11 = 1. / m_affine.m_11;
             invert.m_affine.m_22 = 1. / m_affine.m_22;
@@ -734,7 +734,7 @@ Transform Transform::inverted() const
     default:
         // general case
         double det = determinant();
-        inv = !mu::RealIsNull(det);
+        inv = !RealIsNull(det);
         if (inv) {
             invert = adjoint() / det;
         }

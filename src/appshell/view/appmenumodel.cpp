@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::appshell;
 using namespace muse::ui;
 using namespace muse::uicomponents;
@@ -659,7 +660,7 @@ MenuItemList AppMenuModel::makePluginsItems()
     MenuItemList pluginsWithoutCategories;
     for (const Manifest& m : enabledExtensions) {
         std::string categoryStr = m.category.toStdString();
-        if (mu::contains(categories, categoryStr)) {
+        if (muse::contains(categories, categoryStr)) {
             MenuItemList& items = categoriesMap[categoryStr];
             addMenuItems(items, m);
         } else {
@@ -668,7 +669,7 @@ MenuItemList AppMenuModel::makePluginsItems()
     }
 
     for (const auto& it : categoriesMap) {
-        TranslatableString categoryTitle = mu::value(categories, it.first, {});
+        TranslatableString categoryTitle = muse::value(categories, it.first, {});
         result << makeMenu(categoryTitle, it.second);
     }
 

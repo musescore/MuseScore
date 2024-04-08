@@ -37,7 +37,7 @@ void EngravingElementsProvider::clearStatistic()
 
 void EngravingElementsProvider::printStatistic(const std::string& title)
 {
-#define FORMAT(str, width) mu::strings::leftJustified(str, width)
+#define FORMAT(str, width) muse::strings::leftJustified(str, width)
 #define TITLE(str) FORMAT(std::string(str), 20)
 #define VALUE(val) FORMAT(std::to_string(val), 20)
 
@@ -100,7 +100,7 @@ bool EngravingElementsProvider::isSelected(const mu::engraving::EngravingObject*
     return false;
 }
 
-mu::async::Channel<const mu::engraving::EngravingObject*, bool> EngravingElementsProvider::selectChanged() const
+muse::async::Channel<const mu::engraving::EngravingObject*, bool> EngravingElementsProvider::selectChanged() const
 {
     return m_selectChanged;
 }

@@ -31,7 +31,7 @@ class PlaybackConfiguration;
 class PlaybackController;
 class PlaybackUiActions;
 class SoundProfilesRepository;
-class PlaybackModule : public modularity::IModuleSetup
+class PlaybackModule : public muse::modularity::IModuleSetup
 {
 public:
 
@@ -40,8 +40,8 @@ public:
     void resolveImports() override;
     void registerResources() override;
     void registerUiTypes() override;
-    void onInit(const IApplication::RunMode& mode) override;
-    void onAllInited(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+    void onAllInited(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<PlaybackConfiguration> m_configuration;

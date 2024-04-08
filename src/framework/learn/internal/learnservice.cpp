@@ -32,6 +32,7 @@
 #include "learnerrors.h"
 #include "log.h"
 
+using namespace muse;
 using namespace muse::learn;
 using namespace muse::network;
 
@@ -81,7 +82,7 @@ Playlist LearnService::startedPlaylist() const
     return m_startedPlaylist;
 }
 
-mu::async::Channel<Playlist> LearnService::startedPlaylistChanged() const
+async::Channel<Playlist> LearnService::startedPlaylistChanged() const
 {
     return m_startedPlaylistChannel;
 }
@@ -91,7 +92,7 @@ Playlist LearnService::advancedPlaylist() const
     return m_advancedPlaylist;
 }
 
-mu::async::Channel<Playlist> LearnService::advancedPlaylistChanged() const
+async::Channel<Playlist> LearnService::advancedPlaylistChanged() const
 {
     return m_advancedPlaylistChannel;
 }

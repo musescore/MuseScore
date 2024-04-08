@@ -38,9 +38,10 @@
 
 #include "log.h"
 
+using namespace muse;
+using namespace muse::draw;
 using namespace mu;
 using namespace mu::diagnostics;
-using namespace muse::draw;
 using namespace mu::engraving;
 
 //! TODO
@@ -52,7 +53,7 @@ using namespace mu::engraving;
 
 static const std::vector<std::string> FILES_FILTER = { "*.mscz", "*.mscx", "*.gp", "*.gpx", "*.gp4", "*.gp5" };
 
-Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& outDir, const GenOpt& opt)
+Ret DrawDataGenerator::processDir(const muse::io::path_t& scoreDir, const muse::io::path_t& outDir, const GenOpt& opt)
 {
     io::Dir::mkpath(outDir);
 
@@ -82,25 +83,25 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
             continue;
         }
 
-        io::path_t scoreFile = scores.val.at(i);
-        io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).completeBaseName() + ".json";
+        muse::io::path_t scoreFile = scores.val.at(i);
+        muse::io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).completeBaseName() + ".json";
         processFile(scoreFile, outFile, opt);
     }
 
     //PROFILER_PRINT;
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
-Ret DrawDataGenerator::processFile(const io::path_t& scoreFile, const io::path_t& outFile, const GenOpt& opt)
+Ret DrawDataGenerator::processFile(const muse::io::path_t& scoreFile, const muse::io::path_t& outFile, const GenOpt& opt)
 {
     DrawDataPtr drawData = genDrawData(scoreFile, opt);
     DrawDataRW::writeData(outFile, drawData);
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
-DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const GenOpt& opt) const
+DrawDataPtr DrawDataGenerator::genDrawData(const muse::io::path_t& scorePath, const GenOpt& opt) const
 {
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     if (!loadScore(score, scorePath)) {
@@ -137,7 +138,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
     return drawData;
 }
 
-Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
+Pixmap DrawDataGenerator::genImage(const muse::io::path_t& scorePath) const
 {
     LOGD() << "try: " << scorePath;
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
@@ -181,7 +182,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
     return Pixmap::fromQImage(image);
 }
 
-bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::io::path_t& path) const
+bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const muse::io::path_t& path) const
 {
     TRACEFUNC;
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));

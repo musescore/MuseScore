@@ -31,7 +31,7 @@
 
 #include "ipclog.h"
 
-void mu::ipc::serialize(const Msg& msg, QByteArray& data)
+void muse::ipc::serialize(const Msg& msg, QByteArray& data)
 {
     QJsonObject msgObj;
 
@@ -49,7 +49,7 @@ void mu::ipc::serialize(const Msg& msg, QByteArray& data)
     data = QJsonDocument(msgObj).toJson(QJsonDocument::Compact);
 }
 
-void mu::ipc::deserialize(const QByteArray& data, Msg& msg)
+void muse::ipc::deserialize(const QByteArray& data, Msg& msg)
 {
     QJsonDocument doc = QJsonDocument::fromJson(data);
     QJsonObject msgObj = doc.object();
@@ -65,7 +65,7 @@ void mu::ipc::deserialize(const QByteArray& data, Msg& msg)
     }
 }
 
-QString mu::ipc::socketErrorToString(int err)
+QString muse::ipc::socketErrorToString(int err)
 {
     switch (err) {
     case QLocalSocket::ConnectionRefusedError: return "ConnectionRefusedError";
@@ -83,7 +83,7 @@ QString mu::ipc::socketErrorToString(int err)
     return "Unknown error";
 }
 
-bool mu::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
+bool muse::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
 {
     QDataStream stream(socket);
     stream.writeBytes(data.constData(), data.size());
@@ -94,7 +94,7 @@ bool mu::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
     return ok;
 }
 
-bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackageRead)
+bool muse::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackageRead)
 {
     qint64 bytesAvailable = socket->bytesAvailable();
     if (bytesAvailable < (qint64)sizeof(quint32)) {

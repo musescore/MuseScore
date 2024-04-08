@@ -32,12 +32,13 @@
 
 using namespace mu;
 using namespace mu::diagnostics;
+using namespace muse;
 using namespace muse::draw;
 
 static const Color REF_COLOR("#999999");
 static const Color ADDED_COLOR("#ff0000");
 
-Ret DrawDataConverter::drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile)
+Ret DrawDataConverter::drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile)
 {
     RetVal<DrawDataPtr> drawData = DrawDataRW::readData(dataFile);
     if (!drawData.ret) {
@@ -47,7 +48,7 @@ Ret DrawDataConverter::drawDataToPng(const io::path_t& dataFile, const io::path_
     return saveAsPng(drawData.val, outFile);
 }
 
-Ret DrawDataConverter::drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile)
+Ret DrawDataConverter::drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile)
 {
     RetVal<Diff> diff = DrawDataRW::readDiff(diffFile);
     if (!diff.ret) {
@@ -72,7 +73,7 @@ Ret DrawDataConverter::drawDiffToPng(const io::path_t& diffFile, const io::path_
     return io::File::writeFile(outFile, px.data());
 }
 
-Ret DrawDataConverter::saveAsPng(const DrawDataPtr& data, const io::path_t& path)
+Ret DrawDataConverter::saveAsPng(const DrawDataPtr& data, const muse::io::path_t& path)
 {
     Pixmap px = drawDataToPixmap(data);
     return io::File::writeFile(path, px.data());

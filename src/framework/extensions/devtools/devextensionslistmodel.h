@@ -34,7 +34,7 @@ class DevExtensionsListModel : public QObject
     Q_OBJECT
 
     Inject<IExtensionsProvider> provider;
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
 
 public:
     DevExtensionsListModel(QObject* parent = nullptr);

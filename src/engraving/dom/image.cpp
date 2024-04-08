@@ -36,7 +36,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
 
@@ -124,15 +124,15 @@ void Image::setImageType(ImageType t)
 //   imageSize
 //---------------------------------------------------------
 
-SizeF Image::imageSize() const
+muse::SizeF Image::imageSize() const
 {
     if (!isValid()) {
-        return SizeF();
+        return muse::SizeF();
     }
 
     if (m_imageType == ImageType::RASTER) {
-        Size rasterSize = m_rasterDoc->size();
-        return SizeF(rasterSize.width(), rasterSize.height());
+        muse::Size rasterSize = m_rasterDoc->size();
+        return muse::SizeF(rasterSize.width(), rasterSize.height());
     }
 
     return m_svgDoc->defaultSize();
@@ -213,7 +213,7 @@ bool Image::load()
     // once all paths are read, load img or retrieve it from store
     // loading from file is tried first to update the stored image, if necessary
 
-    io::path_t path;
+    muse::io::path_t path;
     bool loaded = false;
     // if a store path is given, attempt to get the image from the store
     if (!m_storePath.isEmpty()) {
@@ -250,13 +250,13 @@ bool Image::load()
 //    return true on success
 //---------------------------------------------------------
 
-bool Image::load(const io::path_t& ss)
+bool Image::load(const muse::io::path_t& ss)
 {
     if (ss.empty()) {
         return false;
     }
 
-    io::path_t path(ss);
+    muse::io::path_t path(ss);
     // if file path is relative, prepend score path
     FileInfo fi(path);
     if (fi.isRelative()) {
@@ -270,7 +270,7 @@ bool Image::load(const io::path_t& ss)
         LOGD() << "failed load file: " << path;
         return false;
     }
-    ByteArray ba = f.readAll();
+    muse::ByteArray ba = f.readAll();
     f.close();
 
     m_linkIsValid = true;
@@ -291,7 +291,7 @@ bool Image::load(const io::path_t& ss)
 //    return true on success
 //---------------------------------------------------------
 
-bool Image::loadFromData(const path_t& name, const ByteArray& ba)
+bool Image::loadFromData(const path_t& name, const muse::ByteArray& ba)
 {
     m_linkIsValid = false;
     m_linkPath = u"";
@@ -353,7 +353,7 @@ void Image::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<mu::PointF> Image::gripsPositions(const EditData&) const
+std::vector<PointF> Image::gripsPositions(const EditData&) const
 {
     RectF r(pageBoundingRect());
     return {

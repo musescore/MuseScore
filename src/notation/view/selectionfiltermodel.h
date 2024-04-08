@@ -30,7 +30,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class SelectionFilterModel : public QAbstractListModel, public async::Asyncable
+class SelectionFilterModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 

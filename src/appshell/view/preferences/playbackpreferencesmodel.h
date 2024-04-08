@@ -33,7 +33,7 @@
 #include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
-class PlaybackPreferencesModel : public QObject, public async::Asyncable
+class PlaybackPreferencesModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

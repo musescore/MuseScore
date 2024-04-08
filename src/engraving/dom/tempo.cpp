@@ -217,7 +217,7 @@ BeatsPerSecond TempoMap::tempo(int tick) const
 
 double TempoMap::pauseSecs(int tick) const
 {
-    return mu::value(m_pauses, tick, 0.0);
+    return muse::value(m_pauses, tick, 0.0);
 }
 
 //---------------------------------------------------------

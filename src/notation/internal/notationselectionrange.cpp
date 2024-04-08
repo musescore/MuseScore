@@ -70,7 +70,7 @@ NotationSelectionRange::MeasureRange NotationSelectionRange::measureRange() cons
     return range;
 }
 
-std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
+std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
 {
     const mu::engraving::Selection& selection = score()->selection();
     if (!selection.isRange()) {
@@ -122,7 +122,7 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
 
 bool NotationSelectionRange::containsPoint(const PointF& point) const
 {
-    for (const mu::RectF& area : boundingArea()) {
+    for (const muse::RectF& area : boundingArea()) {
         if (area.contains(point)) {
             return true;
         }

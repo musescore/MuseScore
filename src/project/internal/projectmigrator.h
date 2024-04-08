@@ -32,17 +32,17 @@ namespace mu::project {
 class ProjectMigrator : public IProjectMigrator
 {
     INJECT(IProjectConfiguration, configuration)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
 public:
     ProjectMigrator() = default;
 
-    Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) override;
+    muse::Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) override;
 
 private:
 
-    Ret askAboutMigration(MigrationOptions& out, const QString& appVersion, MigrationType migrationType);
+    muse::Ret askAboutMigration(MigrationOptions& out, const QString& appVersion, MigrationType migrationType);
 
-    Ret migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt);
+    muse::Ret migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt);
 
     bool applyLelandStyle(mu::engraving::MasterScore* score);
     bool applyEdwinStyle(mu::engraving::MasterScore* score);

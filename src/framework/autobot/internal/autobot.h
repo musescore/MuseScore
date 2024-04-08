@@ -49,7 +49,7 @@ class Autobot : public IAutobot, public async::Asyncable
     INJECT(io::IFileSystem, fileSystem)
     INJECT(muse::ui::INavigationController, navigation)
     INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(mu::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(muse::ui::IMainWindow, mainWindow)
 
 public:

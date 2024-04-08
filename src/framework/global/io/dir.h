@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_DIR_H
-#define MU_IO_DIR_H
+#ifndef MUSE_IO_DIR_H
+#define MUSE_IO_DIR_H
 
 #include "global/types/retval.h"
 #include "global/modularity/ioc.h"
@@ -29,7 +29,7 @@
 #include "ioenums.h"
 #include "ifilesystem.h"
 
-namespace mu::io {
+namespace muse::io {
 class Dir
 {
     static inline Inject<IFileSystem> fileSystem;
@@ -57,8 +57,4 @@ private:
 };
 }
 
-namespace muse::io {
-using Dir = mu::io::Dir;
-}
-
-#endif // MU_IO_DIR_H
+#endif // MUSE_IO_DIR_H

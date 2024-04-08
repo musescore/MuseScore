@@ -31,6 +31,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 using namespace mu::project;
@@ -47,13 +48,13 @@ bool AbstractAudioWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractAudioWriter::write(INotationPtr, io::IODevice&, const Options& options)
+Ret AbstractAudioWriter::write(INotationPtr, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
     }
 
-    if (supportsUnitType(mu::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
+    if (supportsUnitType(muse::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -62,13 +63,13 @@ mu::Ret AbstractAudioWriter::write(INotationPtr, io::IODevice&, const Options& o
     return Ret(Ret::Code::NotSupported);
 }
 
-mu::Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const Options& options)
+Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
     }
 
-    if (supportsUnitType(mu::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
+    if (supportsUnitType(muse::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -82,14 +83,14 @@ void AbstractAudioWriter::abort()
     playback()->audioOutput()->abortSavingAllSoundTracks();
 }
 
-mu::Progress* AbstractAudioWriter::progress()
+muse::Progress* AbstractAudioWriter::progress()
 {
     return &m_progress;
 }
 
-mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
-                                            io::IODevice& destinationDevice,
-                                            const SoundTrackFormat& format)
+Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
+                                        io::IODevice& destinationDevice,
+                                        const SoundTrackFormat& format)
 {
     //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
     //!     on any call from background thread. Once we have our own implementation of QIODevice
@@ -101,7 +102,7 @@ mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     }
 
     m_isCompleted = false;
-    m_writeRet = Ret();
+    m_writeRet = muse::Ret();
 
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
@@ -121,12 +122,12 @@ mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                 m_progress.progressChanged.send(current, total, title);
             });
 
-            playback()->audioOutput()->saveSoundTrack(sequenceId, io::path_t(path), std::move(format))
+            playback()->audioOutput()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;
-                m_writeRet = mu::make_ok();
+                m_writeRet = muse::make_ok();
                 m_isCompleted = true;
-                m_progress.finished.send(mu::make_ok());
+                m_progress.finished.send(muse::make_ok());
             })
             .onReject(this, [this](int errorCode, const std::string& msg) {
                 m_writeRet = Ret(errorCode, msg);
@@ -155,7 +156,7 @@ INotationWriter::UnitType AbstractAudioWriter::unitTypeFromOptions(const Options
     }
 
     UnitType defaultUnitType = supported.front();
-    UnitType unitType = mu::value(options, OptionKey::UNIT_TYPE, Val(defaultUnitType)).toEnum<UnitType>();
+    UnitType unitType = muse::value(options, OptionKey::UNIT_TYPE, Val(defaultUnitType)).toEnum<UnitType>();
     if (!supportsUnitType(unitType)) {
         return defaultUnitType;
     }

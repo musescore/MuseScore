@@ -32,7 +32,7 @@
 #include "types/datetime.h"
 #include "io/path.h"
 
-namespace mu {
+namespace muse {
 class LogRemover
 {
 public:

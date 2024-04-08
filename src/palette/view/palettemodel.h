@@ -98,7 +98,7 @@ public:
 //   PaletteTreeModel
 //---------------------------------------------------------
 
-class PaletteTreeModel : public QAbstractItemModel, public mu::async::Asyncable
+class PaletteTreeModel : public QAbstractItemModel, public muse::async::Asyncable
 {
     Q_OBJECT
 

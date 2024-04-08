@@ -24,8 +24,10 @@
 
 #include "log.h"
 
-std::vector<mu::Interpolation::Point> mu::Interpolation::quadraticBezierCurve(const Point& p0, const Point& p1, const Point& p2,
-                                                                              std::size_t N)
+using namespace muse;
+
+std::vector<Interpolation::Point> Interpolation::quadraticBezierCurve(const Point& p0, const Point& p1, const Point& p2,
+                                                                      std::size_t N)
 {
     IF_ASSERT_FAILED(N != 0) {
         return {};
