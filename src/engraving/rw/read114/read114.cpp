@@ -1012,10 +1012,25 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 
 static void readTremolo(compat::TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 {
-    auto item = [](compat::TremoloCompat* t) -> EngravingItem* {
+    auto createDefaultTremolo = [](compat::TremoloCompat* t) {
+        t->single = Factory::createTremoloSingleChord(t->parent);
+        t->single->setTrack(t->parent->track());
+        t->single->setTremoloType(TremoloType::R8);
+    };
+
+    auto item = [createDefaultTremolo](compat::TremoloCompat* t) -> EngravingItem* {
         if (t->two) {
             return t->two;
         }
+
+        if (!t->single) {
+            // If no item been created yet at this point,
+            // that means no "subtype" tag was present in the XML file.
+            // In this case, we create a single eighth-note tremolo,
+            // since that was the default.
+            createDefaultTremolo(t);
+        }
+
         return t->single;
     };
 
@@ -1060,6 +1075,14 @@ static void readTremolo(compat::TremoloCompat* t, XmlReader& e, ReadContext& ctx
         } else if (!TRead::readItemProperties(item(t), e, ctx)) {
             e.unknown();
         }
+    }
+
+    if (!t->two && !t->single) {
+        // If no item been created yet at this point,
+        // that means no "subtype" tag was present in the XML file.
+        // In this case, we create a single eighth-note tremolo,
+        // since that was the default.
+        createDefaultTremolo(t);
     }
 }
 
