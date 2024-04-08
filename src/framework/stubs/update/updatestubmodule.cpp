@@ -42,6 +42,6 @@ std::string UpdateModule::moduleName() const
 void UpdateModule::registerExports()
 {
     ioc()->registerExport<IUpdateScenario>(moduleName(), s_scenario);
-    ioc()->registerExport<IUpdateService>(moduleName(), s_service);
+    ioc()->registerExport<IAppUpdateService>(moduleName(), s_service);
     ioc()->registerExport<IUpdateConfiguration>(moduleName(), s_configuration);
 }

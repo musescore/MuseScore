@@ -28,6 +28,8 @@
 
 #include "updateerrors.h"
 
+#include "types/val.h"
+
 #include "translation.h"
 #include "defer.h"
 #include "log.h"
@@ -69,7 +71,8 @@ static ValMap releaseInfoToValMap(const ReleaseInfo& info)
         { "fileName", Val(info.fileName) },
         { "fileUrl", Val(info.fileUrl) },
         { "notes", Val(info.notes) },
-        { "previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)) }
+        { "previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)) },
+        { "additionalInfo", Val(info.additionInfo) }
     };
 }
 
@@ -81,6 +84,7 @@ static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
     info.fileUrl = map.at("fileUrl").toString();
     info.notes = map.at("notes").toString();
     info.previousReleasesNotes = releasesNotesFromValList(map.at("previousReleasesNotes").toList());
+    info.additionInfo = map.at("additionalInfo").toMap();
 
     return info;
 }
@@ -89,35 +93,71 @@ void UpdateScenario::delayedInit()
 {
     if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
         QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
-            doCheckForUpdate(false);
+            doCheckForAppUpdate(false);
         });
+
+        doCheckForMuseSamplerUpdate(false);
     }
 }
 
-void UpdateScenario::checkForUpdate()
+void UpdateScenario::checkForAppUpdate()
 {
-    if (isCheckStarted()) {
+    if (isAppCheckStarted()) {
         return;
     }
 
-    doCheckForUpdate(true);
+    doCheckForAppUpdate(true);
 }
 
-bool UpdateScenario::isCheckStarted() const
+void UpdateScenario::checkForMuseSamplerUpdate()
 {
-    return m_progress;
+    if (isMuseSamplerCheckStarted()) {
+        return;
+    }
+
+    RetVal<ReleaseInfo> lastCheckResult = museSamplerUpdateService()->lastCheckResult();
+    if (lastCheckResult.ret) {
+        if (shouldIgnoreMuseSamplerUpdate(lastCheckResult.val)) {
+            return;
+        }
+
+        showMuseSamplerReleaseInfo(lastCheckResult.val);
+        return;
+    }
+
+    doCheckForMuseSamplerUpdate(true);
 }
 
-void UpdateScenario::doCheckForUpdate(bool manual)
+bool UpdateScenario::isAppCheckStarted() const
 {
-    m_progressChannel = std::make_shared<mu::Progress>();
-    m_progressChannel->started.onNotify(this, [this]() {
-        m_progress = true;
+    return m_appCheckProgress;
+}
+
+bool UpdateScenario::isMuseSamplerCheckStarted() const
+{
+    return m_museSamplerCheckProgress;
+}
+
+bool UpdateScenario::shouldIgnoreMuseSamplerUpdate(const ReleaseInfo& info) const
+{
+    return info.version == configuration()->lastShownMuseSamplerReleaseVersion();
+}
+
+void UpdateScenario::setIgnoredMuseSamplerUpdate(const std::string& version)
+{
+    configuration()->setLastShownMuseSamplerReleaseVersion(version);
+}
+
+void UpdateScenario::doCheckForAppUpdate(bool manual)
+{
+    m_appCheckProgressChannel = std::make_shared<mu::Progress>();
+    m_appCheckProgressChannel->started.onNotify(this, [this]() {
+        m_appCheckProgress = true;
     });
 
-    m_progressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+    m_appCheckProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
-            m_progress = false;
+            m_appCheckProgress = false;
         };
 
         if (!res.ret) {
@@ -138,26 +178,74 @@ void UpdateScenario::doCheckForUpdate(bool manual)
                 return;
             }
         } else if (noUpdate) {
-            showNoUpdateMsg();
+            showNoAppUpdateMsg();
             return;
         }
 
-        showReleaseInfo(info);
+        showAppReleaseInfo(info);
     });
 
-    Concurrent::run(this, &UpdateScenario::th_heckForUpdate);
+    Concurrent::run(this, &UpdateScenario::th_checkForAppUpdate);
 }
 
-void UpdateScenario::th_heckForUpdate()
+void UpdateScenario::th_checkForAppUpdate()
 {
-    m_progressChannel->started.notify();
+    m_appCheckProgressChannel->started.notify();
 
-    RetVal<ReleaseInfo> retVal = updateService()->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = appUpdateService()->checkForUpdate();
 
     RetVal<Val> result;
     result.ret = retVal.ret;
     result.val = Val(releaseInfoToValMap(retVal.val));
-    m_progressChannel->finished.send(result);
+
+    m_appCheckProgressChannel->finished.send(result);
+}
+
+void UpdateScenario::doCheckForMuseSamplerUpdate(bool manual)
+{
+    m_museSamplerCheckProgressChannel = std::make_shared<mu::Progress>();
+    m_museSamplerCheckProgressChannel->started.onNotify(this, [this]() {
+        m_museSamplerCheckProgress = true;
+    });
+
+    m_museSamplerCheckProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+        DEFER {
+            m_museSamplerCheckProgress = false;
+        };
+
+        if (!res.ret) {
+            LOGE() << "Unable to check for update, error: " << res.ret.toString();
+            return;
+        }
+        if (!manual) {
+            return;
+        }
+
+        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        bool shouldIgnoreUpdate = shouldIgnoreMuseSamplerUpdate(info);
+
+        if (noUpdate || shouldIgnoreUpdate) {
+            return;
+        }
+
+        showMuseSamplerReleaseInfo(info);
+    });
+
+    Concurrent::run(this, &UpdateScenario::th_checkForMuseSamplerUpdate);
+}
+
+void UpdateScenario::th_checkForMuseSamplerUpdate()
+{
+    m_museSamplerCheckProgressChannel->started.notify();
+
+    RetVal<ReleaseInfo> retVal = museSamplerUpdateService()->checkForUpdate();
+
+    RetVal<Val> result;
+    result.ret = retVal.ret;
+    result.val = Val(releaseInfoToValMap(retVal.val));
+
+    m_museSamplerCheckProgressChannel->finished.send(result);
 }
 
 void UpdateScenario::processUpdateResult(int errorCode)
@@ -173,7 +261,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
     case Err::NoError:
         break;
     case Err::NoUpdate:
-        showNoUpdateMsg();
+        showNoAppUpdateMsg();
         break;
     default:
         showServerErrorMsg();
@@ -181,7 +269,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
     }
 }
 
-void UpdateScenario::showNoUpdateMsg()
+void UpdateScenario::showNoAppUpdateMsg()
 {
     QString str = mu::qtrc("update", "You already have the latest version of MuseScore. "
                                      "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
@@ -194,9 +282,9 @@ void UpdateScenario::showNoUpdateMsg()
                         IInteractive::Option::WithIcon);
 }
 
-void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
+void UpdateScenario::showAppReleaseInfo(const ReleaseInfo& info)
 {
-    UriQuery query("musescore://update/releaseinfo");
+    UriQuery query("musescore://update/appreleaseinfo");
     query.addParam("notes", Val(info.notes));
     query.addParam("previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)));
 
@@ -215,6 +303,27 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     } else if (actionCode == "skip") {
         configuration()->setSkippedReleaseVersion(info.version);
     }
+}
+
+void UpdateScenario::showMuseSamplerReleaseInfo(const ReleaseInfo& info)
+{
+    UriQuery query("musescore://update/musesoundsreleaseinfo");
+    query.addParam("notes", Val(info.notes));
+    query.addParam("features", Val(info.additionInfo.at("features")));
+
+    RetVal<Val> rv = interactive()->open(query);
+    if (!rv.ret) {
+        LOGD() << rv.ret.toString();
+        return;
+    }
+
+    QString actionCode = rv.val.toQString();
+
+    if (actionCode == "openMuseHub") {
+        museSamplerUpdateService()->openMuseHub();
+    }
+
+    setIgnoredMuseSamplerUpdate(info.version);
 }
 
 void UpdateScenario::showServerErrorMsg()

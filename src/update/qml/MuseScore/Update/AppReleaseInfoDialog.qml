@@ -109,7 +109,7 @@ StyledDialogView {
             Layout.rightMargin: -root.margins
         }
 
-        ReleaseInfoBottomPanel {
+        AppReleaseInfoBottomPanel {
             id: buttons
 
             Layout.fillWidth: true

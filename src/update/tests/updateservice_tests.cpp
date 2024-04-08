@@ -35,7 +35,7 @@ using ::testing::Return;
 #include "network/tests/mocks/networkmanagermock.h"
 #include "global/tests/mocks/systeminfomock.h"
 
-#include "update/internal/updateservice.h"
+#include "update/internal/appupdateservice.h"
 
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
@@ -43,26 +43,27 @@ using ::testing::Return;
 using namespace mu;
 using namespace mu::update;
 
-class UpdateServiceTests : public ::testing::Test
+namespace mu::update {
+class AppUpdateServiceTests : public ::testing::Test
 {
     Inject<IApplication> application;
 public:
     void SetUp() override
     {
-        m_service = new UpdateService();
+        m_service = new AppUpdateService();
 
         m_configuration = std::make_shared<UpdateConfigurationMock>();
-        m_service->setconfiguration(m_configuration);
+        m_service->configuration.set(m_configuration);
 
         m_networkManagerCreator = std::make_shared<muse::network::NetworkManagerCreatorMock>();
-        m_service->setnetworkManagerCreator(m_networkManagerCreator);
+        m_service->networkManagerCreator.set(m_networkManagerCreator);
 
         m_networkManager = std::make_shared<muse::network::NetworkManagerMock>();
         ON_CALL(*m_networkManagerCreator, makeNetworkManager())
         .WillByDefault(Return(m_networkManager));
 
         m_systemInfoMock = std::make_shared<SystemInfoMock>();
-        m_service->setsystemInfo(m_systemInfoMock);
+        m_service->systemInfo.set(m_systemInfoMock);
 
         ON_CALL(*m_systemInfoMock, productType())
         .WillByDefault(Return(ISystemInfo::ProductType::Linux));
@@ -75,9 +76,9 @@ public:
 
     void makeReleaseInfo() const
     {
-        std::string checkForUpdateUrl = "checkForUpdateUrl";
-        EXPECT_CALL(*m_configuration, checkForUpdateUrl())
-        .WillOnce(Return(checkForUpdateUrl));
+        std::string checkForAppUpdateUrl = "checkForAppUpdateUrl";
+        EXPECT_CALL(*m_configuration, checkForAppUpdateUrl())
+        .WillOnce(Return(checkForAppUpdateUrl));
 
         QString releasesNotes = "{"
                                 "\"tag_name\": \"v5.0\","
@@ -92,7 +93,7 @@ public:
                                 "]"
                                 "}";
 
-        EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(checkForUpdateUrl)), _, _))
+        EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(checkForAppUpdateUrl)), _, _))
         .WillOnce(testing::Invoke(
                       [releasesNotes](const QUrl&, muse::network::IncomingDevice* buf, const muse::network::RequestHeaders&) {
             buf->open(muse::network::IncomingDevice::WriteOnly);
@@ -105,9 +106,9 @@ public:
 
     void makePreviousReleasesNotes() const
     {
-        std::string previousReleasesNotesUrl = "previousReleasesNotesUrl";
-        EXPECT_CALL(*m_configuration, previousReleasesNotesUrl())
-        .WillOnce(Return(previousReleasesNotesUrl));
+        std::string previousAppReleasesNotesUrl = "previousAppReleasesNotesUrl";
+        EXPECT_CALL(*m_configuration, previousAppReleasesNotesUrl())
+        .WillOnce(Return(previousAppReleasesNotesUrl));
 
         //! [GIVEN] Previous releases notes. Contains chaotic order of versions
         QString releasesNotes = QString("{"
@@ -119,7 +120,7 @@ public:
                                         "]"
                                         "}").arg(application()->fullVersion().toString());
 
-        EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(previousReleasesNotesUrl)), _, _))
+        EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(previousAppReleasesNotesUrl)), _, _))
         .WillOnce(testing::Invoke(
                       [releasesNotes](const QUrl&, muse::network::IncomingDevice* buf, const muse::network::RequestHeaders&) {
             buf->open(muse::network::IncomingDevice::WriteOnly);
@@ -130,7 +131,7 @@ public:
         }));
     }
 
-    UpdateService* m_service = nullptr;
+    AppUpdateService* m_service = nullptr;
     std::shared_ptr<UpdateConfigurationMock> m_configuration;
 
     std::shared_ptr<muse::network::NetworkManagerCreatorMock> m_networkManagerCreator;
@@ -138,7 +139,7 @@ public:
     std::shared_ptr<SystemInfoMock> m_systemInfoMock;
 };
 
-TEST_F(UpdateServiceTests, ParseRelease_Linux_x86_64)
+TEST_F(AppUpdateServiceTests, ParseRelease_Linux_x86_64)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
@@ -159,7 +160,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_x86_64)
     EXPECT_EQ(retVal.val.fileName, "MuseScore.AppImage");
 }
 
-TEST_F(UpdateServiceTests, ParseRelease_Linux_arm)
+TEST_F(AppUpdateServiceTests, ParseRelease_Linux_arm)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
@@ -180,7 +181,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_arm)
     EXPECT_EQ(retVal.val.fileName, "MuseScore-arm.AppImage");
 }
 
-TEST_F(UpdateServiceTests, ParseRelease_Linux_aarch64)
+TEST_F(AppUpdateServiceTests, ParseRelease_Linux_aarch64)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
@@ -201,7 +202,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_aarch64)
     EXPECT_EQ(retVal.val.fileName, "MuseScore-aarch64.AppImage");
 }
 
-TEST_F(UpdateServiceTests, ParseRelease_Linux_Unknown)
+TEST_F(AppUpdateServiceTests, ParseRelease_Linux_Unknown)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
@@ -222,7 +223,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_Unknown)
     EXPECT_EQ(retVal.val.fileName, "MuseScore.AppImage");
 }
 
-TEST_F(UpdateServiceTests, ParseRelease_Windows)
+TEST_F(AppUpdateServiceTests, ParseRelease_Windows)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
@@ -243,7 +244,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Windows)
     EXPECT_EQ(retVal.val.fileName, "MuseScore.msi");
 }
 
-TEST_F(UpdateServiceTests, ParseRelease_MacOS)
+TEST_F(AppUpdateServiceTests, ParseRelease_MacOS)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
@@ -264,7 +265,7 @@ TEST_F(UpdateServiceTests, ParseRelease_MacOS)
     EXPECT_EQ(retVal.val.fileName, "MuseScore.dmg");
 }
 
-TEST_F(UpdateServiceTests, CheckForUpdate_ReleasesNotes)
+TEST_F(AppUpdateServiceTests, CheckForUpdate_ReleasesNotes)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
@@ -282,4 +283,5 @@ TEST_F(UpdateServiceTests, CheckForUpdate_ReleasesNotes)
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
     EXPECT_EQ(retVal.val.previousReleasesNotes, expectedReleasesNotes);
+}
 }

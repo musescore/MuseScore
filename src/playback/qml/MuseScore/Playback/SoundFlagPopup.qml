@@ -108,6 +108,7 @@ StyledPopupView {
                 horizontalAlignment: Text.AlignLeft
 
                 NavigationControl {
+                    id: navCtrl
                     name: "SoundFlagTitle"
                     enabled: titleLabel.enabled && titleLabel.visible
                     panel: navPanel
@@ -117,6 +118,10 @@ StyledPopupView {
                     accessible.role: MUAccessible.StaticText
                     accessible.visualItem: titleLabel
                     accessible.name: titleLabel.text
+                }
+
+                NavigationFocusBorder {
+                    navigationCtrl: navCtrl
                 }
             }
 

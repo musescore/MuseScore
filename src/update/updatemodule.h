@@ -28,9 +28,10 @@
 
 namespace mu::update {
 class UpdateScenario;
-class UpdateService;
 class UpdateConfiguration;
 class UpdateActionController;
+class AppUpdateService;
+class MuseSamplerUpdateService;
 class UpdateModule : public modularity::IModuleSetup
 {
 public:
@@ -44,7 +45,8 @@ public:
 
 private:
     std::shared_ptr<UpdateScenario> m_scenario;
-    std::shared_ptr<UpdateService> m_service;
+    std::shared_ptr<AppUpdateService> m_appUpdateService;
+    std::shared_ptr<MuseSamplerUpdateService> m_museSamplerUpdateService;
     std::shared_ptr<UpdateConfiguration> m_configuration;
     std::shared_ptr<UpdateActionController> m_actionController;
 };

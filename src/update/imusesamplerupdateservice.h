@@ -19,16 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "updateactioncontroller.h"
+#ifndef MU_UPDATE_IMUSESAMPLERUPDATESERVICE_H
+#define MU_UPDATE_IMUSESAMPLERUPDATESERVICE_H
 
-using namespace mu::update;
+#include "types/retval.h"
+#include "io/path.h"
+#include "progress.h"
 
-void UpdateActionController::init()
+#include "updatetypes.h"
+
+#include "modularity/imoduleinterface.h"
+
+namespace mu::update {
+class IMuseSamplerUpdateService : MODULE_EXPORT_INTERFACE
 {
-    dispatcher()->reg(this, "check-update", this, &UpdateActionController::checkForAppUpdate);
+    INTERFACE_ID(IMuseSamplerUpdateService)
+
+public:
+    virtual ~IMuseSamplerUpdateService() = default;
+
+    virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
+    virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
+
+    virtual mu::Progress updateProgress() = 0;
+
+    virtual void openMuseHub() = 0;
+};
 }
 
-void UpdateActionController::checkForAppUpdate()
-{
-    updateScenario()->checkForAppUpdate();
-}
+#endif // MU_UPDATE_IMUSESAMPLERUPDATESERVICE_H

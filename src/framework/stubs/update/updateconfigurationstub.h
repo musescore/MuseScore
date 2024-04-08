@@ -37,10 +37,14 @@ public:
     void setNeedCheckForUpdate(bool needCheck) override;
 
     std::string skippedReleaseVersion() const override;
-    void setSkippedReleaseVersion(const std::string& version) const override;
+    void setSkippedReleaseVersion(const std::string& version) override;
 
-    std::string checkForUpdateUrl() const override;
-    std::string previousReleasesNotesUrl() const override;
+    std::string lastShownMuseSamplerReleaseVersion() const override;
+    void setLastShownMuseSamplerReleaseVersion(const std::string& version) override;
+
+    std::string checkForAppUpdateUrl() const override;
+    std::string previousAppReleasesNotesUrl() const override;
+    std::string checkForMuseSamplerUpdateUrl() const override;
 
     muse::network::RequestHeaders updateHeaders() const override;
 

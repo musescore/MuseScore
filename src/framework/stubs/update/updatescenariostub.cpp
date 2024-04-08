@@ -23,6 +23,10 @@
 
 using namespace mu::update;
 
-void UpdateScenarioStub::checkForUpdate()
+void UpdateScenarioStub::checkForAppUpdate()
+{
+}
+
+void UpdateScenarioStub::checkForMuseSamplerUpdate()
 {
 }

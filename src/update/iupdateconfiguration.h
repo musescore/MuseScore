@@ -44,10 +44,14 @@ public:
     virtual void setNeedCheckForUpdate(bool needCheck) = 0;
 
     virtual std::string skippedReleaseVersion() const = 0;
-    virtual void setSkippedReleaseVersion(const std::string& version) const = 0;
+    virtual void setSkippedReleaseVersion(const std::string& version) = 0;
 
-    virtual std::string checkForUpdateUrl() const = 0;
-    virtual std::string previousReleasesNotesUrl() const = 0;
+    virtual std::string lastShownMuseSamplerReleaseVersion() const = 0;
+    virtual void setLastShownMuseSamplerReleaseVersion(const std::string& version) = 0;
+
+    virtual std::string checkForAppUpdateUrl() const = 0;
+    virtual std::string previousAppReleasesNotesUrl() const = 0;
+    virtual std::string checkForMuseSamplerUpdateUrl() const = 0;
 
     virtual muse::network::RequestHeaders updateHeaders() const = 0;
 

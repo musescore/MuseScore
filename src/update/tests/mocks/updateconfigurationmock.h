@@ -39,10 +39,14 @@ public:
     MOCK_METHOD(void, setNeedCheckForUpdate, (bool), (override));
 
     MOCK_METHOD(std::string, skippedReleaseVersion, (), (const, override));
-    MOCK_METHOD(void, setSkippedReleaseVersion, (const std::string&), (const, override));
+    MOCK_METHOD(void, setSkippedReleaseVersion, (const std::string&), (override));
 
-    MOCK_METHOD(std::string, checkForUpdateUrl, (), (const, override));
-    MOCK_METHOD(std::string, previousReleasesNotesUrl, (), (const, override));
+    MOCK_METHOD(std::string, lastShownMuseSamplerReleaseVersion, (), (const, override));
+    MOCK_METHOD(void, setLastShownMuseSamplerReleaseVersion, (const std::string&), (override));
+
+    MOCK_METHOD(std::string, checkForAppUpdateUrl, (), (const, override));
+    MOCK_METHOD(std::string, previousAppReleasesNotesUrl, (), (const, override));
+    MOCK_METHOD(std::string, checkForMuseSamplerUpdateUrl, (), (const, override));
 
     MOCK_METHOD(muse::network::RequestHeaders, updateHeaders, (), (const, override));
 

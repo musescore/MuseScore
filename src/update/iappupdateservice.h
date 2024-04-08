@@ -19,24 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_IUPDATESERVICE_H
-#define MU_APPSHELL_IUPDATESERVICE_H
+#ifndef MU_UPDATE_IAPPUPDATESERVICE_H
+#define MU_UPDATE_IAPPUPDATESERVICE_H
 
 #include "types/retval.h"
-#include "async/promise.h"
 #include "io/path.h"
 #include "progress.h"
+
 #include "updatetypes.h"
 
 #include "modularity/imoduleinterface.h"
 
 namespace mu::update {
-class IUpdateService : MODULE_EXPORT_INTERFACE
+class IAppUpdateService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IUpdateService)
+    INTERFACE_ID(IAppUpdateService)
 
 public:
-    virtual ~IUpdateService() = default;
+    virtual ~IAppUpdateService() = default;
 
     virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
 
@@ -46,4 +46,4 @@ public:
 };
 }
 
-#endif // MU_APPSHELL_IUPDATESERVICE_H
+#endif // MU_UPDATE_IAPPUPDATESERVICE_H

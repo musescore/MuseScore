@@ -24,6 +24,8 @@
 
 #include <string>
 
+#include "types/val.h"
+
 namespace mu::update {
 struct PrevReleaseNotes {
     std::string version;
@@ -48,9 +50,11 @@ struct ReleaseInfo {
     std::string notes;
     PrevReleasesNotesList previousReleasesNotes;
 
+    ValMap additionInfo;
+
     bool isValid() const
     {
-        return !version.empty() && !fileUrl.empty();
+        return !version.empty();
     }
 };
 }

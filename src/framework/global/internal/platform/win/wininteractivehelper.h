@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,16 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "updateactioncontroller.h"
+#ifndef MU_FRAMEWORK_WININTERACTIVEHELPER_H
+#define MU_FRAMEWORK_WININTERACTIVEHELPER_H
 
-using namespace mu::update;
+#include "io/path.h"
+#include "types/ret.h"
 
-void UpdateActionController::init()
+#include "async/asyncable.h"
+#include "async/promise.h"
+
+namespace mu {
+class WinInteractiveHelper : public async::Asyncable
 {
-    dispatcher()->reg(this, "check-update", this, &UpdateActionController::checkForAppUpdate);
+public:
+    static async::Promise<Ret> openApp(const std::string& appIdentifier);
+};
 }
 
-void UpdateActionController::checkForAppUpdate()
-{
-    updateScenario()->checkForAppUpdate();
-}
+#endif // MU_FRAMEWORK_WININTERACTIVEHELPER_H

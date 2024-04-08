@@ -51,16 +51,30 @@ std::string UpdateConfigurationStub::skippedReleaseVersion() const
     return "";
 }
 
-void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&) const
+void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&)
 {
 }
 
-std::string UpdateConfigurationStub::previousReleasesNotesUrl() const
+std::string UpdateConfigurationStub::lastShownMuseSamplerReleaseVersion() const
 {
     return "";
 }
 
-std::string UpdateConfigurationStub::checkForUpdateUrl() const
+void UpdateConfigurationStub::setLastShownMuseSamplerReleaseVersion(const std::string&)
+{
+}
+
+std::string UpdateConfigurationStub::checkForAppUpdateUrl() const
+{
+    return "";
+}
+
+std::string UpdateConfigurationStub::previousAppReleasesNotesUrl() const
+{
+    return "";
+}
+
+std::string UpdateConfigurationStub::checkForMuseSamplerUpdateUrl() const
 {
     return "";
 }

@@ -43,6 +43,7 @@
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
+#include "update/iupdatescenario.h"
 
 #include "async/asyncable.h"
 
@@ -72,6 +73,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(print::IPrintProvider, printProvider)
     INJECT(io::IFileSystem, fileSystem)
+    INJECT(update::IUpdateScenario, updateScenario)
 
 public:
     void init();
@@ -192,6 +194,7 @@ private:
     Ret doOpenProject(const io::path_t& filePath);
     Ret doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
 
+    Ret doFinishOpenProject();
     Ret openPageIfNeed(Uri pageUri);
 
     void exportScore();

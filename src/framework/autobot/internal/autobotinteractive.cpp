@@ -223,6 +223,11 @@ Ret AutobotInteractive::openUrl(const QUrl& url) const
     return m_real->openUrl(url);
 }
 
+async::Promise<Ret> AutobotInteractive::openApp(const std::string& appIdentifier) const
+{
+    return m_real->openApp(appIdentifier);
+}
+
 Ret AutobotInteractive::revealInFileBrowser(const io::path_t& filePath) const
 {
     return m_real->revealInFileBrowser(filePath);
