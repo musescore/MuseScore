@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATECONFIGURATIONMOCK_H
-#define MU_UPDATE_UPDATECONFIGURATIONMOCK_H
+#ifndef MUSE_UPDATE_UPDATECONFIGURATIONMOCK_H
+#define MUSE_UPDATE_UPDATECONFIGURATIONMOCK_H
 
 #include <gmock/gmock.h>
 
 #include "update/iupdateconfiguration.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateConfigurationMock : public IUpdateConfiguration
 {
 public:
@@ -57,4 +57,4 @@ public:
 };
 }
 
-#endif // MU_UPDATE_UPDATECONFIGURATIONMOCK_H
+#endif // MUSE_UPDATE_UPDATECONFIGURATIONMOCK_H

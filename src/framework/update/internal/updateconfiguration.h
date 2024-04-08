@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATECONFIGURATION_H
-#define MU_UPDATE_UPDATECONFIGURATION_H
+#ifndef MUSE_UPDATE_UPDATECONFIGURATION_H
+#define MUSE_UPDATE_UPDATECONFIGURATION_H
 
 #include "../iupdateconfiguration.h"
 #include "async/asyncable.h"
@@ -30,10 +30,10 @@
 
 #include "global/types/config.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateConfiguration : public IUpdateConfiguration, public async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<mu::IGlobalConfiguration> globalConfiguration;
 
 public:
     void init();
@@ -65,8 +65,8 @@ public:
 
 private:
 
-    Config m_config;
+    mu::Config m_config;
 };
 }
 
-#endif // MU_UPDATE_UPDATECONFIGURATION_H
+#endif // MUSE_UPDATE_UPDATECONFIGURATION_H

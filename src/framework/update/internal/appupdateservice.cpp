@@ -35,7 +35,7 @@
 #include "translation.h"
 #include "log.h"
 
-using namespace mu::update;
+using namespace muse::update;
 using namespace muse::network;
 
 mu::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
@@ -117,7 +117,7 @@ mu::RetVal<mu::io::path_t> AppUpdateService::downloadRelease()
     }
 
     io::path_t installerPath = configuration()->updateDataPath() + "/" + m_lastCheckResult.fileName;
-    fileSystem()->makePath(io::absoluteDirpath(installerPath));
+    fileSystem()->makePath(mu::io::absoluteDirpath(installerPath));
 
     ret = fileSystem()->writeFile(installerPath, ByteArray::fromQByteArrayNoCopy(buff.data()));
     if (ret) {

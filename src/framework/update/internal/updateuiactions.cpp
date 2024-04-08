@@ -25,7 +25,7 @@
 #include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
-using namespace mu::update;
+using namespace muse::update;
 using namespace muse::ui;
 using namespace muse::actions;
 

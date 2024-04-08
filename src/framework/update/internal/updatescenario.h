@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATESCENARIO_H
-#define MU_UPDATE_UPDATESCENARIO_H
+#ifndef MUSE_UPDATE_UPDATESCENARIO_H
+#define MUSE_UPDATE_UPDATESCENARIO_H
 
 #include "async/asyncable.h"
 #include "progress.h"
@@ -36,12 +36,12 @@
 
 #include "../iupdatescenario.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
-    Inject<IInteractive> interactive;
-    Inject<muse::actions::IActionsDispatcher> dispatcher;
-    Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<mu::IInteractive> interactive;
+    Inject<actions::IActionsDispatcher> dispatcher;
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
     Inject<IUpdateConfiguration> configuration;
 
     Inject<IAppUpdateService> appUpdateService;
@@ -86,4 +86,4 @@ private:
 };
 }
 
-#endif // MU_UPDATE_UPDATESCENARIO_H
+#endif // MUSE_UPDATE_UPDATESCENARIO_H

@@ -41,9 +41,9 @@ using ::testing::Return;
 #include "global/iapplication.h"
 
 using namespace mu;
-using namespace mu::update;
+using namespace muse::update;
 
-namespace mu::update {
+namespace muse::update {
 class AppUpdateServiceTests : public ::testing::Test
 {
     Inject<IApplication> application;

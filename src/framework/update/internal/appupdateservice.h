@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_APPUPDATESERVICE_H
-#define MU_UPDATE_APPUPDATESERVICE_H
+#ifndef MUSE_UPDATE_APPUPDATESERVICE_H
+#define MUSE_UPDATE_APPUPDATESERVICE_H
 
 #include "async/asyncable.h"
 
@@ -36,15 +36,15 @@
 #include "../iupdateconfiguration.h"
 #include "../iappupdateservice.h"
 
-namespace mu::update {
+namespace muse::update {
 class AppUpdateService : public IAppUpdateService, public async::Asyncable
 {
-    Inject<muse::network::INetworkManagerCreator> networkManagerCreator;
-    Inject<IUpdateConfiguration> configuration;
+    Inject<network::INetworkManagerCreator> networkManagerCreator;
     Inject<io::IFileSystem> fileSystem;
-    Inject<ISystemInfo> systemInfo;
+    Inject<mu::ISystemInfo> systemInfo;
     Inject<IApplication> application;
-    Inject<IInteractive> interactive;
+    Inject<mu::IInteractive> interactive;
+    Inject<IUpdateConfiguration> configuration;
 
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;
@@ -59,10 +59,10 @@ private:
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 
     std::string platformFileSuffix() const;
-    ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
+    mu::ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
     QJsonObject resolveReleaseAsset(const QJsonObject& release) const;
 
-    PrevReleasesNotesList previousReleasesNotes(const Version& updateVersion) const;
+    PrevReleasesNotesList previousReleasesNotes(const mu::Version& updateVersion) const;
     PrevReleasesNotesList parsePreviousReleasesNotes(const QByteArray& json) const;
 
     void clear();
@@ -70,9 +70,9 @@ private:
     ReleaseInfo m_lastCheckResult;
     io::path_t m_installatorPath;
 
-    muse::network::INetworkManagerPtr m_networkManager;
+    network::INetworkManagerPtr m_networkManager;
     mu::Progress m_updateProgress;
 };
 }
 
-#endif // MU_UPDATE_APPUPDATESERVICE_H
+#endif // MUSE_UPDATE_APPUPDATESERVICE_H

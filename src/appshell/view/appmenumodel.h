@@ -57,7 +57,7 @@ class AppMenuModel : public muse::uicomponents::AbstractMenuModel
     INJECT(project::IRecentFilesController, recentFilesController)
     INJECT(IAppMenuModelHook, appMenuModelHook)
     INJECT(muse::extensions::IExtensionsProvider, extensionsProvider)
-    INJECT(update::IUpdateConfiguration, updateConfiguration)
+    INJECT(muse::update::IUpdateConfiguration, updateConfiguration)
     INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:

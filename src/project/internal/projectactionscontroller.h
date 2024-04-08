@@ -73,7 +73,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(print::IPrintProvider, printProvider)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(update::IUpdateScenario, updateScenario)
+    INJECT(muse::update::IUpdateScenario, updateScenario)
 
 public:
     void init();

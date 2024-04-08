@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATEMODULE_H
-#define MU_UPDATE_UPDATEMODULE_H
+#ifndef MUSE_UPDATE_UPDATEMODULE_H
+#define MUSE_UPDATE_UPDATEMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateScenario;
 class UpdateConfiguration;
 class UpdateActionController;
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_UPDATE_UPDATEMODULE_H
+#endif // MUSE_UPDATE_UPDATEMODULE_H

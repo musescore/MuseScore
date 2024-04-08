@@ -37,7 +37,7 @@
 static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 
 using namespace mu;
-using namespace mu::update;
+using namespace muse::update;
 using namespace muse::actions;
 
 static ValList releasesNotesToValList(const PrevReleasesNotesList& list)

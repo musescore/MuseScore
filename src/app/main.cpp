@@ -337,7 +337,7 @@ int main(int argc, char** argv)
 #endif
     app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::project::ProjectModule());
-    app.addModule(new mu::update::UpdateModule());
+    app.addModule(new muse::update::UpdateModule());
     app.addModule(new muse::workspace::WorkspaceModule());
     app.addModule(new mu::workspacescene::WorkspaceSceneModule());
 

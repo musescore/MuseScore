@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UPDATE_UPDATEMODEL_H
-#define MU_UPDATE_UPDATEMODEL_H
+#ifndef MUSE_UPDATE_UPDATEMODEL_H
+#define MUSE_UPDATE_UPDATEMODEL_H
 
 #include <QObject>
 
@@ -30,7 +30,7 @@
 
 #include "async/asyncable.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -70,4 +70,4 @@ private:
 };
 }
 
-#endif // MU_UPDATE_UPDATEMODEL_H
+#endif // MUSE_UPDATE_UPDATEMODEL_H

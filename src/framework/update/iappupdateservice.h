@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_IAPPUPDATESERVICE_H
-#define MU_UPDATE_IAPPUPDATESERVICE_H
+#ifndef MUSE_UPDATE_IAPPUPDATESERVICE_H
+#define MUSE_UPDATE_IAPPUPDATESERVICE_H
 
 #include "types/retval.h"
 #include "io/path.h"
@@ -30,7 +30,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-namespace mu::update {
+namespace muse::update {
 class IAppUpdateService : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAppUpdateService)
@@ -46,4 +46,4 @@ public:
 };
 }
 
-#endif // MU_UPDATE_IAPPUPDATESERVICE_H
+#endif // MUSE_UPDATE_IAPPUPDATESERVICE_H

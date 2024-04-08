@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATEACTIONCONTROLLER_H
-#define MU_UPDATE_UPDATEACTIONCONTROLLER_H
+#ifndef MUSE_UPDATE_UPDATEACTIONCONTROLLER_H
+#define MUSE_UPDATE_UPDATEACTIONCONTROLLER_H
 
 #include "actions/actionable.h"
 
@@ -28,7 +28,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "../iupdatescenario.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateActionController : public muse::actions::Actionable
 {
     Inject<muse::actions::IActionsDispatcher> dispatcher;
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_UPDATE_UPDATEACTIONCONTROLLER_H
+#endif // MUSE_UPDATE_UPDATEACTIONCONTROLLER_H

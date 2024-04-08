@@ -28,7 +28,7 @@
 #include "settings.h"
 
 using namespace mu;
-using namespace mu::update;
+using namespace muse::update;
 
 static const std::string module_name("update");
 

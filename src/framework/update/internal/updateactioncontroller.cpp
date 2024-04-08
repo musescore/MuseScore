@@ -21,7 +21,7 @@
  */
 #include "updateactioncontroller.h"
 
-using namespace mu::update;
+using namespace muse::update;
 
 void UpdateActionController::init()
 {

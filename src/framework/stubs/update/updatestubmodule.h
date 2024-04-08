@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATESTUBMODULE_H
-#define MU_UPDATE_UPDATESTUBMODULE_H
+#ifndef MUSE_UPDATE_UPDATESTUBMODULE_H
+#define MUSE_UPDATE_UPDATESTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateModule : public modularity::IModuleSetup
 {
 public:
@@ -33,4 +33,4 @@ public:
 };
 }
 
-#endif // MU_UPDATE_UPDATESTUBMODULE_H
+#endif // MUSE_UPDATE_UPDATESTUBMODULE_H
