@@ -282,7 +282,7 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
     if (muse::contains(supportPrimaryAndSecondaryCategories, search->second.soundId())) {
         SoundSubCategory category = instrument->isPrimary() ? SoundSubCategory::Primary : SoundSubCategory::Secondary;
         PlaybackSetupData setupData = search->second;
-        setupData.subCategorySet.insert(category);
+        setupData.add(category);
         return setupData;
     }
 
