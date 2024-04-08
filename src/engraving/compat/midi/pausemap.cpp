@@ -69,7 +69,7 @@ void PauseMap::calculate(const Score* s)
             int tick = it->first;
             int utick = tick + tickOffset;
 
-            if (it->second.pause == 0.0) {
+            if (RealIsNull(it->second.pause)) {
                 // We have a regular tempo change. Don't include tempo change from first tick of next RepeatSegment (it will be included later).
                 if (tick != endTick) {
                     m_tempomapWithPauses->insert(std::pair<const int, TEvent>(tickWithPauses(utick), it->second));

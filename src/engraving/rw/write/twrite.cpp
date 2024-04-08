@@ -562,10 +562,10 @@ void TWrite::write(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeItemProperties(item, xml, ctx);
     writeProperty(item, xml, Pid::ARPEGGIO_TYPE);
-    if (item->userLen1() != 0.0) {
+    if (!RealIsNull(item->userLen1())) {
         xml.tag("userLen1", item->userLen1() / item->spatium());
     }
-    if (item->userLen2() != 0.0) {
+    if (!RealIsNull(item->userLen2())) {
         xml.tag("userLen2", item->userLen2() / item->spatium());
     }
     if (item->span() != 1) {
@@ -873,7 +873,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 
     if (item->noStem()) {
         xml.tag("noStem", item->noStem());
-    } else if (item->stem() && (item->stem()->isUserModified() || (item->stem()->userLength() != 0.0))) {
+    } else if (item->stem() && (item->stem()->isUserModified() || !RealIsNull(item->stem()->userLength()))) {
         write(item->stem(), xml, ctx);
     }
     if (item->hook() && item->hook()->isUserModified()) {
@@ -2685,13 +2685,13 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
     if (item->lines() != 5) {
         xml.tag("lines", item->lines());
     }
-    if (item->lineDistance().val() != 1.0) {
+    if (!RealIsEqual(item->lineDistance().val(), 1.0)) {
         xml.tag("lineDistance", item->lineDistance().val());
     }
-    if (item->yoffset().val() != 0.0) {
+    if (!RealIsNull(item->yoffset().val())) {
         xml.tag("yoffset", item->yoffset().val());
     }
-    if (item->userMag() != 1.0) {
+    if (!RealIsEqual(item->userMag(), 1.0)) {
         xml.tag("mag", item->userMag());
     }
     if (item->isSmall()) {

@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "intinputvalidator.h"
+#include "global/realfn.h"
 
 using namespace muse::uicomponents;
 
@@ -54,7 +55,7 @@ QValidator::State IntInputValidator::validate(QString& inputStr, int& cursorPos)
                                   : 1;
     if (inputStr.contains(QRegularExpression(QString("^\\-?\\d{1,%1}$").arg(maxNumberOfDigits)))) {
         if ((maxNumberOfDigits >= 2 && inputStr.contains(QRegularExpression(QString("^\\-?0{2,%1}").arg(maxNumberOfDigits))))
-            || (inputStr.startsWith("-") && inputStr.toDouble() == 0.0)) {
+            || (inputStr.startsWith("-") && mu::RealIsNull(inputStr.toDouble()))) {
             state = Intermediate;
         } else {
             state = Acceptable;

@@ -112,7 +112,7 @@ void EaseInOut::timeList(const int nbNotes, const int duration, std::vector<int>
 {
     double nNotes = double(nbNotes);
     double space = double(duration);
-    if (m_easeIn == 0.0 && m_easeOut == 0.0) {
+    if (RealIsNull(m_easeIn) && RealIsNull(m_easeOut)) {
         for (int n = 0; n <= nbNotes; n++) {
             times->push_back(static_cast<int>(std::lround((static_cast<double>(n) / nNotes) * space)));
         }

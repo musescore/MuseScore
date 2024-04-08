@@ -382,7 +382,7 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction>& al, c
             s += a.text;
             break;
         case RenderAction::RenderActionType::MOVE:
-            if (a.movex != 0.0 || a.movey != 0.0) {
+            if (!RealIsNull(a.movex) || !RealIsNull(a.movey)) {
                 s += String(u"m:%1:%2").arg(a.movex).arg(a.movey);
             }
             break;
@@ -1471,11 +1471,11 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         // check for adjustments
         // stop adjusting when first non-adjusted modifier found
         double p = adjust ? cl->position(tok.names, ctc) : 0.0;
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && p == 0.0) {
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && RealIsNull(p)) {
             adjust = false;
         }
         // build render list
-        if (p != 0.0) {
+        if (!RealIsNull(p)) {
             RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
             m1.movex = 0.0;
             m1.movey = p;
@@ -1489,7 +1489,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             a.text = tok.names.front();
             m_renderList.push_back(a);
         }
-        if (p != 0.0) {
+        if (!RealIsNull(p)) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
             m2.movey = -p;

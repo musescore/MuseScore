@@ -287,7 +287,7 @@ void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
     if (!tag.isEmpty()) {
         xml.tag("tag", tag);
     }
-    if (mag != 1.0) {
+    if (!RealIsEqual(mag, 1.0)) {
         xml.tag("mag", mag);
     }
 

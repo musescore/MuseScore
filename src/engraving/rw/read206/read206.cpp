@@ -2376,7 +2376,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
         el = f;
     }
     if (el->isFermata()) {
-        if (timeStretch != 0.0) {
+        if (!RealIsNull(timeStretch)) {
             el->setProperty(Pid::TIME_STRETCH, timeStretch);
         }
         if (useDefaultPlacement) {
