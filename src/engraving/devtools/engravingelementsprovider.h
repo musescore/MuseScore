@@ -19,20 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
-#define MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
+#ifndef MU_ENGRAVING_ENGRAVINGELEMENTSPROVIDER_H
+#define MU_ENGRAVING_ENGRAVINGELEMENTSPROVIDER_H
 
 #include <string>
 #include <map>
 
-#include "../iengravingelementsprovider.h"
+#include "iengravingelementsprovider.h"
 
 namespace mu::engraving {
 class Score;
 class EngravingItem;
-}
-
-namespace mu::diagnostics {
 class EngravingElementsProvider : public IEngravingElementsProvider
 {
 public:
@@ -45,7 +42,7 @@ public:
     // register
     void reg(const mu::engraving::EngravingObject* e) override;
     void unreg(const mu::engraving::EngravingObject* e) override;
-    const EngravingObjectList& elements() const override;
+    const EngravingObjectSet& elements() const override;
 
     // debug draw
     void select(const mu::engraving::EngravingObject* e, bool arg) override;
@@ -68,11 +65,11 @@ private:
 
     std::map<std::string, ObjectStatistic> m_statistics;
 
-    EngravingObjectList m_elements;
+    EngravingObjectSet m_elements;
 
-    EngravingObjectList m_selected;
+    EngravingObjectSet m_selected;
     muse::async::Channel<const mu::engraving::EngravingObject*, bool> m_selectChanged;
 };
 }
 
-#endif // MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
+#endif // MU_ENGRAVING_ENGRAVINGELEMENTSPROVIDER_H

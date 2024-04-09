@@ -25,8 +25,8 @@
 #include "draw/painter.h"
 
 #include "modularity/ioc.h"
-#include "diagnostics/iengravingelementsprovider.h"
 #include "iengravingconfiguration.h"
+#include "../devtools/iengravingelementsprovider.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -38,7 +38,7 @@ class PaintDebugger;
 class DebugPaint
 {
     INJECT_STATIC(IEngravingConfiguration, configuration)
-    INJECT_STATIC(diagnostics::IEngravingElementsProvider, elementsProvider)
+    INJECT_STATIC(IEngravingElementsProvider, elementsProvider)
 
 public:
     static void paintElementDebug(muse::draw::Painter& painter, const EngravingItem* item);

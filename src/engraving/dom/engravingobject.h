@@ -28,7 +28,7 @@
 
 #include "draw/types/geometry.h"
 #include "modularity/ioc.h"
-#include "diagnostics/iengravingelementsprovider.h"
+#include "../devtools/iengravingelementsprovider.h"
 
 #include "../style/styledef.h"
 
@@ -202,7 +202,7 @@ public:
 
 class EngravingObject
 {
-    INJECT_STATIC(mu::diagnostics::IEngravingElementsProvider, elementsProvider)
+    INJECT_STATIC(IEngravingElementsProvider, elementsProvider)
 
 public:
     EngravingObject(const ElementType& type, EngravingObject* parent);

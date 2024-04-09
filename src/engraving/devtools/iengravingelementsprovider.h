@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
-#define MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
+#ifndef MU_ENGRAVING_IENGRAVINGELEMENTSPROVIDER_H
+#define MU_ENGRAVING_IENGRAVINGELEMENTSPROVIDER_H
 
 #include <unordered_set>
 
@@ -29,10 +29,7 @@
 
 namespace mu::engraving {
 class EngravingObject;
-}
-
-namespace mu::diagnostics {
-using EngravingObjectList = std::unordered_set<const mu::engraving::EngravingObject*>;
+using EngravingObjectSet = std::unordered_set<const EngravingObject*>;
 class IEngravingElementsProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IEngravingElementsProvider)
@@ -46,7 +43,7 @@ public:
     // register
     virtual void reg(const mu::engraving::EngravingObject* e) = 0;
     virtual void unreg(const mu::engraving::EngravingObject* e) = 0;
-    virtual const EngravingObjectList& elements() const = 0;
+    virtual const EngravingObjectSet& elements() const = 0;
 
     // debug draw
     virtual void select(const mu::engraving::EngravingObject* e, bool arg) = 0;
@@ -55,4 +52,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
+#endif // MU_ENGRAVING_IENGRAVINGELEMENTSPROVIDER_H

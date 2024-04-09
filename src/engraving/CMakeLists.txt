@@ -46,6 +46,10 @@ include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
 
+if (MUE_BUILD_ENGRAVING_DEVTOOLS)
+    include(${CMAKE_CURRENT_LIST_DIR}/devtools/devtools.cmake)
+endif()
+
 set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/engravingmodule.cpp
@@ -275,6 +279,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/pitchutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/expressionutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h
+
+    ${DEVTOOLS_SRC}
     )
 
 if (ENGRAVING_NO_ACCESSIBILITY)
@@ -342,6 +348,10 @@ endif()
 
 if (MUE_ENABLE_ENGRAVING_LD_PASSES)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ENGRAVING_LD_PASSES)
+endif()
+
+if (MUE_BUILD_ENGRAVING_DEVTOOLS)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_BUILD_ENGRAVING_DEVTOOLS)
 endif()
 
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})

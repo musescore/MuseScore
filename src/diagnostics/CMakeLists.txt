@@ -30,7 +30,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticutils.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticspathsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iengravingelementsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticdrawprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticserrors.h
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticstypes.h
@@ -43,8 +42,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/diagnosticdrawprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/diagnosticdrawprovider.h
@@ -79,9 +76,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/keynavdevsubsection.h
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/keynavdevsection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/keynavdevsection.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/view/engraving/engravingelementsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/engraving/engravingelementsmodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/devtools/crashhandlerdevtoolsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/crashhandlerdevtoolsmodel.h
