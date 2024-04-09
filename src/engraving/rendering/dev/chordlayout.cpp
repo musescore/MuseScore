@@ -70,6 +70,7 @@
 #include "tremololayout.h"
 #include "autoplace.h"
 
+using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 

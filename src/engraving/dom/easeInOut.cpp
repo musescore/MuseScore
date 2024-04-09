@@ -33,6 +33,7 @@
 #include "realfn.h"
 
 using namespace mu;
+using namespace muse;
 
 namespace mu::engraving {
 //-------------------------------------------------------------------------------------------------

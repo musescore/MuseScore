@@ -85,7 +85,7 @@ QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorP
 
     if (inputStr.contains(QRegularExpression(QString("^\\-?\\d{1,3}\\.\\d{%1}$").arg(m_decimal)))) {
         if (inputStr.contains(QRegularExpression("^\\-?0{2,3}\\."))
-            || (inputStr.startsWith("-") && mu::RealIsNull(inputStr.toDouble()))) {
+            || (inputStr.startsWith("-") && muse::RealIsNull(inputStr.toDouble()))) {
             state = Intermediate;
         } else {
             state = Acceptable;

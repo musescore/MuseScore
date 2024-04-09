@@ -38,6 +38,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::io;
 
 namespace mu::engraving {

@@ -107,6 +107,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 using namespace mu::engraving::read400;

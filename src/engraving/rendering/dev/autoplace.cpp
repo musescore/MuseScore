@@ -30,6 +30,7 @@
 #include "dom/system.h"
 #include "dom/measure.h"
 
+using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 

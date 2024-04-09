@@ -162,6 +162,7 @@
 #include "tupletlayout.h"
 #include "horizontalspacing.h"
 
+using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
