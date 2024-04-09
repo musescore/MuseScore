@@ -35,8 +35,6 @@ declare_muse_module_opt(UPDATE ON)
 set(VST3_SDK_VERSION "3.7")
 declare_muse_module_opt(VST OFF)
 set(MUSE_MODULE_VST_VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
-# backwards compatible, will be removed later
-set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
 
 declare_muse_module_opt(WORKSPACE ON)
 
