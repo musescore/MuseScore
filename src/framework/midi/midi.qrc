@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/MuseScore/Midi/qmldir</file>
+        <file>qml/Muse/Midi/qmldir</file>
     </qresource>
 </RCC>

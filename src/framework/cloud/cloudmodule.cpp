@@ -65,7 +65,7 @@ void CloudModule::resolveImports()
 {
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://cloud/requireauthorization"), "MuseScore/Cloud/RequireAuthorizationDialog.qml");
+        ir->registerQmlUri(Uri("musescore://cloud/requireauthorization"), "Muse/Cloud/RequireAuthorizationDialog.qml");
     }
 }
 
@@ -76,13 +76,13 @@ void CloudModule::registerResources()
 
 void CloudModule::registerUiTypes()
 {
-    qmlRegisterType<CloudsModel>("MuseScore.Cloud", 1, 0, "CloudsModel");
-    qmlRegisterType<MuseScoreComAuthorizationModel>("MuseScore.Cloud", 1, 0, "MuseScoreComAuthorizationModel");
+    qmlRegisterType<CloudsModel>("Muse.Cloud", 1, 0, "CloudsModel");
+    qmlRegisterType<MuseScoreComAuthorizationModel>("Muse.Cloud", 1, 0, "MuseScoreComAuthorizationModel");
 
-    qmlRegisterUncreatableType<QMLCloudVisibility>("MuseScore.Cloud", 1, 0, "CloudVisibility",
+    qmlRegisterUncreatableType<QMLCloudVisibility>("Muse.Cloud", 1, 0, "CloudVisibility",
                                                    "Not creatable as it is an enum type");
 
-    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Cloud", 1, 0, "SaveToCloudResponse",
+    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("Muse.Cloud", 1, 0, "SaveToCloudResponse",
                                                        "Not creatable as it is an enum type");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);

@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/MuseScore/Cloud/qmldir</file>
-        <file>qml/MuseScore/Cloud/AccountInfoButton.qml</file>
-        <file>qml/MuseScore/Cloud/AccountPage.qml</file>
-        <file>qml/MuseScore/Cloud/CloudScoresView.qml</file>
+        <file>qml/Muse/Cloud/qmldir</file>
+        <file>qml/Muse/Cloud/AccountInfoButton.qml</file>
+        <file>qml/Muse/Cloud/AccountPage.qml</file>
+        <file>qml/Muse/Cloud/CloudScoresView.qml</file>
     </qresource>
 </RCC>

@@ -78,7 +78,7 @@ void MidiModule::registerExports()
 
 void MidiModule::registerUiTypes()
 {
-    qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
+    qmlRegisterType<MidiPortDevModel>("Muse.Midi", 1, 0, "MidiPortDevModel");
 }
 
 void MidiModule::onInit(const IApplication::RunMode& mode)

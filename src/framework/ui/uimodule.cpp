@@ -150,35 +150,35 @@ void UiModule::registerUiTypes()
 #ifdef MU_QT5_COMPAT
     qRegisterMetaType<api::ThemeApi*>("api::ThemeApi*");
 #endif
-    qmlRegisterUncreatableType<UiEngine>("MuseScore.Ui", 1, 0, "UiEngine", "Cannot create an UiEngine");
-    qmlRegisterUncreatableType<api::ThemeApi>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
-    qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
-    qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
-    qmlRegisterUncreatableType<MusicalSymbolCodes>("MuseScore.Ui", 1, 0, "MusicalSymbolCodes",
+    qmlRegisterUncreatableType<UiEngine>("Muse.Ui", 1, 0, "UiEngine", "Cannot create an UiEngine");
+    qmlRegisterUncreatableType<api::ThemeApi>("Muse.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
+    qmlRegisterUncreatableType<QmlToolTip>("Muse.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
+    qmlRegisterUncreatableType<IconCode>("Muse.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
+    qmlRegisterUncreatableType<MusicalSymbolCodes>("Muse.Ui", 1, 0, "MusicalSymbolCodes",
                                                    "Cannot create an MusicalSymbolCodes");
-    qmlRegisterUncreatableType<InteractiveProvider>("MuseScore.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
-    qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
+    qmlRegisterUncreatableType<InteractiveProvider>("Muse.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
+    qmlRegisterUncreatableType<ContainerType>("Muse.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
 
-    qmlRegisterUncreatableType<NavigationEvent>("MuseScore.Ui", 1, 0, "NavigationEvent", "Cannot create a KeyNavigationEvent");
-    qmlRegisterType<NavigationSection>("MuseScore.Ui", 1, 0, "NavigationSection");
-    qmlRegisterType<NavigationPanel>("MuseScore.Ui", 1, 0, "NavigationPanel");
-    qmlRegisterType<NavigationPopupPanel>("MuseScore.Ui", 1, 0, "NavigationPopupPanel");
-    qmlRegisterType<NavigationControl>("MuseScore.Ui", 1, 0, "NavigationControl");
-    qmlRegisterType<AccessibleItem>("MuseScore.Ui", 1, 0, "AccessibleItem");
-    qmlRegisterUncreatableType<MUAccessible>("MuseScore.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
+    qmlRegisterUncreatableType<NavigationEvent>("Muse.Ui", 1, 0, "NavigationEvent", "Cannot create a KeyNavigationEvent");
+    qmlRegisterType<NavigationSection>("Muse.Ui", 1, 0, "NavigationSection");
+    qmlRegisterType<NavigationPanel>("Muse.Ui", 1, 0, "NavigationPanel");
+    qmlRegisterType<NavigationPopupPanel>("Muse.Ui", 1, 0, "NavigationPopupPanel");
+    qmlRegisterType<NavigationControl>("Muse.Ui", 1, 0, "NavigationControl");
+    qmlRegisterType<AccessibleItem>("Muse.Ui", 1, 0, "AccessibleItem");
+    qmlRegisterUncreatableType<MUAccessible>("Muse.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
 
-    qmlRegisterType<FocusListener>("MuseScore.Ui", 1, 0, "FocusListener");
+    qmlRegisterType<FocusListener>("Muse.Ui", 1, 0, "FocusListener");
 
 #ifdef Q_OS_MAC
-    qmlRegisterType<MacOSMainWindowBridge>("MuseScore.Ui", 1, 0, "MainWindowBridge");
+    qmlRegisterType<MacOSMainWindowBridge>("Muse.Ui", 1, 0, "MainWindowBridge");
 #else
-    qmlRegisterType<MainWindowBridge>("MuseScore.Ui", 1, 0, "MainWindowBridge");
+    qmlRegisterType<MainWindowBridge>("Muse.Ui", 1, 0, "MainWindowBridge");
 #endif
 
-    qmlRegisterType<ErrorDetailsModel>("MuseScore.Ui", 1, 0, "ErrorDetailsModel");
-    qmlRegisterType<ProgressDialogModel>("MuseScore.Ui", 1, 0, "ProgressDialogModel");
+    qmlRegisterType<ErrorDetailsModel>("Muse.Ui", 1, 0, "ErrorDetailsModel");
+    qmlRegisterType<ProgressDialogModel>("Muse.Ui", 1, 0, "ProgressDialogModel");
 
-    qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
+    qmlRegisterType<InteractiveTestsModel>("Muse.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);

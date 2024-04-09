@@ -1,9 +1,0 @@
-module MuseScore.Mpe
-ArticulationPatternPlot 1.0 ArticulationPatternPlot.qml
-ArrangementPatternControl 1.0 ArrangementPatternControl.qml
-ArticulationPatternControlsTab 1.0 ArticulationPatternControlsTab.qml
-PitchPatternControl 1.0 PitchPatternControl.qml
-ExpressionPatternControl 1.0 ExpressionPatternControl.qml
-ArticulationPatternsTab 1.0 ArticulationPatternsTab.qml
-ArticulationPatternsList 1.0 ArticulationPatternsList.qml
-ArticulationPatternSegmentsList 1.0 ArticulationPatternSegmentsList.qml

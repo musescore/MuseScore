@@ -53,7 +53,7 @@ void MpeModule::registerExports()
 
 void MpeModule::registerUiTypes()
 {
-    qmlRegisterType<ArticulationsProfileEditorModel>("MuseScore.Mpe", 1, 0, "ArticulationsProfileEditorModel");
+    qmlRegisterType<ArticulationsProfileEditorModel>("Muse.Mpe", 1, 0, "ArticulationsProfileEditorModel");
 
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(mpe_QML_IMPORT);
 }

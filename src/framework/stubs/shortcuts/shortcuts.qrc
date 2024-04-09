@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/MuseScore/Shortcuts/qmldir</file>
-        <file>qml/MuseScore/Shortcuts/Shortcuts.qml</file>
+        <file>qml/Muse/Shortcuts/qmldir</file>
+        <file>qml/Muse/Shortcuts/Shortcuts.qml</file>
     </qresource>
 </RCC>

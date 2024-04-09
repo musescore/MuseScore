@@ -1,5 +1,0 @@
-module MuseScore.Audio
-AudioEngineTests 1.0 DevTools/AudioEngineTests.qml
-MidiPorts 1.0 DevTools/MidiPorts.qml
-SoundFontsPanel 1.0 DevTools/SoundFontsPanel.qml
-SynthSettings 1.0 DevTools/SynthSettings.qml

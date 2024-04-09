@@ -1,0 +1,6 @@
+module Muse.Cloud
+AccountInfoButton 1.0 AccountInfoButton.qml
+AccountPage 1.0 AccountPage.qml
+AccountAvatar 1.0 AccountAvatar.qml
+RequireAuthorizationDialog 1.0 RequireAuthorizationDialog.qml
+CloudScoresView 1.0 CloudScoresView.qml

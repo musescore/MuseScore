@@ -22,7 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 
-import MuseScore.UiComponents 1.0
+import Muse.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
 import "../common"

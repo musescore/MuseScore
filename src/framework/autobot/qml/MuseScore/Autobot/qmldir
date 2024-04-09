@@ -1,5 +1,0 @@
-module MuseScore.Autobot
-AutobotDialog 1.0 AutobotDialog.qml
-AutobotPanel 1.0 AutobotPanel.qml
-TestCaseRunPanel 1.0 TestCaseRunPanel.qml
-AutobotSelectFileDialog 1.0 AutobotSelectFileDialog.qml

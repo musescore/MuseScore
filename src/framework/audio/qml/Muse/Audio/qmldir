@@ -1,0 +1,4 @@
+module Muse.Audio
+KnobControl 1.0 KnobControl.qml
+VolumePressureMeter 1.0 VolumePressureMeter.qml
+VolumeSlider 1.0 VolumeSlider.qml
