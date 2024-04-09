@@ -90,7 +90,7 @@ QVariantMap LearnPageModel::classesAuthor() const
                                                 "with discussion spaces, live streams, "
                                                 "and other related courses and services to help you create your best music. "
                                                 "Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!");
-    author["avatarUrl"] = "qrc:/qml/MuseScore/Learn/resources/marc_sabatella.JPG";
+    author["avatarUrl"] = "qrc:/qml/Muse/Learn/resources/marc_sabatella.JPG";
     author["organizationName"] = muse::qtrc("learn", "Mastering MuseScore");
     author["organizationUrl"] = "https://www.masteringmusescore.com/musescore4";
 

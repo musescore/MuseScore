@@ -27,7 +27,7 @@ import Muse.Dock 1.0
 
 import MuseScore.Project 1.0
 import Muse.Cloud 1.0
-import MuseScore.Learn 1.0
+import Muse.Learn 1.0
 
 DockPage {
     id: root
