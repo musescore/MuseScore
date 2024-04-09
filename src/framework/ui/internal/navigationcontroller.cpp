@@ -364,7 +364,7 @@ void NavigationController::resetIfNeed(QObject* watched)
     }
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    if (mu::diagnostics::isDiagnosticHierarchy(watched)) {
+    if (muse::diagnostics::isDiagnosticHierarchy(watched)) {
         return;
     }
 #endif

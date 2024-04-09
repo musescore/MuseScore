@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DIAGNOSTICS_CRASHHANDLER_H
-#define MU_DIAGNOSTICS_CRASHHANDLER_H
+#ifndef MUSE_DIAGNOSTICS_CRASHHANDLER_H
+#define MUSE_DIAGNOSTICS_CRASHHANDLER_H
 
 #include <string>
 
@@ -34,7 +34,7 @@ namespace crashpad {
 class CrashpadClient;
 }
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class CrashHandler
 {
     Inject<muse::IApplication> application;
@@ -53,4 +53,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_CRASHHANDLER_H
+#endif // MUSE_DIAGNOSTICS_CRASHHANDLER_H

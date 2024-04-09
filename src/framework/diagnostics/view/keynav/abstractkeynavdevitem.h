@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
-#define MU_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
+#ifndef MUSE_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
+#define MUSE_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
 
 #include <QObject>
 
 #include "ui/inavigation.h"
 #include "async/asyncable.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class AbstractKeyNavDevItem : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -55,4 +55,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
+#endif // MUSE_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H

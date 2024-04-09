@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSMODULE_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSMODULE_H
+#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICSMODULE_H
+#define MUSE_DIAGNOSTICS_DIAGNOSTICSMODULE_H
 
 #include <memory>
 
@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticsConfiguration;
 class DiagnosticsActionsController;
 class DiagnosticsModule : public muse::modularity::IModuleSetup
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSMODULE_H
+#endif // MUSE_DIAGNOSTICS_DIAGNOSTICSMODULE_H

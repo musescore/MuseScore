@@ -38,10 +38,6 @@
 #include "../infrastructure/rtti.h"
 #include "../infrastructure/eid.h"
 
-namespace mu::diagnostics {
-class EngravingElementsProvider;
-}
-
 namespace mu::engraving {
 class Accidental;
 class ActionIcon;
@@ -228,7 +224,7 @@ public:
     const EngravingObjectList& children() const { return m_children; }
 
     // Score Tree functions for scan function
-    friend class mu::diagnostics::EngravingElementsProvider;
+    friend class EngravingElementsProvider;
     virtual EngravingObject* scanParent() const { return m_parent; }
     virtual EngravingObjectList scanChildren() const { return {}; }
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);

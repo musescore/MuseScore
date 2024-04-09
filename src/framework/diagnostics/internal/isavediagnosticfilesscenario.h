@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
-#define MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
+#ifndef MUSE_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
+#define MUSE_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "types/ret.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class ISaveDiagnosticFilesScenario : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ISaveDiagnosticFilesScenario)
@@ -38,4 +38,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
+#endif // MUSE_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H

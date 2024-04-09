@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IDIAGNOSTICSPATHSREGISTER_H
-#define MU_DIAGNOSTICS_IDIAGNOSTICSPATHSREGISTER_H
+#ifndef MUSE_DIAGNOSTICS_IDIAGNOSTICSPATHSREGISTER_H
+#define MUSE_DIAGNOSTICS_IDIAGNOSTICSPATHSREGISTER_H
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class IDiagnosticsPathsRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IDiagnosticsPathsRegister)
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_IDIAGNOSTICSPATHSREGISTER_H
+#endif // MUSE_DIAGNOSTICS_IDIAGNOSTICSPATHSREGISTER_H

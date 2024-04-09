@@ -21,7 +21,7 @@
  */
 #include "diagnosticspathsregister.h"
 
-using namespace mu::diagnostics;
+using namespace muse::diagnostics;
 
 void DiagnosticsPathsRegister::reg(const std::string& name, const muse::io::path_t& path)
 {

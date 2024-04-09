@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
-#define MU_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
+#ifndef MUSE_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
+#define MUSE_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
 
 #include <QObject>
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class CrashHandlerDevToolsModel : public QObject
 {
     Q_OBJECT
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
+#endif // MUSE_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H

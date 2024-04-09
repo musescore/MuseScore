@@ -28,7 +28,7 @@
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
-using namespace mu::diagnostics;
+using namespace muse::diagnostics;
 
 const UiActionList DiagnosticsActions::m_actions = {
     UiAction("diagnostic-save-diagnostic-files",

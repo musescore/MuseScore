@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSACTIONS_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSACTIONS_H
+#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICSACTIONS_H
+#define MUSE_DIAGNOSTICS_DIAGNOSTICSACTIONS_H
 
 #include "ui/iuiactionsmodule.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticsActions : public muse::ui::IUiActionsModule
 {
 public:
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSACTIONS_H
+#endif // MUSE_DIAGNOSTICS_DIAGNOSTICSACTIONS_H

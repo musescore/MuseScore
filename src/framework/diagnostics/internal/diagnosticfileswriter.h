@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
-#define MU_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
+#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
+#define MUSE_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
 
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
@@ -33,7 +33,7 @@ namespace muse {
 class ZipWriter;
 }
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticFilesWriter
 {
     INJECT_STATIC(muse::io::IFileSystem, fileSystem)
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
+#endif // MUSE_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H

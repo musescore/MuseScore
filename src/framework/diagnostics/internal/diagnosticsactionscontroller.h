@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSACTIONSCONTROLLER_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSACTIONSCONTROLLER_H
+#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICSACTIONSCONTROLLER_H
+#define MUSE_DIAGNOSTICS_DIAGNOSTICSACTIONSCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -29,7 +29,7 @@
 #include "accessibility/iaccessibilitycontroller.h"
 #include "isavediagnosticfilesscenario.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticsActionsController : public muse::actions::Actionable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
@@ -47,4 +47,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSACTIONSCONTROLLER_H
+#endif // MUSE_DIAGNOSTICS_DIAGNOSTICSACTIONSCONTROLLER_H

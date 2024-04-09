@@ -27,7 +27,7 @@
 
 #include <QApplication>
 
-using namespace mu::diagnostics;
+using namespace muse::diagnostics;
 using namespace muse;
 
 Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()

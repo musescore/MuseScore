@@ -101,7 +101,7 @@ void AutobotModule::onInit(const IApplication::RunMode& mode)
     m_actionsController->init();
 
     //! --- Diagnostics ---
-    auto pr = modularity::ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = modularity::ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         for (const io::path_t& p : m_configuration->scriptsDirPaths()) {
             pr->reg("autobotScriptsPath", p);
