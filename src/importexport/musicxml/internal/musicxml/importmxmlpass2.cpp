@@ -1764,48 +1764,6 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
 }
 
 //---------------------------------------------------------
-//   reformatHeaderVBox
-//---------------------------------------------------------
-/**
- Due to inconsistencies with spacing and inferred text,
- the header VBox frequently has collisions. This cleans
- those (as a temporary fix for a more robust collision-prevention
- system in Boxes).
- */
-
-static void reformatHeaderVBox(MeasureBase* mb)
-{
-    if (!mb->isVBox()) {
-        return;
-    }
-
-    VBox* headerVBox = toVBox(mb);
-    double totalHeight = 0;
-    double offsetHeight = 0;
-    double lineSpacingMultiplier = 0.5;
-
-    for (auto e : headerVBox->el()) {
-        if (!e->isText()) {
-            continue;
-        }
-        Text* t = toText(e);
-        TLayout::layoutText(t, t->mutldata());
-
-        totalHeight += t->height();
-        if (t->align() == AlignV::TOP) {
-            totalHeight += t->lineHeight() * lineSpacingMultiplier;
-            t->setOffset(t->offset().x(), offsetHeight);
-            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-            offsetHeight += t->height();
-            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
-        }
-    }
-
-    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
-    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
-}
-
-//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -1837,8 +1795,10 @@ void MusicXMLParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(m_e, u"score-partwise"));
 
-    if (m_pass1.hasInferredHeaderText()) {
-        reformatHeaderVBox(m_score->measures()->first());
+    // This method relies heavily on text metrics which differ from system to system and can be very volatile
+    // To avoid having to update the majority of musicxml tests on every change to engraving, don't run this during testing
+    if (!MScore::testMode) {
+        m_pass1.reformatHeaderVBox(m_score->measures()->first());
     }
 }
 

@@ -33,6 +33,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
+#include "engraving/rendering/dev/tlayout.h"
 
 #include "engraving/style/style.h"
 #include "engraving/style/textstyle.h"
@@ -52,6 +53,7 @@ using namespace mu;
 using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
@@ -732,6 +734,54 @@ VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score, const in
     vbox->setBoxHeight(Spatium(vboxHeight));
     score->measures()->add(vbox);
     return vbox;
+}
+
+//---------------------------------------------------------
+//   reformatHeaderVBox
+//---------------------------------------------------------
+/**
+ Due to inconsistencies with spacing and inferred text,
+ the header VBox frequently has collisions. This cleans
+ those (as a temporary fix for a more robust collision-prevention
+ system in Boxes).
+ */
+
+void MusicXMLParserPass1::reformatHeaderVBox(MeasureBase* mb)
+{
+    if (!mb->isVBox()) {
+        return;
+    }
+
+    VBox* headerVBox = toVBox(mb);
+    double totalHeight = 0;
+    double offsetHeight = 0;
+    double lineSpacingMultiplier = 0.5;
+
+    for (auto e : headerVBox->el()) {
+        if (!e->isText()) {
+            continue;
+        }
+        Text* t = toText(e);
+        TLayout::layoutText(t, t->mutldata());
+
+        totalHeight += t->height();
+        if (t->align() == AlignV::TOP) {
+            totalHeight += t->lineHeight() * lineSpacingMultiplier;
+            t->setOffset(t->offset().x(), offsetHeight);
+            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+            offsetHeight += t->height();
+            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
+        }
+    }
+
+    // 1mm of
+    static const double VBOX_BOTTOM_PADDING = 1;
+    totalHeight += VBOX_BOTTOM_PADDING;
+    headerVBox->setBottomMargin(VBOX_BOTTOM_PADDING);
+    headerVBox->setPropertyFlags(Pid::BOTTOM_MARGIN, PropertyFlags::UNSTYLED);
+
+    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
+    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
 }
 
 //---------------------------------------------------------
