@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_ENGRAVINGELEMENTSMODEL_H
-#define MU_DIAGNOSTICS_ENGRAVINGELEMENTSMODEL_H
+#ifndef MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H
+#define MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H
 
 #include <QAbstractItemModel>
 #include <QHash>
 
 #include "modularity/ioc.h"
-#include "../../iengravingelementsprovider.h"
+#include "iengravingelementsprovider.h"
 #include "actions/iactionsdispatcher.h"
 
-namespace mu::diagnostics {
+namespace mu::engraving {
 class EngravingElementsModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -98,8 +98,8 @@ private:
     Item* itemByModelIndex(const QModelIndex& index) const;
     QVariantMap makeData(const mu::engraving::EngravingObject* el) const;
 
-    void load(const EngravingObjectList& elements, Item* root);
-    void findAndAddLost(const EngravingObjectList& elements, Item* lossRoot);
+    void load(const EngravingObjectSet& elements, Item* root);
+    void findAndAddLost(const EngravingObjectSet& elements, Item* lossRoot);
     const Item* findItem(const mu::engraving::EngravingObject* el, const Item* root) const;
 
     void updateInfo();
@@ -112,4 +112,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_ENGRAVINGELEMENTSMODEL_H
+#endif // MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H

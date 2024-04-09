@@ -31,7 +31,6 @@
 #include "log.h"
 
 using namespace muse;
-using namespace mu::diagnostics;
 using namespace mu::engraving;
 
 EngravingElementsModel::EngravingElementsModel(QObject* parent)
@@ -221,8 +220,8 @@ void EngravingElementsModel::reload()
     delete m_rootItem;
     m_rootItem = createItem(nullptr);
 
-    const EngravingObjectList& elements = elementsProvider()->elements();
-    EngravingObjectList notpalettes;
+    const EngravingObjectSet& elements = elementsProvider()->elements();
+    EngravingObjectSet notpalettes;
 
     for (const mu::engraving::EngravingObject* el : elements) {
         if (el == mu::engraving::gpaletteScore || el->score() == mu::engraving::gpaletteScore) {
@@ -249,7 +248,7 @@ void EngravingElementsModel::reload()
     updateInfo();
 }
 
-void EngravingElementsModel::load(const EngravingObjectList& elements, Item* root)
+void EngravingElementsModel::load(const EngravingObjectSet& elements, Item* root)
 {
     TRACEFUNC;
     for (const mu::engraving::EngravingObject* el : elements) {
@@ -282,7 +281,7 @@ const EngravingElementsModel::Item* EngravingElementsModel::findItem(const mu::e
     return nullptr;
 }
 
-void EngravingElementsModel::findAndAddLost(const EngravingObjectList& elements, Item* lossRoot)
+void EngravingElementsModel::findAndAddLost(const EngravingObjectSet& elements, Item* lossRoot)
 {
     TRACEFUNC;
 
@@ -342,7 +341,7 @@ void EngravingElementsModel::click1(QModelIndex index)
 
 void EngravingElementsModel::updateInfo()
 {
-    const EngravingObjectList& elements = elementsProvider()->elements();
+    const EngravingObjectSet& elements = elementsProvider()->elements();
     QHash<QString, int> els;
     for (const mu::engraving::EngravingObject* el : elements) {
         els[el->typeName()] += 1;

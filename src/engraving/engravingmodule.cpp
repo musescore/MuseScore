@@ -56,6 +56,12 @@
 #include "api/v1/engravingapiv1.h"
 #endif
 
+#ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
+#include "ui/iinteractiveuriregister.h"
+#include "devtools/engravingelementsprovider.h"
+#include "devtools/engravingelementsmodel.h"
+#endif
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -114,10 +120,20 @@ Versions:
     //ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::stable::ScoreRenderer());
 
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
+
+#ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
+    ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
+#endif
 }
 
 void EngravingModule::resolveImports()
 {
+#ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
+    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore/Engraving/EngravingElementsDialog.qml");
+    }
+#endif
 }
 
 void EngravingModule::registerApi()
@@ -140,6 +156,10 @@ void EngravingModule::registerResources()
 void EngravingModule::registerUiTypes()
 {
     MScore::registerUiTypes();
+
+#ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
+    qmlRegisterType<EngravingElementsModel>("MuseScore.Engraving", 1, 0, "EngravingElementsModel");
+#endif
 }
 
 void EngravingModule::onInit(const IApplication::RunMode& mode)

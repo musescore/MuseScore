@@ -32,7 +32,6 @@
 #include "internal/diagnosticsactions.h"
 #include "internal/diagnosticsactionscontroller.h"
 #include "internal/diagnosticspathsregister.h"
-#include "internal/engravingelementsprovider.h"
 #include "internal/savediagnosticfilesscenario.h"
 
 #include "internal/drawdata/diagnosticdrawprovider.h"
@@ -49,8 +48,6 @@
 #include "view/keynav/keynavdevcontrol.h"
 
 #include "view/diagnosticaccessiblemodel.h"
-
-#include "view/engraving/engravingelementsmodel.h"
 
 #include "devtools/crashhandlerdevtoolsmodel.h"
 #include "devtools/corruptscoredevtoolsmodel.h"
@@ -72,7 +69,6 @@ void DiagnosticsModule::registerExports()
     m_actionsController = std::make_shared<DiagnosticsActionsController>();
 
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
-    ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
     ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider());
     ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario());
@@ -86,7 +82,6 @@ void DiagnosticsModule::resolveImports()
         ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "MuseScore/Diagnostics/DiagnosticProfilerDialog.qml");
         ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
         ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/engraving/elements"), "MuseScore/Diagnostics/EngravingElementsDialog.qml");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
@@ -107,8 +102,6 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterUncreatableType<KeyNavDevControl>("MuseScore.Diagnostics", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
 
     qmlRegisterType<DiagnosticAccessibleModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
-
-    qmlRegisterType<EngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "EngravingElementsModel");
 
     qmlRegisterType<CrashHandlerDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
     qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CorruptScoreDevToolsModel");

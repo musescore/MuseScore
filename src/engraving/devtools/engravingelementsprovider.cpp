@@ -25,11 +25,11 @@
 
 #include "stringutils.h"
 
-#include "engraving/dom/score.h"
+#include "../dom/score.h"
 
 #include "log.h"
 
-namespace mu::diagnostics {
+namespace mu::engraving {
 void EngravingElementsProvider::clearStatistic()
 {
     m_statistics.clear();
@@ -77,7 +77,7 @@ void EngravingElementsProvider::unreg(const mu::engraving::EngravingObject* e)
     m_statistics[e->typeName()].unregCount++;
 }
 
-const EngravingObjectList& EngravingElementsProvider::elements() const
+const EngravingObjectSet& EngravingElementsProvider::elements() const
 {
     return m_elements;
 }
