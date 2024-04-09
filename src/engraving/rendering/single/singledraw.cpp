@@ -140,6 +140,7 @@
 using namespace mu::engraving::rendering::single;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
+using namespace muse;
 using namespace muse::draw;
 
 void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)

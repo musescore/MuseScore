@@ -159,6 +159,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::dev;
+using namespace muse;
 using namespace muse::draw;
 
 void TDraw::drawItem(const EngravingItem* item, Painter* painter)
