@@ -23,69 +23,56 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.Diagnostics 1.0
+import Muse.Diagnostics 1.0
 
 Rectangle {
 
     id: root
 
-    objectName: "DiagnosticEngravingElementsPanel"
+    objectName: "DiagnosticAccessiblePanel"
 
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
-        elementsModel.init()
-        elementsModel.reload()
+        accessibleModel.init()
+        accessibleModel.reload()
     }
 
-    EngravingElementsModel {
-        id: elementsModel
+    DiagnosticAccessibleModel {
+        id: accessibleModel
+
+        property var lastFocusedIndex: null
+
+        onFocusedItem: function(index) {
+            if (lastFocusedIndex) {
+                view.collapseBranch(lastFocusedIndex)
+            }
+
+            view.expandBranch(index)
+            view.positionViewAtIndex(index)
+            lastFocusedIndex = index
+        }
     }
 
-    Item {
+    Row {
         id: tools
-        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 8
-        height: childrenRect.height
+        height: 48
+        spacing: 16
 
         FlatButton {
-            id: reloadBtn
-            text: "Reload"
-            onClicked: elementsModel.reload()
+            anchors.verticalCenter: parent.verticalCenter
+            text: "Refresh"
+            onClicked: accessibleModel.reload()
         }
 
-        StyledTextLabel {
-            id: summaryLabel
-            anchors.top: parent.top
-            anchors.left: reloadBtn.right
-            anchors.right: parent.right
-            anchors.leftMargin: 8
-            height: 32
-            verticalAlignment: Text.AlignTop
-            horizontalAlignment: Text.AlignLeft
-            text: elementsModel.summary
-            visible: true
-        }
-
-        FlatButton {
-            id: moreBtn
-            anchors.right: parent.right
-            text: infoLabel.visible ? "Less" : "More"
-            onClicked: infoLabel.visible = !infoLabel.visible
-        }
-
-        StyledTextLabel {
-            id: infoLabel
-            anchors.top: reloadBtn.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: visible ? implicitHeight : 0
-            verticalAlignment: Text.AlignTop
-            horizontalAlignment: Text.AlignLeft
-            text: elementsModel.info
-            visible: false
+        CheckBox {
+            anchors.verticalCenter: parent.verticalCenter
+            text: "Auto refresh"
+            checked: accessibleModel.isAutoRefresh
+            onClicked: accessibleModel.isAutoRefresh = !accessibleModel.isAutoRefresh
         }
     }
 
@@ -99,7 +86,7 @@ Rectangle {
 
         headerVisible: false
 
-        model: elementsModel
+        model: accessibleModel
 
         function positionViewAtIndex(index) {
             var rows = -1
@@ -146,7 +133,6 @@ Rectangle {
         }
 
         style: TreeViewStyle {
-            indentation: styleData.depth
             rowDelegate: Rectangle {
                 height: 48
                 width: parent.width
@@ -157,10 +143,21 @@ Rectangle {
         itemDelegate: Item {
             id: item
 
+            function formatData(data) {
+                var str = data.name + " [" + data.role + "]"
+                if (data.children > 0) {
+                    str += ", children: " + data.children
+                }
+
+                str += "\n" + JSON.stringify(data.state)
+
+                return str;
+            }
+
             Rectangle {
                 anchors.fill: parent
-                visible: styleData.value.color ? true : false
-                color: styleData.value.color ? styleData.value.color : "#ffffff"
+                color: ui.theme.accentColor
+                visible: styleData.value ? styleData.value.state.focused === 1 : false
             }
 
             StyledTextLabel {
@@ -169,7 +166,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: styleData.value.info
+                text: item.formatData(styleData.value)
             }
 
             MouseArea {
@@ -181,28 +178,6 @@ Rectangle {
                         view.collapse(styleData.index)
                     }
                 }
-            }
-
-            FlatButton {
-                id: btn1
-                anchors.right: selBtn.left
-                anchors.rightMargin: 8
-                height: 16
-                width: 32
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Btn1"
-                onClicked: elementsModel.click1(styleData.index)
-            }
-
-            FlatButton {
-                id: selBtn
-                anchors.right: parent.right
-                anchors.rightMargin: 8
-                height: 16
-                width: 32
-                anchors.verticalCenter: parent.verticalCenter
-                text: styleData.value.selected ? "Unsel" : "Sel"
-                onClicked: elementsModel.select(styleData.index, !styleData.value.selected)
             }
         }
     }

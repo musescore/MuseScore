@@ -76,10 +76,10 @@ void DiagnosticsModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "MuseScore/Diagnostics/DiagnosticProfilerDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse/Diagnostics/DiagnosticPathsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "Muse/Diagnostics/DiagnosticProfilerDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "Muse/Diagnostics/DiagnosticNavigationDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse/Diagnostics/DiagnosticAccessibleDialog.qml");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
@@ -90,18 +90,18 @@ void DiagnosticsModule::resolveImports()
 
 void DiagnosticsModule::registerUiTypes()
 {
-    qmlRegisterType<DiagnosticsPathsModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticsPathsModel");
-    qmlRegisterType<ProfilerViewModel>("MuseScore.Diagnostics", 1, 0, "ProfilerViewModel");
+    qmlRegisterType<DiagnosticsPathsModel>("Muse.Diagnostics", 1, 0, "DiagnosticsPathsModel");
+    qmlRegisterType<ProfilerViewModel>("Muse.Diagnostics", 1, 0, "ProfilerViewModel");
 
-    qmlRegisterType<DiagnosticNavigationModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticNavigationModel");
-    qmlRegisterUncreatableType<AbstractKeyNavDevItem>("MuseScore.Diagnostics", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");
-    qmlRegisterUncreatableType<KeyNavDevSubSection>("MuseScore.Diagnostics", 1, 0, "KeyNavDevSubSection", "Cannot create");
-    qmlRegisterUncreatableType<KeyNavDevSection>("MuseScore.Diagnostics", 1, 0, "KeyNavDevSection", "Cannot create a KeyNavDevSection");
-    qmlRegisterUncreatableType<KeyNavDevControl>("MuseScore.Diagnostics", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
+    qmlRegisterType<DiagnosticNavigationModel>("Muse.Diagnostics", 1, 0, "DiagnosticNavigationModel");
+    qmlRegisterUncreatableType<AbstractKeyNavDevItem>("Muse.Diagnostics", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");
+    qmlRegisterUncreatableType<KeyNavDevSubSection>("Muse.Diagnostics", 1, 0, "KeyNavDevSubSection", "Cannot create");
+    qmlRegisterUncreatableType<KeyNavDevSection>("Muse.Diagnostics", 1, 0, "KeyNavDevSection", "Cannot create a KeyNavDevSection");
+    qmlRegisterUncreatableType<KeyNavDevControl>("Muse.Diagnostics", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
 
-    qmlRegisterType<DiagnosticAccessibleModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
+    qmlRegisterType<DiagnosticAccessibleModel>("Muse.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
 
-    qmlRegisterType<CrashHandlerDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
+    qmlRegisterType<CrashHandlerDevToolsModel>("Muse.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
 }
 
 void DiagnosticsModule::onInit(const IApplication::RunMode& mode)
