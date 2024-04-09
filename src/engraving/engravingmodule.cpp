@@ -60,6 +60,7 @@
 #include "ui/iinteractiveuriregister.h"
 #include "devtools/engravingelementsprovider.h"
 #include "devtools/engravingelementsmodel.h"
+#include "devtools/drawdata/diagnosticdrawprovider.h"
 #endif
 
 #include "log.h"
@@ -123,6 +124,7 @@ Versions:
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
+    ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider());
 #endif
 }
 

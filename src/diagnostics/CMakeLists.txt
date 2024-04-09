@@ -30,9 +30,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticutils.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticspathsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/idiagnosticdrawprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/diagnosticserrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/diagnosticstypes.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.h
@@ -42,15 +39,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/diagnosticdrawprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/diagnosticdrawprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdatagenerator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdatagenerator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdataconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdataconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdatacomparator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdatacomparator.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/isavediagnosticfilesscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/savediagnosticfilesscenario.cpp

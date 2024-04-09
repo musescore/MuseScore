@@ -22,19 +22,11 @@ set(MODULE_TEST diagnostics_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drawdata_tests.cpp
 )
 
 set(MODULE_TEST_LINK
-    draw
     diagnostics
-    engraving
-    accessibility
 )
-
-if (MUE_BUILD_IMPORTEXPORT_MODULE)
-    list(APPEND MODULE_TEST_LINK iex_guitarpro)
-endif()
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 

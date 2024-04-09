@@ -19,15 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H
-#define MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H
+#ifndef MU_ENGRAVING_IDIAGNOSTICDRAWPROVIDER_H
+#define MU_ENGRAVING_IDIAGNOSTICDRAWPROVIDER_H
 
 #include "modularity/imoduleinterface.h"
 #include "global/types/ret.h"
 #include "global/io/path.h"
-#include "diagnosticstypes.h"
 
-namespace mu::diagnostics {
+#include "drawdatatypes.h"
+
+namespace mu::engraving {
 class IDiagnosticDrawProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IDiagnosticDrawProvider)
@@ -42,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H
+#endif // MU_ENGRAVING_IDIAGNOSTICDRAWPROVIDER_H

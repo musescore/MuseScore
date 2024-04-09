@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 #include "converter/iconvertercontroller.h"
-#include "diagnostics/idiagnosticdrawprovider.h"
+#include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
 #include "audio/iregisteraudiopluginsscenario.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -53,7 +53,7 @@ class App
 {
     INJECT(muse::IApplication, muapplication)
     INJECT(converter::IConverterController, converter)
-    INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
+    INJECT(engraving::IDiagnosticDrawProvider, diagnosticDrawProvider)
     INJECT(muse::autobot::IAutobot, autobot)
     INJECT(muse::audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
     INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)

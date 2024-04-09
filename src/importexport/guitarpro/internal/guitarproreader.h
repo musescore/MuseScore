@@ -24,7 +24,7 @@
 
 #include "project/inotationreader.h"
 #include "modularity/ioc.h"
-#include "iguitarproconfiguration.h"
+#include "../iguitarproconfiguration.h"
 
 namespace mu::iex::guitarpro {
 class GuitarProReader : public project::INotationReader

@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H
+#ifndef MU_ENGRAVING_DIAGNOSTICSTYPES_H
+#define MU_ENGRAVING_DIAGNOSTICSTYPES_H
 
 #include "draw/types/geometry.h"
 
-namespace mu::diagnostics {
+namespace mu::engraving {
 struct GenOpt {
     muse::SizeF pageSize;
 };
@@ -35,4 +35,4 @@ struct ComOpt {
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H
+#endif // MU_ENGRAVING_DIAGNOSTICSTYPES_H

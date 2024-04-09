@@ -34,8 +34,6 @@
 #include "internal/diagnosticspathsregister.h"
 #include "internal/savediagnosticfilesscenario.h"
 
-#include "internal/drawdata/diagnosticdrawprovider.h"
-
 #include "internal/crashhandler/crashhandler.h"
 
 #include "view/diagnosticspathsmodel.h"
@@ -69,7 +67,6 @@ void DiagnosticsModule::registerExports()
     m_actionsController = std::make_shared<DiagnosticsActionsController>();
 
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
-    ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider());
     ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario());
 }

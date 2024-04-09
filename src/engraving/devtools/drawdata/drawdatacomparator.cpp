@@ -27,12 +27,11 @@
 #include "draw/utils/drawdatacomp.h"
 #include "draw/utils/drawdatarw.h"
 
-#include "../../diagnosticserrors.h"
+#include "drawdataerrors.h"
 
-using namespace mu;
 using namespace muse;
 using namespace muse::draw;
-using namespace mu::diagnostics;
+using namespace mu::engraving;
 
 Diff DrawDataComparator::compare(const DrawDataPtr& ref, const DrawDataPtr& test)
 {

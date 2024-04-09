@@ -31,20 +31,20 @@
 
 #include "global/io/file.h"
 
-#include "diagnostics/internal/drawdata/drawdataconverter.h"
-#include "diagnostics/internal/drawdata/drawdatagenerator.h"
+#include "devtools/drawdata/drawdataconverter.h"
+#include "devtools/drawdata/drawdatagenerator.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace muse;
 using namespace muse::draw;
-using namespace mu::diagnostics;
+using namespace mu::engraving;
 
-const muse::io::path_t DATA_ROOT(diagnostics_tests_DATA_ROOT);
+const muse::io::path_t DATA_ROOT(engraving_tests_DATA_ROOT);
 const muse::io::path_t VTEST_SCORES = DATA_ROOT + "/../../../vtest/scores";
 
-class Diagnostics_DrawDataTests : public ::testing::Test
+class Engraving_DrawDataTests : public ::testing::Test
 {
 public:
 };
@@ -65,7 +65,7 @@ void saveDiff(const muse::io::path_t& path, const DrawDataPtr& origin, const Dra
     io::File::writeFile(path, px.data());
 }
 
-TEST_F(Diagnostics_DrawDataTests, Rw)
+TEST_F(Engraving_DrawDataTests, Rw)
 {
     DrawDataPtr origin;
     {
@@ -110,7 +110,7 @@ TEST_F(Diagnostics_DrawDataTests, Rw)
     }
 }
 
-TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
+TEST_F(Engraving_DrawDataTests, SimpleDraw)
 {
     DrawDataPtr data;
     // paint
@@ -162,7 +162,7 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
     }
 }
 
-TEST_F(Diagnostics_DrawDataTests, ScoreDraw)
+TEST_F(Engraving_DrawDataTests, ScoreDraw)
 {
     Pixmap originImage;
     {
@@ -196,7 +196,7 @@ TEST_F(Diagnostics_DrawDataTests, ScoreDraw)
     EXPECT_EQ(originImage, dataImage);
 }
 
-TEST_F(Diagnostics_DrawDataTests, DrawDiff)
+TEST_F(Engraving_DrawDataTests, DrawDiff)
 {
     DrawDataPtr origin;
     // paint 1
@@ -280,7 +280,7 @@ TEST_F(Diagnostics_DrawDataTests, DrawDiff)
     EXPECT_EQ(ddd.polygons.size(), 1);
 }
 
-TEST_F(Diagnostics_DrawDataTests, ScoreDrawDiff)
+TEST_F(Engraving_DrawDataTests, ScoreDrawDiff)
 {
     DrawDataPtr data1;
     {
