@@ -40,10 +40,6 @@ if (MUE_BUILD_CONVERTER_MODULE)
     add_subdirectory(converter)
 endif()
 
-if (MUE_BUILD_DIAGNOSTICS_MODULE)
-    add_subdirectory(diagnostics)
-endif()
-
 add_subdirectory(engraving)
 
 add_subdirectory(importexport)
