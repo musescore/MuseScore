@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Window 2.15
+import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
@@ -31,22 +32,56 @@ Page {
     title: qsTrc("appshell/gettingstarted", "Video tutorials")
     explanation: qsTrc("appshell/gettingstarted", "Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started\n(Video tutorials require an internet connection)")
 
-    titleContentSpacing: 12
+    titleContentSpacing: 24
 
-    Image {
-        id: image
+    TutorialsPageModel {
+        id: tutorialsModel
+    }
+
+    ColumnLayout {
+        id: content
+
         anchors.fill: parent
-        fillMode: Image.PreserveAspectCrop
-        source: "resources/VideoTutorials.png"
-        sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
+        spacing: 20
 
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: image.width
-                height: image.height
-                radius: 3
+        Item {
+            id: imageArea
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Image {
+                id: image
+
+                anchors.centerIn: parent
+
+                // Approx 40% of the image height is empty space
+                height: parent.height * 1.4
+                width: implicitWidth
+
+                fillMode: Image.PreserveAspectFit
+                source: "resources/VideoTutorials.png"
+
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: image.width
+                        height: image.height
+                        radius: 3
+                    }
+                }
             }
+        }
+
+        StyledTextLabel {
+            id: privacyInfo
+
+            Layout.fillWidth: true
+
+            text: qsTrc("appshell/gettingstarted", "In order to protect your privacy, MuseScore Studio does not collect any personal information. See our <a href=\"%1\">Privacy Policy</a> for more info.")
+                  .arg(tutorialsModel.museScorePrivacyPolicyUrl())
+
+            wrapMode: Text.WordWrap
         }
     }
 }

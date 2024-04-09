@@ -61,6 +61,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/firstlaunchsetupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/themespagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/themespagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/tutorialspagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/tutorialspagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencepageitem.cpp
