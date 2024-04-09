@@ -60,7 +60,7 @@ static QVariantList buildAvailablePresetsModel(const SoundPresetList& availableP
     return model;
 }
 
-static QVariantList buildAvailablePlayingTechniquesModel(const std::set<String>& availableTechniqueCodes)
+static QVariantList buildAvailablePlayingTechniquesModel(const std::set<muse::String>& availableTechniqueCodes)
 {
     QVariantList model;
 
@@ -73,7 +73,7 @@ static QVariantList buildAvailablePlayingTechniquesModel(const std::set<String>&
     ordinaryItem["name"] = muse::qtrc("playback", "Ord. (default)");
     model << ordinaryItem;
 
-    for (const String& playingTechniqueCode : availableTechniqueCodes) {
+    for (const muse::String& playingTechniqueCode : availableTechniqueCodes) {
         QVariantMap item;
         item["code"] = playingTechniqueCode.toQString();
         item["name"] = playingTechniqueCode.toQString();
@@ -207,7 +207,7 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
     SoundFlag* soundFlag = toSoundFlag(m_item);
 
     beginCommand();
-    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), String(playingTechniqueCode));
+    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), muse::String(playingTechniqueCode));
     bool needUpdateNotation = updateStaffText();
     endCommand();
 
@@ -250,8 +250,8 @@ QString SoundFlagSettingsModel::defaultPresetCode() const
 QString SoundFlagSettingsModel::defaultPlayingTechniqueCode() const
 {
     return !m_availablePlayingTechniquesModel.empty()
-           ? String(m_availablePlayingTechniquesModel.front().toMap()["code"].toString())
-           : String();
+           ? muse::String(m_availablePlayingTechniquesModel.front().toMap()["code"].toString())
+           : muse::String();
 }
 
 QVariantList SoundFlagSettingsModel::contextMenuModel()
@@ -267,7 +267,7 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
         bool enabled = false;
 
         const SoundFlag::PresetCodes& activePresetCodes = soundFlag->soundPresets();
-        const String playingTechnique = soundFlag->playingTechnique();
+        const muse::String playingTechnique = soundFlag->playingTechnique();
 
         if (!activePresetCodes.empty()) {
             enabled = activePresetCodes != StringList { defaultPresetCode() };
@@ -336,7 +336,7 @@ bool SoundFlagSettingsModel::updateStaffText()
         return false;
     }
 
-    String newText = muse::mtrc("engraving", "Staff text");
+    muse::String newText = muse::mtrc("engraving", "Staff text");
     const SoundFlag* soundFlag = toSoundFlag(m_item);
     const SoundFlag::PresetCodes& activePresetCodes = soundFlag->soundPresets();
 
@@ -421,7 +421,7 @@ QStringList SoundFlagSettingsModel::selectedPresetCodes() const
     }
 
     QStringList result;
-    for (const String& presetCode : toSoundFlag(m_item)->soundPresets()) {
+    for (const muse::String& presetCode : toSoundFlag(m_item)->soundPresets()) {
         result << presetCode.toQString();
     }
 
@@ -451,7 +451,7 @@ void SoundFlagSettingsModel::setAvailableSoundPresets(const SoundPresetList& pre
 void SoundFlagSettingsModel::loadAvailablePlayingTechniques()
 {
     QStringList selectedPresetCodes = this->selectedPresetCodes();
-    std::set<String> availablePlayingTechniqueCodes;
+    std::set<muse::String> availablePlayingTechniqueCodes;
 
     for (const SoundPreset& preset : m_availablePresets) {
         if (selectedPresetCodes.empty()) {
@@ -467,7 +467,7 @@ void SoundFlagSettingsModel::loadAvailablePlayingTechniques()
             continue;
         }
 
-        for (const String& code : techniqueIt->second.split(u"|")) {
+        for (const muse::String& code : techniqueIt->second.split(u"|")) {
             availablePlayingTechniqueCodes << code;
         }
     }

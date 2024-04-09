@@ -25,7 +25,7 @@
 
 using namespace muse::draw;
 
-int FontProvider::addSymbolFont(const mu::String& family, const io::path_t& path)
+int FontProvider::addSymbolFont(const muse::String& family, const io::path_t& path)
 {
     //! NOTE Adding fonts in the fontsmodule
     UNUSED(family);
@@ -40,7 +40,7 @@ int FontProvider::addTextFont(const io::path_t& path)
     return 1;
 }
 
-void FontProvider::insertSubstitution(const mu::String& from, const mu::String& to)
+void FontProvider::insertSubstitution(const muse::String& from, const muse::String& to)
 {
     //! NOTE Instead of substitution, default fonts are used
     //! Set in the fontsmodule
@@ -73,7 +73,7 @@ double FontProvider::descent(const muse::draw::Font& f) const
     return fontsEngine()->descent(f);
 }
 
-bool FontProvider::inFont(const muse::draw::Font& f, mu::Char ch) const
+bool FontProvider::inFont(const muse::draw::Font& f, muse::Char ch) const
 {
     return inFontUcs4(f, static_cast<char32_t>(ch.unicode()));
 }
@@ -84,34 +84,34 @@ bool FontProvider::inFontUcs4(const muse::draw::Font& f, char32_t ucs4) const
 }
 
 // Text
-double FontProvider::horizontalAdvance(const muse::draw::Font& f, const mu::String& string) const
+double FontProvider::horizontalAdvance(const muse::draw::Font& f, const muse::String& string) const
 {
     return fontsEngine()->horizontalAdvance(f, string.toStdU32String());
 }
 
-double FontProvider::horizontalAdvance(const muse::draw::Font& f, const mu::Char& ch) const
+double FontProvider::horizontalAdvance(const muse::draw::Font& f, const muse::Char& ch) const
 {
     return fontsEngine()->horizontalAdvance(f, ch.unicode());
 }
 
-RectF FontProvider::boundingRect(const muse::draw::Font& f, const mu::String& string) const
+RectF FontProvider::boundingRect(const muse::draw::Font& f, const muse::String& string) const
 {
     return fontsEngine()->boundingRect(f, string.toStdU32String());
 }
 
-RectF FontProvider::boundingRect(const muse::draw::Font& f, const mu::Char& ch) const
+RectF FontProvider::boundingRect(const muse::draw::Font& f, const muse::Char& ch) const
 {
     return fontsEngine()->boundingRect(f, ch.unicode());
 }
 
-RectF FontProvider::boundingRect(const muse::draw::Font& f, const RectF& r, int flags, const mu::String& string) const
+RectF FontProvider::boundingRect(const muse::draw::Font& f, const RectF& r, int flags, const muse::String& string) const
 {
     UNUSED(r);
     UNUSED(flags);
     return boundingRect(f, string);
 }
 
-RectF FontProvider::tightBoundingRect(const muse::draw::Font& f, const mu::String& string) const
+RectF FontProvider::tightBoundingRect(const muse::draw::Font& f, const muse::String& string) const
 {
     return fontsEngine()->tightBoundingRect(f, string.toStdU32String());
 }
