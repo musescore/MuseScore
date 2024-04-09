@@ -60,6 +60,7 @@
 #include "ui/iinteractiveuriregister.h"
 #include "devtools/engravingelementsprovider.h"
 #include "devtools/engravingelementsmodel.h"
+#include "devtools/corruptscoredevtoolsmodel.h"
 #include "devtools/drawdata/diagnosticdrawprovider.h"
 #endif
 
@@ -161,6 +162,7 @@ void EngravingModule::registerUiTypes()
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     qmlRegisterType<EngravingElementsModel>("MuseScore.Engraving", 1, 0, "EngravingElementsModel");
+    qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Engraving", 1, 0, "CorruptScoreDevToolsModel");
 #endif
 }
 

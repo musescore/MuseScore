@@ -67,8 +67,6 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/devtools/crashhandlerdevtoolsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/crashhandlerdevtoolsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/corruptscoredevtoolsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/corruptscoredevtoolsmodel.h
     )
 
 # --- Crashpad ---

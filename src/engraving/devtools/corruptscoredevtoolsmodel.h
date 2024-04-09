@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DIAGNOSTICS_CORRUPTSCORENDEVTOOLSMODEL_H
-#define MU_DIAGNOSTICS_CORRUPTSCORENDEVTOOLSMODEL_H
+#ifndef MU_ENGRAVING_CORRUPTSCORENDEVTOOLSMODEL_H
+#define MU_ENGRAVING_CORRUPTSCORENDEVTOOLSMODEL_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-namespace mu::diagnostics {
+namespace mu::engraving {
 class CorruptScoreDevToolsModel : public QObject
 {
     Q_OBJECT
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_CORRUPTSCORENDEVTOOLSMODEL_H
+#endif // MU_ENGRAVING_CORRUPTSCORENDEVTOOLSMODEL_H
