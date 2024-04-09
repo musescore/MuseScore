@@ -21,7 +21,7 @@
  */
 import QtQuick 2.15
 
-import MuseScore.Shortcuts 1.0
+import Muse.Shortcuts 1.0
 
 QtObject {
     id: root

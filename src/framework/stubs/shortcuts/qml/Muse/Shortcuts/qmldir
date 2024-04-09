@@ -1,2 +1,2 @@
-module MuseScore.Shortcuts
+module Muse.Shortcuts
 Shortcuts 1.0 Shortcuts.qml

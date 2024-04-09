@@ -23,7 +23,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
-import MuseScore.Shortcuts 1.0
+import Muse.Shortcuts 1.0
 import MuseScore.AppShell 1.0
 
 ApplicationWindow {
