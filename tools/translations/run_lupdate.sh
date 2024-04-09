@@ -38,7 +38,6 @@ SRC_DIR=src
 TS_FILE=share/locale/musescore_en.ts
 DEFAULT_LUPDATE_ARGS=(
     -recursive
-    -no-recursive src/framework/dockwindow/thirdparty
     -tr-function-alias translate+=trc
     -tr-function-alias translate+=mtrc
     -tr-function-alias translate+=qtrc
