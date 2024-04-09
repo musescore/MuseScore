@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H
-#define MU_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H
+#ifndef MUSE_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H
+#define MUSE_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H
 
 #include "abstractkeynavdevitem.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class KeyNavDevSubSection : public AbstractKeyNavDevItem
 {
     Q_OBJECT
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H
+#endif // MUSE_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H

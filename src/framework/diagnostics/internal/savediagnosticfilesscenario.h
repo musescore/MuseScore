@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H
-#define MU_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H
+#ifndef MUSE_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H
+#define MUSE_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H
 
 #include "isavediagnosticfilesscenario.h"
 
@@ -28,7 +28,7 @@
 #include "idiagnosticsconfiguration.h"
 #include "iinteractive.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario
 {
     INJECT(diagnostics::IDiagnosticsConfiguration, configuration)
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H
+#endif // MUSE_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H

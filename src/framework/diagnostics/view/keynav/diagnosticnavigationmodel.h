@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_KEYNAVDEVMODEL_H
-#define MU_DIAGNOSTICS_KEYNAVDEVMODEL_H
+#ifndef MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H
+#define MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H
 
 #include <QObject>
 #include <QTimer>
@@ -29,7 +29,7 @@
 #include "ui/inavigationcontroller.h"
 #include "async/asyncable.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class AbstractKeyNavDevItem;
 class DiagnosticNavigationModel : public QObject, public muse::async::Asyncable
 {
@@ -62,4 +62,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_KEYNAVDEVMODEL_H
+#endif // MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H

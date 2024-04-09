@@ -200,7 +200,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     //! --- Diagnostics ---
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("appBinPath", m_configuration->appBinPath());
         pr->reg("appBinDirPath", m_configuration->appBinDirPath());

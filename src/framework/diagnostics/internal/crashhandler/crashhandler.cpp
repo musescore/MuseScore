@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::diagnostics;
+using namespace muse::diagnostics;
 using namespace crashpad;
 
 CrashHandler::~CrashHandler()

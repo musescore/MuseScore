@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#define MUSE_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
 
 #include "../idiagnosticsconfiguration.h"
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticsConfiguration : public IDiagnosticsConfiguration
 {
     INJECT(muse::IGlobalConfiguration, globalConfiguration)
@@ -47,4 +47,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#endif // MUSE_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H

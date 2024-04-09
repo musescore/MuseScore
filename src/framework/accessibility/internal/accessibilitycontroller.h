@@ -42,7 +42,7 @@
 class QAccessibleInterface;
 class QAccessibleEvent;
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticAccessibleModel;
 }
 
@@ -128,7 +128,7 @@ public:
 
 private:
 
-    friend class mu::diagnostics::DiagnosticAccessibleModel;
+    friend class muse::diagnostics::DiagnosticAccessibleModel;
 
     struct Item
     {

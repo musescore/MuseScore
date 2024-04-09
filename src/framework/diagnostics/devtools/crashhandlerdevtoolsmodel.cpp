@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::diagnostics;
+using namespace muse::diagnostics;
 
 CrashHandlerDevToolsModel::CrashHandlerDevToolsModel(QObject* parent)
     : QObject(parent)

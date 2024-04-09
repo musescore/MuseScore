@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSPATHSREGISTER_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSPATHSREGISTER_H
+#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSREGISTER_H
+#define MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSREGISTER_H
 
 #include "../idiagnosticspathsregister.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticsPathsRegister : public IDiagnosticsPathsRegister
 {
 public:
@@ -39,4 +39,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSPATHSREGISTER_H
+#endif // MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSREGISTER_H

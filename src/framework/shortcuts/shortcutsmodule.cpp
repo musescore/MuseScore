@@ -124,7 +124,7 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
     m_midiRemote->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("shortcutsUserAppDataPath", m_configuration->shortcutsUserAppDataPath());
         pr->reg("shortcutsAppDataPath", m_configuration->shortcutsAppDataPath());

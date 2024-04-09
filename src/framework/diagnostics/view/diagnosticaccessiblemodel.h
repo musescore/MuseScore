@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
-#define MU_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
+#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
+#define MUSE_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
 
 #include <QAbstractItemModel>
 #include <QTimer>
@@ -33,7 +33,7 @@
 
 class QAccessibleInterface;
 class QAccessibleEvent;
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -139,4 +139,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
+#endif // MUSE_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H

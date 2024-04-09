@@ -79,7 +79,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
     m_actionController->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         io::paths_t paths = m_configuration->workspacePaths();
         for (const io::path_t& p : paths) {

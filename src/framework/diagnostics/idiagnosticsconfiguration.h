@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H
-#define MU_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H
+#ifndef MUSE_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H
+#define MUSE_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "io/path.h"
 
-namespace mu::diagnostics {
+namespace muse::diagnostics {
 class IDiagnosticsConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IDiagnosticsConfiguration)
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H
+#endif // MUSE_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H

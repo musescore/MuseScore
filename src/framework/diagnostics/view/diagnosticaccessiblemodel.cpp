@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-using namespace mu::diagnostics;
+using namespace muse::diagnostics;
 using namespace muse::accessibility;
 
 DiagnosticAccessibleModel::DiagnosticAccessibleModel(QObject* parent)

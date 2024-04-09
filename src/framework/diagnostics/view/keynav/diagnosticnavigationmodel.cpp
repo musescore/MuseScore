@@ -27,7 +27,7 @@
 #include "keynavdevsubsection.h"
 #include "keynavdevcontrol.h"
 
-using namespace mu::diagnostics;
+using namespace muse::diagnostics;
 using namespace muse::ui;
 
 template<class T>
