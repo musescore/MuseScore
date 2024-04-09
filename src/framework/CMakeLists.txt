@@ -48,6 +48,10 @@ if (MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()
 
+if (MUE_BUILD_DIAGNOSTICS_MODULE)
+    add_subdirectory(diagnostics)
+endif()
+
 add_subdirectory(draw)
 
 if (MUSE_MODULE_MIDI)
