@@ -77,9 +77,9 @@ void UpdateModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://update/appreleaseinfo"), "MuseScore/Update/AppReleaseInfoDialog.qml");
-        ir->registerQmlUri(Uri("musescore://update"), "MuseScore/Update/UpdateProgressDialog.qml");
-        ir->registerQmlUri(Uri("musescore://update/musesoundsreleaseinfo"), "MuseScore/Update/MuseSoundsReleaseInfoDialog.qml");
+        ir->registerQmlUri(Uri("musescore://update/appreleaseinfo"), "Muse/Update/AppReleaseInfoDialog.qml");
+        ir->registerQmlUri(Uri("musescore://update"), "Muse/Update/UpdateProgressDialog.qml");
+        ir->registerQmlUri(Uri("musescore://update/musesoundsreleaseinfo"), "Muse/Update/MuseSoundsReleaseInfoDialog.qml");
     }
 }
 
@@ -90,7 +90,7 @@ void UpdateModule::registerResources()
 
 void UpdateModule::registerUiTypes()
 {
-    qmlRegisterType<UpdateModel>("MuseScore.Update", 1, 0, "UpdateModel");
+    qmlRegisterType<UpdateModel>("Muse.Update", 1, 0, "UpdateModel");
 
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(update_QML_IMPORT);
 }

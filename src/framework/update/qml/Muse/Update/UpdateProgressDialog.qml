@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.Update 1.0
+import Muse.Update 1.0
 
 import "internal"
 
