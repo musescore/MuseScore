@@ -575,6 +575,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         //
         // remove clef, barlines, time and key signatures
         //
+        bool headerKeySig = false;
         if (measureInsert) {
             // if inserting before first measure, always preserve clefs and signatures
             // at the begining of the score (move them back)
@@ -636,6 +637,9 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             } else {
                                 ee = e;
                             }
+                            if (s->header()) {
+                                headerKeySig = true;
+                            }
                         } else if (e->isTimeSig()) {
                             TimeSig* ts = toTimeSig(e);
                             timeSigList.push_back(ts);
@@ -651,7 +655,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         }
                         if (ee) {
                             doUndoRemoveElement(ee);
-                            if (s->empty()) {
+                            if (s->empty() && s->isTimeSigType()) {
                                 if (ee->isTimeSig()) {
                                     undoRemoveElement(s);
                                 } else {
@@ -705,6 +709,9 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         for (KeySig* ks : keySigList) {
             KeySig* nks = Factory::copyKeySig(*ks);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
+            if (headerKeySig || newMeasure->tick().isZero()) {
+                s->setHeader(true);
+            }
             nks->setParent(s);
             if (!nks->isAtonal()) {
                 nks->setKey(nks->concertKey());  // to set correct (transposing) key
@@ -714,6 +721,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         for (Clef* clef : clefList) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
+            s->setHeader(true);
             nClef->setParent(s);
             undoAddElement(nClef);
         }
