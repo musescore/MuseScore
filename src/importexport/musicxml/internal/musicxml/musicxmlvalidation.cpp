@@ -174,7 +174,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
     return errorDialog.exec();
 }
 
-Err MusicxmlValidation::validate(const String& name, const ByteArray& data)
+Err MusicxmlValidation::validate(const String& name, const muse::ByteArray& data)
 {
     //QElapsedTimer t;
     //t.start();
