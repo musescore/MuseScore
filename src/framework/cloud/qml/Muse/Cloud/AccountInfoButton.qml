@@ -21,8 +21,8 @@
  */
 import QtQuick 2.7
 
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
 import Muse.Cloud 1.0
 
 import "internal"

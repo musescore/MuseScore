@@ -79,7 +79,7 @@ void UiComponentsModule::resolveImports()
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://interactive/selectMultipleDirectories"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/UiComponents/SelectMultipleDirectoriesDialog.qml"));
+                        ContainerMeta(ContainerType::QmlDialog, "Muse/UiComponents/SelectMultipleDirectoriesDialog.qml"));
     }
 }
 
@@ -90,40 +90,40 @@ void UiComponentsModule::registerResources()
 
 void UiComponentsModule::registerUiTypes()
 {
-    qmlRegisterType<SampleObject>("MuseScore.UiComponents", 1, 0, "SampleObject");
+    qmlRegisterType<SampleObject>("Muse.UiComponents", 1, 0, "SampleObject");
 
-    qmlRegisterUncreatableType<QAbstractItemModel>("MuseScore.UiComponents", 1, 0, "AbstractItemModel", "Cannot …");
+    qmlRegisterUncreatableType<QAbstractItemModel>("Muse.UiComponents", 1, 0, "AbstractItemModel", "Cannot …");
 
-    qmlRegisterType<DoubleInputValidator>("MuseScore.UiComponents", 1, 0, "DoubleInputValidator");
-    qmlRegisterType<IntInputValidator>("MuseScore.UiComponents", 1, 0, "IntInputValidator");
-    qmlRegisterType<IntInputValidator>("MuseScore.UiComponents", 1, 0, "IntInputValidator");
+    qmlRegisterType<DoubleInputValidator>("Muse.UiComponents", 1, 0, "DoubleInputValidator");
+    qmlRegisterType<IntInputValidator>("Muse.UiComponents", 1, 0, "IntInputValidator");
+    qmlRegisterType<IntInputValidator>("Muse.UiComponents", 1, 0, "IntInputValidator");
 
-    qmlRegisterType<IconView>("MuseScore.UiComponents", 1, 0, "IconView");
+    qmlRegisterType<IconView>("Muse.UiComponents", 1, 0, "IconView");
 
-    qmlRegisterType<SortFilterProxyModel>("MuseScore.UiComponents", 1, 0, "SortFilterProxyModel");
-    qmlRegisterType<FilterValue>("MuseScore.UiComponents", 1, 0, "FilterValue");
-    qmlRegisterType<SorterValue>("MuseScore.UiComponents", 1, 0, "SorterValue");
-    qmlRegisterUncreatableType<CompareType>("MuseScore.UiComponents", 1, 0, "CompareType", "Cannot create a CompareType");
+    qmlRegisterType<SortFilterProxyModel>("Muse.UiComponents", 1, 0, "SortFilterProxyModel");
+    qmlRegisterType<FilterValue>("Muse.UiComponents", 1, 0, "FilterValue");
+    qmlRegisterType<SorterValue>("Muse.UiComponents", 1, 0, "SorterValue");
+    qmlRegisterUncreatableType<CompareType>("Muse.UiComponents", 1, 0, "CompareType", "Cannot create a CompareType");
 
-    qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
-    qmlRegisterType<DialogView>("MuseScore.UiComponents", 1, 0, "DialogView");
-    qmlRegisterType<DropdownView>("MuseScore.UiComponents", 1, 0, "DropdownView");
-    qmlRegisterType<MenuView>("MuseScore.UiComponents", 1, 0, "MenuView");
+    qmlRegisterType<PopupView>("Muse.UiComponents", 1, 0, "PopupView");
+    qmlRegisterType<DialogView>("Muse.UiComponents", 1, 0, "DialogView");
+    qmlRegisterType<DropdownView>("Muse.UiComponents", 1, 0, "DropdownView");
+    qmlRegisterType<MenuView>("Muse.UiComponents", 1, 0, "MenuView");
 
-    qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
-    qmlRegisterType<ColorPickerModel>("MuseScore.UiComponents", 1, 0, "ColorPickerModel");
-    qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
+    qmlRegisterType<FilePickerModel>("Muse.UiComponents", 1, 0, "FilePickerModel");
+    qmlRegisterType<ColorPickerModel>("Muse.UiComponents", 1, 0, "ColorPickerModel");
+    qmlRegisterType<ItemMultiSelectionModel>("Muse.UiComponents", 1, 0, "ItemMultiSelectionModel");
 
-    qmlRegisterType<TextInputFieldModel>("MuseScore.UiComponents", 1, 0, "TextInputFieldModel");
-    qmlRegisterType<SelectMultipleDirectoriesModel>("MuseScore.UiComponents", 1, 0, "SelectMultipleDirectoriesModel");
-    qmlRegisterType<ButtonBoxModel>("MuseScore.UiComponents", 1, 0, "ButtonBoxModel");
+    qmlRegisterType<TextInputFieldModel>("Muse.UiComponents", 1, 0, "TextInputFieldModel");
+    qmlRegisterType<SelectMultipleDirectoriesModel>("Muse.UiComponents", 1, 0, "SelectMultipleDirectoriesModel");
+    qmlRegisterType<ButtonBoxModel>("Muse.UiComponents", 1, 0, "ButtonBoxModel");
 
-    qmlRegisterType<QQuickTreeModelAdaptor1>("MuseScore.UiComponents.Private", 1, 0, "TreeModelAdaptor");
-    qmlRegisterType<QQuickRangeModel1>("MuseScore.UiComponents.Private", 1, 0, "RangeModel");
-    qmlRegisterType<QQuickWheelArea1>("MuseScore.UiComponents.Private", 1, 0, "WheelArea");
-    qmlRegisterType<QQuickAbstractStyle1>("MuseScore.UiComponents.Private", 1, 0, "AbstractStyle");
-    qmlRegisterType<QQuickPadding1>("MuseScore.UiComponents.Private", 1, 0, "Padding");
-    qmlRegisterUncreatableType<QQuickSelectionMode1>("MuseScore.UiComponents.Private", 1, 0, "SelectionMode",
+    qmlRegisterType<QQuickTreeModelAdaptor1>("Muse.UiComponents.Private", 1, 0, "TreeModelAdaptor");
+    qmlRegisterType<QQuickRangeModel1>("Muse.UiComponents.Private", 1, 0, "RangeModel");
+    qmlRegisterType<QQuickWheelArea1>("Muse.UiComponents.Private", 1, 0, "WheelArea");
+    qmlRegisterType<QQuickAbstractStyle1>("Muse.UiComponents.Private", 1, 0, "AbstractStyle");
+    qmlRegisterType<QQuickPadding1>("Muse.UiComponents.Private", 1, 0, "Padding");
+    qmlRegisterUncreatableType<QQuickSelectionMode1>("Muse.UiComponents.Private", 1, 0, "SelectionMode",
                                                      QLatin1String("Do not create objects of type SelectionMode"));
 
     auto ui = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());

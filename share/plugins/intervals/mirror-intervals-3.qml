@@ -19,7 +19,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore 3.0
-import MuseScore.UiComponents 1.0
+import Muse.UiComponents 1.0
 
 MuseScore {
     version: "3.0.2"

@@ -25,8 +25,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.Palette 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
+import Muse.UiComponents 1.0
+import Muse.Ui 1.0
 
 StyledPopupView {
     id: root

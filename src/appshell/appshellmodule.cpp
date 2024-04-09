@@ -177,7 +177,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
     qmlRegisterType<MainToolBarModel>("MuseScore.AppShell", 1, 0, "MainToolBarModel");
 
-    qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
+    qmlRegisterType<WindowDropArea>("Muse.Ui", 1, 0, "WindowDropArea");
 }
 
 void AppShellModule::onPreInit(const IApplication::RunMode& mode)

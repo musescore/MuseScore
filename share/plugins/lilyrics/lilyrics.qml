@@ -2,7 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls 2.15
 
 import MuseScore 3.0
-import MuseScore.UiComponents 1.0
+import Muse.UiComponents 1.0
 
 // Inspired by roblyric, by Robbie Matthews
 
