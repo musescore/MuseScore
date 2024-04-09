@@ -23,7 +23,7 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Audio 1.0
+import Muse.Audio 1.0
 import MuseScore.Playback 1.0
 
 Loader {
