@@ -97,7 +97,7 @@ inline UriQuery makeUriQuery(const Uri& uri, const std::string& actionCode)
 manifest.json
 {
 
-"uri": String,                    // Example: musescore://module/target/name
+"uri": String,                    // Example: muse://module/target/name
 "type": String,                   // Values: form, macros
 "title": String,                  //
 "description": String,            //

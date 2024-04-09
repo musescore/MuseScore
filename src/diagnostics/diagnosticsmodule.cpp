@@ -82,11 +82,11 @@ void DiagnosticsModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
-        ir->registerQmlUri(Uri("musescore://diagnostics/system/profiler"), "MuseScore/Diagnostics/DiagnosticProfilerDialog.qml");
-        ir->registerQmlUri(Uri("musescore://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
-        ir->registerQmlUri(Uri("musescore://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
-        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore/Diagnostics/EngravingElementsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "MuseScore/Diagnostics/DiagnosticProfilerDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/engraving/elements"), "MuseScore/Diagnostics/EngravingElementsDialog.qml");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());

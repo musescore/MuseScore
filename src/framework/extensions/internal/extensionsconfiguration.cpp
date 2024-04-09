@@ -143,7 +143,7 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
         if (obj.contains("uri")) {
             uri = Uri(obj.value("uri").toStdString());
         } else {
-            uri = Uri("musescore://extensions/v1/" + obj.value("codeKey").toStdString());
+            uri = Uri("muse://extensions/v1/" + obj.value("codeKey").toStdString());
         }
 
         c.enabled = obj.value("enabled").toBool();

@@ -65,7 +65,7 @@ void CloudModule::resolveImports()
 {
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://cloud/requireauthorization"), "Muse/Cloud/RequireAuthorizationDialog.qml");
+        ir->registerQmlUri(Uri("muse://cloud/requireauthorization"), "Muse/Cloud/RequireAuthorizationDialog.qml");
     }
 }
 

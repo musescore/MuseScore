@@ -331,7 +331,7 @@ void InteractiveProvider::closeObject(const ObjectInfo& obj)
 
 void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q) const
 {
-    static Uri VIEWER_URI = Uri("musescore://extensions/viewer");
+    static Uri VIEWER_URI = Uri("muse://extensions/viewer");
 
     ContainerMeta meta = uriRegister()->meta(VIEWER_URI);
     data->setValue("path", meta.qmlPath);

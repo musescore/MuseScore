@@ -46,7 +46,7 @@
 
 using namespace muse::ui;
 
-static const muse::UriQuery DEV_SHOW_CONTROLS_URI("musescore://devtools/keynav/controls?sync=false&modal=false");
+static const muse::UriQuery DEV_SHOW_CONTROLS_URI("muse://devtools/keynav/controls?sync=false&modal=false");
 
 using MoveDirection = NavigationController::MoveDirection;
 using Event = INavigation::Event;

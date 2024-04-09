@@ -34,12 +34,12 @@ TEST_F(Global_UriTests, Uri_Parce_Valid)
 {
     //! GIVEN Valid uri as string
 
-    Uri uri("musescore://some/path");
+    Uri uri("muse://some/path");
 
     EXPECT_TRUE(uri.isValid());
     EXPECT_EQ(uri.scheme(), "musescore");
     EXPECT_EQ(uri.path(), "some/path");
-    EXPECT_EQ(uri.toString(), "musescore://some/path");
+    EXPECT_EQ(uri.toString(), "muse://some/path");
 }
 
 TEST_F(Global_UriTests, Uri_Parce_NotValid)
@@ -55,24 +55,24 @@ TEST_F(Global_UriTests, Uri_Parce_QueryAsUri)
 {
     //! GIVEN Valid uriquery as string
 
-    Uri uri("musescore://some/path?param1=value1&param2=value2");
+    Uri uri("muse://some/path?param1=value1&param2=value2");
 
     EXPECT_TRUE(uri.isValid());
     EXPECT_EQ(uri.scheme(), "musescore");
     EXPECT_EQ(uri.path(), "some/path");
-    EXPECT_EQ(uri.toString(), "musescore://some/path");
+    EXPECT_EQ(uri.toString(), "muse://some/path");
 }
 
 TEST_F(Global_UriTests, UriQuery_Parce)
 {
     //! GIVEN Valid uriquery as string
 
-    UriQuery q("musescore://some/path?param1=value1&param2=value2");
+    UriQuery q("muse://some/path?param1=value1&param2=value2");
 
     EXPECT_TRUE(q.isValid());
     EXPECT_EQ(q.uri().scheme(), "musescore");
     EXPECT_EQ(q.uri().path(), "some/path");
-    EXPECT_EQ(q.uri().toString(), "musescore://some/path");
+    EXPECT_EQ(q.uri().toString(), "muse://some/path");
 
     EXPECT_EQ(q.params().size(), 2);
     EXPECT_EQ(q.param("param1"), Val("value1"));
@@ -83,12 +83,12 @@ TEST_F(Global_UriTests, UriQuery_Parce_Quoted)
 {
     //! GIVEN Valid uriquery as string
 
-    UriQuery q("musescore://some/path?param1=value1&param2='value2'&param3='x=5'");
+    UriQuery q("muse://some/path?param1=value1&param2='value2'&param3='x=5'");
 
     EXPECT_TRUE(q.isValid());
     EXPECT_EQ(q.uri().scheme(), "musescore");
     EXPECT_EQ(q.uri().path(), "some/path");
-    EXPECT_EQ(q.uri().toString(), "musescore://some/path");
+    EXPECT_EQ(q.uri().toString(), "muse://some/path");
 
     EXPECT_EQ(q.params().size(), 3);
     EXPECT_EQ(q.param("param1"), Val("value1"));
@@ -100,17 +100,17 @@ TEST_F(Global_UriTests, UriQuery_ToString)
 {
     //! GIVEN Valid uriquery
 
-    UriQuery q("musescore://some/path");
+    UriQuery q("muse://some/path");
     q.addParam("param1", Val("value1"));
 
     //! DO to string
     std::string str = q.toString();
-    EXPECT_EQ(str, "musescore://some/path?param1=value1");
+    EXPECT_EQ(str, "muse://some/path?param1=value1");
 
     //! DO add param 2
     q.addParam("param2", Val("value2"));
 
     //! Do to string
     std::string str2 = q.toString();
-    EXPECT_EQ(str2, "musescore://some/path?param1=value1&param2=value2");
+    EXPECT_EQ(str2, "muse://some/path?param1=value1&param2=value2");
 }

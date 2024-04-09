@@ -56,7 +56,7 @@ void MultiInstancesModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://devtools/multiinstances/info"), "Muse/MultiInstances/MultiInstancesDevDialog.qml");
+        ir->registerQmlUri(Uri("muse://devtools/multiinstances/info"), "Muse/MultiInstances/MultiInstancesDevDialog.qml");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());

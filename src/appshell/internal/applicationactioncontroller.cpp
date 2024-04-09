@@ -65,6 +65,10 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
+
+    dispatcher()->reg(this, "manage-plugins", [this]() {
+        interactive()->open("musescore://home?section=plugins");
+    });
 }
 
 void ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
@@ -241,7 +245,7 @@ void ApplicationActionController::openPreferencesDialog()
         return;
     }
 
-    interactive()->open("musescore://preferences");
+    interactive()->open("muse://preferences");
 }
 
 void ApplicationActionController::revertToFactorySettings()

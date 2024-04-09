@@ -78,7 +78,7 @@ void UiComponentsModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://interactive/selectMultipleDirectories"),
+        ir->registerUri(Uri("muse://interactive/selectmultipledirectories"),
                         ContainerMeta(ContainerType::QmlDialog, "Muse/UiComponents/SelectMultipleDirectoriesDialog.qml"));
     }
 }
