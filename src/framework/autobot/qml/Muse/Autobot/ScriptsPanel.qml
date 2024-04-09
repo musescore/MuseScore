@@ -21,7 +21,7 @@
  */
 import QtQuick 2.15
 import MuseScore.UiComponents 1.0
-import MuseScore.Autobot 1.0
+import Muse.Autobot 1.0
 
 Rectangle {
 

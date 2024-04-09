@@ -69,9 +69,9 @@ void AutobotModule::resolveImports()
 {
     auto ir = modularity::ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://autobot/batchtests"), "MuseScore/Autobot/BatchTestsDialog.qml");
-        ir->registerQmlUri(Uri("musescore://autobot/scripts"), "MuseScore/Autobot/ScriptsDialog.qml");
-        ir->registerQmlUri(Uri("musescore://autobot/selectfile"), "MuseScore/Autobot/AutobotSelectFileDialog.qml");
+        ir->registerQmlUri(Uri("musescore://autobot/batchtests"), "Muse/Autobot/BatchTestsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://autobot/scripts"), "Muse/Autobot/ScriptsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://autobot/selectfile"), "Muse/Autobot/AutobotSelectFileDialog.qml");
     }
 
     auto ar = modularity::ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
@@ -89,8 +89,8 @@ void AutobotModule::resolveImports()
 
 void AutobotModule::registerUiTypes()
 {
-    qmlRegisterType<AutobotScriptsModel>("MuseScore.Autobot", 1, 0, "AutobotScriptsModel");
-    qmlRegisterType<TestCaseRunModel>("MuseScore.Autobot", 1, 0, "TestCaseRunModel");
+    qmlRegisterType<AutobotScriptsModel>("Muse.Autobot", 1, 0, "AutobotScriptsModel");
+    qmlRegisterType<TestCaseRunModel>("Muse.Autobot", 1, 0, "TestCaseRunModel");
 }
 
 void AutobotModule::onInit(const IApplication::RunMode& mode)
