@@ -1,4 +1,4 @@
-module MuseScore.Mpe
+module Muse.Mpe
 ArticulationPatternPlot 1.0 ArticulationPatternPlot.qml
 ArrangementPatternControl 1.0 ArrangementPatternControl.qml
 ArticulationPatternControlsTab 1.0 ArticulationPatternControlsTab.qml
