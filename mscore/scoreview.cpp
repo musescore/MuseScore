@@ -10,36 +10,32 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "log.h"
-
-#include "scoreview.h"
-
 #include "breaksdialog.h"
 #include "continuouspanel.h"
 #include "drumroll.h"
 #include "editdrumset.h"
 #include "editstaff.h"
 #include "globals.h"
-#include "zoombox.h"
+#include "log.h"
 #include "measureproperties.h"
 #include "musescore.h"
 #include "navigator.h"
 #include "preferences.h"
 #include "scoreaccessibility.h"
 #include "scoretab.h"
+#include "scoreview.h"
 #include "seq.h"
 #include "splitstaff.h"
 #include "textcursor.h"
 #include "textpalette.h"
 #include "texttools.h"
-#include "fotomode.h"
 #include "tourhandler.h"
+#include "zoombox.h"
 
 #include "inspector/inspector.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
-#include "libmscore/box.h"
 #include "libmscore/chord.h"
 #include "libmscore/clef.h"
 #include "libmscore/dynamic.h"
@@ -49,8 +45,6 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
 #include "libmscore/fret.h"
-#include "libmscore/icon.h"
-#include "libmscore/image.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/keysig.h"
 #include "libmscore/lasso.h"
@@ -60,10 +54,8 @@
 #include "libmscore/notedot.h"
 #include "libmscore/note.h"
 #include "libmscore/noteline.h"
-#include "libmscore/ottava.h"
 #include "libmscore/page.h"
 #include "libmscore/part.h"
-#include "libmscore/pedal.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/repeatlist.h"
@@ -85,7 +77,6 @@
 #include "libmscore/textframe.h"
 #include "libmscore/text.h"
 #include "libmscore/timesig.h"
-#include "libmscore/trill.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/undo.h"
 #include "libmscore/utils.h"
@@ -1601,7 +1592,7 @@ void ScoreView::zoomBySteps(const qreal numSteps, const bool usingMouse/* = fals
 
       // If the new zoom level is exactly equal to one of the numeric presets, use the preset; otherwise, it's free zoom.
       const auto i = std::find(zoomEntries.cbegin(), zoomEntries.cend(), static_cast<int>(100.0 * logicalLevel));
-      const auto index = ((i != zoomEntries.cend()) && i->isNumericPreset() && (i->level == 100.0 * logicalLevel)) ? i->index : ZoomIndex::ZOOM_FREE;
+      const auto index = ((i != zoomEntries.cend()) && i->isNumericPreset() && (qFuzzyCompare(i->level, 100.0 * logicalLevel))) ? i->index : ZoomIndex::ZOOM_FREE;
 
       setLogicalZoom(index, logicalLevel, pos);
       }

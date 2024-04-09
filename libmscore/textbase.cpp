@@ -10,21 +10,18 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "text.h"
-#include "textedit.h"
-#include "jump.h"
-#include "marker.h"
-#include "score.h"
-#include "segment.h"
-#include "measure.h"
-#include "system.h"
 #include "box.h"
 #include "page.h"
-#include "textframe.h"
-#include "sym.h"
-#include "xml.h"
-#include "undo.h"
+#include "measure.h"
 #include "mscore.h"
+#include "score.h"
+#include "segment.h"
+#include "sym.h"
+#include "system.h"
+#include "textedit.h"
+#include "textframe.h"
+#include "undo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -1260,7 +1257,6 @@ QString TextBlock::remove(int column, TextCursor* cursor)
       QString s;
       for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
             int idx  = 0;
-            int rcol = 0;
             for (const QChar& c : qAsConst(i->text)) {
                   if (col == column) {
                         if (c.isSurrogate()) {
@@ -1281,7 +1277,6 @@ QString TextBlock::remove(int column, TextCursor* cursor)
                   if (c.isHighSurrogate())
                         continue;
                   ++col;
-                  ++rcol;
                   }
             }
       insertEmptyFragmentIfNeeded(cursor); // without this, cursorRect can't calculate the y position of the cursor correctly
@@ -1322,7 +1317,6 @@ QString TextBlock::remove(int start, int n, TextCursor* cursor)
       int col = 0;
       QString s;
       for (auto i = _fragments.begin(); i != _fragments.end();) {
-            int rcol = 0;
             bool inc = true;
             for( int idx = 0; idx < i->text.length(); ) {
                   QChar c = i->text[idx];
@@ -1349,7 +1343,6 @@ QString TextBlock::remove(int start, int n, TextCursor* cursor)
                   if (c.isHighSurrogate())
                         continue;
                   ++col;
-                  ++rcol;
                   }
             if (inc)
                   ++i;

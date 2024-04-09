@@ -16,6 +16,7 @@
 namespace Ms {
 
 class ScoreView;
+class Score;
 
 //---------------------------------------------------------
 //   ContinuousPanel

@@ -52,8 +52,8 @@ inline bool Voice::updateAmpInc(unsigned int &nextNewAmpInc, std::map<int, qreal
             return false;
 
       // if volume is zero skip all phases that do not change that!
-      if (amp == 0.0f) {
-            while (dsp_amp_incr == 0.0f && curSample2AmpInc != Sample2AmpInc.end()) {
+      if (qFuzzyIsNull(amp)) {
+            while (qFuzzyIsNull(dsp_amp_incr) && curSample2AmpInc != Sample2AmpInc.end()) {
                   dsp_i = curSample2AmpInc->first;
                   curSample2AmpInc++;
                   nextNewAmpInc = curSample2AmpInc->first;

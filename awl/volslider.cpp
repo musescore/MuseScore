@@ -46,7 +46,7 @@ VolSlider::VolSlider(QWidget* parent)
 void VolSlider::setValue(double val)
       {
       if (_log) {
-            if (val == 0.0f)
+            if (qFuzzyIsNull(val))
                   _value = _minValue;
             else {
                   _value = fast_log10(val) * 20.0f;

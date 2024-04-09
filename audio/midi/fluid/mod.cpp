@@ -202,7 +202,7 @@ float Mod::get_value(Channel* chan, Voice* voice)
             return 0.0;
 
       /* no need to go further */
-      if (v1 == 0.0f)
+      if (qFuzzyIsNull(v1))
             return 0.0f;
 
       /* get the second input source */

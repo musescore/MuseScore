@@ -187,7 +187,7 @@ void AbstractSlider::setValue(double val)
       double oldValue = _value;
 
       if (_log) {
-            if (val == 0.0f)
+            if (qFuzzyIsNull(val))
                   _value = _minValue;
             else {
                   _value = fast_log10(val) * 20.0f;
@@ -253,7 +253,7 @@ QString AbstractSlider::userValue() const
 void AbstractSlider::setMinLogValue(double val)
       {
       if (_log) {
-            if (val == 0.0f)
+            if (qFuzzyIsNull(val))
                   _minValue = -100;
             else
                   _minValue = fast_log10(val) * 20.0f;
