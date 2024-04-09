@@ -139,7 +139,12 @@ RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, cons
 
 RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) const
 {
-    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).tightBoundingRect(string));
+    auto boundingRect = QFontMetricsF(f.toQFont(), &device).tightBoundingRect(string);
+    if (!boundingRect.isValid()) {
+        // fix for https://github.com/musescore/MuseScore/issues/19503 - Qt can return garbage bounding rectangles that corrupt layout
+        return RectF();
+    }
+    return RectF::fromQRectF(boundingRect);
 }
 
 // Score symbols
