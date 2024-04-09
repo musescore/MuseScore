@@ -81,7 +81,7 @@ void ExtensionsModule::resolveImports()
 {
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
+        ir->registerQmlUri(Uri("muse://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
     }
 }
 

@@ -307,7 +307,7 @@ RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, cons
         return muse::make_ok();
     }
 
-    UriQuery query("musescore://cloud/requireauthorization");
+    UriQuery query("muse://cloud/requireauthorization");
     query.addParam("text", Val(text));
     query.addParam("cloudCode", Val(cloudInfo().code));
     query.addParam("publishingScore", Val(publishingScore));

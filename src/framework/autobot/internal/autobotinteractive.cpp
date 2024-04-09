@@ -122,7 +122,7 @@ io::path_t AutobotInteractive::selectSavingFile(const QString& title, const io::
     }
 
     LOGD() << title << " dir:" << dir << ", filter: " << filterList << ", confirmOverwrite: " << confirmOverwrite;
-    m_real->open("musescore://autobot/selectfile?sync=true&filePath=" + dir.toStdString());
+    m_real->open("muse://autobot/selectfile?sync=true&filePath=" + dir.toStdString());
     m_selectedFilePath = dir;
     return m_selectedFilePath;
 }

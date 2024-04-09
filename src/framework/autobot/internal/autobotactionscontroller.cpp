@@ -25,8 +25,8 @@
 
 using namespace muse::autobot;
 
-static const muse::UriQuery SHOW_BATCHTESTS_URI("musescore://autobot/batchtests?sync=false&modal=false&floating=true");
-static const muse::UriQuery SHOW_SCRIPTS_URI("musescore://autobot/scripts?sync=false&modal=false&floating=true");
+static const muse::UriQuery SHOW_BATCHTESTS_URI("muse://autobot/batchtests?sync=false&modal=false&floating=true");
+static const muse::UriQuery SHOW_SCRIPTS_URI("muse://autobot/scripts?sync=false&modal=false&floating=true");
 
 void AutobotActionsController::init()
 {

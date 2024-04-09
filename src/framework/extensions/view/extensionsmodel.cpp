@@ -133,7 +133,7 @@ void ExtensionsListModel::editShortcut(QString codeKey)
         return;
     }
 
-    UriQuery uri("musescore://preferences");
+    UriQuery uri("muse://preferences");
     uri.addParam("currentPageId", Val("shortcuts"));
 
     QVariantMap params;

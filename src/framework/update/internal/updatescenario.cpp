@@ -284,7 +284,7 @@ void UpdateScenario::showNoAppUpdateMsg()
 
 void UpdateScenario::showAppReleaseInfo(const ReleaseInfo& info)
 {
-    UriQuery query("musescore://update/appreleaseinfo");
+    UriQuery query("muse://update/appreleaseinfo");
     query.addParam("notes", Val(info.notes));
     query.addParam("previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)));
 
@@ -307,7 +307,7 @@ void UpdateScenario::showAppReleaseInfo(const ReleaseInfo& info)
 
 void UpdateScenario::showMuseSamplerReleaseInfo(const ReleaseInfo& info)
 {
-    UriQuery query("musescore://update/musesoundsreleaseinfo");
+    UriQuery query("muse://update/musesoundsreleaseinfo");
     query.addParam("notes", Val(info.notes));
     query.addParam("features", Val(info.additionInfo.at("features")));
 
@@ -334,7 +334,7 @@ void UpdateScenario::showServerErrorMsg()
 
 void UpdateScenario::downloadRelease()
 {
-    RetVal<Val> rv = interactive()->open("musescore://update?mode=download");
+    RetVal<Val> rv = interactive()->open("muse://update?mode=download");
     if (!rv.ret) {
         processUpdateResult(rv.ret.code());
         return;

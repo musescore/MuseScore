@@ -77,10 +77,10 @@ void VSTModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://vsti/editor"),
+        ir->registerUri(Uri("muse://vsti/editor"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstiEditorView>("VstiEditorView")));
 
-        ir->registerUri(Uri("musescore://vstfx/editor"),
+        ir->registerUri(Uri("muse://vstfx/editor"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstFxEditorView>("VstFxEditorView")));
     }
 

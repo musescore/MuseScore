@@ -86,7 +86,7 @@ inline std::vector<muse::Uri> removeDiagnosticsUri(const std::vector<muse::Uri>&
 {
     std::vector<muse::Uri> nuris;
     for (const muse::Uri& uri : uris) {
-        if (!QString::fromStdString(uri.toString()).startsWith("musescore://diagnostics")) {
+        if (!QString::fromStdString(uri.toString()).startsWith("muse://diagnostics")) {
             nuris.push_back(uri);
         }
     }

@@ -44,10 +44,10 @@ void WorkspaceSceneModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://workspace/select"),
+        ir->registerUri(Uri("muse://workspace/select"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/WorkspacesDialog.qml"));
 
-        ir->registerUri(Uri("musescore://workspace/create"),
+        ir->registerUri(Uri("muse://workspace/create"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/NewWorkspaceDialog.qml"));
     }
 }

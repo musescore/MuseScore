@@ -52,10 +52,6 @@ void ExtensionsActionController::registerPlugins()
         }
     }
 
-    dispatcher()->reg(this, "manage-plugins", [this]() {
-        interactive()->open("musescore://home?section=plugins");
-    });
-
     uiActionsRegister()->reg(m_uiActions);
 }
 

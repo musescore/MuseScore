@@ -155,7 +155,7 @@ void WorkspaceListModel::createNewWorkspace()
         workspaceNames << QString::fromStdString(workspace->name());
     }
 
-    UriQuery uri("musescore://workspace/create");
+    UriQuery uri("muse://workspace/create");
     uri.addParam("sync", Val(true));
     uri.addParam("workspaceNames", Val(workspaceNames.join(',')));
 

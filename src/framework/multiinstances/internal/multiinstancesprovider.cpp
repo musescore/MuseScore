@@ -35,13 +35,13 @@ using namespace muse::mi;
 using namespace muse::ipc;
 using namespace muse::actions;
 
-static const muse::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
+static const muse::UriQuery DEV_SHOW_INFO_URI("muse://devtools/multiinstances/info?sync=false&modal=false");
 static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_PROJECT("ACTIVATE_WINDOW_WITH_PROJECT");
 static const QString METHOD_IS_WITHOUT_PROJECT("IS_WITHOUT_PROJECT");
 static const QString METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT("METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT");
 
-static const muse::Uri PREFERENCES_URI("musescore://preferences");
+static const muse::Uri PREFERENCES_URI("muse://preferences");
 static const QString METHOD_PREFERENCES_IS_OPENED("PREFERENCES_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES("ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES");
 static const QString METHOD_SETTINGS_BEGIN_TRANSACTION("SETTINGS_BEGIN_TRANSACTION");

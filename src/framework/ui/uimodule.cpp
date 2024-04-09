@@ -123,8 +123,8 @@ void UiModule::resolveImports()
 
     auto ir = modularity::ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerWidgetUri<TestDialog>(Uri("musescore://devtools/interactive/testdialog"));
-        ir->registerQmlUri(Uri("musescore://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
+        ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
+        ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
     }
 }
 
