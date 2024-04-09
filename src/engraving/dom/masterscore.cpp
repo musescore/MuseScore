@@ -656,11 +656,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         if (ee) {
                             doUndoRemoveElement(ee);
                             if (s->empty()) {
-                                if (ee->isTimeSig()) {
-                                    undoRemoveElement(s);
-                                } else {
-                                    s->setEnabled(false);
-                                }
+                                undoRemoveElement(s);
                             }
                         }
                     }
