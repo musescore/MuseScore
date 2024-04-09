@@ -48,7 +48,6 @@
 #include "view/diagnosticaccessiblemodel.h"
 
 #include "devtools/crashhandlerdevtoolsmodel.h"
-#include "devtools/corruptscoredevtoolsmodel.h"
 
 #include "log.h"
 
@@ -101,7 +100,6 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<DiagnosticAccessibleModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
 
     qmlRegisterType<CrashHandlerDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
-    qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CorruptScoreDevToolsModel");
 }
 
 void DiagnosticsModule::onInit(const IApplication::RunMode& mode)

@@ -22,7 +22,7 @@
 
 #include "corruptscoredevtoolsmodel.h"
 
-using namespace mu::diagnostics;
+using namespace mu::engraving;
 
 CorruptScoreDevToolsModel::CorruptScoreDevToolsModel(QObject* parent)
     : QObject(parent)
