@@ -28,6 +28,10 @@ if (NOT MUSE_MODULE_AUDIO)
     set(MUSE_MODULE_VST OFF)
 endif()
 
+if (NOT MUSE_MODULE_DIAGNOSTICS)
+    set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT OFF)
+endif()
+
 # backwards compatible, will be removed later
 if (VST3_SDK_PATH)
     set(MUSE_MODULE_VST_VST3_SDK_PATH ${VST3_SDK_PATH})

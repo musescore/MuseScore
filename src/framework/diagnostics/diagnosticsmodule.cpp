@@ -49,6 +49,8 @@
 
 #include "devtools/crashhandlerdevtoolsmodel.h"
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace mu::diagnostics;
@@ -116,7 +118,7 @@ void DiagnosticsModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-#ifdef MUE_BUILD_CRASHPAD_CLIENT
+#ifdef MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 
     static CrashHandler s_crashHandler;
 
@@ -147,5 +149,5 @@ void DiagnosticsModule::onInit(const IApplication::RunMode& mode)
 
 #else
     LOGW() << "crash handling disabled";
-#endif // MUE_BUILD_CRASHPAD_CLIENT
+#endif // MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 }

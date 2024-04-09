@@ -34,7 +34,9 @@ if (MUSE_MODULE_ACCESSIBILITY)
     add_subdirectory(accessibility)
 endif()
 
-add_subdirectory(actions)
+if (MUSE_MODULE_ACTIONS)
+    add_subdirectory(actions)
+endif()
 
 if (MUSE_MODULE_AUDIO)
     add_subdirectory(audio)
@@ -48,11 +50,13 @@ if (MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()
 
-if (MUE_BUILD_DIAGNOSTICS_MODULE)
+if (MUSE_MODULE_DIAGNOSTICS)
     add_subdirectory(diagnostics)
 endif()
 
-add_subdirectory(draw)
+if (MUSE_MODULE_DRAW)
+    add_subdirectory(draw)
+endif()
 
 if (MUSE_MODULE_MIDI)
     add_subdirectory(midi)

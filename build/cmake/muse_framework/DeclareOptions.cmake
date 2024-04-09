@@ -14,6 +14,10 @@ option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 
 declare_muse_module_opt(AUTOBOT ON)
 declare_muse_module_opt(CLOUD ON)
+
+declare_muse_module_opt(DIAGNOSTICS ON)
+option(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT "Enable crashpad client" OFF) # enable on CI
+
 declare_muse_module_opt(DRAW ON)
 declare_muse_module_opt(EXTENSIONS ON)
 declare_muse_module_opt(GLOBAL ON)

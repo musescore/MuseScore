@@ -30,7 +30,9 @@
 
 #include "global/defer.h"
 
-#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_DIAGNOSTICS
 #include "diagnostics/diagnosticutils.h"
 #endif
 
@@ -361,7 +363,7 @@ void NavigationController::resetIfNeed(QObject* watched)
         return;
     }
 
-#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
+#ifdef MUSE_MODULE_DIAGNOSTICS
     if (mu::diagnostics::isDiagnosticHierarchy(watched)) {
         return;
     }
