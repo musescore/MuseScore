@@ -31,8 +31,7 @@
 #include "log.h"
 
 using namespace muse;
-using namespace mu;
-using namespace mu::diagnostics;
+using namespace mu::engraving;
 
 // --diagnostic-gen-drawdata ./vtest/scores --diagnostic-output ./drawdata
 // --diagnostic-gen-drawdata ./vtest/scores/accidental-1.mscx --diagnostic-output ./drawdata/accidental-1.json

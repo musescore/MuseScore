@@ -32,16 +32,14 @@
 #include "engraving/rw/mscloader.h"
 #include "engraving/dom/masterscore.h"
 
-#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
-#include "importexport/guitarpro/internal/guitarproreader.h"
-#endif
+// #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+// #include "importexport/guitarpro/internal/guitarproreader.h"
+// #endif
 
 #include "log.h"
 
 using namespace muse;
 using namespace muse::draw;
-using namespace mu;
-using namespace mu::diagnostics;
 using namespace mu::engraving;
 
 //! TODO
@@ -212,18 +210,18 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const muse:
     } else {
         // Import
 
-        TRACEFUNC_C("Load gp");
-#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
-        mu::iex::guitarpro::GuitarProReader reader;
-        Ret ret = reader.read(score, path);
-        if (!ret) {
-            LOGE() << "failed read file: " << path;
-            return false;
-        }
-#else
+//         TRACEFUNC_C("Load gp");
+// #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+//         mu::iex::guitarpro::GuitarProReader reader;
+//         Ret ret = reader.read(score, path);
+//         if (!ret) {
+//             LOGE() << "failed read file: " << path;
+//             return false;
+//         }
+// #else
         NOT_SUPPORTED;
         return false;
-#endif
+//#endif
     }
 
     return true;

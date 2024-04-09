@@ -22,26 +22,13 @@
 
 #include "testing/environment.h"
 
-#include "engraving/engravingmodule.h"
-#include "draw/drawmodule.h"
-
-#include "engraving/dom/instrtemplate.h"
-#include "engraving/dom/mscore.h"
-
 #include "log.h"
 
 static muse::testing::SuiteEnvironment diagnostics_se(
 {
-    new muse::draw::DrawModule(),
-    new mu::engraving::EngravingModule()
 },
     nullptr,
     []() {
-    LOGI() << "engraving tests suite post init";
-
-    mu::engraving::MScore::testMode = true;
-    mu::engraving::MScore::noGui = true;
-
-    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
+    LOGI() << "diagnostics tests suite post init";
 }
     );

@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICDRAWPROVIDER_H
-#define MU_DIAGNOSTICS_DIAGNOSTICDRAWPROVIDER_H
+#ifndef MU_ENGRAVING_DIAGNOSTICDRAWPROVIDER_H
+#define MU_ENGRAVING_DIAGNOSTICDRAWPROVIDER_H
 
-#include "../../idiagnosticdrawprovider.h"
+#include "idiagnosticdrawprovider.h"
 
-namespace mu::diagnostics {
+namespace mu::engraving {
 class DiagnosticDrawProvider : public IDiagnosticDrawProvider
 {
 public:
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICDRAWPROVIDER_H
+#endif // MU_ENGRAVING_DIAGNOSTICDRAWPROVIDER_H

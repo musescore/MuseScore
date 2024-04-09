@@ -19,22 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
-#define MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#ifndef MU_ENGRAVING_DRAWDATAGENERATOR_H
+#define MU_ENGRAVING_DRAWDATAGENERATOR_H
 
 #include "global/types/ret.h"
 #include "global/io/path.h"
 #include "draw/types/drawdata.h"
-#include "../../diagnosticstypes.h"
 
 #include "modularity/ioc.h"
 #include "engraving/rendering/iscorerenderer.h"
 
+#include "drawdatatypes.h"
+
 namespace mu::engraving {
 class MasterScore;
-}
-
-namespace mu::diagnostics {
 class DrawDataGenerator
 {
     INJECT(engraving::rendering::IScoreRenderer, scoreRenderer)
@@ -53,4 +51,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#endif // MU_ENGRAVING_DRAWDATAGENERATOR_H

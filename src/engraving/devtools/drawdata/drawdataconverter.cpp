@@ -30,8 +30,7 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::diagnostics;
+using namespace mu::engraving;
 using namespace muse;
 using namespace muse::draw;
 

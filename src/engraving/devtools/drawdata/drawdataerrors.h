@@ -1,9 +1,9 @@
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSERRORS_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSERRORS_H
+#ifndef MU_ENGRAVING_DIAGNOSTICSERRORS_H
+#define MU_ENGRAVING_DIAGNOSTICSERRORS_H
 
 #include "global/types/ret.h"
 
-namespace mu::diagnostics {
+namespace mu::engraving {
 enum class Err {
     Undefined       = int(muse::Ret::Code::Undefined),
     Ok              = int(muse::Ret::Code::Ok),
@@ -28,4 +28,4 @@ inline muse::Ret make_ret(Err e)
 }
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSERRORS_H
+#endif // MU_ENGRAVING_DIAGNOSTICSERRORS_H

@@ -19,28 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DRAWDATACONVERTER_H
-#define MU_DIAGNOSTICS_DRAWDATACONVERTER_H
+#ifndef MU_ENGRAVING_DRAWDATACOMPARATOR_H
+#define MU_ENGRAVING_DRAWDATACOMPARATOR_H
 
 #include "global/types/ret.h"
 #include "global/io/path.h"
 #include "draw/types/drawdata.h"
-#include "draw/types/pixmap.h"
 
-namespace mu::diagnostics {
-class DrawDataConverter
+namespace mu::engraving {
+class DrawDataComparator
 {
 public:
-    DrawDataConverter() = default;
+    DrawDataComparator() = default;
 
-    muse::Ret drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile);
-    muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile);
-
-    muse::Ret saveAsPng(const muse::draw::DrawDataPtr& data, const muse::io::path_t& path);
-
-    muse::draw::Pixmap drawDataToPixmap(const muse::draw::DrawDataPtr& data);
-    void drawOnPixmap(muse::draw::Pixmap& px, const muse::draw::DrawDataPtr& data, const muse::draw::Color& overlay = muse::draw::Color());
+    muse::draw::Diff compare(const muse::draw::DrawDataPtr& ref, const muse::draw::DrawDataPtr& test);
+    muse::Ret compare(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outdiff);
 };
 }
 
-#endif // MU_DIAGNOSTICS_DRAWDATACONVERTER_H
+#endif // MU_ENGRAVING_DRAWDATACOMPARATOR_H
