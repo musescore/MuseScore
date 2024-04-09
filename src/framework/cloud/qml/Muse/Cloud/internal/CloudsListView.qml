@@ -23,7 +23,7 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Cloud 1.0
+import Muse.Cloud 1.0
 
 StyledGridView {
     id: root

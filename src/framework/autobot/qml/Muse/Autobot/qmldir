@@ -1,4 +1,4 @@
-module MuseScore.Autobot
+module Muse.Autobot
 AutobotDialog 1.0 AutobotDialog.qml
 AutobotPanel 1.0 AutobotPanel.qml
 TestCaseRunPanel 1.0 TestCaseRunPanel.qml

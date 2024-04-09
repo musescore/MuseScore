@@ -1,14 +1,14 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/MuseScore/Cloud/qmldir</file>
-        <file>qml/MuseScore/Cloud/AccountInfoButton.qml</file>
-        <file>qml/MuseScore/Cloud/AccountAvatar.qml</file>
-        <file>qml/MuseScore/Cloud/AccountPage.qml</file>
-        <file>qml/MuseScore/Cloud/internal/CloudsListView.qml</file>
-        <file>qml/MuseScore/Cloud/RequireAuthorizationDialog.qml</file>
-        <file>qml/MuseScore/Cloud/internal/CloudItem.qml</file>
-        <file>qml/MuseScore/Cloud/CloudScoresView.qml</file>
-        <file>qml/MuseScore/Cloud/internal/CloudScoresListView.qml</file>
-        <file>qml/MuseScore/Cloud/internal/CloudScoresGridView.qml</file>
+        <file>qml/Muse/Cloud/qmldir</file>
+        <file>qml/Muse/Cloud/AccountInfoButton.qml</file>
+        <file>qml/Muse/Cloud/AccountAvatar.qml</file>
+        <file>qml/Muse/Cloud/AccountPage.qml</file>
+        <file>qml/Muse/Cloud/internal/CloudsListView.qml</file>
+        <file>qml/Muse/Cloud/RequireAuthorizationDialog.qml</file>
+        <file>qml/Muse/Cloud/internal/CloudItem.qml</file>
+        <file>qml/Muse/Cloud/CloudScoresView.qml</file>
+        <file>qml/Muse/Cloud/internal/CloudScoresListView.qml</file>
+        <file>qml/Muse/Cloud/internal/CloudScoresGridView.qml</file>
     </qresource>
 </RCC>

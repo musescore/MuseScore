@@ -1,0 +1,4 @@
+module Muse.Cloud
+AccountInfoButton 1.0 AccountInfoButton.qml
+AccountPage 1.0 AccountPage.qml
+CloudScoresView 1.0 CloudScoresView.qml
