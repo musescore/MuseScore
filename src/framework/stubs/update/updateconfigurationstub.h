@@ -39,8 +39,8 @@ public:
     std::string skippedReleaseVersion() const override;
     void setSkippedReleaseVersion(const std::string& version) override;
 
-    std::string lastShownMuseSamplerReleaseVersion() const override;
-    void setLastShownMuseSamplerReleaseVersion(const std::string& version) override;
+    std::string lastShownMuseSoundsReleaseVersion() const override;
+    void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
 
     std::string checkForAppUpdateUrl() const override;
     std::string previousAppReleasesNotesUrl() const override;

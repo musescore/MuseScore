@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_IUPDATESCENARIO_H
-#define MUSE_UPDATE_IUPDATESCENARIO_H
+#ifndef MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
+#define MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
+
+#include "types/retval.h"
+#include "io/path.h"
+#include "progress.h"
+
+#include "updatetypes.h"
 
 #include "modularity/imoduleinterface.h"
 
 namespace muse::update {
-class IUpdateScenario : MODULE_EXPORT_INTERFACE
+class IMuseSoundsCheckUpdateService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IUpdateScenario)
+    INTERFACE_ID(IMuseSamplerUpdateService)
 
 public:
-    virtual ~IUpdateScenario() = default;
+    virtual ~IMuseSoundsCheckUpdateService() = default;
 
-    virtual void checkForUpdate() = 0;
+    virtual RetVal<ReleaseInfo> checkForUpdate() = 0;
+    virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
+
+    virtual Progress updateProgress() = 0;
+
+    virtual void openMuseHub() = 0;
 };
 }
 
-#endif // MUSE_UPDATE_IUPDATESCENARIO_H
+#endif // MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H

@@ -28,8 +28,7 @@ namespace muse::update {
 class UpdateScenarioStub : public IUpdateScenario
 {
 public:
-    void checkForAppUpdate() override;
-    void checkForMuseSamplerUpdate() override;
+    void checkForUpdate() override;
 };
 }
 

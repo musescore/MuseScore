@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_UPDATESCENARIO_H
-#define MUSE_UPDATE_UPDATESCENARIO_H
+#ifndef MUSE_UPDATE_MUSESOUNDSCHECKUPDATESCENARIO_H
+#define MUSE_UPDATE_MUSESOUNDSCHECKUPDATESCENARIO_H
 
 #include "async/asyncable.h"
 #include "progress.h"
@@ -30,19 +30,20 @@
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "../iupdateconfiguration.h"
-#include "../iappupdateservice.h"
+#include "../imusesoundscheckupdateservice.h"
 
-#include "../iupdatescenario.h"
+#include "../iappupdateservice.h"
+#include "../imusesoundscheckupdatescenario.h"
 
 namespace muse::update {
-class UpdateScenario : public IUpdateScenario, public async::Asyncable
+class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public async::Asyncable
 {
     Inject<IInteractive> interactive;
     Inject<actions::IActionsDispatcher> dispatcher;
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
     Inject<IUpdateConfiguration> configuration;
 
-    Inject<IAppUpdateService> service;
+    Inject<IMuseSoundsCheckUpdateService> service;
 
 public:
     void delayedInit();
@@ -52,22 +53,17 @@ public:
 private:
     bool isCheckStarted() const;
 
+    bool shouldIgnoreUpdate(const ReleaseInfo& info) const;
+    void setIgnoredUpdate(const std::string& version);
+
     void doCheckForUpdate(bool manual);
     void th_checkForUpdate();
 
-    void processUpdateResult(int errorCode);
-
-    void showNoUpdateMsg();
     void showReleaseInfo(const ReleaseInfo& info);
-
-    void showServerErrorMsg();
-
-    void downloadRelease();
-    void closeAppAndStartInstallation(const io::path_t& installerPath);
 
     bool m_checkProgress = false;
     ProgressPtr m_checkProgressChannel = nullptr;
 };
 }
 
-#endif // MUSE_UPDATE_UPDATESCENARIO_H
+#endif // MUSE_UPDATE_MUSESOUNDSCHECKUPDATESCENARIO_H

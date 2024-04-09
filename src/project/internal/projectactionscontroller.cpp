@@ -359,7 +359,7 @@ Ret ProjectActionsController::doFinishOpenProject()
             mut.resetOnReceive(this);
 
             QTimer::singleShot(5000, [this]() {
-                updateScenario()->checkForMuseSamplerUpdate();
+                museSoundsCheckUpdateScenario()->checkForUpdate();
             });
         });
     });
