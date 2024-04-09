@@ -49,7 +49,7 @@ class BeamSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * customPositioned READ customPositioned CONSTANT)
 
-    Q_PROPERTY(PropertyItem * stemDirection READ stemDirection)
+    Q_PROPERTY(PropertyItem * stemDirection READ stemDirection CONSTANT)
     Q_PROPERTY(PropertyItem * crossStaffMove READ crossStaffMove CONSTANT)
     Q_PROPERTY(
         bool isCrossStaffMoveAvailable READ isCrossStaffMoveAvailable WRITE setisCrossStaffMoveAvailable NOTIFY isCrossStaffMoveAvailableChanged)
