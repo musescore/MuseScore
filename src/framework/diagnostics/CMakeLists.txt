@@ -76,7 +76,7 @@ if (CC_IS_MINGW)
     set(BUILD_CRASHPAD_CLIENT OFF)
 endif(CC_IS_MINGW)
 
-if (MUE_BUILD_CRASHPAD_CLIENT)
+if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
     set(MODULE_SRC ${MODULE_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/crashhandler/crashhandler.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/crashhandler/crashhandler.h
@@ -127,7 +127,7 @@ if (MUE_BUILD_CRASHPAD_CLIENT)
 
         install(PROGRAMS ${MUE_CRASHPAD_HANDLER_PATH} DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
     endif()
-endif(MUE_BUILD_CRASHPAD_CLIENT)
+endif() # MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 # ----------------
 
 set(MODULE_INCLUDE ${MODULE_INCLUDE}
@@ -136,6 +136,6 @@ set(MODULE_INCLUDE ${MODULE_INCLUDE}
 
 include(SetupModule)
 
-if (MUE_BUILD_DIAGNOSTICS_TESTS)
+if (MUSE_MODULE_DIAGNOSTICS_TESTS)
     add_subdirectory(tests)
 endif()

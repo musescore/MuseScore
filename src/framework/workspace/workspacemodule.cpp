@@ -33,7 +33,9 @@
 #include "internal/workspaceuiactions.h"
 #include "internal/workspacesdataprovider.h"
 
-#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_DIAGNOSTICS
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
@@ -76,7 +78,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
     m_provider->init();
     m_actionController->init();
 
-#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
+#ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         io::paths_t paths = m_configuration->workspacePaths();
