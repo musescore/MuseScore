@@ -162,7 +162,7 @@ set(MODULE_DEF
 
 set(MODULE_USE_PCH_NONE ON)
 set(MODULE_USE_UNITY_NONE ON)
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
 # Export variables
 set(FREETYPE_LIBRARIES freetype PARENT_SCOPE)

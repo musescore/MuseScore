@@ -234,4 +234,4 @@ set(MODULE_LINK
     )
 
 set(MODULE_USE_UNITBUILD ON)
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)

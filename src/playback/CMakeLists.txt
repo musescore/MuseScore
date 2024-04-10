@@ -77,4 +77,4 @@ if (MUE_BUILD_PLAYBACK_TESTS)
     add_subdirectory(tests)
 endif()
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)

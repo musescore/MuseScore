@@ -22,7 +22,7 @@ set(MODULE_LINK
 
 set(MODULE_USE_PCH_NONE ON)
 set(MODULE_USE_UNITY_NONE ON)
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
 #target_no_warning(${MODULE} -Wunused-const-variable=0)
 target_no_warning(${MODULE} -Wno-deprecated)

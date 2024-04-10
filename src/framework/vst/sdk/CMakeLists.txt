@@ -165,7 +165,7 @@ set(MODULE_INCLUDE
     ${VST3_SDK_PATH}
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
 target_no_warning(${MODULE} -w)
 

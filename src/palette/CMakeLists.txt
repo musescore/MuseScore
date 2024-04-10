@@ -84,4 +84,4 @@ set(MODULE_LINK
     commonscene
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
