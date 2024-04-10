@@ -33,7 +33,7 @@ set(MODULE_TEST_SRC
 set(MODULE_TEST_LINK
     braille
     engraving
-    accessibility
+    muse::accessibility
     )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})

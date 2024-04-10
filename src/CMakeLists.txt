@@ -18,11 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# Framework, should be first to work pch
+add_subdirectory(framework)
+
 # App (main)
 add_subdirectory(app)
-
-# Framework
-add_subdirectory(framework)
 
 # Modules
 if (MUE_BUILD_APPSHELL_MODULE)

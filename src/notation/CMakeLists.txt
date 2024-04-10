@@ -178,11 +178,11 @@ set(MODULE_UI
     )
 
 set(MODULE_LINK
-    draw
+    muse::draw
     engraving
     commonscene
-    uicomponents
-    ui
+    muse::uicomponents
+    muse::ui
     )
 
 if (MUE_BUILD_NOTATION_TESTS)

@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE actions)
+set(MODULE muse_actions)
+set(MODULE_ALIAS muse::actions)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/actionsmodule.cpp

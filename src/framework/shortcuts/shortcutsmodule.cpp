@@ -109,7 +109,7 @@ void ShortcutsModule::registerUiTypes()
     qmlRegisterType<MidiDeviceMappingModel>("Muse.Shortcuts", 1, 0, "MidiDeviceMappingModel");
     qmlRegisterType<EditMidiMappingModel>("Muse.Shortcuts", 1, 0, "EditMidiMappingModel");
 
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(shortcuts_QML_IMPORT);
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(muse_shortcuts_QML_IMPORT);
 }
 
 void ShortcutsModule::onInit(const IApplication::RunMode& mode)

@@ -110,9 +110,9 @@ set(MODULE_SRC
 
 
 set(MODULE_LINK
-    ui
-    uicomponents
-    dockwindow
+    muse::ui
+    muse::uicomponents
+    muse::dockwindow
     )
 
 if (OS_IS_MAC)

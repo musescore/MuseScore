@@ -85,7 +85,7 @@ void CloudModule::registerUiTypes()
     qmlRegisterUncreatableType<QMLSaveToCloudResponse>("Muse.Cloud", 1, 0, "SaveToCloudResponse",
                                                        "Not creatable as it is an enum type");
 
-    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
+    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_cloud_QML_IMPORT);
 }
 
 void CloudModule::onInit(const IApplication::RunMode& mode)

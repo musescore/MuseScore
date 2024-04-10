@@ -177,7 +177,6 @@ endif(MUE_DOWNLOAD_SOUNDFONT)
 # Add source tree
 ###########################################
 add_subdirectory(share)
-add_subdirectory(src/framework/global) # should be first to work pch
 add_subdirectory(src)
 
 

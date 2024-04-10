@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE shortcuts)
+set(MODULE muse_shortcuts)
+set(MODULE_ALIAS muse::shortcuts)
 
 set(MODULE_QRC shortcuts.qrc)
 

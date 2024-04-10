@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST ui_tests)
+set(MODULE_TEST muse_ui_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
@@ -30,8 +30,8 @@ set(MODULE_TEST_SRC
     )
 
 set(MODULE_TEST_LINK
-    actions
-    ui
+    muse_actions
+    muse_ui
     )
 
 include(SetupGTest)

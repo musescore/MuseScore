@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST audio_test)
+set(MODULE_TEST muse_audio_test)
 
 if (NOT MUSE_MODULE_AUDIO_JACK)
 
@@ -38,7 +38,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audioutilstest.cpp
 )
 
-set(MODULE_TEST_LINK audio)
+set(MODULE_TEST_LINK muse_audio)
 
 include(SetupGTest)
 

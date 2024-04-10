@@ -53,8 +53,4 @@ void LanguagesModule::registerResources()
 
 void LanguagesModule::registerUiTypes()
 {
-    std::shared_ptr<muse::ui::IUiEngine> ui = ioc()->resolve<muse::ui::IUiEngine>(moduleName());
-    if (ui) {
-        ui->addSourceImportPath(languages_QML_IMPORT);
-    }
 }

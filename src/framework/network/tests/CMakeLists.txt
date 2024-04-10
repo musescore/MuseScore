@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST network_test)
+set(MODULE_TEST muse_network_test)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/networkmanagercreatormock.h
@@ -26,7 +26,7 @@ set(MODULE_TEST_SRC
 )
 
 set(MODULE_TEST_LINK
-    network
+    muse_network
 )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})

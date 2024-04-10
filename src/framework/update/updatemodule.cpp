@@ -92,7 +92,7 @@ void UpdateModule::registerUiTypes()
 {
     qmlRegisterType<UpdateModel>("Muse.Update", 1, 0, "UpdateModel");
 
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(update_QML_IMPORT);
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(muse_update_QML_IMPORT);
 }
 
 void UpdateModule::onInit(const IApplication::RunMode& mode)

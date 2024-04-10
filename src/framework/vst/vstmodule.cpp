@@ -112,7 +112,7 @@ void VSTModule::registerResources()
 
 void VSTModule::registerUiTypes()
 {
-    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
+    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(muse_vst_QML_IMPORT);
 }
 
 void VSTModule::onInit(const IApplication::RunMode&)

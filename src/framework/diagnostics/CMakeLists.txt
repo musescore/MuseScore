@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE diagnostics)
+set(MODULE muse_diagnostics)
+set(MODULE_ALIAS muse::diagnostics)
 
 set(MODULE_QRC diagnostics.qrc)
 
@@ -129,10 +130,6 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
     endif()
 endif() # MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 # ----------------
-
-set(MODULE_INCLUDE ${MODULE_INCLUDE}
-    ${PROJECT_SOURCE_DIR}/src/importexport/guitarpro
-)
 
 include(SetupModule)
 
