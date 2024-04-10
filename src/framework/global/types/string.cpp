@@ -616,6 +616,35 @@ std::u32string String::toStdU32String() const
     return s32;
 }
 
+std::wstring String::toStdWString() const
+{
+    const std::u16string& u16 = constStr();
+    std::wstring ws;
+    ws.resize(u16.size());
+
+    static_assert(sizeof(wchar_t) >= sizeof(char16_t));
+
+    for (size_t i = 0; i < ws.size(); ++i) {
+        ws[i] = static_cast<wchar_t>(u16.at(i));
+    }
+
+    return ws;
+}
+
+const String String::fromStdWString(const std::wstring& str)
+{
+    String s;
+    s.mutStr().resize(str.size());
+
+    static_assert(sizeof(wchar_t) >= sizeof(char16_t));
+
+    for (size_t i = 0; i < str.size(); ++i) {
+        s[i] = static_cast<char16_t>(str.at(i));
+    }
+
+    return s;
+}
+
 #ifndef NO_QT_SUPPORT
 String String::fromQString(const QString& str)
 {
@@ -679,15 +708,7 @@ bool String::contains(const String& str, CaseSensitivity cs) const
 
 bool String::contains(const std::wregex& re) const
 {
-    const std::u16string& u16 = constStr();
-    std::wstring ws;
-    ws.resize(u16.size());
-
-    static_assert(sizeof(wchar_t) >= sizeof(char16_t));
-
-    for (size_t i = 0; i < ws.size(); ++i) {
-        ws[i] = static_cast<wchar_t>(u16.at(i));
-    }
+    std::wstring ws = toStdWString();
 
     auto words_begin = std::wsregex_iterator(ws.begin(), ws.end(), re);
     if (words_begin != std::wsregex_iterator()) {

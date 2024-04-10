@@ -271,6 +271,9 @@ public:
     static String fromUcs4(char32_t chr);
     std::u32string toStdU32String() const;
 
+    std::wstring toStdWString() const;
+    static const String fromStdWString(const std::wstring& str);
+
     size_t size() const;
     bool empty() const;
     inline bool isEmpty() const { return empty(); }
