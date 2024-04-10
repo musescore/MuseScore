@@ -47,4 +47,4 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/number_tests.cpp
 )
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(SetupGTest)

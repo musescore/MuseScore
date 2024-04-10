@@ -45,4 +45,4 @@ if (MSVC)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif (MSVC)
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(SetupGTest)

@@ -31,5 +31,5 @@ set(MODULE_TEST_LINK
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(SetupGTest)
 

@@ -31,4 +31,4 @@ set(MODULE_TEST_LINK
     accessibility
     )
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(SetupGTest)

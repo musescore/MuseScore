@@ -18,4 +18,4 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(${MUSE_FRAMEWORK_SRC_PATH}/testing/gtest.cmake)

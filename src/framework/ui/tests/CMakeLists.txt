@@ -34,4 +34,4 @@ set(MODULE_TEST_LINK
     ui
     )
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(SetupGTest)

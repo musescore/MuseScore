@@ -27,5 +27,5 @@ set(MODULE_TEST_SRC
 
 set(MODULE_TEST_LINK project)
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(SetupGTest)
 
