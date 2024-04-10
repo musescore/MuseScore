@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_learn)
+declare_module(muse_learn)
 set(MODULE_ALIAS muse::learn)
 
 set(MODULE_QRC learn.qrc)
@@ -31,5 +31,5 @@ set(MODULE_SRC
     )
 
 set(MODULE_IS_STUB ON)
-include(SetupModule)
+setup_module()
 

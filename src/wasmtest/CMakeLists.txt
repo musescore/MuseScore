@@ -18,12 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE wasmtest)
+declare_module(wasmtest)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/wasmtestmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/wasmtestmodule.h
     )
 
-include(SetupModule)
+setup_module()
 

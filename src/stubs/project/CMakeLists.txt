@@ -17,7 +17,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-set(MODULE project)
+declare_module(project)
 
 set(MODULE_QRC project.qrc)
 
@@ -33,4 +33,4 @@ set(MODULE_SRC
     )
 
 set(MODULE_IS_STUB ON)
-include(SetupModule)
+setup_module()
