@@ -126,6 +126,8 @@ StyledPopupView {
 
                 menuModel: soundFlagModel.contextMenuModel
 
+                enabled: !museSoundsParams.noOptions
+
                 navigation.panel: navPanel
                 navigation.order: 2
                 navigation.accessible.name: qsTrc("playback", "Sound flag menu")
