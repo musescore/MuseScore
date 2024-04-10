@@ -70,8 +70,9 @@ endif()
 # Setup paths
 ###########################################
 if (OS_IS_MAC)
-    SET(Mscore_INSTALL_NAME  "Contents/Resources/")
-    SET(Mscore_SHARE_NAME    "mscore.app/")
+    SET(Mscore_INSTALL_NAME    "Contents/Resources/")
+    SET(Mscore_FRAMEWORKS_NAME "Frameworks/")
+    SET(Mscore_SHARE_NAME      "mscore.app/")
 elseif (OS_IS_WIN)
     SET(Mscore_INSTALL_NAME  "")
     SET(Mscore_SHARE_NAME    "./")
