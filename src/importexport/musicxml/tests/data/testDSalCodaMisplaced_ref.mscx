@@ -210,7 +210,8 @@
       <Measure>
         <Marker>
           <style>repeat_right</style>
-          <text>To Coda</text>
+          <text>To Coda
+<sym>coda</sym></text>
           <label>coda</label>
           </Marker>
         <voice>

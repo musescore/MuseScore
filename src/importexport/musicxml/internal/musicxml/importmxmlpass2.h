@@ -225,6 +225,7 @@ using InferredHairpinsStack = std::vector<Hairpin*>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
+using SegnoStack = std::map<int, Marker*>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -387,6 +388,7 @@ private:
     Chord* m_tremStart = nullptr;                  // Starting chord for current tremolo
     FiguredBass* m_figBass = nullptr;              // Current figured bass element (to attach to next note)
     SLine* m_delayedOttava = nullptr;              // Current delayed ottava
+    SegnoStack m_segnos;                           // List of segno markings
     int m_multiMeasureRestCount = 0;
     int m_measureNumber = 0;                       // Current measure number as written in the score
     MusicXmlLyricsExtend m_extendedLyrics;         // Lyrics with "extend" requiring fixup
@@ -409,7 +411,7 @@ public:
     MusicXMLParserDirection(muse::XmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
     void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& coda);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& coda, SegnoStack& segnos);
     double totalY() const { return m_defaultY + m_relativeY; }
     String placement() const;
 
@@ -425,7 +427,9 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& coda);
+    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& coda, SegnoStack& segnos);
+    Marker* findMarker(const String& repeat, bool& coda, SegnoStack& segnos, const Fraction& tick);
+    Jump* findJump(const String& repeat);
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     void handleTempo();
     String matchRepeat();
