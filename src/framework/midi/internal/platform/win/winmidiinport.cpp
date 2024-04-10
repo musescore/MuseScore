@@ -39,6 +39,7 @@ struct muse::midi::WinMidiInPort::Win {
     int deviceID = -1;
 };
 
+using namespace muse;
 using namespace muse::midi;
 
 namespace wmidi_prv {

@@ -31,6 +31,7 @@
 #include "log.h"
 
 using namespace winrt;
+using namespace muse;
 using namespace muse::audio;
 
 static constexpr char DEFAULT_DEVICE_ID[] = "default";
