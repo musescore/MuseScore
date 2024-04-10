@@ -728,6 +728,18 @@ int String::count(const Char& ch) const
     return count;
 }
 
+int String::count(const String& str) const
+{
+    int count = 0;
+    std::string::size_type pos = 0;
+    std::u16string otherStr = str.constStr();
+    while ((pos = constStr().find(otherStr, pos)) != std::string::npos) {
+        ++count;
+        pos += str.size();
+    }
+    return count;
+}
+
 size_t String::indexOf(const Char& ch, size_t from) const
 {
     for (size_t i = from; i < constStr().size(); ++i) {
