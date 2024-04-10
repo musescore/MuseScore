@@ -121,7 +121,9 @@ DockPage {
     Component {
         id: corruptScoreComp
 
-        CorruptScoreDevTools {}
+        Loader {
+            source: "qrc:/qml/DevTools/CorruptScore/CorruptScoreDevTools.qml"
+        }
     }
 
     Component {

@@ -1,3 +1,47 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# MuseScore-CLA-applies
+#
+# MuseScore
+# Music Composition & Notation
+#
+# Copyright (C) 2024 MuseScore BVBA and others
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+## Declare
+# declare_module(somename) - set module (target) name
+
+## Setup
+# set(MODULE somename)                        - set module (target) name
+# set(MODULE_ALIAS somename)                  - set module (target) alias name
+# set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})  - set module root
+# set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
+# set(MODULE_DEF ...)                         - set definitions
+# set(MODULE_SRC ...)                         - set sources and headers files
+# set(MODULE_LINK ...)                        - set libraries for link
+# set(MODULE_NOT_LINK_GLOBAL ON)              - set for not link global lib
+# set(MODULE_QRC somename.qrc)                - set resource (qrc) file
+# set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
+# set(MODULE_UI ...)                          - set ui headers
+# set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_USE_PCH_NONE ON)                 - set for disable PCH for module
+# set(MODULE_USE_UNITY_NONE ON)               - set for disable UNITY BUILD for module
+# set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
+# set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
+
+# After all the settings you need to do:
+# setup_module()
 
 macro(declare_module name)
     set(MODULE ${name})
