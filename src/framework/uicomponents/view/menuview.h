@@ -63,6 +63,7 @@ private:
     void componentComplete() override;
 
     void updateGeometry() override;
+    void updateContentPosition() override;
 
     QRect viewGeometry() const override;
 

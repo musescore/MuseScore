@@ -136,6 +136,15 @@ void MenuView::updateGeometry()
     movePos(m_globalPos.x() - padding(), m_globalPos.y());
 }
 
+void MenuView::updateContentPosition()
+{
+    if (opensUpward()) {
+        contentItem()->setY(padding());
+    } else {
+        contentItem()->setY(-padding());
+    }
+}
+
 QRect MenuView::viewGeometry() const
 {
     return QRect(m_globalPos.toPoint(), QSize(contentWidth() + padding() * 2, contentHeight() + padding() * 2));
