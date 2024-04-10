@@ -33,6 +33,6 @@ set(MODULE_SRC
     rtf_tools.h
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
 target_no_warning(${MODULE} -Wno-conversion)

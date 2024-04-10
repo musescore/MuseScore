@@ -62,4 +62,4 @@ set(MODULE_LINK
     engraving
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)

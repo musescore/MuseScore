@@ -65,7 +65,7 @@ elseif (OS_IS_WASM)
         ${LIBVORBIS_PATH}/lib
         )
 
-    include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+    include(SetupModule)
 
 else()
     # Use pkg-config to get hints about paths

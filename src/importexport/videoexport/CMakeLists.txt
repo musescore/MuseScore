@@ -50,5 +50,5 @@ endif()
 set(MODULE_INCLUDE ${MODULE_INCLUDE} ${FFMPEG_INCLUDE_DIRS})
 set(MODULE_LINK ${MODULE_LINK} ${FFMPEG_LIBRARIES})
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
