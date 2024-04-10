@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE rtf2html)
+declare_module(rtf2html)
 
 set(MODULE_SRC
     common.h
@@ -33,6 +33,6 @@ set(MODULE_SRC
     rtf_tools.h
     )
 
-include(SetupModule)
+setup_module()
 
 target_no_warning(${MODULE} -Wno-conversion)

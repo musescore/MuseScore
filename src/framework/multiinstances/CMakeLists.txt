@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_multiinstances)
+declare_module(muse_multiinstances)
 set(MODULE_ALIAS muse::multiinstances)
 
 set(MODULE_QRC multiinstances.qrc)
@@ -55,4 +55,4 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dev/multiinstancesdevmodel.h
     )
 
-include(SetupModule)
+setup_module()

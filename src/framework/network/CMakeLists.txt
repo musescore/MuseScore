@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_network)
+declare_module(muse_network)
 set(MODULE_ALIAS muse::network)
 
 set(MODULE_SRC
@@ -34,7 +34,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/networkmanagercreator.h
     )
 
-include(SetupModule)
+setup_module()
 
 if (MUSE_MODULE_NETWORK_TESTS)
     add_subdirectory(tests)

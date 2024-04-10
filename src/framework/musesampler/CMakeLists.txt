@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_musesampler)
+declare_module(muse_musesampler)
 set(MODULE_ALIAS muse::musesampler)
 
 set(MODULE_SRC
@@ -44,4 +44,4 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesampleractioncontroller.h
     )
 
-include(SetupModule)
+setup_module()

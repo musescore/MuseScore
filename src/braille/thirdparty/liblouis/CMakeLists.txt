@@ -1,4 +1,4 @@
-set(MODULE liblouis)
+declare_module(liblouis)
 
 add_subdirectory(tables)
 
@@ -39,7 +39,7 @@ set(MODULE_SRC
 set(MODULE_USE_PCH_NONE ON)
 set(MODULE_USE_UNITY_NONE ON)
 
-include(SetupModule)
+setup_module()
 
 target_no_warning(${MODULE} -Wno-conversion)
 target_no_warning(${MODULE} -w)

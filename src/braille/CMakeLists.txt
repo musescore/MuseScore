@@ -1,4 +1,4 @@
-set(MODULE braille)
+declare_module(braille)
 
 add_subdirectory(tables)
 add_subdirectory(thirdparty/liblouis)
@@ -40,7 +40,7 @@ set(MODULE_LINK
     liblouis
     )
 
-include(SetupModule)
+setup_module()
 
 if (MUE_BUILD_BRAILLE_TESTS)
     add_subdirectory(tests)

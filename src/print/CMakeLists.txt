@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE print)
+declare_module(print)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/printmodule.cpp
@@ -29,5 +29,5 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/printprovider.h
     )
 
-include(SetupModule)
+setup_module()
 

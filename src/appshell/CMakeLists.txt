@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE appshell)
+declare_module(appshell)
 
 set(MODULE_QRC appshell.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
@@ -153,4 +153,4 @@ if (NOT OS_IS_MAC)
     endif()
 endif(NOT OS_IS_MAC)
 
-include(SetupModule)
+setup_module()

@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE iex_midi)
+declare_module(iex_midi)
 
 include(${CMAKE_CURRENT_LIST_DIR}/internal/midishared/midishared.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
@@ -46,7 +46,7 @@ set(MODULE_LINK
     engraving
     )
 
-include(SetupModule)
+setup_module()
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)

@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_dockwindow)
+declare_module(muse_dockwindow)
 set(MODULE_ALIAS muse::dockwindow)
 
 set(MODULE_QRC dock.qrc)
@@ -81,5 +81,5 @@ set(MODULE_LINK kddockwidgets)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-include(SetupModule)
+setup_module()
 

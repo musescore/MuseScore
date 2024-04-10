@@ -1,4 +1,5 @@
-set(MODULE lame)
+
+declare_module(lame)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -57,7 +58,7 @@ set (MODULE_SRC
 
 set(MODULE_USE_PCH_NONE ON)
 set(MODULE_USE_UNITY_NONE ON)
-include(SetupModule)
+setup_module()
 
 #target_no_warning(${MODULE} -Wunused-const-variable=0)
 target_no_warning(${MODULE} -Wno-unused-parameter)

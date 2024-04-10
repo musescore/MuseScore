@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_global)
+declare_module(muse_global)
 set(MODULE_ALIAS muse::global)
 
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
@@ -251,7 +251,7 @@ if (MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
 endif()
 
-include(SetupModule)
+setup_module()
 
 if (MUSE_MODULE_GLOBAL_TESTS)
     add_subdirectory(tests)

@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE iex_ove)
+declare_module(iex_ove)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ovemodule.cpp
@@ -37,5 +37,5 @@ set(MODULE_LINK
     engraving
     )
 
-include(SetupModule)
+setup_module()
 

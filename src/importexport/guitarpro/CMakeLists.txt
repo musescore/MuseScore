@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE iex_guitarpro)
+declare_module(iex_guitarpro)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/guitarpromodule.cpp
@@ -81,7 +81,7 @@ set(MODULE_LINK
     engraving
     )
 
-include(SetupModule)
+setup_module()
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)

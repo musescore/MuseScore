@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_ui)
+declare_module(muse_ui)
 set(MODULE_ALIAS muse::ui)
 
 set(MODULE_QRC ui.qrc)
@@ -158,7 +158,7 @@ if (OS_IS_MAC)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})
 endif()
 
-include(SetupModule)
+setup_module()
 
 if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)
