@@ -64,6 +64,8 @@
 #include "devtools/drawdata/diagnosticdrawprovider.h"
 #endif
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -174,7 +176,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
 #ifndef ENGRAVING_NO_INTERNAL
     // Init fonts
-#ifdef MUE_COMPILE_USE_QTFONTMETRICS
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     {
         // Symbols
         Smufl::init();
@@ -240,7 +242,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         fontProvider->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
         fontProvider->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
     }
-#else // MUE_COMPILE_USE_QTFONTMETRICS
+#else // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     {
         using namespace muse::draw;
 
@@ -288,7 +290,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         //! accordingly, they are drawn incorrectly
         m_engravingfonts->loadAllFonts();
     }
-#endif // MUE_COMPILE_USE_QTFONTMETRICS
+#endif // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
 
     m_configuration->init();
 
