@@ -5242,7 +5242,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     Measure* nm = nstaff->score()->tick2measure(s->tick());
     Segment* ns = nm->findSegment(s->segmentType(), s->tick());
     EngravingItem* ne = ns->element(dtrack);
-    if (!ne->isChord()) {
+    if (!ne || !ne->isChord()) {
         return 0;
     }
     Chord* nc = toChord(ne);
@@ -6226,6 +6226,11 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 }
                 Chord* c1 = findLinkedChord(cr1, score->staff(staffIdx));
                 Chord* c2 = findLinkedChord(cr2, score->staff(staffIdx + sm));
+
+                IF_ASSERT_FAILED(c1) {
+                    return;
+                }
+
                 Note* nn1 = c1->findNote(n1->pitch(), n1->unisonIndex());
                 Note* nn2 = c2 ? c2->findNote(n2->pitch(), n2->unisonIndex()) : 0;
 
