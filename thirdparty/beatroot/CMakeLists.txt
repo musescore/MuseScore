@@ -1,5 +1,5 @@
 
-set(MODULE beatroot)
+declare_module(beatroot)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/Agent.cpp
@@ -13,6 +13,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/Induction.h
     )
 
-include(SetupModule)
+setup_module()
 
 target_no_warning(${MODULE} -Wno-conversion)

@@ -39,12 +39,12 @@
 # set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
 
 # After all the settings you need to do:
-# include(SetupModule)
+# setup_module()
 
 if (MODULE_IS_STUB)
-    message(STATUS "Configuring " ${MODULE} " [stub]")
+    message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}> [stub]")
 else()
-    message(STATUS "Configuring " ${MODULE})
+    message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}>")
 endif()
 
 if (NOT MUSE_FRAMEWORK_PATH)

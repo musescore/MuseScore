@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_audio)
+declare_module(muse_audio)
 set(MODULE_ALIAS muse::audio)
 
 include(GetPlatformInfo)
@@ -317,7 +317,7 @@ set(MODULE_QRC audio.qrc)
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-include(SetupModule)
+setup_module()
 
 if (MUSE_MODULE_AUDIO_TESTS)
     add_subdirectory(tests)

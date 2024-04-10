@@ -22,7 +22,7 @@
 # Main goal - determine what need to do and call necessary functions.
 # Usually use from command line.
 
-set(MODULE converter)
+declare_module(converter)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/convertermodule.cpp
@@ -39,5 +39,5 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/notationmeta.h
     )
 
-include(SetupModule)
+setup_module()
 

@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE engraving)
+declare_module(engraving)
 set(MODULE_QRC
     engraving.qrc
     ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Smufl.qrc
@@ -356,7 +356,7 @@ endif()
 
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(MODULE_USE_UNITY_NONE ON)
-include(SetupModule)
+setup_module()
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")
 

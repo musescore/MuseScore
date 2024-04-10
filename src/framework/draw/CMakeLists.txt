@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_draw)
+declare_module(muse_draw)
 set(MODULE_ALIAS muse::draw)
 
 set(MODULE_SRC
@@ -127,7 +127,7 @@ if (MUSE_MODULE_DRAW_TRACE)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_TRACE)
 endif()
 
-include(SetupModule)
+setup_module()
 
 if (MUSE_MODULE_DRAW_TESTS)
     add_subdirectory(tests)

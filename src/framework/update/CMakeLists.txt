@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_update)
+declare_module(muse_update)
 set(MODULE_ALIAS muse::update)
 
 set(MODULE_QRC update.qrc)
@@ -52,7 +52,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/updatemodel.h
     )
 
-include(SetupModule)
+setup_module()
 
 if (MUE_BUILD_UPDATE_TESTS)
     add_subdirectory(tests)

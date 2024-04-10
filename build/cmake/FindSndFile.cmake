@@ -13,7 +13,8 @@ elseif (OS_IS_WASM)
     set(LIBOGG_PATH "" CACHE PATH "Path to libogg sources")
     set(LIBVORBIS_PATH "" CACHE PATH "Path to libogg sources")
     set(SNDFILE_INCDIR LIBSND_PATH)
-    set(MODULE sndfile)
+
+    declare_module(sndfile)
 
     set(MODULE_SRC
         ${LIBSND_PATH}/sndfile.c
@@ -65,7 +66,7 @@ elseif (OS_IS_WASM)
         ${LIBVORBIS_PATH}/lib
         )
 
-    include(SetupModule)
+    setup_module()
 
 else()
     # Use pkg-config to get hints about paths

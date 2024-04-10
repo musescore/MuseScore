@@ -1,4 +1,5 @@
-set(MODULE flac)
+
+declare_module(flac)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -69,7 +70,7 @@ set (MODULE_SRC
 
 set(MODULE_USE_PCH_NONE ON)
 set(MODULE_USE_UNITY_NONE ON)
-include(SetupModule)
+setup_module()
 
 target_no_warning(${MODULE} -Wno-deprecated)
 target_no_warning(${MODULE} -Wno-conversion)

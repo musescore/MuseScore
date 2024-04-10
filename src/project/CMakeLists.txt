@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE project)
+declare_module(project)
 
 set(MODULE_QRC project.qrc)
 
@@ -145,7 +145,7 @@ set(MODULE_LINK
     notation
 )
 
-include(SetupModule)
+setup_module()
 
 if (MUE_BUILD_PROJECT_TESTS)
     add_subdirectory(tests)

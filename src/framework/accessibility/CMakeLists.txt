@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_accessibility)
+declare_module(muse_accessibility)
 set(MODULE_ALIAS muse::accessibility)
 
 set(MODULE_SRC
@@ -60,7 +60,7 @@ if (MUSE_MODULE_ACCESSIBILITY_TRACE)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_ACCESSIBILITY_TRACE )
 endif()
 
-include(SetupModule)
+setup_module()
 
 if (MUSE_MODULE_ACCESSIBILITY_TESTS)
     add_subdirectory(tests)

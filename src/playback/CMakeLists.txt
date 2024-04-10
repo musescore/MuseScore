@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE playback)
+declare_module(playback)
 
 set(MODULE_QRC
     ${CMAKE_CURRENT_LIST_DIR}/playback.qrc
@@ -77,4 +77,4 @@ if (MUE_BUILD_PLAYBACK_TESTS)
     add_subdirectory(tests)
 endif()
 
-include(SetupModule)
+setup_module()

@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_diagnostics)
+declare_module(muse_diagnostics)
 set(MODULE_ALIAS muse::diagnostics)
 
 set(MODULE_QRC diagnostics.qrc)
@@ -131,7 +131,7 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
 endif() # MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 # ----------------
 
-include(SetupModule)
+setup_module()
 
 if (MUSE_MODULE_DIAGNOSTICS_TESTS)
     add_subdirectory(tests)

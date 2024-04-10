@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_autobot)
+declare_module(muse_autobot)
 set(MODULE_ALIAS muse::autobot)
 
 set(MODULE_QRC autobot.qrc)
@@ -75,5 +75,5 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/testcaserunmodel.h
     )
 
-include(SetupModule)
+setup_module()
 
