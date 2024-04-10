@@ -29,17 +29,9 @@ set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 add_definitions(
     -DNO_QT_SUPPORT
     -DGLOBAL_NO_INTERNAL
-
-    -DMUSESCORE_REVISION="abc123"
-    -DMUSESCORE_BUILD_NUMBER="123456"
-    -DMUSESCORE_VERSION="4.0.0"
-    -DMUSESCORE_VERSION_LABEL="dev"
-    -DMUSESCORE_INSTALL_SUFFIX=""
-    -DMUSESCORE_INSTALL_PREFIX=""
-    -DMUSESCORE_INSTALL_NAME=""
 )
 
-configure_file(${MU_ROOT}/build/cmake/muse_framework/muse_framework_config.h.in muse_framework_config.h )
+configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )
 
 include(DeclareModuleSetup)
 
