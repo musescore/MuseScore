@@ -32,6 +32,8 @@
 #include "internal/fontsdatabase.h"
 #endif
 
+#include "muse_framework_config.h"
+
 using namespace muse::draw;
 using namespace muse::modularity;
 
@@ -46,14 +48,14 @@ void DrawModule::registerExports()
 
     ioc()->registerExport<draw::IImageProvider>(moduleName(), new QImageProvider());
 
-#ifdef MUE_COMPILE_USE_QTFONTMETRICS
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new QFontProvider());
 #else
     m_fontsEngine = std::make_shared<FontsEngine>();
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new FontProvider());
     ioc()->registerExport<draw::IFontsEngine>(moduleName(), m_fontsEngine);
     ioc()->registerExport<draw::IFontsDatabase>(moduleName(), new FontsDatabase());
-#endif // MUE_COMPILE_USE_QTFONTMETRICS
+#endif // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
 
 #endif // DRAW_NO_INTERNAL
 }
@@ -61,7 +63,7 @@ void DrawModule::registerExports()
 void DrawModule::onInit(const IApplication::RunMode&)
 {
 #ifndef DRAW_NO_INTERNAL
-#ifndef MUE_COMPILE_USE_QTFONTMETRICS
+#ifndef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     m_fontsEngine->init();
 #endif
 #endif // DRAW_NO_INTERNAL

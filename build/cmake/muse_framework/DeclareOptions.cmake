@@ -19,6 +19,8 @@ declare_muse_module_opt(DIAGNOSTICS ON)
 option(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT "Enable crashpad client" OFF) # enable on CI
 
 declare_muse_module_opt(DRAW ON)
+option(MUSE_MODULE_DRAW_USE_QTFONTMETRICS "Use Qt font metrics" ON)
+
 declare_muse_module_opt(EXTENSIONS ON)
 declare_muse_module_opt(GLOBAL ON)
 declare_muse_module_opt(LANGUAGES ON)

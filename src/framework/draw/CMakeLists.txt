@@ -80,7 +80,7 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
         )
 
-    if (MUE_COMPILE_USE_QTFONTMETRICS)
+    if (MUSE_MODULE_DRAW_USE_QTFONTMETRICS)
         set(MODULE_SRC ${MODULE_SRC}
             ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
