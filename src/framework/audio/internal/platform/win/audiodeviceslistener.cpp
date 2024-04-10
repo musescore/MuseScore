@@ -23,6 +23,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::audio;
 
 AudioDevicesListener::AudioDevicesListener()

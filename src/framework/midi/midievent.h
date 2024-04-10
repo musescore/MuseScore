@@ -25,9 +25,19 @@
 #include <cstdint>
 #include <array>
 #include <set>
+#include <cassert>
+#include <string>
 
 #ifndef UNUSED
 #define UNUSED(x) (void)x;
+#endif
+
+#ifndef MU_FALLTHROUGH
+#if __has_cpp_attribute(fallthrough)
+#define MU_FALLTHROUGH() [[fallthrough]]
+#else
+#define MU_FALLTHROUGH() (void)0
+#endif
 #endif
 
 namespace muse::midi {
@@ -375,7 +385,7 @@ struct Event {
                 return ((m_data[0] & 0x7F) << 7) | ((m_data[0] & 0x7F00) >> 8);
             default: assert(false);
             }
-            Q_FALLTHROUGH();
+            MU_FALLTHROUGH();
         case MessageType::ChannelVoice20:
             switch (opcode()) {
             case Opcode::PolyPressure:
@@ -392,7 +402,7 @@ struct Event {
                 return m_data[1];
             default: assert(false);
             }
-            Q_FALLTHROUGH();
+            MU_FALLTHROUGH();
         default:;     //TODO
         }
 
