@@ -3470,19 +3470,21 @@ void MusicXMLParserDirection::otherDirection()
  Do a wild-card match with known repeat texts.
  */
 
-String MusicXMLParserDirection::matchRepeat() const
+String MusicXMLParserDirection::matchRepeat()
 {
     String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
     static const std::wregex daCapo(L"^(d\\.? ?|da )(c\\.?|capo)$");
     static const std::wregex daCapoAlFine(L"^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
-    static const std::wregex daCapoAlCoda(L"^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
-    static const std::wregex dalSegno(L"^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
-    static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
-    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
+    static const std::wregex daCapoAlCoda(L"^(d\\.? ?|da )(c\\.? ?|capo )al coda ?(iv|v?i{0,3})?$");
+    static const std::wregex dalSegno(L"^(d\\.? ?|d[ae]l )(s\\.?|segno) ?(iv|v?i{0,3})?$");
+    static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) ?(iv|v?i{0,3})? al fine$");
+    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) ?(iv|v?i{0,3})? al coda ?(iv|v?i{0,3})?$");
+    static const std::regex dalSegnoAlCoda2("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) ?(iv|v?i{0,3})? al coda ?(iv|v?i{0,3})?$");
     static const std::wregex fine(L"^fine$");
-    static const std::wregex segno(L"^segno( segno)?$");
-    static const std::wregex toCoda(L"^to coda( coda)?$");
-    static const std::wregex coda(L"^coda( coda)?$");
+    static const std::wregex segno(L"^segno( segno)? ?(iv|v?i{0,3})?$");
+    static const std::wregex toCoda(L"^to coda( coda)? ?(iv|v?i{0,3})?$");
+    static const std::wregex coda(L"^coda( coda)? ?(iv|v?i{0,3})?$");
+    static const std::regex number("(iv|v?i{0,3})");
 
     if (plainWords.contains(daCapo)) {
         return u"daCapo";
@@ -3491,27 +3493,58 @@ String MusicXMLParserDirection::matchRepeat() const
         return u"daCapoAlFine";
     }
     if (plainWords.contains(daCapoAlCoda)) {
+        StringList nums = plainWords.search(number, { 1 },  SplitBehavior::SkipEmptyParts);
+        if (!nums.empty()) {
+            m_codaId = nums.at(0);
+        }
         return u"daCapoAlCoda";
     }
     if (plainWords.contains(dalSegno)) {
+        StringList nums = plainWords.search(number, { 1 },  SplitBehavior::SkipEmptyParts);
+        if (!nums.empty()) {
+            m_segnoId = nums.at(0);
+        }
         return u"dalSegno";
     }
     if (plainWords.contains(dalSegnoAlFine)) {
+        StringList nums = plainWords.search(number, { 1 },  SplitBehavior::SkipEmptyParts);
+        if (!nums.empty()) {
+            m_segnoId = nums.at(0);
+        }
         return u"dalSegnoAlFine";
     }
     if (plainWords.contains(dalSegnoAlCoda)) {
+        std::wsmatch matches;
+        const std::wstring str = plainWords.toStdWString();
+        if (std::regex_search(str, matches, dalSegnoAlCoda)) {
+            m_segnoId = String::fromStdWString(matches.str(3));
+            m_codaId = String::fromStdWString(matches.str(4));
+        }
+
         return u"dalSegnoAlCoda";
     }
     if (plainWords.contains(segno)) {
+        StringList nums = plainWords.search(number, { 1 },  SplitBehavior::SkipEmptyParts);
+        if (!nums.empty()) {
+            m_segnoId = nums.at(0);
+        }
         return u"segno";
     }
     if (plainWords.contains(fine)) {
         return u"fine";
     }
     if (plainWords.contains(toCoda)) {
+        StringList nums = plainWords.search(number, { 1 },  SplitBehavior::SkipEmptyParts);
+        if (!nums.empty()) {
+            m_codaId = nums.at(0);
+        }
         return u"toCoda";
     }
     if (plainWords.contains(coda)) {
+        StringList nums = plainWords.search(number, { 1 },  SplitBehavior::SkipEmptyParts);
+        if (!nums.empty()) {
+            m_codaId = nums.at(0);
+        }
         return u"coda";
     }
     return String();
@@ -3525,7 +3558,7 @@ String MusicXMLParserDirection::matchRepeat() const
  Try to find a Jump in \a repeat.
  */
 
-static Jump* findJump(const String& repeat, Score* score)
+static Jump* findJump(const String& repeat, Score* score, const String& codaId, const String& segnoId)
 {
     Jump* jp = 0;
     if (repeat == u"daCapo") {
@@ -3534,18 +3567,25 @@ static Jump* findJump(const String& repeat, Score* score)
     } else if (repeat == u"daCapoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DC_AL_CODA);
+        jp->setPlayUntil(jp->playUntil() + codaId);
+        jp->setContinueAt(jp->continueAt() + codaId);
     } else if (repeat == u"daCapoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DC_AL_FINE);
     } else if (repeat == u"dalSegno") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DS);
+        jp->setJumpTo(jp->jumpTo() + segnoId);
     } else if (repeat == u"dalSegnoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DS_AL_CODA);
+        jp->setJumpTo(jp->jumpTo() + segnoId);
+        jp->setPlayUntil(jp->playUntil() + codaId);
+        jp->setContinueAt(jp->continueAt() + codaId);
     } else if (repeat == u"dalSegnoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DS_AL_FINE);
+        jp->setJumpTo(jp->jumpTo() + segnoId);
     }
     return jp;
 }
@@ -3558,24 +3598,27 @@ static Jump* findJump(const String& repeat, Score* score)
  Try to find a Marker in \a repeat.
  */
 
-static Marker* findMarker(const String& repeat, Score* score)
+static TextBase* findMarker(const String& repeat, Score* score, const String& codaId, const String& segnoId)
 {
-    Marker* m = 0;
+    Marker* m = nullptr;
     if (repeat == u"segno") {
         m = Factory::createMarker(score->dummy());
         // note: Marker::read() also contains code to set text style based on type
         // avoid duplicated code
         // apparently this MUST be after setTextStyle
         m->setMarkerType(MarkerType::SEGNO);
+        m->setLabel(m->label() + segnoId);
     } else if (repeat == u"coda") {
         m = Factory::createMarker(score->dummy());
         m->setMarkerType(MarkerType::CODA);
+        m->setLabel(m->label() + codaId);
     } else if (repeat == u"fine") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::FINE);
     } else if (repeat == u"toCoda") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::TOCODA);
+        m->setLabel(m->label() + codaId);
     }
     return m;
 }
@@ -3793,7 +3836,13 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
 
     if (!repeat.empty()) {
         TextBase* tb = nullptr;
-        if ((tb = findJump(repeat, m_score)) || (tb = findMarker(repeat, m_score))) {
+        if (m_codaId == u"i") {
+            m_codaId.clear();
+        }
+        if (m_segnoId == u"i") {
+            m_segnoId.clear();
+        }
+        if ((tb = findJump(repeat, m_score, m_codaId, m_segnoId)) || (tb = findMarker(repeat, m_score, m_codaId, m_segnoId))) {
             tb->setTrack(track);
             if (!m_wordsText.empty()) {
                 tb->setXmlText(m_wordsText);

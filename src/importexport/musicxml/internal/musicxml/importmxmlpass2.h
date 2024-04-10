@@ -409,7 +409,7 @@ public:
     MusicXMLParserDirection(muse::XmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
     void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& coda);
     double totalY() const { return m_defaultY + m_relativeY; }
     String placement() const;
 
@@ -425,10 +425,10 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
+    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& coda);
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     void handleTempo();
-    String matchRepeat() const;
+    String matchRepeat();
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     void textToDynamic(String& text);
@@ -464,6 +464,8 @@ private:
     String m_sndFine;
     String m_sndSegno;
     String m_sndToCoda;
+    String m_codaId;
+    String m_segnoId;
     String m_placement;
     bool m_hasDefaultY = false;
     double m_defaultY = 0.0;
