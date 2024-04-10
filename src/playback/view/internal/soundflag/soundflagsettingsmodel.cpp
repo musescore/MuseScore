@@ -288,8 +288,10 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
 
     items << resetItem;
 
-    uicomponents::MenuItem* multiSelectionItem
-        = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback", "Allow multiple selection"));
+    bool isMultiSelectionEnabled = !m_availablePresetsModel.isEmpty();
+
+    mu::uicomponents::MenuItem* multiSelectionItem
+        = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback", "Allow multiple selection"), isMultiSelectionEnabled);
 
     ui::UiAction multiSelectionAction = multiSelectionItem->action();
     multiSelectionAction.checkable = ui::Checkable::Yes;
