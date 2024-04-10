@@ -36,6 +36,9 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     )
 
+set(MUSE_FRAMEWORK_PATH ${CMAKE_CURRENT_LIST_DIR})
+set(MUSE_FRAMEWORK_SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/framework)
+
 ###########################################
 # Setup option and build settings
 ###########################################
@@ -56,7 +59,7 @@ set(MUSESCORE_BUILD_MODE "dev" CACHE STRING "Build mode")
 
 set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
 
-include(muse_framework/DeclareOptions)
+include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/DeclareMuseOptions.cmake)
 
 # Modules (alphabetical order please)
 option(MUE_BUILD_APPSHELL_MODULE "Build appshell module" ON)
