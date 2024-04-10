@@ -4156,7 +4156,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
       if (!ns)
             return 0;
       Element* ne = ns->element(dtrack);
-      if (!ne->isChord())
+      if (!ne || !ne->isChord())
             return 0;
       Chord* nc = toChord(ne);
       if (c->isGrace()) {
