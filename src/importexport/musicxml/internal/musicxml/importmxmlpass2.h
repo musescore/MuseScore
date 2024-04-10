@@ -227,6 +227,7 @@ using InferredHairpinsStack = std::vector<Hairpin*>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
+using SegnoStack = std::map<int, Marker*>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -390,6 +391,7 @@ private:
     Chord* _tremStart;                            ///< Starting chord for current tremolo
     FiguredBass* _figBass;                        ///< Current figured bass element (to attach to next note)
     SLine* _delayedOttava = nullptr;              // Current delayed ottava
+    SegnoStack _segnos;                           // List of segno markings
     int _multiMeasureRestCount;
     int _measureNumber;                           ///< Current measure number as written in the score
     MusicXmlLyricsExtend _extendedLyrics;         ///< Lyrics with "extend" requiring fixup
@@ -411,7 +413,8 @@ class MusicXMLParserDirection
 public:
     MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
     void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& measureHasCoda,
+                   SegnoStack& segnos);
     qreal totalY() const { return _defaultY + _relativeY; }
     QString placement() const;
 
@@ -436,6 +439,8 @@ private:
     QString _sndFine;
     QString _sndSegno;
     QString _sndToCoda;
+    QString _codaId;
+    QString _segnoId;
     String _placement;
     bool _hasDefaultY;
     qreal _defaultY;
@@ -457,10 +462,13 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
+    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
+                       DelayedDirectionsList& delayedDirections);
+    Marker* findMarker(const String& repeat) const;
+    Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     void handleTempo();
-    QString matchRepeat() const;
+    QString matchRepeat(const QString& plainWords) const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     void textToDynamic(String& text);
@@ -492,6 +500,10 @@ public:
         _measure(measure), _tick(tick) {}
     void addElem();
     qreal totalY() const { return _totalY; }
+    const EngravingItem* element() const { return _element; }
+    track_idx_t track() const { return _track; }
+    const Fraction& tick() const { return _tick; }
+    const QString& placement() const { return _placement; }
 
 private:
     qreal _totalY;
