@@ -123,23 +123,23 @@ endif()
 ###########################################
 set(LINK_LIB
     ${QT_LIBRARIES}
-    global
-    draw
-    network
+    muse::global
+    muse::draw
+    muse::network
 
     braille
-    diagnostics
+    muse::diagnostics
     engraving
-    actions
-    accessibility
+    muse::actions
+    muse::accessibility
     context
-    shortcuts
-    workspace
+    muse::shortcuts
+    muse::workspace
     workspacescene
-    audio
-    mpe
-    midi
-    learn
+    muse::audio
+    muse::mpe
+    muse::midi
+    muse::learn
     notation
     project
     print
@@ -148,14 +148,14 @@ set(LINK_LIB
     inspector
     playback
     instrumentsscene
-    vst
-    update
+    muse::vst
+    muse::update
     )
 
 if (MUSE_MODULE_UI)
-    list(APPEND LINK_LIB ui)
-    list(APPEND LINK_LIB uicomponents)
-    list(APPEND LINK_LIB dockwindow)
+    list(APPEND LINK_LIB muse::ui)
+    list(APPEND LINK_LIB muse::uicomponents)
+    list(APPEND LINK_LIB muse::dockwindow)
 endif()
 
 if (MUE_BUILD_CONVERTER_MODULE)
@@ -167,12 +167,12 @@ if (MUE_BUILD_APPSHELL_MODULE)
 endif()
 
 if (NOT CC_IS_EMSCRIPTEN)
-    list(APPEND LINK_LIB cloud)
-    list(APPEND LINK_LIB languages)
-    list(APPEND LINK_LIB multiinstances)
+    list(APPEND LINK_LIB muse::cloud)
+    list(APPEND LINK_LIB muse::languages)
+    list(APPEND LINK_LIB muse::multiinstances)
 
     if (MUSE_MODULE_EXTENSIONS)
-        list(APPEND LINK_LIB extensions)
+        list(APPEND LINK_LIB muse::extensions)
     endif()
 
     if (MUE_BUILD_IMPORTEXPORT_MODULE)
@@ -203,11 +203,11 @@ endif()
 
 
 if (MUSE_MODULE_AUTOBOT)
-    list(APPEND LINK_LIB autobot)
+    list(APPEND LINK_LIB muse::autobot)
 endif()
 
 if (MUSE_MODULE_MUSESAMPLER)
-    list(APPEND LINK_LIB musesampler)
+    list(APPEND LINK_LIB muse::musesampler)
 endif()
 
 set (MSCORE_APPEND_SRC)

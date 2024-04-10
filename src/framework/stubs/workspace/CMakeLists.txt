@@ -18,7 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE workspace)
+set(MODULE muse_workspace)
+set(MODULE_ALIAS muse::workspace)
+
 set(MODULE_QRC workspace.qrc)
 
 set(MODULE_SRC

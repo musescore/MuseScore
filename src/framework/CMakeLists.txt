@@ -18,16 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (MUSE_BUILD_UNIT_TESTS)
-    enable_testing()
-    message(STATUS "Enabled testing")
-
-    define_property(TARGET PROPERTY OUTPUT_XML
-        BRIEF_DOCS "List XML files outputted by google test."
-        FULL_DOCS "List XML files outputted by google test."
-    )
-
-    add_subdirectory(testing/thirdparty/googletest)
+# should be first to work pch
+if (MUSE_MODULE_GLOBAL)
+    add_subdirectory(global)
 endif()
 
 if (MUSE_MODULE_ACCESSIBILITY)
@@ -110,6 +103,19 @@ endif()
 
 if (MUSE_MODULE_UPDATE)
     add_subdirectory(update)
+endif()
+
+# Tests
+if (MUSE_BUILD_UNIT_TESTS)
+    enable_testing()
+    message(STATUS "Enabled testing")
+
+    define_property(TARGET PROPERTY OUTPUT_XML
+        BRIEF_DOCS "List XML files outputted by google test."
+        FULL_DOCS "List XML files outputted by google test."
+    )
+
+    add_subdirectory(testing/thirdparty/googletest)
 endif()
 
 # Stubs

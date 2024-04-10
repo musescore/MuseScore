@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE audio)
+set(MODULE muse_audio)
+set(MODULE_ALIAS muse::audio)
 
 set(MODULE_QRC audio.qrc)
 

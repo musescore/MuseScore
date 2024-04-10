@@ -58,8 +58,4 @@ void ShortcutsModule::registerResources()
 
 void ShortcutsModule::registerUiTypes()
 {
-    std::shared_ptr<muse::ui::IUiEngine> ui = ioc()->resolve<muse::ui::IUiEngine>(moduleName());
-    if (ui) {
-        ui->addSourceImportPath(shortcuts_QML_IMPORT);
-    }
 }

@@ -17,7 +17,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-set(MODULE mpe)
+
+set(MODULE muse_mpe)
+set(MODULE_ALIAS muse::mpe)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mpestubmodule.cpp

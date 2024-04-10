@@ -128,6 +128,6 @@ void UiComponentsModule::registerUiTypes()
 
     auto ui = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
-        ui->addSourceImportPath(uicomponents_QML_IMPORT);
+        ui->addSourceImportPath(muse_uicomponents_QML_IMPORT);
     }
 }

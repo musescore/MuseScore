@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE uicomponents)
+set(MODULE muse_uicomponents)
+set(MODULE_ALIAS muse::uicomponents)
 
 if (MUE_COMPILE_QT5_COMPAT)
     set(MODULE_QRC uicomponents.qrc graphicaleffects_qt5.qrc)

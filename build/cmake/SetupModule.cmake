@@ -20,6 +20,7 @@
 
 ## Setup
 # set(MODULE somename)                        - set module (target) name
+# set(MODULE_ALIAS somename)                  - set module (target) alias name
 # set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})  - set module root
 # set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
 # set(MODULE_DEF ...)                         - set definitions
@@ -88,7 +89,10 @@ if (CC_IS_EMSCRIPTEN)
     add_library(${MODULE} OBJECT)
 else()
     add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
-    add_library(muse::${MODULE} ALIAS ${MODULE})
+endif()
+
+if (MODULE_ALIAS)
+    add_library(${MODULE_ALIAS} ALIAS ${MODULE})
 endif()
 
 if (BUILD_SHARED_LIBS)
@@ -103,10 +107,10 @@ if (MUE_COMPILE_USE_PCH)
     if (MODULE_USE_PCH_NONE)
         # disabled pch for current module
     else()
-        if (NOT ${MODULE} MATCHES global)
+        if (NOT ${MODULE} MATCHES muse_global)
             if (NOT DEFINED MODULE_OVERRIDDEN_PCH)
-                target_precompile_headers(${MODULE} REUSE_FROM global)
-                target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
+                target_precompile_headers(${MODULE} REUSE_FROM muse_global)
+                target_compile_definitions(${MODULE} PRIVATE muse_global_EXPORTS=1)
             else()
                 target_precompile_headers(${MODULE} PRIVATE ${MODULE_OVERRIDDEN_PCH})
             endif()
@@ -161,9 +165,9 @@ target_compile_definitions(${MODULE} PUBLIC
     ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
 )
 
-if (NOT ${MODULE} MATCHES global)
+if (NOT ${MODULE} MATCHES muse_global)
     if (NOT MODULE_NOT_LINK_GLOBAL)
-        set(MODULE_LINK global ${MODULE_LINK})
+        set(MODULE_LINK muse_global ${MODULE_LINK})
     endif()
 endif()
 

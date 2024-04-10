@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE dockwindow)
+set(MODULE muse_dockwindow)
+set(MODULE_ALIAS muse::dockwindow)
 
 set(MODULE_QRC dock.qrc)
 

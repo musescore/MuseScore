@@ -67,7 +67,7 @@ endif()
 target_link_libraries(${MODULE_TEST}
     ${QtLibs}
     gmock
-    global
+    muse_global
     ${MODULE_TEST_LINK}
     )
 

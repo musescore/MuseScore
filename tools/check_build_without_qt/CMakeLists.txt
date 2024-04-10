@@ -64,7 +64,7 @@ add_executable(engraving_app
 )
 
 set_target_properties(engraving PROPERTIES COMPILE_FLAGS "-fPIC")
-set_target_properties(global PROPERTIES COMPILE_FLAGS "-fPIC")
+set_target_properties(muse_global PROPERTIES COMPILE_FLAGS "-fPIC")
 set_target_properties(engraving_app PROPERTIES COMPILE_FLAGS "-fPIC")
 
 target_include_directories(engraving_app PUBLIC
@@ -76,8 +76,8 @@ target_include_directories(engraving_app PUBLIC
 
 target_link_libraries(engraving_app
     ${QT_LIBRARIES}
-    global
-    draw
+    muse::global
+    muse::draw
     engraving
     iex_guitarpro
 )

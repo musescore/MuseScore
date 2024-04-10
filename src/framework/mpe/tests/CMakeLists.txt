@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST mpe_test)
+set(MODULE_TEST muse_mpe_test)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utils/articulationutils.h
@@ -27,7 +27,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/articulationprofilesrepositorymock.h
     )
 
-set(MODULE_TEST_LINK mpe)
+set(MODULE_TEST_LINK muse_mpe)
 
 include(SetupGTest)
 
