@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE iex_videoexport)
+declare_module(iex_videoexport)
 
 set(MODULE_QRC videoexport.qrc)
 
@@ -50,5 +50,5 @@ endif()
 set(MODULE_INCLUDE ${MODULE_INCLUDE} ${FFMPEG_INCLUDE_DIRS})
 set(MODULE_LINK ${MODULE_LINK} ${FFMPEG_LIBRARIES})
 
-include(SetupModule)
+setup_module()
 

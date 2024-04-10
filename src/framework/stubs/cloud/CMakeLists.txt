@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_cloud)
+declare_module(muse_cloud)
 set(MODULE_ALIAS muse::cloud)
 
 set(MODULE_QRC cloud.qrc)
@@ -33,5 +33,5 @@ set(MODULE_SRC
     )
 
 set(MODULE_IS_STUB ON)
-include(SetupModule)
+setup_module()
 

@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE muse_shortcuts)
+declare_module(muse_shortcuts)
 set(MODULE_ALIAS muse::shortcuts)
 
 set(MODULE_QRC shortcuts.qrc)
@@ -39,5 +39,5 @@ set(MODULE_SRC
     )
 
 set(MODULE_IS_STUB ON)
-include(SetupModule)
+setup_module()
 

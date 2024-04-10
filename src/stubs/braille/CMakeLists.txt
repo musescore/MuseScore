@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE braille)
+declare_module(braille)
 
 set(MODULE_QRC ${CMAKE_CURRENT_LIST_DIR}/braille.qrc)
 
@@ -32,4 +32,4 @@ set(MODULE_SRC
     )
 
 set(MODULE_IS_STUB ON)
-include(SetupModule)
+setup_module()
