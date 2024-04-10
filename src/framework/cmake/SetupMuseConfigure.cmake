@@ -10,7 +10,7 @@ macro(disable_module_tests name)
     set(MUSE_MODULE_${name}_TESTS OFF)
 endmacro()
 
-include(${CMAKE_CURRENT_LIST_DIR}/Modules.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/MuseModules.cmake)
 
 foreach(NAME ${MUSE_FRAMEWORK_MODULES})
     disable_module_deps(${NAME})
