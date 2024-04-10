@@ -57,20 +57,7 @@ static bool isSubdivided(const ChordRest* chord, int swingUnit)
 
 void Swing::swingAdjustParams(const Chord* chord, const SwingParameters& params, int& onTime, int& gateTime)
 {
-    Fraction tick = chord->rtick();
-
-    // adjust for anacrusis
-    const Measure* cm = chord->measure();
-    const MeasureBase* pm = cm->prev();
-    ElementType pt = pm ? pm->type() : ElementType::INVALID;
-    if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
-        || pt == ElementType::VBOX || pt == ElementType::HBOX
-        || pt == ElementType::FBOX || pt == ElementType::TBOX) {
-        Fraction offset = cm->timesig() - cm->ticks();
-        if (offset > Fraction(0, 1)) {
-            tick += offset;
-        }
-    }
+    Fraction tick = chord->rtick() + chord->measure()->anacrusisOffset();
 
     int swingBeat            = params.swingUnit * 2;
     double ticksDuration     = (double)chord->actualTicks().ticks();

@@ -519,9 +519,9 @@ std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fr
     }
 
     if (nominal.isCompound()) {
-        splitCompoundBeatsForList(&dList, l, isRest, rtickStart, nominal, maxDots);
+        splitCompoundBeatsForList(&dList, l, isRest, rtickStart + msr->anacrusisOffset(), nominal, maxDots);
     } else {
-        populateRhythmicList(&dList, l, isRest, rtickStart, nominal, maxDots);
+        populateRhythmicList(&dList, l, isRest, rtickStart + msr->anacrusisOffset(), nominal, maxDots);
     }
 
     return dList;
