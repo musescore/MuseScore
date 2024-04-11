@@ -81,26 +81,7 @@ private:
     std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
     std::shared_ptr<RegisterAudioPluginsScenario> m_registerAudioPluginsScenario;
 
-    #ifdef Q_OS_LINUX
     std::shared_ptr<IAudioDriver> m_audioDriver;
-    #endif
-    #ifdef Q_OS_FREEBSD
-    std::shared_ptr<IAudioDriver> m_audioDriver;
-    #endif
-
-    #ifdef Q_OS_WIN
-    //std::shared_ptr<IAudioDriver> m_audioDriver;
-    //std::shared_ptr<IAudioDriver> m_audioDriver;
-    std::shared_ptr<IAudioDriver> m_audioDriver;
-    #endif
-
-    #ifdef Q_OS_MACOS
-    std::shared_ptr<IAudioDriver> m_audioDriver;
-    #endif
-
-    #ifdef Q_OS_WASM
-    std::shared_ptr<IAudioDriver> m_audioDriver;
-    #endif
 };
 }
 
