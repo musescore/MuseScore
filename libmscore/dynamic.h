@@ -13,8 +13,7 @@
 #ifndef __DYNAMICS_H__
 #define __DYNAMICS_H__
 
-#include "text.h"
-#include "mscore.h"
+#include "textbase.h"
 
 namespace Ms {
 
@@ -182,6 +181,7 @@ class Dynamic final : public TextBase {
       void setVelChangeSpeed(Speed val) { _velChangeSpeed = val; }
       static QString speedToName(Speed speed);
       static Speed nameToSpeed(QString name);
+      static int dynamicVelocity(Dynamic::Type t);
 
       QVariant getProperty(Pid propertyId) const override;
       bool     setProperty(Pid propertyId, const QVariant&) override;

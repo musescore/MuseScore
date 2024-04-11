@@ -10,20 +10,20 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "score.h"
+#include "chord.h"
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
-#include "xml.h"
-#include "score.h"
 #include "measure.h"
-#include "system.h"
-#include "segment.h"
-#include "utils.h"
-#include "style.h"
 #include "mscore.h"
-#include "chord.h"
-#include "undo.h"
-#include "sym.h"
 #include "musescoreCore.h"
+#include "score.h"
+#include "segment.h"
+#include "style.h"
+#include "system.h"
+#include "utils.h"
+#include "undo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -302,6 +302,11 @@ void Dynamic::setDynamicType(const QString& tag)
 QString Dynamic::dynamicTypeName(Dynamic::Type type)
       {
       return dynList[int(type)].tag;
+      }
+
+int Dynamic::dynamicVelocity(Dynamic::Type t)
+      {
+      return dynList[int(t)].velocity;
       }
 
 //---------------------------------------------------------
