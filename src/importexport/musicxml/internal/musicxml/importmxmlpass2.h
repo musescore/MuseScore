@@ -337,7 +337,7 @@ private:
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
     FretDiagram* frame();
-    void harmony(const QString& partId, Measure* measure, const Fraction sTime);
+    void harmony(const QString& partId, Measure* measure, const Fraction& sTime, HarmonyMap& harmonyMap);
     Accidental* accidental();
     void beam(QMap<int, QString>& beamTypes);
     void duration(Fraction& dura);
@@ -415,8 +415,8 @@ class MusicXMLParserDirection
 public:
     MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
     void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& measureHasCoda,
-                   SegnoStack& segnos);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, HarmonyMap& harmonyMap,
+                   bool& measureHasCoda, SegnoStack& segnos);
     qreal totalY() const { return _defaultY + _relativeY; }
     QString placement() const;
 
@@ -470,6 +470,7 @@ private:
     Marker* findMarker(const String& repeat) const;
     Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
+    void handleChordSym(const track_idx_t track, const Fraction tick, HarmonyMap& harmonyMap);
     void handleTempo();
     QString matchRepeat(const QString& plainWords) const;
     void skipLogCurrElem();
