@@ -5797,7 +5797,7 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
                         if (e->type() == ElementType::FIGURED_BASS) {
                               const FiguredBass* fb = dynamic_cast<const FiguredBass*>(e);
                               if (fb->numOfItems() == 0)
-                                    return;
+                                    continue;
                               //qDebug("figuredbass() track %d seg %p fb %p seg %p tick %d ticks %d cr %p tick %d ticks %d",
                               //       track, seg, fb, fb->segment(), fb->segment()->tick(), fb->ticks(), cr, cr->tick(), cr->actualTicks());
                               bool extend = fb->ticks() > cr->actualTicks();
