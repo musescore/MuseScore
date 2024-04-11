@@ -835,19 +835,27 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
     break;
     }
     Segment* s = item->segment();
-    if (s && s->isEndBarLineType() && !opt.isPrinting) {
-        Measure* m = s->measure();
-        if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
-            painter->setPen(item->configuration()->invisibleColor());
+    if (s && (s->isEndBarLineType() || s->isStartRepeatBarLineType()) && !opt.isPrinting && item->score()->markIrregularMeasures()) {
+        Measure* measure = s->measure();
+        if (s->isStartRepeatBarLineType()) {
+            Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
+            if (!prevMeasure || prevMeasure->system() != measure->system()) {
+                measure = nullptr;
+            } else {
+                measure = prevMeasure;
+            }
+        }
 
+        if (measure && measure->isIrregular() && item->score()->markIrregularMeasures() && !measure->isMMRest()) {
+            painter->setPen(item->configuration()->invisibleColor());
             Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / item->defaultSpatium());
             f.setBold(true);
-            Char ch = m->ticks() > m->timesig() ? u'+' : u'-';
+            Char ch = measure->ticks() > measure->timesig() ? u'+' : u'-';
             RectF r = FontMetrics(f).boundingRect(ch);
 
             painter->setFont(f);
-            painter->drawText(-r.width(), 0.0, ch);
+            painter->drawText(-r.width(), -item->spatium(), ch);
         }
     }
 
