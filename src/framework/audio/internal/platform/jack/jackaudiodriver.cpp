@@ -66,7 +66,7 @@ static bool musescore_act;
 static msecs_t musescore_act_seek;
 static bool running_musescore_state;
 static mu::playback::IPlaybackController* s_playbackController;
-static std::vector<std::thread> threads;
+//static std::vector<std::thread> threads;
 
 void musescore_state_check_musescore()
 {
@@ -550,17 +550,12 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         LOGW() << "Jack is already opened";
         return true;
     }
-    // start musescore state thread
-    running_musescore_state = true;
-    std::thread thread_musescore_state(musescore_state);
-    std::vector<std::thread> threadv;
-    threadv.push_back(std::move(thread_musescore_state));
-    threads = std::move(threadv);
 
     // m_spec.samples  = spec.samples; // client doesn't set sample-rate
     m_spec.channels = spec.channels;
     m_spec.callback = spec.callback;
     m_spec.userdata = spec.userdata;
+
     const char* clientName = m_deviceName.c_str();
     jack_status_t status;
     jack_client_t* handle;
@@ -581,6 +576,14 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         //jack_client_close(handle);
         //return false;
     }
+
+    // start musescore state thread
+    running_musescore_state = true;
+    std::thread thread_musescore_state(musescore_state);
+    thread_musescore_state.detach();
+    //std::vector<std::thread> threadv;
+    //threadv.push_back(std::move(thread_musescore_state));
+    //threads = std::move(threadv);
 
     jack_set_sample_rate_callback(handle, jack_srate_callback, (void*)&m_spec);
 
