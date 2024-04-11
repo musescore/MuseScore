@@ -2970,7 +2970,9 @@ void MusicXMLParserDirection::direction(const String& partId,
                 String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : String();
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
-                ((TempoText*)t)->setFollowText(true);
+                if (t->plainText().contains(u"=")) {
+                    ((TempoText*)t)->setFollowText(true);
+                }
                 m_score->setTempo(tick, m_tpoSound);
             }
         } else {
