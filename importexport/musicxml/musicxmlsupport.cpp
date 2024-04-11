@@ -723,6 +723,30 @@ AccidentalType mxmlString2accidentalType(const QString mxmlName, const QString s
       }
 
 //---------------------------------------------------------
+//   mxmlAccidentalTextToChar
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML accidental text to a accidental character.
+ */
+
+QString mxmlAccidentalTextToChar(const QString mxmlName)
+      {
+      static QMap<QString, QString> map;   // map MusicXML accidental name to MuseScore enum AccidentalType
+      if (map.empty()) {
+            map["sharp"] = "♯";
+            map["natural"] = "♮";
+            map["flat"] = "♭";
+            }
+
+      if (map.contains(mxmlName))
+            return map.value(mxmlName);
+      else
+            qDebug("mxmlAccidentalTextToChar: unsupported accidental '%s'", qPrintable(mxmlName));
+      return "";
+      }
+
+//---------------------------------------------------------
 //   isAppr
 //---------------------------------------------------------
 

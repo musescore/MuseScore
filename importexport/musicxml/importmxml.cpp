@@ -90,34 +90,6 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
       return errorDialog.exec();
       }
 
-#if 0
-static void updateNamesForAccidentals(Instrument* inst)
-      {
-      auto replace = [](QString name) {
-            name = name.replace(QRegExp(
-                                  R"(((?:^|\s)([A-Ga-g]|[Uu][Tt]|[Dd][Oo]|[Rr][EeÉé]|[MmSsTt][Ii]|[FfLl][Aa]|[Ss][Oo][Ll]))b(?=\s|$))"),
-                                QString::fromStdString(R"($1♭)"));
-
-            name = name.replace(QRegExp(
-                                  R"(((?:^|\s)([A-Ga-g]|[Uu][Tt]|[Dd][Oo]|[Rr][EeÉé]|[MmSsTt][Ii]|[FfLl][Aa]|[Ss][Oo][Ll]))#(?=\s|$))"),
-                                QString::fromStdString(R"($1♯)"));
-
-            return name;
-            };
-      // change staff names from simple text (eg 'Eb') to text using accidental symbols (eg 'E♭')
-
-      // Instrument::longNames() is const af so we need to make a deep copy, update it, and then set it again
-      QList<StaffName> longNamesCopy = inst->longNames();
-      for (StaffName& sn : longNamesCopy)
-            sn.setName(replace(sn.name()));
-      QList<StaffName> shortNamesCopy = inst->shortNames();
-      for (StaffName& sn : shortNamesCopy)
-            sn.setName(replace(sn.name()));
-      inst->setLongNames(longNamesCopy);
-      inst->setShortNames(shortNamesCopy);
-      }
-#endif
-
 //---------------------------------------------------------
 //   importMusicXMLfromBuffer
 //---------------------------------------------------------
@@ -154,7 +126,6 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
       for (const Part* part : score->parts()) {
             for (const auto& pair : *part->instruments()) {
                   pair.second->updateInstrumentId();
-                  updateNamesForAccidentals(pair.second);
                   }
             }
 #endif

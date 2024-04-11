@@ -2615,6 +2615,31 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
       }
 
 //---------------------------------------------------------
+//   writeDisplayName
+//---------------------------------------------------------
+
+static void writeDisplayName(XmlWriter& xml, const QString& partName)
+      {
+      QString displayText;
+      for (int i = 0; i < partName.size(); ++i) {
+            QChar ch = partName.at(i);
+            if (ch != u'♭' && ch != u'♯')
+                  displayText += ch;
+            else {
+                  if (!displayText.isEmpty())
+                        xml.tag("display-text", displayText);
+                  if (ch == u'♭')
+                        xml.tag("accidental-text", "flat");
+                  else if (ch == u'♯')
+                        xml.tag("accidental-text", "sharp");
+                  displayText.clear();
+                  }
+            }
+      if (!displayText.isEmpty())
+            xml.tag("display-text", displayText);
+      }
+
+//---------------------------------------------------------
 //   wavyLineStart
 //---------------------------------------------------------
 
@@ -6701,21 +6726,30 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
             initInstrMap(instrMap, part->instruments(), score);
+            static const QRegExp acc("[♭♯]");
+            QString attributes;
             // by default export the parts long name as part-name
-            if (!part->longName().isEmpty())
-                  xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
-            else {
-                  if (!part->partName().isEmpty()) {
-                        // use the track name if no part long name
-                        // to prevent an empty track name on import
-                        xml.tag("part-name print-object=\"no\"", MScoreTextToMXML::toPlainText(part->partName()));
-                        }
-                  else
-                        // part-name is required
-                        xml.tag("part-name", "");
+            QString partName = part->longName();
+            // use the track name if no part long name
+            if (partName.isEmpty()) {
+                  partName = part->partName();
+                  if (!partName.isEmpty())
+                        attributes = " print-object=\"no\"";
                   }
-            if (!part->shortName().isEmpty())
-                  xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
+            xml.tag("part-name" + attributes, MScoreTextToMXML::toPlainText(partName).replace(u'♭', 'b').replace(u'♯', '#'));
+            if (partName.contains(acc)) {
+                  xml.stag("part-name-display");
+                  writeDisplayName(xml, partName);
+                  xml.etag();
+                  }
+            if (!part->shortName().isEmpty()) {
+                  xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()).replace(u'♭', 'b').replace(u'♯', '#'));
+                  if (part->shortName().contains(acc)) {
+                        xml.stag("part-abbreviation-display");
+                        writeDisplayName(xml, part->shortName());
+                        xml.etag();
+                        }
+                  }
 
             if (part->instrument()->useDrumset()) {
                   const Drumset* drumset = part->instrument()->drumset();

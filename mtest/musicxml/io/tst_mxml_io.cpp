@@ -232,6 +232,7 @@ private slots:
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
       void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void partNames() { mxmlImportTestRef("testPartNames"); }
+      void partNames2() { mxmlIoTest("testPartNames2"); }
       void pedalChanges() { mxmlIoTest("testPedalChanges"); }
       void pedalChangesBroken() { mxmlImportTestRef("testPedalChangesBroken"); }
       void pedalStyles() { mxmlIoTest("testPedalStyles"); }

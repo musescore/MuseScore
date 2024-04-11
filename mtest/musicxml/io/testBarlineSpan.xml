@@ -64,8 +64,16 @@
         </midi-instrument>
       </score-part>
     <score-part id="P4">
-      <part-name>Clarinet in B♭</part-name>
-      <part-abbreviation>Cl. in B♭</part-abbreviation>
+      <part-name>Clarinet in Bb</part-name>
+      <part-name-display>
+        <display-text>Clarinet in B</display-text>
+        <accidental-text>flat</accidental-text>
+        </part-name-display>
+      <part-abbreviation>Cl. in Bb</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text>Cl. in B</display-text>
+        <accidental-text>flat</accidental-text>
+        </part-abbreviation-display>
       <score-instrument id="P4-I1">
         <instrument-name>Clarinet</instrument-name>
         </score-instrument>

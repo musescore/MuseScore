@@ -2142,8 +2142,17 @@ void MusicXMLParserPass1::scorePart()
                   _parts[id].setName(name);
                   }
             else if (_e.name() == "part-name-display") {
-                  // TODO
-                  _e.skipCurrentElement(); // skip but don't log
+                  QString name;
+                  while (_e.readNextStartElement()) {
+                        if (_e.name() == "display-text")
+                              name += _e.readElementText();
+                        else if (_e.name() == "accidental-text")
+                              name += mxmlAccidentalTextToChar(_e.readElementText());
+                        else
+                              skipLogCurrElem();
+                        }
+                  if (!name.isEmpty())
+                        _parts[id].setName(name);
                   }
             else if (_e.name() == "part-abbreviation") {
                   // Element part-name contains the displayed (abbreviated) part name
@@ -2154,10 +2163,25 @@ void MusicXMLParserPass1::scorePart()
                   QString name = _e.readElementText();
                   _parts[id].setAbbr(name);
                   }
-            else if (_e.name() == "part-abbreviation-display")
-                  _e.skipCurrentElement();  // skip but don't log
+            else if (_e.name() == "part-abbreviation-display") {
+                  QString name;
+                  while (_e.readNextStartElement()) {
+                        if (_e.name() == "display-text")
+                              name += _e.readElementText();
+                        else if (_e.name() == "accidental-text")
+                              name += mxmlAccidentalTextToChar(_e.readElementText());
+                        else
+                              skipLogCurrElem();
+                        }
+                  if (!name.isEmpty())
+                        _parts[id].setAbbr(name);
+                  }
+            else if (_e.name() == "group")      // TODO
+                  _e.skipCurrentElement();      // skip but don't log
             else if (_e.name() == "score-instrument")
                   scoreInstrument(id);
+            else if (_e.name() == "player")     // unsupported
+                _e.skipCurrentElement();        // skip but don't log
             else if (_e.name() == "midi-device") {
                   if (!_e.attributes().hasAttribute("port")) {
                         _e.readElementText(); // empty string
