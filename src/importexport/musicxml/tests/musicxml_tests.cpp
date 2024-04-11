@@ -470,6 +470,9 @@ TEST_F(Musicxml_Tests, chordNoVoice) {
 TEST_F(Musicxml_Tests, chordSymbols) {
     mxmlMscxExportTestRef("testChordSymbols");
 }
+TEST_F(Musicxml_Tests, chordSymbols2) {
+    mxmlImportTestRef("testChordSymbols2");
+}
 TEST_F(Musicxml_Tests, clefs1) {
     mxmlIoTest("testClefs1");
 }

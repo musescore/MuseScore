@@ -26,6 +26,7 @@
 #include "engraving/types/fraction.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/fret.h"
 
 namespace muse {
 class XmlStreamReader;
@@ -73,6 +74,23 @@ struct MusicXmlArpeggioDesc {
         : arp(arp), no(no) {}
 };
 typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
+
+struct HarmonyDesc
+{
+    track_idx_t m_track;
+    bool fretVisible() { return m_diagram ? m_diagram->visible() : false; }
+    Harmony* m_harmony;
+    FretDiagram* m_diagram;
+
+    HarmonyDesc(track_idx_t m_track, Harmony* m_harmony, FretDiagram* m_diagram)
+        : m_track(m_track), m_harmony(m_harmony),
+        m_diagram(m_diagram) {}
+
+    HarmonyDesc()
+        : m_track(0), m_harmony(nullptr), m_diagram(nullptr) {}
+};
+
+using HarmonyMap = std::multimap<int, HarmonyDesc>;
 
 //---------------------------------------------------------
 //   VoiceDesc

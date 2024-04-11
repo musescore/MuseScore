@@ -2344,7 +2344,11 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
     InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
     ArpeggioMap arpMap;
     DelayedArpMap delayedArps;
+<<<<<<< HEAD
     bool measureHasCoda = false;
+=======
+    HarmonyMap delayedHarmony;
+>>>>>>> 972d3ed656 (Fix duplicate chords exported by dolet)
 
     // collect candidates for courtesy accidentals to work out at measure end
     std::map<Note*, int> alterMap;
@@ -2361,7 +2365,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
                 fbl.push_back(fb);
             }
         } else if (m_e.name() == "harmony") {
-            harmony(partId, measure, time + mTime);
+            harmony(partId, measure, time + mTime, delayedHarmony);
         } else if (m_e.name() == "note") {
             // Correct delayed ottava tick
             if (m_delayedOttava && m_delayedOttava->tick2() < time + mTime) {
@@ -2496,6 +2500,23 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
             delayedDirections.push_back(inferredFingering->toDelayedDirection());
         }
         delete inferredFingering;
+    }
+
+    for (auto& harmony : delayedHarmony) {
+        HarmonyDesc hd = harmony.second;
+        Fraction tick = Fraction::fromTicks(harmony.first);
+        if (hd.m_diagram) {
+            hd.m_diagram->setTrack(hd.m_track);
+            Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+            hd.m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+            s->add(hd.m_diagram);
+        }
+
+        if (hd.m_harmony) {
+            hd.m_harmony->setTrack(hd.m_track);
+            Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+            s->add(hd.m_harmony);
+        }
     }
 
     // Sort and add delayed directions
@@ -6520,7 +6541,7 @@ FretDiagram* MusicXMLParserPass2::frame()
  Parse the /score-partwise/part/measure/harmony node.
  */
 
-void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const Fraction& sTime)
+void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const Fraction& sTime, HarmonyMap& harmonyMap)
 {
     track_idx_t track = m_pass1.trackForPart(partId);
 
@@ -6531,7 +6552,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     String kind, kindText, functionText, symbols, parens;
     std::list<HDegree> degreeList;
 
-    FretDiagram* fd = 0;
+    FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
     Fraction offset;
     if (!placement.isEmpty()) {
@@ -6653,14 +6674,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
         }
     }
 
-    if (fd) {
-        fd->setTrack(track);
-        Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
-        ha->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
-        s->add(fd);
-    }
-
-    const ChordDescription* d = 0;
+    const ChordDescription* d = nullptr;
     if (ha->rootTpc() != Tpc::TPC_INVALID) {
         d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
     }
@@ -6683,11 +6697,34 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
         ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
 
-    // TODO-LV: do this only if ha points to a valid harmony
-    // harmony = ha;
-    ha->setTrack(track);
-    Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
-    s->add(ha);
+    const HarmonyDesc hd(track, ha, fd);
+    bool insert = true;
+    if (m_pass1.exporterString().contains(u"dolet")) {
+        const int ticks = (sTime + offset).ticks();
+        for (auto itr = harmonyMap.begin(); itr != harmonyMap.end(); itr++) {
+            if (itr->first != ticks) {
+                continue;
+            }
+            HarmonyDesc& harmony = itr->second;
+            if (track2staff(harmony.m_track) == track2staff(track) && harmony.m_harmony->descr() == ha->descr()) {
+                if (harmony.m_harmony && harmony.fretVisible() && !(fd && fd->visible())) {
+                    // Matching harmony with a fret diagram already at this tick, no need to add another chord symbol
+                    insert = false;
+                } else if (fd && fd->visible() && !harmony.fretVisible()) {
+                    // Matching harmony without a fret diagram found at this tick, replace with this harmony and its fret diagram
+                    harmony.m_harmony = ha;
+                    harmony.m_diagram = fd;
+                    harmony.m_track = track;
+                    insert = false;
+                }
+            }
+        }
+    }
+
+    if (insert) {
+        // No harmony at this tick, add to the map
+        harmonyMap.insert(std::pair<int, HarmonyDesc>((sTime + offset).ticks(), hd));
+    }
 }
 
 //---------------------------------------------------------

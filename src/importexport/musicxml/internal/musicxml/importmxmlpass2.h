@@ -332,7 +332,7 @@ private:
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
     FretDiagram* frame();
-    void harmony(const String& partId, Measure* measure, const Fraction& sTime);
+    void harmony(const String& partId, Measure* measure, const Fraction& sTime, HarmonyMap& harmonyMap);
     Accidental* accidental();
     void beam(std::map<int, String>& beamTypes);
     void duration(Fraction& dura);
