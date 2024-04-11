@@ -2954,7 +2954,9 @@ void MusicXMLParserDirection::direction(const String& partId,
         if (m_tpoSound > 0 && canAddTempoText(m_score->tempomap(), tick.ticks())) {
             double tpo = m_tpoSound / 60;
             tt->setTempo(tpo);
-            tt->setFollowText(true);
+            if (tt->plainText().contains('=')) {
+                tt->setFollowText(true);
+            }
         }
 
         addElemOffset(tt, track, placement(), measure, tick + m_offset);
@@ -2970,7 +2972,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : String();
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
-                if (t->plainText().contains(u"=")) {
+                if (t->plainText().contains('=')) {
                     ((TempoText*)t)->setFollowText(true);
                 }
                 m_score->setTempo(tick, m_tpoSound);
