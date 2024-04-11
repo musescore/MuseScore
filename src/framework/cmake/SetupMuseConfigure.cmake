@@ -16,7 +16,7 @@ foreach(NAME ${MUSE_FRAMEWORK_MODULES})
     disable_module_deps(${NAME})
 endforeach()
 
-if (NOT MUSE_BUILD_UNIT_TESTS)
+if (NOT MUSE_ENABLE_UNIT_TESTS)
     foreach(NAME ${MUSE_FRAMEWORK_MODULES})
         disable_module_tests(${NAME})
     endforeach()

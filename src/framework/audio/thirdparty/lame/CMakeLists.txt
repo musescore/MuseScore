@@ -56,7 +56,7 @@ set (MODULE_SRC
     ${SOURCE_LIB}
     )
 
-set(MODULE_USE_PCH_NONE ON)
+set(MODULE_USE_PCH_DISABLED ON)
 set(MODULE_USE_UNITY_NONE ON)
 setup_module()
 

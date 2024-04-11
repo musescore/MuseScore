@@ -36,7 +36,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/liblouis/utils.c
 )
 
-set(MODULE_USE_PCH_NONE ON)
+set(MODULE_USE_PCH_DISABLED ON)
 set(MODULE_USE_UNITY_NONE ON)
 
 setup_module()

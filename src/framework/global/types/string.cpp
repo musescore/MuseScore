@@ -274,7 +274,7 @@ String::String()
 String::String(const char16_t* str)
 {
     m_data = std::make_shared<std::u16string>(str ? str : u"");
-#ifdef STRING_DEBUG_HACK
+#ifdef MUSE_STRING_DEBUG_HACK
     updateDebugView();
 #endif
 }
@@ -283,7 +283,7 @@ String::String(const Char& ch)
 {
     m_data = std::make_shared<std::u16string>();
     *m_data.get() += ch.unicode();
-#ifdef STRING_DEBUG_HACK
+#ifdef MUSE_STRING_DEBUG_HACK
     updateDebugView();
 #endif
 }
@@ -303,12 +303,12 @@ String::String(const Char* unicode, size_t size)
         m_data = std::make_shared<std::u16string>(str, size);
     }
 
-#ifdef STRING_DEBUG_HACK
+#ifdef MUSE_STRING_DEBUG_HACK
     updateDebugView();
 #endif
 }
 
-#ifdef STRING_DEBUG_HACK
+#ifdef MUSE_STRING_DEBUG_HACK
 void String::updateDebugView()
 {
     try {
@@ -333,7 +333,7 @@ struct String::Mutator {
         : s(s), self(self) {}
     ~Mutator()
     {
-#ifdef STRING_DEBUG_HACK
+#ifdef MUSE_STRING_DEBUG_HACK
         self->updateDebugView();
 #endif
     }

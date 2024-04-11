@@ -30,7 +30,7 @@
 
 namespace muse {
 /*!
- * mu::Timer
+ * muse::Timer
  * usage:
  *      auto timer = new Timer(std::chrono::microseconds(20));
  *      timer.onTimeout(this, []() { LOGI() << "Timer call";});

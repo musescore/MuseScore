@@ -106,7 +106,7 @@ if (MUSE_MODULE_UPDATE)
 endif()
 
 # Tests
-if (MUSE_BUILD_UNIT_TESTS)
+if (MUSE_ENABLE_UNIT_TESTS)
     enable_testing()
     message(STATUS "Enabled testing")
 

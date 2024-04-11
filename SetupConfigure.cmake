@@ -113,9 +113,9 @@ endif()
 # CONFIGURE: VTest
 ###########################################
 if(BUILD_CONFIGURE MATCHES "VTEST")
-    set(MUSE_BUILD_UNIT_TESTS OFF)
+    set(MUSE_ENABLE_UNIT_TESTS OFF)
     set(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL ON)
-    set(MUE_BUILD_ASAN ON)
+    set(MUSE_COMPILE_ASAN ON)
 
     set(MUE_BUILD_IMAGESEXPORT_MODULE ON)
     set(MUE_BUILD_CONVERTER_MODULE ON)
@@ -159,10 +159,10 @@ endif()
 # CONFIGURE: UTest
 ###########################################
 if(BUILD_CONFIGURE MATCHES "UTEST")
-    set(MUSE_BUILD_UNIT_TESTS ON)
+    set(MUSE_ENABLE_UNIT_TESTS ON)
     set(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL ON)
     set(MUSE_MODULE_AUDIO ON)
-    set(MUE_BUILD_ASAN ON)
+    set(MUSE_COMPILE_ASAN ON)
 
     message(STATUS "If you added tests to a module that didn't have them yet, make sure that this module is enabled, see SetupConfigure.cmake")
     set(MUSE_MODULE_MIDI OFF)
@@ -203,8 +203,8 @@ if (NOT MUE_BUILD_IMPORTEXPORT_MODULE)
     set(MUE_BUILD_VIDEOEXPORT_MODULE OFF)
 endif()
 
-if (MUE_BUILD_ASAN)
-    set(MUE_ENABLE_CUSTOM_ALLOCATOR OFF)
+if (MUSE_COMPILE_ASAN)
+    set(MUSE_ENABLE_CUSTOM_ALLOCATOR OFF)
 endif()
 
 if (NOT MUE_BUILD_NOTATION_MODULE)
@@ -219,7 +219,7 @@ endif()
 ###########################################
 # Unit tests
 ###########################################
-if (NOT MUSE_BUILD_UNIT_TESTS)
+if (NOT MUSE_ENABLE_UNIT_TESTS)
 
     set(MUE_BUILD_BRAILLE_TESTS OFF)
     set(MUE_BUILD_ENGRAVING_TESTS OFF)

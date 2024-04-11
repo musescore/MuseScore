@@ -35,7 +35,7 @@
 # set(MODULE_UI ...)                          - set ui headers
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_USE_PCH_NONE ON)                 - set for disable PCH for module
+# set(MODULE_USE_PCH_DISABLED ON)                 - set for disable PCH for module
 # set(MODULE_USE_UNITY_NONE ON)               - set for disable UNITY BUILD for module
 # set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
 # set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
@@ -58,7 +58,7 @@ macro(declare_module name)
     unset(MODULE_UI)
     unset(MODULE_QML_IMPORT)
     unset(MODULE_QMLEXT_IMPORT)
-    unset(MODULE_USE_PCH_NONE)
+    unset(MODULE_USE_PCH_DISABLED)
     unset(MODULE_USE_UNITY_NONE)
     unset(MODULE_OVERRIDDEN_PCH)
     unset(MODULE_IS_STUB)
@@ -129,8 +129,8 @@ macro(setup_module)
         endif (NOT MSVC)
     endif()
 
-    if (MUE_COMPILE_USE_PCH)
-        if (MODULE_USE_PCH_NONE)
+    if (MUSE_COMPILE_USE_PCH)
+        if (MODULE_USE_PCH_DISABLED)
             # disabled pch for current module
         else()
             if (NOT ${MODULE} MATCHES muse_global)
@@ -147,7 +147,7 @@ macro(setup_module)
                 target_precompile_headers(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/build/pch/pch.h)
             endif()
         endif()
-    endif(MUE_COMPILE_USE_PCH)
+    endif() # MUSE_COMPILE_USE_PCH
 
     if (MUE_COMPILE_USE_UNITY)
         if (MODULE_USE_UNITY_NONE)
