@@ -73,6 +73,8 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     m_current_audioDriverState->setAudioDelayCompensate(m_audioDelayCompensate);
 
     if (!m_current_audioDriverState->open(spec, activeSpec)) {
+        // FIX: need to carry around the spec because of callback
+        m_spec = spec;
         return false;
     }
     m_spec = *activeSpec;
