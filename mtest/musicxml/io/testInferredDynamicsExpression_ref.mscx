@@ -250,16 +250,27 @@
         </Measure>
       <Measure>
         <voice>
-          <StaffText>
-            <style>Expression</style>
-            <placement>below</placement>
-            <family>Palatino</family>
-            <text><font face="Palatino"/><i>cresc.</i></text>
-            </StaffText>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>2</subtype>
+              <endText></endText>
+              <lineVisible>0</lineVisible>
+              </HairPin>
+            <next>
+              <location>
+                </location>
+              </next>
+            </Spanner>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>

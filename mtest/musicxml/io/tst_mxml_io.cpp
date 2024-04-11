@@ -158,6 +158,7 @@ private slots:
       void incorrectStaffNumber2() { mxmlIoTestRef("testIncorrectStaffNumber2"); }
       void inferredCredits1() { mxmlImportTestRef("testInferredCredits1"); }
       void inferredCredits2() { mxmlImportTestRef("testInferredCredits2"); }
+      void inferredCrescLines() { mxmlImportTestRef("testInferredCrescLines"); }
       void inferredDynamics() { mxmlImportTestRef("testInferredDynamics"); }
       void inferredDynamicsExpressiont() { mxmlImportTestRef("testInferredDynamicsExpression"); }
       void inferredFingerings() { mxmlImportTestRef("testInferredFingerings"); }

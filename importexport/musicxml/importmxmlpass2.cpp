@@ -2262,6 +2262,9 @@ void MusicXMLParserPass2::part()
                   }
             }
 
+      for (Hairpin* hp : _inferredHairpins)
+              hp->score()->addElement(hp);
+
       const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
       //qDebug("spanner list:");
       auto i = _spanners.constBegin();
@@ -3385,11 +3388,22 @@ void MusicXMLParserDirection::direction(const QString& partId,
             if (dynamicsPlacement.isEmpty())
                   dynamicsPlacement = isVocalStaff ? "above" : "below";
 
+            // Check staff and end any cresc lines which are waiting
+            InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
+            for (Hairpin* h : hairpins) {
+                  if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
+                        h->setTrack2(track);
+                        h->setTick2(tick + _offset);
+                        }
+                  }
+
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
             MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
+
+      addInferredCrescLine(track, tick, isVocalStaff);
 
       // handle the elems
       for (auto elem : _elems) {
@@ -3510,6 +3524,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                   _enclosure      = _e.attributes().value("enclosure").toString();
                   QString nextPart = nextPartOfFormattedString(_e);
                   textToDynamic(nextPart);
+                  textToCrescLine(nextPart);
                   _wordsText += nextPart;
                   }
             else if (_e.name() == "rehearsal") {
@@ -4084,6 +4099,40 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
       return false;
       }
 
+void MusicXMLParserDirection::textToCrescLine(QString& text)
+      {
+      QString simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+      bool cresc = simplifiedText.contains("cresc");
+      bool dim = simplifiedText.contains("dim");
+      if (!cresc && !dim)
+            return;
+
+      // Create line
+      text.clear();
+      Hairpin* line = new Hairpin(_score);
+
+      line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DECRESC_LINE);
+      line->setBeginText(simplifiedText);
+      line->setProperty(Pid::LINE_VISIBLE, false);
+      _inferredHairpinStart = line;
+      }
+
+void MusicXMLParserDirection::addInferredCrescLine(const int track, const Fraction& tick, const bool isVocalStaff)
+      {
+      if (!_inferredHairpinStart)
+            return;
+
+      _inferredHairpinStart->setTrack(track);
+      _inferredHairpinStart->setTick(tick + _offset);
+
+      QString spannerPlacement = _placement;
+      if (_placement.isEmpty())
+            spannerPlacement = isVocalStaff ? "above" : "below";
+      setSLinePlacement(_inferredHairpinStart, _placement);
+
+      _pass2.addInferredHairpin(_inferredHairpinStart);
+      }
+
 //---------------------------------------------------------
 //   handleRepeats
 //---------------------------------------------------------
@@ -4568,6 +4617,16 @@ void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
       delete spanner;
       }
 
+void MusicXMLParserPass2::addInferredHairpin(Hairpin* hp)
+      {
+      _inferredHairpins.push_back(hp);
+      }
+
+InferredHairpinsStack MusicXMLParserPass2::getInferredHairpins()
+      {
+      return _inferredHairpins;
+      }
+
 //---------------------------------------------------------
 //   metronome
 //---------------------------------------------------------
@@ -4760,7 +4819,6 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                   if (fermataType == "inverted")
                         fermata->setPlacement(Placement::BELOW);
                   else if (fermataType.isEmpty()) {
-                        qDebug() << "Set placement: " << (int)fermata->propertyDefault(Pid::PLACEMENT).value<Placement>();
                         fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<Placement>());
                         }
                   }
