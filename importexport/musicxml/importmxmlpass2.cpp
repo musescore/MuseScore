@@ -2262,8 +2262,10 @@ void MusicXMLParserPass2::part()
                   }
             }
 
-      for (Hairpin* hp : _inferredHairpins)
-              hp->score()->addElement(hp);
+      if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE)) {
+            for (Hairpin* hp : _inferredHairpins)
+                  hp->score()->addElement(hp);
+            }
 
       const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
       //qDebug("spanner list:");
@@ -3389,11 +3391,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   dynamicsPlacement = isVocalStaff ? "above" : "below";
 
             // Check staff and end any cresc lines which are waiting
-            InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
-            for (Hairpin* h : hairpins) {
-                  if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
-                        h->setTrack2(track);
-                        h->setTick2(tick + _offset);
+            if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE)) {
+                  InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
+                  for (Hairpin* h : hairpins) {
+                        if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
+                              h->setTrack2(track);
+                              h->setTick2(tick + _offset);
+                              }
                         }
                   }
 
@@ -3774,6 +3778,8 @@ static Marker* findMarker(const QString& repeat, Score* score)
  */
 void MusicXMLParserDirection::textToDynamic(QString& text) const
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return;
       QString simplifiedText = text.simplified();
       for (auto dyn : dynList) {
             if (dyn.tag == simplifiedText) {
@@ -4101,6 +4107,8 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
 
 void MusicXMLParserDirection::textToCrescLine(QString& text)
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return;
       QString simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
       bool cresc = simplifiedText.contains("cresc");
       bool dim = simplifiedText.contains("dim");
@@ -4119,6 +4127,8 @@ void MusicXMLParserDirection::textToCrescLine(QString& text)
 
 void MusicXMLParserDirection::addInferredCrescLine(const int track, const Fraction& tick, const bool isVocalStaff)
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return;
       if (!_inferredHairpinStart)
             return;
 
