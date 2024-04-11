@@ -55,7 +55,7 @@ jobs:
         echo "DO_RUN=${{ env.DO_RUN }}"
         echo "reference_sha=${{ env.REFERENCE_SHA }}" >> $GITHUB_OUTPUT
         echo "REFERENCE_SHA=${{ env.REFERENCE_SHA }}"
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests Comparison ${{ env.BUILD_NUMBER }}${pr_info}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"VTests Comparison ${{ env.BUILD_NUMBER }}${pr_info}")"
         echo "artifact_name=$UPLOAD_ARTIFACT_NAME"  >> $GITHUB_OUTPUT
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
 
