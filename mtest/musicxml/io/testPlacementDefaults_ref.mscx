@@ -214,7 +214,6 @@
             </TimeSig>
           <Tempo>
             <tempo>0.58333333333333337</tempo>
-            <followText>1</followText>
             <text><font size="12"/><b>Grave</b></text>
             </Tempo>
           <Dynamic>

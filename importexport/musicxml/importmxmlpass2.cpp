@@ -3261,7 +3261,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
             if (_tpoSound > 0 && canAddTempoText(_score->tempomap(), tick.ticks())) {
                   double tpo = _tpoSound / 60;
                   tt->setTempo(tpo);
-                  tt->setFollowText(true);
+                  if (tt->plainText().contains('='))
+                        tt->setFollowText(true);
                   }
 
             addElemOffset(tt, track, placement(), measure, tick + _offset);
@@ -3291,7 +3292,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         else {
                               ((TempoText*) t)->setTempo(_score->tempo(tick)); // Maintain tempo (somewhat hacky)
                               }
-                        if (t->plainText().contains("="))
+                        if (t->plainText().contains('='))
                               ((TempoText*)t)->setFollowText(true);
                         }
                   }
