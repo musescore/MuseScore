@@ -2513,7 +2513,7 @@ static void coerceGraceCue(Chord* mainChord, Chord* graceChord)
             graceChord->setSmall(true);
       bool anyPlays = false;
       for (auto n : mainChord->notes())
-            anyPlays |= n->play();      
+            anyPlays |= n->play();
       if (!anyPlays)
             for (auto gn : graceChord->notes())
                   gn->setPlay(false);
@@ -3392,9 +3392,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
             // Check staff and end any cresc lines which are waiting
             if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE)) {
+                  // To avoid extending lines which aren't intended to be terminated by dynamics,
+                  // only extend lines to dynamics within 24 quarter notes
+                  static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
                   InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
                   for (Hairpin* h : hairpins) {
-                        if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
+                        Fraction diff = tick + _offset - h->tick();
+                        if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
                               h->setTrack2(track);
                               h->setTick2(tick + _offset);
                               }
@@ -4168,7 +4172,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
       // As sound may be missing, next do a wild-card match with known repeat texts
       else
             repeat = matchRepeat();
-      
+
       // Create Jump or Marker and assign it _wordsText (invisible if no _wordsText)
       if (!repeat.isEmpty()) {
             TextBase* tb = nullptr;
@@ -4290,7 +4294,7 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
             if ((sline && sline->isTrill()) || (!sline && isWavy)) {
                   if (!sline)
                         sline = new Trill(_score);
-                  if (!lineEnd.isEmpty() && lineEnd != "none") 
+                  if (!lineEnd.isEmpty() && lineEnd != "none")
                         _logger->logError(QString("line-end not supported for line-type \"wavy\""));
                   }
             else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
