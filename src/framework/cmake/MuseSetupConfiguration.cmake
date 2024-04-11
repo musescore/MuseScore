@@ -32,6 +32,8 @@ if (NOT MUSE_MODULE_DIAGNOSTICS)
     set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT OFF)
 endif()
 
+include(${CMAKE_CURRENT_LIST_DIR}/MuseFetchDependencies.cmake)
+
 configure_file(${CMAKE_CURRENT_LIST_DIR}/muse_framework_config.h.in muse_framework_config.h )
 
 include(DeclareModuleSetup)
