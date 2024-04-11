@@ -221,6 +221,7 @@ using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
 using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using InferredHairpinsStack = std::vector<Hairpin*>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
@@ -300,6 +301,9 @@ public:
     SLine* delayedOttava() { return m_delayedOttava; }
     void setDelayedOttava(SLine* ottava) { m_delayedOttava = ottava; }
 
+    void addInferredHairpin(Hairpin* hp);
+    InferredHairpinsStack getInferredHairpins();
+
 private:
     void addError(const String& error);      // Add an error to be shown in the GUI
     void initPartState(const String& partId);
@@ -366,6 +370,7 @@ private:
     BracketsStack m_brackets;
     OttavasStack m_ottavas;                // Current ottavas
     HairpinsStack m_hairpins;              // Current hairpins
+    InferredHairpinsStack m_inferredHairpins;
     MusicXmlExtendedSpannerDesc m_dummyNewMusicXmlSpannerDesc;
 
     Glissando* m_glissandi[MAX_NUMBER_LEVEL][2];     // Current slides ([0]) / glissandi ([1])
@@ -426,6 +431,9 @@ private:
     String matchRepeat() const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
+    void textToDynamic(String& text);
+    void textToCrescLine(String& text);
+    void addInferredCrescLine(const track_idx_t track, const Fraction& tick, const bool isVocalStaff);
     bool isLyricBracket() const;
     bool isLikelySubtitle(const Fraction& tick) const;
     bool isLikelyLegallyDownloaded(const Fraction& tick) const;
@@ -442,6 +450,7 @@ private:
     MusicXMLParserPass2& m_pass2;                // the pass2 results
     MxmlLogger* m_logger = nullptr;                        // Error logger
 
+    Hairpin* m_inferredHairpinStart = nullptr;
     StringList m_dynamicsList;
     String m_enclosure;
     String m_wordsText;

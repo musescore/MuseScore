@@ -900,6 +900,18 @@ AsciiStringView TConv::toXml(DynamicType v)
     return it->xml;
 }
 
+bool TConv::dynamicValid(const AsciiStringView& tag)
+{
+    auto it = std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [tag](const DynamicItem& i) {
+        return i.xml == tag;
+    });
+
+    if (it != DYNAMIC_TYPES.cend()) {
+        return true;
+    }
+    return false;
+}
+
 DynamicType TConv::fromXml(const AsciiStringView& tag, DynamicType def)
 {
     auto it = std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [tag](const DynamicItem& i) {
