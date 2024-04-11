@@ -41,8 +41,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractcloudservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractcloudservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/musescorecom/imusescorecomservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiocom/iaudiocomservice.h
     ${CMAKE_CURRENT_LIST_DIR}/audiocom/audiocomservice.h
     ${CMAKE_CURRENT_LIST_DIR}/audiocom/audiocomservice.cpp
@@ -52,5 +50,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/musescorecomauthorizationmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/musescorecomauthorizationmodel.cpp
     )
+
+if (MUSE_MODULE_CLOUD_MUSESCORECOM)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.h
+        ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.cpp
+    )
+    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_CLOUD_MUSESCORECOM)
+endif()
 
 setup_module()

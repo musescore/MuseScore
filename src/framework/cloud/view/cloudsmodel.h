@@ -36,7 +36,9 @@ class CloudsModel : public QAbstractListModel, async::Asyncable
 {
     Q_OBJECT
 
+#ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
     INJECT(IMuseScoreComService, museScoreComService)
+#endif
     INJECT(IAudioComService, audioComService)
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)

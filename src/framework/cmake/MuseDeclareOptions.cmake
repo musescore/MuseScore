@@ -16,6 +16,7 @@ option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 
 declare_muse_module_opt(AUTOBOT ON)
 declare_muse_module_opt(CLOUD ON)
+option(MUSE_MODULE_CLOUD_MUSESCORECOM "Enable MuseScore.com account" ON)
 
 declare_muse_module_opt(DIAGNOSTICS ON)
 option(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT "Enable crashpad client" OFF) # enable on CI

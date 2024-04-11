@@ -27,7 +27,9 @@
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiengine.h"
 
+#ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
 #include "musescorecom/musescorecomservice.h"
+#endif
 #include "audiocom/audiocomservice.h"
 #include "internal/cloudconfiguration.h"
 
@@ -53,11 +55,12 @@ std::string CloudModule::moduleName() const
 void CloudModule::registerExports()
 {
     m_cloudConfiguration = std::make_shared<CloudConfiguration>();
-    m_museScoreComService = std::make_shared<MuseScoreComService>();
-    m_audioComService = std::make_shared<AudioComService>();
-
     ioc()->registerExport<ICloudConfiguration>(moduleName(), m_cloudConfiguration);
+#ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
+    m_museScoreComService = std::make_shared<MuseScoreComService>();
     ioc()->registerExport<IMuseScoreComService>(moduleName(), m_museScoreComService);
+#endif
+    m_audioComService = std::make_shared<AudioComService>();
     ioc()->registerExport<IAudioComService>(moduleName(), m_audioComService);
 }
 
@@ -95,6 +98,8 @@ void CloudModule::onInit(const IApplication::RunMode& mode)
     }
 
     m_cloudConfiguration->init();
+#ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
     m_museScoreComService->init();
+#endif
     m_audioComService->init();
 }
