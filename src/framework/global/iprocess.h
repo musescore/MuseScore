@@ -30,7 +30,7 @@
 namespace muse {
 class IProcess : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(mu::IProcess)
+    INTERFACE_ID(muse::IProcess)
 
 public:
     virtual ~IProcess() = default;

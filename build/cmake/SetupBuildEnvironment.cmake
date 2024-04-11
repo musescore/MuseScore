@@ -17,7 +17,7 @@ if (CC_IS_GCC)
         set(BUILD_SHARED_LIBS ON)
     endif()
 
-    if (MUE_BUILD_ASAN)
+    if (MUSE_COMPILE_ASAN)
         add_compile_options("-fsanitize=address")
         add_compile_options("-fno-omit-frame-pointer")
         link_libraries("-fsanitize=address")
@@ -55,7 +55,7 @@ elseif(CC_IS_MINGW)
 
     # -mno-ms-bitfields see #22048
     set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -mno-ms-bitfields")
-    if (NOT MUE_COMPILE_BUILD_64)
+    if (NOT MUSE_COMPILE_BUILD_64)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
     endif()
 
@@ -68,7 +68,7 @@ elseif(CC_IS_CLANG)
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-    if (MUE_BUILD_ASAN)
+    if (MUSE_COMPILE_ASAN)
         add_compile_options("-fsanitize=address")
         add_compile_options("-fno-omit-frame-pointer")
         link_libraries("-fsanitize=address")
@@ -76,8 +76,8 @@ elseif(CC_IS_CLANG)
 
     # On MacOS with clang there are problems with debugging
     # - the value of the std::u16string is not visible.
-    if (BUILD_IS_DEBUG AND MUE_ENABLE_STRING_DEBUG_HACK)
-        add_definitions(-DSTRING_DEBUG_HACK)
+    if (BUILD_IS_DEBUG AND MUSE_COMPILE_STRING_DEBUG_HACK)
+        add_definitions(-DMUSE_STRING_DEBUG_HACK)
     endif()
 
 elseif(CC_IS_EMSCRIPTEN)
@@ -126,7 +126,7 @@ endif()
 # APPLE specific
 if (OS_IS_MAC)
     if (MUE_COMPILE_QT5_COMPAT)
-        if (MUE_COMPILE_BUILD_MACOS_APPLE_SILICON)
+        if (MUSE_COMPILE_MACOS_APPLE_SILICON)
             set(CMAKE_OSX_ARCHITECTURES ) # leave empty, use default
         else()
             set(CMAKE_OSX_ARCHITECTURES x86_64)

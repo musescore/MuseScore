@@ -15,7 +15,7 @@
                "value": "RELWITHDEBINFO"
             },
             {
-               "name": "MUE_COMPILE_BUILD_64",
+               "name": "MUSE_COMPILE_BUILD_64",
                "value": "ON"
             },
             {

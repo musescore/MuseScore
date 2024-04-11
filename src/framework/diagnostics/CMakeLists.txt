@@ -89,7 +89,7 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
     )
 
     set(MODULE_DEF ${MODULE_DEF}
-        -DMUE_CRASH_REPORT_URL="${MUE_CRASH_REPORT_URL}"
+        -DMUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL="${MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL}"
     )
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client google_crashpad_client)
@@ -101,32 +101,32 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
     # Install crashpad handler
     set(CPAD_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR}/crashpad_handler)
     if (OS_IS_LIN)
-        if (NOT MUE_CRASHPAD_HANDLER_PATH)
+        if (NOT MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH)
             if (ARCH_IS_ARMV7L)
-                set(MUE_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/armv7l/crashpad_handler)
+                set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/armv7l/crashpad_handler)
             elseif (ARCH_IS_AARCH64)
-                set(MUE_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/aarch64/crashpad_handler)
+                set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/aarch64/crashpad_handler)
             elseif (ARCH_IS_X86_64)
-                set(MUE_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler)
+                set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler)
             else ()
                 message(WARNING "Architecture could not be detected. Using x86_64 as a fallback for crashpad_handler binary.")
-                set(MUE_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler)
+                set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler)
             endif()
         endif()
 
-        install(PROGRAMS ${MUE_CRASHPAD_HANDLER_PATH} DESTINATION bin)
+        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION bin)
     elseif(OS_IS_WIN)
-        if (NOT MUE_CRASHPAD_HANDLER_PATH)
-            set(MUE_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/windows/x86-64/crashpad_handler.exe)
+        if (NOT MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH)
+            set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/windows/x86-64/crashpad_handler.exe)
         endif()
 
-        install(PROGRAMS ${MUE_CRASHPAD_HANDLER_PATH} DESTINATION bin)
+        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION bin)
     elseif(OS_IS_MAC)
-        if (NOT MUE_CRASHPAD_HANDLER_PATH)
-            set(MUE_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler)
+        if (NOT MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH)
+            set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler)
         endif()
 
-        install(PROGRAMS ${MUE_CRASHPAD_HANDLER_PATH} DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
+        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
     endif()
 endif() # MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 # ----------------

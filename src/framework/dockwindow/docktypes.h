@@ -25,6 +25,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QRect>
 
 namespace muse::dock {
 inline const char* CONTEXT_MENU_MODEL_PROPERTY("contextMenuModel");

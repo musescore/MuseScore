@@ -43,14 +43,14 @@ static inline size_t align(size_t n)
 // ============================================
 void ObjectAllocator::used()
 {
-#ifdef MUE_ENABLE_CUSTOM_ALLOCATOR
+#ifdef MUSE_ENABLE_CUSTOM_ALLOCATOR
     s_used++;
 #endif
 }
 
 void ObjectAllocator::unused()
 {
-#ifdef MUE_ENABLE_CUSTOM_ALLOCATOR
+#ifdef MUSE_ENABLE_CUSTOM_ALLOCATOR
     s_used--;
 #endif
 }
