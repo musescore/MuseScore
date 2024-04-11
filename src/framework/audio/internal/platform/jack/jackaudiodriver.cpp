@@ -109,6 +109,7 @@ void musescore_state()
         cnt++;
         if (cnt > 4) {
             cnt = 0;
+            /*
             LOGI("state: mframe=%u/%li jframe=%u (framedrift: %i / %i)  ms=%s  js=%s",
                  muse_frame, mpos_frame, jack_frame,
                  muse_frame - jack_frame,
@@ -119,6 +120,7 @@ void musescore_state()
                  (jack_state == JackTransportStopped ? "stop"
                   : (jack_state == JackTransportStarting ? "start"
                      : (jack_state == JackTransportRolling ? "roll" : "other"))));
+                     */
         }
         if (musescore_act) {
             if (is_seeking) {
