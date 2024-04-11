@@ -42,7 +42,9 @@ public:
 
 private:
     std::shared_ptr<CloudConfiguration> m_cloudConfiguration;
+#ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
     std::shared_ptr<MuseScoreComService> m_museScoreComService;
+#endif
     std::shared_ptr<AudioComService> m_audioComService;
 };
 }

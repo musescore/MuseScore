@@ -216,7 +216,9 @@ void CloudsModel::load()
     m_clouds.clear();
 
     m_clouds = {
+#ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
         museScoreComService()->authorization(),
+#endif
         audioComService()->authorization()
     };
 
