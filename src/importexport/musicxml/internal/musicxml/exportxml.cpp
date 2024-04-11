@@ -429,6 +429,7 @@ public:
     void credits(XmlWriter& xml);
     void moveToTick(const Fraction& t);
     void words(TextBase const* const text, staff_idx_t staff);
+    void systemText(StaffTextBase const* const text, staff_idx_t staff);
     void tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, QPointF position);
     void rehearsal(RehearsalMark const* const rmk, staff_idx_t staff);
     void hairpin(Hairpin const* const hp, staff_idx_t staff, const Fraction& tick);
@@ -4839,6 +4840,46 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
 }
 
 //---------------------------------------------------------
+//   systemText
+//---------------------------------------------------------
+
+void ExportMusicXml::systemText(StaffTextBase const* const text, staff_idx_t staff)
+{
+    const auto offset = calculateTimeDeltaInDivisions(text->tick(), tick(), div);
+
+    if (text->plainText() == "") {
+        // sometimes empty Texts are present, exporting would result
+        // in invalid MusicXML (as an empty direction-type would be created)
+        return;
+    }
+
+    directionTag(_xml, _attr, text);
+    wordsMetronome(_xml, _score->style(), text, offset);
+
+    if (text->swing()) {
+        _xml.startElement("sound");
+        _xml.startElement("swing");
+        if (!text->swingParameters().swingUnit) {
+            _xml.tag("straight");
+        } else {
+            const int swingPercentage = text->swingParameters().swingRatio;
+            const int swingDivisor = std::gcd(text->swingParameters().swingRatio, 100);
+            _xml.tag("first",  100 / swingDivisor);
+            _xml.tag("second", swingPercentage / swingDivisor);
+            if (text->swingParameters().swingUnit == Constants::DIVISION / 2) {
+                _xml.tag("swing-type", TConv::toXml(DurationType::V_EIGHTH));
+            } else {
+                _xml.tag("swing-type", TConv::toXml(DurationType::V_16TH));
+            }
+        }
+        _xml.endElement();
+        _xml.endElement();
+    }
+
+    directionETag(_xml, staff);
+}
+
+//---------------------------------------------------------
 //   positioningAttributesForTboxText
 //---------------------------------------------------------
 
@@ -6095,7 +6136,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->symbol(toSymbol(e), sstaff);
     } else if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
-    } else if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isStaffText() || e->isSystemText()
+    } else if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isStaffText()
                || e->isTripletFeel() || e->isText()
                || e->isExpression() || (e->isInstrumentChange() && e->visible())) {
         exp->words(toTextBase(e), sstaff);
@@ -6103,6 +6144,8 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->dynamic(toDynamic(e), sstaff);
     } else if (e->isRehearsalMark()) {
         exp->rehearsal(toRehearsalMark(e), sstaff);
+    } else if (e->isSystemText()) {
+        exp->systemText(toStaffTextBase(e), sstaff);
     } else {
         return instrChangeHandled;
     }
