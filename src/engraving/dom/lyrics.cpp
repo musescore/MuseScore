@@ -421,11 +421,16 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 
     switch (propertyId) {
     case Pid::PLACEMENT:
-        if (Lyrics* l = prevLyrics(this)) {
-            l->setNeedRemoveInvalidSegments();
+    {
+        PlacementV newVal = v.value<PlacementV>();
+        if (newVal != placement()) {
+            if (Lyrics* l = prevLyrics(this)) {
+                l->setNeedRemoveInvalidSegments();
+            }
+            setPlacement(newVal);
         }
-        setPlacement(v.value<PlacementV>());
-        break;
+    }
+    break;
     case Pid::SYLLABIC:
         m_syllabic = LyricsSyllabic(v.toInt());
         break;
