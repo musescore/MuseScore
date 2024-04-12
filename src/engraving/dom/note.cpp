@@ -1888,6 +1888,7 @@ EngravingItem* Note::drop(EditData& data)
         }
         score()->undoRemoveElement(this);
         score()->undoAddElement(n);
+        return n;
     }
     break;
 
