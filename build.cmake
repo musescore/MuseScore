@@ -38,7 +38,7 @@ while(i LESS "${CMAKE_ARGC}")
 endwhile()
 
 # load custom CMake functions and macros
-include("${CMAKE_CURRENT_LIST_DIR}/build/cmake/GetUtilsFunctions.cmake") # "fn__" namespace
+include("${CMAKE_CURRENT_LIST_DIR}/buildscripts/cmake/GetUtilsFunctions.cmake") # "fn__" namespace
 
 # Set the name of the build folder (just the folder name, not the full path)
 function(build_folder
