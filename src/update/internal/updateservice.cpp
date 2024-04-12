@@ -109,7 +109,7 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
 
             //: Means that the download is currently in progress.
             //: %1 will be replaced by the version number of the version that is being downloaded.
-            qtrc("update", "Downloading MuseScore %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
+            qtrc("update", "Downloading MuseScore Studio %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
     });
 
     Ret ret = m_networkManager->get(fileUrl, &buff);

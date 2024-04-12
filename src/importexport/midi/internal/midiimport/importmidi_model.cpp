@@ -203,7 +203,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             int width() const override { return 220; }
             QString headerName() const override
             {
-                return qtrc("iex_midi", "MuseScore instrument");
+                return qtrc("iex_midi", "MuseScore Studio instrument");
             }
 
             bool isEditable(int trackIndex) const override

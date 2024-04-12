@@ -61,7 +61,7 @@ int voiceLimit()
 
     Q_ASSERT_X(allowedVoiceCount <= VOICES,
                "MidiVoice::voiceLimit",
-               "Allowed voice count exceeds MuseScore voice limit");
+               "Allowed voice count exceeds MuseScore Studio voice limit");
 
     return static_cast<int>(allowedVoiceCount);
 }

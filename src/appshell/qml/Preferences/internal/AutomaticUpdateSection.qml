@@ -39,7 +39,7 @@ BaseSection {
         id: needCheckBox
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Check to see if a new version of MuseScore is available")
+        text: qsTrc("appshell/preferences", "Check to see if a new version of MuseScore Studio is available")
 
         visible: root.isAppUpdatable
 
@@ -55,7 +55,7 @@ BaseSection {
     StyledTextLabel {
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our <a href=\"%1\">privacy policy</a> for more info.")
+        text: qsTrc("appshell/preferences", "Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our <a href=\"%1\">privacy policy</a> for more info.")
               .arg(root.museScorePrivacyPolicyUrl)
               .replace("\n", "<br>")
 

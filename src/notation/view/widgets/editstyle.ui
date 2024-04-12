@@ -347,7 +347,7 @@
                  <item row="0" column="2">
                   <widget class="QCheckBox" name="optimizeStyleCheckbox">
                    <property name="toolTip">
-                    <string>MuseScore will change the style to suit the font better</string>
+                    <string>MuseScore Studio will change the style to suit the font better</string>
                    </property>
                    <property name="text">
                     <string>Automatically load style settings based on font</string>

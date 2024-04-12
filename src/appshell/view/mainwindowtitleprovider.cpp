@@ -101,7 +101,7 @@ void MainWindowTitleProvider::update()
     project::INotationProjectPtr project = context()->currentProject();
 
     if (!project) {
-        setTitle(qtrc("appshell", "MuseScore 4"));
+        setTitle(qtrc("appshell", "MuseScore Studio"));
         setFilePath("");
         setFileModified(false);
         return;
