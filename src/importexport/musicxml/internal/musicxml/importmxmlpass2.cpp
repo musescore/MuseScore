@@ -1779,48 +1779,6 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
 }
 
 //---------------------------------------------------------
-//   reformatHeaderVBox
-//---------------------------------------------------------
-/**
- Due to inconsistencies with spacing and inferred text,
- the header VBox frequently has collisions. This cleans
- those (as a temporary fix for a more robust collision-prevention
- system in Boxes).
- */
-
-static void reformatHeaderVBox(MeasureBase* mb)
-{
-    if (!mb->isVBox()) {
-        return;
-    }
-
-    VBox* headerVBox = toVBox(mb);
-    double totalHeight = 0;
-    double offsetHeight = 0;
-    double lineSpacingMultiplier = 0.5;
-
-    for (auto e : headerVBox->el()) {
-        if (!e->isText()) {
-            continue;
-        }
-        Text* t = toText(e);
-        TLayout::layoutText(t, t->mutldata());
-
-        totalHeight += t->height();
-        if (t->align() == AlignV::TOP) {
-            totalHeight += t->lineHeight() * lineSpacingMultiplier;
-            t->setOffset(t->offset().x(), offsetHeight);
-            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-            offsetHeight += t->height();
-            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
-        }
-    }
-
-    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
-    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
-}
-
-//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -1852,8 +1810,10 @@ void MusicXMLParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(_e, "score-partwise"));
 
-    if (_pass1.hasInferredHeaderText()) {
-        reformatHeaderVBox(_score->measures()->first());
+    // This method relies heavily on text metrics which differ from system to system and can be very volatile
+    // To avoid having to update the majority of musicxml tests on every change to engraving, don't run this during testing
+    if (!MScore::testMode) {
+        _pass1.reformatHeaderVBox(_score->measures()->first());
     }
 }
 
@@ -1995,6 +1955,12 @@ void MusicXMLParserPass2::part()
         if (_delayedOttava && _delayedOttava->tick2() < lastTick) {
             handleSpannerStop(_delayedOttava, _delayedOttava->track2(), lastTick, _spanners);
             _delayedOttava = nullptr;
+        }
+    }
+
+    if (configuration()->inferTextType()) {
+        for (Hairpin* hp : _inferredHairpins) {
+            hp->score()->addElement(hp);
         }
     }
 
@@ -3000,7 +2966,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
         if (_tpoSound > 0 && canAddTempoText(_score->tempomap(), tick.ticks())) {
             double tpo = _tpoSound / 60;
             tt->setTempo(tpo);
-            tt->setFollowText(true);
+            if (tt->plainText().contains('=')) {
+                tt->setFollowText(true);
+            }
         }
 
         addElemOffset(tt, track, placement(), measure, tick + _offset);
@@ -3015,14 +2983,20 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
                 t->setXmlText(_wordsText + sep + _metroText);
                 ((TempoText*)t)->setTempo(_tpoSound);
-                ((TempoText*)t)->setFollowText(true);
+                if (t->plainText().contains('=')) {
+                    ((TempoText*)t)->setFollowText(true);
+                }
                 _score->setTempo(tick, _tpoSound);
             }
         } else {
             if (_wordsText != "" || _metroText != "") {
-                t = Factory::createStaffText(_score->dummy()->segment());
+                isExpressionText = _wordsText.contains(u"<i>") && _metroText.isEmpty();
+                if (isExpressionText) {
+                    t = Factory::createExpression(_score->dummy()->segment());
+                } else {
+                    t = Factory::createStaffText(_score->dummy()->segment());
+                }
                 t->setXmlText(_wordsText + _metroText);
-                isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
             } else {
                 t = Factory::createRehearsalMark(_score->dummy()->segment());
                 if (!_rehearsalText.contains("<b>")) {
@@ -3113,12 +3087,29 @@ void MusicXMLParserDirection::direction(const QString& partId,
             dynamicsPlacement = isVocalStaff ? "above" : "below";
         }
 
+        // Check staff and end any cresc lines which are waiting
+        if (configuration()->inferTextType()) {
+            // To avoid extending lines which aren't intended to be terminated by dynamics,
+            // only extend lines to dynamics within 24 quarter notes
+            static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
+            InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
+            for (Hairpin* h : hairpins) {
+                Fraction diff = tick + _offset - h->tick();
+                if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
+                    h->setTrack2(track);
+                    h->setTick2(tick + _offset);
+                }
+            }
+        }
+
         // Add element to score later, after collecting all the others and sorting by default-y
         // This allows default-y to be at least respected by the order of elements
         MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
             hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset);
         delayedDirections.push_back(delayedDirection);
     }
+
+    addInferredCrescLine(track, tick, isVocalStaff);
 
     // handle the elems
     foreach (auto elem, _elems) {
@@ -3332,12 +3323,16 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                 n--;          // make zero-based
             }
         }
-        QString type = _e.attributes().value("type").toString();
+
+        String type = _e.attributes().value("type").toString();
         if (_e.name() == "metronome") {
             _metroText = metronome(_tpoMetro);
         } else if (_e.name() == "words") {
             _enclosure      = _e.attributes().value("enclosure").toString();
-            _wordsText += xmlpass2::nextPartOfFormattedString(_e);
+            String nextPart = xmlpass2::nextPartOfFormattedString(_e);
+            textToDynamic(nextPart);
+            textToCrescLine(nextPart);
+            _wordsText += nextPart;
         } else if (_e.name() == "rehearsal") {
             _enclosure      = _e.attributes().value("enclosure").toString();
             if (_enclosure == "") {
@@ -3704,6 +3699,73 @@ MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
 {
     auto dd = new MusicXMLDelayedDirectionElement(m_totalY, m_element, m_track, m_placement, m_measure, m_tick);
     return dd;
+}
+
+//---------------------------------------------------------
+//   textToDynamic
+//---------------------------------------------------------
+/**
+ Attempts to convert text to dynamic text. No-op if unable.
+ */
+void MusicXMLParserDirection::textToDynamic(String& text)
+{
+    if (!configuration()->inferTextType()) {
+        return;
+    }
+    String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+    // try to find a dynamic - xml representation or
+    // if found add to dynamics list and set text to blank string
+    if (TConv::dynamicValid(simplifiedText.toStdString())) {
+        DynamicType dt = TConv::fromXml(simplifiedText.toStdString(), DynamicType::OTHER);
+        if (dt != DynamicType::OTHER) {
+            _dynaVelocity = String::number(round(Dynamic::dynamicVelocity(dt) / 0.9));
+            _dynamicsList.push_back(Dynamic::dynamicText(dt));
+            text.clear();
+        }
+    }
+}
+
+void MusicXMLParserDirection::textToCrescLine(String& text)
+{
+    if (!configuration()->inferTextType()) {
+        return;
+    }
+    String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+    bool cresc = simplifiedText.contains(u"cresc");
+    bool dim = simplifiedText.contains(u"dim");
+    if (!cresc && !dim) {
+        return;
+    }
+
+    // Create line
+    text.clear();
+    Hairpin* line = Factory::createHairpin(_score->dummy()->segment());
+
+    line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DECRESC_LINE);
+    line->setBeginText(simplifiedText);
+    line->setProperty(Pid::LINE_VISIBLE, false);
+    _inferredHairpinStart = line;
+}
+
+void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, const Fraction& tick, const bool isVocalStaff)
+{
+    if (!configuration()->inferTextType()) {
+        return;
+    }
+    if (!_inferredHairpinStart) {
+        return;
+    }
+
+    _inferredHairpinStart->setTrack(track);
+    _inferredHairpinStart->setTick(tick + _offset);
+
+    String spannerPlacement = _placement;
+    if (_placement.empty()) {
+        spannerPlacement = isVocalStaff ? u"above" : u"below";
+    }
+    setSLinePlacement(_inferredHairpinStart, _placement);
+
+    _pass2.addInferredHairpin(_inferredHairpinStart);
 }
 
 //---------------------------------------------------------
@@ -4237,6 +4299,16 @@ void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
     delete spanner;
 }
 
+void MusicXMLParserPass2::addInferredHairpin(Hairpin* hp)
+{
+    _inferredHairpins.push_back(hp);
+}
+
+InferredHairpinsStack MusicXMLParserPass2::getInferredHairpins()
+{
+    return _inferredHairpins;
+}
+
 //---------------------------------------------------------
 //   metronome
 //---------------------------------------------------------
@@ -4435,7 +4507,6 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
             if (fermataType == "inverted") {
                 fermata->setPlacement(PlacementV::BELOW);
             } else if (fermataType == u"") {
-                LOGI() << "Set placement: " << (int)fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
                 fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
             }
         } else if (_e.name() == "repeat") {

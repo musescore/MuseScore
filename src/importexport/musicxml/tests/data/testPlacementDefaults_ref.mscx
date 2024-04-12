@@ -211,7 +211,6 @@
             </TimeSig>
           <Tempo>
             <tempo>0.583333</tempo>
-            <followText>1</followText>
             <text><font size="12"/><b>Grave</b></text>
             </Tempo>
           <Dynamic>
@@ -310,9 +309,9 @@
         </Measure>
       <Measure>
         <voice>
-          <StaffText>
+          <Expression>
             <text><i>increasingly grave in spirit</i></text>
-            </StaffText>
+            </Expression>
           <Spanner type="HairPin">
             <prev>
               <location>
@@ -554,9 +553,9 @@
         </Measure>
       <Measure>
         <voice>
-          <StaffText>
+          <Expression>
             <text><i>with care</i></text>
-            </StaffText>
+            </Expression>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>

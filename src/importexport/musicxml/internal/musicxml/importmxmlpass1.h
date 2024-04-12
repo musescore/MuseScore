@@ -181,6 +181,7 @@ public:
     bool hasBeamingInfo() const { return _hasBeamingInfo; }
     bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
     static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
+    static void reformatHeaderVBox(MeasureBase* mb);
     void createDefaultHeader(Score* const score);
     void createMeasuresAndVboxes(Score* const score, const QVector<Fraction>& ml, const QVector<Fraction>& ms,
                                  const std::set<int>& systemStartMeasureNrs, const std::set<int>& pageStartMeasureNrs,

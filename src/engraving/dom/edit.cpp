@@ -3916,6 +3916,13 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 {
     std::set<Segment*> segments;
     for (EngravingObject* e : cr->linkList()) {
+        if (cr->isChord()) {
+            for (Spanner* spanner : toChord(e)->startingSpanners()) {
+                if (spanner->isTrill()) {
+                    doUndoRemoveElement(spanner);
+                }
+            }
+        }
         doUndoRemoveElement(static_cast<EngravingItem*>(e));
         if (clearSegment) {
             Segment* s = cr->segment();
@@ -3936,13 +3943,6 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
             delete beam;
         } else {
             undoRemoveElement(beam);
-        }
-    }
-    if (cr->isChord()) {
-        for (Spanner* spanner : toChord(cr)->startingSpanners()) {
-            if (spanner->isTrill()) {
-                doUndoRemoveElement(spanner);
-            }
         }
     }
 }

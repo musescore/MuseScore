@@ -223,6 +223,7 @@ using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
 using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using InferredHairpinsStack = std::vector<Hairpin*>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
@@ -301,6 +302,9 @@ public:
     SLine* delayedOttava() { return _delayedOttava; }
     void setDelayedOttava(SLine* ottava) { _delayedOttava = ottava; }
 
+    void addInferredHairpin(Hairpin* hp);
+    InferredHairpinsStack getInferredHairpins();
+
 private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void initPartState(const QString& partId);
@@ -369,6 +373,7 @@ private:
     BracketsStack _brackets;
     OttavasStack _ottavas;                ///< Current ottavas
     HairpinsStack _hairpins;              ///< Current hairpins
+    InferredHairpinsStack _inferredHairpins;
     MusicXmlExtendedSpannerDesc _dummyNewMusicXmlSpannerDesc;
 
     Glissando* _glissandi[MAX_NUMBER_LEVEL][2];     ///< Current slides ([0]) / glissandi ([1])
@@ -417,6 +422,7 @@ private:
     MusicXMLParserPass2& _pass2;                // the pass2 results
     MxmlLogger* _logger;                        ///< Error logger
 
+    Hairpin* _inferredHairpinStart = nullptr;
     QStringList _dynamicsList;
     QString _enclosure;
     QString _wordsText;
@@ -457,6 +463,9 @@ private:
     QString matchRepeat() const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
+    void textToDynamic(String& text);
+    void textToCrescLine(String& text);
+    void addInferredCrescLine(const track_idx_t track, const Fraction& tick, const bool isVocalStaff);
     bool isLyricBracket() const;
     bool isLikelySubtitle(const Fraction& tick) const;
     bool isLikelyLegallyDownloaded(const Fraction& tick) const;

@@ -155,10 +155,9 @@
             <tempo>2</tempo>
             <text><font size="12"/><b>Straight</b></text>
             </Tempo>
-          <StaffText>
-            <placement>below</placement>
+          <Expression>
             <text><i>Cantabile</i></text>
-            </StaffText>
+            </Expression>
           <Beam>
             <StemDirection>down</StemDirection>
             <l1>44</l1>
