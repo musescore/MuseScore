@@ -144,7 +144,7 @@ macro(setup_module)
                     set(MODULE_NOT_LINK_GLOBAL OFF)
                 endif()
             else()
-                target_precompile_headers(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/build/pch/pch.h)
+                target_precompile_headers(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
             endif()
         endif()
     endif() # MUSE_COMPILE_USE_PCH
