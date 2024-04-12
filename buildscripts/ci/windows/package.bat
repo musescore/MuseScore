@@ -117,7 +117,7 @@ IF %BUILD_MODE% == nightly_build (
 RENAME %INSTALL_DIR% %ARTIFACT_NAME%
 7z a %ARTIFACTS_DIR%\%ARTIFACT_NAME%.7z %ARTIFACT_NAME%
 
-bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%.7z
+bash ./buildscripts/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%.7z
 ECHO "Finished 7z packing"
 GOTO END_SUCCESS
 
@@ -196,7 +196,7 @@ IF %DO_SIGN% == ON (
     CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --name %ARTIFACT_NAME% --file %ARTIFACT_PATH% || exit \b 1
 )
 
-bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
+bash ./buildscripts/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 
 GOTO END_SUCCESS
 
@@ -242,7 +242,7 @@ IF %DO_SIGN% == ON (
     CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --name %ARTIFACT_NAME% --file %ARTIFACT_PATH% || exit \b 1
 )
 
-bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
+bash ./buildscripts/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 
 ECHO "Finished portable packing"
 

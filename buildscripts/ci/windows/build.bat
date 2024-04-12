@@ -64,7 +64,7 @@ IF %BUILD_WIN_PORTABLE% == ON (
     SET MUSESCORE_BUILD_CONFIGURATION="app-portable"
 )
 
-bash ./build/ci/tools/make_revision_env.sh 
+bash ./buildscripts/ci/tools/make_revision_env.sh 
 SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\build_revision.env
 
 SET MUSESCORE_BUILD_CONFIGURATION=%MUSESCORE_BUILD_CONFIGURATION%
@@ -79,6 +79,6 @@ SET MUSESCORE_QT5_COMPAT=%QT5_COMPAT%
 
 CALL ninja_build.bat -t installrelwithdebinfo || exit \b 1
 
-bash ./build/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_MODE%
-bash ./build/ci/tools/make_version_env.sh %BUILD_NUMBER%
-bash ./build/ci/tools/make_branch_env.sh
+bash ./buildscripts/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_MODE%
+bash ./buildscripts/ci/tools/make_version_env.sh %BUILD_NUMBER%
+bash ./buildscripts/ci/tools/make_branch_env.sh

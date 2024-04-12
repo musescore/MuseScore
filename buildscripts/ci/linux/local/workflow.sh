@@ -12,7 +12,7 @@ DO_BUILD='true'
     #   env:
     #     pull_request_title: ${{ github.event.pull_request.title }}
     #   run: |
-        bash ./build/ci/tools/make_build_mode_env.sh -e workflow_dispatch -m testing_build
+        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e workflow_dispatch -m testing_build
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         DO_UPDATE_TS='false'
@@ -36,22 +36,22 @@ DO_BUILD='true'
 #      if: env.DO_BUILD == 'true'
 if [ $DO_SETUP == 'true' ]; then
       #run: |
-        bash ./build/ci/linux/setup.sh
+        bash ./buildscripts/ci/linux/setup.sh
 fi
 
 #    - name: Generate _en.ts files
 #      if: env.DO_BUILD == 'true'
 if [ $DO_BUILD == 'true' ]; then
 #      run: |
-        bash ./build/ci/translation/run_lupdate.sh
+        bash ./buildscripts/ci/translation/run_lupdate.sh
 fi
 
 #    - name: Update .ts files
 #      if: env.DO_UPDATE_TS == 'true'
 if [ $DO_UPDATE_TS == 'true' ]; then
 #      run: |
-        bash ./build/ci/translation/tx_install.sh -t ${TRANSIFEX_API_TOKEN} -s linux
-        bash ./build/ci/translation/tx_pull.sh
+        bash ./buildscripts/ci/translation/tx_install.sh -t ${TRANSIFEX_API_TOKEN} -s linux
+        bash ./buildscripts/ci/translation/tx_pull.sh
 fi        
 
     # - name: Generate placeholder.ts files
@@ -64,16 +64,16 @@ fi
 if [ $DO_BUILD == 'true' ]; then
 #      run: |
 #        C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        bash ./build/ci/linux/build.sh -n ${github_run_id}
+        bash ./buildscripts/ci/linux/build.sh -n ${github_run_id}
 fi
     # - name: Generate dump symbols
     #   if: env.DO_BUILD == 'true'
     #   run: |
-    #     sudo bash ./build/ci/linux/dumpsyms.sh  
+    #     sudo bash ./buildscripts/ci/linux/dumpsyms.sh  
  #   - name: Package 
  #     if: env.DO_BUILD == 'true'
 if [ $DO_BUILD == 'true' ]; then
 #      run: |
-        bash ./build/ci/linux/package.sh
+        bash ./buildscripts/ci/linux/package.sh
 fi
   

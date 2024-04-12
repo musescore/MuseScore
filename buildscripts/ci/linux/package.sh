@@ -77,7 +77,7 @@ fi
 if [ "$PACKTYPE" == "7z" ]; then
     mv $INSTALL_DIR $ARTIFACT_NAME
     7z a $ARTIFACTS_DIR/$ARTIFACT_NAME.7z $ARTIFACT_NAME
-    bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.7z
+    bash ./buildscripts/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.7z
     chmod a+rw $ARTIFACT_NAME.7z
 fi
 
@@ -90,9 +90,9 @@ if [ "$PACKTYPE" == "appimage" ]; then
     *) unset UPDATE_INFORMATION;; # disable updates for other build modes
     esac
 
-    bash ./build/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${ARTIFACT_NAME}.AppImage" "${PACKARCH}"
+    bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${ARTIFACT_NAME}.AppImage" "${PACKARCH}"
     mv "${INSTALL_DIR}/../${ARTIFACT_NAME}.AppImage" "${ARTIFACTS_DIR}/"
-    bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.AppImage
+    bash ./buildscripts/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.AppImage
 
     if [ -v UPDATE_INFORMATION ]; then
         # zsync file contains data for automatic delta updates

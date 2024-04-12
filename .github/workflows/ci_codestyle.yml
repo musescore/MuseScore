@@ -13,4 +13,4 @@ jobs:
       uses: actions/checkout@v4    
     - name: Test coding style
       run: |
-        bash ./build/ci/linux/checkcodestyle.sh
+        bash ./buildscripts/ci/linux/checkcodestyle.sh

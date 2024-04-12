@@ -73,9 +73,9 @@ MUSESCORE_BUILD_VIDEOEXPORT_MODULE=$BUILD_VIDEOEXPORT \
 bash ./ninja_build.sh -t appimage
 
 
-bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_MODE
-bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
-bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
-bash ./build/ci/tools/make_branch_env.sh
+bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_MODE
+bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
+bash ./buildscripts/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
+bash ./buildscripts/ci/tools/make_branch_env.sh
 
 df -h .
