@@ -93,7 +93,7 @@ if [ "$BUILD_MODE" == "stable_build" ]; then
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 fi
 
-build/package_mac --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
+buildscripts/packaging/MacOS/package_mac --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
 
 DMGFILE="$(ls applebuild/*.dmg)"
 echo "DMGFILE: $DMGFILE"

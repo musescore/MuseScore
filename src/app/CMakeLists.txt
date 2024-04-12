@@ -263,8 +263,9 @@ if (MSCORE_OUTPUT_NAME)
 endif (MSCORE_OUTPUT_NAME)
 
 if (OS_IS_MAC)
-    set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in
-                                            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
+    set_target_properties(mscore PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/MacOS/MacOSXBundleInfo.plist.in
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
 endif (OS_IS_MAC)
 
 if (CC_IS_MINGW)
@@ -348,7 +349,7 @@ if (OS_IS_WIN)
 
     if (MUE_COMPILE_QT5_COMPAT)
         install(FILES
-                ${PROJECT_SOURCE_DIR}/build/windows/qt.conf
+                ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/qt.conf
                 ${QtInstallLibraries}
                 ${QT_INSTALL_BINS}/libEGL.dll
                 ${QT_INSTALL_BINS}/libGLESv2.dll
@@ -359,7 +360,7 @@ if (OS_IS_WIN)
                 DESTINATION bin)
     else()
         install(FILES
-                ${PROJECT_SOURCE_DIR}/build/windows/qt.conf
+                ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/qt.conf
                 ${QtInstallLibraries}
                 #${QT_INSTALL_BINS}/libEGL.dll
                 #${QT_INSTALL_BINS}/libGLESv2.dll
@@ -429,10 +430,10 @@ if (OS_IS_WIN)
 
     if (WIN_PORTABLE)
         # deploy the files and directory structure needed for the PortableApps.com format
-        install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
-        install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/Other DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
-        install(FILES ${PROJECT_SOURCE_DIR}/build/PortableApps/help.html DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
-        configure_file(${PROJECT_SOURCE_DIR}/build/PortableApps/appinfo.ini.in     ${CMAKE_INSTALL_PREFIX}/../../App/AppInfo/appinfo.ini   @ONLY)
+        install(DIRECTORY ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        install(DIRECTORY ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/PortableApps/Other DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        install(FILES ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/PortableApps/help.html DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        configure_file(${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/PortableApps/appinfo.ini.in     ${CMAKE_INSTALL_PREFIX}/../../App/AppInfo/appinfo.ini   @ONLY)
     endif (WIN_PORTABLE)
 
 ###########################################

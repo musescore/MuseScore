@@ -52,7 +52,7 @@ file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
 set(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.11")
 
 # Use custom version of WIX.template.in
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/packaging" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/buildscripts/packaging/Windows/Installer" ${CMAKE_MODULE_PATH})
 
 if(NOT CPACK_WIX_PRODUCT_GUID)
     set(CPACK_WIX_PRODUCT_GUID "00000000-0000-0000-0000-000000000000")
@@ -66,10 +66,10 @@ endif()
 
 message(STATUS "[SetupWindowsPackaging.cmake] CPACK_WIX_UPGRADE_GUID: ${CPACK_WIX_UPGRADE_GUID}")
 
-set(CPACK_WIX_LICENSE_RTF "${PROJECT_SOURCE_DIR}/build/packaging/LICENSE.rtf")
+set(CPACK_WIX_LICENSE_RTF "${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/Installer/LICENSE.rtf")
 set(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/share/icons/AppIcon/MS4_AppIcon.ico")
-set(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/build/packaging/installer_banner_wix.png")
-set(CPACK_WIX_UI_DIALOG "${PROJECT_SOURCE_DIR}/build/packaging/installer_background_wix.png")
+set(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/Installer/installer_banner_wix.png")
+set(CPACK_WIX_UI_DIALOG "${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/Installer/installer_background_wix.png")
 set(CPACK_WIX_PROGRAM_MENU_FOLDER "${MUSESCORE_NAME_VERSION}")
 set(CPACK_WIX_EXTENSIONS "WixUtilExtension")
 

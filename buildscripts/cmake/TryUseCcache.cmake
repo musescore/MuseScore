@@ -22,8 +22,8 @@ if(CCACHE_PROGRAM)
            # Set up wrapper scripts
            set(C_LAUNCHER   "${CCACHE_PROGRAM}")
            set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
-           configure_file(${PROJECT_SOURCE_DIR}/build/launch-c.in   launch-c)
-           configure_file(${PROJECT_SOURCE_DIR}/build/launch-cxx.in launch-cxx)
+           configure_file(${PROJECT_SOURCE_DIR}/buildscripts/tools/launch-c.in   launch-c)
+           configure_file(${PROJECT_SOURCE_DIR}/buildscripts/tools/launch-cxx.in launch-cxx)
            execute_process(COMMAND chmod a+rx
                             "${CMAKE_BINARY_DIR}/launch-c"
                             "${CMAKE_BINARY_DIR}/launch-cxx"

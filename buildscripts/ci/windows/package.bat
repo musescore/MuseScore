@@ -91,7 +91,7 @@ ECHO "INSTALL_DIR: %INSTALL_DIR%"
 ECHO "PACKAGE_TYPE: %PACKAGE_TYPE%"
 
 :: For MSI
-SET SIGN="build\ci\windows\sign.bat"
+SET SIGN="buildscripts\ci\windows\sign.bat"
 SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\uuidgen.exe"
 SET WIX_DIR=%WIX%
 

@@ -9,8 +9,8 @@ SET FILE_PATH=""
 SET FILE_NAME=""
 
 SET SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe"
-SET SIGNCERT="build\ci\windows\resources\musescore.pfx"
-SET SIGNCERT_ENCRYPTED="build\ci\windows\resources\musescore.enc"
+SET SIGNCERT="buildscripts\ci\windows\resources\musescore.pfx"
+SET SIGNCERT_ENCRYPTED="buildscripts\ci\windows\resources\musescore.enc"
 
 SET TIMESERVER1="http://timestamp.digicert.com"
 SET TIMESERVER2="http://timestamp.sectigo.com"
@@ -37,7 +37,7 @@ ECHO "FILE_PATH: %FILE_PATH%"
 ECHO "FILE_NAME: %FILE_NAME%"
 
 ECHO "=== Decrypt certificate ==="
-7z x -y %SIGNCERT_ENCRYPTED% -obuild\ci\windows\resources\ -p%CERT_ENCRYPT_SECRET%
+7z x -y %SIGNCERT_ENCRYPTED% -obuildscripts\ci\windows\resources\ -p%CERT_ENCRYPT_SECRET%
 ECHO "=== End Decrypt certificate ==="
 
 :: Sign files in dir
