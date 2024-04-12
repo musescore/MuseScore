@@ -21,6 +21,7 @@
 #define __MUSICXMLSUPPORT_H__
 
 #include "libmscore/fraction.h"
+#include "libmscore/fret.h"
 #include "libmscore/note.h"
 #include "libmscore/sym.h"
 
@@ -57,6 +58,23 @@ public:
 private:
       QList<StartStopList> _staffNoteLists; ///< The note start/stop times in all staves
       };
+
+struct HarmonyDesc
+{
+    int _track;
+    bool fretDiagramVisible() const { return _fretDiagram ? _fretDiagram->visible() : false; }
+    Harmony* _harmony;
+    FretDiagram* _fretDiagram;
+
+    HarmonyDesc(int m_track, Harmony* _harmony, FretDiagram* _fretDiagram)
+        : _track(m_track), _harmony(_harmony),
+        _fretDiagram(_fretDiagram) {}
+
+    HarmonyDesc()
+        : _track(0), _harmony(nullptr), _fretDiagram(nullptr) {}
+};
+
+using HarmonyMap = std::multimap<int, HarmonyDesc>;
 
 //---------------------------------------------------------
 //   VoiceDesc

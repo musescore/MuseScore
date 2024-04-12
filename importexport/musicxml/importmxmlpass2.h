@@ -320,7 +320,7 @@ private:
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
       FretDiagram* frame(qreal& defaultY, qreal& relativeY);
-      void harmony(const QString& partId, Measure* measure, const Fraction sTime, DelayedDirectionsList& delayedDirections);
+      void harmony(const QString& partId, Measure* measure, const Fraction sTime,  HarmonyMap& harmonyMap);
       Accidental* accidental();
       void beam(QMap<int, QString>& beamTypes);
       void duration(Fraction& dura);
@@ -391,7 +391,7 @@ class MusicXMLParserDirection {
 public:
       MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
       void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                     DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings);
+                     DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, HarmonyMap& harmonyMap);
       qreal totalY() const { return _defaultY + _relativeY; }
       QString placement() const;
 
@@ -444,6 +444,7 @@ private:
       void handleRepeats(Measure* measure, const int track, const Fraction tick);
       QString matchRepeat() const;
       void handleNmiCmi(Measure* measure, const int track, const Fraction tick, DelayedDirectionsList& delayedDirections);
+      void handleChordSym(const int track, const Fraction tick, HarmonyMap& harmonyMap);
       bool isLikelyFingering() const;
       bool isLikelyCredit(const Fraction& tick) const;
       void textToCrescLine(QString& text);

@@ -90,6 +90,7 @@ private slots:
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void chordSymbols() { mxmlMscxExportTestRef("testChordSymbols"); }
+      void chordSymbols2() { mxmlImportTestRef("testChordSymbols2"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
       void clefs2() { mxmlIoTest("testClefs2"); }
       void colorExport() { mxmlMscxExportTestRef("testColorExport"); }
