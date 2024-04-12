@@ -3302,7 +3302,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t = new StaffText(_score, Tid::EXPRESSION);
                   else
                         t = new StaffText(_score);
-                  t->setXmlText(_wordsText + _metroText);                  }
+                  t->setXmlText(_wordsText + _metroText);
+                  }
             else {
                   t = new RehearsalMark(_score);
                   if (!_rehearsalText.contains("<b>"))
