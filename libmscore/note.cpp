@@ -15,52 +15,48 @@
  Implementation of classes Note and ShadowNote.
 */
 
-#include <assert.h>
-
-#include "global/log.h"
-
-#include "note.h"
-#include "score.h"
-#include "chord.h"
-#include "sym.h"
-#include "xml.h"
-#include "slur.h"
-#include "tie.h"
-#include "text.h"
-#include "clef.h"
-#include "staff.h"
-#include "pitchspelling.h"
-#include "arpeggio.h"
-#include "tremolo.h"
-#include "utils.h"
-#include "image.h"
-#include "system.h"
-#include "tuplet.h"
-#include "articulation.h"
-#include "drumset.h"
-#include "segment.h"
-#include "measure.h"
-#include "undo.h"
-#include "part.h"
-#include "stafftype.h"
-#include "stringdata.h"
-#include "fret.h"
-#include "harmony.h"
-#include "fingering.h"
-#include "bend.h"
-#include "accidental.h"
-#include "page.h"
-#include "icon.h"
-#include "notedot.h"
-#include "spanner.h"
-#include "glissando.h"
-#include "bagpembell.h"
-#include "hairpin.h"
-#include "textline.h"
-#include "hook.h"
 #include <QPointF>
 #include <QtMath>
 #include <QVector2D>
+
+#include "global/log.h"
+
+#include "accidental.h"
+#include "arpeggio.h"
+#include "articulation.h"
+#include "bagpembell.h"
+#include "bend.h"
+#include "chord.h"
+#include "clef.h"
+#include "score.h"
+#include "drumset.h"
+#include "fret.h"
+#include "fingering.h"
+#include "glissando.h"
+#include "hairpin.h"
+#include "hook.h"
+#include "icon.h"
+#include "image.h"
+#include "measure.h"
+#include "note.h"
+#include "notedot.h"
+#include "page.h"
+#include "part.h"
+#include "pitchspelling.h"
+#include "segment.h"
+#include "spanner.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "stringdata.h"
+#include "sym.h"
+#include "system.h"
+#include "textline.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -1874,6 +1870,7 @@ Element* Note::drop(EditData& data)
                         }
                   score()->undoRemoveElement(this);
                   score()->undoAddElement(n);
+                  return n;
                   }
                   break;
 
