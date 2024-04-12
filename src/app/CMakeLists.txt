@@ -348,7 +348,7 @@ if (OS_IS_WIN)
 
     if (MUE_COMPILE_QT5_COMPAT)
         install(FILES
-                ${PROJECT_SOURCE_DIR}/build/qt.conf
+                ${PROJECT_SOURCE_DIR}/build/windows/qt.conf
                 ${QtInstallLibraries}
                 ${QT_INSTALL_BINS}/libEGL.dll
                 ${QT_INSTALL_BINS}/libGLESv2.dll
@@ -359,7 +359,7 @@ if (OS_IS_WIN)
                 DESTINATION bin)
     else()
         install(FILES
-                ${PROJECT_SOURCE_DIR}/build/qt.conf
+                ${PROJECT_SOURCE_DIR}/build/windows/qt.conf
                 ${QtInstallLibraries}
                 #${QT_INSTALL_BINS}/libEGL.dll
                 #${QT_INSTALL_BINS}/libGLESv2.dll
@@ -500,7 +500,7 @@ elseif(OS_IS_MAC)
     if(MUE_COMPILE_INSTALL_QTQML_FILES)
         install(DIRECTORY
                 ${QT_INSTALL_QML}
-                DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+                DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}${Mscore_FRAMEWORKS_NAME}
                 REGEX ".*QtWebkit.*" EXCLUDE
                 REGEX ".*QtTest.*" EXCLUDE
                 REGEX ".*QtSensors.*" EXCLUDE
