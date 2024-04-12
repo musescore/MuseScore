@@ -63,7 +63,7 @@ APP_IMAGE_NAME=MuseScoreTemporary
 ARTIFACT_NAME=MuseScore-${BUILD_VERSION}
 
 # Make AppImage
-bash ./build/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
+bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
 mv "${INSTALL_DIR}/../${APP_IMAGE_NAME}.AppImage" "${ARTIFACTS_DIR}/"
 
 cd $ARTIFACTS_DIR
@@ -91,7 +91,7 @@ rm -rf $APP_DIR
 
 cd $ORIGIN_DIR
 
-bash ./build/ci/tools/make_artifact_name_env.sh "$ARTIFACT_NAME.7z"
+bash ./buildscripts/ci/tools/make_artifact_name_env.sh "$ARTIFACT_NAME.7z"
 
 df -h .
 

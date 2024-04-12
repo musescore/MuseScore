@@ -22,6 +22,8 @@
 #ifndef MU_CONVERTER_BACKENDAPI_H
 #define MU_CONVERTER_BACKENDAPI_H
 
+#include <QFile>
+
 #include "types/retval.h"
 
 #include "io/path.h"

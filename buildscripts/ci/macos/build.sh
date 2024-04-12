@@ -70,7 +70,7 @@ MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
 MUSESCORE_QT5_COMPAT=$QT5_COMPAT \
 bash ./ninja_build.sh -t install
 
-bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_MODE
-bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
-bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
-bash ./build/ci/tools/make_branch_env.sh
+bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_MODE
+bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
+bash ./buildscripts/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
+bash ./buildscripts/ci/tools/make_branch_env.sh

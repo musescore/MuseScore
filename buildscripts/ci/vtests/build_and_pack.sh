@@ -31,8 +31,8 @@ source $BUILD_TOOLS/environment.sh
 
 # =========== Build =======================
 
-bash ./build/ci/tools/make_build_mode_env.sh -m devel_build
-bash ./build/ci/tools/make_build_number.sh
+bash ./buildscripts/ci/tools/make_build_mode_env.sh -m devel_build
+bash ./buildscripts/ci/tools/make_build_number.sh
 BUILD_MODE=$(cat ./$ARTIFACTS_DIR/env/build_mode.env)
 BUILD_NUMBER=$(cat ./$ARTIFACTS_DIR/env/build_number.env)
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
@@ -44,10 +44,10 @@ MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_QT5_COMPAT=OFF \
 bash ninja_build.sh -t appimagedebug
 
-bash ./build/ci/tools/make_release_channel_env.sh -c $BUILD_MODE
-bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
-bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
-bash ./build/ci/tools/make_branch_env.sh
+bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $BUILD_MODE
+bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
+bash ./buildscripts/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
+bash ./buildscripts/ci/tools/make_branch_env.sh
 
 # =========== Pack ==========================
 
@@ -60,7 +60,7 @@ APP_IMAGE_NAME=MuseScoreTemporary
 ARTIFACT_NAME=app
 
 # Make AppImage
-bash ./build/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
+bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
 mv "${INSTALL_DIR}/../${APP_IMAGE_NAME}.AppImage" "${ARTIFACTS_DIR}/"
 
 cd $ARTIFACTS_DIR
