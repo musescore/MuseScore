@@ -153,12 +153,14 @@
             <text><font size="12"/><b>Straight</b></text>
             </Tempo>
           <StaffText>
+            <style>Expression</style>
             <text>3rd time senza <i>Invisalign</i></text>
             </StaffText>
           <StaffText>
             <text>2nd time ad lib.</text>
             </StaffText>
           <StaffText>
+            <style>Expression</style>
             <placement>below</placement>
             <text><i>Cantabile</i></text>
             </StaffText>

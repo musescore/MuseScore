@@ -313,6 +313,7 @@
       <Measure>
         <voice>
           <StaffText>
+            <style>Expression</style>
             <text><i>increasingly grave in spirit</i></text>
             </StaffText>
           <Spanner type="HairPin">
@@ -556,6 +557,7 @@
       <Measure>
         <voice>
           <StaffText>
+            <style>Expression</style>
             <placement>below</placement>
             <text><i>with care</i></text>
             </StaffText>
