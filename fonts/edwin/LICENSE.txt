@@ -1,4 +1,4 @@
-Copyright (c) 2021, MuseScore BVBA (http://www.musescore.org/),
+Copyright (c) 2021, MuseScore Limited (http://www.musescore.org/),
 with Reserved Font Name "Edwin".
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.

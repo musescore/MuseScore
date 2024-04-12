@@ -9,7 +9,7 @@ The Edwin Font Software is a family consisting of four fonts, Edwin Roman, Edwin
 Basic font information
 ----------------------
 
-Edwin is a typeface adapted from the C059 typeface (from URW++ Design and Development GmbH) by MuseScore BVBA for its music notation and scoring applications.
+Edwin is a typeface adapted from the C059 typeface (from URW++ Design and Development GmbH) by MuseScore Limited for its music notation and scoring applications.
 
 
 Change log

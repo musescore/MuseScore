@@ -5,7 +5,7 @@
 # found in the LICENSE file.
 
 #
-# Modified 2020 MuseScore BVBA and others  
+# Modified 2020 MuseScore Limited  
 # Added option --dumpsyms-bin
 
 """Convert pdb to sym for given directories"""
