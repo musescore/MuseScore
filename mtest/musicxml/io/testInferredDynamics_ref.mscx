@@ -146,6 +146,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
+            <style>Expression</style>
             <placement>below</placement>
             <text><sym>dynamicMezzo</sym><sym>dynamicForte</sym> <i>cresc.</i></text>
             </StaffText>

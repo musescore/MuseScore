@@ -10,21 +10,22 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "xml.h"
-#include "score.h"
-#include "staff.h"
-#include "revisions.h"
-#include "part.h"
+#include "audio.h"
+//#include "barline.h"
+#include "excerpt.h"
+#include "measurebase.h"
 #include "page.h"
+#include "part.h"
+#include "revisions.h"
+#include "score.h"
+#include "scoreOrder.h"
+#include "sig.h"
+#include "spanner.h"
+#include "staff.h"
+#include "stafftext.h"
 #include "style.h"
 #include "sym.h"
-#include "audio.h"
-#include "sig.h"
-#include "barline.h"
-#include "excerpt.h"
-#include "spanner.h"
-#include "scoreOrder.h"
-#include "measurebase.h"
+#include "xml.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -214,6 +215,11 @@ bool Score::read(XmlReader& e)
                         _layoutMode = LayoutMode::SYSTEM;
                   else
                         qDebug("layoutMode: %s", qPrintable(s));
+                  }
+            else if (tag == "Expression") { // Mu4 compatibility
+                  QString s = e.readElementText();
+                  TextBase* t = new StaffText(score(), Tid::EXPRESSION);
+                  t->setXmlText(s);
                   }
             else
                   e.unknown();
@@ -406,7 +412,7 @@ Score::FileError MasterScore::read302(XmlReader& e)
                   }
             else if (tag == "programRevision")
                   setMscoreRevision(e.readIntHex());
-            else if (tag == "LastEID")    // 4.2+ compatibility
+            else if (tag == "LastEID")    // Mu4.2+ compatibility
                   e.skipCurrentElement(); // skip, don't log
             else if (tag == "Score") {
                   MasterScore* score;

@@ -3297,10 +3297,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         }
                   }
             else if (!_wordsText.isEmpty() || !_metroText.isEmpty()) {
-                  t = new StaffText(_score);
-                  t->setXmlText(_wordsText + _metroText);
                   isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
-                  }
+                  if (isExpressionText)
+                        t = new StaffText(_score, Tid::EXPRESSION);
+                  else
+                        t = new StaffText(_score);
+                  t->setXmlText(_wordsText + _metroText);                  }
             else {
                   t = new RehearsalMark(_score);
                   if (!_rehearsalText.contains("<b>"))
