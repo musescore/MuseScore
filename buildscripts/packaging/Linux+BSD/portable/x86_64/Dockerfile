@@ -1,7 +1,7 @@
 FROM library/ubuntu:16.04
 # For maximum AppImage compatibility, build on the oldest Linux distribution
 # that still receives security updates from its manufacturer.
-COPY build/Linux+BSD/portable/Recipe /Recipe
+COPY buildscripts/packaging/Linux+BSD/portable/Recipe /Recipe
 RUN bash -ex Recipe
 # Note that each additional ADD, RUN or COPY command creates a new "layer"
 # (i.e. an intermediate Docker image). Any clean-up steps after a RUN command

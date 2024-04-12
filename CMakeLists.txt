@@ -31,7 +31,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}
-    ${CMAKE_CURRENT_LIST_DIR}/build
+    ${CMAKE_CURRENT_LIST_DIR}/buildscripts
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts/cmake
     ${CMAKE_MODULE_PATH}
     )
@@ -159,11 +159,11 @@ add_subdirectory(src)
 ###########################################
 
 if (OS_IS_LIN)
-    include(SetupAppImagePackaging)
+    include(packaging/Linux+BSD/SetupAppImagePackaging)
 endif(OS_IS_LIN)
 
 if (OS_IS_WIN)
-    include(SetupWindowsPackaging)
+    include(packaging/Windows/SetupWindowsPackaging)
 endif(OS_IS_WIN)
 
 ###########################################

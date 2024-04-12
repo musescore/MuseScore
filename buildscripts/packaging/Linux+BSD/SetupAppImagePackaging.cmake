@@ -30,7 +30,7 @@ if(${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "portableanything" wo
     set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Portable") # distinguish our build from distro packages
 
     # Build portable AppImage as per https://github.com/probonopd/AppImageKit
-    add_subdirectory(build/Linux+BSD/portable)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/portable)
 
     if(NOT DEFINED ARCH)
         execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE) # Get architecture (strip trailing newline)
@@ -48,13 +48,13 @@ if(${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "portableanything" wo
     execute_process(COMMAND echo ${CMAKE_INSTALL_PREFIX} OUTPUT_FILE PREFIX.txt)
 
     # Prepare portable scripts:
-    configure_file(build/Linux+BSD/portable/AppRun.in AppRun @ONLY)
-    configure_file(build/Linux+BSD/portable/portable-utils.in portable-utils @ONLY)
+    configure_file(${CMAKE_CURRENT_LIST_DIR}/portable/AppRun.in AppRun @ONLY)
+    configure_file(${CMAKE_CURRENT_LIST_DIR}/portable/portable-utils.in portable-utils @ONLY)
     install(PROGRAMS ${PROJECT_BINARY_DIR}/AppRun DESTINATION . COMPONENT portable)
     install(PROGRAMS ${PROJECT_BINARY_DIR}/portable-utils
-        build/Linux+BSD/portable/ldd-recursive
-        build/rm-empty-dirs DESTINATION bin COMPONENT portable)
-    install(FILES build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
+        ${CMAKE_CURRENT_LIST_DIR}/portable/ldd-recursive
+        buildscripts/packaging/Linux+BSD/portable/rm-empty-dirs DESTINATION bin COMPONENT portable)
+    install(FILES ${CMAKE_CURRENT_LIST_DIR}/portable/qt.conf DESTINATION bin COMPONENT portable)
 else(${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable")
     set(MAN_PORTABLE ".\\\"") # comment out lines in man page that are only relevant to the portable version
 endif(${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable")
@@ -69,7 +69,7 @@ else(MUSESCORE_UNSTABLE)
 endif(MUSESCORE_UNSTABLE)
 
 # Install desktop file (perform variable substitution first)
-configure_file(build/Linux+BSD/org.musescore.MuseScore.desktop.in org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/org.musescore.MuseScore.desktop.in org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop)
 install(FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
 
 # Install appdata file (perform variable substitution first)
@@ -81,7 +81,7 @@ if("${MUSESCORE_INSTALL_SUFFIX}" MATCHES "-")
     )
 endif("${MUSESCORE_INSTALL_SUFFIX}" MATCHES "-")
 
-configure_file(build/Linux+BSD/org.musescore.MuseScore.appdata.xml.in org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.appdata.xml)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/org.musescore.MuseScore.appdata.xml.in org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.appdata.xml)
 install(FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.appdata.xml DESTINATION share/metainfo)
 
 # Substitute variables within man pages
@@ -90,7 +90,7 @@ set(MAN_ALIAS musescore)
 set(MAN_EXTENSION .1)
 set(MAN_FULL_NAME ${MAN_NAME}${MUSESCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
 set(MAN_FULL_ALIAS ${MAN_ALIAS}${MUSESCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/Linux+BSD/${MAN_NAME}${MAN_EXTENSION}.in)
+set(MAN_TARGET ${CMAKE_CURRENT_LIST_DIR}/${MAN_NAME}${MAN_EXTENSION}.in)
 set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
 string(TOUPPER "mscore${MUSESCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
 configure_file(${MAN_TARGET} ${MAN_BUILD})
@@ -149,7 +149,7 @@ else(LN_EXECUTABLE)
 endif(LN_EXECUTABLE)
 
 # Add .MSCZ, .MSCX and .MSCS to MIME database (informs system that filetypes .MSCZ, .MSCX and .MSCS are MuseScore files)
-configure_file(build/Linux+BSD/musescore.xml.in musescore${MUSESCORE_INSTALL_SUFFIX}.xml)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/musescore.xml.in musescore${MUSESCORE_INSTALL_SUFFIX}.xml)
 install(FILES ${PROJECT_BINARY_DIR}/musescore${MUSESCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
 
 # Note: Must now run "update-mime-database" to apply changes.

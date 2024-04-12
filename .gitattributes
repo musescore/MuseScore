@@ -1,7 +1,7 @@
-build/PortableApps/**/*.ini eol=crlf
-build/PortableApps/**/*.txt eol=crlf
-build/PortableApps/**/*.ini.in eol=crlf
-build/PortableApps/**/*.html eol=crlf
+buildscripts/packaging/Windows/PortableApps/**/*.ini eol=crlf
+buildscripts/packaging/Windows/PortableApps/**/*.txt eol=crlf
+buildscripts/packaging/Windows/PortableApps/**/*.ini.in eol=crlf
+buildscripts/packaging/Windows/PortableApps/**/*.html eol=crlf
 
 # Shell scripts with shebang lines must have LF line endings
 *.sh            text            eol=lf

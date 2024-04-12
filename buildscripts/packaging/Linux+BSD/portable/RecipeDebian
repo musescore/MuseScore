@@ -134,7 +134,7 @@ build() {
 
   if [ "$ARCH" == "armhf" ]; then
     LIBARM="/lib/arm-linux-gnueabihf" # might generalize in future to support other archs
-    CMAKE_TOOLCHAIN_FILE="/MuseScore/build/Linux+BSD/portable/ARM/jessie-crosscompile-armhf.cmake" \
+    CMAKE_TOOLCHAIN_FILE="/MuseScore/buildscripts/packaging/Linux+BSD/portable/ARM/jessie-crosscompile-armhf.cmake" \
     LD_LIBRARY_PATH="/usr$LIBARM:/usr$LIBARM/alsa-lib:/usr$LIBARM/pulseaudio:$LIBARM" \
     make "$@" portable
   else

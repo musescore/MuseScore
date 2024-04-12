@@ -161,7 +161,7 @@ jobs:
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
-        build\ci\windows\setup.bat --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\setup.bat --qt5_compat ${{ env.QT5_COMPAT }}
     - name: Make environment file
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -187,7 +187,7 @@ jobs:
       shell: cmd
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
-        build\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -200,7 +200,7 @@ jobs:
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
         IF ${{ env.BUILD_MODE }} == stable_build ( SET GUID=${{ secrets.WIN_MSI_STABLE_MU4_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_MU4_GUID }} )
-        build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
+        buildscripts\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum 
       if: env.DO_BUILD == 'true'
       run: |
@@ -320,7 +320,7 @@ jobs:
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
-        build\ci\windows\setup.bat --portable ON --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\setup.bat --portable ON --qt5_compat ${{ env.QT5_COMPAT }}
     - name: Make environment file
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -337,14 +337,14 @@ jobs:
       shell: cmd
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
-        build\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
     - name: Package
       if: env.DO_BUILD == 'true'
       shell: cmd
       run: |      
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
-        build\ci\windows\package.bat --portable ON --signsecret %S_S% --signpass %S_P%
+        buildscripts\ci\windows\package.bat --portable ON --signsecret %S_S% --signpass %S_P%
     - name: Checksum 
       if: env.DO_BUILD == 'true'
       run: |
