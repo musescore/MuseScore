@@ -13520,7 +13520,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <item>
                    <widget class="QRadioButton" name="tabParenthMeasure">
                     <property name="text">
-                     <string>Always show at the start of a bar</string>
+                     <string>Always show at the start of a measure</string>
                     </property>
                    </widget>
                   </item>
