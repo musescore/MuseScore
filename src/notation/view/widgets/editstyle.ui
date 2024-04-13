@@ -13534,8 +13534,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <item>
                    <widget class="QCheckBox" name="tabParenthArticulation">
                     <property name="text">
-                     <string>Always show parenthesized fret marks when 
-articulation markings are present</string>
+                     <string>Always show parenthesized fret marks when articulation markings are present</string>
                     </property>
                    </widget>
                   </item>
