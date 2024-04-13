@@ -13772,7 +13772,7 @@ By default, they will be placed such as that their right end are at the same lev
                <item>
                 <widget class="QGroupBox" name="groupBox_2">
                  <property name="title">
-                  <string>Parenthesis indicating ties</string>
+                  <string>Parentheses indicating ties</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_601">
                   <item>
@@ -13799,8 +13799,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <item>
                    <widget class="QCheckBox" name="tabParenthArticulation">
                     <property name="text">
-                     <string>Always show parenthesised fret marks when 
-articulation markings are present</string>
+                     <string>Always show parenthesized fret marks when articulation markings are present</string>
                     </property>
                    </widget>
                   </item>
