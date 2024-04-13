@@ -273,6 +273,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
         IAudioDriver::Spec activeSpec;
         if (m_audioDriver->open(requiredSpec, &activeSpec)) {
+            m_configuration->setSampleRate(activeSpec.sampleRate);
             setupAudioWorker(activeSpec);
             return;
         }
