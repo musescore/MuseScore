@@ -1228,9 +1228,14 @@ void MusicXMLParserPass1::identification()
             else if (_e.name() == "rights") {
                   _score->setMetaTag("copyright", _e.readElementText().trimmed());
                   bool copyrightFirstPageOnly = true; // TODO: expose as import setting
-                  if (copyrightFirstPageOnly)
-                        // Somewhat temporary fix: hide footer and make copyright a text box
-                        _score->setStyleValue(Sid::showFooter, false);
+                  if (copyrightFirstPageOnly) { // Mu4 default
+                        _score->setStyleValue(Sid::oddFooterC, "$C");
+                        _score->setStyleValue(Sid::evenFooterC, "$C");
+                        }
+                  else { // Mu3 default
+                        _score->setStyleValue(Sid::oddFooterC, "$:copyright"); // or $c
+                        _score->setStyleValue(Sid::evenFooterC, "$:copyright"); // or $c
+                        }
                   }
             else if (_e.name() == "encoding") {
                   // TODO

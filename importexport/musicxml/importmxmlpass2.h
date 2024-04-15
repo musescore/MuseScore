@@ -322,7 +322,6 @@ private:
       void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QColor color, const QString& text, const bool print);
       void staffDetails(const QString& partId, Measure* measure = nullptr);
       void staffTuning(StringData* t);
-      void addCopyrightVBox();
       void skipLogCurrElem();
 
       // multi-measure rest state handling

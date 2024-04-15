@@ -5,6 +5,8 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <evenFooterC>$C</evenFooterC>
+      <oddFooterC>$C</oddFooterC>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

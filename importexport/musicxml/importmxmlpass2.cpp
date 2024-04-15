@@ -634,52 +634,6 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
       }
 
 //---------------------------------------------------------
-//   findFirstPageBreak
-//---------------------------------------------------------
-
-static MeasureBase* findFirstPageBreak(Score* score)
-      {
-      for (MeasureBase* mb = score->first(); mb; mb = mb->next())
-            if (mb->pageBreak())
-                  return mb;
-      // If no imported pageBreaks, find the last measure of the
-      // second-to-last or last system of the first page
-      score->doLayout();
-      if (score->pages().size() == 1) return score->last();
-      auto firstPageSystems = score->pages().first()->systems();
-      MeasureBase* lastMeasureOfFirstPageAdjusted = firstPageSystems[firstPageSystems.length() - 2]->measures().back();
-      return lastMeasureOfFirstPageAdjusted ? lastMeasureOfFirstPageAdjusted : score->last();
-      }
-
-//---------------------------------------------------------
-//   addCopyrightVBox
-//---------------------------------------------------------
-
-/**
- Adds VBox at the end of the first page with copyright info
- */
-
-void MusicXMLParserPass2::addCopyrightVBox()
-      {
-      if (_score->metaTag("copyright").isEmpty()
-       || _score->pages().first()->systems().back()->measure(0)->isVBox())
-            return;
-      Text* copyrightText = new Text(_score);
-      VBox* copyrightVBox = new VBox(_score);
-      copyrightText->setPlainText(_score->metaTag("copyright"));
-      copyrightText->setAlign(Align::BASELINE | Align::HCENTER);
-      copyrightText->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
-      copyrightVBox->add(copyrightText);
-      MeasureBase* mb = findFirstPageBreak(_score);
-      _score->addMeasure(copyrightVBox, mb->next());
-      copyrightVBox->setPageBreak(true);
-      if (mb->pageBreak()) {
-            mb->setPageBreak(false);
-            mb->setLineBreak(true);
-            }
-      }
-
-//---------------------------------------------------------
 //   text2syms
 //---------------------------------------------------------
 
@@ -2135,11 +2089,6 @@ void MusicXMLParserPass2::scorePartwise()
       _score->connectArpeggios();
       _score->fixupLaissezVibrer();
       cleanFretDiagrams(_score->firstMeasure());
-
-      bool copyrightFirstPageOnly = true; // TODO: expose as import setting
-      if (copyrightFirstPageOnly)
-            // Somewhat temporary fix: hide footer and make copyright a text box
-            addCopyrightVBox();
 
       cleanUpLayoutBreaks(_score, _logger);
 
