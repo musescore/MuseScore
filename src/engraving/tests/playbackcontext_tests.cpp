@@ -39,6 +39,7 @@ using namespace mu::mpe;
 static const mu::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
 
 static constexpr int HAIRPIN_STEPS = 24;
+static constexpr int TICKS_STEP = 480;
 
 class Engraving_PlaybackContextTests : public ::testing::Test
 {
@@ -120,7 +121,7 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
 TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
 {
     // [GIVEN] Score (piano with 2 staves) with sound flags
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
@@ -177,6 +178,55 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
             EXPECT_TRUE(params.empty());
         }
     }
+
+    delete score;
+}
+
+/**
+ * @brief Engraving_PlaybackContextTests_ParseSoundFlags_ArcoAndOrdCancelPlayingTechniques
+ *  @details Checks whether Arco & "Ord." correctly cancel playing techniques. See:
+ *  https://github.com/musescore/MuseScore/issues/22403
+ */
+TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags_ArcoAndOrdCancelPlayingTechniques)
+{
+    // [GIVEN] Score with sound flags & playing techniques
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags_arco.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing sound flags & playing techniques
+    PlaybackContext ctx;
+
+    // [WHEN] Parse the sound flags & playing techniques
+    const Part* part = parts.front();
+    ctx.update(part->id(), score);
+
+    // [THEN] 1st measure: Pizz.
+    for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Pizzicato);
+    }
+
+    // [THEN] "Standard" for all the other measures, as Pizz. was canceled with "Ord." in the 2nd measure
+    int lastTick = score->lastMeasure()->tick().ticks();
+    for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Standard);
+    }
+
+    // [THEN] The actual params match the expectation
+    PlaybackParamList ordinary { { PLAY_TECHNIQUE_PARAM_CODE, mu::Val(ORDINARY_PLAYING_TECHNIQUE_CODE), 0 } };
+    PlaybackParamList bartok { { PLAY_TECHNIQUE_PARAM_CODE, mu::Val("bartok"), 0 } };
+
+    PlaybackParamMap expectedParams {
+        { timestampFromTicks(score, 1920), ordinary }, // 2nd measure (cancels Pizz.)
+        { timestampFromTicks(score, 3840), bartok }, // 3rd measure
+        { timestampFromTicks(score, 5760), ordinary }, // 4th (canceled by Arco)
+    };
+
+    PlaybackParamMap params = ctx.playbackParamMap(score);
+    EXPECT_EQ(params, expectedParams);
 
     delete score;
 }
