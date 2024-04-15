@@ -290,8 +290,10 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
 
     items << resetItem;
 
+    bool isMultiSelectionEnabled = !m_availablePresetsModel.isEmpty();
+
     muse::uicomponents::MenuItem* multiSelectionItem
-        = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback", "Allow multiple selection"));
+        = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback", "Allow multiple selection"), isMultiSelectionEnabled);
 
     muse::ui::UiAction multiSelectionAction = multiSelectionItem->action();
     multiSelectionAction.checkable = muse::ui::Checkable::Yes;
@@ -330,9 +332,14 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
     if (menuId == RESET_MENU_ID) {
         beginCommand();
 
-        soundFlag->undoChangeSoundFlag({ defaultPresetCode() }, defaultPlayingTechniqueCode());
+        const SoundFlag::PresetCodes oldPresetCodes = soundFlag->soundPresets();
+        const SoundFlag::PresetCodes newPresetCodes = { defaultPresetCode() };
+        soundFlag->undoChangeSoundFlag(newPresetCodes, defaultPlayingTechniqueCode());
+
         soundFlag->undoResetProperty(Pid::APPLY_TO_ALL_STAVES);
+
         bool needUpdateNotation = updateStaffText();
+        bool needUpdateAvailablePlayingTechniques = oldPresetCodes != newPresetCodes;
 
         endCommand();
 
@@ -341,7 +348,10 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
         }
 
         emit selectedPresetCodesChanged();
-        emit selectedPlayingTechniqueCodeChanged();
+
+        if (needUpdateAvailablePlayingTechniques) {
+            loadAvailablePlayingTechniques();
+        }
     } else if (menuId == MULTI_SELECTION_MENU_ID) {
         playbackConfiguration()->setSoundPresetsMultiSelectionEnabled(!playbackConfiguration()->soundPresetsMultiSelectionEnabled());
         emit contextMenuModelChanged();

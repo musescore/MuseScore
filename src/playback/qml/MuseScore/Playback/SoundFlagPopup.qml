@@ -50,9 +50,8 @@ StyledPopupView {
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        const marginFromElement = 12
         var popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
-        root.y = -popupHeight - marginFromElement
+        root.y = -popupHeight
         root.x = (root.parent.width / 2) - (root.width / 2) + root.margins
 
         root.setOpensUpward(true)
@@ -130,6 +129,8 @@ StyledPopupView {
                 Layout.preferredHeight: width
 
                 menuModel: soundFlagModel.contextMenuModel
+
+                enabled: !museSoundsParams.noOptions
 
                 navigation.panel: navPanel
                 navigation.order: 2

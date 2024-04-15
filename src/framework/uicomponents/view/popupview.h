@@ -249,7 +249,7 @@ protected:
     virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
     virtual void updateGeometry();
-    void updateContentPosition();
+    virtual void updateContentPosition();
 
     virtual QRect viewGeometry() const;
 
