@@ -121,7 +121,7 @@ bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
             undo(new ChangeStyle(this, st, overlap));
             return true;
         } else {
-            LOGE() << "The style file is not compatible with this version of MuseScore.";
+            LOGE() << "The style file is not compatible with this version of MuseScore Studio.";
             return false;
         }
     }

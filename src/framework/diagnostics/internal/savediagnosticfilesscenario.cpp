@@ -35,7 +35,7 @@ Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
     if (configuration()->shouldWarnBeforeSavingDiagnosticFiles()) {
         IInteractive::Result result = interactive()->warning(
             muse::trc("diagnostics", "Save diagnostic files?"),
-            muse::trc("diagnostics", "This will create a .zip file with information about your MuseScore setup "
+            muse::trc("diagnostics", "This will create a .zip file with information about your MuseScore Studio setup "
                                      "to help developers diagnose any problems you are having. "
                                      "You can inspect the contents of this file before sending it to anyone."),
             { IInteractive::Button::Cancel, IInteractive::Button::Save }, IInteractive::Button::Save,

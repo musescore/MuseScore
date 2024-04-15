@@ -77,6 +77,8 @@ QVariantMap LearnPageModel::classesAuthor() const
     QVariantMap author;
     author["name"] = muse::qtrc("learn", "Marc Sabatella");
     author["role"] = muse::qtrc("learn", "Instructor");
+
+    // Rename to "MuseScore Studio" in this description?
     author["position"] = muse::qtrc("learn", "Creator, Mastering MuseScore");
     author["description"] = muse::qtrc("learn", "Welcome to Mastering MuseScore – the most comprehensive resource "
                                                 "for learning the world’s most popular music notation software! "

@@ -34,7 +34,7 @@ using namespace muse::ui;
 
 static std::vector<std::string> shortcutsFileFilter()
 {
-    return { muse::trc("shortcuts", "MuseScore shortcuts file") + " (*.xml)" };
+    return { muse::trc("shortcuts", "MuseScore Studio shortcuts file") + " (*.xml)" };
 }
 
 ShortcutsModel::ShortcutsModel(QObject* parent)

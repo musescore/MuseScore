@@ -271,7 +271,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
 
 void UpdateScenario::showNoAppUpdateMsg()
 {
-    QString str = muse::qtrc("update", "You already have the latest version of MuseScore. "
+    QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
                                        "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
@@ -345,9 +345,8 @@ void UpdateScenario::downloadRelease()
 
 void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& installerPath)
 {
-    std::string info = muse::trc("update", "MuseScore needs to close to complete the installation. "
-                                           "If you have any unsaved changes, you will be prompted to save them before MuseScore closes.");
-
+    std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
+                                           "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
     int closeBtn = int(IInteractive::Button::CustomButton) + 1;
     IInteractive::Result result = interactive()->info("", info,
                                                       { interactive()->buttonData(IInteractive::Button::Cancel),

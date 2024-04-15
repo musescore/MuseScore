@@ -80,7 +80,7 @@ inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = "")
                .arg(u"https://musescore.org/download#older-versions");
         break;
     case Err::FileTooNew:
-        text = muse::mtrc("engraving", "This file was saved using a newer version of MuseScore. "
+        text = muse::mtrc("engraving", "This file was saved using a newer version of MuseScore Studio. "
                                        "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version.");
         break;
     case Err::FileOld300Format:

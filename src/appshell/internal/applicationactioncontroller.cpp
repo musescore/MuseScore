@@ -269,8 +269,8 @@ void ApplicationActionController::revertToFactorySettings()
     static constexpr bool NOTIFY_ABOUT_CHANGES = false;
     configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES);
 
-    title = muse::trc("appshell", "Would you like to restart MuseScore now?");
-    question = muse::trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
+    title = muse::trc("appshell", "Would you like to restart MuseScore Studio now?");
+    question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
 
     int restartBtn = int(IInteractive::Button::Apply);
     result = interactive()->question(title, question,

@@ -40,7 +40,7 @@ int tupletVoiceLimit()
 
     Q_ASSERT_X(allowedVoices <= engraving::VOICES,
                "MidiTuplet::tupletVoiceLimit",
-               "Allowed voice count exceeds MuseScore voice limit");
+               "Allowed voice count exceeds MuseScore Studio voice limit");
 
     // for multiple voices: one voice is reserved for non-tuplet chords
     return (allowedVoices == 1) ? 1 : static_cast<int>(allowedVoices) - 1;

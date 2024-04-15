@@ -66,11 +66,11 @@ elseif(OS_IS_MAC)
     set(EXECUTABLE_NAME mscore MACOSX_BUNDLE)
     set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.musescore.${MUSESCORE_NAME})
-    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSESCORE_NAME})
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSESCORE_NAME_WITH_SPACE})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${CMAKE_BUILD_NUMBER})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2024 MuseScore BVBA and others. Published under the GNU General Public License version 3.")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2024 MuseScore Limited. Published under the GNU General Public License version 3.")
 
     set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
 
@@ -212,7 +212,7 @@ endif()
 
 set (MSCORE_APPEND_SRC)
 
-if (OS_IS_WIN) 
+if (OS_IS_WIN)
     list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
 endif()
 

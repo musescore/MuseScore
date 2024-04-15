@@ -33,10 +33,10 @@ using namespace mu::appshell;
 
 static const QString imagePath(":/resources/LoadingScreen.svg");
 
-static constexpr QSize loadingScreenSize(810, 405);
+static constexpr QSize loadingScreenSize(810, 406);
 
 static const QColor messageColor("#99FFFFFF");
-static constexpr QRectF messageRect(loadingScreenSize.width() / 2, 269, 0, 0);
+static constexpr QRectF messageRect(loadingScreenSize.width() / 2, 264, 0, 0);
 
 static const QString website("www.musescore.org");
 static constexpr QRectF websiteRect(loadingScreenSize.width() - 48, loadingScreenSize.height() - 48, 0, 0);
