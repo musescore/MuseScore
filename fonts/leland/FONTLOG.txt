@@ -9,7 +9,7 @@ The Leland Font Software is a family consisting of two fonts, Leland and Leland 
 Basic font information
 ----------------------
 
-Leland is a Unicode typeface designed by MuseScore BVBA for its music notation and scoring applications.
+Leland is a Unicode typeface designed by MuseScore Limited for its music notation and scoring applications.
 
 It is compliant with version 1.4 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 

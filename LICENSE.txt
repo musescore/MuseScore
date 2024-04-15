@@ -1,15 +1,16 @@
-MuseScore, free and open source music notation software
-Copyright (C) 1999-2024 MuseScore BVBA and others
+MuseScore Studio, free and open source music notation software
+Copyright (C) 1999-2024 MuseScore Limited and others
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License version 3 as published
 by the Free Software Foundation.
 
-All fonts included in Musescore are made available under the GNU Freefont License,
-and those fonts are covered by the following special exception:
+All fonts included in MuseScore Studio are made available under the GNU
+Freefont License, and those fonts are covered by the following special
+exception:
 
-- If you create a document which uses fonts included in MuseScore, and
-embed this font or unaltered portions of this font into the document,
+- If you create a document which uses fonts included in MuseScore Studio,
+and embed this font or unaltered portions of this font into the document,
 then this font does not by itself cause the resulting document to be
 covered by the GNU General Public License. This exception does not
 however invalidate any other reasons why the document might be covered

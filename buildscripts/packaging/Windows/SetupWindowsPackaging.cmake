@@ -8,7 +8,7 @@ include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_NAME ${MUSESCORE_NAME})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
-set(CPACK_PACKAGE_VENDOR "MuseScore BVBA and Others")
+set(CPACK_PACKAGE_VENDOR "MuseScore Limited")
 set(CPACK_PACKAGE_CONTACT "https://musescore.org")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://musescore.org")
 
