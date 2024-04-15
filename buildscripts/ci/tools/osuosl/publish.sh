@@ -65,9 +65,9 @@ fi fi fi
 if [ -z "$ARTIFACT_NAME" ]; then echo "error: not set ARTIFACT_NAME"; exit 1; fi
 if [ -z "$OSUOSL_SSH_ENCRYPT_SECRET" ]; then echo "error: not set OSUOSL_SSH_ENCRYPT_SECRET"; exit 1; fi
 
-7z x -y build/ci/tools/osuosl/osuosl_nighlies_rsa.enc -obuild/ci/tools/osuosl/ -p$OSUOSL_SSH_ENCRYPT_SECRET
+7z x -y ./buildscripts/ci/tools/osuosl/osuosl_nighlies_rsa.enc -o./buildscripts/ci/tools/osuosl/ -p$OSUOSL_SSH_ENCRYPT_SECRET
 
-SSH_KEY=build/ci/tools/osuosl/osuosl_nighlies_rsa
+SSH_KEY=./buildscripts/ci/tools/osuosl/osuosl_nighlies_rsa
 
 #if [ "$OS" == "windows" ]; then
 #Icacls $SSH_KEY
@@ -126,7 +126,7 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
 fi
 
 # Sending index.html
-scp -oStrictHostKeyChecking=no -C -i $SSH_KEY build/ci/tools/osuosl/index.html musescore-nightlies@ftp-osl.osuosl.org:~/ftp/
+scp -oStrictHostKeyChecking=no -C -i $SSH_KEY ./buildscripts/ci/tools/osuosl/index.html musescore-nightlies@ftp-osl.osuosl.org:~/ftp/
 
 # Trigger
 ssh -o StrictHostKeyChecking=no -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
