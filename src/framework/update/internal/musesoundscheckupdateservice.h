@@ -47,6 +47,8 @@ class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, publi
     Inject<IInteractive> interactive;
 
 public:
+    Ret needCheckForUpdate() const override;
+
     RetVal<ReleaseInfo> checkForUpdate() override;
     RetVal<ReleaseInfo> lastCheckResult() override;
 

@@ -223,9 +223,19 @@ Ret AutobotInteractive::openUrl(const QUrl& url) const
     return m_real->openUrl(url);
 }
 
-async::Promise<Ret> AutobotInteractive::openApp(const std::string& appIdentifier) const
+Ret AutobotInteractive::isAppExists(const std::string& appIdentifier) const
 {
-    return m_real->openApp(appIdentifier);
+    return m_real->isAppExists(appIdentifier);
+}
+
+Ret AutobotInteractive::canOpenApp(const Uri& uri) const
+{
+    return m_real->canOpenApp(uri);
+}
+
+async::Promise<Ret> AutobotInteractive::openApp(const Uri& uri) const
+{
+    return m_real->openApp(uri);
 }
 
 Ret AutobotInteractive::revealInFileBrowser(const io::path_t& filePath) const

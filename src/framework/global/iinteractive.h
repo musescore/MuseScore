@@ -217,7 +217,9 @@ public:
     virtual Ret openUrl(const std::string& url) const = 0;
     virtual Ret openUrl(const QUrl& url) const = 0;
 
-    virtual async::Promise<Ret> openApp(const std::string& appIdentifier) const = 0;
+    virtual Ret isAppExists(const std::string& appIdentifier) const = 0;
+    virtual Ret canOpenApp(const Uri& uri) const = 0;
+    virtual async::Promise<Ret> openApp(const Uri& uri) const = 0;
 
     /// Opens a file browser at the parent directory of filePath,
     /// and selects the file at filePath on OSs that support it

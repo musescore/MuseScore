@@ -24,6 +24,11 @@
 using namespace muse;
 using namespace muse::update;
 
+Ret muse::update::MuseSoundsCheckUpdateServiceStub::needCheckForUpdate() const
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
 RetVal<ReleaseInfo> MuseSoundsCheckUpdateServiceStub::checkForUpdate()
 {
     return make_ret(Ret::Code::NotSupported);

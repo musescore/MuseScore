@@ -32,21 +32,43 @@
 #include "../updateerrors.h"
 #include "types/version.h"
 
-#include "translation.h"
 #include "defer.h"
 #include "log.h"
 
+static const muse::Uri MUSEHUB_APP_URI("musehub://launch?from=musescore");
+
 using namespace muse::update;
 using namespace muse::network;
+
+muse::Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
+{
+#ifdef Q_OS_WIN
+    return true;
+#elif defined(Q_OS_MAC)
+    if (systemInfo()->productVersion() < Version("10.15")) {
+        return false;
+    }
+
+    //! NOTE: If there is installed MuseHub, but we can't open it, then we shouldn't check update
+    static const std::string MUSEHUB_APP_IDENTIFIER = "com.muse.hub";
+    bool isMuseHubExists = interactive()->isAppExists(MUSEHUB_APP_IDENTIFIER);
+    if (isMuseHubExists) {
+        bool canOpenMuseHubByUniversalUrl = interactive()->canOpenApp(MUSEHUB_APP_URI);
+        return canOpenMuseHubByUniversalUrl;
+    }
+
+    return true;
+#else
+    return false;
+#endif
+}
 
 muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
     result.ret = make_ret(Err::NoUpdate);
 
-    DEFER {
-        m_lastCheckResult = result;
-    };
+    m_lastCheckResult = result;
 
     clear();
 
@@ -85,6 +107,8 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
     result.ret = make_ok();
     result.val = std::move(releaseInfo);
 
+    m_lastCheckResult = result;
+
     return result;
 }
 
@@ -106,18 +130,16 @@ void MuseSoundsCheckUpdateService::openMuseHub()
     };
 
 #ifdef Q_OS_WIN
-    static const std::string MUSEHUB_APPV1_IDENTIFIER = "muse-hub://";
-    interactive()->openApp(MUSEHUB_APPV1_IDENTIFIER).onReject(this, [=](int, const std::string&) {
-        openMuseHubWebsite();
+    interactive()->openApp(MUSEHUB_APP_URI).onReject(this, [=](int, const std::string&) {
+        static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://launch?from=musescore");
+        interactive()->openApp(MUSEHUB_APP_V1_URI).onReject(this, [=](int, const std::string&) {
+            openMuseHubWebsite();
+        });
     });
     return;
 #elif defined(Q_OS_MAC)
-    static const std::string MUSEHUB_UNIVERSAL_URL = "muse://launch?from=musescore";
-    interactive()->openApp(MUSEHUB_UNIVERSAL_URL).onReject(this, [=](int, const std::string&) {
-        static const std::string MUSEHUB_APP_IDENTIFIER = "com.muse.hub";
-        interactive()->openApp(MUSEHUB_APP_IDENTIFIER).onReject(this, [=](int, const std::string&) {
-            openMuseHubWebsite();
-        });
+    interactive()->openApp(MUSEHUB_APP_URI).onReject(this, [=](int, const std::string&) {
+        openMuseHubWebsite();
     });
     return;
 #else

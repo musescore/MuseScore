@@ -28,6 +28,8 @@ namespace muse::update {
 class MuseSoundsCheckUpdateServiceStub : public IMuseSoundsCheckUpdateService
 {
 public:
+    Ret needCheckForUpdate() const override;
+
     RetVal<ReleaseInfo> checkForUpdate() override;
     RetVal<ReleaseInfo> lastCheckResult() override;
 

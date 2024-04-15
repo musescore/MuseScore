@@ -40,15 +40,27 @@ bool MacOSInteractiveHelper::revealInFinder(const io::path_t& filePath)
     return true;
 }
 
-async::Promise<Ret> MacOSInteractiveHelper::openApp(const std::string& appIdentifier)
+Ret MacOSInteractiveHelper::isAppExists(const std::string& appIdentifier)
 {
-    return Promise<Ret>([&appIdentifier](auto resolve, auto reject) {
+    NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
+    NSURL* appURL = [workspace URLForApplicationWithBundleIdentifier:@(appIdentifier.c_str())];
+    return appURL != nil;
+}
+
+Ret MacOSInteractiveHelper::canOpenApp(const Uri& uri)
+{
+    NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
+    NSString* nsUri = [NSString stringWithUTF8String:uri.toString().c_str()];
+    NSURL* appURL = [workspace URLForApplicationToOpenURL:[NSURL URLWithString:nsUri]];
+    return appURL != nil;
+}
+
+async::Promise<Ret> MacOSInteractiveHelper::openApp(const Uri& uri)
+{
+    return Promise<Ret>([&uri](auto resolve, auto reject) {
         NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
-        NSString* nsAppIdentifier = [NSString stringWithUTF8String:appIdentifier.c_str()];
-        NSURL* appURL = [NSURL URLWithString: nsAppIdentifier];
-        if (!appURL.scheme || [appURL.scheme isEqualToString:@""]) {
-            appURL = [workspace URLForApplicationWithBundleIdentifier:nsAppIdentifier];
-        }
+        NSString* nsUri = [NSString stringWithUTF8String:uri.toString().c_str()];
+        NSURL* appURL = [NSURL URLWithString: nsUri];
 
         auto configuration = [NSWorkspaceOpenConfiguration configuration];
         [configuration setPromptsUserIfNeeded:NO];

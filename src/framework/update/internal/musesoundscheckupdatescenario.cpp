@@ -37,14 +37,14 @@ using namespace muse::actions;
 
 void MuseSoundsCheckUpdateScenario::delayedInit()
 {
-    if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
+    if (service()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
         doCheckForUpdate(false);
     }
 }
 
 void MuseSoundsCheckUpdateScenario::checkForUpdate()
 {
-    if (isCheckStarted()) {
+    if (isCheckStarted() || !service()->needCheckForUpdate()) {
         return;
     }
 

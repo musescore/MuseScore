@@ -24,6 +24,7 @@
 
 #include "io/path.h"
 #include "types/ret.h"
+#include "types/uri.h"
 
 #include "async/asyncable.h"
 #include "async/promise.h"
@@ -33,7 +34,10 @@ class MacOSInteractiveHelper : public async::Asyncable
 {
 public:
     static bool revealInFinder(const io::path_t& filePath);
-    static async::Promise<Ret> openApp(const std::string& appIdentifier);
+
+    static Ret isAppExists(const std::string& appIdentifier);
+    static Ret canOpenApp(const Uri& uri);
+    static async::Promise<Ret> openApp(const Uri& uri);
 };
 }
 

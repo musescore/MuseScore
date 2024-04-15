@@ -38,6 +38,8 @@ class IMuseSoundsCheckUpdateService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMuseSoundsCheckUpdateService() = default;
 
+    virtual Ret needCheckForUpdate() const = 0;
+
     virtual RetVal<ReleaseInfo> checkForUpdate() = 0;
     virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
 

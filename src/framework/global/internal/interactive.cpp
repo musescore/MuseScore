@@ -326,14 +326,36 @@ Ret Interactive::openUrl(const QUrl& url) const
     return QDesktopServices::openUrl(url);
 }
 
-async::Promise<Ret> Interactive::openApp(const std::string& appIdentifier) const
+Ret Interactive::isAppExists(const std::string& appIdentifier) const
 {
 #ifdef Q_OS_MACOS
-    return MacOSInteractiveHelper::openApp(appIdentifier);
-#elif defined(Q_OS_WIN)
-    return WinInteractiveHelper::openApp(appIdentifier);
+    return MacOSInteractiveHelper::isAppExists(appIdentifier);
 #else
+    NOT_IMPLEMENTED;
     UNUSED(appIdentifier);
+    return false;
+#endif
+}
+
+Ret Interactive::canOpenApp(const Uri& uri) const
+{
+#ifdef Q_OS_MACOS
+    return MacOSInteractiveHelper::canOpenApp(uri);
+#else
+    NOT_IMPLEMENTED;
+    UNUSED(uri);
+    return false;
+#endif
+}
+
+async::Promise<Ret> Interactive::openApp(const Uri& uri) const
+{
+#ifdef Q_OS_MACOS
+    return MacOSInteractiveHelper::openApp(uri);
+#elif defined(Q_OS_WIN)
+    return WinInteractiveHelper::openApp(uri);
+#else
+    UNUSED(uri);
     return async::Promise<Ret>([](auto, auto reject) {
         Ret ret = make_ret(Ret::Code::NotImplemented);
         return reject(ret.code(), ret.text());
