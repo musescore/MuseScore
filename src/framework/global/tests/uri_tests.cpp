@@ -37,7 +37,7 @@ TEST_F(Global_UriTests, Uri_Parce_Valid)
     Uri uri("muse://some/path");
 
     EXPECT_TRUE(uri.isValid());
-    EXPECT_EQ(uri.scheme(), "musescore");
+    EXPECT_EQ(uri.scheme(), "muse");
     EXPECT_EQ(uri.path(), "some/path");
     EXPECT_EQ(uri.toString(), "muse://some/path");
 }
@@ -58,7 +58,7 @@ TEST_F(Global_UriTests, Uri_Parce_QueryAsUri)
     Uri uri("muse://some/path?param1=value1&param2=value2");
 
     EXPECT_TRUE(uri.isValid());
-    EXPECT_EQ(uri.scheme(), "musescore");
+    EXPECT_EQ(uri.scheme(), "muse");
     EXPECT_EQ(uri.path(), "some/path");
     EXPECT_EQ(uri.toString(), "muse://some/path");
 }
@@ -70,7 +70,7 @@ TEST_F(Global_UriTests, UriQuery_Parce)
     UriQuery q("muse://some/path?param1=value1&param2=value2");
 
     EXPECT_TRUE(q.isValid());
-    EXPECT_EQ(q.uri().scheme(), "musescore");
+    EXPECT_EQ(q.uri().scheme(), "muse");
     EXPECT_EQ(q.uri().path(), "some/path");
     EXPECT_EQ(q.uri().toString(), "muse://some/path");
 
@@ -86,7 +86,7 @@ TEST_F(Global_UriTests, UriQuery_Parce_Quoted)
     UriQuery q("muse://some/path?param1=value1&param2='value2'&param3='x=5'");
 
     EXPECT_TRUE(q.isValid());
-    EXPECT_EQ(q.uri().scheme(), "musescore");
+    EXPECT_EQ(q.uri().scheme(), "muse");
     EXPECT_EQ(q.uri().path(), "some/path");
     EXPECT_EQ(q.uri().toString(), "muse://some/path");
 
