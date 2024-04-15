@@ -6174,6 +6174,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     if (parent && parent->isNote()) {
                         nsp->setParent(parent->findLinkedInStaff(staff));
                     }
+                    EngravingItem* endEl = sp->endElement();
+                    if (endEl && endEl->isNote()) {
+                        nsp->setEndElement(endEl->findLinkedInStaff(staff));
+                    }
                 }
 
                 doUndoAddElement(nsp);
