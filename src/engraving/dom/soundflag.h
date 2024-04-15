@@ -78,6 +78,7 @@ private:
     PlayingTechniqueCode m_playingTechnique;
 
     draw::Font m_iconFont;
+    bool m_iconFontValid = false;
 
     bool m_play = true;
     bool m_applyToAllStaves = true;

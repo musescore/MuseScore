@@ -32,7 +32,9 @@ using namespace mu::engraving;
 SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
-    m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+    String fontFamily = engravingConfiguration()->iconsFontFamily();
+    m_iconFontValid = !fontFamily.empty();
+    m_iconFont = draw::Font(fontFamily, draw::Font::Type::Icon);
 
     //! draw on top of all elements
     setZ(INT_MAX);
@@ -162,6 +164,10 @@ void SoundFlag::clear()
 
 bool SoundFlag::shouldHide() const
 {
+    if (!m_iconFontValid) {
+        return true;
+    }
+
     if (const Score* score = this->score()) {
         if (!score->showSoundFlags()) {
             return true;
