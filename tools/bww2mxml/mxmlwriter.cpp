@@ -244,7 +244,7 @@ void MxmlWriter::note(const QString pitch, QVector<BeamType> beamList,
         default:               s = "";
             break;
         }
-        if (s != "") {
+        if (!s.empty()) {
             out << "        <beam number=\"" << i + 1 << "\">"
                 << s << "</beam>" << Qt::endl;
         } else {

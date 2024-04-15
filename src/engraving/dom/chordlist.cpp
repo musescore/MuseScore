@@ -489,7 +489,7 @@ void ParsedChord::correctXmlText(const String& s)
 {
     String xmlText = m_xmlText;
     xmlText.remove(std::regex("[0-9]"));
-    if (s != "") {
+    if (!s.empty()) {
         size_t pos = xmlText.lastIndexOf(u')');
         if (pos == muse::nidx) {
             pos = xmlText.size();
@@ -546,7 +546,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
     }
     // quality and first modifier ran together with no separation - eg, mima7, augadd
     // keep quality portion, reset index to read modifier portion later
-    if (initial != "" && initial != tok1 && tok1L != "tristan" && tok1L != "omit") {
+    if (!initial.empty() && initial != tok1 && tok1L != "tristan" && tok1L != "omit") {
         i -= (tok1.size() - initial.size());
         tok1 = initial;
         tok1L = initial.toLower();
@@ -589,7 +589,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         if (!syntaxOnly) {
             m_chord = HChord(u"C Eb Gb Bb");
         }
-    } else if (tok1L == "") {
+    } else if (tok1L.empty()) {
         // empty quality - this will turn out to be major or dominant (or minor if preferMinor)
         m_quality = u"";
         if (!syntaxOnly) {
@@ -613,7 +613,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         tok1 = u"";
         tok1L = u"";
     }
-    if (tok1 != "") {
+    if (!tok1.empty()) {
         addToken(tok1, ChordTokenClass::QUALITY);
     }
     if (!syntaxOnly) {
@@ -641,7 +641,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         tok1.append(s.at(i));
     }
     m_extension = tok1;
-    if (m_quality == "") {
+    if (m_quality.empty()) {
         if (m_extension == "7" || m_extension == "9" || m_extension == "11" || m_extension == "13") {
             m_quality = preferMinor ? u"minor" : u"dominant";
             if (!syntaxOnly) {
@@ -663,7 +663,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             take13 = true;
         }
     }
-    if (tok1 != "") {
+    if (!tok1.empty()) {
         addToken(tok1, ChordTokenClass::EXTENSION);
     }
     if (!syntaxOnly) {
@@ -807,10 +807,10 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         }
         // if we reached the end of the string and never got a token,
         // then nothing to do, and no sense in looking for a second token
-        if (i == len && tok1 == "") {
+        if (i == len && tok1.empty()) {
             break;
         }
-        if (initial != "" && initial != tok1) {
+        if (!initial.empty() && initial != tok1) {
             // two modifiers ran together with no separation - eg, susb9
             // keep first, reset index to read second later
             i -= (tok1.size() - initial.size());
@@ -857,9 +857,9 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             tok1L = u"major";
         } else if (tok1L == "omit") {
             tok1L = u"no";
-        } else if (tok1L == "sus" && tok2L == "") {
+        } else if (tok1L == "sus" && tok2L.empty()) {
             tok2L = u"4";
-        } else if (m_augmented.contains(tok1L) && tok2L == "") {
+        } else if (m_augmented.contains(tok1L) && tok2L.empty()) {
             if (m_quality == "dominant" && m_extension == "7") {
                 m_quality = u"augmented";
                 if (!syntaxOnly) {
@@ -884,7 +884,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                 m_chord += 6;
             }
             tok1L = u"";
-        } else if ((m_lower.contains(tok1L) || m_raise.contains(tok1L)) && tok2L == "") {
+        } else if ((m_lower.contains(tok1L) || m_raise.contains(tok1L)) && tok2L.empty()) {
             // trailing alteration - treat as applying to extension (and convert to modifier)
             // this handles C5b, C9#, etc
             tok2L = m_extension;
@@ -912,18 +912,18 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             tok1L = u"#";
         }
         String m = tok1L + tok2L;
-        if (m != "") {
+        if (!m.empty()) {
             m_modifierList << m;
         }
-        if (tok1 != "") {
+        if (!tok1.empty()) {
             addToken(tok1, ChordTokenClass::MODIFIER);
         }
-        if (tok2 != "") {
+        if (!tok2.empty()) {
             addToken(tok2, ChordTokenClass::MODIFIER);
         }
         if (!syntaxOnly) {
             int d;
-            if (tok2L == "") {
+            if (tok2L.empty()) {
                 d = 0;
             } else {
                 d = tok2L.toInt();
@@ -936,7 +936,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             if (tok1L == "add") {
                 if (d) {
                     hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
-                } else if (tok2L != "") {
+                } else if (!tok2L.empty()) {
                     // this was result of addPending
                     // alteration; tok1 = alter, tok2 = value
                     d = tok2.toInt();
@@ -979,7 +979,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                     // in export, we will set the degree text to null
                     m_xmlText = m_extension + m_xmlText;
                     degree = u"";
-                } else if (m_extension != "") {
+                } else if (!m_extension.empty()) {
                     degree = u"add" + m_extension;
                 }
                 if (m_extension == u"13") {
@@ -1071,7 +1071,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                 } else {
                     hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                 }
-            } else if (tok1L == "" && tok2L != "") {
+            } else if (tok1L.empty() && !tok2L.empty()) {
                 degree = u"add" + tok2L;
                 hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
             } else if (m_lower.contains(tok1L)) {
@@ -1080,7 +1080,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             } else if (m_raise.contains(tok1L)) {
                 tok1L = u"#";
                 alter = true;
-            } else if (tok1L == "") {
+            } else if (tok1L.empty()) {
                 // token was already handled fully
             } else {
                 m_understandable = false;
@@ -1112,7 +1112,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                     hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
                 }
             }
-            if (degree != "") {
+            if (!degree.empty()) {
                 m_xmlDegrees << degree;
             }
         }
@@ -1296,7 +1296,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
             extension = 69;
             mod = u"";
         }
-        if (mod != "") {
+        if (!mod.empty()) {
             m_modifierList << mod;
         }
     }
@@ -1320,7 +1320,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
     // force parens where necessary)
     if (!parens && extension == 0 && !m_modifierList.empty()) {
         String firstMod = m_modifierList.front();
-        if (firstMod != "" && (firstMod.startsWith(u'#') || firstMod.startsWith(u'b'))) {
+        if (!firstMod.empty() && (firstMod.startsWith(u'#') || firstMod.startsWith(u'b'))) {
             parens = true;
         }
     }
@@ -1331,7 +1331,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
     }
 
     // validate kindText
-    if (kindText != "" && kind != "none" && kind != "other") {
+    if (!kindText.empty() && kind != "none" && kind != "other") {
         ParsedChord validate;
         validate.parse(kindText, cl, false);
         // kindText should parse to produce same kind, no degrees
@@ -1342,8 +1342,8 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 
     // construct name & handle
     m_name = u"";
-    if (kindText != "") {
-        if (m_extension != "" && kind.contains(u"suspended")) {
+    if (!kindText.empty()) {
+        if (!m_extension.empty() && kind.contains(u"suspended")) {
             m_name += m_extension;
         }
         m_name += kindText;
@@ -1373,9 +1373,9 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
     }
     for (String mod : m_modifierList) {
         mod.replace(u"major", u"maj");
-        if (kindText != "" && kind.contains(u"suspended") && mod.startsWith(u"sus")) {
+        if (!kindText.empty() && kind.contains(u"suspended") && mod.startsWith(u"sus")) {
             continue;
-        } else if (kindText != "" && kind == "major-minor" && mod.startsWith(u"maj")) {
+        } else if (!kindText.empty() && kind == "major-minor" && mod.startsWith(u"maj")) {
             continue;
         }
         m_name += mod;
@@ -1506,7 +1506,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
 void ParsedChord::addToken(String s, ChordTokenClass tc)
 {
-    if (s == "") {
+    if (s.empty()) {
         return;
     }
     ChordToken tok;
@@ -1570,7 +1570,7 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
         renderList = pc->renderList(cl);
         renderListGenerated = true;
     }
-    if (xmlKind == "") {
+    if (xmlKind.empty()) {
         xmlKind = pc->xmlKind();
         xmlDegrees = pc->xmlDegrees();
     }

@@ -362,13 +362,13 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         } else if (tag == "pedalText" && m_version < 420) {
             // Ignore old default
             String pedText = e.readText();
-            if (pedText != "") {
+            if (!pedText.empty()) {
                 set(Sid::pedalText, pedText);
             }
         } else if (tag == "pedalContinueText" && m_version < 420 && e.readAsciiText() == "") {
             // Ignore old default
             String pedContText = e.readText();
-            if (pedContText != "") {
+            if (!pedContText.empty()) {
                 set(Sid::pedalText, pedContText);
             }
         } else if ((tag == "slurEndWidth"
