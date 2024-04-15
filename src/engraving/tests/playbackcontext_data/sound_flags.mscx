@@ -2,7 +2,7 @@
 <museScore version="4.20">
   <programVersion>4.4.0</programVersion>
   <programRevision></programRevision>
-  <LastEID>1045</LastEID>
+  <LastEID>1892</LastEID>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -76,8 +76,14 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="2" visible="1"/>
+        <bracket type="1" span="3" col="2" visible="1"/>
         <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -282,13 +288,6 @@
         </Measure>
       <Measure>
         <voice>
-          <StaffText>
-            <eid>3332894621744</eid>
-            <text>orchestral</text>
-            <SoundFlag>
-              <presets>Orchestral</presets>
-              </SoundFlag>
-            </StaffText>
           <Chord>
             <eid>2946347565172</eid>
             <durationType>quarter</durationType>
@@ -322,6 +321,185 @@
             <Note>
               <eid>3027951943700</eid>
               <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>4561255268375</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>4565550235673</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>4569845203060</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4574140170261</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4578435137652</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4582730104853</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4587025072244</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4591320039445</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4595615006836</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4599909974037</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>4604204941428</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4608499908629</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4612794876020</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4617089843221</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4621384810612</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4625679777813</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4629974745204</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4634269712405</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>4638564679796</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4642859646997</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4647154614388</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4651449581589</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4655744548980</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4660039516181</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4664334483572</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4668629450773</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <eid>4672924418096</eid>
+            <text>orchestral</text>
+            <SoundFlag>
+              <presets>Orchestral</presets>
+              <applyToAllStaves>0</applyToAllStaves>
+              </SoundFlag>
+            </StaffText>
+          <Chord>
+            <eid>4492535791732</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4496830758933</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4501125726324</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4505420693525</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4509715660916</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4514010628117</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>4518305595508</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4522600562709</eid>
+              <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>

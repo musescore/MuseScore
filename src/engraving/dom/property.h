@@ -440,6 +440,8 @@ enum class Pid {
     SYMBOLS_SIZE,
     SYMBOL_ANGLE,
 
+    APPLY_TO_ALL_STAVES,
+
     END
 };
 

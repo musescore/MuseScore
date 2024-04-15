@@ -255,7 +255,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
                           result);
     }
 
-    PlaybackParamMap params = ctx.playbackParamMap(m_score, minTick);
+    PlaybackParamMap params = ctx.playbackParamMap(m_score, minTick, playableItems.front()->staffIdx());
     trackPlaybackData.offStream.send(std::move(result), std::move(params));
 }
 
