@@ -107,9 +107,6 @@ endif()
 
 # Tests
 if (MUSE_ENABLE_UNIT_TESTS)
-    enable_testing()
-    message(STATUS "Enabled testing")
-
     define_property(TARGET PROPERTY OUTPUT_XML
         BRIEF_DOCS "List XML files outputted by google test."
         FULL_DOCS "List XML files outputted by google test."
