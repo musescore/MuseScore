@@ -482,10 +482,10 @@ static const StyleType styleTypes[] {
       { Sid::footerOddEven,           "footerOddEven",           QVariant(true) },
       { Sid::footerInsideMargins,     "footerInsideMargins",     QVariant(false) },
       { Sid::evenFooterL,             "evenFooterL",             QVariant(QString()) },
-      { Sid::evenFooterC,             "evenFooterC",             QVariant(QString("$:copyright:")) },
+      { Sid::evenFooterC,             "evenFooterC",             QVariant(QString("$C")) },
       { Sid::evenFooterR,             "evenFooterR",             QVariant(QString()) },
       { Sid::oddFooterL,              "oddFooterL",              QVariant(QString()) },
-      { Sid::oddFooterC,              "oddFooterC",              QVariant(QString("$:copyright:")) },
+      { Sid::oddFooterC,              "oddFooterC",              QVariant(QString("$C")) },
       { Sid::oddFooterR,              "oddFooterR",              QVariant(QString()) },
 
       { Sid::voltaPosAbove,           "voltaPosAbove",           QPointF(0.0, -3.0) },
@@ -3353,6 +3353,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   e.skipCurrentElement();
             //else if (mscVersion >= 400 && tag == "evenFooterC") // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
             //else if (mscVersion >= 400 && tag == "oddFooterC")  // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
+            // actually changed the default for Mu3.7 to match that of Mu4 now
             else if (mscVersion >= 400 && tag == "voltaLineStyle") {
                   int _lineStyle = Qt::SolidLine;
                   QString lineStyle = e.readElementText();

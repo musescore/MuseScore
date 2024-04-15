@@ -26,8 +26,6 @@
       <slurMidWidth>0.21</slurMidWidth>
       <tieEndWidth>0.05</tieEndWidth>
       <tieMidWidth>0.21</tieMidWidth>
-      <evenFooterC>$C</evenFooterC>
-      <oddFooterC>$C</oddFooterC>
       <voltaLineWidth>0.11</voltaLineWidth>
       <ottavaLineWidth>0.11</ottavaLineWidth>
       <tupletFontSize>10</tupletFontSize>

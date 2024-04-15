@@ -41,8 +41,6 @@
       <chordSymbolAFrameWidth>0</chordSymbolAFrameWidth>
       <headerFirstPage>1</headerFirstPage>
       <footerOddEven>0</footerOddEven>
-      <evenFooterC>$C</evenFooterC>
-      <oddFooterC>$C</oddFooterC>
       <voltaFontFace>FreeSerif</voltaFontFace>
       <voltaFontSize>10</voltaFontSize>
       <voltaFramePadding>0</voltaFramePadding>

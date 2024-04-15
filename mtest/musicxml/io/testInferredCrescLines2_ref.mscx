@@ -28,8 +28,6 @@
       <slurMidWidth>0.21875</slurMidWidth>
       <tieEndWidth>0.0625</tieEndWidth>
       <tieMidWidth>0.21875</tieMidWidth>
-      <evenFooterC>$C</evenFooterC>
-      <oddFooterC>$C</oddFooterC>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
