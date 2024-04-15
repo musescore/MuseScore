@@ -58,7 +58,7 @@ private:
     muse::mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
-    void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
+    void updatePlayTechMap(const ID partId, const Score* score, const PlayTechAnnotation* annotation, const int segmentPositionTick);
     void updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlag* flag, const int segmentPositionTick);
     void applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
                                    const muse::mpe::dynamic_level_t dynamicLevel);
