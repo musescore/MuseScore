@@ -5126,7 +5126,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
 
         StaffType* staffType = staff->staffType(e->tick());
         StaffGroup staffGroup = staffType->group();
-        if (ClefInfo::staffGroup(ct) != staffGroup) {
+        if (ClefInfo::staffGroup(ct) != staffGroup && !forInstrumentChange) {
             continue;
         }
 
