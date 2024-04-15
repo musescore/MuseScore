@@ -74,6 +74,7 @@
 #define PREF_IMPORT_MUSICXML_IMPORTBREAKS                   "import/musicXML/importBreaks"
 #define PREF_IMPORT_MUSICXML_IMPORTLAYOUT                   "import/musicXML/importLayout"
 #define PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE            "import/musicXML/importInferTextType"
+#define PREF_IMPORT_MUSICXML_IMPORTCOPYRIGHTONFIRSTPAGEONLY "import/musicXML/importCopyrightOnFirstPageOnly"
 #define PREF_IMPORT_MUSICXML_REMOVEINSTRUMENTNAMES          "import/musicXML/removeInstrumentNames"
 #define PREF_IMPORT_OVERTURE_CHARSET                        "import/overture/charset"
 #define PREF_IMPORT_STYLE_STYLEFILE                         "import/style/styleFile"

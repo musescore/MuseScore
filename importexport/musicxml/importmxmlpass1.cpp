@@ -1227,12 +1227,12 @@ void MusicXMLParserPass1::identification()
                   }
             else if (_e.name() == "rights") {
                   _score->setMetaTag("copyright", _e.readElementText().trimmed());
-                  bool copyrightFirstPageOnly = true; // TODO: expose as import setting
-                  if (copyrightFirstPageOnly) { // Mu4 default
+                  bool copyrightFirstPageOnly = preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTCOPYRIGHTONFIRSTPAGEONLY);
+                  if (copyrightFirstPageOnly) { // Mu4 and Mu3.7 default
                         _score->setStyleValue(Sid::oddFooterC, "$C");
                         _score->setStyleValue(Sid::evenFooterC, "$C");
                         }
-                  else { // Mu3 default
+                  else { // Mu3.6 default
                         _score->setStyleValue(Sid::oddFooterC, "$:copyright"); // or $c
                         _score->setStyleValue(Sid::evenFooterC, "$:copyright"); // or $c
                         }
