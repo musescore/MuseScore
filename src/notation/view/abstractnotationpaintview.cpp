@@ -26,6 +26,7 @@
 #include "actions/actiontypes.h"
 
 #include "log.h"
+#include "view/playbackcursor.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -1333,7 +1334,7 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
     }
 
     RectF oldCursorRect = m_playbackCursor->rect();
-    m_playbackCursor->move(tick);
+    RemarkingResult rr = m_playbackCursor->move(tick);
     const RectF& newCursorRect = m_playbackCursor->rect();
 
     if (!m_playbackCursor->visible() || newCursorRect.isNull()) {
@@ -1368,6 +1369,7 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
         scheduleRedraw(dirtyRect1);
         scheduleRedraw(dirtyRect2);
     }
+    scheduleRedraw(rr.region);
 }
 
 bool AbstractNotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect)

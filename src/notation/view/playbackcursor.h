@@ -31,6 +31,10 @@
 class QColor;
 
 namespace mu::notation {
+struct RemarkingResult {
+    muse::RectF region;
+};
+
 class PlaybackCursor
 {
     INJECT(INotationConfiguration, configuration)
@@ -41,7 +45,7 @@ public:
     void paint(muse::draw::Painter* painter);
 
     void setNotation(INotationPtr notation);
-    void move(muse::midi::tick_t tick);
+    RemarkingResult move(muse::midi::tick_t tick);
 
     bool visible() const;
     void setVisible(bool arg);
@@ -49,11 +53,13 @@ public:
     const muse::RectF& rect() const;
 
 private:
+    bool unmarkNotes();
     QColor color() const;
-    muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
+    std::pair<muse::RectF, const engraving::Segment*> resolveCursorRectByTick(muse::midi::tick_t tick) const;
 
     bool m_visible = false;
     muse::RectF m_rect;
+    std::vector<Note*> m_markedNotes;
 
     INotationPtr m_notation;
 };

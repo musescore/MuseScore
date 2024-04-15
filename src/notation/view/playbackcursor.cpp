@@ -21,7 +21,10 @@
  */
 #include "playbackcursor.h"
 
+#include "dom/engravingobject.h"
+#include "dom/tie.h"
 #include "engraving/dom/system.h"
+#include <algorithm>
 
 using namespace mu::notation;
 using namespace muse;
@@ -40,16 +43,64 @@ void PlaybackCursor::setNotation(INotationPtr notation)
     m_notation = notation;
 }
 
-void PlaybackCursor::move(muse::midi::tick_t tick)
+static bool noteContainsTick(const Note* note, muse::midi::tick_t tick)
 {
-    m_rect = resolveCursorRectByTick(tick);
+    double fraction = ((double)tick - (double)note->tick().ticks()) * 1000.0 / note->playTicks();
+    for (const mu::engraving::NoteEvent& ev : note->playEvents()) {
+        if (ev.ontime() <= fraction && fraction < ev.offtime()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+RemarkingResult PlaybackCursor::move(muse::midi::tick_t tick)
+{
+    auto r = resolveCursorRectByTick(tick);
+    m_rect = r.first;
+    auto rr = RectF();
+    m_markedNotes.erase(std::remove_if(m_markedNotes.begin(), m_markedNotes.end(), [tick, &rr](Note* note) {
+        if (!noteContainsTick(note, tick)) {
+            note->setMark(false);
+            rr.unite(note->canvasBoundingRect());
+            return true;
+        }
+        return false;
+    }), m_markedNotes.end());
+    const mu::engraving::Segment* s = r.second;
+    if (m_visible && s) {
+        std::vector<mu::engraving::EngravingItem*> selection;
+        for (EngravingItem* e : s->elist()) {
+            if (e && e->isChord()) {
+                for (Note* note : engraving::toChord(e)->notes()) {
+                    note = note->firstTiedNote();
+                    if (std::any_of(m_markedNotes.begin(), m_markedNotes.end(), [note](Note* n) { return n == note; })) {
+                        continue;
+                    }
+                    if (noteContainsTick(note, tick)) {
+                        while (true) {
+                            note->setMark(true);
+                            m_markedNotes.push_back(note);
+                            rr.unite(note->canvasBoundingRect());
+                            engraving::Tie* tie = note->tieFor();
+                            if (!tie) {
+                                break;
+                            }
+                            note = tie->endNote();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return RemarkingResult{ rr };
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) const
+std::pair<muse::RectF, const mu::engraving::Segment*> PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) const
 {
     if (!m_notation) {
-        return RectF();
+        return std::pair(RectF(), nullptr);
     }
 
     const mu::engraving::Score* score = m_notation->elements()->msScore();
@@ -58,12 +109,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
 
     Measure* measure = score->tick2measureMM(tick);
     if (!measure) {
-        return RectF();
+        return std::pair(RectF(), nullptr);
     }
 
     mu::engraving::System* system = measure->system();
     if (!system) {
-        return RectF();
+        return std::pair(RectF(), nullptr);
     }
 
     qreal x = 0.0;
@@ -103,7 +154,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
     }
 
     if (!s) {
-        return RectF();
+        return std::pair(RectF(), nullptr);
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
@@ -128,7 +179,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
     x -= _spatium;
     y -= 3 * _spatium;
 
-    return RectF(x, y, w, h);
+    return std::pair(RectF(x, y, w, h), s);
 }
 
 bool PlaybackCursor::visible() const
@@ -139,6 +190,11 @@ bool PlaybackCursor::visible() const
 void PlaybackCursor::setVisible(bool arg)
 {
     m_visible = arg;
+    if (!arg) {
+        if (unmarkNotes()) {
+            m_notation->notationChanged();
+        }
+    }
 }
 
 const muse::RectF& PlaybackCursor::rect() const
@@ -149,4 +205,14 @@ const muse::RectF& PlaybackCursor::rect() const
 QColor PlaybackCursor::color() const
 {
     return configuration()->playbackCursorColor();
+}
+
+bool PlaybackCursor::unmarkNotes()
+{
+    for (Note* note : m_markedNotes) {
+        note->setMark(false);
+    }
+    bool unmarked = !m_markedNotes.empty();
+    m_markedNotes.clear();
+    return unmarked;
 }
