@@ -69,9 +69,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r8</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>half</durationType>
@@ -83,9 +83,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r16</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
@@ -101,9 +101,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r32</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>half</durationType>
@@ -115,9 +115,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r64</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
@@ -133,9 +133,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r8</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -147,9 +147,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r16</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -161,9 +161,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r32</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -175,9 +175,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r64</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
@@ -197,9 +197,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r8</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -211,9 +211,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r8</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -225,9 +225,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r16</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -239,9 +239,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r16</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Beam>
             <l1>-20</l1>
@@ -257,9 +257,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r32</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -271,9 +271,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r32</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -285,9 +285,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r64</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -299,9 +299,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r64</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
@@ -313,9 +313,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r8</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -323,9 +323,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r16</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -333,9 +333,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r32</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -343,9 +343,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r64</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
@@ -364,9 +364,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>buzzroll</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -381,9 +381,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>buzzroll</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <BarLine>
             <subtype>end</subtype>

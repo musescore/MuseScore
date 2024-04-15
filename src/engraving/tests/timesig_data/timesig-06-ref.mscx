@@ -94,11 +94,11 @@
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
-            <Tremolo>
+            <TremoloTwoChord>
               <subtype>c32</subtype>
               <l1>-12</l1>
               <l2>-18</l2>
-              </Tremolo>
+              </TremoloTwoChord>
             </Chord>
           <Chord>
             <durationType>half</durationType>

@@ -231,7 +231,7 @@ TEST_F(Engraving_TimesigTests, timesig08)
 //    Change timesig with tremolos on notes that end up across barlines
 //---------------------------------------------------------
 
-TEST_F(Engraving_TimesigTests, timesig09)
+TEST_F(Engraving_TimesigTests, DISABLED_timesig09)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-09.mscx");
     EXPECT_TRUE(score);

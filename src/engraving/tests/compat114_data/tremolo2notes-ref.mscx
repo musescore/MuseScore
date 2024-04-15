@@ -81,11 +81,11 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
-            <Tremolo>
+            <TremoloTwoChord>
               <subtype>c8</subtype>
               <l1>34</l1>
               <l2>30</l2>
-              </Tremolo>
+              </TremoloTwoChord>
             </Chord>
           <Chord>
             <durationType>whole</durationType>
@@ -108,11 +108,11 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
-            <Tremolo>
+            <TremoloTwoChord>
               <subtype>c16</subtype>
               <l1>38</l1>
               <l2>36</l2>
-              </Tremolo>
+              </TremoloTwoChord>
             </Chord>
           <Chord>
             <durationType>whole</durationType>
@@ -135,11 +135,11 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
-            <Tremolo>
+            <TremoloTwoChord>
               <subtype>c32</subtype>
               <l1>44</l1>
               <l2>42</l2>
-              </Tremolo>
+              </TremoloTwoChord>
             </Chord>
           <Chord>
             <durationType>whole</durationType>

@@ -102,9 +102,9 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
-            <Tremolo>
+            <TremoloSingleChord>
               <subtype>r16</subtype>
-              </Tremolo>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>half</durationType>

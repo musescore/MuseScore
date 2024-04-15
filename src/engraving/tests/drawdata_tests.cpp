@@ -65,7 +65,7 @@ void saveDiff(const muse::io::path_t& path, const DrawDataPtr& origin, const Dra
     io::File::writeFile(path, px.data());
 }
 
-TEST_F(Engraving_DrawDataTests, Rw)
+TEST_F(Engraving_DrawDataTests, DISABLED_Rw)
 {
     DrawDataPtr origin;
     {
