@@ -150,6 +150,11 @@ endif(MUE_DOWNLOAD_SOUNDFONT)
 ###########################################
 # Add source tree
 ###########################################
+if (MUSE_ENABLE_UNIT_TESTS)
+    enable_testing()
+    message(STATUS "Enabled testing")
+endif()
+
 add_subdirectory(share)
 add_subdirectory(src)
 
