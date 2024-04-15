@@ -78,7 +78,7 @@ typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
 struct HarmonyDesc
 {
     track_idx_t m_track;
-    bool fretVisible() { return m_diagram ? m_diagram->visible() : false; }
+    bool fretVisible() const { return m_diagram ? m_diagram->visible() : false; }
     Harmony* m_harmony;
     FretDiagram* m_diagram;
 

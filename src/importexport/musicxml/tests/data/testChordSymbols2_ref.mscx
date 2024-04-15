@@ -14,68 +14,19 @@
       <pageOddBottomMargin>0.5</pageOddBottomMargin>
       <pageTwosided>0</pageTwosided>
       <minSystemDistance>12</minSystemDistance>
-      <lyricsOddFontFace>Times New Roman</lyricsOddFontFace>
-      <lyricsEvenFontFace>Times New Roman</lyricsEvenFontFace>
       <barWidth>0.15625</barWidth>
       <endBarWidth>0.5</endBarWidth>
       <stemWidth>0.125</stemWidth>
       <staffLineWidth>0.09375</staffLineWidth>
       <ledgerLineWidth>0.15625</ledgerLineWidth>
-      <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
-      <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
-      <romanNumeralFontFace>Times New Roman</romanNumeralFontFace>
-      <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
+      <romanNumeralFontFace>Edwin</romanNumeralFontFace>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
+      <concertPitch>1</concertPitch>
       <slurEndWidth>0.0625</slurEndWidth>
       <slurMidWidth>0.21875</slurMidWidth>
       <tieEndWidth>0.0625</tieEndWidth>
       <tieMidWidth>0.21875</tieMidWidth>
-      <tupletFontFace>Times New Roman</tupletFontFace>
-      <titleFontFace>Times New Roman</titleFontFace>
-      <subTitleFontFace>Times New Roman</subTitleFontFace>
-      <composerFontFace>Times New Roman</composerFontFace>
-      <lyricistFontFace>Times New Roman</lyricistFontFace>
-      <fingeringFontFace>Times New Roman</fingeringFontFace>
-      <lhGuitarFingeringFontFace>Times New Roman</lhGuitarFingeringFontFace>
-      <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
-      <stringNumberFontFace>Times New Roman</stringNumberFontFace>
-      <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
-      <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
-      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
-      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
-      <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
-      <expressionFontFace>Times New Roman</expressionFontFace>
-      <tempoFontFace>Times New Roman</tempoFontFace>
-      <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
-      <metronomeFontFace>Times New Roman</metronomeFontFace>
-      <measureNumberFontFace>Times New Roman</measureNumberFontFace>
-      <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
-      <translatorFontFace>Times New Roman</translatorFontFace>
-      <systemFontFace>Times New Roman</systemFontFace>
-      <staffFontFace>Times New Roman</staffFontFace>
-      <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
-      <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
-      <repeatRightFontFace>Times New Roman</repeatRightFontFace>
-      <frameFontFace>Times New Roman</frameFontFace>
-      <glissandoFontFace>Times New Roman</glissandoFontFace>
-      <bendFontFace>Times New Roman</bendFontFace>
-      <headerFontFace>Times New Roman</headerFontFace>
-      <footerFontFace>Times New Roman</footerFontFace>
-      <instrumentChangeFontFace>Times New Roman</instrumentChangeFontFace>
-      <stickingFontFace>Times New Roman</stickingFontFace>
-      <user1FontFace>Times New Roman</user1FontFace>
-      <user2FontFace>Times New Roman</user2FontFace>
-      <user3FontFace>Times New Roman</user3FontFace>
-      <user4FontFace>Times New Roman</user4FontFace>
-      <user5FontFace>Times New Roman</user5FontFace>
-      <user6FontFace>Times New Roman</user6FontFace>
-      <user7FontFace>Times New Roman</user7FontFace>
-      <user8FontFace>Times New Roman</user8FontFace>
-      <user9FontFace>Times New Roman</user9FontFace>
-      <user10FontFace>Times New Roman</user10FontFace>
-      <user11FontFace>Times New Roman</user11FontFace>
-      <user12FontFace>Times New Roman</user12FontFace>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -184,10 +135,10 @@
                 <marker>cross</marker>
                 </string>
               <string no="1">
-                <dot fret="3">normal</dot>
+                <marker>circle</marker>
                 </string>
               <string no="2">
-                <marker>cross</marker>
+                <dot fret="3">normal</dot>
                 </string>
               <string no="3">
                 <dot fret="2">normal</dot>
@@ -203,10 +154,10 @@
               <marker>88</marker>
               </string>
             <string no="1">
-              <dot>3</dot>
+              <marker>79</marker>
               </string>
             <string no="2">
-              <marker>88</marker>
+              <dot>3</dot>
               </string>
             <string no="3">
               <dot>2</dot>
@@ -221,7 +172,77 @@
           <Harmony>
             <root>13</root>
             <name>add9</name>
-            <base>14</base>
+            <base>17</base>
+            </Harmony>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <FretDiagram>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="5">
+                <dot fret="1">normal</dot>
+                </string>
+              <barre start="1" end="5">1</barre>
+              </fretDiagram>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <dot>1</dot>
+              </string>
+            <string no="2">
+              <dot>3</dot>
+              </string>
+            <string no="3">
+              <dot>3</dot>
+              </string>
+            <string no="4">
+              <dot>3</dot>
+              </string>
+            <string no="5">
+              <dot>1</dot>
+              </string>
+            </FretDiagram>
+          <Harmony>
+            <root>12</root>
+            </Harmony>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <name>maj7(no3rd)</name>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>

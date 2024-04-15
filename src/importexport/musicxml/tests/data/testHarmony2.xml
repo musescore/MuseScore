@@ -189,17 +189,29 @@
         </note>
       </measure>
     <measure number="5">
-      <direction placement="below">
-        <direction-type>
-          <words>Eb9sus4</words>
-          </direction-type>
-        </direction>
       <harmony print-frame="no">
         <root>
           <root-step>E</root-step>
           <root-alter>-1</root-alter>
           </root>
         <kind text="sus">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-alter>0</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>0</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <harmony placement="below" print-frame="no">
+        <root>
+          <root-step>E</root-step>
+          <root-alter>-1</root-alter>
+          </root>
+        <kind>suspended-fourth</kind>
         <degree>
           <degree-value>7</degree-value>
           <degree-alter>0</degree-alter>
