@@ -43,7 +43,7 @@
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
-#include "update/iupdatescenario.h"
+#include "update/imusesoundscheckupdatescenario.h"
 
 #include "async/asyncable.h"
 
@@ -73,7 +73,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(print::IPrintProvider, printProvider)
     INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(muse::update::IUpdateScenario, updateScenario)
+    INJECT(muse::update::IMuseSoundsCheckUpdateScenario, museSoundsCheckUpdateScenario)
 
 public:
     void init();

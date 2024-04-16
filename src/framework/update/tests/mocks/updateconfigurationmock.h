@@ -41,8 +41,8 @@ public:
     MOCK_METHOD(std::string, skippedReleaseVersion, (), (const, override));
     MOCK_METHOD(void, setSkippedReleaseVersion, (const std::string&), (override));
 
-    MOCK_METHOD(std::string, lastShownMuseSamplerReleaseVersion, (), (const, override));
-    MOCK_METHOD(void, setLastShownMuseSamplerReleaseVersion, (const std::string&), (override));
+    MOCK_METHOD(std::string, lastShownMuseSoundsReleaseVersion, (), (const, override));
+    MOCK_METHOD(void, setLastShownMuseSoundsReleaseVersion, (const std::string&), (override));
 
     MOCK_METHOD(std::string, checkForAppUpdateUrl, (), (const, override));
     MOCK_METHOD(std::string, previousAppReleasesNotesUrl, (), (const, override));

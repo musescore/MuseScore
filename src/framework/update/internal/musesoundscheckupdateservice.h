@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,24 +31,24 @@
 #include "io/ifilesystem.h"
 #include "global/isysteminfo.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "musesampler/imusesamplerinfo.h"
 #include "iinteractive.h"
 
 #include "../iupdateconfiguration.h"
-#include "../imusesamplerupdateservice.h"
+#include "../imusesoundscheckupdateservice.h"
 
 namespace muse::update {
-class MuseSamplerUpdateService : public IMuseSamplerUpdateService, public async::Asyncable
+class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public async::Asyncable
 {
     Inject<network::INetworkManagerCreator> networkManagerCreator;
     Inject<IUpdateConfiguration> configuration;
     Inject<io::IFileSystem> fileSystem;
     Inject<ISystemInfo> systemInfo;
     Inject<languages::ILanguagesConfiguration> languagesConfiguration;
-    Inject<musesampler::IMuseSamplerInfo> museSamplerInfo;
     Inject<IInteractive> interactive;
 
 public:
+    Ret needCheckForUpdate() const override;
+
     RetVal<ReleaseInfo> checkForUpdate() override;
     RetVal<ReleaseInfo> lastCheckResult() override;
 
@@ -61,7 +61,7 @@ private:
 
     void clear();
 
-    ReleaseInfo m_lastCheckResult;
+    RetVal<ReleaseInfo> m_lastCheckResult;
     io::path_t m_installatorPath;
 
     network::INetworkManagerPtr m_networkManager;

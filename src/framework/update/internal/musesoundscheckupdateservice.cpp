@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "musesamplerupdateservice.h"
+#include "musesoundscheckupdateservice.h"
 
 #include <QBuffer>
 #include <QJsonParseError>
@@ -32,16 +32,43 @@
 #include "../updateerrors.h"
 #include "types/version.h"
 
-#include "translation.h"
+#include "defer.h"
 #include "log.h"
+
+static const muse::Uri MUSEHUB_APP_URI("musehub://launch?from=musescore");
 
 using namespace muse::update;
 using namespace muse::network;
 
-muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()
+muse::Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
+{
+#ifdef Q_OS_WIN
+    return true;
+#elif defined(Q_OS_MAC)
+    if (systemInfo()->productVersion() < Version("10.15")) {
+        return false;
+    }
+
+    //! NOTE: If there is installed MuseHub, but we can't open it, then we shouldn't check update
+    static const std::string MUSEHUB_APP_IDENTIFIER = "com.muse.hub";
+    bool isMuseHubExists = interactive()->isAppExists(MUSEHUB_APP_IDENTIFIER);
+    if (isMuseHubExists) {
+        bool canOpenMuseHubByUniversalUrl = interactive()->canOpenApp(MUSEHUB_APP_URI);
+        return canOpenMuseHubByUniversalUrl;
+    }
+
+    return true;
+#else
+    return false;
+#endif
+}
+
+muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
     result.ret = make_ret(Err::NoUpdate);
+
+    m_lastCheckResult = result;
 
     clear();
 
@@ -51,7 +78,7 @@ muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()
                                               configuration()->updateHeaders());
 
     if (!getUpdateInfo) {
-        result.ret = make_ret(Err::NetworkError);
+        LOGE() << getUpdateInfo.toString();
         return result;
     }
 
@@ -66,7 +93,6 @@ muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()
         return result;
     }
 
-    Version current(museSamplerInfo()->version());
     Version update(releaseInfoRetVal.val.version);
 
     bool allowUpdateOnPreRelease = configuration()->allowUpdateOnPreRelease();
@@ -76,35 +102,27 @@ muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()
         return result;
     }
 
-    if (update <= current) {
-        return result;
-    }
-
     ReleaseInfo releaseInfo = releaseInfoRetVal.val;
 
     result.ret = make_ok();
     result.val = std::move(releaseInfo);
 
-    m_lastCheckResult = result.val;
+    m_lastCheckResult = result;
 
     return result;
 }
 
-muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::lastCheckResult()
+muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::lastCheckResult()
 {
-    if (m_lastCheckResult.isValid()) {
-        return RetVal<ReleaseInfo>::make_ok(m_lastCheckResult);
-    }
-
-    return RetVal<ReleaseInfo>();
+    return m_lastCheckResult;
 }
 
-muse::Progress MuseSamplerUpdateService::updateProgress()
+muse::Progress MuseSoundsCheckUpdateService::updateProgress()
 {
     return m_updateProgress;
 }
 
-void MuseSamplerUpdateService::openMuseHub()
+void MuseSoundsCheckUpdateService::openMuseHub()
 {
     auto openMuseHubWebsite = [this]() {
         static const std::string MUSEHUB_URL = "https://www.musehub.com/";
@@ -112,18 +130,16 @@ void MuseSamplerUpdateService::openMuseHub()
     };
 
 #ifdef Q_OS_WIN
-    static const std::string MUSEHUB_APPV1_IDENTIFIER = "muse-hub://";
-    interactive()->openApp(MUSEHUB_APPV1_IDENTIFIER).onReject(this, [=](int, const std::string&) {
-        openMuseHubWebsite();
+    interactive()->openApp(MUSEHUB_APP_URI).onReject(this, [=](int, const std::string&) {
+        static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://launch?from=musescore");
+        interactive()->openApp(MUSEHUB_APP_V1_URI).onReject(this, [=](int, const std::string&) {
+            openMuseHubWebsite();
+        });
     });
     return;
 #elif defined(Q_OS_MAC)
-    static const std::string MUSEHUB_UNIVERSAL_URL = "muse://launch?from=musescore";
-    interactive()->openApp(MUSEHUB_UNIVERSAL_URL).onReject(this, [=](int, const std::string&) {
-        static const std::string MUSEHUB_APP_IDENTIFIER = "com.muse.hub";
-        interactive()->openApp(MUSEHUB_APP_IDENTIFIER).onReject(this, [=](int, const std::string&) {
-            openMuseHubWebsite();
-        });
+    interactive()->openApp(MUSEHUB_APP_URI).onReject(this, [=](int, const std::string&) {
+        openMuseHubWebsite();
     });
     return;
 #else
@@ -131,22 +147,21 @@ void MuseSamplerUpdateService::openMuseHub()
 #endif
 }
 
-muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::parseRelease(const QByteArray& json) const
+muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByteArray& json) const
 {
     RetVal<ReleaseInfo> result;
 
     QJsonParseError err;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &err);
     if (err.error != QJsonParseError::NoError || !jsonDoc.isObject()) {
-        LOGE() << "failed parse, err: " << err.errorString();
-        result.ret = make_ret(Ret::Code::InternalError);
+        result.ret = make_ret(Err::NoUpdate);
         return result;
     }
 
     QJsonObject releaseObj = jsonDoc.object();
 
     if (releaseObj.empty()) {
-        LOGE() << "failed parse, no jsonObject";
+        result.ret = make_ret(Err::NoUpdate);
         return result;
     }
 
@@ -185,7 +200,7 @@ muse::RetVal<ReleaseInfo> MuseSamplerUpdateService::parseRelease(const QByteArra
     return result;
 }
 
-void MuseSamplerUpdateService::clear()
+void MuseSoundsCheckUpdateService::clear()
 {
-    m_lastCheckResult = ReleaseInfo();
+    m_lastCheckResult = RetVal<ReleaseInfo>();
 }

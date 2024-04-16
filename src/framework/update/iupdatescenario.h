@@ -32,8 +32,7 @@ class IUpdateScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUpdateScenario() = default;
 
-    virtual void checkForAppUpdate() = 0;
-    virtual void checkForMuseSamplerUpdate() = 0;
+    virtual void checkForUpdate() = 0;
 };
 }
 

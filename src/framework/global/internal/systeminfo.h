@@ -35,6 +35,7 @@ public:
 
     CpuArchitecture cpuArchitecture() const override;
     ProductType productType() const override;
+    Version productVersion() const override;
 
 private:
     std::unordered_map<std::string, Val> m_params;

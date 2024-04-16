@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
-#define MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#ifndef MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
+#define MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
 
+#include "types/retval.h"
 #include "io/path.h"
-#include "types/ret.h"
-#include "types/uri.h"
+#include "progress.h"
 
-#include "async/asyncable.h"
-#include "async/promise.h"
+#include "updatetypes.h"
 
-namespace muse {
-class MacOSInteractiveHelper : public async::Asyncable
+#include "modularity/imoduleinterface.h"
+
+namespace muse::update {
+class IMuseSoundsCheckUpdateService : MODULE_EXPORT_INTERFACE
 {
-public:
-    static bool revealInFinder(const io::path_t& filePath);
+    INTERFACE_ID(IMuseSamplerUpdateService)
 
-    static Ret isAppExists(const std::string& appIdentifier);
-    static Ret canOpenApp(const Uri& uri);
-    static async::Promise<Ret> openApp(const Uri& uri);
+public:
+    virtual ~IMuseSoundsCheckUpdateService() = default;
+
+    virtual Ret needCheckForUpdate() const = 0;
+
+    virtual RetVal<ReleaseInfo> checkForUpdate() = 0;
+    virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
+
+    virtual Progress updateProgress() = 0;
+
+    virtual void openMuseHub() = 0;
 };
 }
 
-#endif // MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#endif // MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H

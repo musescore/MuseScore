@@ -34,7 +34,9 @@
 #include "internal/updateactioncontroller.h"
 #include "internal/updateuiactions.h"
 #include "internal/appupdateservice.h"
-#include "internal/musesamplerupdateservice.h"
+
+#include "internal/musesoundscheckupdatescenario.h"
+#include "internal/musesoundscheckupdateservice.h"
 
 #include "view/updatemodel.h"
 
@@ -60,12 +62,16 @@ void UpdateModule::registerExports()
     m_configuration = std::make_shared<UpdateConfiguration>();
     m_actionController = std::make_shared<UpdateActionController>();
     m_appUpdateService = std::make_shared<AppUpdateService>();
-    m_museSamplerUpdateService = std::make_shared<MuseSamplerUpdateService>();
+
+    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>();
+    m_museSamplerUpdateService = std::make_shared<MuseSoundsCheckUpdateService>();
 
     ioc()->registerExport<IUpdateScenario>(moduleName(), m_scenario);
     ioc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAppUpdateService>(moduleName(), m_appUpdateService);
-    ioc()->registerExport<IMuseSamplerUpdateService>(moduleName(), m_museSamplerUpdateService);
+
+    ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), m_museSoundsCheckUpdateScenario);
+    ioc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), m_museSamplerUpdateService);
 }
 
 void UpdateModule::resolveImports()
@@ -108,4 +114,5 @@ void UpdateModule::onInit(const IApplication::RunMode& mode)
 void UpdateModule::onDelayedInit()
 {
     m_scenario->delayedInit();
+    m_museSoundsCheckUpdateScenario->delayedInit();
 }

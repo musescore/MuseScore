@@ -23,10 +23,6 @@
 
 using namespace muse::update;
 
-void UpdateScenarioStub::checkForAppUpdate()
-{
-}
-
-void UpdateScenarioStub::checkForMuseSamplerUpdate()
+void UpdateScenarioStub::checkForUpdate()
 {
 }

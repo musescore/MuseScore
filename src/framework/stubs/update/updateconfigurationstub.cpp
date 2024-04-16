@@ -55,12 +55,12 @@ void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&)
 {
 }
 
-std::string UpdateConfigurationStub::lastShownMuseSamplerReleaseVersion() const
+std::string UpdateConfigurationStub::lastShownMuseSoundsReleaseVersion() const
 {
     return "";
 }
 
-void UpdateConfigurationStub::setLastShownMuseSamplerReleaseVersion(const std::string&)
+void UpdateConfigurationStub::setLastShownMuseSoundsReleaseVersion(const std::string&)
 {
 }
 

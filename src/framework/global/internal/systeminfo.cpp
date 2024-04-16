@@ -27,6 +27,7 @@ using namespace muse;
 
 static const std::string CPU_ARCHITECTURE_KEY = "cpuArchitecture";
 static const std::string PRODUCT_TYPE_KEY = "productType";
+static const std::string PRODUCT_VERSION_KEY = "productVersion";
 
 void SystemInfo::init()
 {
@@ -53,6 +54,9 @@ void SystemInfo::init()
 #endif
 
     m_params[PRODUCT_TYPE_KEY] = Val(int(productType));
+
+    Version version = Version(QSysInfo::productVersion());
+    m_params[PRODUCT_VERSION_KEY] = Val(version.toStdString());
 }
 
 SystemInfo::CpuArchitecture SystemInfo::cpuArchitecture() const
@@ -63,4 +67,9 @@ SystemInfo::CpuArchitecture SystemInfo::cpuArchitecture() const
 SystemInfo::ProductType SystemInfo::productType() const
 {
     return static_cast<ProductType>(m_params.at(PRODUCT_TYPE_KEY).toInt());
+}
+
+Version SystemInfo::productVersion() const
+{
+    return Version(m_params.at(PRODUCT_VERSION_KEY).toString());
 }

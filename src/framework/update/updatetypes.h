@@ -57,6 +57,57 @@ struct ReleaseInfo {
         return !version.empty();
     }
 };
+
+static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
+
+static ValList releasesNotesToValList(const PrevReleasesNotesList& list)
+{
+    ValList valList;
+    for (const PrevReleaseNotes& release : list) {
+        valList.emplace_back(Val(ValMap {
+                { "version", Val(release.version) },
+                { "notes", Val(release.notes) }
+            }));
+    }
+
+    return valList;
+}
+
+static PrevReleasesNotesList releasesNotesFromValList(const ValList& list)
+{
+    PrevReleasesNotesList notes;
+    for (const Val& val : list) {
+        ValMap releaseMap = val.toMap();
+        notes.emplace_back(releaseMap.at("version").toString(), releaseMap.at("notes").toString());
+    }
+
+    return notes;
+}
+
+static ValMap releaseInfoToValMap(const ReleaseInfo& info)
+{
+    return {
+        { "version", Val(info.version) },
+        { "fileName", Val(info.fileName) },
+        { "fileUrl", Val(info.fileUrl) },
+        { "notes", Val(info.notes) },
+        { "previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)) },
+        { "additionalInfo", Val(info.additionInfo) }
+    };
+}
+
+static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
+{
+    ReleaseInfo info;
+    info.version = map.at("version").toString();
+    info.fileName = map.at("fileName").toString();
+    info.fileUrl = map.at("fileUrl").toString();
+    info.notes = map.at("notes").toString();
+    info.previousReleasesNotes = releasesNotesFromValList(map.at("previousReleasesNotes").toList());
+    info.additionInfo = map.at("additionalInfo").toMap();
+
+    return info;
+}
 }
 
 #endif // MUSE_UPDATE_UPDATETYPES_H

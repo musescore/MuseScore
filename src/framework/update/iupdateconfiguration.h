@@ -46,8 +46,8 @@ public:
     virtual std::string skippedReleaseVersion() const = 0;
     virtual void setSkippedReleaseVersion(const std::string& version) = 0;
 
-    virtual std::string lastShownMuseSamplerReleaseVersion() const = 0;
-    virtual void setLastShownMuseSamplerReleaseVersion(const std::string& version) = 0;
+    virtual std::string lastShownMuseSoundsReleaseVersion() const = 0;
+    virtual void setLastShownMuseSoundsReleaseVersion(const std::string& version) = 0;
 
     virtual std::string checkForAppUpdateUrl() const = 0;
     virtual std::string previousAppReleasesNotesUrl() const = 0;
