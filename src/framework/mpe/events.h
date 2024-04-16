@@ -290,6 +290,8 @@ struct PlaybackParam {
     String code;
     Val val;
 
+    staff_layer_idx_t staffLayerIndex = 0;
+
     bool operator==(const PlaybackParam& other) const
     {
         return code == other.code && val == other.val;

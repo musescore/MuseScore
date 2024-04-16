@@ -768,12 +768,6 @@ void PopupView::updateContentPosition()
         } else {
             setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
         }
-    } else {
-        if (opensUpward()) {
-            contentItem()->setY(padding());
-        } else {
-            contentItem()->setY(-padding());
-        }
     }
 }
 

@@ -34,13 +34,9 @@ Item {
     property int navigationPanelOrderStart: 0
     property int navigationPanelOrderEnd: playingTechniquesGridView.navigationPanel.order
 
-    height: !prv.noOptions ? content.childrenRect.height : noOptionsLabel.implicitHeight
+    property bool noOptions: !modifySoundView.hasPresets && !playingTechniquesGridView.hasPlayingTechniques
 
-    QtObject {
-        id: prv
-
-        property bool noOptions: !modifySoundView.hasPresets && !playingTechniquesGridView.hasPlayingTechniques
-    }
+    height: !noOptions ? content.childrenRect.height : noOptionsLabel.implicitHeight
 
     Column {
         id: content
@@ -79,7 +75,7 @@ Item {
 
             width: parent.width
 
-            title: qsTrc("playback", "Extended techniques")
+            title: qsTrc("playback", "Playing techniques")
             model: root.model.availablePlayingTechniques
             selectionModel: [ root.model.selectedPlayingTechniqueCode ]
 
@@ -103,6 +99,6 @@ Item {
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.Wrap
 
-        visible: prv.noOptions
+        visible: root.noOptions
     }
 }

@@ -32,7 +32,9 @@ using namespace mu::engraving;
 SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
-    m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+    String fontFamily = engravingConfiguration()->iconsFontFamily();
+    m_iconFontValid = !fontFamily.empty();
+    m_iconFont = draw::Font(fontFamily, draw::Font::Type::Icon);
 
     //! draw on top of all elements
     setZ(INT_MAX);
@@ -67,6 +69,8 @@ PropertyValue SoundFlag::getProperty(Pid id) const
     case Pid::AUTOPLACE:
     case Pid::SMALL:
         return PropertyValue();
+    case Pid::APPLY_TO_ALL_STAVES:
+        return m_applyToAllStaves;
     default:
         return EngravingItem::getProperty(id);
     }
@@ -82,6 +86,9 @@ bool SoundFlag::setProperty(Pid id, const PropertyValue& value)
     case Pid::AUTOPLACE:
     case Pid::SMALL:
         return false;
+    case Pid::APPLY_TO_ALL_STAVES:
+        m_applyToAllStaves = value.toBool();
+        return true;
     default:
         return EngravingItem::setProperty(id, value);
     }
@@ -96,6 +103,8 @@ PropertyValue SoundFlag::propertyDefault(Pid id) const
     case Pid::AUTOPLACE:
     case Pid::SMALL:
         return PropertyValue();
+    case Pid::APPLY_TO_ALL_STAVES:
+        return true;
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -131,6 +140,16 @@ void mu::engraving::SoundFlag::setPlay(bool play)
     m_play = play;
 }
 
+bool SoundFlag::applyToAllStaves() const
+{
+    return m_applyToAllStaves;
+}
+
+void SoundFlag::setApplyToAllStaves(bool apply)
+{
+    m_applyToAllStaves = apply;
+}
+
 void SoundFlag::clear()
 {
     if (m_soundPresets.empty() && m_playingTechnique.empty()) {
@@ -145,6 +164,10 @@ void SoundFlag::clear()
 
 bool SoundFlag::shouldHide() const
 {
+    if (!m_iconFontValid) {
+        return true;
+    }
+
     if (const Score* score = this->score()) {
         if (!score->showSoundFlags()) {
             return true;

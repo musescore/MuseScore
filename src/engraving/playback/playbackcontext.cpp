@@ -61,7 +61,7 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
     return it->second;
 }
 
-PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int nominalPositionTick) const
+PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int nominalPositionTick, const staff_idx_t staffIdx) const
 {
     mu::mpe::PlaybackParamMap result;
 
@@ -73,7 +73,17 @@ PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int
     auto endIt = m_playbackParamMap.upper_bound(nominalPositionTick);
 
     for (; it != endIt; ++it) {
-        result.insert_or_assign(timestampFromTicks(score, it->first), it->second);
+        PlaybackParamList params;
+
+        for (const PlaybackParam& param : it->second) {
+            if (param.staffLayerIndex == staffIdx) {
+                params.push_back(param);
+            }
+        }
+
+        if (!params.empty()) {
+            result.insert_or_assign(timestampFromTicks(score, it->first), std::move(params));
+        }
     }
 
     return result;
@@ -114,7 +124,7 @@ void PlaybackContext::update(const ID partId, const Score* score)
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
 
-                handleAnnotations(partId, segment, segmentStartTick);
+                handleAnnotations(partId, score, segment, segmentStartTick);
             }
         }
 
@@ -197,7 +207,8 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
     }
 }
 
-void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
+void PlaybackContext::updatePlayTechMap(const ID partId, const Score* score, const PlayTechAnnotation* annotation,
+                                        const int segmentPositionTick)
 {
     const PlayingTechniqueType type = annotation->techniqueType();
 
@@ -206,9 +217,24 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     }
 
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
+
+    if (type == PlayingTechniqueType::Natural && !m_playbackParamMap.empty()) {
+        const Part* part = score->partById(partId);
+        IF_ASSERT_FAILED(part && !part->staves().empty()) {
+            return;
+        }
+
+        mpe::staff_layer_idx_t startIdx = part->staves().front()->idx();
+        mpe::staff_layer_idx_t endIdx = startIdx + part->nstaves();
+
+        for (mpe::staff_layer_idx_t idx = startIdx; idx < endIdx; ++idx) {
+            PlaybackParam ordTechnique { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(mpe::ORDINARY_PLAYING_TECHNIQUE_CODE), idx };
+            m_playbackParamMap[segmentPositionTick].push_back(ordTechnique);
+        }
+    }
 }
 
-void PlaybackContext::updatePlaybackParamMap(const SoundFlag* flag, const int segmentPositionTick)
+void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlag* flag, const int segmentPositionTick)
 {
     if (!flag->play()) {
         return;
@@ -220,15 +246,41 @@ void PlaybackContext::updatePlaybackParamMap(const SoundFlag* flag, const int se
 
     mpe::PlaybackParamList params;
 
-    for (const String& presetCode : flag->soundPresets()) {
-        params.emplace_back(mpe::PlaybackParam { mpe::SOUND_PRESET_PARAM_CODE, Val(presetCode.toStdString()) });
+    auto addParams = [&params](const SoundFlag* flag, staff_layer_idx_t idx) {
+        for (const String& presetCode : flag->soundPresets()) {
+            params.emplace_back(mpe::PlaybackParam { mpe::SOUND_PRESET_PARAM_CODE, Val(presetCode.toStdString()), idx });
+        }
+
+        if (!flag->playingTechnique().empty()) {
+            params.emplace_back(mpe::PlaybackParam { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(flag->playingTechnique().toStdString()), idx });
+        }
+    };
+
+    if (flag->applyToAllStaves()) {
+        const Part* part = score->partById(partId);
+        IF_ASSERT_FAILED(part && !part->staves().empty()) {
+            return;
+        }
+
+        mpe::staff_layer_idx_t startIdx = part->staves().front()->idx();
+        mpe::staff_layer_idx_t endIdx = startIdx + part->nstaves();
+
+        for (mpe::staff_layer_idx_t idx = startIdx; idx < endIdx; ++idx) {
+            addParams(flag, idx);
+        }
+    } else {
+        addParams(flag, flag->staffIdx());
     }
 
-    if (!flag->playingTechnique().empty()) {
-        params.emplace_back(mpe::PlaybackParam { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(flag->playingTechnique().toStdString()) });
+    IF_ASSERT_FAILED(!params.empty()) {
+        return;
     }
 
     m_playbackParamMap.emplace(segmentPositionTick, std::move(params));
+
+    if (flag->playingTechnique().toStdString() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+        m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
+    }
 }
 
 void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
@@ -335,7 +387,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
     }
 }
 
-void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick)
+void PlaybackContext::handleAnnotations(const ID partId, const Score* score, const Segment* segment, const int segmentPositionTick)
 {
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->part()) {
@@ -352,13 +404,13 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
         }
 
         if (annotation->isPlayTechAnnotation()) {
-            updatePlayTechMap(toPlayTechAnnotation(annotation), segmentPositionTick);
+            updatePlayTechMap(partId, score, toPlayTechAnnotation(annotation), segmentPositionTick);
             continue;
         }
 
         if (annotation->isStaffText()) {
             if (const SoundFlag* flag = toStaffText(annotation)->soundFlag()) {
-                updatePlaybackParamMap(flag, segmentPositionTick);
+                updatePlaybackParamMap(partId, score, flag, segmentPositionTick);
                 continue;
             }
         }

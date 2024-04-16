@@ -39,6 +39,7 @@ using namespace mu::mpe;
 static const mu::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
 
 static constexpr int HAIRPIN_STEPS = 24;
+static constexpr int TICKS_STEP = 480;
 
 class Engraving_PlaybackContextTests : public ::testing::Test
 {
@@ -119,8 +120,8 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
 
 TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
 {
-    // [GIVEN] Score with sound flags
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags.mscx");
+    // [GIVEN] Score (piano with 2 staves) with sound flags
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
@@ -129,15 +130,23 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
     PlaybackContext ctx;
 
     // [WHEN] Parse the sound flags
-    ctx.update(parts.front()->id(), score);
+    const Part* part = parts.front();
+    ctx.update(part->id(), score);
 
     // [WHEN] Get the actual params
     PlaybackParamMap params = ctx.playbackParamMap(score);
 
     // [THEN] Expected params
-    PlaybackParamList studio  { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Studio") } };
-    PlaybackParamList pop { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Pop") } };
-    PlaybackParamList orchestral  { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Orchestral") } };
+    staff_layer_idx_t startIdx = 0;
+    staff_layer_idx_t endIdx = part->nstaves();
+
+    PlaybackParamList studio, pop;
+    for (staff_layer_idx_t i = startIdx; i < endIdx; ++i) {
+        studio.emplace_back(PlaybackParam { SOUND_PRESET_PARAM_CODE, mu::Val("Studio"), i });
+        pop.emplace_back(PlaybackParam { SOUND_PRESET_PARAM_CODE, mu::Val("Pop"), i });
+    }
+
+    PlaybackParamList orchestral  { { SOUND_PRESET_PARAM_CODE, mu::Val("Orchestral"), 1 } }; // "apply to all staves" is off
 
     PlaybackParamMap expectedParams {
         { timestampFromTicks(score, 960), studio },
@@ -147,21 +156,77 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
 
     EXPECT_EQ(params, expectedParams);
 
-    // [THEN] We can get the params for a specific tick
-    params = ctx.playbackParamMap(score, 0);
-    EXPECT_TRUE(params.empty());
+    // [THEN] We can get the params for a specific tick & staff
+    for (staff_layer_idx_t i = startIdx; i < endIdx; ++i) {
+        params = ctx.playbackParamMap(score, 0, i);
+        EXPECT_TRUE(params.empty());
 
-    params = ctx.playbackParamMap(score, 960);
-    ASSERT_EQ(params.size(), 1);
-    EXPECT_EQ(params.begin()->second, studio);
+        params = ctx.playbackParamMap(score, 960, i);
+        ASSERT_EQ(params.size(), 1);
+        EXPECT_EQ(params.begin()->second, PlaybackParamList { studio.at(i) });
 
-    params = ctx.playbackParamMap(score, 4500);
-    ASSERT_EQ(params.size(), 1);
-    EXPECT_EQ(params.begin()->second, pop);
+        params = ctx.playbackParamMap(score, 4500, i);
+        ASSERT_EQ(params.size(), 1);
+        EXPECT_EQ(params.begin()->second, PlaybackParamList { pop.at(i) });
 
-    params = ctx.playbackParamMap(score, 8000);
-    ASSERT_EQ(params.size(), 1);
-    EXPECT_EQ(params.begin()->second, orchestral);
+        params = ctx.playbackParamMap(score, 8000, i);
+
+        if (i == 1) {
+            ASSERT_EQ(params.size(), 1);
+            EXPECT_EQ(params.begin()->second, orchestral);
+        } else {
+            EXPECT_TRUE(params.empty());
+        }
+    }
+
+    delete score;
+}
+
+/**
+ * @brief Engraving_PlaybackContextTests_ParseSoundFlags_ArcoAndOrdCancelPlayingTechniques
+ *  @details Checks whether Arco & "Ord." correctly cancel playing techniques. See:
+ *  https://github.com/musescore/MuseScore/issues/22403
+ */
+TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags_ArcoAndOrdCancelPlayingTechniques)
+{
+    // [GIVEN] Score with sound flags & playing techniques
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags_arco.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing sound flags & playing techniques
+    PlaybackContext ctx;
+
+    // [WHEN] Parse the sound flags & playing techniques
+    const Part* part = parts.front();
+    ctx.update(part->id(), score);
+
+    // [THEN] 1st measure: Pizz.
+    for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Pizzicato);
+    }
+
+    // [THEN] "Standard" for all the other measures, as Pizz. was canceled with "Ord." in the 2nd measure
+    int lastTick = score->lastMeasure()->tick().ticks();
+    for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Standard);
+    }
+
+    // [THEN] The actual params match the expectation
+    PlaybackParamList ordinary { { PLAY_TECHNIQUE_PARAM_CODE, mu::Val(ORDINARY_PLAYING_TECHNIQUE_CODE), 0 } };
+    PlaybackParamList bartok { { PLAY_TECHNIQUE_PARAM_CODE, mu::Val("bartok"), 0 } };
+
+    PlaybackParamMap expectedParams {
+        { timestampFromTicks(score, 1920), ordinary }, // 2nd measure (cancels Pizz.)
+        { timestampFromTicks(score, 3840), bartok }, // 3rd measure
+        { timestampFromTicks(score, 5760), ordinary }, // 4th (canceled by Arco)
+    };
+
+    PlaybackParamMap params = ctx.playbackParamMap(score);
+    EXPECT_EQ(params, expectedParams);
 
     delete score;
 }
