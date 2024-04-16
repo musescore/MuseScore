@@ -247,14 +247,14 @@ void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score
             return;
         }
 
-        mpe::staff_layer_idx_t startIdx = part->staves().front()->idx();
-        mpe::staff_layer_idx_t endIdx = startIdx + part->nstaves();
+        mpe::staff_layer_idx_t startIdx = static_cast <staff_layer_idx_t>(part->staves().front()->idx());
+        mpe::staff_layer_idx_t endIdx = static_cast <staff_layer_idx_t>(startIdx + part->nstaves());
 
         for (mpe::staff_layer_idx_t idx = startIdx; idx < endIdx; ++idx) {
             addParams(flag, idx);
         }
     } else {
-        addParams(flag, flag->staffIdx());
+        addParams(flag, static_cast <staff_layer_idx_t>(flag->staffIdx()));
     }
 
     IF_ASSERT_FAILED(!params.empty()) {

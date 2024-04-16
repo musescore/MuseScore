@@ -138,7 +138,7 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
 
     // [THEN] Expected params
     staff_layer_idx_t startIdx = 0;
-    staff_layer_idx_t endIdx = part->nstaves();
+    staff_layer_idx_t endIdx = static_cast<staff_layer_idx_t>(part->nstaves());
 
     PlaybackParamList studio, pop;
     for (staff_layer_idx_t i = startIdx; i < endIdx; ++i) {
