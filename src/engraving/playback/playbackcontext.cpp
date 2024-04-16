@@ -208,7 +208,8 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
     }
 }
 
-void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
+void PlaybackContext::updatePlayTechMap(const ID partId, const Score* score, const PlayTechAnnotation* annotation,
+                                        const int segmentPositionTick)
 {
     const PlayingTechniqueType type = annotation->techniqueType();
 
@@ -217,6 +218,21 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     }
 
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
+
+    if (type == PlayingTechniqueType::Natural && !m_playbackParamMap.empty()) {
+        const Part* part = score->partById(partId);
+        IF_ASSERT_FAILED(part && !part->staves().empty()) {
+            return;
+        }
+
+        mpe::staff_layer_idx_t startIdx = part->staves().front()->idx();
+        mpe::staff_layer_idx_t endIdx = startIdx + part->nstaves();
+
+        for (mpe::staff_layer_idx_t idx = startIdx; idx < endIdx; ++idx) {
+            PlaybackParam ordTechnique { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(mpe::ORDINARY_PLAYING_TECHNIQUE_CODE), idx };
+            m_playbackParamMap[segmentPositionTick].push_back(ordTechnique);
+        }
+    }
 }
 
 void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlag* flag, const int segmentPositionTick)
@@ -262,6 +278,10 @@ void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score
     }
 
     m_playbackParamMap.emplace(segmentPositionTick, std::move(params));
+
+    if (flag->playingTechnique().toStdString() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+        m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
+    }
 }
 
 void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
@@ -385,7 +405,7 @@ void PlaybackContext::handleAnnotations(const ID partId, const Score* score, con
         }
 
         if (annotation->isPlayTechAnnotation()) {
-            updatePlayTechMap(toPlayTechAnnotation(annotation), segmentPositionTick);
+            updatePlayTechMap(partId, score, toPlayTechAnnotation(annotation), segmentPositionTick);
             continue;
         }
 

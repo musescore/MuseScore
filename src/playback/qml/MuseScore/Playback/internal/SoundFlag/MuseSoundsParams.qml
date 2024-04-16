@@ -75,7 +75,7 @@ Item {
 
             width: parent.width
 
-            title: qsTrc("playback", "Extended techniques")
+            title: qsTrc("playback", "Playing techniques")
             model: root.model.availablePlayingTechniques
             selectionModel: [ root.model.selectedPlayingTechniqueCode ]
 
