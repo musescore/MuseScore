@@ -90,6 +90,11 @@ public:
     virtual async::Notification outputDeviceSampleRateChanged() const = 0;
 
     virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
+    virtual bool isPlaying() const = 0;
+    virtual float playbackPositionInSeconds() const = 0;
+    virtual void remotePlayOrStop(bool) const = 0;
+    virtual void remoteSeek(msecs_t) const = 0;
+
     virtual int audioDelayCompensate() const = 0;
     virtual void setAudioDelayCompensate(const int frames) = 0;
 
@@ -111,6 +116,9 @@ public:
     virtual bool pushMidiEvent(muse::midi::Event&) = 0;
     virtual void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event >) = 0;
     virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
+
+    virtual void changedPlaying() const = 0;
+    virtual void changedPosition() const = 0;
 
     IAudioDriver::Spec m_spec; // current running spec
     std::string m_deviceId;

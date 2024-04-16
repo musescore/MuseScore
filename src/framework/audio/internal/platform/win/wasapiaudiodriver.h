@@ -73,6 +73,10 @@ public:
 
     int audioDelayCompensate(void) const override;
     void setAudioDelayCompensate(const int frames) override;
+    bool isPlaying() const override;
+    float playbackPositionInSeconds() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
     bool pushMidiEvent(muse::midi::Event& e) override;
     std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const override;
 

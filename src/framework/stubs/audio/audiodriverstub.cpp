@@ -92,6 +92,16 @@ void AudioDriverStub::setAudioDelayCompensate(const int frames)
 {
 }
 
+bool AudioDriverStub::isPlaying() const
+{
+    return false;
+}
+
+float AudioDriverStub::playbackPositionInSeconds() const
+{
+    return 0;
+}
+
 unsigned int AudioDriverStub::sampleRate() const
 {
     return 0;
@@ -105,6 +115,14 @@ bool AudioDriverStub::setSampleRate(unsigned int sampleRate)
 async::Notification AudioDriverStub::sampleRateChanged() const
 {
     return async::Notification();
+}
+
+void AudioDriverStub::remotePlayOrStop([[maybe_unused]] bool ps) const
+{
+}
+
+void AudioDriverStub::remoteSeek([[maybe_unused]] msecs_t millis) const
+{
 }
 
 unsigned int AudioDriverStub::outputDeviceBufferSize() const
