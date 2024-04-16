@@ -42,6 +42,8 @@ public:
     std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const override;
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
+    void changedPlaying() const override;
+    void changedPosition() const override;
 
     void* m_alsaDeviceHandle = nullptr;
 

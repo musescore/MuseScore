@@ -50,6 +50,16 @@ void LinuxAudioDriver::init()
     m_devicesListener.devicesChanged().onNotify(this, [this]() {
         m_availableOutputDevicesChanged.notify();
     });
+
+    // notify driver if when musescore changes play-position or play/pause
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        isPlayingChanged();
+    });
+
+    // HELP: is playbackPositionChanged notified for incremental changes too?
+    playbackController()->playbackPositionChanged().onNotify(this, [this]() {
+        positionChanged();
+    });
 }
 
 std::string LinuxAudioDriver::name() const
@@ -110,7 +120,7 @@ bool LinuxAudioDriver::makeDevice(const AudioDeviceID& deviceId)
 {
 #if defined(JACK_AUDIO)
     if (deviceId == "jack") {
-        m_current_audioDriverState = std::make_unique<JackDriverState>(playbackController());
+        m_current_audioDriverState = std::make_unique<JackDriverState>(this);
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     } else if (deviceId == "alsa") {
         m_current_audioDriverState = std::make_unique<AlsaDriverState>();
@@ -198,6 +208,40 @@ AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
 async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
+}
+
+void LinuxAudioDriver::isPlayingChanged()
+{
+    if (m_current_audioDriverState) {
+        m_current_audioDriverState->changedPlaying();
+    }
+}
+
+void LinuxAudioDriver::positionChanged()
+{
+    if (m_current_audioDriverState) {
+        m_current_audioDriverState->changedPosition();
+    }
+}
+
+bool LinuxAudioDriver::isPlaying() const
+{
+    return playbackController()->isPlaying();
+}
+
+float LinuxAudioDriver::playbackPositionInSeconds() const
+{
+    return playbackController()->playbackPositionInSeconds();
+}
+
+void LinuxAudioDriver::remotePlayOrStop(bool ps) const
+{
+    playbackController()->remotePlayOrStop(ps);
+}
+
+void LinuxAudioDriver::remoteSeek(msecs_t millis) const
+{
+    playbackController()->remoteSeek(millis);
 }
 
 int LinuxAudioDriver::audioDelayCompensate() const
