@@ -427,6 +427,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
     midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
     guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
+    musicXmlConfiguration()->setInferTextTypeOverride(options.importMusicXML.inferTextType);
 #endif
 
     if (options.app.revertToFactorySettings) {
