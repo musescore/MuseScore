@@ -83,6 +83,7 @@ public:
     InstrumentTemplate& operator=(const InstrumentTemplate&);
 
     String id;
+    String soundId;
     String trackName;
     StaffNameList longNames;     ///< shown on first system
     StaffNameList shortNames;    ///< shown on followup systems
@@ -111,8 +112,8 @@ public:
     std::list<NamedEventList> midiActions;
     std::vector<MidiArticulation> midiArticulations;
     std::vector<InstrChannel> channel;
-    std::list<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
-    InstrumentFamily* family = nullptr;   //; family the instrument belongs to
+    std::list<const InstrumentGenre*> genres;       //; list of genres this instrument belongs to
+    const InstrumentFamily* family = nullptr;   //; family the instrument belongs to
 
     ClefTypeList clefTypes[MAX_STAVES];
     int staffLines[MAX_STAVES];
@@ -148,7 +149,7 @@ struct InstrumentGroup {
     String id;
     String name;
     bool extended;            // belongs to extended instruments set if true
-    std::list<InstrumentTemplate*> instrumentTemplates;
+    std::list<const InstrumentTemplate*> instrumentTemplates;
     void read(XmlReader&);
     void clear();
 
@@ -163,25 +164,28 @@ struct InstrumentIndex {
     int groupIndex = 0;
     int instrIndex = 0;
     size_t templateCount = 0;
-    InstrumentTemplate* instrTemplate = nullptr;
+    const InstrumentTemplate* instrTemplate = nullptr;
 
-    InstrumentIndex(int g, int i, InstrumentTemplate* it);
+    InstrumentIndex(int g, int i, const InstrumentTemplate* it);
 };
 
-extern std::vector<InstrumentGenre*> instrumentGenres;
-extern std::vector<InstrumentFamily*> instrumentFamilies;
+extern std::vector<const InstrumentGenre*> instrumentGenres;
+extern std::vector<const InstrumentFamily*> instrumentFamilies;
+extern std::vector<const InstrumentGroup*> instrumentGroups;
 extern std::vector<MidiArticulation> midiArticulations;
-extern std::vector<InstrumentGroup*> instrumentGroups;
 extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
-extern bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath);
-extern InstrumentTemplate* searchTemplate(const String& name);
+extern bool loadInstrumentTemplates(const mu::io::path_t& instrTemplatesPath);
 extern InstrumentIndex searchTemplateIndexForTrackName(const String& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const String& id);
-extern InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
-extern InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset = false);
-extern InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset = false);
-extern InstrumentGroup* searchInstrumentGroup(const String& name);
+extern const InstrumentTemplate* searchTemplate(const String& name);
+extern const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
+extern const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset = false);
+extern const InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset = false);
+extern const InstrumentGenre* searchInstrumentGenre(const String& id);
+
+extern void addTemplateToGroup(const InstrumentTemplate* templ, const String& groupId);
+
 extern ClefType defaultClef(int patch);
 } // namespace mu::engraving
 #endif

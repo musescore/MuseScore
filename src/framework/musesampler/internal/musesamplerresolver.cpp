@@ -26,6 +26,8 @@
 
 #include "musesamplerwrapper.h"
 
+#include "serialization/json.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -33,9 +35,30 @@ using namespace mu::async;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::musesampler;
-using namespace mu::framework;
 
-InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const audio::AudioResourceMeta& resourceMeta)
+static const std::unordered_map<String, ClefType> CLEF_NAME_LOWER_CASE_TO_TYPE {
+    { u"none", ClefType::None },
+    { u"treble", ClefType::Treble },
+    { u"bass", ClefType::Bass },
+    { u"alto", ClefType::Alto },
+    { u"tenor", ClefType::Tenor },
+    { u"percussion", ClefType::Percussion },
+    { u"higheroctavetreble", ClefType::HigherOctaveTreble },
+    { u"loweroctavetreble", ClefType::LowerOctaveTreble },
+    { u"higheroctavebass", ClefType::HigherOctaveBass },
+    { u"loweroctavebass", ClefType::LowerOctaveBass },
+    { u"baritone", ClefType::Baritone },
+    { u"mezzosoprano", ClefType::Mezzosoprano },
+    { u"soprano", ClefType::Soprano },
+    { u"frenchviolin", ClefType::FrenchViolin },
+};
+
+static const std::unordered_map<String, StaffType> STAFF_NAME_LOWER_CASE_TO_TYPE {
+    { u"standard", StaffType::Standard },
+    { u"grand", StaffType::Grand },
+};
+
+InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioResourceMeta& resourceMeta)
 {
     if (!libHandler) {
         return InstrumentInfo();
@@ -222,14 +245,63 @@ float MuseSamplerResolver::defaultReverbLevel(const String& instrumentSoundId) c
     return 0.f;
 }
 
-String MuseSamplerResolver::drumMapping(int instrumentId) const
+ByteArray MuseSamplerResolver::drumMapping(int instrumentId) const
 {
     if (!m_libHandler) {
-        return String();
+        return ByteArray();
     }
 
     const char* mapping_cstr = m_libHandler->getDrumMapping(instrumentId);
-    return mapping_cstr ? String::fromAscii(mapping_cstr) : String();
+    return mapping_cstr ? ByteArray(mapping_cstr) : ByteArray();
+}
+
+std::vector<Instrument> MuseSamplerResolver::instruments() const
+{
+    if (!m_libHandler) {
+        return {};
+    }
+
+    std::vector<Instrument> result;
+
+    auto instrumentList = m_libHandler->getInstrumentList();
+    while (auto msInstrument = m_libHandler->getNextInstrument(instrumentList)) {
+        const char* json_cstr = m_libHandler->getInstrumentInfoJson(msInstrument);
+        if (!json_cstr) {
+            continue;
+        }
+
+        ByteArray json(json_cstr);
+        if (json.empty()) {
+            continue;
+        }
+
+        std::string err;
+        JsonDocument doc = JsonDocument::fromJson(json, &err);
+        if (!err.empty()) {
+            LOGE() << err;
+            continue;
+        }
+
+        int id = m_libHandler->getInstrumentId(msInstrument);
+        JsonObject obj = doc.rootObject();
+
+        Instrument instrument;
+        instrument.id = buildMuseInstrumentId(instrument.category, instrument.name, id);
+        instrument.soundId = String::fromUtf8(m_libHandler->getMpeSoundId(msInstrument));
+        instrument.musicXmlId = String::fromUtf8(m_libHandler->getMusicXmlSoundId(msInstrument));
+        instrument.name = obj.value("FriendlyName").toString();
+        instrument.abbreviation = obj.value("Abbreviation").toString();
+        instrument.category = obj.value("Category").toString();
+        instrument.vendor = obj.value("Vendor").toString();
+        instrument.staffLines = obj.contains("StaffLines") ? obj.value("StaffLines").toString().toInt() : 5;
+        instrument.staffType = mu::value(STAFF_NAME_LOWER_CASE_TO_TYPE, obj.value(
+                                             "DefaultStaffType").toString().toLower(), StaffType::Standard);
+        instrument.clefType = mu::value(CLEF_NAME_LOWER_CASE_TO_TYPE, obj.value("DefaultClef").toString().toLower(), ClefType::Treble);
+
+        result.emplace_back(std::move(instrument));
+    }
+
+    return result;
 }
 
 bool MuseSamplerResolver::checkLibrary() const

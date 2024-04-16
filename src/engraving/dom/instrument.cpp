@@ -74,6 +74,7 @@ Instrument::Instrument(String id)
 Instrument::Instrument(const Instrument& i)
 {
     m_id           = i.m_id;
+    m_soundId      = i.m_soundId;
     m_longNames    = i.m_longNames;
     m_shortNames   = i.m_shortNames;
     m_trackName    = i.m_trackName;
@@ -105,6 +106,7 @@ void Instrument::operator=(const Instrument& i)
     delete m_drumset;
 
     m_id           = i.m_id;
+    m_soundId      = i.m_soundId;
     m_longNames    = i.m_longNames;
     m_shortNames   = i.m_shortNames;
     m_trackName    = i.m_trackName;
@@ -205,8 +207,8 @@ String Instrument::recognizeId() const
     String fallback;
     int bestMatchStrength = 0;     // higher when fallback ID provides better match for instrument data
 
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
+    for (const InstrumentGroup* g : instrumentGroups) {
+        for (const InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->musicXMLid != musicXmlId()) {
                 continue;
             }
@@ -252,7 +254,7 @@ String Instrument::recognizeId() const
 
 int Instrument::recognizeMidiProgram() const
 {
-    InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(m_musicXmlId);
+    const InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(m_musicXmlId);
 
     if (tmplInstrumentId && !tmplInstrumentId->channel.empty() && tmplInstrumentId->channel[0].program() >= 0) {
         return tmplInstrumentId->channel[0].program();
@@ -264,7 +266,7 @@ int Instrument::recognizeMidiProgram() const
     mu::join(nameList, m_longNames.toStringList());
     mu::join(nameList, m_shortNames.toStringList());
 
-    InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
+    const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
 
     if (tmplByName && !tmplByName->channel.empty() && tmplByName->channel[0].program() >= 0) {
         return tmplByName->channel[0].program();
@@ -1129,13 +1131,10 @@ String Instrument::abbreviatureAsPlainText() const
     return !m_shortNames.empty() ? m_shortNames.front().toPlainText() : String();
 }
 
-//---------------------------------------------------------
-//   fromTemplate
-//---------------------------------------------------------
-
 Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
 {
     Instrument instrument(templ->id);
+    instrument.setSoundId(templ->soundId);
     instrument.setAmateurPitchRange(templ->minPitchA, templ->maxPitchA);
     instrument.setProfessionalPitchRange(templ->minPitchP, templ->maxPitchP);
 
@@ -1231,7 +1230,7 @@ InstrChannel* Instrument::playbackChannel(int idx, MasterScore* score)
 bool Instrument::getSingleNoteDynamicsFromTemplate() const
 {
     String templateName = trackName().toLower().replace(u" ", u"-").replace(u"♭", u"b");
-    InstrumentTemplate* tp = searchTemplate(templateName);
+    const InstrumentTemplate* tp = searchTemplate(templateName);
     if (tp) {
         return tp->singleNoteDynamics;
     }

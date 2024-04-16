@@ -35,6 +35,12 @@ using namespace mu::mpe;
 
 void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const
 {
+    if (!instrument->soundId().empty()) {
+        result = PlaybackSetupData::fromString(instrument->soundId());
+        result.musicXmlSoundId = std::make_optional(instrument->musicXmlId().toStdString());
+        return;
+    }
+
     if (KeyboardsSetupDataResolver::resolve(instrument, result)) {
         return;
     }
@@ -65,13 +71,13 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
         static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
             SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
                                                        SoundSubCategory::Nylon,
-                                                       SoundSubCategory::Plucked }, {}
+                                                       SoundSubCategory::Plucked }
         };
 
         result = CHORD_SYMBOLS_SETUP_DATA;
     } else {
-        static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
-            SoundId::Piano, SoundCategory::Keyboards, {}, {}
+        static const PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
+            SoundId::Piano, SoundCategory::Keyboards
         };
 
         result = CHORD_SYMBOLS_SETUP_DATA;
@@ -80,8 +86,8 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
 
 void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const
 {
-    static const mpe::PlaybackSetupData METRONOME_SETUP_DATA = {
-        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }, {}
+    static const PlaybackSetupData METRONOME_SETUP_DATA = {
+        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }
     };
 
     result = METRONOME_SETUP_DATA;

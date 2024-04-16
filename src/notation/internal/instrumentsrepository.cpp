@@ -23,12 +23,59 @@
 
 #include "global/serialization/json.h"
 
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/types/types.h"
+
+#include "mpe/playbacksetupdata.h"
+
 #include "log.h"
 #include "translation.h"
 
-#include "engraving/dom/instrtemplate.h"
-
+using namespace mu;
+using namespace mu::io;
 using namespace mu::notation;
+
+static InstrumentGroup* createAndAddOtherGroup()
+{
+    InstrumentGroup* otherGroup = new InstrumentGroup();
+    otherGroup->id = "other_group";
+    otherGroup->name = mtrc("instruments", "Other");
+    mu::engraving::instrumentGroups.push_back(otherGroup);
+
+    return otherGroup;
+}
+
+static mu::engraving::ClefType museSamplerClefTypeToEngravingClefType(musesampler::ClefType type)
+{
+    switch (type) {
+    case musesampler::ClefType::Treble: return mu::engraving::ClefType::G;
+    case musesampler::ClefType::Bass: return mu::engraving::ClefType::F;
+    case musesampler::ClefType::Alto: return mu::engraving::ClefType::C3;
+    case musesampler::ClefType::Tenor: return mu::engraving::ClefType::C4;
+    case musesampler::ClefType::Percussion: return mu::engraving::ClefType::PERC;
+    case musesampler::ClefType::HigherOctaveTreble: return mu::engraving::ClefType::G8_VA;
+    case musesampler::ClefType::LowerOctaveTreble: return mu::engraving::ClefType::G8_VB;
+    case musesampler::ClefType::HigherOctaveBass: return mu::engraving::ClefType::F_8VA;
+    case musesampler::ClefType::LowerOctaveBass: return mu::engraving::ClefType::F8_VB;
+    case musesampler::ClefType::Baritone: return mu::engraving::ClefType::C5;
+    case musesampler::ClefType::Mezzosoprano: return mu::engraving::ClefType::C2;
+    case musesampler::ClefType::Soprano: return mu::engraving::ClefType::C1;
+    case musesampler::ClefType::FrenchViolin: return mu::engraving::ClefType::G_1;
+    case musesampler::ClefType::None: break;
+    }
+
+    return mu::engraving::ClefType::G;
+}
+
+static size_t staffCount(musesampler::StaffType type)
+{
+    switch (type) {
+    case musesampler::StaffType::Standard: return 1;
+    case musesampler::StaffType::Grand: return 2;
+    }
+
+    return 1;
+}
 
 void InstrumentsRepository::init()
 {
@@ -41,24 +88,18 @@ void InstrumentsRepository::init()
 
 const InstrumentTemplateList& InstrumentsRepository::instrumentTemplates() const
 {
-    return m_instrumentTemplates;
+    return m_instrumentTemplateList;
 }
 
-const InstrumentTemplate& InstrumentsRepository::instrumentTemplate(const std::string& instrumentId) const
+const InstrumentTemplate& InstrumentsRepository::instrumentTemplate(const String& instrumentId) const
 {
-    const InstrumentTemplateList& templates = m_instrumentTemplates;
-
-    auto it = std::find_if(templates.begin(), templates.end(), [instrumentId](const InstrumentTemplate* templ) {
-        return templ->id == instrumentId;
-    });
-
-    if (it == m_instrumentTemplates.cend()) {
-        static InstrumentTemplate dummy;
+    auto it = m_instrumentTemplateMap.find(instrumentId);
+    if (it == m_instrumentTemplateMap.end()) {
+        static const InstrumentTemplate dummy;
         return dummy;
     }
 
-    const InstrumentTemplate* templ = *it;
-    return *templ;
+    return *it->second;
 }
 
 const ScoreOrderList& InstrumentsRepository::orders() const
@@ -66,7 +107,7 @@ const ScoreOrderList& InstrumentsRepository::orders() const
     return mu::engraving::instrumentOrders;
 }
 
-const ScoreOrder& InstrumentsRepository::order(const std::string& orderId) const
+const ScoreOrder& InstrumentsRepository::order(const String& orderId) const
 {
     const ScoreOrderList& orders = mu::engraving::instrumentOrders;
 
@@ -84,12 +125,12 @@ const ScoreOrder& InstrumentsRepository::order(const std::string& orderId) const
 
 const InstrumentGenreList& InstrumentsRepository::genres() const
 {
-    return m_genres;
+    return mu::engraving::instrumentGenres;
 }
 
 const InstrumentGroupList& InstrumentsRepository::groups() const
 {
-    return m_groups;
+    return mu::engraving::instrumentGroups;
 }
 
 const InstrumentStringTuningsMap& InstrumentsRepository::stringTuningsPresets() const
@@ -101,46 +142,44 @@ void InstrumentsRepository::load()
 {
     TRACEFUNC;
 
-    m_instrumentTemplates.clear();
-    m_genres.clear();
-    m_groups.clear();
+    m_instrumentTemplateList.clear();
+    m_instrumentTemplateMap.clear();
     mu::engraving::clearInstrumentTemplates();
 
-    io::path_t instrumentsPath = configuration()->instrumentListPath();
+    path_t instrumentsPath = configuration()->instrumentListPath();
     if (!mu::engraving::loadInstrumentTemplates(instrumentsPath)) {
         LOGE() << "Could not load instruments from " << instrumentsPath << "!";
     }
 
-    for (const io::path_t& ordersPath : configuration()->scoreOrderListPaths()) {
+    for (const path_t& ordersPath : configuration()->scoreOrderListPaths()) {
         if (!mu::engraving::loadInstrumentTemplates(ordersPath)) {
             LOGE() << "Could not load orders from " << ordersPath << "!";
         }
     }
 
-    for (const InstrumentGenre* genre : mu::engraving::instrumentGenres) {
-        m_genres << genre;
-    }
+    InstrumentTemplateMap instrumentByMusicXmlId;
 
     for (const InstrumentGroup* group : mu::engraving::instrumentGroups) {
-        m_groups << group;
-
-        for (InstrumentTemplate* templ : group->instrumentTemplates) {
+        for (const InstrumentTemplate* templ : group->instrumentTemplates) {
             if (templ->trackName.isEmpty() || templ->longNames.empty()) {
                 continue;
             }
 
-            templ->groupId = group->id;
-            m_instrumentTemplates << templ;
+            m_instrumentTemplateList.push_back(templ);
+            m_instrumentTemplateMap.insert_or_assign(templ->id, templ);
+            instrumentByMusicXmlId.insert_or_assign(templ->musicXMLid, templ);
         }
     }
 
-    io::path_t stringTuningsPresetsPath = configuration()->stringTuningsPresetsPath();
+    loadMuseInstruments(instrumentByMusicXmlId);
+
+    path_t stringTuningsPresetsPath = configuration()->stringTuningsPresetsPath();
     if (!loadStringTuningsPresets(stringTuningsPresetsPath)) {
         LOGE() << "Could not load string tunings presets from " << stringTuningsPresetsPath << "!";
     }
 }
 
-bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
+bool InstrumentsRepository::loadStringTuningsPresets(const path_t& path)
 {
     TRACEFUNC;
 
@@ -210,8 +249,87 @@ bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
         std::string id = presetInfoObj.contains("familyId") ? presetInfoObj.value("familyId").toStdString()
                          : presetInfoObj.value("instrumentId").toStdString();
 
-        m_stringTuningsPresets.emplace(id, strings);
+        m_stringTuningsPresets.emplace(std::move(id), std::move(strings));
     }
 
     return true;
+}
+
+void InstrumentsRepository::loadMuseInstruments(const InstrumentTemplateMap& standardInstrumentByMusicXmlId)
+{
+    TRACEFUNC;
+
+    if (!museSampler()) {
+        return;
+    }
+
+    InstrumentGroup* otherGroup = nullptr;
+    std::vector<musesampler::Instrument> instruments = museSampler()->instruments();
+
+    for (const musesampler::Instrument& instrument : instruments) {
+        mpe::PlaybackSetupData sound = mpe::PlaybackSetupData::fromString(instrument.soundId);
+        if (!sound.isValid()) {
+            continue;
+        }
+
+        if (sound.isKnownSound()) {
+            continue;
+        }
+
+        InstrumentTemplate* templ = new InstrumentTemplate();
+        templ->id = instrument.id;
+        templ->soundId = instrument.soundId;
+        templ->musicXMLid = instrument.musicXmlId;
+        templ->trackName = instrument.name;
+        templ->longNames.emplace_back(StaffName(instrument.name));
+        templ->shortNames.emplace_back(StaffName(instrument.abbreviation));
+        templ->staffCount = staffCount(instrument.staffType);
+        mu::engraving::ClefType clefType = museSamplerClefTypeToEngravingClefType(instrument.clefType);
+        templ->clefTypes[0].concertClef = clefType;
+        templ->clefTypes[0].transposingClef = clefType;
+
+        if (instrument.staffType == musesampler::StaffType::Grand) {
+            templ->bracketSpan[0] = templ->staffCount;
+            templ->barlineSpan[0] = templ->staffCount;
+
+            for (size_t i = 0; i < templ->staffCount; ++i) {
+                templ->bracket[i] = mu::engraving::BracketType::BRACE;
+            }
+
+            templ->clefTypes[1].concertClef = mu::engraving::ClefType::F;
+            templ->clefTypes[1].transposingClef = mu::engraving::ClefType::F;
+        }
+
+        for (int i = 0; i < MAX_STAVES; ++i) {
+            templ->staffLines[i] = instrument.staffLines;
+        }
+
+        if (!instrument.musicXmlId.empty()) {
+            const InstrumentTemplate* standardTempl = mu::value(standardInstrumentByMusicXmlId, instrument.musicXmlId, nullptr);
+            if (standardTempl) {
+                templ->family = standardTempl->family;
+                templ->groupId = standardTempl->groupId;
+                templ->genres = standardTempl->genres;
+            }
+        }
+
+        if (templ->groupId.empty()) {
+            if (!otherGroup) {
+                otherGroup = createAndAddOtherGroup();
+            }
+            templ->groupId = otherGroup->id;
+        }
+
+        if (templ->genres.empty()) {
+            const InstrumentGenre* commonGenre = mu::engraving::searchInstrumentGenre(COMMON_GENRE_ID);
+            if (commonGenre) {
+                templ->genres.push_back(commonGenre);
+            }
+        }
+
+        m_instrumentTemplateList.push_back(templ);
+        m_instrumentTemplateMap.insert_or_assign(templ->id, templ);
+
+        mu::engraving::addTemplateToGroup(templ, templ->groupId);
+    }
 }

@@ -24,27 +24,28 @@
 
 #include "modularity/ioc.h"
 
-#include "async/channel.h"
+#include "iinstrumentsrepository.h"
 #include "async/asyncable.h"
 
 #include "io/ifilesystem.h"
-#include "iinstrumentsrepository.h"
 #include "inotationconfiguration.h"
+#include "framework/musesampler/imusesamplerinfo.h"
 
 namespace mu::notation {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(mu::io::IFileSystem, fileSystem)
     INJECT(INotationConfiguration, configuration)
+    INJECT(mu::musesampler::IMuseSamplerInfo, museSampler)
 
 public:
     void init();
 
     const InstrumentTemplateList& instrumentTemplates() const override;
-    const InstrumentTemplate& instrumentTemplate(const std::string& instrumentId) const override;
+    const InstrumentTemplate& instrumentTemplate(const mu::String& instrumentId) const override;
 
     const ScoreOrderList& orders() const override;
-    const ScoreOrder& order(const std::string& orderId) const override;
+    const ScoreOrder& order(const mu::String& orderId) const override;
 
     const InstrumentGenreList& genres() const override;
     const InstrumentGroupList& groups() const override;
@@ -52,14 +53,16 @@ public:
     const InstrumentStringTuningsMap& stringTuningsPresets() const override;
 
 private:
+    using InstrumentTemplateMap = std::unordered_map<mu::String, const InstrumentTemplate*>;
+
     void load();
     void clear();
 
-    bool loadStringTuningsPresets(const io::path_t& path);
+    bool loadStringTuningsPresets(const mu::io::path_t& path);
+    void loadMuseInstruments(const InstrumentTemplateMap& standardInstrumentByMusicXmlId);
 
-    InstrumentTemplateList m_instrumentTemplates;
-    InstrumentGroupList m_groups;
-    InstrumentGenreList m_genres;
+    InstrumentTemplateList m_instrumentTemplateList;
+    InstrumentTemplateMap m_instrumentTemplateMap;
     InstrumentStringTuningsMap m_stringTuningsPresets;
 };
 }

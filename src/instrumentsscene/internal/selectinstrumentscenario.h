@@ -39,7 +39,7 @@ public:
     override;
 
 private:
-    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
+    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const StringList& params) const;
 };
 }
 

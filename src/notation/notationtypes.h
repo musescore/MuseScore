@@ -124,30 +124,22 @@ using StaffTypeId = mu::engraving::StaffTypes;
 using StaffName = mu::engraving::StaffName;
 using StaffNameList = mu::engraving::StaffNameList;
 using Segment = mu::engraving::Segment;
-using MidiArticulation = mu::engraving::MidiArticulation;
 using TextStyleType = mu::engraving::TextStyleType;
-using Trait = mu::engraving::Trait;
 using TraitType = mu::engraving::TraitType;
 using HarmonyDurationType = mu::engraving::HDuration;
 using Voicing = mu::engraving::Voicing;
-using InstrumentChannel = mu::engraving::InstrChannel;
 using Instrument = mu::engraving::Instrument;
 using InstrumentTemplate = mu::engraving::InstrumentTemplate;
 using InstrumentTrait = mu::engraving::Trait;
 using ScoreOrder = mu::engraving::ScoreOrder;
-using ScoreOrderGroup = mu::engraving::ScoreGroup;
-using InstrumentOverwrite = mu::engraving::InstrumentOverwrite;
 using InstrumentGenre = mu::engraving::InstrumentGenre;
 using InstrumentGroup = mu::engraving::InstrumentGroup;
-using MidiArticulation = mu::engraving::MidiArticulation;
 using PageList = std::vector<const Page*>;
 using PartList = std::vector<const Part*>;
-using InstrumentList = QList<Instrument>;
-using InstrumentTemplateList = QList<const InstrumentTemplate*>;
-using InstrumentGenreList = QList<const InstrumentGenre*>;
+using InstrumentTemplateList = std::vector<const InstrumentTemplate*>;
+using InstrumentGenreList = std::vector<const InstrumentGenre*>;
 using ScoreOrderList = std::vector<mu::engraving::ScoreOrder>;
-using InstrumentGroupList = QList<const InstrumentGroup*>;
-using MidiArticulationList = QList<MidiArticulation>;
+using InstrumentGroupList = std::vector<const InstrumentGroup*>;
 using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
@@ -316,35 +308,9 @@ struct Tempo
 
 static constexpr int MAX_STAVES  = 4;
 
-struct ClefPair
-{
-    ClefType concertClef = ClefType::G;
-    ClefType transposingClef = ClefType::G;
-};
-
-struct PitchRange
-{
-    int min = 0;
-    int max = 0;
-
-    PitchRange() = default;
-    PitchRange(int min, int max)
-        : min(min), max(max) {}
-
-    bool operator ==(const PitchRange& other) const
-    {
-        return min == other.min && max == other.max;
-    }
-
-    bool operator !=(const PitchRange& other) const
-    {
-        return !operator ==(other);
-    }
-};
-
 struct InstrumentKey
 {
-    QString instrumentId;
+    String instrumentId;
     ID partId;
     Fraction tick = mu::engraving::Fraction(0, 1);
 };
