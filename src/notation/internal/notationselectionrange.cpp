@@ -156,6 +156,27 @@ bool NotationSelectionRange::containsPoint(const PointF& point) const
     return false;
 }
 
+bool NotationSelectionRange::containsItem(const EngravingItem* item) const
+{
+    Fraction itemTick = item->tick();
+    Fraction selectionStartTick = startTick();
+    Fraction selectionEndTick = endTick();
+
+    if (itemTick < selectionStartTick || itemTick > selectionEndTick) {
+        return false;
+    }
+
+    if (itemTick == selectionEndTick) {
+        return item->rtick() > Fraction(0, 1);
+    }
+
+    track_idx_t itemTrack = item->track();
+    track_idx_t selectionStartTrack = VOICES * startStaffIndex();
+    track_idx_t selectionEndTrack = VOICES * (endStaffIndex() - 1) + VOICES;
+
+    return itemTrack >= selectionStartTrack && itemTrack < selectionEndTrack;
+}
+
 std::vector<const Part*> NotationSelectionRange::selectedParts() const
 {
     std::vector<const Part*> result;
