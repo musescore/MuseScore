@@ -1620,7 +1620,7 @@ void NotationActionController::loadStyle()
         }
         if (!currentNotationStyle()->loadStyle(path.toQString(), false) && interactive()->warning(
                 muse::trc("notation",
-                          "Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly."),
+                          "Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly."),
                 muse::trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
                 IInteractive::Button::Ok).standardButton()
             == IInteractive::Button::Ok) {

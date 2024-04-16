@@ -181,7 +181,7 @@ void OAuthHttpServerReplyHandler::Impl::answerClient(QTcpSocket* socket, const Q
     Q_EMIT m_public->callbackReceived(receivedData);
 
     // Fallback text, shown while redirecting
-    const QString text = muse::qtrc("cloud", "Sign in successful! You’re good to go back to the MuseScore desktop app.");
+    const QString text = muse::qtrc("cloud", "Sign in successful! You’re good to go back to MuseScore Studio.");
 
     const QByteArray html = QByteArrayLiteral("<html><head><title>")
                             + qApp->applicationName().toUtf8()
