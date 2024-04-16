@@ -39,6 +39,7 @@
 #elif defined(Q_OS_WIN)
 #include <QDir>
 #include <QProcess>
+#include "platform/win/wininteractivehelper.h"
 #endif
 
 #include "log.h"
@@ -323,6 +324,43 @@ Ret Interactive::openUrl(const std::string& url) const
 Ret Interactive::openUrl(const QUrl& url) const
 {
     return QDesktopServices::openUrl(url);
+}
+
+Ret Interactive::isAppExists(const std::string& appIdentifier) const
+{
+#ifdef Q_OS_MACOS
+    return MacOSInteractiveHelper::isAppExists(appIdentifier);
+#else
+    NOT_IMPLEMENTED;
+    UNUSED(appIdentifier);
+    return false;
+#endif
+}
+
+Ret Interactive::canOpenApp(const Uri& uri) const
+{
+#ifdef Q_OS_MACOS
+    return MacOSInteractiveHelper::canOpenApp(uri);
+#else
+    NOT_IMPLEMENTED;
+    UNUSED(uri);
+    return false;
+#endif
+}
+
+async::Promise<Ret> Interactive::openApp(const Uri& uri) const
+{
+#ifdef Q_OS_MACOS
+    return MacOSInteractiveHelper::openApp(uri);
+#elif defined(Q_OS_WIN)
+    return WinInteractiveHelper::openApp(uri);
+#else
+    UNUSED(uri);
+    return async::Promise<Ret>([](auto, auto reject) {
+        Ret ret = make_ret(Ret::Code::NotImplemented);
+        return reject(ret.code(), ret.text());
+    });
+#endif
 }
 
 Ret Interactive::revealInFileBrowser(const io::path_t& filePath) const

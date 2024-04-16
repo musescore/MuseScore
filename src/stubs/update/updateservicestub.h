@@ -22,10 +22,10 @@
 #ifndef MU_UPDATE_UPDATESERVICESTUB_H
 #define MU_UPDATE_UPDATESERVICESTUB_H
 
-#include "update/iupdateservice.h"
+#include "update/iappupdateservice.h"
 
 namespace mu::update {
-class UpdateServiceStub : public IUpdateService
+class UpdateServiceStub : public IAppUpdateService
 {
 public:
     mu::RetVal<ReleaseInfo> checkForUpdate() override;

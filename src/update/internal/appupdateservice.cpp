@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "updateservice.h"
+#include "appupdateservice.h"
 
 #include <QBuffer>
 #include <QJsonParseError>
@@ -30,17 +30,16 @@
 #include <QJsonDocument>
 
 #include "../updateerrors.h"
-#include "types/version.h"
-#include "muversion.h"
+#include "global/muversion.h"
 
 #include "translation.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::update;
 using namespace mu::network;
-using namespace mu::framework;
 
-mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
+mu::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
     result.ret = make_ret(Err::NoUpdate);
@@ -49,7 +48,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 
     QBuffer buff;
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForAppUpdateUrl()), &buff,
                                               configuration()->updateHeaders());
 
     if (!getUpdateInfo) {
@@ -68,8 +67,8 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
         return result;
     }
 
-    Version current(MUVersion::fullVersion());
-    Version update(releaseInfoRetVal.val.version);
+    framework::Version current(framework::MUVersion::fullVersion());
+    framework::Version update(releaseInfoRetVal.val.version);
 
     bool allowUpdateOnPreRelease = configuration()->allowUpdateOnPreRelease();
     bool isPreRelease = update.preRelease();
@@ -85,7 +84,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     ReleaseInfo releaseInfo = releaseInfoRetVal.val;
     releaseInfo.previousReleasesNotes = previousReleasesNotes(update);
 
-    result.ret = make_ok();
+    result.ret = mu::make_ok();
     result.val = std::move(releaseInfo);
 
     m_lastCheckResult = result.val;
@@ -93,7 +92,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     return result;
 }
 
-mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
+mu::RetVal<mu::io::path_t> AppUpdateService::downloadRelease()
 {
     RetVal<io::path_t> result;
 
@@ -109,7 +108,7 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
 
             //: Means that the download is currently in progress.
             //: %1 will be replaced by the version number of the version that is being downloaded.
-            qtrc("update", "Downloading MuseScore Studio %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
+            mu::qtrc("update", "Downloading MuseScore Studio %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
     });
 
     Ret ret = m_networkManager->get(fileUrl, &buff);
@@ -119,7 +118,7 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
     }
 
     io::path_t installerPath = configuration()->updateDataPath() + "/" + m_lastCheckResult.fileName;
-    fileSystem()->makePath(io::absoluteDirpath(installerPath));
+    fileSystem()->makePath(mu::io::absoluteDirpath(installerPath));
 
     ret = fileSystem()->writeFile(installerPath, ByteArray::fromQByteArrayNoCopy(buff.data()));
     if (ret) {
@@ -130,19 +129,19 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
     return result;
 }
 
-void UpdateService::cancelUpdate()
+void AppUpdateService::cancelUpdate()
 {
     if (m_networkManager) {
         m_networkManager->abort();
     }
 }
 
-mu::framework::Progress UpdateService::updateProgress()
+framework::Progress AppUpdateService::updateProgress()
 {
     return m_updateProgress;
 }
 
-mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) const
+RetVal<ReleaseInfo> AppUpdateService::parseRelease(const QByteArray& json) const
 {
     RetVal<ReleaseInfo> result;
 
@@ -163,7 +162,7 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
         return result;
     }
 
-    result.ret = make_ok();
+    result.ret = mu::make_ok();
 
     result.val.fileName = assetObj.value("name").toString().toStdString();
     result.val.fileUrl = assetObj.value("browser_download_url").toString().toStdString();
@@ -177,7 +176,7 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     return result;
 }
 
-std::string UpdateService::platformFileSuffix() const
+std::string AppUpdateService::platformFileSuffix() const
 {
     switch (systemInfo()->productType()) {
     case ISystemInfo::ProductType::Windows: return "msi";
@@ -189,7 +188,7 @@ std::string UpdateService::platformFileSuffix() const
     return "";
 }
 
-mu::ISystemInfo::CpuArchitecture UpdateService::assetArch(const QString& asset) const
+ISystemInfo::CpuArchitecture AppUpdateService::assetArch(const QString& asset) const
 {
     if (asset.contains("aarch64")) {
         return ISystemInfo::CpuArchitecture::Arm64;
@@ -200,7 +199,7 @@ mu::ISystemInfo::CpuArchitecture UpdateService::assetArch(const QString& asset) 
     return ISystemInfo::CpuArchitecture::x86_64;
 }
 
-QJsonObject UpdateService::resolveReleaseAsset(const QJsonObject& release) const
+QJsonObject AppUpdateService::resolveReleaseAsset(const QJsonObject& release) const
 {
     std::string fileSuffix = platformFileSuffix();
     ISystemInfo::ProductType productType = systemInfo()->productType();
@@ -231,12 +230,12 @@ QJsonObject UpdateService::resolveReleaseAsset(const QJsonObject& release) const
     return QJsonObject();
 }
 
-PrevReleasesNotesList UpdateService::previousReleasesNotes(const Version& updateVersion) const
+PrevReleasesNotesList AppUpdateService::previousReleasesNotes(const framework::Version& updateVersion) const
 {
     PrevReleasesNotesList result;
 
     QBuffer buff;
-    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousReleasesNotesUrl()), &buff,
+    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff,
                                                         configuration()->updateHeaders());
     if (!getPreviousReleaseNotes) {
         LOGE() << "failed to get previous release notes: " << getPreviousReleaseNotes.toString();
@@ -250,10 +249,10 @@ PrevReleasesNotesList UpdateService::previousReleasesNotes(const Version& update
         return result;
     }
 
-    Version currentVersion = Version(MUVersion::fullVersion());
+    framework::Version currentVersion = framework::MUVersion::fullVersion();
 
     for (const PrevReleaseNotes& releaseNotes : previousReleasesNotes) {
-        Version previousVersion = Version(releaseNotes.version);
+        framework::Version previousVersion = framework::Version(releaseNotes.version);
         if (updateVersion == previousVersion) {
             continue;
         }
@@ -274,13 +273,13 @@ PrevReleasesNotesList UpdateService::previousReleasesNotes(const Version& update
 
     std::sort(result.begin(), result.end(), [](const PrevReleaseNotes& a,
                                                const PrevReleaseNotes& b) {
-        return Version(a.version) < Version(b.version);
+        return framework::Version(a.version) < framework::Version(b.version);
     });
 
     return result;
 }
 
-PrevReleasesNotesList UpdateService::parsePreviousReleasesNotes(const QByteArray& json) const
+PrevReleasesNotesList AppUpdateService::parsePreviousReleasesNotes(const QByteArray& json) const
 {
     PrevReleasesNotesList result;
 
@@ -309,7 +308,7 @@ PrevReleasesNotesList UpdateService::parsePreviousReleasesNotes(const QByteArray
     return result;
 }
 
-void UpdateService::clear()
+void AppUpdateService::clear()
 {
     m_lastCheckResult = ReleaseInfo();
 

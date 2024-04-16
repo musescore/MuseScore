@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UPDATE_UPDATEMODEL_H
-#define MU_UPDATE_UPDATEMODEL_H
+#ifndef MUSE_UPDATE_UPDATEMODEL_H
+#define MUSE_UPDATE_UPDATEMODEL_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "iupdateservice.h"
+#include "iappupdateservice.h"
 
 #include "async/asyncable.h"
 
@@ -35,7 +35,7 @@ class UpdateModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IUpdateService, service)
+    INJECT(IAppUpdateService, service);
 
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)

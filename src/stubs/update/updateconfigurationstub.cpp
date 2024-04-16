@@ -51,23 +51,37 @@ std::string UpdateConfigurationStub::skippedReleaseVersion() const
     return "";
 }
 
-void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&) const
+void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&)
 {
 }
 
-std::string UpdateConfigurationStub::previousReleasesNotesUrl() const
+std::string UpdateConfigurationStub::lastShownMuseSoundsReleaseVersion() const
 {
     return "";
 }
 
-std::string UpdateConfigurationStub::checkForUpdateUrl() const
+void UpdateConfigurationStub::setLastShownMuseSoundsReleaseVersion(const std::string&)
+{
+}
+
+std::string UpdateConfigurationStub::checkForAppUpdateUrl() const
+{
+    return "";
+}
+
+std::string UpdateConfigurationStub::previousAppReleasesNotesUrl() const
+{
+    return "";
+}
+
+std::string UpdateConfigurationStub::checkForMuseSamplerUpdateUrl() const
 {
     return "";
 }
 
 mu::network::RequestHeaders UpdateConfigurationStub::updateHeaders() const
 {
-    return network::RequestHeaders();
+    return mu::network::RequestHeaders();
 }
 
 std::string UpdateConfigurationStub::museScoreUrl() const

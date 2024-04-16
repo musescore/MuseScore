@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATEACTIONCONTROLLER_H
-#define MU_UPDATE_UPDATEACTIONCONTROLLER_H
+#ifndef MU_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
+#define MU_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
 
-#include "actions/actionable.h"
+#include "types/retval.h"
+#include "progress.h"
 
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "../iupdatescenario.h"
+#include "updatetypes.h"
+
+#include "modularity/imoduleinterface.h"
 
 namespace mu::update {
-class UpdateActionController : public actions::Actionable
+class IMuseSoundsCheckUpdateService : MODULE_EXPORT_INTERFACE
 {
-    INJECT(mu::actions::IActionsDispatcher, dispatcher);
-    INJECT(IUpdateScenario, updateScenario);
+    INTERFACE_ID(IMuseSamplerUpdateService)
 
 public:
-    void init();
+    virtual ~IMuseSoundsCheckUpdateService() = default;
 
-private:
-    void checkForAppUpdate();
+    virtual Ret needCheckForUpdate() const = 0;
+
+    virtual RetVal<ReleaseInfo> checkForUpdate() = 0;
+    virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
+
+    virtual framework::Progress updateProgress() = 0;
+
+    virtual void openMuseHub() = 0;
 };
 }
 
-#endif // MU_UPDATE_UPDATEACTIONCONTROLLER_H
+#endif // MU_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H

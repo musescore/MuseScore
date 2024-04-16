@@ -25,10 +25,10 @@ using namespace mu::update;
 
 void UpdateActionController::init()
 {
-    dispatcher()->reg(this, "check-update", this, &UpdateActionController::checkForUpdate);
+    dispatcher()->reg(this, "check-update", this, &UpdateActionController::checkForAppUpdate);
 }
 
-void UpdateActionController::checkForUpdate()
+void UpdateActionController::checkForAppUpdate()
 {
     updateScenario()->checkForUpdate();
 }

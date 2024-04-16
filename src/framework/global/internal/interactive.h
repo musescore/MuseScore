@@ -107,6 +107,10 @@ public:
     Ret openUrl(const std::string& url) const override;
     Ret openUrl(const QUrl& url) const override;
 
+    Ret isAppExists(const std::string& appIdentifier) const override;
+    Ret canOpenApp(const Uri& uri) const override;
+    async::Promise<Ret> openApp(const Uri& uri) const override;
+
     Ret revealInFileBrowser(const io::path_t& filePath) const override;
 
 private:

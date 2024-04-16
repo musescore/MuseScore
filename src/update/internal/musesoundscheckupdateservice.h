@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,51 +19,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATESERVICE_H
-#define MU_UPDATE_UPDATESERVICE_H
+#ifndef MU_UPDATE_MUSESAMPLERUPDATESERVICE_H
+#define MU_UPDATE_MUSESAMPLERUPDATESERVICE_H
 
 #include "async/asyncable.h"
 
 #include "global/types/version.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
 #include "network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
 #include "global/isysteminfo.h"
+#include "languages/ilanguagesconfiguration.h"
+#include "iinteractive.h"
 
 #include "../iupdateconfiguration.h"
-#include "../iupdateservice.h"
+#include "../imusesoundscheckupdateservice.h"
 
 namespace mu::update {
-class UpdateService : public IUpdateService, public async::Asyncable
+class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public async::Asyncable
 {
-    INJECT(framework::IInteractive, interactive)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(IUpdateConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(ISystemInfo, systemInfo)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator);
+    INJECT(IUpdateConfiguration, configuration);
+    INJECT(io::IFileSystem, fileSystem);
+    INJECT(ISystemInfo, systemInfo);
+    INJECT(languages::ILanguagesConfiguration, languagesConfiguration);
+    INJECT(framework::IInteractive, interactive);
 
 public:
-    RetVal<ReleaseInfo> checkForUpdate() override;
+    Ret needCheckForUpdate() const override;
 
-    RetVal<io::path_t> downloadRelease() override;
-    void cancelUpdate() override;
+    RetVal<ReleaseInfo> checkForUpdate() override;
+    RetVal<ReleaseInfo> lastCheckResult() override;
+
     framework::Progress updateProgress() override;
+
+    void openMuseHub() override;
 
 private:
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 
-    std::string platformFileSuffix() const;
-    ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
-    QJsonObject resolveReleaseAsset(const QJsonObject& release) const;
-
-    PrevReleasesNotesList previousReleasesNotes(const framework::Version& updateVersion) const;
-    PrevReleasesNotesList parsePreviousReleasesNotes(const QByteArray& json) const;
-
     void clear();
 
-    ReleaseInfo m_lastCheckResult;
+    RetVal<ReleaseInfo> m_lastCheckResult;
     io::path_t m_installatorPath;
 
     network::INetworkManagerPtr m_networkManager;
@@ -71,4 +69,4 @@ private:
 };
 }
 
-#endif // MU_UPDATE_UPDATESERVICE_H
+#endif // MU_UPDATE_MUSESAMPLERUPDATESERVICE_H

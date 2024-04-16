@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
-#define MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#ifndef MU_UPDATE_MUSESOUNDSUPDATESERVICESTUB_H
+#define MU_UPDATE_MUSESOUNDSUPDATESERVICESTUB_H
 
-#include "io/path.h"
-#include "types/ret.h"
-#include "types/uri.h"
+#include "update/imusesoundscheckupdateservice.h"
 
-#include "async/asyncable.h"
-#include "async/promise.h"
-
-namespace mu::framework {
-class MacOSInteractiveHelper : public async::Asyncable
+namespace mu::update {
+class MuseSoundsCheckUpdateServiceStub : public IMuseSoundsCheckUpdateService
 {
 public:
-    static bool revealInFinder(const io::path_t& filePath);
+    Ret needCheckForUpdate() const override;
 
-    static Ret isAppExists(const std::string& appIdentifier);
-    static Ret canOpenApp(const Uri& uri);
-    static async::Promise<Ret> openApp(const Uri& uri);
+    RetVal<ReleaseInfo> checkForUpdate() override;
+    RetVal<ReleaseInfo> lastCheckResult() override;
+
+    framework::Progress updateProgress() override;
+
+    void openMuseHub() override;
 };
 }
 
-#endif // MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#endif // MU_UPDATE_MUSESOUNDSUPDATESERVICESTUB_H

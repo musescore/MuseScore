@@ -22,6 +22,8 @@
 #ifndef MU_ISYSTEMINFO_H
 #define MU_ISYSTEMINFO_H
 
+#include "types/version.h"
+
 #include "modularity/imoduleinterface.h"
 
 namespace mu {
@@ -47,6 +49,7 @@ public:
 
     virtual CpuArchitecture cpuArchitecture() const = 0;
     virtual ProductType productType() const = 0;
+    virtual framework::Version productVersion() const = 0;
 };
 }
 
