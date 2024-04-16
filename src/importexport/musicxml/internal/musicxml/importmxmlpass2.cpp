@@ -2332,7 +2332,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
     InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
     ArpeggioMap arpMap;
     DelayedArpMap delayedArps;
-    bool coda = false;
+    bool measureHasCoda = false;
 
     // collect candidates for courtesy accidentals to work out at measure end
     std::map<Note*, int> alterMap;
@@ -2342,7 +2342,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (m_e.name() == "direction") {
             MusicXMLParserDirection dir(m_e, m_score, m_pass1, *this, m_logger);
-            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections, inferredFingerings, coda, m_segnos);
+            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections, inferredFingerings, measureHasCoda, m_segnos);
         } else if (m_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
@@ -2874,7 +2874,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                                         MusicXmlSpannerMap& spanners,
                                         DelayedDirectionsList& delayedDirections,
                                         InferredFingeringsList& inferredFingerings,
-                                        bool& coda,
+                                        bool& measureHasCoda,
                                         SegnoStack& segnos)
 {
     //LOGD("direction tick %s", muPrintable(tick.print()));
@@ -2917,7 +2917,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     }
 
     handleTempo();
-    handleRepeats(measure, track, tick + m_offset, coda, segnos);
+    handleRepeats(measure, track, tick + m_offset, measureHasCoda, segnos);
     handleNmiCmi(measure, track, tick + m_offset, delayedDirections);
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
@@ -3465,37 +3465,26 @@ void MusicXMLParserDirection::otherDirection()
     }
 }
 
-/**
- Helper function to set the marker ID string
- eg. extract 'II' from 'To Coda II'
- */
-
-static void setMarkerId(String& markerId, const String& words)
+static const String getMarkerId(const String& words)
 {
+    // Helper function to set the marker ID string
+    // eg. extract 'II' from 'To Coda II'
     static const std::regex number("(i{0,3})");
     const StringList nums = words.search(number, { 1 },  SplitBehavior::SkipEmptyParts);
     if (!nums.empty()) {
-        markerId = nums.at(0);
+        return nums.at(0);
     }
+    return String();
 }
 
-//---------------------------------------------------------
-//   matchRepeat
-//---------------------------------------------------------
-
-/**
- Do a wild-card match with known repeat texts.
- */
-
-String MusicXMLParserDirection::matchRepeat()
+String MusicXMLParserDirection::matchRepeat(const String& plainWords) const
 {
-    String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
     static const std::wregex daCapo(L"^(d\\.? ?|da )(c\\.?|capo)$");
     static const std::wregex daCapoAlFine(L"^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
     static const std::wregex daCapoAlCoda(L"^(d\\.? ?|da )(c\\.? ?|capo )al coda ?(i{0,3})?$");
     static const std::wregex dalSegno(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno) ?(i{0,3})?$");
-    static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? al fine$");
-    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? al coda ?(i{0,3})?$");
+    static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al fine$");
+    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
     static const std::wregex fine(L"^fine$");
     static const std::wregex segno(L"^segno( segno)? ?(i{0,3})?$");
     static const std::wregex toCoda(L"^to coda( coda)? ?(i{0,3})?$");
@@ -3508,73 +3497,35 @@ String MusicXMLParserDirection::matchRepeat()
         return u"daCapoAlFine";
     }
     if (plainWords.contains(daCapoAlCoda)) {
-        setMarkerId(m_codaId, plainWords);
         return u"daCapoAlCoda";
     }
     if (plainWords.contains(dalSegno)) {
-        setMarkerId(m_segnoId, plainWords);
-
-        // If no numeral, count how many 's' in D.S. or D.S.S...
-        if (m_segnoId.empty()) {
-            std::wsmatch matches;
-            const std::wstring str = plainWords.toStdWString();
-            if (std::regex_search(str, matches, dalSegno)) {
-                const String segnoGroup = String::fromStdWString(matches.str(2)).toLower();
-                const int count = segnoGroup.count('s');
-                m_segnoId = String::fromStdString(std::string(count, 'i'));
-            }
-        }
         return u"dalSegno";
     }
     if (plainWords.contains(dalSegnoAlFine)) {
-        setMarkerId(m_segnoId, plainWords);
         return u"dalSegnoAlFine";
     }
     if (plainWords.contains(dalSegnoAlCoda)) {
-        // Find numerals eg D.S I al Coda II
-        std::wsmatch matches;
-        std::wstring str = plainWords.toStdWString();
-        if (std::regex_search(str, matches, dalSegnoAlCoda)) {
-            m_segnoId = String::fromStdWString(matches.str(3));
-            m_codaId = String::fromStdWString(matches.str(4));
-        }
-
-        // Count how many 's' in D.S. or D.S.S...
-        if (m_segnoId.empty()) {
-            str = plainWords.toStdWString();
-            if (std::regex_search(str, matches, dalSegnoAlCoda)) {
-                const String segnoGroup = String::fromStdWString(matches.str(2)).toLower();
-                const int count = segnoGroup.count('s');
-                m_segnoId = String::fromStdString(std::string(count, 'i'));
-            }
-        }
-
         return u"dalSegnoAlCoda";
     }
     if (plainWords.contains(segno)) {
-        setMarkerId(m_segnoId, plainWords);
         return u"segno";
     }
     if (plainWords.contains(fine)) {
         return u"fine";
     }
     if (plainWords.contains(toCoda)) {
-        setMarkerId(m_codaId, plainWords);
         return u"toCoda";
     }
     if (plainWords.contains(coda)) {
-        setMarkerId(m_codaId, plainWords);
         return u"coda";
     }
     return String();
 }
 
-/**
- Append correct number of symbols to coda text
- */
-
 static void addSymbolsToCoda(String& wordsString, const String& codaId)
 {
+    // Append correct number of symbols to coda text
     if (!wordsString.contains(u"<sym>coda</sym>")) {
         String end = u"\n";
         if (codaId.size() > 0) {
@@ -3586,14 +3537,6 @@ static void addSymbolsToCoda(String& wordsString, const String& codaId)
         wordsString.append(end);
     }
 }
-
-//---------------------------------------------------------
-//   findMarker
-//---------------------------------------------------------
-
-/**
- Try to find a Marker in \a repeat.
- */
 
 //---------------------------------------------------------
 //   isLikelyFingering
@@ -3779,11 +3722,26 @@ void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, cons
     m_pass2.addInferredHairpin(m_inferredHairpinStart);
 }
 
+static String countSegno(const String& plainWords)
+{
+    // Count how many 's' in D.S. or D.S.S...
+    std::wsmatch matches;
+    const std::wstring str = plainWords.toStdWString();
+    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
+    if (std::regex_search(str, matches, dalSegnoAlCoda)) {
+        const String segnoGroup = String::fromStdWString(matches.str(2)).toLower();
+        const int count = segnoGroup.count('s');
+        return String::fromStdString(std::string(count, 'i'));
+    }
+    return String();
+}
+
 //---------------------------------------------------------
 //   handleRepeats
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& coda, SegnoStack& segnos)
+void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda,
+                                            SegnoStack& segnos)
 {
     if (!configuration()->inferTextType()) {
         return;
@@ -3803,7 +3761,28 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
     } else if (!m_sndToCoda.empty()) {
         repeat = u"toCoda";
     } else {
-        repeat = matchRepeat();
+        const String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
+        repeat = matchRepeat(plainWords);
+
+        if (repeat == u"daCapoAlCoda" || repeat == u"toCoda" || repeat == u"coda") {
+            m_codaId = getMarkerId(plainWords);
+        } else if (repeat == u"dalSegnoAlFine" || repeat == u"segno" || repeat == u"dalSegno") {
+            m_segnoId = getMarkerId(plainWords);
+        } else if (repeat == u"dalSegnoAlCoda") {
+            // Find numerals eg D.S I al Coda II
+            std::wsmatch matches;
+            std::wstring str = plainWords.toStdWString();
+            static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
+            if (std::regex_search(str, matches, dalSegnoAlCoda)) {
+                m_segnoId = String::fromStdWString(matches.str(3));
+                m_codaId = String::fromStdWString(matches.str(5));
+            }
+        }
+
+        if ((repeat == u"dalSegno" || repeat == u"dalSegnoAlCoda") && m_segnoId.empty()) {
+            // If no numeral, count how many 's' in D.S. or D.S.S...
+            m_segnoId = countSegno(plainWords);
+        }
     }
 
     if (!repeat.empty()) {
@@ -3815,11 +3794,36 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
             m_segnoId.clear();
         }
         m_wordsText = TextBase::unEscape(m_wordsText);
-        if ((repeat == u"coda" || repeat == u"toCoda") && coda) {
+        if ((repeat == u"coda" || repeat == u"toCoda") && measureHasCoda) {
             // If there is already a coda in the bar, discard this marker
             m_wordsText.clear();
             return;
-        } else if ((tb = findJump(repeat)) || (tb = findMarker(repeat, coda, segnos, tick))) {
+        } else if ((tb = findJump(repeat)) || (tb = findMarker(repeat))) {
+            if (tb->isMarker()) {
+                if (repeat == u"segno") {
+                    if (Marker* prevSegno = muse::value(segnos, tick.ticks(), nullptr)) {
+                        // If there is another segno at this tick, combine their text and increase the label
+                        // eg. two segno symbols will have the label 'segnoii'
+                        if (prevSegno->xmlText().contains(u"<sym>segno</sym>") && m_wordsText.contains(u"<sym>segno</sym>")) {
+                            prevSegno->setXmlText(prevSegno->xmlText() + u" " + m_wordsText);
+                            m_wordsText.clear();
+                            const int segnoCount = prevSegno->xmlText().count(u"<sym>segno</sym>");
+                            const String label = String::fromStdString(std::string(segnoCount, 'i'));
+                            prevSegno->setLabel(prevSegno->label() + label);
+
+                            return;
+                        }
+                    } else {
+                        segnos.insert(std::pair<int, Marker*>(tick.ticks(), toMarker(tb)));
+                    }
+                } else {
+                    if (repeat == u"coda" || repeat == u"toCoda") {
+                        measureHasCoda = true;
+                        addSymbolsToCoda(m_wordsText, m_codaId);
+                    }
+                }
+            }
+
             tb->setTrack(track);
             if (!m_wordsText.empty()) {
                 tb->setXmlText(m_wordsText);
@@ -3850,35 +3854,20 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
     }
 }
 
-Marker* MusicXMLParserDirection::findMarker(const String& repeat, bool& coda, SegnoStack& segnos, const Fraction& tick)
+Marker* MusicXMLParserDirection::findMarker(const String& repeat) const
 {
     Marker* m = nullptr;
     if (repeat == u"segno") {
-        if (Marker* prevSegno = muse::value(segnos, tick.ticks(), nullptr)) {
-            // If there is another segno at this tick, combine their text and increase the label
-            // eg. two segno symbols will have the label 'segnoii'
-            if (prevSegno->xmlText().contains(u"<sym>segno</sym>") && m_wordsText.contains(u"<sym>segno</sym>")) {
-                prevSegno->setXmlText(prevSegno->xmlText() + u" " + m_wordsText);
-                m_wordsText.clear();
-                const int segnoCount = prevSegno->xmlText().count(u"<sym>segno</sym>");
-                const String label = String::fromStdString(std::string(segnoCount, 'i'));
-                prevSegno->setLabel(prevSegno->label() + label);
-            }
-        } else {
-            m = Factory::createMarker(m_score->dummy());
-            // note: Marker::read() also contains code to set text style based on type
-            // avoid duplicated code
-            // apparently this MUST be after setTextStyle
-            m->setMarkerType(MarkerType::SEGNO);
-            m->setLabel(m->label() + m_segnoId);
-            segnos.insert(std::pair<int, Marker*>(tick.ticks(), m));
-        }
+        m = Factory::createMarker(m_score->dummy());
+        // note: Marker::read() also contains code to set text style based on type
+        // avoid duplicated code
+        // apparently this MUST be after setTextStyle
+        m->setMarkerType(MarkerType::SEGNO);
+        m->setLabel(m->label() + m_segnoId);
     } else if (repeat == u"coda") {
         m = Factory::createMarker(m_score->dummy());
         m->setMarkerType(MarkerType::CODA);
         m->setLabel(m->label() + m_codaId);
-        coda = true;
-        addSymbolsToCoda(m_wordsText, m_codaId);
     } else if (repeat == u"fine") {
         m = Factory::createMarker(m_score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::FINE);
@@ -3886,21 +3875,11 @@ Marker* MusicXMLParserDirection::findMarker(const String& repeat, bool& coda, Se
         m = Factory::createMarker(m_score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::TOCODA);
         m->setLabel(m->label() + m_codaId);
-        coda = true;
-        addSymbolsToCoda(m_wordsText, m_codaId);
     }
     return m;
 }
 
-//---------------------------------------------------------
-//   findJump
-//---------------------------------------------------------
-
-/**
- Try to find a Jump in \a repeat.
- */
-
-Jump* MusicXMLParserDirection::findJump(const String& repeat)
+Jump* MusicXMLParserDirection::findJump(const String& repeat) const
 {
     Jump* jp = nullptr;
     if (repeat == u"daCapo") {

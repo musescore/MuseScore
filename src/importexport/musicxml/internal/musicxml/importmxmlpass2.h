@@ -411,7 +411,8 @@ public:
     MusicXMLParserDirection(muse::XmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
     void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& coda, SegnoStack& segnos);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& measureHasCoda,
+                   SegnoStack& segnos);
     double totalY() const { return m_defaultY + m_relativeY; }
     String placement() const;
 
@@ -427,12 +428,12 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& coda, SegnoStack& segnos);
-    Marker* findMarker(const String& repeat, bool& coda, SegnoStack& segnos, const Fraction& tick);
-    Jump* findJump(const String& repeat);
+    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos);
+    Marker* findMarker(const String& repeat) const;
+    Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     void handleTempo();
-    String matchRepeat();
+    String matchRepeat(const String& plainWords) const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     void textToDynamic(String& text);
