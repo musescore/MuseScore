@@ -66,9 +66,6 @@ private:
     std::vector<RangeSection> splitRangeBySections(const mu::engraving::Segment* rangeStartSegment,
                                                    const mu::engraving::Segment* rangeEndSegment) const;
 
-    double sectionElementsMaxY(const RangeSection& selection) const;
-    double sectionElementsMinY(const RangeSection& selection) const;
-
     IGetScore* m_getScore = nullptr;
 };
 }
