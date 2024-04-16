@@ -5126,7 +5126,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
 
         StaffType* staffType = staff->staffType(e->tick());
         StaffGroup staffGroup = staffType->group();
-        if (ClefInfo::staffGroup(ct) != staffGroup) {
+        if (ClefInfo::staffGroup(ct) != staffGroup && !forInstrumentChange) {
             continue;
         }
 
@@ -6173,6 +6173,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     EngravingItem* parent = sp->parentItem();
                     if (parent && parent->isNote()) {
                         nsp->setParent(parent->findLinkedInStaff(staff));
+                    }
+                    EngravingItem* endEl = sp->endElement();
+                    if (endEl && endEl->isNote()) {
+                        nsp->setEndElement(endEl->findLinkedInStaff(staff));
                     }
                 }
 
