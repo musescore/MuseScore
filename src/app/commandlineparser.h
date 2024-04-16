@@ -76,6 +76,10 @@ public:
         } importMidi;
 
         struct {
+            std::optional<bool> inferTextType;
+        } importMusicXML;
+
+        struct {
             std::optional<bool> linkedTabStaffCreated;
             std::optional<bool> experimental;
         } guitarPro;
