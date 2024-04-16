@@ -25,14 +25,13 @@
 
 #include <variant>
 #include <vector>
-#include <optional>
 
 #include "async/channel.h"
 #include "realfn.h"
 #include "types/val.h"
 
 #include "mpetypes.h"
-#include "soundid.h"
+#include "playbacksetupdata.h"
 
 namespace muse::mpe {
 struct NoteEvent;
@@ -286,102 +285,6 @@ struct RestEvent
 private:
     ArrangementContext m_arrangementCtx;
 };
-
-struct PlaybackSetupData
-{
-    SoundId id = SoundId::Undefined;
-    SoundCategory category = SoundCategory::Undefined;
-    SoundSubCategories subCategorySet;
-
-    std::optional<std::string> musicXmlSoundId;
-
-    bool contains(const SoundSubCategory subcategory) const
-    {
-        return subCategorySet.find(subcategory) != subCategorySet.cend();
-    }
-
-    bool operator==(const PlaybackSetupData& other) const
-    {
-        return id == other.id
-               && category == other.category
-               && subCategorySet == other.subCategorySet;
-    }
-
-    bool operator<(const PlaybackSetupData& other) const
-    {
-        if (other.id > id) {
-            return true;
-        } else if (other.id == id) {
-            if (other.category > category) {
-                return true;
-            } else if (other.category == category) {
-                return other.subCategorySet > subCategorySet;
-            }
-        }
-
-        return false;
-    }
-
-    bool isValid() const
-    {
-        return id != SoundId::Undefined
-               && category != SoundCategory::Undefined;
-    }
-
-    String toString() const
-    {
-        String result;
-
-        if (!subCategorySet.empty()) {
-            result = String(u"%1.%2.%3")
-                     .arg(soundCategoryToString(category))
-                     .arg(soundIdToString(id))
-                     .arg(subCategorySet.toString());
-        } else {
-            result = String(u"%1.%2")
-                     .arg(soundCategoryToString(category))
-                     .arg(soundIdToString(id));
-        }
-
-        return result;
-    }
-
-    static PlaybackSetupData fromString(const String& str)
-    {
-        if (str.empty()) {
-            return PlaybackSetupData();
-        }
-
-        StringList subStrList = str.split(u".");
-
-        if (subStrList.size() < 2) {
-            return PlaybackSetupData();
-        }
-
-        SoundSubCategories subCategories;
-        if (subStrList.size() == 3) {
-            subCategories = SoundSubCategories::fromString(subStrList.at(2));
-        }
-
-        PlaybackSetupData result = {
-            soundIdFromString(subStrList.at(1)),
-            soundCategoryFromString(subStrList.at(0)),
-            std::move(subCategories),
-            std::nullopt
-        };
-
-        return result;
-    }
-};
-
-static const PlaybackSetupData GENERIC_SETUP_DATA = {
-    SoundId::Last,
-    SoundCategory::Last,
-    { SoundSubCategory::Last },
-    std::nullopt
-};
-
-static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
 
 struct PlaybackParam {
     String code;

@@ -32,6 +32,7 @@ namespace muse::mpe {
 enum class SoundId
 {
     Undefined = -1,
+    Unknown,
 
     Accordion,
     Bandoneon,
@@ -240,6 +241,7 @@ enum class SoundCategory
 enum class SoundSubCategory
 {
     Undefined = -1,
+    Unknown,
 
     English,
     Armenian,
@@ -315,6 +317,7 @@ enum class SoundSubCategory
     Secunda,
 
     Electric,
+    Electronic,
     Acoustic,
     Fretless,
     Pedal,
@@ -400,6 +403,8 @@ enum class SoundSubCategory
 
 inline const std::unordered_map<SoundId, String> ID_STRINGS
 {
+    { SoundId::Undefined, String(u"undefined") },
+    { SoundId::Unknown, String(u"unknown") },
     { SoundId::Accordion, String(u"accordion") },
     { SoundId::Bandoneon, String(u"bandoneon") },
     { SoundId::Concertina, String(u"concertina") },
@@ -595,8 +600,7 @@ inline const String& soundIdToString(const SoundId id)
 {
     auto search = ID_STRINGS.find(id);
     if (search == ID_STRINGS.cend()) {
-        static const String UNDEFINED_ID_STR(u"undefined_id");
-        return UNDEFINED_ID_STR;
+        return ID_STRINGS.at(SoundId::Unknown);
     }
 
     return search->second;
@@ -604,12 +608,16 @@ inline const String& soundIdToString(const SoundId id)
 
 inline SoundId soundIdFromString(const String& str)
 {
+    if (str.empty()) {
+        return SoundId::Undefined;
+    }
+
     auto search = std::find_if(ID_STRINGS.cbegin(),
                                ID_STRINGS.cend(),
                                [str](const auto& pair) { return pair.second == str; });
 
     if (search == ID_STRINGS.cend()) {
-        return SoundId::Undefined;
+        return SoundId::Unknown;
     }
 
     return search->first;
@@ -651,6 +659,8 @@ inline SoundCategory soundCategoryFromString(const String& str)
 
 inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
 {
+    { SoundSubCategory::Undefined, String(u"undefined") },
+    { SoundSubCategory::Unknown, String(u"unknown") },
     { SoundSubCategory::English, String(u"english") },
     { SoundSubCategory::Armenian, String(u"armenian") },
     { SoundSubCategory::Alpine, String(u"alpine") },
@@ -724,6 +734,7 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::Secunda, String(u"secunda") },
 
     { SoundSubCategory::Electric, String(u"electric") },
+    { SoundSubCategory::Electronic, String(u"electronic") },
     { SoundSubCategory::Acoustic, String(u"acoustic") },
     { SoundSubCategory::Fretless, String(u"fretless") },
     { SoundSubCategory::Pedal, String(u"pedal") },
@@ -792,12 +803,13 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::Last, String(u"last") }
 };
 
+using SoundSubCategories = std::set<SoundSubCategory>;
+
 inline const String& soundSubCategoryToString(const SoundSubCategory& subCategory)
 {
     auto search = SUBCATEGORY_STRINGS.find(subCategory);
     if (search == SUBCATEGORY_STRINGS.cend()) {
-        static const String UNDEFINED_SUBCATEGORY_STR(u"undefined");
-        return UNDEFINED_SUBCATEGORY_STR;
+        return SUBCATEGORY_STRINGS.at(SoundSubCategory::Unknown);
     }
 
     return search->second;
@@ -805,48 +817,20 @@ inline const String& soundSubCategoryToString(const SoundSubCategory& subCategor
 
 inline SoundSubCategory soundSubCategoryFromString(const String& str)
 {
+    if (str.empty()) {
+        return SoundSubCategory::Undefined;
+    }
+
     auto search = std::find_if(SUBCATEGORY_STRINGS.cbegin(),
                                SUBCATEGORY_STRINGS.cend(),
                                [str](const auto& pair) { return pair.second == str; });
 
     if (search == SUBCATEGORY_STRINGS.cend()) {
-        return SoundSubCategory::Undefined;
+        return SoundSubCategory::Unknown;
     }
 
     return search->first;
 }
-
-using SoundCategories = std::set<SoundCategory>;
-struct SoundSubCategories : public std::set<SoundSubCategory>
-{
-    SoundSubCategories() = default;
-    SoundSubCategories(std::initializer_list<SoundSubCategory> initList)
-        : std::set<SoundSubCategory>(std::move(initList))
-    {
-    }
-
-    String toString() const
-    {
-        StringList subCategoryStrList;
-        for (const auto& subCategory : *this) {
-            subCategoryStrList.push_back(soundSubCategoryToString(subCategory));
-        }
-
-        return subCategoryStrList.join(u":");
-    }
-
-    static SoundSubCategories fromString(const String& str)
-    {
-        SoundSubCategories result;
-
-        StringList subCategoryStrList = str.split(u":");
-        for (const String& subStr : subCategoryStrList) {
-            result.insert(soundSubCategoryFromString(subStr));
-        }
-
-        return result;
-    }
-};
 }
 
 #endif // MUSE_MPE_SOUNDID_H

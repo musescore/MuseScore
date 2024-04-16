@@ -60,7 +60,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
 
     // restore the default drumset when changing from MuseSounds to MS Basic / VST
     if (resourceMeta.type != AudioResourceType::MuseSamplerSoundPack) {
-        const InstrumentTemplate& templ = instrumentsRepository()->instrumentTemplate(trackId.instrumentId.toStdString());
+        const InstrumentTemplate& templ = instrumentsRepository()->instrumentTemplate(trackId.instrumentId);
         if (!templ.useDrumset) {
             return;
         }
@@ -86,14 +86,14 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
         return;
     }
 
-    muse::String drumMapping = museSampler()->drumMapping(instrumentId);
+    muse::ByteArray drumMapping = museSampler()->drumMapping(instrumentId);
     if (drumMapping.empty()) {
         m_drumsetCache.emplace(instrumentId, std::nullopt);
         return;
     }
 
     Drumset drumset;
-    readDrumset(drumMapping.toAscii(), drumset);
+    readDrumset(drumMapping, drumset);
     replaceDrumset(notation, trackId, drumset);
 
     m_drumsetCache.emplace(instrumentId, std::move(drumset));

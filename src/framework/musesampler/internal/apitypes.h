@@ -377,6 +377,7 @@ typedef ms_Result (* ms_MuseSampler_all_notes_off)(ms_MuseSampler);
 // Added in 0.6
 typedef const char*(* ms_Instrument_get_pack_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_vendor_name)(ms_InstrumentInfo);
+typedef const char*(* ms_Instrument_get_info_json)(ms_InstrumentInfo);
 
 typedef ms_PresetChange (* ms_MuseSampler_create_preset_change)(ms_MuseSampler ms, ms_Track track, long long location_us);
 typedef ms_Result (* ms_MuseSampler_add_preset)(ms_MuseSampler ms, ms_Track track, ms_PresetChange preset_change, const char* preset_name);

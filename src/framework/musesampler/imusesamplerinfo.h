@@ -25,9 +25,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-namespace mu {
-class String;
-}
+#include "musesamplertypes.h"
 
 namespace muse::musesampler {
 class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE
@@ -41,7 +39,9 @@ public:
     virtual bool isInstalled() const = 0;
 
     virtual float defaultReverbLevel(const String& instrumentSoundId) const = 0;
-    virtual String drumMapping(int instrumentId) const = 0;
+
+    virtual ByteArray drumMapping(int instrumentId) const = 0;
+    virtual std::vector<Instrument> instruments() const = 0;
 };
 }
 

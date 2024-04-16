@@ -40,7 +40,7 @@ public:
     override;
 
 private:
-    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
+    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::StringList& params) const;
 };
 }
 
