@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <cfloat>
+
 #include "notationselectionrange.h"
 
 #include "engraving/dom/segment.h"
@@ -91,25 +93,31 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
 
     std::vector<RangeSection> rangeSections = splitRangeBySections(startSegment, endSegment);
 
-    int lastStaff = selectionLastVisibleStaff();
+    bool linearMode = score()->linearMode();
 
     for (const RangeSection& rangeSection: rangeSections) {
         const mu::engraving::System* sectionSystem = rangeSection.system;
         const mu::engraving::Segment* sectionStartSegment = rangeSection.startSegment;
         const mu::engraving::Segment* sectionEndSegment = rangeSection.endSegment;
 
-        const mu::engraving::SysStaff* segmentFirstStaff = sectionSystem->staff(score()->selection().staffStart());
+        staff_idx_t firstStaff = selectionFirstVisibleStaff(sectionSystem);
+        staff_idx_t lastStaff = selectionLastVisibleStaff(sectionSystem);
+        if (firstStaff == muse::nidx || lastStaff == muse::nidx) {
+            continue;
+        }
+
+        const mu::engraving::SysStaff* segmentFirstStaff = sectionSystem->staff(firstStaff);
         const mu::engraving::SysStaff* segmentLastStaff = sectionSystem->staff(lastStaff);
 
-        int topY = sectionElementsMaxY(rangeSection);
-        int bottomY = sectionElementsMinY(rangeSection);
+        int topY = linearMode ? 0.0 : sectionElementsMaxY(rangeSection);
+        int bottomY = linearMode ? score()->staff(lastStaff)->staffHeight() : sectionElementsMinY(rangeSection);
 
         double x1 = sectionStartSegment->pagePos().x() - SELECTION_SIDE_PADDING;
         double x2 = sectionEndSegment->pageBoundingRect().topRight().x();
         double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - SELECTION_SIDE_PADDING;
         double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + SELECTION_SIDE_PADDING;
 
-        if (sectionStartSegment->measure()->first() == sectionStartSegment) {
+        if (sectionStartSegment->measure()->firstEnabled() == sectionStartSegment) {
             x1 = sectionStartSegment->measure()->pagePos().x();
         }
 
@@ -196,15 +204,26 @@ mu::engraving::Segment* NotationSelectionRange::rangeEndSegment() const
     return endSegment;
 }
 
-int NotationSelectionRange::selectionLastVisibleStaff() const
+staff_idx_t NotationSelectionRange::selectionLastVisibleStaff(const System* system) const
 {
     for (int i = static_cast<int>(score()->selection().staffEnd()) - 1; i >= 0; --i) {
-        if (score()->staff(i)->show()) {
+        if (system->staff(i)->show()) {
             return i;
         }
     }
 
-    return 0;
+    return muse::nidx;
+}
+
+staff_idx_t NotationSelectionRange::selectionFirstVisibleStaff(const System* system) const
+{
+    for (staff_idx_t i = score()->selection().staffStart(); i < score()->nstaves(); ++i) {
+        if (system->staff(i)->show()) {
+            return i;
+        }
+    }
+
+    return muse::nidx;
 }
 
 std::vector<NotationSelectionRange::RangeSection> NotationSelectionRange::splitRangeBySections(
@@ -258,18 +277,21 @@ const
     return sections;
 }
 
-int NotationSelectionRange::sectionElementsMaxY(const NotationSelectionRange::RangeSection& selection) const
+double NotationSelectionRange::sectionElementsMaxY(const NotationSelectionRange::RangeSection& selection) const
 {
     const mu::engraving::System* segmentSystem = selection.system;
     const mu::engraving::Segment* startSegment = selection.startSegment;
+    const mu::engraving::Measure* startMeasure = startSegment->measure();
     const mu::engraving::Segment* endSegment = selection.endSegment;
 
     mu::engraving::SysStaff* segmentFirstStaff = segmentSystem->staff(score()->selection().staffStart());
-
     mu::engraving::SkylineLine north = segmentFirstStaff->skyline().north();
-    int maxY = INT_MAX;
+
+    double startX = startMeasure->firstEnabled() == startSegment ? startMeasure->x() : (startSegment->pageX() - segmentSystem->pageX());
+    double endX = endSegment->pageX() + endSegment->width() - segmentSystem->pageX();
+    double maxY = DBL_MAX;
     for (mu::engraving::SkylineSegment segment: north) {
-        bool ok = segment.x >= startSegment->pagePos().x() && segment.x <= endSegment->pagePos().x();
+        bool ok = muse::RealIsEqualOrMore(segment.x + segment.w, startX) && muse::RealIsEqualOrLess(segment.x, endX);
         if (!ok) {
             continue;
         }
@@ -279,26 +301,32 @@ int NotationSelectionRange::sectionElementsMaxY(const NotationSelectionRange::Ra
         }
     }
 
-    if (maxY == INT_MAX) {
-        maxY = 0;
+    if (muse::RealIsEqual(maxY, DBL_MAX)) {
+        maxY = 0.0;
     }
 
     return maxY;
 }
 
-int NotationSelectionRange::sectionElementsMinY(const NotationSelectionRange::RangeSection& selection) const
+double NotationSelectionRange::sectionElementsMinY(const NotationSelectionRange::RangeSection& selection) const
 {
     const mu::engraving::System* segmentSystem = selection.system;
     const mu::engraving::Segment* startSegment = selection.startSegment;
+    const mu::engraving::Measure* startMeasure = startSegment->measure();
     const mu::engraving::Segment* endSegment = selection.endSegment;
 
-    int lastStaff = selectionLastVisibleStaff();
+    staff_idx_t lastStaff = selectionLastVisibleStaff(segmentSystem);
+    if (lastStaff == muse::nidx) {
+        return 0;
+    }
     mu::engraving::SysStaff* segmentLastStaff = segmentSystem->staff(lastStaff);
-
     mu::engraving::SkylineLine south = segmentLastStaff->skyline().south();
-    int minY = INT_MIN;
+
+    double startX = startMeasure->firstEnabled() == startSegment ? startMeasure->x() : startSegment->pageX() - segmentSystem->pageX();
+    double endX = endSegment->pageX() + endSegment->width() - segmentSystem->pageX();
+    double minY = -DBL_MAX;
     for (mu::engraving::SkylineSegment segment: south) {
-        bool ok = segment.x >= startSegment->pagePos().x() && segment.x <= endSegment->pagePos().x();
+        bool ok = muse::RealIsEqualOrMore(segment.x + segment.w, startX) && muse::RealIsEqualOrLess(segment.x, endX);
         if (!ok) {
             continue;
         }
@@ -308,7 +336,7 @@ int NotationSelectionRange::sectionElementsMinY(const NotationSelectionRange::Ra
         }
     }
 
-    if (minY == INT_MIN) {
+    if (muse::RealIsEqual(minY, -DBL_MAX)) {
         minY = segmentLastStaff->bbox().height();
     }
 
