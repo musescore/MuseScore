@@ -2866,6 +2866,11 @@ void ScoreView::cmd(const char* s)
                         cv->score()->endCmd();
                         }
                   }},
+            {{"toggle-edit-playback"}, [](ScoreView* /*cv*/, const QByteArray&) {
+
+                  bool value = preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK);
+                  preferences.setPreference(PREF_SCORE_NOTE_PLAYONCLICK, !value);
+                  }},
             };
 
       auto c = std::find_if(cmdList.begin(), cmdList.end(), [cmd](const ScoreViewCmd& cc) {

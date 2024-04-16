@@ -1946,6 +1946,17 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CHECKABLE
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "toggle-edit-playback",
+         QT_TRANSLATE_NOOP("action","Toggle editing sound playback"),
+         QT_TRANSLATE_NOOP("action","Toggle editing sound playback"),
+         0,
+         Icons::editPlayback_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "midi-on",

@@ -266,6 +266,7 @@ const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
             "flat2",
             "flip",
             "toggle-mouse-entry",
+            "toggle-edit-playback",
             "",
             "voice-1",
             "voice-2",
@@ -481,6 +482,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace, bool changeUI)
       getAction("midi-on")->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
       getAction("toggle-statusbar")->setChecked(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
       getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
+      getAction("toggle-edit-playback")->setChecked(preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK));
       _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
 
       if (!cs)
@@ -1335,6 +1337,8 @@ MuseScore::MuseScore()
       entryTools->setObjectName("entry-tools");
 
       populateNoteInputMenu();
+
+      getAction("toggle-edit-playback")->setChecked(preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK));
 
       //-------------------------------
       //    Workspaces Tool Bar

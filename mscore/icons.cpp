@@ -63,6 +63,7 @@ static const char* iconNames[] = {
       "note-dot4.svg",
       "stem-flip.svg",
       "mouse-entry.svg",
+      "edit-playback.svg",
       "edit-undo.svg",
       "edit-redo.svg",
       "edit-cut.svg",
