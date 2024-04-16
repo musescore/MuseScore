@@ -26,6 +26,7 @@
 #include <QEventLoop>
 
 #include "popupview.h"
+#include "muversion.h"
 
 namespace mu::uicomponents {
 class DialogView : public PopupView
