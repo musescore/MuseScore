@@ -26,11 +26,14 @@
 #include <QEventLoop>
 
 #include "popupview.h"
+#include "global/iapplication.h"
 
 namespace muse::uicomponents {
 class DialogView : public PopupView
 {
     Q_OBJECT
+
+    Inject<muse::IApplication> application;
 
 public:
     explicit DialogView(QQuickItem* parent = nullptr);
