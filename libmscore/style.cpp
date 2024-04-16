@@ -3251,7 +3251,8 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         set(Sid::chordSymbolBFontSize, QVariant(chordSymbolBFontSize));
                   }
             else if (tag == "graceToMainNoteDist" // Mu4 only, let's skip
-                     || tag == "graceToGraceNoteDist") // Mu4 only, let's skip
+                     || tag == "graceToGraceNoteDist" // Mu4 only, let's skip
+                     || tag == "hideTabClefAfterFirst" ) // Mu4.3+ only, let's skip
                   e.skipCurrentElement();
             //else if (isMu4 && tag == "useStandardNoteNames") // 1 -> 0, why??? Seems a mistake, let's pass
             else if (tag == "multiVoiceRestTwoSpaceOffset") // Mu4.1+ only, let's skip
@@ -3456,7 +3457,11 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "articulationMinDistance") // 0.4 -> 0.5, reset back
                   set(Sid::articulationMinDistance, styleTypes[int(Sid::articulationMinDistance)].defaultValue()); // 3.x default
             else if (tag.contains("ShowTab") // Mu4 only, let's skip
-                     || tag == "chordlineThickness") // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
+                     || tag == "chordlineThickness" // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
+                     || tag == "tabShowTiedFret" // Mu4.3+ only, let's skip
+                     || tag == "tabParenthesizeTiedFret" // Mu4.3+ only, let's skip
+                     || tag == "parenthesizeTiedFretIfArticulation" // Mu4.3+ only, let's skip
+                     || tag == "chordlineThickness" ) // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
                   e.skipCurrentElement();
             else if (isMu4 && tag == "defaultsVersion") // 400/420 -> 302, let's sip, i.e. reset to Mu3
                   e.skipCurrentElement();
