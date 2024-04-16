@@ -49,6 +49,10 @@ public:
 
     int audioDelayCompensate() const override;
     void setAudioDelayCompensate(const int frames) override;
+    bool isPlaying() const override;
+    float playbackPositionInSeconds() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
 
     unsigned int sampleRate() const override;
     bool setSampleRate(unsigned int sampleRate) override;
