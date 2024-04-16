@@ -150,6 +150,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
         double distance;
         if (ctx.state().prevSystem()) {
             distance = SystemLayout::minDistance(ctx.state().prevSystem(), ctx.state().curSystem(), ctx);
+            // TODO: This 'if' should be deleted when new print module will be ready by @alexpavlov96
+            // If this won't happen before merge with master this if should be kept,
+            // but hidden under the configuration file
             if (ctx.conf().isPrintingMode()) {
                 double top = ctx.state().curSystem()->minTop();
                 double bottom = ctx.state().prevSystem()->minBottom();
