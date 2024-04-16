@@ -65,8 +65,8 @@ std::chrono::time_point<std::chrono::steady_clock> musescore_act_time;
 static bool musescore_act;
 static msecs_t musescore_act_seek;
 static bool running_musescore_state;
-static mu::playback::IPlaybackController* s_playbackController;
 //static std::vector<std::thread> threads;
+static JackDriverState* s_jackDriver;
 
 void musescore_state_check_musescore()
 {
@@ -76,7 +76,7 @@ void musescore_state_check_musescore()
     }
     muse_frame = pos;
 
-    if (s_playbackController->isPlaying()) {
+    if (s_jackDriver->isPlaying()) {
         muse_state = JackTransportRolling;
     } else {
         muse_state = JackTransportStopped;
@@ -92,7 +92,7 @@ void musescore_state_do_seek()
     millis = std::max(millis - ms, 0L);
     LOGW("Jack mst: really do musescore-seek to %lu (%lims) (diff: %i)  mf=%u/%li jf=%u lag: %lims",
          musescore_act_seek, millis, muse_frame - jack_frame, muse_frame, mpos_frame, jack_frame, ms);
-    s_playbackController->remoteSeek(millis);
+    s_jackDriver->remoteSeek(millis);
     //mpos_frame = static_cast<msecs_t>(millis * g_samplerate / 1000);
 }
 
@@ -163,12 +163,12 @@ bool musescore_seek(unsigned int pos)
     return true;
 }
 
-void JackDriverState::musescore_changed_play_state()
+void JackDriverState::changedPlaying() const
 {
     jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
 
-    if (s_playbackController->isPlaying()) {
-        jack_nframes_t frames = static_cast<jack_nframes_t>(m_playbackController->playbackPositionInSeconds() * g_samplerate);
+    if (s_jackDriver->isPlaying()) {
+        jack_nframes_t frames = static_cast<jack_nframes_t>(s_jackDriver->playbackPositionInSeconds() * g_samplerate);
         LOGW("musescore tell transport to START at %u", frames);
         jack_transport_locate(client, frames);
         jack_transport_start(client);
@@ -178,10 +178,10 @@ void JackDriverState::musescore_changed_play_state()
     }
 }
 
-void JackDriverState::musescore_changed_position_state()
+void JackDriverState::changedPosition() const
 {
     jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
-    jack_nframes_t frames = static_cast<jack_nframes_t>(m_playbackController->playbackPositionInSeconds() * g_samplerate);
+    jack_nframes_t frames = static_cast<jack_nframes_t>(s_jackDriver->playbackPositionInSeconds() * g_samplerate);
 
     // worker thread is updating muse_frame (which runs every 100ms)
     // thats why we can get out of sync with "ourself"
@@ -339,11 +339,11 @@ void check_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
     bool state_sync = false;
     if (muse_state == JackTransportStopped
         && (jack_state == JackTransportStarting || jack_state == JackTransportRolling)) {
-        state->m_playbackController->remotePlayOrStop(true);
+        state->remotePlayOrStop(true);
         muse_state = JackTransportRolling;
     } else if (muse_state == JackTransportRolling
                && jack_state == JackTransportStopped) {
-        state->m_playbackController->remotePlayOrStop(false);
+        state->remotePlayOrStop(false);
         muse_state = JackTransportStopped;
     } else {
         state_sync = true;
@@ -497,13 +497,12 @@ static void jack_cleanup_callback(void*)
 }
 }
 
-JackDriverState::JackDriverState(mu::playback::IPlaybackController* playbackController)
+JackDriverState::JackDriverState(IAudioDriver* amm)
 {
-    m_playbackController = playbackController;
+    s_jackDriver = this;
     m_deviceId = JACK_DEFAULT_DEVICE_ID;
     m_deviceName = JACK_DEFAULT_IDENTIFY_AS;
-
-    s_playbackController = playbackController;
+    m_audiomidiManager = amm;
 }
 
 JackDriverState::~JackDriverState()
@@ -612,17 +611,6 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         return false;
     }
 
-    // get notification when musescore changes play-position or play/pause
-
-    s_playbackController->isPlayingChanged().onNotify(this, [this]() {
-        musescore_changed_play_state();
-    });
-
-    // HELP: is playbackPositionChanged notified for incremental changes too?
-    s_playbackController->playbackPositionChanged().onNotify(this, [this]() {
-        musescore_changed_position_state();
-    });
-
     // midi input
     jack_port_t* midi_input_port = jack_port_register(handle, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
     m_midiInputPorts.push_back(midi_input_port);
@@ -634,12 +622,12 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     m_midiOutputPorts.push_back(port);
 
     muse_seek_requested = 0;
-    mpos_frame = muse_frame = static_cast<unsigned int>(m_playbackController->playbackPositionInSeconds() * jackSamplerate);
+    mpos_frame = muse_frame = static_cast<unsigned int>(s_jackDriver->playbackPositionInSeconds() * jackSamplerate);
     if (muse_frame >= g_jackTransportDelay) {
         muse_frame -= g_jackTransportDelay;
     }
 
-    if (m_playbackController->isPlaying()) {
+    if (s_jackDriver->isPlaying()) {
         muse_state = JackTransportRolling;
     } else {
         muse_state = JackTransportStopped;
@@ -659,6 +647,26 @@ void JackDriverState::close()
 bool JackDriverState::isOpened() const
 {
     return m_jackDeviceHandle != nullptr;
+}
+
+bool JackDriverState::isPlaying() const
+{
+    return m_audiomidiManager->isPlaying();
+}
+
+float JackDriverState::playbackPositionInSeconds() const
+{
+    return m_audiomidiManager->playbackPositionInSeconds();
+}
+
+void JackDriverState::remotePlayOrStop(bool ps) const
+{
+    m_audiomidiManager->remotePlayOrStop(ps);
+}
+
+void JackDriverState::remoteSeek(msecs_t millis) const
+{
+    m_audiomidiManager->remoteSeek(millis);
 }
 
 /*

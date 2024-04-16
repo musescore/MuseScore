@@ -362,6 +362,24 @@ void WasapiAudioDriver::setAudioDelayCompensate(const int frames)
 {
 }
 
+bool WasapiAudioDriver::isPlaying() const
+{
+    return false;
+}
+
+float WasapiAudioDriver::playbackPositionInSeconds() const
+{
+    return 0;
+}
+
+void WasapiAudioDriver::remotePlayOrStop(bool ps) const
+{
+}
+
+void WasapiAudioDriver::remoteSeek(msecs_t millis) const
+{
+}
+
 AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
 {
     using namespace winrt::Windows::Media::Devices;

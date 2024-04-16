@@ -436,6 +436,24 @@ void OSXAudioDriver::setAudioDelayCompensate(const int frames)
 {
 }
 
+bool OSXAudioDriver::isPlaying() const
+{
+    return false;
+}
+
+float OSXAudioDriver::playbackPositionInSeconds() const
+{
+    return 0;
+}
+
+void OSXAudioDriver::remotePlayOrStop([[maybe_unused]] bool ps) const
+{
+}
+
+void OSXAudioDriver::remoteSeek([[maybe_unused]] msecs_t millis) const
+{
+}
+
 bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
 {
     if (deviceId.empty() || deviceId == DEFAULT_DEVICE_ID) {

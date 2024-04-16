@@ -80,6 +80,14 @@ public:
 
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
+    void isPlayingChanged();
+    void positionChanged();
+
+    bool isPlaying() const override;
+    float playbackPositionInSeconds() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
+
     void resume() override;
     void suspend() override;
 

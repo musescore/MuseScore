@@ -33,7 +33,7 @@ namespace muse::audio {
 class JackDriverState : public AudioDriverState, public async::Asyncable
 {
 public:
-    JackDriverState(mu::playback::IPlaybackController*);
+    JackDriverState(IAudioDriver* amm);
     ~JackDriverState();
 
     std::string name() const override;
@@ -57,11 +57,17 @@ public:
     async::Channel<muse::midi::tick_t, muse::midi::Event> m_eventReceived;
     mu::playback::IPlaybackController* m_playbackController;
 
-private:
-    std::string m_deviceName;
+    void changedPlaying() const override;
+    void changedPosition() const override;
 
-    void musescore_changed_play_state();
-    void musescore_changed_position_state();
+    bool isPlaying() const;
+    float playbackPositionInSeconds() const;
+    void remotePlayOrStop(bool) const;
+    void remoteSeek(msecs_t) const;
+
+private:
+    IAudioDriver* m_audiomidiManager;
+    std::string m_deviceName;
 };
 }
 
