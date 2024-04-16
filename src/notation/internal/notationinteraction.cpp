@@ -2432,7 +2432,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
     for (const RectF& rect: rangeArea) {
         PainterPath path;
-        path.addRoundedRect(rect, 6, 6);
+        path.addRect(rect);
 
         QColor fillColor = selectionColor;
         fillColor.setAlpha(10);

@@ -31,8 +31,6 @@
 
 #include "log.h"
 
-static constexpr int SELECTION_SIDE_PADDING = 8;
-
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -94,8 +92,6 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
 
     std::vector<RangeSection> rangeSections = splitRangeBySections(startSegment, endSegment);
 
-    bool linearMode = score()->linearMode();
-
     for (const RangeSection& rangeSection: rangeSections) {
         const mu::engraving::System* sectionSystem = rangeSection.system;
         const mu::engraving::Segment* sectionStartSegment = rangeSection.startSegment;
@@ -129,10 +125,10 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
             bottomY += 0.5 * diff;
         }
 
-        double x1 = sectionStartSegment->pagePos().x() - SELECTION_SIDE_PADDING;
+        double x1 = sectionStartSegment->pagePos().x();
         double x2 = sectionEndSegment->pageBoundingRect().topRight().x();
-        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - SELECTION_SIDE_PADDING;
-        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + SELECTION_SIDE_PADDING;
+        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y();
+        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y();
 
         if (sectionStartSegment->measure()->firstEnabled() == sectionStartSegment) {
             x1 = sectionStartSegment->measure()->pagePos().x();
