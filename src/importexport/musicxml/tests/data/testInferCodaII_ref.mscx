@@ -988,7 +988,8 @@
           </LayoutBreak>
         <Marker>
           <style>repeat_left</style>
-          <text><sym>coda</sym></text>
+          <text>CODA I
+<sym>coda</sym></text>
           <label>codab</label>
           </Marker>
         <voice>

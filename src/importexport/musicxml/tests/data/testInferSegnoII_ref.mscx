@@ -901,7 +901,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>D.S. I al Coda I</text>
+          <text>D.S. I (no repeats) al Coda I</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
           <continueAt>codab</continueAt>

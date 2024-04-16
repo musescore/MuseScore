@@ -428,7 +428,8 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos);
+    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
+                       DelayedDirectionsList& delayedDirections);
     Marker* findMarker(const String& repeat) const;
     Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
@@ -499,6 +500,10 @@ public:
         m_measure(measure), m_tick(tick) {}
     void addElem();
     double totalY() const { return m_totalY; }
+    const EngravingItem* element() const { return m_element; }
+    track_idx_t track() const { return m_track; }
+    const Fraction& tick() const { return m_tick; }
+    const String& placement() const { return m_placement; }
 
 private:
     double m_totalY = 0.0;

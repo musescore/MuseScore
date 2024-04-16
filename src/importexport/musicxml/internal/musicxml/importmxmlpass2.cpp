@@ -2917,7 +2917,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     }
 
     handleTempo();
-    handleRepeats(measure, track, tick + m_offset, measureHasCoda, segnos);
+    handleRepeats(measure, track, tick + m_offset, measureHasCoda, segnos, delayedDirections);
     handleNmiCmi(measure, track, tick + m_offset, delayedDirections);
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
@@ -3483,8 +3483,8 @@ String MusicXMLParserDirection::matchRepeat(const String& plainWords) const
     static const std::wregex daCapoAlFine(L"^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
     static const std::wregex daCapoAlCoda(L"^(d\\.? ?|da )(c\\.? ?|capo )al coda ?(i{0,3})?$");
     static const std::wregex dalSegno(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno) ?(i{0,3})?$");
-    static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al fine$");
-    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
+    static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? ?(\\(.*\\))? al fine$");
+    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? ?(\\(.*\\))? al coda ?(i{0,3})?$");
     static const std::wregex fine(L"^fine$");
     static const std::wregex segno(L"^segno( segno)? ?(i{0,3})?$");
     static const std::wregex toCoda(L"^to coda( coda)? ?(i{0,3})?$");
@@ -3722,6 +3722,40 @@ void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, cons
     m_pass2.addInferredHairpin(m_inferredHairpinStart);
 }
 
+static String findDetachedRepeatNumber(const Measure* measure, const track_idx_t track, const Fraction tick, const String& placement,
+                                       DelayedDirectionsList& directions)
+{
+    static const std::wregex number(L"^(i{1,3})$");
+    DelayedDirectionsList::iterator it;
+
+    for (it = directions.begin(); it != directions.end(); ++it) {
+        MusicXMLDelayedDirectionElement d = **it;
+        const EngravingItem* el = d.element();
+        if (d.track() == track && d.tick() == tick && d.placement() == placement && el->isTextBase()) {
+            const String text = toTextBase(el)->plainText();
+            if (text.toLower().contains(number)) {
+                it = directions.erase(it);
+                return u" " + text;
+            }
+        }
+    }
+
+    Segment* s = measure->findSegment(SegmentType::ChordRest, tick);
+    if (s) {
+        for (EngravingItem* el : s->annotations()) {
+            if (el->tick() == tick && el->track() == track && el->placeAbove() == (placement == u"above") && el->isTextBase()) {
+                const String text = toTextBase(el)->plainText();
+                if (text.toLower().contains(number)) {
+                    s->removeAnnotation(el);
+                    return u" " + text;
+                }
+            }
+        }
+    }
+
+    return String();
+}
+
 static String countSegno(const String& plainWords)
 {
     // Count how many 's' in D.S. or D.S.S...
@@ -3741,13 +3775,14 @@ static String countSegno(const String& plainWords)
 //---------------------------------------------------------
 
 void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda,
-                                            SegnoStack& segnos)
+                                            SegnoStack& segnos, DelayedDirectionsList& delayedDirections)
 {
     if (!configuration()->inferTextType()) {
         return;
     }
     // Try to recognize the various repeats
     String repeat;
+    const String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
     if (!m_sndCoda.empty()) {
         repeat = u"coda";
     } else if (!m_sndDacapo.empty()) {
@@ -3761,28 +3796,32 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
     } else if (!m_sndToCoda.empty()) {
         repeat = u"toCoda";
     } else {
-        const String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
         repeat = matchRepeat(plainWords);
+    }
+    // Check if repeat number has become detached
+    if (repeat == u"coda" || repeat == u"segno") {
+        m_wordsText += findDetachedRepeatNumber(measure, track, tick, placement(), delayedDirections);
+    }
 
-        if (repeat == u"daCapoAlCoda" || repeat == u"toCoda" || repeat == u"coda") {
-            m_codaId = getMarkerId(plainWords);
-        } else if (repeat == u"dalSegnoAlFine" || repeat == u"segno" || repeat == u"dalSegno") {
-            m_segnoId = getMarkerId(plainWords);
-        } else if (repeat == u"dalSegnoAlCoda") {
-            // Find numerals eg D.S I al Coda II
-            std::wsmatch matches;
-            std::wstring str = plainWords.toStdWString();
-            static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
-            if (std::regex_search(str, matches, dalSegnoAlCoda)) {
-                m_segnoId = String::fromStdWString(matches.str(3));
-                m_codaId = String::fromStdWString(matches.str(5));
-            }
+    // Check if coda is numbered by checking numerals after 'coda' or 'segno'
+    if (repeat == u"daCapoAlCoda" || repeat == u"toCoda" || repeat == u"coda") {
+        m_codaId = getMarkerId(plainWords);
+    } else if (repeat == u"dalSegnoAlFine" || repeat == u"segno" || repeat == u"dalSegno") {
+        m_segnoId = getMarkerId(plainWords);
+    } else if (repeat == u"dalSegnoAlCoda") {
+        // Find numerals eg D.S I al Coda II
+        std::wsmatch matches;
+        std::wstring str = plainWords.toStdWString();
+        static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
+        if (std::regex_search(str, matches, dalSegnoAlCoda)) {
+            m_segnoId = String::fromStdWString(matches.str(3));
+            m_codaId = String::fromStdWString(matches.str(5));
         }
+    }
 
-        if ((repeat == u"dalSegno" || repeat == u"dalSegnoAlCoda") && m_segnoId.empty()) {
-            // If no numeral, count how many 's' in D.S. or D.S.S...
-            m_segnoId = countSegno(plainWords);
-        }
+    if ((repeat == u"dalSegno" || repeat == u"dalSegnoAlCoda") && m_segnoId.empty()) {
+        // If no numeral, count how many 's' in D.S. or D.S.S...
+        m_segnoId = countSegno(plainWords);
     }
 
     if (!repeat.empty()) {
