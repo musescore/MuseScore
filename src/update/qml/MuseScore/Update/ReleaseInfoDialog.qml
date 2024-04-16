@@ -79,7 +79,7 @@ StyledDialogView {
             StyledTextLabel {
                 id: releaseTitleLabel
 
-                text: qsTrc("update", "A new version of MuseScore is available!")
+                text: qsTrc("update", "A new version of MuseScore Studio is available!")
                 font: ui.theme.headerBoldFont
             }
 

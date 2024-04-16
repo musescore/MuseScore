@@ -664,7 +664,7 @@ void EditDrumsetDialog::load()
             if (e.attribute("version") != Constants::MSC_VERSION_STR) {
                 auto result = interactive()->warning(
                     mu::trc("palette", "Drumset file too old"),
-                    mu::trc("palette", "MuseScore may not be able to load this drumset file."), {
+                    mu::trc("palette", "MuseScore Studio may not be able to load this drumset file."), {
                     IInteractive::Button::Cancel,
                     IInteractive::Button::Ignore
                 }, IInteractive::Button::Cancel);

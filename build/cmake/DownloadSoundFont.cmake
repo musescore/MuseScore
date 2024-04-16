@@ -18,7 +18,7 @@ if(EXISTS ${SF_VERSION_REMOTE_FILE} AND SF_VERSION_DL_STATUS EQUAL 0)
 
   string(COMPARE LESS ${SF_VERSION_LOCAL} ${SF_VERSION_REMOTE} DO_DOWNLOAD)
   if (DO_DOWNLOAD)
-    message("Version ${SF_VERSION_LOCAL} of the MuseScore SoundFont is outdated, downloading version ${SF_VERSION_REMOTE}.")
+    message("Version ${SF_VERSION_LOCAL} of the MuseScore Studio SoundFont is outdated, downloading version ${SF_VERSION_REMOTE}.")
     # delete soundfont and download new version
     ## TODO check STATUS of downloads
     file (REMOVE "${SOUND_DIRECTORY}/MS Basic.sf3"
@@ -38,6 +38,6 @@ if(EXISTS ${SF_VERSION_REMOTE_FILE} AND SF_VERSION_DL_STATUS EQUAL 0)
     file (COPY ${SF_VERSION_REMOTE_FILE} DESTINATION ${SOUND_DIRECTORY})
     file (REMOVE ${SF_VERSION_REMOTE_FILE})
   else(DO_DOWNLOAD)
-    message("MuseScore SoundFont is up to date.")
+    message("MuseScore Studio SoundFont is up to date.")
   endif(DO_DOWNLOAD)
 endif()

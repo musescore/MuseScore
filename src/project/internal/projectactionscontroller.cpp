@@ -1597,14 +1597,14 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
 void ProjectActionsController::warnFileTooNew(const io::path_t& filepath)
 {
     interactive()->error(qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
-                         trc("project", "This file was saved using a newer version of MuseScore. "
+                         trc("project", "This file was saved using a newer version of MuseScore Studio. "
                                         "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version."));
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
 {
     std::string title = mtrc("project", "File “%1” is corrupted").arg(projectName).toStdString();
-    std::string body = trc("project", "This file contains errors that could cause MuseScore to malfunction.");
+    std::string body = trc("project", "This file contains errors that could cause MuseScore Studio to malfunction.");
 
     IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Open anyway"), true /*accent*/);
 
@@ -1643,7 +1643,7 @@ void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const i
         body = trc("project", "This file does not exist or cannot be accessed at the moment.");
         break;
     case int(engraving::Err::FileOpenError):
-        body = trc("project", "This file could not be opened. Please make sure that MuseScore has permission to read this file.");
+        body = trc("project", "This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.");
         break;
     default:
         if (!ret.text().empty()) {

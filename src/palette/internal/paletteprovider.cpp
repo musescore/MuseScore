@@ -899,10 +899,10 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
 #endif
     if (open) {
         title  = mu::qtrc("palette", "Load palette");
-        filter = { mu::trc("palette", "MuseScore palette") + " (*.mpal)" };
+        filter = { mu::trc("palette", "MuseScore Studio palette") + " (*.mpal)" };
     } else {
         title  = mu::qtrc("palette", "Save palette");
-        filter = { mu::trc("palette", "MuseScore palette") + " (*.mpal)" };
+        filter = { mu::trc("palette", "MuseScore Studio palette") + " (*.mpal)" };
     }
 
     QFileInfo myPalettes(wd);
