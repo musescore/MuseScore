@@ -3070,6 +3070,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
                      || tag == "alignSystemToMargin") // Mu4 only, let's skip
                   e.skipCurrentElement();
             //else if (isMu4 && tag == "lyricsMinBottomDistance") // 1.5 -> 2, Mu4's default seems better, so let's pass
+            //else if (isMu4 && tag == "lyricsDashMaxLength") // 0.6 -> 0.5, Mu4.4+'s default seems better, so let's pass
             else if (isMu4 && tag == "lyricsDashLineThickness") { // 0.1 -> 0.15
                   qreal lyricsDashLineThickness = e.readDouble();
                   if (qFuzzyCompare(lyricsDashLineThickness, 0.1)) // 4.x default, let's skip, i.e. reset back
@@ -3077,6 +3078,12 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   else
                         set(Sid::lyricsDashLineThickness, Spatium(lyricsDashLineThickness));
                   }
+            //else if (isMu4 && tag == "lyricsDashYposRatio") // 0.6 -> 0.5, Mu4.4+'s default seems better, so let's pass
+            else if (tag == "lyricsShowDashIfSyllableOnFirstNote" // Mu4.4+ only, let's skip
+                     || tag == "lyricsMelismaForce" // Mu4.4+ only, let's skip
+                     || tag == "lyricsMelismaMinLength" // Mu4.4+ only, let's skip
+                     || tag == "lyricsDashPosAtStartOfSystem") // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
             else if (isMu4 && tag == "minMeasureWidth") { // 8 -> 5
                   qreal minMeasureWidth = e.readDouble();
                   if (qFuzzyCompare(minMeasureWidth, 8.0)) // 4.x default, let's skip, i.e. reset back
@@ -3170,7 +3177,8 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   else
                         set(Sid::beamMinLen, Spatium(beamMinLen));
                   }
-            else if (tag == "snapCustomBeamsToGrid") // Mu4 only, let's skip
+            else if (tag == "snapCustomBeamsToGrid" // Mu4 only, let's skip
+                     || tag == "frenchStyleBeams") // Mu4.4+ only, let's skip
                   e.skipCurrentElement();
             else if (isMu4 && (tag == "propertyDistanceHead" // 0.4 -> 1, articulation/ornaments distance, let's skip, i.e. reset back
                                || tag == "propertyDistanceStem" // 0.4 -> 1.8, articulation/ornaments distance, let's skip, i.e. reset back
@@ -3228,7 +3236,16 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   set(Sid::pedalLineStyle, QVariant(_lineStyle));
                   }
             else if (tag == "pedalDashLineLen" // Mu4 only, let's skip
-                     || tag == "pedalDashGapLen" // Mu4 only, let's skip
+                     || tag == "pedalDashGapLen") // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (isMu4 && tag == "pedalFontSize") { // 12 -> 10
+                  qreal pedalFontSize = e.readDouble();
+                  if (qFuzzyCompare(pedalFontSize, 10.0)) // 4.4+ default, let's skip, i.e. reset back
+                        e.skipCurrentElement();
+                  else
+                        set(Sid::pedalFontSize, pedalFontSize);
+                  }
+            else if (tag == "pedalMusicalSymbolsScale" // Mu4.4+ only, let's skip
                      || tag == "pedalText" // Mu4.1+ only, let's skip
                      || tag == "pedalHookText" // Mu4.2+ only, let's skip
                      || tag == "pedalContinueText" // Mu4.1+ only, let's skip
@@ -3252,7 +3269,9 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   }
             else if (tag == "graceToMainNoteDist" // Mu4 only, let's skip
                      || tag == "graceToGraceNoteDist" // Mu4 only, let's skip
-                     || tag == "hideTabClefAfterFirst" ) // Mu4.3+ only, let's skip
+                     || tag == "hideTabClefAfterFirst" // Mu4.3+ only, let's skip
+                     || tag == "keySigCourtesyBarlineMode" // Mu4.4+ only, let's skip
+                     || tag == "timeSigCourtesyBarlineMode") // Mu4.4+ only, let's skip
                   e.skipCurrentElement();
             //else if (isMu4 && tag == "useStandardNoteNames") // 1 -> 0, why??? Seems a mistake, let's pass
             else if (tag == "multiVoiceRestTwoSpaceOffset") // Mu4.1+ only, let's skip
@@ -3331,10 +3350,12 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   }
             else if (tag == "ottavaDashLineLen" // Mu4 only, let's skip
                      || tag == "ottavaDashGapLen" // Mu4 only, let's skip
+                     || tag == "ottavaMusicalSymbolsScale" // Mu4.4+ only, let's skip
                      || tag == "ottavaTextAlignAbove" // Mu4 only, let's skip
                      || tag == "ottavaTextAlignBelow" // Mu4 only, let's skip
                      || tag == "tremoloNoteSidePadding" // Mu4 only, let's skip
-                     || tag == "tremoloOutSidePadding") // Mu4 only, let's skip
+                     || tag == "tremoloOutSidePadding" // Mu4 only, let's skip
+                     || tag == "ottavaMusicalSymbolsScale") // Mu4.4+ only, let's skip
                   e.skipCurrentElement();
             else if (isMu4 && tag == "tupletStemLeftDistance") { // 0.5 -> 0
                   qreal tupletStemLeftDistance = e.readDouble();
@@ -3364,6 +3385,9 @@ void MStyle::load(XmlReader& e, bool isMu4)
                      || tag == "snapToDynamics" // Mu4.1+ only, let's skip
                      || tag == "centerOnNotehead") // Mu4.1+ only, let's skip
                   e.skipCurrentElement();
+            else if (tag == "tupletMusicalSymbolsScale" // Mu4.4+ only, let's skip
+                     || tag == "tupletUseSymbols") // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
             else if (isMu4 && tag == "subTitleFontSize") { // 14 -> 16
                   qreal subTitleFontSize = e.readDouble();
                   if (qFuzzyCompare(subTitleFontSize, 14.0)) // 4.x default, let's skip, i.e. reset back
@@ -3387,7 +3411,16 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   }
             else if (tag == "expressionPosAbove" // Mu4.1+ only, let's skip
                      || tag == "expressionPosBelow" // Mu4.1+ only, let's skip
-                     || tag == "expressionMinDistance" // Mu4.1+ only, let's skip
+                     || tag == "expressionMinDistance" ) // Mu4.1+ only, let's skip
+                  e.skipCurrentElement();
+            else if (isMu4 && tag == "repeatLeftFontSize") { // 18 -> 11
+                  qreal repeatLeftFontSize = e.readDouble();
+                  if (qFuzzyCompare(repeatLeftFontSize, 11)) // 4.4+ default, let's skip, i.e. reset back
+                        e.skipCurrentElement();
+                  else
+                        set(Sid::repeatLeftFontSize, repeatLeftFontSize);
+                  }
+            else if (tag == "repeatsMusicalSymbolsScale" // Mu4.4+ only, let's skip
                      || tag == "glissandoStyle" // Mu4.2+ only, let's skip
                      || tag == "glissandoStyleHarp" // Mu4.2+ only, let's skip
                      || tag.startsWith("guitarBend") // Mu4.2+ only, let's skip
@@ -3461,7 +3494,8 @@ void MStyle::load(XmlReader& e, bool isMu4)
                      || tag == "tabShowTiedFret" // Mu4.3+ only, let's skip
                      || tag == "tabParenthesizeTiedFret" // Mu4.3+ only, let's skip
                      || tag == "parenthesizeTiedFretIfArticulation" // Mu4.3+ only, let's skip
-                     || tag == "chordlineThickness" ) // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
+                     || tag == "chordlineThickness" // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
+                     || tag == "dummyMusicalSymbolsScale") // Mu4.4+ only, let's skip
                   e.skipCurrentElement();
             else if (isMu4 && tag == "defaultsVersion") // 400/420 -> 302, let's sip, i.e. reset to Mu3
                   e.skipCurrentElement();
