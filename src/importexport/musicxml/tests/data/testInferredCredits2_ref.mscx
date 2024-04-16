@@ -117,14 +117,13 @@ Words &amp; Music by also Henry Ives (and ampersands)
       </Part>
     <Staff id="1">
       <VBox>
-        <height>19.7659</height>
+        <height>10.4262</height>
         <Text>
           <style>title</style>
           <text>Inferred Credits 2</text>
           </Text>
         <Text>
           <style>subtitle</style>
-          <offset x="0" y="11.4294"/>
           <text>from MUSESCORE: the musical: a tone poem</text>
           </Text>
         <Text>
@@ -137,7 +136,6 @@ Words &amp; Music by also Henry Ives (and ampersands)
           </Text>
         <Text>
           <style>subtitle</style>
-          <offset x="0" y="19.6585"/>
           <text>Op.1 No.43</text>
           </Text>
         </VBox>
