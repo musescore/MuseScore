@@ -150,11 +150,6 @@ void PageLayout::collectPage(LayoutContext& ctx)
         double distance;
         if (ctx.state().prevSystem()) {
             distance = SystemLayout::minDistance(ctx.state().prevSystem(), ctx.state().curSystem(), ctx);
-            if (ctx.conf().isPrintingMode()) {
-                double top = ctx.state().curSystem()->minTop();
-                double bottom = ctx.state().prevSystem()->minBottom();
-                distance += std::abs(top - bottom);
-            }
         } else {
             // this is the first system on page
             if (ctx.state().curSystem()->vbox()) {
