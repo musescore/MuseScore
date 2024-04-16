@@ -84,7 +84,7 @@ static PrevReleasesNotesList releasesNotesFromValList(const ValList& list)
     return notes;
 }
 
-static ValMap releaseInfoToValMap(const ReleaseInfo& info)
+static inline ValMap releaseInfoToValMap(const ReleaseInfo& info)
 {
     return {
         { "version", Val(info.version) },
@@ -96,7 +96,7 @@ static ValMap releaseInfoToValMap(const ReleaseInfo& info)
     };
 }
 
-static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
+static inline ReleaseInfo releaseInfoFromValMap(const ValMap& map)
 {
     ReleaseInfo info;
     info.version = map.at("version").toString();
