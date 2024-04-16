@@ -289,8 +289,8 @@ void InstrumentsRepository::loadMuseInstruments(const InstrumentTemplateMap& sta
         templ->clefTypes[0].transposingClef = clefType;
 
         if (instrument.staffType == musesampler::StaffType::Grand) {
-            templ->bracketSpan[0] = templ->staffCount;
-            templ->barlineSpan[0] = templ->staffCount;
+            templ->bracketSpan[0] = static_cast<int>(templ->staffCount);
+            templ->barlineSpan[0] = static_cast<int>(templ->staffCount);
 
             for (size_t i = 0; i < templ->staffCount; ++i) {
                 templ->bracket[i] = mu::engraving::BracketType::BRACE;
@@ -301,7 +301,7 @@ void InstrumentsRepository::loadMuseInstruments(const InstrumentTemplateMap& sta
         }
 
         for (int i = 0; i < MAX_STAVES; ++i) {
-            templ->staffLines[i] = instrument.staffLines;
+            templ->staffLines[i] = static_cast<int>(instrument.staffLines);
         }
 
         if (!instrument.musicXmlId.empty()) {

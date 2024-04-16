@@ -200,7 +200,7 @@ int InstrumentsOnScoreListModel::resolveInstrumentSequenceNumber(const String& i
     }
 
     const InstrumentTemplateList& allTemplates = repository()->instrumentTemplates();
-    return allTemplates.size();
+    return static_cast<int>(allTemplates.size());
 }
 
 void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentIdList)
