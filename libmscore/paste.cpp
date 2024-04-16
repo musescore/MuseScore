@@ -1080,7 +1080,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   ddata.dropElement = el.get();
                   if (target->acceptDrop(ddata)) {
                         if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
-                              ddata.dropElement = nel = el->clone();
+                              ddata.dropElement = el->clone();
                               Element* dropped = target->drop(ddata);
                               if (dropped)
                                     nel = dropped;
