@@ -49,6 +49,7 @@ public:
 
     virtual std::vector<RectF> boundingArea() const = 0;
     virtual bool containsPoint(const PointF& point) const = 0;
+    virtual bool containsItem(const engraving::EngravingItem* item) const = 0;
 };
 
 using INotationSelectionRangePtr = std::shared_ptr<INotationSelectionRange>;
