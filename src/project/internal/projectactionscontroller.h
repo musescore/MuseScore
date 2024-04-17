@@ -39,6 +39,7 @@
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
 #include "iopensaveprojectscenario.h"
+#include "imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
@@ -63,6 +64,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(IExportProjectScenario, exportProjectScenario)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(framework::IInteractive, interactive)
+    INJECT(IMscMetaReader, mscMetaReader)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
