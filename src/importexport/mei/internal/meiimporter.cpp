@@ -2068,6 +2068,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
     }
 
     Lyrics* lyrics = Factory::createLyrics(chord);
+    m_uids->reg(lyrics, meiVerse.m_xmlId);
     Convert::colorFromMEI(lyrics, meiVerse);
 
     bool success = true;
@@ -2076,6 +2077,13 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
     pugi::xpath_node extender = verseNode.select_node("./syl[@con='u']");
     if (extender) {
         m_lyricExtenders[chord->track()][no] = std::make_pair(lyrics, nullptr);
+    }
+
+    // @place
+    if (meiVerse.HasPlace()) {
+        lyrics->setPlacement(meiVerse.GetPlace()
+                             == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        lyrics->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
     // Aggregate the syllable into line blocks
