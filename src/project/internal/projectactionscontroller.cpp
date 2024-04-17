@@ -424,6 +424,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     }
 
     CloudProjectInfo info;
+    muse::io::path_t localPath = configuration()->cloudProjectPath(scoreId);
 
     if (isOwner) {
         RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
@@ -437,10 +438,20 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
         info.visibility = scoreInfo.val.visibility;
         info.sourceUrl = scoreInfo.val.url;
         info.revisionId = scoreInfo.val.revisionId;
+
+        RetVal<CloudProjectInfo> localInfo = mscMetaReader()->readCloudProjectInfo(localPath);
+
+        if (localInfo.ret) {
+            if (localInfo.val.revisionId == scoreInfo.val.revisionId) {
+                doOpenCloudProject(localPath, info, isOwner);
+                return;
+            }
+        } else {
+            LOGE() << localInfo.ret;
+        }
     }
 
     // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
-    muse::io::path_t localPath = configuration()->cloudProjectPath(scoreId);
     QFile* projectData = new QFile(localPath.toQString());
     if (!projectData->open(QIODevice::WriteOnly)) {
         openSaveProjectScenario()->showCloudOpenError(make_ret(Err::FileOpenError));

@@ -40,6 +40,7 @@
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
 #include "iopensaveprojectscenario.h"
+#include "imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
@@ -63,6 +64,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     INJECT(IProjectAutoSaver, projectAutoSaver)
     INJECT(IOpenSaveProjectScenario, openSaveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
+    INJECT(IMscMetaReader, mscMetaReader)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(muse::IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
