@@ -63,9 +63,9 @@ endif(${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable")
 # and icon in the OS dock / taskbar. Run `xprop WM_CLASS` and click on
 # MuseScore's main window to find out what string to use here.
 if(MUSESCORE_UNSTABLE)
-    set(WINDOW_MANAGER_CLASS "MuseScore4Development")
+    set(WINDOW_MANAGER_CLASS "MuseScoreStudio4Development")
 else(MUSESCORE_UNSTABLE)
-    set(WINDOW_MANAGER_CLASS "MuseScore4")
+    set(WINDOW_MANAGER_CLASS "MuseScoreStudio4")
 endif(MUSESCORE_UNSTABLE)
 
 # Install desktop file (perform variable substitution first)

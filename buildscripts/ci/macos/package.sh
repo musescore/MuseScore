@@ -74,22 +74,22 @@ VERSION_MAJOR="$(cut -d'.' -f1 <<<"$BUILD_VERSION")"
 VERSION_MINOR="$(cut -d'.' -f2 <<<"$BUILD_VERSION")"
 VERSION_PATCH="$(cut -d'.' -f3 <<<"$BUILD_VERSION")"
 
-APP_LONGER_NAME="MuseScore $VERSION_MAJOR"
+APP_LONGER_NAME="MuseScore Studio"
 PACKAGE_VERSION="$BUILD_VERSION"
 if [ "$BUILD_MODE" == "devel_build" ]; then
-  APP_LONGER_NAME="MuseScore $BUILD_VERSION Devel"
+  APP_LONGER_NAME="MuseScore Studio $BUILD_VERSION Devel"
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
 if [ "$BUILD_MODE" == "nightly_build" ]; then
-  APP_LONGER_NAME="MuseScore $BUILD_VERSION Nightly";
+  APP_LONGER_NAME="MuseScore Studio $BUILD_VERSION Nightly";
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
 if [ "$BUILD_MODE" == "testing_build" ]; then
-  APP_LONGER_NAME="MuseScore $BUILD_VERSION Testing";
+  APP_LONGER_NAME="MuseScore Studio $BUILD_VERSION Testing";
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
 if [ "$BUILD_MODE" == "stable_build" ]; then
-  APP_LONGER_NAME="MuseScore $VERSION_MAJOR";
+  APP_LONGER_NAME="MuseScore Studio";
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 fi
 
@@ -102,11 +102,11 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
 
   BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
-  ARTIFACT_NAME=MuseScoreNightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
+  ARTIFACT_NAME=MuseScore-Studio-Nightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
 
 else
 
-  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}.dmg  
+  ARTIFACT_NAME=MuseScore-Studio-${BUILD_VERSION}.dmg  
 
 fi
 

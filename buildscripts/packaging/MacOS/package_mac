@@ -1,8 +1,8 @@
 #!/bin/bash
 
 APPNAME=mscore
-LONG_NAME="MuseScore"
-LONGER_NAME="MuseScore 4"
+LONG_NAME="MuseScore-Studio"
+LONGER_NAME="MuseScore Studio"
 VERSION=0
 
 while [[ "$#" -gt 0 ]]; do
