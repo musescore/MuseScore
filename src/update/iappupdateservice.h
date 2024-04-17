@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
-#define MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#ifndef MU_UPDATE_IAPPUPDATESERVICE_H
+#define MU_UPDATE_IAPPUPDATESERVICE_H
 
+#include "types/retval.h"
 #include "io/path.h"
-#include "types/ret.h"
-#include "types/uri.h"
+#include "progress.h"
 
-#include "async/asyncable.h"
-#include "async/promise.h"
+#include "updatetypes.h"
 
-namespace mu::framework {
-class MacOSInteractiveHelper : public async::Asyncable
+#include "modularity/imoduleinterface.h"
+
+namespace mu::update {
+class IAppUpdateService : MODULE_EXPORT_INTERFACE
 {
-public:
-    static bool revealInFinder(const io::path_t& filePath);
+    INTERFACE_ID(IAppUpdateService)
 
-    static Ret isAppExists(const std::string& appIdentifier);
-    static Ret canOpenApp(const Uri& uri);
-    static async::Promise<Ret> openApp(const Uri& uri);
+public:
+    virtual ~IAppUpdateService() = default;
+
+    virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
+
+    virtual mu::RetVal<io::path_t> downloadRelease() = 0;
+    virtual void cancelUpdate() = 0;
+    virtual framework::Progress updateProgress() = 0;
 };
 }
 
-#endif // MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#endif // MU_UPDATE_IAPPUPDATESERVICE_H

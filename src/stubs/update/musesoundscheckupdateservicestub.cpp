@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
-#define MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#include "musesoundscheckupdateservicestub.h"
 
-#include "io/path.h"
-#include "types/ret.h"
-#include "types/uri.h"
+using namespace mu;
+using namespace mu::update;
 
-#include "async/asyncable.h"
-#include "async/promise.h"
-
-namespace mu::framework {
-class MacOSInteractiveHelper : public async::Asyncable
+Ret mu::update::MuseSoundsCheckUpdateServiceStub::needCheckForUpdate() const
 {
-public:
-    static bool revealInFinder(const io::path_t& filePath);
-
-    static Ret isAppExists(const std::string& appIdentifier);
-    static Ret canOpenApp(const Uri& uri);
-    static async::Promise<Ret> openApp(const Uri& uri);
-};
+    return make_ret(Ret::Code::NotSupported);
 }
 
-#endif // MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+RetVal<ReleaseInfo> MuseSoundsCheckUpdateServiceStub::checkForUpdate()
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
+RetVal<ReleaseInfo> MuseSoundsCheckUpdateServiceStub::lastCheckResult()
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
+framework::Progress MuseSoundsCheckUpdateServiceStub::updateProgress()
+{
+    return framework::Progress();
+}
+
+void MuseSoundsCheckUpdateServiceStub::openMuseHub()
+{
+}

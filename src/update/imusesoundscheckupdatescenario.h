@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
-#define MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#ifndef MU_UPDATE_IMUSESOUNDSCHECKUPDATESCENARIO_H
+#define MU_UPDATE_IMUSESOUNDSCHECKUPDATESCENARIO_H
 
-#include "io/path.h"
-#include "types/ret.h"
-#include "types/uri.h"
+#include "modularity/imoduleinterface.h"
 
-#include "async/asyncable.h"
-#include "async/promise.h"
-
-namespace mu::framework {
-class MacOSInteractiveHelper : public async::Asyncable
+namespace mu::update {
+class IMuseSoundsCheckUpdateScenario : MODULE_EXPORT_INTERFACE
 {
-public:
-    static bool revealInFinder(const io::path_t& filePath);
+    INTERFACE_ID(IMuseSoundsCheckUpdateScenario)
 
-    static Ret isAppExists(const std::string& appIdentifier);
-    static Ret canOpenApp(const Uri& uri);
-    static async::Promise<Ret> openApp(const Uri& uri);
+public:
+    virtual ~IMuseSoundsCheckUpdateScenario() = default;
+
+    virtual void checkForUpdate() = 0;
 };
 }
 
-#endif // MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+#endif // MU_UPDATE_IMUSESOUNDSCHECKUPDATESCENARIO_H

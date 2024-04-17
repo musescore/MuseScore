@@ -21,6 +21,9 @@
  */
 #include "updateconfiguration.h"
 
+#include "modularity/ioc.h"
+#include "global/iapplication.h"
+
 #include "settings.h"
 
 using namespace mu::update;
@@ -31,6 +34,7 @@ static const std::string module_name("update");
 static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "application/checkForUpdate");
 static const Settings::Key ALLOW_UPDATE_ON_PRERELEASE(module_name, "application/allowUpdateOnPreRelease");
 static const Settings::Key SKIPPED_VERSION_KEY(module_name, "application/skippedVersion");
+static const Settings::Key LAST_MUSESOUNDS_SHOWN_VERSION_KEY(module_name, "application/lastShownMuseSoundsReleaseVersion");
 
 static const std::string PRIVACY_POLICY_URL_PATH("/about/desktop-privacy-policy");
 
@@ -95,21 +99,37 @@ std::string UpdateConfiguration::skippedReleaseVersion() const
     return settings()->value(SKIPPED_VERSION_KEY).toString();
 }
 
-void UpdateConfiguration::setSkippedReleaseVersion(const std::string& version) const
+void UpdateConfiguration::setSkippedReleaseVersion(const std::string& version)
 {
     settings()->setSharedValue(SKIPPED_VERSION_KEY, Val(version));
 }
 
-std::string UpdateConfiguration::checkForUpdateUrl() const
+std::string UpdateConfiguration::lastShownMuseSoundsReleaseVersion() const
+{
+    return settings()->value(LAST_MUSESOUNDS_SHOWN_VERSION_KEY).toString();
+}
+
+void UpdateConfiguration::setLastShownMuseSoundsReleaseVersion(const std::string& version)
+{
+    settings()->setSharedValue(LAST_MUSESOUNDS_SHOWN_VERSION_KEY, Val(version));
+}
+
+std::string UpdateConfiguration::checkForAppUpdateUrl() const
 {
     return !allowUpdateOnPreRelease() ? "https://updates.musescore.org/feed/latest.xml"
            : "https://updates.musescore.org/feed/latest.test.xml";
 }
 
-std::string UpdateConfiguration::previousReleasesNotesUrl() const
+std::string UpdateConfiguration::previousAppReleasesNotesUrl() const
 {
     return !allowUpdateOnPreRelease() ? "https://updates.musescore.org/feed/all.xml"
            : "https://updates.musescore.org/feed/all.test.xml";
+}
+
+std::string UpdateConfiguration::checkForMuseSamplerUpdateUrl() const
+{
+    return !allowUpdateOnPreRelease() ? "https://updates.musescore.org/feed/musesounds.latest.xml"
+           : "https://updates.musescore.org/feed/musesounds.latest.test.xml";
 }
 
 mu::network::RequestHeaders UpdateConfiguration::updateHeaders() const

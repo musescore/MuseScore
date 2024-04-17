@@ -27,6 +27,8 @@
 
 #include "updateerrors.h"
 
+#include "types/val.h"
+
 #include "translation.h"
 #include "defer.h"
 #include "log.h"
@@ -36,53 +38,6 @@ static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 using namespace mu;
 using namespace mu::update;
 using namespace mu::framework;
-
-static ValList releasesNotesToValList(const PrevReleasesNotesList& list)
-{
-    ValList valList;
-    for (const PrevReleaseNotes& release : list) {
-        valList.emplace_back(Val(ValMap {
-            { "version", Val(release.version) },
-            { "notes", Val(release.notes) }
-        }));
-    }
-
-    return valList;
-}
-
-static PrevReleasesNotesList releasesNotesFromValList(const ValList& list)
-{
-    PrevReleasesNotesList notes;
-    for (const Val& val : list) {
-        ValMap releaseMap = val.toMap();
-        notes.emplace_back(releaseMap.at("version").toString(), releaseMap.at("notes").toString());
-    }
-
-    return notes;
-}
-
-static ValMap releaseInfoToValMap(const ReleaseInfo& info)
-{
-    return {
-        { "version", Val(info.version) },
-        { "fileName", Val(info.fileName) },
-        { "fileUrl", Val(info.fileUrl) },
-        { "notes", Val(info.notes) },
-        { "previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)) }
-    };
-}
-
-static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
-{
-    ReleaseInfo info;
-    info.version = map.at("version").toString();
-    info.fileName = map.at("fileName").toString();
-    info.fileUrl = map.at("fileUrl").toString();
-    info.notes = map.at("notes").toString();
-    info.previousReleasesNotes = releasesNotesFromValList(map.at("previousReleasesNotes").toList());
-
-    return info;
-}
 
 void UpdateScenario::delayedInit()
 {
@@ -104,19 +59,19 @@ void UpdateScenario::checkForUpdate()
 
 bool UpdateScenario::isCheckStarted() const
 {
-    return m_progress;
+    return m_checkProgress;
 }
 
 void UpdateScenario::doCheckForUpdate(bool manual)
 {
-    m_progressChannel = std::make_shared<framework::Progress>();
-    m_progressChannel->started.onNotify(this, [this]() {
-        m_progress = true;
+    m_checkProgressChannel = std::make_shared<Progress>();
+    m_checkProgressChannel->started.onNotify(this, [this]() {
+        m_checkProgress = true;
     });
 
-    m_progressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
-            m_progress = false;
+            m_checkProgress = false;
         };
 
         if (!res.ret) {
@@ -144,19 +99,20 @@ void UpdateScenario::doCheckForUpdate(bool manual)
         showReleaseInfo(info);
     });
 
-    QtConcurrent::run(this, &UpdateScenario::th_heckForUpdate);
+    QtConcurrent::run(this, &UpdateScenario::th_checkForUpdate);
 }
 
-void UpdateScenario::th_heckForUpdate()
+void UpdateScenario::th_checkForUpdate()
 {
-    m_progressChannel->started.notify();
+    m_checkProgressChannel->started.notify();
 
-    RetVal<ReleaseInfo> retVal = updateService()->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = service()->checkForUpdate();
 
     RetVal<Val> result;
     result.ret = retVal.ret;
     result.val = Val(releaseInfoToValMap(retVal.val));
-    m_progressChannel->finished.send(result);
+
+    m_checkProgressChannel->finished.send(result);
 }
 
 void UpdateScenario::processUpdateResult(int errorCode)

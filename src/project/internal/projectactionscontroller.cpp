@@ -27,6 +27,7 @@
 #include <QTemporaryFile>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QTimer>
 
 #include "async/async.h"
 #include "defer.h"
@@ -222,7 +223,7 @@ Ret ProjectActionsController::openProject(const io::path_t& givenPath, const QSt
 
     //! Step 2. If the project is already open in the current window, then just switch to showing the notation
     if (isProjectOpened(actualPath)) {
-        return openPageIfNeed(NOTATION_PAGE_URI);
+        return doFinishOpenProject();
     }
 
     //! Step 3. Check, if the project already opened in another window, then activate the window with the project
@@ -344,6 +345,24 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
     }
 
     globalContext()->setCurrentProject(project);
+
+    return doFinishOpenProject();
+}
+
+Ret ProjectActionsController::doFinishOpenProject()
+{
+    //! Show MuseSampler update if need
+    async::Channel<Uri> opened = interactive()->opened();
+    opened.onReceive(this, [this, opened](const Uri&) {
+        async::Async::call(this, [this, opened]() {
+            async::Channel<Uri> mut = opened;
+            mut.resetOnReceive(this);
+
+            QTimer::singleShot(5000, [this]() {
+                museSoundsCheckUpdateScenario()->checkForUpdate();
+            });
+        });
+    });
 
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
@@ -478,7 +497,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
 
         // either in this instance
         if (isProjectOpened(projectPath)) {
-            return openPageIfNeed(NOTATION_PAGE_URI);
+            return doFinishOpenProject();
         }
 
         // or in another one
@@ -588,7 +607,7 @@ void ProjectActionsController::newProject()
     Ret ret = interactive()->open(NEW_SCORE_URI).ret;
 
     if (ret) {
-        ret = openPageIfNeed(NOTATION_PAGE_URI);
+        ret = doFinishOpenProject();
     }
 
     if (!ret) {
