@@ -921,11 +921,6 @@
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articLaissezVibrerBelow</subtype>
-              <autoplace>0</autoplace>
-              <offset x="1.06594" y="-8.45219"/>
-              </Articulation>
             <Note>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -942,11 +937,6 @@
           <Chord>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articLaissezVibrerBelow</subtype>
-              <autoplace>0</autoplace>
-              <offset x="1.06594" y="-6.11334"/>
-              </Articulation>
             <Note>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
@@ -958,11 +948,6 @@
           <Chord>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articLaissezVibrerBelow</subtype>
-              <autoplace>0</autoplace>
-              <offset x="1.06594" y="-2.95219"/>
-              </Articulation>
             <Note>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
@@ -1072,11 +1057,6 @@
             </Spanner>
           <Chord>
             <durationType>whole</durationType>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <autoplace>0</autoplace>
-              <offset x="1.14594" y="0.202187"/>
-              </Articulation>
             <Note>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
@@ -1743,11 +1723,6 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <autoplace>0</autoplace>
-              <offset x="1.14594" y="0.222187"/>
-              </Articulation>
             <StemDirection>down</StemDirection>
             <Note>
               <Accidental>

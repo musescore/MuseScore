@@ -95,7 +95,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 static void addTie(const Notation& notation, Score* score, Note* note, const int track,
-                   std::map<int, Tie*>& tie, MxmlLogger* logger, const QXmlStreamReader* const xmlreader);
+                   std::map<int, Tie*>& tie, MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
+                   const bool fixForCrossStaff);
 
 //---------------------------------------------------------
 //   support enums / structs / classes
@@ -1644,6 +1645,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       {
       Q_UNUSED(partId);
       _timeSigDura = Fraction(0, 0);             // invalid
+      _ties.clear();
       _lastVolta = 0;
       _hasDrumset = false;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
@@ -1704,7 +1706,7 @@ static void addArticLaissezVibrer(const Note* const note)
       {
       if (!note)
             return;
-      auto chord = note->chord();
+      Chord* chord = note->chord();
       if (!hasLaissezVibrer(chord)) {
             Articulation* na = new Articulation(SymId::articLaissezVibrerBelow, chord->score());
             chord->add(na);
@@ -1719,12 +1721,34 @@ static void addArticLaissezVibrer(const Note* const note)
  Delete tie and add Laissez Vibrer where it was
  */
 
-static void cleanupUnterminatedTie(Tie*& tie)
+static void cleanupUnterminatedTie(Tie*& tie, const Score* score, bool fixForCrossStaff = false)
       {
       Note* unterminatedTieNote = tie->startNote();
+      const Chord* unterminatedChord = unterminatedTieNote->chord();
+
+      // Dolet 6 doesn't export cross staff information
+      // If a tie is unterminated, try to find a candidate to tie it to on a different track/stave
+      if (fixForCrossStaff) {
+            const Segment* nextSeg = score->tick2leftSegment(unterminatedChord->tick() + unterminatedChord->ticks());
+            if (nextSeg) {
+                  const Part* part = unterminatedTieNote->part();
+                  for (int track = part->startTrack(); track <= part->endTrack(); ++track) {
+                        const Element* el = nextSeg->element(track);
+                        if (el && el->isChord()) {
+                              Note* matchingNote = toChord(el)->findNote(unterminatedTieNote->pitch());
+                              if (matchingNote && matchingNote->tpc() == unterminatedTieNote->tpc()) {
+                                    tie->setEndNote(matchingNote);
+                                    matchingNote->setTieBack(tie);
+                                    return;
+                                    }
+                              }
+                        }
+                  }
+            }
+
+      // Delete unterminated ties pending fully featured l.v. ties & ties over repeats
       unterminatedTieNote->remove(tie);
       delete tie;
-      addArticLaissezVibrer(unterminatedTieNote); // Treat as let-ring
       }
 
 //---------------------------------------------------------
@@ -2278,8 +2302,8 @@ void MusicXMLParserPass2::part()
       // Clean up unterminated ties
       for (auto tie : _ties) {
             if (tie.second) {
-                  cleanupUnterminatedTie(tie.second);
-                  _ties[tie.first] = 0;
+                  cleanupUnterminatedTie(tie.second, _score, _pass1.exporterString().contains("dolet 6"));
+                  _ties[tie.first] = nullptr;
                   }
             }
       _ties.clear();
@@ -5803,7 +5827,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       QString instrumentId;
       QString tieType;
       MusicXMLParserLyric lyric { _pass1.getMusicXmlPart(partId).lyricNumberHandler(), _e, _score, _logger };
-      MusicXMLParserNotations notations { _e, _score, _logger };
+      MusicXMLParserNotations notations { _e, _score, _logger, _pass1 };
 
       mxmlNoteDuration mnd { _divs, _logger, &_pass1 };
       mxmlNotePitch mnp { _logger };
@@ -6128,7 +6152,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   Notation notation { "tied" };
                   const QString ctype { "type" };
                   notation.addAttribute(&ctype, &tieType);
-                  addTie(notation, _score, note, cr->track(), _ties, _logger, &_e);
+                  addTie(notation, _score, note, cr->track(), _ties, _logger, &_e, _pass1.exporterString().contains("dolet 6"));
                   }
             }
 
@@ -7483,7 +7507,8 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
 //---------------------------------------------------------
 
 static void addTie(const Notation& notation, Score* score, Note* note, const int track,
-                   std::map<int, Tie*>& ties, MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
+                   std::map<int, Tie*>& ties, MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
+                   const bool fixForCrossStaff)
       {
       if (!note)
             return;
@@ -7496,8 +7521,8 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
             if (ties[note->pitch()]) {
                   // Unterminated tie on this pitch. Clean this up, then resume.
                   logger->logError(QString("Tie already active"), xmlreader);
-                  cleanupUnterminatedTie(ties[note->pitch()]);
-                  ties[note->pitch()] = 0;
+                  cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
+                  ties[note->pitch()] = nullptr;
                   }
             ties[note->pitch()] = new Tie(score);
             Tie* currTie = ties[note->pitch()];
@@ -7531,15 +7556,33 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
                   currTie->setLineType(2);
 
             }
-      else if (type == "stop")
+      else if (type == "stop") {
             if (ties[note->pitch()]) {
                   Tie* currTie = ties[note->pitch()];
-                  currTie->setEndNote(note);
-                  note->setTieBack(currTie);
-                  ties[note->pitch()] = 0;
+                  const Note* startNote = currTie->startNote();
+                  const Chord* startChord = startNote ? startNote->chord() : nullptr;
+                  const Chord* endChord = note->chord();
+                  const Measure* startMeasure = startChord ? startChord->measure() : nullptr;
+                  qInfo() << "startMeasure: " << startMeasure;
+                  qInfo() << "endMeasure: " << endChord->measure();
+                  qInfo() << "startChord->tick() + startChord->ticks(): " << (startChord->tick() + startChord->ticks()).toString();
+                  qInfo() << "endChord->tick(): " << endChord->tick().toString();
+                  if (startMeasure == endChord->measure() || startChord->tick() + startChord->ticks() == endChord->tick()) {
+                        // only connect if they're in the same bar, or there are no notes/rests in the same voice between them
+                        qInfo() << "Connect";
+                        currTie->setEndNote(note);
+                        note->setTieBack(currTie);
+                        }
+                  else {
+                        qInfo() << "Discard";
+                        cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
+                        }
+                  ties[note->pitch()] = nullptr;
                   }
             else
                   logger->logError(QString("Non-started tie terminated. No-op."), xmlreader);
+            // ignore
+            }
       else if (type == "let-ring")
             addArticLaissezVibrer(note);
       else
@@ -7709,8 +7752,8 @@ QString Notation::print() const
 //   MusicXMLParserNotations
 //---------------------------------------------------------
 
-MusicXMLParserNotations::MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger)
-      : _e(e), _score(score), _logger(logger)
+MusicXMLParserNotations::MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1)
+      : _e(e), _pass1(pass1), _score(score), _logger(logger)
       {
       // nothing
       }
@@ -7894,7 +7937,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                   addGlissandoSlide(notation, note, glissandi, spanners, _logger, &_e);
                   }
             else if (note && notation.name() == "tied") {
-                  addTie(notation, _score, note, cr->track(), ties, _logger, &_e);
+                  addTie(notation, _score, note, cr->track(), ties, _logger, &_e, _pass1.exporterString().contains("dolet 6"));
                   }
             else if (note && notation.parent() == "technical") {
                   addTechnical(notation, note);

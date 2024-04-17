@@ -142,8 +142,8 @@ private:
       void readElision(QString& formattedText);
       const LyricNumberHandler _lyricNumberHandler;
       QXmlStreamReader& _e;
-      Score* const _score;                      // the score
-      MxmlLogger* _logger;                      ///< Error logger
+      Score* const _score = nullptr;      // the score
+      MxmlLogger* _logger = nullptr;      ///< Error logger
       QMap<int, Lyrics*> _numberedLyrics; // lyrics with valid number
       QSet<Lyrics*> _extendedLyrics;      // lyrics with the extend flag set
       };
@@ -218,7 +218,7 @@ public:
 
 class MusicXMLParserNotations {
 public:
-      MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
+      MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1);
       void parse();
       void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                       Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners, TrillStack& trills,
@@ -246,6 +246,7 @@ private:
       void tuplet();
       void otherNotation();
       QXmlStreamReader& _e;
+      MusicXMLParserPass1& _pass1;
       Score* const _score;                      // the score
       MxmlLogger* _logger;                      // the error logger
       QString _errors;                          // errors to present to the user
