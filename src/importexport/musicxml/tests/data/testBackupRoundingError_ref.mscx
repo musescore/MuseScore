@@ -652,15 +652,6 @@
               <tpc>14</tpc>
               </Note>
             <Note>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <voices>1</voices>
-                    <fractions>-1/2</fractions>
-                    <notes>-1</notes>
-                    </location>
-                  </prev>
-                </Spanner>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -921,17 +912,6 @@
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <voices>-1</voices>
-                    <fractions>1/2</fractions>
-                    <notes>1</notes>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1070,15 +1050,6 @@
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>13/12</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>88</pitch>
               <tpc>18</tpc>
               </Note>
@@ -1126,13 +1097,6 @@
               <Fingering>
                 <text>1</text>
                 </Fingering>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-13/12</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
               <pitch>88</pitch>
               <tpc>18</tpc>
               </Note>
