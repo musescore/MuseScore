@@ -27,7 +27,7 @@ fi
 TARGET=release
 
 MUSESCORE_INSTALL_DIR=${MUSESCORE_INSTALL_DIR:-"../build.install"}
-MUSESCORE_INSTALL_SUFFIX=${MUSESCORE_INSTALL_SUFFIX:-""}
+MUSE_APP_INSTALL_SUFFIX=${MUSE_APP_INSTALL_SUFFIX:-""}
 MUSESCORE_BUILD_CONFIGURATION=${MUSESCORE_BUILD_CONFIGURATION:-"app"}
 MUSE_APP_BUILD_MODE=${MUSE_APP_BUILD_MODE:-"dev"}
 MUSESCORE_BUILD_NUMBER=${MUSESCORE_BUILD_NUMBER:-"12345678"}
@@ -81,7 +81,7 @@ function do_build() {
     cmake .. -GNinja \
         -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
         -DCMAKE_INSTALL_PREFIX="${MUSESCORE_INSTALL_DIR}" \
-        -DMUSESCORE_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}" \
+        -DMUSE_APP_INSTALL_SUFFIX="${MUSE_APP_INSTALL_SUFFIX}" \
         -DMUSESCORE_BUILD_CONFIGURATION="${MUSESCORE_BUILD_CONFIGURATION}" \
         -DMUSE_APP_BUILD_MODE="${MUSE_APP_BUILD_MODE}" \
         -DCMAKE_BUILD_NUMBER="${MUSESCORE_BUILD_NUMBER}" \
@@ -158,7 +158,7 @@ case $TARGET in
             -DMUE_COMPILE_USE_UNITY=OFF \
             -DCMAKE_BUILD_TYPE="Debug" \
             -DCMAKE_INSTALL_PREFIX="${MUSESCORE_INSTALL_DIR}" \
-            -DMUSESCORE_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}" \
+            -DMUSE_APP_INSTALL_SUFFIX="${MUSE_APP_INSTALL_SUFFIX}" \
             -DMUSESCORE_BUILD_CONFIGURATION="${MUSESCORE_BUILD_CONFIGURATION}" \
             -DMUSE_APP_BUILD_MODE="${MUSE_APP_BUILD_MODE}" \
             -DCMAKE_BUILD_NUMBER="${MUSESCORE_BUILD_NUMBER}" \
@@ -182,7 +182,7 @@ case $TARGET in
 
     appimage)
         MUSESCORE_INSTALL_DIR=../MuseScore
-        MUSESCORE_INSTALL_SUFFIX="4portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
+        MUSE_APP_INSTALL_SUFFIX="4portable${MUSE_APP_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
         MUSESCORE_NO_RPATH=ON
 
         mkdir -p build.release
@@ -195,8 +195,8 @@ case $TARGET in
         cd $install_dir
 
         ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
-        mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
-        desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
+        mscore="mscore${MUSE_APP_INSTALL_SUFFIX}"
+        desktop="org.musescore.MuseScore${MUSE_APP_INSTALL_SUFFIX}.desktop"
         icon="${mscore}.png"
         mani="install_manifest.txt"
         cp "share/applications/${desktop}" "${desktop}"
@@ -206,7 +206,7 @@ case $TARGET in
 
     appimagedebug)
         MUSESCORE_INSTALL_DIR=../MuseScore
-        MUSESCORE_INSTALL_SUFFIX="4portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
+        MUSE_APP_INSTALL_SUFFIX="4portable${MUSE_APP_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
         MUSESCORE_NO_RPATH=ON
 
         mkdir -p build.debug
@@ -219,8 +219,8 @@ case $TARGET in
         cd $install_dir
 
         ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
-        mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
-        desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
+        mscore="mscore${MUSE_APP_INSTALL_SUFFIX}"
+        desktop="org.musescore.MuseScore${MUSE_APP_INSTALL_SUFFIX}.desktop"
         icon="${mscore}.png"
         mani="install_manifest.txt"
         cp "share/applications/${desktop}" "${desktop}"
