@@ -19,16 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <cfloat>
+
 #include "notationselectionrange.h"
 
 #include "engraving/dom/segment.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/chordrest.h"
+#include "engraving/dom/staff.h"
 
 #include "log.h"
-
-static constexpr int SELECTION_SIDE_PADDING = 8;
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -91,25 +92,45 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
 
     std::vector<RangeSection> rangeSections = splitRangeBySections(startSegment, endSegment);
 
-    int lastStaff = selectionLastVisibleStaff();
-
     for (const RangeSection& rangeSection: rangeSections) {
         const mu::engraving::System* sectionSystem = rangeSection.system;
         const mu::engraving::Segment* sectionStartSegment = rangeSection.startSegment;
         const mu::engraving::Segment* sectionEndSegment = rangeSection.endSegment;
 
-        const mu::engraving::SysStaff* segmentFirstStaff = sectionSystem->staff(score()->selection().staffStart());
+        staff_idx_t firstStaff = selectionFirstVisibleStaff(sectionSystem);
+        staff_idx_t lastStaff = selectionLastVisibleStaff(sectionSystem);
+        if (firstStaff == muse::nidx || lastStaff == muse::nidx) {
+            continue;
+        }
+
+        const mu::engraving::SysStaff* segmentFirstStaff = sectionSystem->staff(firstStaff);
         const mu::engraving::SysStaff* segmentLastStaff = sectionSystem->staff(lastStaff);
 
-        int topY = sectionElementsMaxY(rangeSection);
-        int bottomY = sectionElementsMinY(rangeSection);
+        const mu::engraving::Staff* scoreFirstStaff = score()->staff(firstStaff);
+        const mu::engraving::Staff* scoreLastStaff = score()->staff(lastStaff);
 
-        double x1 = sectionStartSegment->pagePos().x() - SELECTION_SIDE_PADDING;
+        double standardStaffHeight = 4 * scoreFirstStaff->spatium(Fraction(0, 1));
+        double firstStaffHeight = scoreFirstStaff->staffHeight();
+        double lastStaffHeight = scoreLastStaff->staffHeight();
+
+        double topY = 0.0;
+        if (firstStaffHeight < standardStaffHeight) {
+            double diff = standardStaffHeight - firstStaffHeight;
+            topY -= 0.5 * diff;
+        }
+
+        double bottomY = lastStaffHeight;
+        if (lastStaffHeight < standardStaffHeight) {
+            double diff = standardStaffHeight - lastStaffHeight;
+            bottomY += 0.5 * diff;
+        }
+
+        double x1 = sectionStartSegment->pagePos().x();
         double x2 = sectionEndSegment->pageBoundingRect().topRight().x();
-        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - SELECTION_SIDE_PADDING;
-        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + SELECTION_SIDE_PADDING;
+        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y();
+        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y();
 
-        if (sectionStartSegment->measure()->first() == sectionStartSegment) {
+        if (sectionStartSegment->measure()->firstEnabled() == sectionStartSegment) {
             x1 = sectionStartSegment->measure()->pagePos().x();
         }
 
@@ -129,6 +150,27 @@ bool NotationSelectionRange::containsPoint(const PointF& point) const
     }
 
     return false;
+}
+
+bool NotationSelectionRange::containsItem(const EngravingItem* item) const
+{
+    Fraction itemTick = item->tick();
+    Fraction selectionStartTick = startTick();
+    Fraction selectionEndTick = endTick();
+
+    if (itemTick < selectionStartTick || itemTick > selectionEndTick) {
+        return false;
+    }
+
+    if (itemTick == selectionEndTick) {
+        return item->rtick() > Fraction(0, 1);
+    }
+
+    track_idx_t itemTrack = item->track();
+    track_idx_t selectionStartTrack = VOICES * startStaffIndex();
+    track_idx_t selectionEndTrack = VOICES * (endStaffIndex() - 1) + VOICES;
+
+    return itemTrack >= selectionStartTrack && itemTrack < selectionEndTrack;
 }
 
 std::vector<const Part*> NotationSelectionRange::selectedParts() const
@@ -196,15 +238,26 @@ mu::engraving::Segment* NotationSelectionRange::rangeEndSegment() const
     return endSegment;
 }
 
-int NotationSelectionRange::selectionLastVisibleStaff() const
+staff_idx_t NotationSelectionRange::selectionLastVisibleStaff(const System* system) const
 {
     for (int i = static_cast<int>(score()->selection().staffEnd()) - 1; i >= 0; --i) {
-        if (score()->staff(i)->show()) {
+        if (system->staff(i)->show()) {
             return i;
         }
     }
 
-    return 0;
+    return muse::nidx;
+}
+
+staff_idx_t NotationSelectionRange::selectionFirstVisibleStaff(const System* system) const
+{
+    for (staff_idx_t i = score()->selection().staffStart(); i < score()->nstaves(); ++i) {
+        if (system->staff(i)->show()) {
+            return i;
+        }
+    }
+
+    return muse::nidx;
 }
 
 std::vector<NotationSelectionRange::RangeSection> NotationSelectionRange::splitRangeBySections(
@@ -256,61 +309,4 @@ const
     }
 
     return sections;
-}
-
-int NotationSelectionRange::sectionElementsMaxY(const NotationSelectionRange::RangeSection& selection) const
-{
-    const mu::engraving::System* segmentSystem = selection.system;
-    const mu::engraving::Segment* startSegment = selection.startSegment;
-    const mu::engraving::Segment* endSegment = selection.endSegment;
-
-    mu::engraving::SysStaff* segmentFirstStaff = segmentSystem->staff(score()->selection().staffStart());
-
-    mu::engraving::SkylineLine north = segmentFirstStaff->skyline().north();
-    int maxY = INT_MAX;
-    for (mu::engraving::SkylineSegment segment: north) {
-        bool ok = segment.x >= startSegment->pagePos().x() && segment.x <= endSegment->pagePos().x();
-        if (!ok) {
-            continue;
-        }
-
-        if (segment.y < maxY) {
-            maxY = segment.y;
-        }
-    }
-
-    if (maxY == INT_MAX) {
-        maxY = 0;
-    }
-
-    return maxY;
-}
-
-int NotationSelectionRange::sectionElementsMinY(const NotationSelectionRange::RangeSection& selection) const
-{
-    const mu::engraving::System* segmentSystem = selection.system;
-    const mu::engraving::Segment* startSegment = selection.startSegment;
-    const mu::engraving::Segment* endSegment = selection.endSegment;
-
-    int lastStaff = selectionLastVisibleStaff();
-    mu::engraving::SysStaff* segmentLastStaff = segmentSystem->staff(lastStaff);
-
-    mu::engraving::SkylineLine south = segmentLastStaff->skyline().south();
-    int minY = INT_MIN;
-    for (mu::engraving::SkylineSegment segment: south) {
-        bool ok = segment.x >= startSegment->pagePos().x() && segment.x <= endSegment->pagePos().x();
-        if (!ok) {
-            continue;
-        }
-
-        if (segment.y > minY) {
-            minY = segment.y;
-        }
-    }
-
-    if (minY == INT_MIN) {
-        minY = segmentLastStaff->bbox().height();
-    }
-
-    return minY;
 }
