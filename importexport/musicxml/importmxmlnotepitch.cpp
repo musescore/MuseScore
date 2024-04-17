@@ -32,9 +32,11 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
       const bool cautionary = e.attributes().value("cautionary") == "yes";
       const bool editorial = e.attributes().value("editorial") == "yes";
       const bool parentheses = e.attributes().value("parentheses") == "yes";
-      const bool bracket = e.attributes().value("bracket") == "yes";
+      const bool noParentheses = e.attributes().value("parentheses") == "no";
+      const bool brackets = e.attributes().value("bracket") == "yes";
+      const bool noBrackets = e.attributes().value("bracket") == "no";
       const QColor accColor = e.attributes().value("color").toString();
-      QString smufl = e.attributes().value("smufl").toString();
+      const QString smufl = e.attributes().value("smufl").toString();
 
       const auto s = e.readElementText();
       const auto type = mxmlString2accidentalType(s, smufl);
@@ -42,20 +44,21 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
       if (type != AccidentalType::NONE) {
             auto a = new Accidental(score);
             a->setAccidentalType(type);
-            if (cautionary || parentheses) {
+            if (cautionary || editorial) // no way to tell one from the other
+                  a->setRole(AccidentalRole::USER);
+            // except via the use of parenthesis vs. brackets
+            if (noParentheses || noBrackets) // explicitly none wanted
+                  ;
+            else if (parentheses || cautionary) // set to "yes", or for a "cautionary" and not set at all
                   a->setBracket(AccidentalBracket(AccidentalBracket::PARENTHESIS));
-                  a->setRole(AccidentalRole::USER);
-                  }
-            else if (editorial || bracket) {
+            else if (brackets || editorial) // set to "yes", or for an "editorial" and not set at all
                   a->setBracket(AccidentalBracket(AccidentalBracket::BRACKET));
-                  a->setRole(AccidentalRole::USER);
-                  }
             if (accColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   a->setColor(accColor);
             return a;
             }
 
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
