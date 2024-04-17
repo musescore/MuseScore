@@ -129,6 +129,7 @@
 #include "modularity/ioc.h"
 #include "../../imusicxmlconfiguration.h"
 #include "global/iapplication.h"
+#include "global/realfn.h"
 #include "engraving/iengravingconfiguration.h"
 
 #include "log.h"
