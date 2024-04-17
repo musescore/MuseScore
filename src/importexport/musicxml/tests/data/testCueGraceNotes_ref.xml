@@ -691,7 +691,7 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
+        <accidental cautionary="yes" parentheses="no">natural</accidental>
         <stem>down</stem>
         </note>
       <note>
