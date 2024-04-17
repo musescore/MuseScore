@@ -60,7 +60,7 @@ ORIGIN_DIR=${PWD}
 ROOT_DIR=${HERE}/../../..
 
 APP_IMAGE_NAME=MuseScoreTemporary
-ARTIFACT_NAME=MuseScore-${BUILD_VERSION}
+ARTIFACT_NAME=MuseScore-Studio-${BUILD_VERSION}
 
 # Make AppImage
 bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
