@@ -46,11 +46,14 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_MU3_COMPAT_KEY, Val(false));
-    settings()->setDescription(MUSICXML_EXPORT_MU3_COMPAT_KEY, muse::qtrc("project/export",
-                                                                          "Export to MusicXML compatible with older MuseScore versions").toStdString());
+    settings()->setDescription(MUSICXML_EXPORT_MU3_COMPAT_KEY, muse::trc("iex_musicxml",
+                                                                         "Export to MusicXML compatible with older MuseScore versions"));
     settings()->setCanBeManuallyEdited(MUSICXML_EXPORT_MU3_COMPAT_KEY, true);
     settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicxmlExportBreaksType::All));
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
+    settings()->setDescription(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, muse::trc("iex_musicxml",
+                                                                                 "Export invisible elements to MusicXML"));
+    settings()->setCanBeManuallyEdited(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, true);
     settings()->setDefaultValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(false));
     settings()->setDefaultValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(false));
     settings()->setDefaultValue(MUSICXML_IMPORT_INFER_TEXT_TYPE, Val(false));
