@@ -45,6 +45,7 @@
 #include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "importexport/videoexport/ivideoexportconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
+#include "importexport/musicxml/imusicxmlconfiguration.h"
 
 #include "commandlineparser.h"
 
@@ -68,6 +69,7 @@ class App
     INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
     INJECT(iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
     INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
+    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
 
 public:
     App();

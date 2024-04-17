@@ -110,6 +110,12 @@ void CommandLineParser::init()
                                           "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
                                           "Possible values: \"MuseScore Basic\", \"Muse Sounds\"", "sound-profile"));
 
+    // MusicXML
+    m_parser.addOption(QCommandLineOption("musicxml-use-default-font",
+                                          "Apply default typeface (Edwin) to imported scores"));
+    m_parser.addOption(QCommandLineOption("musicxml-infer-text-type",
+                                          "Infer text type based on content where possible"));
+
     // Video export
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     m_parser.addOption(QCommandLineOption("score-video", "Generate video for the given score and export it to file"));
@@ -348,6 +354,15 @@ void CommandLineParser::parse(int argc, char** argv)
         } else {
             LOGW() << "Option: --source-update no source specified";
         }
+    }
+
+    // MusicXML
+    if (m_parser.isSet("musicxml-use-default-font")) {
+        m_options.importMusicXML.useDefaultFont = true;
+    }
+
+    if (m_parser.isSet("musicxml-infer-text-type")) {
+        m_options.importMusicXML.inferTextType = true;
     }
 
     // Video
