@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/engravingitem.h"
 #include "dom/glissando.h"
+#include "dom/lyrics.h"
 #include "dom/note.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -350,6 +351,8 @@ double HorizontalSpacing::computePadding(const EngravingItem* item1, const Engra
 
     if (type1 == ElementType::NOTE && isSpecialNotePaddingType(type2)) {
         computeNotePadding(toNote(item1), item2, padding, scaling);
+    } else if (type1 == ElementType::LYRICS && type2 == ElementType::LYRICS) {
+        computeLyricsPadding(toLyrics(item1), toLyrics(item2), padding);
     } else {
         padding *= scaling;
     }
@@ -457,6 +460,19 @@ void HorizontalSpacing::computeLedgerRestPadding(const Rest* rest2, double& padd
     }
 }
 
+void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Lyrics* lyrics2, double& padding)
+{
+    const MStyle& style = lyrics1->style();
+
+    LyricsSyllabic syllabicType = lyrics1->syllabic();
+    bool leaveSpaceForDash = (syllabicType == LyricsSyllabic::BEGIN || syllabicType == LyricsSyllabic::MIDDLE)
+                             && style.styleB(Sid::lyricsDashForce);
+    if (leaveSpaceForDash) {
+        double spaceForDash = style.styleMM(Sid::lyricsDashMinLength).val() + 2 * style.styleMM(Sid::lyricsDashPad).val();
+        padding = std::max(padding, spaceForDash);
+    }
+}
+
 KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
     if (isSameVoiceKerningLimited(item1) && isSameVoiceKerningLimited(item2) && item1->track() == item2->track()) {
@@ -518,7 +534,7 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
     case ElementType::HARMONY:
         return item2->isHarmony() ? KerningType::NON_KERNING : KerningType::KERNING;
     case ElementType::LYRICS:
-        return (item2->isLyrics() || item2->isBarLine()) ? KerningType::NON_KERNING : KerningType::KERNING;
+        return computeLyricsKerningType(toLyrics(item1), item2);
     case ElementType::NOTE:
         return computeNoteKerningType(toNote(item1), item2);
     case ElementType::STEM_SLASH:
@@ -536,7 +552,14 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
     }
 
     Chord* c = note->chord();
-    if (!c || (c->allowKerningAbove() && c->allowKerningBelow())) {
+    if (!c) {
+        return KerningType::KERNING;
+    }
+    if (item2->isLyrics() && c->isMelismaEnd()) {
+        Note* melismaEndNote = c->up() ? c->downNote() : c->upNote();
+        return note == melismaEndNote ? KerningType::NON_KERNING : KerningType::KERNING;
+    }
+    if (c->allowKerningAbove() && c->allowKerningBelow()) {
         return KerningType::KERNING;
     }
     bool kerningAbove = item2->canvasPos().y() < note->canvasPos().y();
@@ -573,4 +596,20 @@ KerningType HorizontalSpacing::computeStemSlashKerningType(const StemSlash* stem
     }
 
     return KerningType::KERNING;
+}
+
+KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2)
+{
+    if (item2->isBarLine()) {
+        return KerningType::NON_KERNING;
+    }
+
+    if (item2->isLyrics()) {
+        const Lyrics* lyrics2 = toLyrics(item2);
+        if (lyrics1->no() == lyrics2->no()) {
+            return KerningType::NON_KERNING;
+        }
+    }
+
+    return KerningType::ALLOW_COLLISION;
 }

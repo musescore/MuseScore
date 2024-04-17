@@ -84,8 +84,8 @@ public:
 
     static void checkAndFillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf);
     static void fillShape(const ChordRest* item, Chord::LayoutData* ldata, const LayoutConfiguration& conf);
-    static void fillShape(const Chord* item, Chord::LayoutData* ldata, const LayoutConfiguration& conf);
-    static void fillShape(const Rest* item, Rest::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void fillShape(const Chord* item, Chord::LayoutData* ldata);
+    static void fillShape(const Rest* item, Rest::LayoutData* ldata);
     static void fillShape(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutConfiguration& conf);
     static void fillShape(const MMRest* item, MMRest::LayoutData* ldata, const LayoutConfiguration& conf);
 
@@ -99,7 +99,7 @@ private:
 
     static void skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack);
 
-    static Shape chordRestShape(const ChordRest* item, const LayoutConfiguration& conf);
+    static Shape chordRestShape(const ChordRest* item);
 
     static bool leaveSpaceForTie(const Articulation* item);
 

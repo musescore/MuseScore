@@ -178,9 +178,6 @@ void PaddingTable::createTable(const MStyle& style)
         elem[ElementType::BREATH] = 1.0 * spatium;
     }
 
-    // Temporary hack, because some padding is already constructed inside the lyrics themselves.
-    table[ElementType::BAR_LINE][ElementType::LYRICS] = 0.0 * spatium;
-
     // Harmony
     table[ElementType::BAR_LINE][ElementType::HARMONY] = 0.5 * style.styleMM(Sid::minHarmonyDistance);
     table[ElementType::HARMONY][ElementType::HARMONY] = style.styleMM(Sid::minHarmonyDistance);
@@ -209,4 +206,11 @@ void PaddingTable::createTable(const MStyle& style)
         elem[ElementType::SYMBOL] = elem[ElementType::ACCIDENTAL];
     }
     table[ElementType::NOTEDOT][ElementType::SYMBOL] = 0.2 * spatium;
+
+    double lyricsSpacing = style.styleMM(Sid::lyricsMinDistance);
+    table[ElementType::LYRICS].fill(lyricsSpacing);
+    for (auto& elem : table) {
+        elem[ElementType::LYRICS] = lyricsSpacing;
+    }
+    table[ElementType::NOTE][ElementType::LYRICS] = style.styleMM(Sid::lyricsMelismaPad);
 }

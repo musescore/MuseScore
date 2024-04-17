@@ -38,7 +38,7 @@
     <lyricsMinDistance>0.25</lyricsMinDistance>
     <lyricsLineHeight>1</lyricsLineHeight>
     <lyricsDashMinLength>0.4</lyricsDashMinLength>
-    <lyricsDashMaxLength>0.8</lyricsDashMaxLength>
+    <lyricsDashMaxLength>0.6</lyricsDashMaxLength>
     <lyricsDashMaxDistance>16</lyricsDashMaxDistance>
     <lyricsDashForce>1</lyricsDashForce>
     <lyricsAlignVerseNumber>1</lyricsAlignVerseNumber>
@@ -47,7 +47,7 @@
     <lyricsMelismaPad>0.1</lyricsMelismaPad>
     <lyricsDashPad>0.05</lyricsDashPad>
     <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
-    <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+    <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
     <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
     <lyricsOddFontSize>10</lyricsOddFontSize>
     <lyricsOddLineSpacing>1</lyricsOddLineSpacing>

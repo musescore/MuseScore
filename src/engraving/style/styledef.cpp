@@ -80,7 +80,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::lyricsMinDistance,       "lyricsMinDistance",       Spatium(0.25) },
     { Sid::lyricsLineHeight,        "lyricsLineHeight",        1.0 },
     { Sid::lyricsDashMinLength,     "lyricsDashMinLength",     Spatium(0.4) },
-    { Sid::lyricsDashMaxLength,     "lyricsDashMaxLength",     Spatium(0.8) },
+    { Sid::lyricsDashMaxLength,     "lyricsDashMaxLength",     Spatium(0.6) },
     { Sid::lyricsDashMaxDistance,   "lyricsDashMaxDistance",   Spatium(16.0) },
     { Sid::lyricsDashForce,         "lyricsDashForce",         true },
     { Sid::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
@@ -90,7 +90,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::lyricsMelismaPad,        "lyricsMelismaPad",        Spatium(0.10) }, // the empty space before a melisma line
     { Sid::lyricsDashPad,           "lyricsDashPad",           Spatium(0.05) }, // the min. empty space before and after a dash
     { Sid::lyricsDashLineThickness, "lyricsDashLineThickness", Spatium(0.1) },  // in sp. units
-    { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.60 },          // the fraction of lyrics font x-height to raise the dashes above text base line
+    { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.50 },          // the fraction of lyrics font x-height to raise the dashes above text base line
 
     { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "Edwin" },
     { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       10.0 },
