@@ -99,7 +99,7 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
 
         staff_idx_t firstStaff = selectionFirstVisibleStaff(sectionSystem);
         staff_idx_t lastStaff = selectionLastVisibleStaff(sectionSystem);
-        if (firstStaff == muse::nidx || lastStaff == muse::nidx) {
+        if (firstStaff == mu::nidx || lastStaff == mu::nidx) {
             continue;
         }
 
@@ -246,7 +246,7 @@ staff_idx_t NotationSelectionRange::selectionLastVisibleStaff(const System* syst
         }
     }
 
-    return muse::nidx;
+    return mu::nidx;
 }
 
 staff_idx_t NotationSelectionRange::selectionFirstVisibleStaff(const System* system) const
@@ -257,7 +257,7 @@ staff_idx_t NotationSelectionRange::selectionFirstVisibleStaff(const System* sys
         }
     }
 
-    return muse::nidx;
+    return mu::nidx;
 }
 
 std::vector<NotationSelectionRange::RangeSection> NotationSelectionRange::splitRangeBySections(
