@@ -462,6 +462,7 @@ void HorizontalSpacing::computeLedgerRestPadding(const Rest* rest2, double& padd
 
 void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Lyrics* lyrics2, double& padding)
 {
+    UNUSED(lyrics2);
     const MStyle& style = lyrics1->style();
 
     LyricsSyllabic syllabicType = lyrics1->syllabic();
