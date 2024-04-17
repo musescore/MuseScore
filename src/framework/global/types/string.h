@@ -271,6 +271,9 @@ public:
     static String fromUcs4(char32_t chr);
     std::u32string toStdU32String() const;
 
+    std::wstring toStdWString() const;
+    static const String fromStdWString(const std::wstring& str);
+
     size_t size() const;
     bool empty() const;
     inline bool isEmpty() const { return empty(); }
@@ -282,6 +285,7 @@ public:
     bool contains(const String& str, CaseSensitivity cs = CaseSensitive) const;
     bool contains(const std::wregex& re) const;
     int count(const Char& ch) const;
+    int count(const String& str) const;
     size_t indexOf(const Char& ch, size_t from = 0) const;
     size_t indexOf(const String& str, size_t from = 0) const;
     size_t indexOf(const char16_t* str, size_t from = 0) const;

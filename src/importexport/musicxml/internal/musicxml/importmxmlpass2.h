@@ -225,6 +225,7 @@ using InferredHairpinsStack = std::vector<Hairpin*>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
+using SegnoStack = std::map<int, Marker*>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -387,6 +388,7 @@ private:
     Chord* m_tremStart = nullptr;                  // Starting chord for current tremolo
     FiguredBass* m_figBass = nullptr;              // Current figured bass element (to attach to next note)
     SLine* m_delayedOttava = nullptr;              // Current delayed ottava
+    SegnoStack m_segnos;                           // List of segno markings
     int m_multiMeasureRestCount = 0;
     int m_measureNumber = 0;                       // Current measure number as written in the score
     MusicXmlLyricsExtend m_extendedLyrics;         // Lyrics with "extend" requiring fixup
@@ -409,7 +411,8 @@ public:
     MusicXMLParserDirection(muse::XmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
     void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& measureHasCoda,
+                   SegnoStack& segnos);
     double totalY() const { return m_defaultY + m_relativeY; }
     String placement() const;
 
@@ -425,10 +428,13 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
+    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
+                       DelayedDirectionsList& delayedDirections);
+    Marker* findMarker(const String& repeat) const;
+    Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     void handleTempo();
-    String matchRepeat() const;
+    String matchRepeat(const String& plainWords) const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     void textToDynamic(String& text);
@@ -465,6 +471,8 @@ private:
     String m_sndFine;
     String m_sndSegno;
     String m_sndToCoda;
+    String m_codaId;
+    String m_segnoId;
     String m_placement;
     bool m_hasDefaultY = false;
     double m_defaultY = 0.0;
@@ -493,6 +501,10 @@ public:
         m_measure(measure), m_tick(tick) {}
     void addElem();
     double totalY() const { return m_totalY; }
+    const EngravingItem* element() const { return m_element; }
+    track_idx_t track() const { return m_track; }
+    const Fraction& tick() const { return m_tick; }
+    const String& placement() const { return m_placement; }
 
 private:
     double m_totalY = 0.0;
