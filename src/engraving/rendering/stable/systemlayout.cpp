@@ -1101,9 +1101,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
     // Lyric
     //-------------------------------------------------------------
-
-    LyricsLayout::layoutLyrics(ctx, system);
-
     // Layout lyrics dashes and melisma
     // NOTE: loop on a *copy* of unmanagedSpanners because in some cases
     // the underlying operation may invalidate some of the iterators.

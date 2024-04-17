@@ -2306,6 +2306,30 @@ RectF TextBase::pageRectangle() const
     return abbox();
 }
 
+void TextBase::computeHighResShape(const FontMetrics& fontMetrics)
+{
+    Shape& highResShape = mutldata()->highResShape.mut_value();
+    highResShape.elements().reserve(m_text.size());
+    highResShape.clear();
+
+    for (const TextBlock& block : ldata()->blocks) {
+        double x = 0;
+        for (const TextFragment& fragment : block.fragments()) {
+            x += fragment.pos.x();
+            size_t textSize = fragment.text.size();
+            for (int i = 0; i < textSize; ++i) {
+                Char character = fragment.text.at(i);
+                RectF characterBoundingRect = fontMetrics.tightBoundingRect(fragment.text.at(i));
+                characterBoundingRect.translate(x, 0.0);
+                highResShape.add(characterBoundingRect);
+                if (i + 1 < textSize) {
+                    x += fontMetrics.horizontalAdvance(character);
+                }
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   dragTo
 //---------------------------------------------------------

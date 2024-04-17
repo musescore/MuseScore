@@ -291,6 +291,11 @@ EditStyle::EditStyle(QWidget* parent)
     keysigVisibility->addButton(radioShowAllKeys, true);
     keysigVisibility->addButton(radioHideKeys, false);
 
+    QButtonGroup* lyricsDashSystemStart = new QButtonGroup(this);
+    lyricsDashSystemStart->addButton(dashAlignStandard, int(LyricsDashSystemStart::STANDARD));
+    lyricsDashSystemStart->addButton(dashAlignHeader, int(LyricsDashSystemStart::UNDER_HEADER));
+    lyricsDashSystemStart->addButton(dashAlignFirstNote, int(LyricsDashSystemStart::UNDER_FIRST_NOTE));
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -349,6 +354,11 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::lyricsDashPad,           false, lyricsDashPad,           resetLyricsDashPad },
         { StyleId::lyricsDashLineThickness, false, lyricsDashLineThickness, resetLyricsDashLineThickness },
         { StyleId::lyricsDashYposRatio,     false, lyricsDashYposRatio,     resetLyricsDashYposRatio },
+        { StyleId::lyricsShowDashIfSyllableOnFirstNote, false, lyricsShowDashIfSyllableOnFirstNote,
+          resetLyricsShowDashIfSyllableOnFirstNote },
+        { StyleId::lyricsMelismaMinLength,  false, minMelismaLength,     resetMinMelismaLength },
+        { StyleId::lyricsMelismaForce,      false, lyricsMelismaForce,   resetLyricsMelismaForce },
+        { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashSystemStart, 0 },
 
         { StyleId::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },

@@ -78,10 +78,6 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
                 || kerningType == KerningType::NON_KERNING) {
                 dist = std::max(dist, r1.right() - r2.left() + padding);
             }
-            if (kerningType == KerningType::KERNING_UNTIL_ORIGIN) { //prepared for future user option, for now always false
-                double origin = r1.left();
-                dist = std::max(dist, origin - r2.left());
-            }
         }
     }
     return dist;
@@ -351,8 +347,8 @@ double HorizontalSpacing::computePadding(const EngravingItem* item1, const Engra
 
     if (type1 == ElementType::NOTE && isSpecialNotePaddingType(type2)) {
         computeNotePadding(toNote(item1), item2, padding, scaling);
-    } else if (type1 == ElementType::LYRICS && type2 == ElementType::LYRICS) {
-        computeLyricsPadding(toLyrics(item1), toLyrics(item2), padding);
+    } else if (type1 == ElementType::LYRICS && isSpecialLyricsPaddingType(type2)) {
+        computeLyricsPadding(toLyrics(item1), item2, padding);
     } else {
         padding *= scaling;
     }
@@ -460,17 +456,37 @@ void HorizontalSpacing::computeLedgerRestPadding(const Rest* rest2, double& padd
     }
 }
 
-void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Lyrics* lyrics2, double& padding)
+bool HorizontalSpacing::isSpecialLyricsPaddingType(ElementType type)
 {
-    UNUSED(lyrics2);
+    switch (type) {
+    case ElementType::NOTE:
+    case ElementType::REST:
+    case ElementType::LYRICS:
+        return true;
+    default:
+        return false;
+    }
+}
+
+void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const EngravingItem* item2, double& padding)
+{
     const MStyle& style = lyrics1->style();
 
-    LyricsSyllabic syllabicType = lyrics1->syllabic();
-    bool leaveSpaceForDash = (syllabicType == LyricsSyllabic::BEGIN || syllabicType == LyricsSyllabic::MIDDLE)
-                             && style.styleB(Sid::lyricsDashForce);
-    if (leaveSpaceForDash) {
-        double spaceForDash = style.styleMM(Sid::lyricsDashMinLength).val() + 2 * style.styleMM(Sid::lyricsDashPad).val();
-        padding = std::max(padding, spaceForDash);
+    bool leaveSpaceForMelisma = lyrics1->separator() && lyrics1->separator()->isEndMelisma() && style.styleB(Sid::lyricsMelismaForce);
+    if (leaveSpaceForMelisma) {
+        double spaceForMelisma = style.styleMM(Sid::lyricsMelismaMinLength).val() + 2 * style.styleMM(Sid::lyricsMelismaPad).val();
+        padding = std::max(padding, spaceForMelisma);
+        return;
+    }
+
+    if (item2->isLyrics()) {
+        LyricsSyllabic syllabicType = lyrics1->syllabic();
+        bool leaveSpaceForDash = (syllabicType == LyricsSyllabic::BEGIN || syllabicType == LyricsSyllabic::MIDDLE)
+                                 && style.styleB(Sid::lyricsDashForce);
+        if (leaveSpaceForDash) {
+            double spaceForDash = style.styleMM(Sid::lyricsDashMinLength).val() + 2 * style.styleMM(Sid::lyricsDashPad).val();
+            padding = std::max(padding, spaceForDash);
+        }
     }
 }
 
@@ -608,6 +624,13 @@ KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, c
     if (item2->isLyrics()) {
         const Lyrics* lyrics2 = toLyrics(item2);
         if (lyrics1->no() == lyrics2->no()) {
+            return KerningType::NON_KERNING;
+        }
+    }
+
+    if ((item2->isNote() || item2->isRest()) && lyrics1->style().styleB(Sid::lyricsMelismaForce)) {
+        LyricsLine* melismaLine = lyrics1->separator();
+        if (melismaLine && melismaLine->isEndMelisma() && item2->tick() >= melismaLine->tick2()) {
             return KerningType::NON_KERNING;
         }
     }

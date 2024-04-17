@@ -177,26 +177,6 @@ void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 }
 
 //---------------------------------------------------------
-//   layout2
-//    compute vertical position
-//---------------------------------------------------------
-
-void Lyrics::layout2(int nAbove)
-{
-    LayoutData* ldata = mutldata();
-    double lh = lineSpacing() * style().styleD(Sid::lyricsLineHeight);
-
-    if (placeBelow()) {
-        double yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
-        ldata->setPosY(lh * (m_no - nAbove) + yo - chordRest()->y());
-        ldata->move(styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>());
-    } else {
-        ldata->setPosY(-lh * (nAbove - m_no - 1) - chordRest()->y());
-        ldata->move(styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>());
-    }
-}
-
-//---------------------------------------------------------
 //   paste
 //---------------------------------------------------------
 

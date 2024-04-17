@@ -51,7 +51,7 @@ void EngravingCompat::correctPedalEndPoints(MasterScore* score)
     for (auto pair : score->spanner()) {
         Spanner* spanner = pair.second;
         if (spanner->isPedal() && toPedal(spanner)->endHookType() == HookType::HOOK_45) {
-            ChordRest* endCR = score->findCRinStaff(spanner->tick2(), track2staff(spanner->track()));
+            ChordRest* endCR = score->findChordRestEndingBeforeTickInStaff(spanner->tick2(), track2staff(spanner->track()));
             if (endCR) {
                 for (EngravingObject* item : spanner->linkList()) {
                     toSpanner(item)->setTick2(endCR->tick());

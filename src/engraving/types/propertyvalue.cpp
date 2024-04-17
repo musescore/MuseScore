@@ -165,6 +165,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::TEMPOCHANGE_TYPE: return static_cast<int>(value<GradualTempoChangeType>());
     case P_TYPE::SLUR_STYLE_TYPE:  return static_cast<int>(value<SlurStyleType>());
     case P_TYPE::TIE_PLACEMENT:    return static_cast<int>(value<TiePlacement>());
+    case P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE: return static_cast<int>(value<LyricsDashSystemStart>());
 
     // Other
     case P_TYPE::GROUPS: {
@@ -266,6 +267,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::TEMPOCHANGE_TYPE: return PropertyValue(GradualTempoChangeType(v.toInt()));
     case P_TYPE::SLUR_STYLE_TYPE:  return PropertyValue(SlurStyleType(v.toInt()));
     case P_TYPE::TIE_PLACEMENT:    return PropertyValue(TiePlacement(v.toInt()));
+    case P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE:    return PropertyValue(LyricsDashSystemStart(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

@@ -157,6 +157,8 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 
     TLayout::layoutBaseTextBase1(item, ctx);
 
+    item->computeHighResShape(item->fontMetrics());
+
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;
 
@@ -220,418 +222,195 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 
 void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
+    UNUSED(ctx);
+
     assert(item->lyricsLine()->lyrics());
-    LyricsLineSegment::LayoutData* ldata = item->mutldata();
     item->ryoffset() = 0.0;
 
-    bool endOfSystem       = false;
-    bool isEndMelisma      = item->lyricsLine()->isEndMelisma();
-    Lyrics* lyr               = 0;
-    Lyrics* nextLyr           = 0;
-    double fromX             = 0;
-    double toX               = 0;                     // start and end point of intra-lyrics room
-    double sp                = item->spatium();
-    System* sys;
+    LyricsLineSegment::LayoutData* ldata = item->mutldata();
+    ldata->clearDashes();
 
-    if (item->lyricsLine()->ticks() <= Fraction(0, 1)) {     // if no span,
-        item->setNumOfDashes(0);                 // nothing to draw
-        return;                           // and do nothing
-    }
-
-    // HORIZONTAL POSITION
-    // A) if line precedes a syllable, advance line end to right before the next syllable text
-    // if not a melisma and there is a next syllable;
-    if (!isEndMelisma && item->lyricsLine()->nextLyrics() && item->isSingleEndType()) {
-        lyr         = nextLyr = item->lyricsLine()->nextLyrics();
-        sys         = lyr->segment()->system();
-        endOfSystem = (sys != item->system());
-        // if next lyrics is on a different system, this line segment is at the end of its system:
-        // do not adjust for next lyrics position
-        if (sys && !endOfSystem) {
-            double lyrX        = lyr->ldata()->bbox().x();
-            double lyrXp       = lyr->pagePos().x();
-            double sysXp       = sys->pagePos().x();
-            toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
-            double offsetX     = toX - item->pos().x() - item->pos2().x() - ctx.conf().styleMM(Sid::lyricsDashPad);
-            //                    delta from current end pos.| ending padding
-            item->rxpos2()          += offsetX;
-        }
-    }
-    // B) if line follows a syllable, advance line start to after the syllable text
-    lyr  = item->lyricsLine()->lyrics();
-    sys  = lyr->segment()->system();
-    if (sys && item->isSingleBeginType()) {
-        double lyrX        = lyr->ldata()->bbox().x();
-        double lyrXp       = lyr->pagePos().x();
-        double lyrW        = lyr->ldata()->bbox().width();
-        double sysXp       = sys->pagePos().x();
-        fromX             = lyrXp - sysXp + lyrX + lyrW;
-        //               syst.rel. X pos. | lyr.advance
-        double offsetX     = fromX - item->pos().x();
-        offsetX           += ctx.conf().styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
-
-        //               delta from curr.pos. | add initial padding
-        ldata->moveX(offsetX);
-        item->rxpos2()          -= offsetX;
-    }
-
-    // VERTICAL POSITION: at the base line of the syllable text
-    if (!item->isEndType()) {
-        ldata->setPosY(lyr->ldata()->pos().y() + lyr->chordRest()->pos().y());
-        item->ryoffset() = lyr->offset().y() + lyr->chordRest()->offset().y();
+    if (item->lyricsLine()->isEndMelisma()) {
+        layoutMelismaLine(item);
     } else {
-        // use Y position of *next* syllable if there is one on same system
-        Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
-        if (nextLyr1 && nextLyr1->segment()->system() == item->system()) {
-            ldata->setPosY(nextLyr1->ldata()->pos().y() + nextLyr1->chordRest()->pos().y());
-            item->ryoffset() = nextLyr1->offset().y() + nextLyr1->chordRest()->offset().y();
-        } else {
-            ldata->setPosY(lyr->ldata()->pos().y() + lyr->chordRest()->pos().y());
-            item->ryoffset() = lyr->offset().y() + lyr->chordRest()->offset().y();
-        }
+        layoutDashes(item);
     }
 
-    // MELISMA vs. DASHES
-    const double minMelismaLen = 1 * sp; // TODO: style setting
-    const double minDashLen  = ctx.conf().styleS(Sid::lyricsDashMinLength).val() * sp;
-    const double maxDashDist = ctx.conf().styleS(Sid::lyricsDashMaxDistance).val() * sp;
-    double len = item->pos2().rx();
-    if (isEndMelisma) {                   // melisma
-        if (len < minMelismaLen) { // Omit the extender line if too short
-            item->setNumOfDashes(0);
-        } else {
-            item->setNumOfDashes(1);
-        }
-        ldata->moveY(-item->lyricsLine()->lineWidth() * .5);     // let the line 'sit on' the base line
-    } else {                              // dash(es)
-        // set conventional dash Y pos
-        ldata->moveY(-lyr->fontMetrics().xHeight() * ctx.conf().styleD(Sid::lyricsDashYposRatio));
-        item->setDashLength(ctx.conf().styleMM(Sid::lyricsDashMaxLength) * item->mag());      // and dash length
-        if (len < minDashLen) {                                               // if no room for a dash
-            // if at end of system or dash is forced
-            if (endOfSystem || ctx.conf().styleB(Sid::lyricsDashForce)) {
-                item->rxpos2() = minDashLen;                               //     draw minimal dash
-                item->setNumOfDashes(1);
-                item->setDashLength(minDashLen);
-            } else {                                                          //   if within system or dash not forced
-                item->setNumOfDashes(0);                                             //     draw no dash
-            }
-        } else if (len < (maxDashDist * 1.5)) {                               // if no room for two dashes
-            item->setNumOfDashes(1);                                                 //    draw one dash
-            if (item->dashLength() > len) {                                          // if no room for a full dash
-                item->setDashLength(len);                                            //    shorten it
-            }
-        } else {
-            item->setNumOfDashes(len / maxDashDist + 1);                             // draw several dashes
-        }
-        // adjust next lyrics horiz. position if too little a space forced to skip the dash
-        if (item->numOfDashes() == 0 && nextLyr != nullptr && len > 0) {
-            nextLyr->mutldata()->moveX(-(toX - fromX));
-        }
-    }
+    double halfLineWidth = item->lyricsLine()->lineWidth();
+    RectF rect(PointF(), item->pos2());
+    rect.adjust(0.0, -halfLineWidth, 0.0, halfLineWidth);
 
-    // apply yoffset for staff type change (keeps lyrics lines aligned with lyrics)
-    if (item->staffType()) {
-        ldata->moveY(item->staffType()->yoffset().val() * item->spatium());
-    }
-
-    // set bounding box
-    RectF r = RectF(0.0, 0.0, item->pos2().x(), item->pos2().y()).normalized();
-    double lw = item->lyricsLine()->lineWidth() * .5;
-    item->setbbox(r.adjusted(-lw, -lw, lw, lw));
-    if (item->system() && lyr->addToSkyline()) {
-        item->system()->staff(lyr->staffIdx())->skyline().add(item->shape().translate(item->pos()));
-    }
+    ldata->setShape(Shape(rect, item));
 }
 
-//---------------------------------------------------------
-//   findLyricsMaxY
-//---------------------------------------------------------
-
-static double findLyricsMaxY(const MStyle& style, Segment& s, staff_idx_t staffIdx)
+void LyricsLayout::layoutMelismaLine(LyricsLineSegment* item)
 {
-    double yMax = 0.0;
-    if (!s.isChordRestType()) {
-        return yMax;
-    }
+    LyricsLine* lyricsLine = item->lyricsLine();
+    Lyrics* startLyrics = lyricsLine->lyrics();
 
-    double lyricsMinTopDistance = style.styleMM(Sid::lyricsMinTopDistance);
-
-    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-        ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-        if (cr && !cr->lyrics().empty()) {
-            SkylineLine sk(true);
-
-            for (Lyrics* l : cr->lyrics()) {
-                if (l->autoplace() && l->placeBelow()) {
-                    double yOff = l->offset().y();
-                    PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
-                    RectF r = l->ldata()->bbox().translated(offset);
-                    r.translate(0.0, -yOff);
-                    sk.add(r.x(), r.top(), r.width());
-                }
-            }
-            SysStaff* ss = s.measure()->system()->staff(staffIdx);
-            for (Lyrics* l : cr->lyrics()) {
-                if (l->autoplace() && l->placeBelow()) {
-                    double y = ss->skyline().south().minDistance(sk);
-                    if (y > -lyricsMinTopDistance) {
-                        yMax = std::max(yMax, y + lyricsMinTopDistance);
-                    }
-                }
-            }
-        }
-    }
-    return yMax;
-}
-
-//---------------------------------------------------------
-//   findLyricsMinY
-//---------------------------------------------------------
-
-static double findLyricsMinY(const MStyle& style, Segment& s, staff_idx_t staffIdx)
-{
-    double yMin = 0.0;
-    if (!s.isChordRestType()) {
-        return yMin;
-    }
-    double lyricsMinTopDistance = style.styleMM(Sid::lyricsMinTopDistance);
-    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-        ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-        if (cr && !cr->lyrics().empty()) {
-            SkylineLine sk(false);
-
-            for (Lyrics* l : cr->lyrics()) {
-                if (l->autoplace() && l->placeAbove()) {
-                    double yOff = l->offset().y();
-                    RectF r = l->ldata()->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
-                    r.translate(0.0, -yOff);
-                    sk.add(r.x(), r.bottom(), r.width());
-                }
-            }
-            SysStaff* ss = s.measure()->system()->staff(staffIdx);
-            for (Lyrics* l : cr->lyrics()) {
-                if (l->autoplace() && l->placeAbove()) {
-                    double y = sk.minDistance(ss->skyline().north());
-                    if (y > -lyricsMinTopDistance) {
-                        yMin = std::min(yMin, -y - lyricsMinTopDistance);
-                    }
-                }
-            }
-        }
-    }
-    return yMin;
-}
-
-static double findLyricsMaxY(const MStyle& style, Measure* m, staff_idx_t staffIdx)
-{
-    double yMax = 0.0;
-    for (Segment& s : m->segments()) {
-        yMax = std::max(yMax, findLyricsMaxY(style, s, staffIdx));
-    }
-    return yMax;
-}
-
-static double findLyricsMinY(const MStyle& style, Measure* m, staff_idx_t staffIdx)
-{
-    double yMin = 0.0;
-    for (Segment& s : m->segments()) {
-        yMin = std::min(yMin, findLyricsMinY(style, s, staffIdx));
-    }
-    return yMin;
-}
-
-//---------------------------------------------------------
-//   applyLyricsMax
-//---------------------------------------------------------
-
-static void applyLyricsMax(const MStyle& style, Segment& s, staff_idx_t staffIdx, double yMax)
-{
-    if (!s.isChordRestType()) {
+    System* system = item->system();
+    if (!system) {
         return;
     }
-    Skyline& sk = s.measure()->system()->staff(staffIdx)->skyline();
-    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-        ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-        if (cr && !cr->lyrics().empty()) {
-            double lyricsMinBottomDistance = style.styleMM(Sid::lyricsMinBottomDistance);
-            for (Lyrics* l : cr->lyrics()) {
-                if (l->autoplace() && l->placeBelow()) {
-                    l->mutldata()->moveY(yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
-                    if (l->addToSkyline()) {
-                        PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
-                        sk.add(l->ldata()->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
-                    }
-                }
-            }
+    const MStyle& style = item->style();
+
+    const double systemPageX = system->pageX();
+
+    double startX = 0.0;
+    if (!item->isSingleBeginType()) {
+        startX = system->firstNoteRestSegmentX(true);
+    } else {
+        double lyricsRightEdge = startLyrics->pageX() - system->pageX() + startLyrics->shape().right();
+        startX = lyricsRightEdge + style.styleMM(Sid::lyricsMelismaPad);
+    }
+
+    ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    double endX = 0.0;
+    if (!item->isSingleEndType() || !lyricsLine->endElement()) {
+        endX = system->endingXForOpenEndedLines();
+    } else {
+        if (endChordRest->isChord()) {
+            Chord* endChord = toChord(endChordRest);
+            Note* note = endChord->up() ? endChord->downNote() : endChord->upNote();
+            endX = note->pageX() - systemPageX + note->headWidth();
+        } else {
+            endX = endChordRest->pageX() - systemPageX + endChordRest->rightEdge();
+        }
+    }
+
+    double tolerance = 0.05 * item->spatium();
+    if (endX - startX < style.styleMM(Sid::lyricsMelismaMinLength) - tolerance) {
+        if (style.styleB(Sid::lyricsMelismaForce)) {
+            endX = startX + style.styleMM(Sid::lyricsMelismaMinLength);
+        } else {
+            return;
+        }
+    }
+
+    if (item->isSingleBeginType()) {
+        item->ryoffset() = startLyrics->offset().y();
+    } else {
+        Lyrics* nextLyrics = findNextLyrics(endChordRest, startLyrics->no());
+        item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y();
+    }
+
+    double y = 0.0; // actual value is set later
+
+    item->setPos(startX, y);
+    item->setPos2(PointF(endX - startX, 0.0));
+
+    item->mutldata()->addDash(LineF(PointF(), item->pos2()));
+}
+
+void LyricsLayout::layoutDashes(LyricsLineSegment* item)
+{
+    LyricsLine* lyricsLine = item->lyricsLine();
+    Lyrics* startLyrics = lyricsLine->lyrics();
+
+    ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    Lyrics* endLyrics = nullptr;
+    for (Lyrics* lyr : endChordRest->lyrics()) {
+        if (lyr->no() == startLyrics->no()) {
+            endLyrics = lyr;
+            break;
+        }
+    }
+    if (!endLyrics) {
+        return;
+    }
+
+    System* system = item->system();
+    if (!system) {
+        return;
+    }
+    const MStyle& style = item->style();
+
+    LyricsDashSystemStart lyricsDashSystemStart = style.styleV(Sid::lyricsDashPosAtStartOfSystem).value<LyricsDashSystemStart>();
+
+    const double systemPageX = system->pageX();
+
+    double startX = 0.0;
+    if (!item->isSingleBeginType()) {
+        startX = system->firstNoteRestSegmentX(lyricsDashSystemStart != LyricsDashSystemStart::UNDER_FIRST_NOTE);
+    } else {
+        double lyricsRightEdge = startLyrics->pageX() - system->pageX() + startLyrics->shape().right();
+        startX = lyricsRightEdge + style.styleMM(Sid::lyricsDashPad);
+    }
+
+    double endX = 0.0;
+    if (!item->isSingleEndType() || lyricsLine->tick2() == system->endTick() || !lyricsLine->endElement()) {
+        endX = system->endingXForOpenEndedLines();
+    } else {
+        double lyricsLeftEdge = endLyrics->pageX() - systemPageX + endLyrics->ldata()->bbox().left();
+        endX = lyricsLeftEdge - style.styleMM(Sid::lyricsDashPad);
+    }
+
+    if (item->isSingleBeginType()) {
+        item->ryoffset() = startLyrics->offset().y();
+    } else {
+        item->ryoffset() = endLyrics->offset().y();
+    }
+
+    double y = 0.0; // actual value is set later
+
+    item->setPos(startX, y);
+    item->setPos2(PointF(endX - startX, 0.0));
+
+    double curLength = endX - startX;
+    double dashMinLength = style.styleMM(Sid::lyricsDashMinLength);
+    int dashCount = std::floor(curLength / style.styleMM(Sid::lyricsDashMaxDistance));
+    if (curLength > dashMinLength || style.styleB(Sid::lyricsDashForce)) {
+        dashCount = std::max(dashCount, 1);
+    }
+
+    if (curLength < dashMinLength && dashCount > 0) {
+        double diff = dashMinLength - curLength;
+        bool isDashOnFirstSyllable = lyricsLine->tick2() == system->firstMeasure()->tick();
+        if (isDashOnFirstSyllable) {
+            startX -= diff;
+        } else {
+            startX -= 0.5 * diff;
+            endX += 0.5 * diff;
+        }
+        item->setPos(startX, y);
+        item->setPos2(PointF(endX - startX, 0.0));
+        curLength = endX - startX;
+    }
+
+    double dashWidth = std::min(curLength, style.styleMM(Sid::lyricsDashMaxLength).val());
+
+    bool dashesLeftAligned = lyricsDashSystemStart != LyricsDashSystemStart::STANDARD && !item->isSingleBeginType();
+    double dashDist = curLength / (dashesLeftAligned ? dashCount : dashCount + 1);
+    double xDash = 0.0;
+    if (dashesLeftAligned) {
+        for (int i = 0; i < dashCount; ++i) {
+            item->mutldata()->addDash(LineF(PointF(xDash, 0.0), PointF(xDash + dashWidth, 0.0)));
+            xDash += dashDist;
+        }
+    } else {
+        for (int i = 0; i < dashCount; ++i) {
+            xDash += dashDist;
+            item->mutldata()->addDash(LineF(PointF(xDash - 0.5 * dashWidth, 0.0), PointF(xDash + 0.5 * dashWidth, 0.0)));
         }
     }
 }
 
-static void applyLyricsMax(const MStyle& style, Measure* m, staff_idx_t staffIdx, double yMax)
+Lyrics* LyricsLayout::findNextLyrics(ChordRest* endChordRest, int verseNumber)
 {
-    for (Segment& s : m->segments()) {
-        applyLyricsMax(style, s, staffIdx, yMax);
-    }
-}
-
-//---------------------------------------------------------
-//   applyLyricsMin
-//---------------------------------------------------------
-
-static void applyLyricsMin(ChordRest* cr, staff_idx_t staffIdx, double yMin)
-{
-    Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
-    for (Lyrics* l : cr->lyrics()) {
-        if (l->autoplace() && l->placeAbove()) {
-            l->mutldata()->moveY(yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
-            if (l->addToSkyline()) {
-                PointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
-                sk.add(l->ldata()->bbox().translated(offset));
-            }
+    for (Segment* segment = endChordRest->segment()->next1(SegmentType::ChordRest); segment;
+         segment = segment->next1(SegmentType::ChordRest)) {
+        if (!segment->elementAt(endChordRest->track())) {
+            continue;
         }
-    }
-}
-
-static void applyLyricsMin(Measure* m, staff_idx_t staffIdx, double yMin)
-{
-    for (Segment& s : m->segments()) {
-        if (s.isChordRestType()) {
-            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-                if (cr) {
-                    applyLyricsMin(cr, staffIdx, yMin);
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   layoutLyrics
-//
-//    vertical align lyrics
-//
-//---------------------------------------------------------
-
-void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
-{
-    std::vector<staff_idx_t> visibleStaves;
-    for (staff_idx_t staffIdx = system->firstVisibleStaff(); staffIdx < ctx.dom().nstaves();
-         staffIdx = system->nextVisibleStaff(staffIdx)) {
-        visibleStaves.push_back(staffIdx);
-    }
-
-    //int nAbove[nstaves()];
-    std::vector<staff_idx_t> VnAbove(ctx.dom().nstaves());
-
-    for (staff_idx_t staffIdx : visibleStaves) {
-        VnAbove[staffIdx] = 0;
-        for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* m = toMeasure(mb);
-            for (Segment& s : m->segments()) {
-                if (s.isChordRestType()) {
-                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                        ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-                        if (cr) {
-                            staff_idx_t nA = 0;
-                            for (Lyrics* l : cr->lyrics()) {
-                                Lyrics::LayoutData* ldata = l->mutldata();
-                                // user adjusted offset can possibly change placement
-                                if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
-                                    PlacementV p = l->placement();
-                                    Autoplace::rebaseOffset(l, ldata);
-                                    if (l->placement() != p) {
-                                        l->undoResetProperty(Pid::AUTOPLACE);
-                                        //l->undoResetProperty(Pid::OFFSET);
-                                        //l->layout();
-                                    }
-                                }
-                                Autoplace::setOffsetChanged(l, ldata, false);
-                                if (l->placeAbove()) {
-                                    ++nA;
-                                }
-                            }
-                            VnAbove[staffIdx] = std::max(VnAbove[staffIdx], nA);
-                        }
-                    }
-                }
+        ChordRest* nextCR = toChordRest(segment->elementAt(endChordRest->track()));
+        for (Lyrics* lyr : nextCR->lyrics()) {
+            if (lyr->no() == verseNumber) {
+                return lyr;
             }
         }
     }
 
-    for (staff_idx_t staffIdx : visibleStaves) {
-        for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* m = toMeasure(mb);
-            for (Segment& s : m->segments()) {
-                if (s.isChordRestType()) {
-                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                        ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-                        if (cr) {
-                            for (Lyrics* l : cr->lyrics()) {
-                                l->layout2(static_cast<int>(VnAbove[staffIdx]));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    switch (ctx.conf().verticalAlignRange()) {
-    case VerticalAlignRange::MEASURE:
-        for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* m = toMeasure(mb);
-            for (staff_idx_t staffIdx : visibleStaves) {
-                double yMax = findLyricsMaxY(ctx.conf().style(), m, staffIdx);
-                applyLyricsMax(ctx.conf().style(), m, staffIdx, yMax);
-            }
-        }
-        break;
-    case VerticalAlignRange::SYSTEM:
-        for (staff_idx_t staffIdx : visibleStaves) {
-            double yMax = 0.0;
-            double yMin = 0.0;
-            for (MeasureBase* mb : system->measures()) {
-                if (!mb->isMeasure()) {
-                    continue;
-                }
-                yMax = std::max<double>(yMax, findLyricsMaxY(ctx.conf().style(), toMeasure(mb), staffIdx));
-                yMin = std::min(yMin, findLyricsMinY(ctx.conf().style(), toMeasure(mb), staffIdx));
-            }
-            for (MeasureBase* mb : system->measures()) {
-                if (!mb->isMeasure()) {
-                    continue;
-                }
-                applyLyricsMax(ctx.conf().style(), toMeasure(mb), staffIdx, yMax);
-                applyLyricsMin(toMeasure(mb), staffIdx, yMin);
-            }
-        }
-        break;
-    case VerticalAlignRange::SEGMENT:
-        for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* m = toMeasure(mb);
-            for (staff_idx_t staffIdx : visibleStaves) {
-                for (Segment& s : m->segments()) {
-                    double yMax = findLyricsMaxY(ctx.conf().style(), s, staffIdx);
-                    applyLyricsMax(ctx.conf().style(), s, staffIdx, yMax);
-                }
-            }
-        }
-        break;
-    }
+    return nullptr;
 }
 
 void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
@@ -672,10 +451,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         if (endSegment->tick() == endTick && endSegmentElement && endSegmentElement->type() == ElementType::CHORD) {
             // everything is OK if we have reached a chord at right tick on right track
             // advance to next CR, or last segment if no next CR
-            endSegment = endSegment->nextCR(track, true);
-            if (!endSegment) {
-                endSegment = ctx.dom().lastSegment();
-            }
+            endSegment = endSegment->nextCR(track, false);
         } else {
             // FIXUP - lyrics tick count not valid
             // this happens if edits to score have removed the original end segment
@@ -699,7 +475,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
                 // we don't want to make the melisma longer arbitrarily, but there is a possibility that the next
                 // CR won't extend the melisma, so let's check it
                 ps = ns;
-                endSegment = ps->nextCR(track, true);
+                endSegment = ps->nextCR(track, false);
                 EngravingItem* e = endSegment ? endSegment->element(track) : nullptr;
 
                 // check to make sure we have a chord
@@ -720,6 +496,8 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
             // but the line shall include it:
             // include the duration of this last segment in the melisma duration
             lyricsLineTicks = endSegment->tick() - startTick;
+        } else {
+            lyricsLineTicks = item->score()->endTick() - startTick;
         }
     }
 
@@ -743,6 +521,225 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
             item->separator()->removeUnmanaged();
             delete item->separator();
             item->setSeparator(nullptr);
+        }
+    }
+}
+
+void LyricsLayout::computeVerticalPositions(System* system, LayoutContext& ctx)
+{
+    staff_idx_t nStaves = system->score()->nstaves();
+
+    std::vector<staff_idx_t> visibleStaves;
+    visibleStaves.reserve(system->staves().size());
+
+    for (staff_idx_t staffIdx = 0; staffIdx < nStaves; ++staffIdx) {
+        if (system->staff(staffIdx)->show()) {
+            computeVerticalPositions(staffIdx, system, ctx);
+        }
+    }
+}
+
+void LyricsLayout::computeVerticalPositions(staff_idx_t staffIdx, System* system, LayoutContext& ctx)
+{
+    LyricsVersesMap lyricsVersesAbove;
+    LyricsVersesMap lyricsVersesBelow;
+
+    collectLyricsVerses(staffIdx, system, lyricsVersesAbove, lyricsVersesBelow);
+
+    setDefaultPositions(staffIdx, lyricsVersesAbove, lyricsVersesBelow, ctx);
+
+    checkCollisionsWithStaffElements(system, staffIdx, ctx, lyricsVersesAbove, lyricsVersesBelow);
+
+    addToSkyline(system, staffIdx, ctx, lyricsVersesAbove, lyricsVersesBelow);
+}
+
+void LyricsLayout::collectLyricsVerses(staff_idx_t staffIdx, System* system, LyricsVersesMap& lyricsVersesAbove,
+                                       LyricsVersesMap& lyricsVersesBelow)
+{
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& segment : toMeasure(mb)->segments()) {
+            if (!segment.isChordRestType()) {
+                continue;
+            }
+            for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                EngravingItem* element = segment.elementAt(track);
+                if (!element) {
+                    continue;
+                }
+                for (Lyrics* lyrics : toChordRest(element)->lyrics()) {
+                    int verse = lyrics->no();
+                    if (lyrics->placeAbove()) {
+                        lyricsVersesAbove[verse].addLyrics(lyrics);
+                    } else {
+                        lyricsVersesBelow[verse].addLyrics(lyrics);
+                    }
+                }
+            }
+        }
+    }
+
+    for (SpannerSegment* spannerSegment : system->spannerSegments()) {
+        if (spannerSegment->staffIdx() == staffIdx && spannerSegment->isLyricsLineSegment()) {
+            LyricsLineSegment* lyricsLineSegment = toLyricsLineSegment(spannerSegment);
+            Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
+            int verse = lyrics->no();
+            if (lyrics->placeAbove()) {
+                lyricsVersesAbove[verse].addLine(lyricsLineSegment);
+            } else {
+                lyricsVersesBelow[verse].addLine(lyricsLineSegment);
+            }
+        }
+    }
+}
+
+void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& lyricsVersesAbove,
+                                       LyricsVersesMap& lyricsVersesBelow,
+                                       LayoutContext& ctx)
+{
+    double staffHeight = ctx.dom().staff(staffIdx)->staffHeight();
+    double lyricsLineHeightFactor = ctx.conf().styleD(Sid::lyricsLineHeight);
+
+    int totVersesAbove = int(lyricsVersesAbove.size()) - 1;
+
+    for (auto& pair : lyricsVersesAbove) {
+        int verse = pair.first;
+        LyricsVerse& lyricsVerse = pair.second;
+        for (Lyrics* lyrics : lyricsVerse.lyrics()) {
+            double y = -(totVersesAbove - verse) * lyrics->lineHeight() * lyricsLineHeightFactor;
+            lyrics->mutldata()->setPosY(y);
+        }
+        for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
+            Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
+            double y = -(totVersesAbove - verse) * lyrics->lineHeight() * lyricsLineHeightFactor;
+            lyricsLineSegment->move(PointF(0.0, y + lyricsLineSegment->baseLineShift()));
+        }
+    }
+
+    for (auto& pair : lyricsVersesBelow) {
+        int verse = pair.first;
+        LyricsVerse& lyricsVerse = pair.second;
+        for (Lyrics* lyrics : lyricsVerse.lyrics()) {
+            double y = staffHeight + verse * lyrics->lineHeight() * lyricsLineHeightFactor;
+            lyrics->mutldata()->setPosY(y);
+        }
+        for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
+            Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
+            double y = staffHeight + verse * lyrics->lineHeight() * lyricsLineHeightFactor;
+            lyricsLineSegment->move(PointF(0.0, y + lyricsLineSegment->baseLineShift()));
+        }
+    }
+}
+
+void LyricsLayout::checkCollisionsWithStaffElements(System* system, staff_idx_t staffIdx,  LayoutContext& ctx,
+                                                    LyricsVersesMap& lyricsVersesAbove,
+                                                    LyricsVersesMap& lyricsVersesBelow)
+{
+    SysStaff* systemStaff = system->staff(staffIdx);
+
+    double lyricsMinDist = ctx.conf().styleMM(Sid::lyricsMinTopDistance);
+
+    SkylineLine& staffSkylineNorth = systemStaff->skyline().north();
+    SkylineLine& staffSkylineSouth = systemStaff->skyline().south();
+
+    int maxVerseAbove = int(lyricsVersesAbove.size());
+    int maxVerseBelow = int(lyricsVersesBelow.size());
+
+    for (int verse = maxVerseAbove - 1; verse >= 0; --verse) {
+        SkylineLine verseSkyline = createSkylineForVerse(verse, false, lyricsVersesAbove, system);
+        double minDistance = -verseSkyline.minDistance(staffSkylineNorth);
+        if (minDistance < lyricsMinDist) {
+            double diff = lyricsMinDist - minDistance;
+            moveThisVerseAndOuterOnes(verse, 0, true, -diff, lyricsVersesAbove);
+        }
+    }
+
+    for (int verse = 0; verse < maxVerseBelow; ++verse) {
+        SkylineLine verseSkyline = createSkylineForVerse(verse, true, lyricsVersesBelow, system);
+        double minDistance = -staffSkylineSouth.minDistance(verseSkyline);
+        if (minDistance < lyricsMinDist) {
+            double diff = lyricsMinDist - minDistance;
+            moveThisVerseAndOuterOnes(verse, maxVerseBelow, false, diff, lyricsVersesBelow);
+        }
+    }
+}
+
+SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, LyricsVersesMap& lyricsVerses, System* system)
+{
+    double systemX = system->pageX();
+
+    SkylineLine lyricsSkyline(north);
+
+    if (lyricsVerses.count(verse) > 0) {
+        LyricsVerse& lyricsVerse = lyricsVerses[verse];
+        for (Lyrics* lyrics : lyricsVerse.lyrics()) {
+            Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->pos().y()));
+            lyricsSkyline.add(lyricsShape);
+        }
+        for (LyricsLineSegment* lyricsLineSeg : lyricsVerse.lines()) {
+            lyricsSkyline.add(lyricsLineSeg->shape().translate(lyricsLineSeg->pos()));
+        }
+    }
+
+    return lyricsSkyline;
+}
+
+void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, LyricsVersesMap lyricsVerses)
+{
+    auto moveVerse = [&](int verse) {
+        if (lyricsVerses.count(verse) > 0) {
+            LyricsVerse& lyricsVerse = lyricsVerses[verse];
+            for (Lyrics* lyrics : lyricsVerse.lyrics()) {
+                lyrics->move(PointF(0.0, diff));
+            }
+            for (LyricsLineSegment* lyricsLineSeg : lyricsVerse.lines()) {
+                lyricsLineSeg->move(PointF(0.0, diff));
+            }
+        }
+    };
+
+    if (above) {
+        for (int otherVerse = verse; otherVerse >= lastVerse; --otherVerse) {
+            moveVerse(otherVerse);
+        }
+    } else {
+        for (int otherVerse = verse; otherVerse <= lastVerse; ++otherVerse) {
+            moveVerse(otherVerse);
+        }
+    }
+}
+
+void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, LyricsVersesMap& lyricsVersesAbove,
+                                LyricsVersesMap& lyricsVersesBelow)
+{
+    double systemX = system->pageX();
+    double lyricsVerticalPadding = ctx.conf().styleMM(Sid::lyricsMinBottomDistance);
+    Skyline& skyline = system->staff(staffIdx)->skyline();
+    for (auto& pair : lyricsVersesAbove) {
+        LyricsVerse& lyricsVerse = pair.second;
+        for (Lyrics* lyrics : lyricsVerse.lyrics()) {
+            Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->pos().y()));
+            skyline.north().add(lyricsShape.adjust(0.0, -lyricsVerticalPadding, 0.0, 0.0));
+        }
+        for (LyricsLineSegment* lyricsLineSeg : lyricsVerse.lines()) {
+            Shape lineShape = lyricsLineSeg->shape().translate(lyricsLineSeg->pos());
+            skyline.north().add(lineShape.adjust(0.0, -lyricsVerticalPadding, 0.0, 0.0));
+        }
+    }
+    for (auto& pair : lyricsVersesBelow) {
+        LyricsVerse& lyricsVerse = pair.second;
+        for (Lyrics* lyrics : lyricsVerse.lyrics()) {
+            Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->pos().y()));
+            skyline.south().add(lyricsShape.adjust(0.0, 0.0, 0.0, lyricsVerticalPadding));
+        }
+        for (LyricsLineSegment* lyricsLineSeg : lyricsVerse.lines()) {
+            Shape lineShape = lyricsLineSeg->shape().translate(lyricsLineSeg->pos());
+            skyline.south().add(lineShape.adjust(0.0, 0.0, 0.0, lyricsVerticalPadding));
         }
     }
 }

@@ -274,8 +274,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>638</height>
+                <width>601</width>
+                <height>452</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -867,8 +867,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>638</height>
+                <width>406</width>
+                <height>374</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2209,8 +2209,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>737</width>
-             <height>674</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4069,8 +4069,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>882</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -6328,8 +6328,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>578</width>
-                <height>527</height>
+                <width>363</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -10751,8 +10751,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>703</width>
-             <height>674</height>
+             <width>609</width>
+             <height>494</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -10775,13 +10775,105 @@ By default, they will be placed such as that their right end are at the same lev
                <string>Lyrics dash</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_24">
-               <item row="0" column="1">
-                <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
+               <item row="5" column="2">
+                <widget class="QToolButton" name="resetLyricsDashYposRatio">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Dash Y position ratio' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_196">
+                 <property name="text">
+                  <string>Dash Y position ratio:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>lyricsDashYposRatio</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="resetLyricsDashMinLength">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Min. dash length' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0" colspan="2">
+                <widget class="QCheckBox" name="lyricsDashForce">
+                 <property name="text">
+                  <string>Always force dash</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_122">
+                 <property name="text">
+                  <string>Min. dash length:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>lyricsDashMinLength</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QToolButton" name="resetLyricsDashMaxDistance">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Max. dash distance' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_195">
+                 <property name="text">
+                  <string>Dash pad:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>lyricsDashPad</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QToolButton" name="resetLyricsDashMaxLength">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Max. dash length' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
                  <property name="keyboardTracking">
                   <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string>sp</string>
+                 </property>
+                 <property name="minimum">
+                  <double>0.050000000000000</double>
                  </property>
                  <property name="maximum">
                   <double>9.990000000000000</double>
@@ -10790,7 +10882,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <double>0.050000000000000</double>
                  </property>
                  <property name="value">
-                  <double>0.400000000000000</double>
+                  <double>0.800000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -10813,36 +10905,92 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                 </widget>
                </item>
-               <item row="5" column="2">
-                <widget class="QToolButton" name="resetLyricsDashYposRatio">
+               <item row="7" column="2">
+                <widget class="QToolButton" name="resetLyricsShowDashIfSyllableOnFirstNote">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="maximum">
+                  <double>9.990000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.050000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.400000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2">
+                <widget class="QToolButton" name="resetLyricsDashForce">
                  <property name="toolTip">
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Dash Y position ratio' value</string>
+                  <string>Reset 'Always force dash' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
                  </property>
                 </widget>
                </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_189">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_120">
                  <property name="text">
-                  <string>Dash thickness:</string>
+                  <string>Max. dash length:</string>
                  </property>
                  <property name="buddy">
-                  <cstring>lyricsDashLineThickness</cstring>
+                  <cstring>lyricsDashMaxLength</cstring>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="2">
-                <widget class="QToolButton" name="resetLyricsDashMaxDistance">
+               <item row="4" column="2">
+                <widget class="QToolButton" name="resetLyricsDashPad">
                  <property name="toolTip">
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Max. dash distance' value</string>
+                  <string>Reset 'Dash pad' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QDoubleSpinBox" name="lyricsDashYposRatio">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_121">
+                 <property name="text">
+                  <string>Max. dash distance:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>lyricsDashMaxDistance</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QToolButton" name="resetLyricsDashLineThickness">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Dash thickness' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -10871,26 +11019,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                 </widget>
                </item>
-               <item row="6" column="2">
-                <widget class="QToolButton" name="resetLyricsDashForce">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Always force dash' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <widget class="QDoubleSpinBox" name="lyricsDashYposRatio">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
                <item row="3" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashLineThickness">
                  <property name="keyboardTracking">
@@ -10910,134 +11038,50 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2">
-                <widget class="QToolButton" name="resetLyricsDashMinLength">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Min. dash length' value</string>
-                 </property>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_189">
                  <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="0" colspan="2">
-                <widget class="QCheckBox" name="lyricsDashForce">
-                 <property name="text">
-                  <string>Always force dash</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QToolButton" name="resetLyricsDashPad">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Dash pad' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_120">
-                 <property name="text">
-                  <string>Max. dash length:</string>
+                  <string>Dash thickness:</string>
                  </property>
                  <property name="buddy">
-                  <cstring>lyricsDashMaxLength</cstring>
+                  <cstring>lyricsDashLineThickness</cstring>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
-                <widget class="QToolButton" name="resetLyricsDashMaxLength">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
+               <item row="8" column="0" colspan="3">
+                <widget class="QGroupBox" name="groupBox">
+                 <property name="title">
+                  <string>Dash alignment at the start of the system:</string>
                  </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Max. dash length' value</string>
-                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_63">
+                  <item>
+                   <widget class="QRadioButton" name="dashAlignStandard">
+                    <property name="text">
+                     <string>Standard</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="dashAlignHeader">
+                    <property name="text">
+                     <string>Inside the header</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="dashAlignFirstNote">
+                    <property name="text">
+                     <string>Under the first note</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="7" column="0" colspan="2">
+                <widget class="QCheckBox" name="lyricsShowDashIfSyllableOnFirstNote">
                  <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_121">
-                 <property name="text">
-                  <string>Max. dash distance:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>lyricsDashMaxDistance</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QToolButton" name="resetLyricsDashLineThickness">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Dash thickness' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_195">
-                 <property name="text">
-                  <string>Dash pad:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>lyricsDashPad</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_196">
-                 <property name="text">
-                  <string>Dash Y position ratio:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>lyricsDashYposRatio</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_122">
-                 <property name="text">
-                  <string>Min. dash length:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>lyricsDashMinLength</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="minimum">
-                  <double>0.050000000000000</double>
-                 </property>
-                 <property name="maximum">
-                  <double>9.990000000000000</double>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.050000000000000</double>
-                 </property>
-                 <property name="value">
-                  <double>0.800000000000000</double>
+                  <string>Show dash if syllable is on the first note of the system</string>
                  </property>
                 </widget>
                </item>
@@ -11378,13 +11422,13 @@ By default, they will be placed such as that their right end are at the same lev
                <string>Lyrics melisma</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_25">
-               <item row="0" column="2">
-                <widget class="QToolButton" name="resetLyricsLineThickness">
+               <item row="1" column="2">
+                <widget class="QToolButton" name="resetLyricsMelismaPad">
                  <property name="toolTip">
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Melisma thickness' value</string>
+                  <string>Reset 'Melisma pad' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -11410,8 +11454,45 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
+               <item row="2" column="2">
+                <widget class="QToolButton" name="resetMinMelismaLength">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
                 <widget class="mu::notation::AlignSelect" name="lyricsMelismaAlign" native="true"/>
+               </item>
+               <item row="5" column="2">
+                <widget class="QToolButton" name="resetLyricsMelismaAlign">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Align' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_220">
+                 <property name="text">
+                  <string>Min. melisma length:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_188">
+                 <property name="text">
+                  <string>Melisma pad:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>lyricsMelismaPad</cstring>
+                 </property>
+                </widget>
                </item>
                <item row="0" column="0">
                 <widget class="QLabel" name="label_80">
@@ -11423,26 +11504,33 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
-                <widget class="QToolButton" name="resetLyricsMelismaPad">
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_198">
+                 <property name="text">
+                  <string>Align:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QDoubleSpinBox" name="minMelismaLength">
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="resetLyricsLineThickness">
                  <property name="toolTip">
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Melisma pad' value</string>
+                  <string>Reset 'Melisma thickness' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_188">
-                 <property name="text">
-                  <string>Melisma pad:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>lyricsMelismaPad</cstring>
                  </property>
                 </widget>
                </item>
@@ -11465,23 +11553,17 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_198">
+               <item row="4" column="0">
+                <widget class="QCheckBox" name="lyricsMelismaForce">
                  <property name="text">
-                  <string>Align:</string>
+                  <string>Always force melisma line</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="2">
-                <widget class="QToolButton" name="resetLyricsMelismaAlign">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Align' value</string>
-                 </property>
+               <item row="4" column="2">
+                <widget class="QToolButton" name="resetLyricsMelismaForce">
                  <property name="text">
-                  <string notr="true"/>
+                  <string>...</string>
                  </property>
                 </widget>
                </item>
@@ -12265,8 +12347,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>638</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -13243,7 +13325,7 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>583</width>
+                <width>404</width>
                 <height>584</height>
                </rect>
               </property>

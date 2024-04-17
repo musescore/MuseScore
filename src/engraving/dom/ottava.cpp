@@ -416,6 +416,6 @@ PointF Ottava::linePos(Grip grip, System** system) const
 
 void Ottava::doComputeEndElement()
 {
-    setEndElement(score()->findCRinStaff(tick2(), track2staff(track())));
+    setEndElement(score()->findChordRestEndingBeforeTickInStaff(tick2(), track2staff(track())));
 }
 }

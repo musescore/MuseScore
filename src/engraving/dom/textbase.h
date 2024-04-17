@@ -355,6 +355,9 @@ public:
 
     RectF pageRectangle() const;
 
+    const Shape& highResShape() const { return ldata()->highResShape.value(); }
+    void computeHighResShape(const muse::draw::FontMetrics& fontMetrics);
+
     void dragTo(EditData&);
 
     std::vector<LineF> dragAnchorLines() const override;
@@ -459,6 +462,8 @@ public:
         size_t rows() const { return blocks.size(); }
         const TextBlock& textBlock(size_t i) const { return blocks.at(i); }
         TextBlock& textBlock(size_t i) { return blocks[i]; }
+
+        ld_field<Shape> highResShape = { "[TextBase] highResShape", Shape() };
     };
     DECLARE_LAYOUTDATA_METHODS(TextBase)
 
