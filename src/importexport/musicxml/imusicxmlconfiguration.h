@@ -54,6 +54,7 @@ public:
 
     virtual bool needUseDefaultFont() const = 0;
     virtual void setNeedUseDefaultFont(bool value) = 0;
+    virtual void setNeedUseDefaultFontOverride(std::optional<bool> value) = 0;
 
     virtual bool needAskAboutApplyingNewStyle() const = 0;
     virtual void setNeedAskAboutApplyingNewStyle(bool value) = 0;

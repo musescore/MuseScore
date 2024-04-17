@@ -76,6 +76,7 @@ public:
         } importMidi;
 
         struct {
+            std::optional<bool> useDefaultFont;
             std::optional<bool> inferTextType;
         } importMusicXML;
 
