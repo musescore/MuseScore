@@ -2342,6 +2342,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
     ArpeggioMap arpMap;
     DelayedArpMap delayedArps;
+    bool measureHasCoda = false;
 
     // collect candidates for courtesy accidentals to work out at measure end
     QMap<Note*, int> alterMap;
@@ -2351,7 +2352,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (_e.name() == "direction") {
             MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
-            dir.direction(partId, measure, time + mTime, _spanners, delayedDirections, inferredFingerings);
+            dir.direction(partId, measure, time + mTime, _spanners, delayedDirections, inferredFingerings, measureHasCoda, _segnos);
         } else if (_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
@@ -2882,7 +2883,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
                                         const Fraction& tick,
                                         MusicXmlSpannerMap& spanners,
                                         DelayedDirectionsList& delayedDirections,
-                                        InferredFingeringsList& inferredFingerings)
+                                        InferredFingeringsList& inferredFingerings,
+                                        bool& measureHasCoda,
+                                        SegnoStack& segnos)
 {
     //LOGD("direction tick %s", qPrintable(tick.print()));
 
@@ -2926,7 +2929,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     }
 
     handleTempo();
-    handleRepeats(measure, track, tick + _offset);
+    handleRepeats(measure, track, tick + _offset, measureHasCoda, segnos, delayedDirections);
     handleNmiCmi(measure, track, tick + _offset, delayedDirections);
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
@@ -3440,7 +3443,7 @@ void MusicXMLParserDirection::otherDirection()
             otherDirectionStrings = {
                 { String(u"To Coda"), String(u"To Coda") },
                 { String(u"Segno"), String(u"<sym>segno</sym>") },
-                { String(u"CODA"), String(u"<sym>coda</sym>") },
+                { String(u"CODA"), String(u"CODA") },
             };
         }
         static const std::map<String, SymId> otherDirectionSyms = { { String(u"Rhythm dot"), SymId::augmentationDot },
@@ -3468,27 +3471,32 @@ void MusicXMLParserDirection::otherDirection()
     }
 }
 
-//---------------------------------------------------------
-//   matchRepeat
-//---------------------------------------------------------
-
-/**
- Do a wild-card match with known repeat texts.
- */
-
-QString MusicXMLParserDirection::matchRepeat() const
+static const QString getMarkerId(const QString& words)
 {
-    QString plainWords = MScoreTextToMXML::toPlainText(_wordsText.toLower().simplified());
-    QRegularExpression daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
-    QRegularExpression daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
-    QRegularExpression daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
-    QRegularExpression dalSegno("^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
-    QRegularExpression dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
-    QRegularExpression dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
-    QRegularExpression fine("^fine$");
-    QRegularExpression segno("^segno( segno)?$");
-    QRegularExpression toCoda("^to coda( coda)?$");
-    QRegularExpression coda("^coda( coda)?$");
+    // Helper function to set the marker ID string
+    // eg. extract 'II' from 'To Coda II'
+    static const QRegularExpression number("(i{1,3})");
+    QRegularExpressionMatch match = number.match(words);
+    const QStringList nums = match.capturedTexts();
+    if (!nums.empty()) {
+        return nums.at(0);
+    }
+    return "";
+}
+
+QString MusicXMLParserDirection::matchRepeat(const QString& plainWords) const
+{
+    static const QRegularExpression daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
+    static const QRegularExpression daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
+    static const QRegularExpression daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda ?(i{0,3})?$");
+    static const QRegularExpression dalSegno("^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno) ?(i{0,3})?$");
+    static const QRegularExpression dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? ?(\\(.*\\))? al fine$");
+    static const QRegularExpression dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? ?(\\(.*\\))? al coda ?(i{0,3})?$");
+    static const QRegularExpression fine("^fine$");
+    static const QRegularExpression segno("^segno( segno)? ?(i{0,3})?$");
+    static const QRegularExpression toCoda("^to coda( coda)? ?(i{0,3})?$");
+    static const QRegularExpression coda("^coda( coda)? ?(i{0,3})?$");
+
     if (plainWords.contains(daCapo)) {
         return "daCapo";
     }
@@ -3522,67 +3530,19 @@ QString MusicXMLParserDirection::matchRepeat() const
     return "";
 }
 
-//---------------------------------------------------------
-//   findJump
-//---------------------------------------------------------
-
-/**
- Try to find a Jump in \a repeat.
- */
-
-static Jump* findJump(const QString& repeat, Score* score)
+static void addSymbolsToCoda(QString& wordsString, const QString& codaId)
 {
-    Jump* jp = 0;
-    if (repeat == "daCapo") {
-        jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(JumpType::DC);
-    } else if (repeat == "daCapoAlCoda") {
-        jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(JumpType::DC_AL_CODA);
-    } else if (repeat == "daCapoAlFine") {
-        jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(JumpType::DC_AL_FINE);
-    } else if (repeat == "dalSegno") {
-        jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(JumpType::DS);
-    } else if (repeat == "dalSegnoAlCoda") {
-        jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(JumpType::DS_AL_CODA);
-    } else if (repeat == "dalSegnoAlFine") {
-        jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(JumpType::DS_AL_FINE);
+    // Append correct number of symbols to coda text
+    if (!wordsString.contains(u"<sym>coda</sym>")) {
+        QString end = "\n";
+        if (codaId.size() > 0) {
+            end.append(codaId);
+            end.replace("i", "<sym>coda</sym>");
+        } else {
+            end.append("<sym>coda</sym>");
+        }
+        wordsString.append(end);
     }
-    return jp;
-}
-
-//---------------------------------------------------------
-//   findMarker
-//---------------------------------------------------------
-
-/**
- Try to find a Marker in \a repeat.
- */
-
-static Marker* findMarker(const QString& repeat, Score* score)
-{
-    Marker* m = 0;
-    if (repeat == "segno") {
-        m = Factory::createMarker(score->dummy());
-        // note: Marker::read() also contains code to set text style based on type
-        // avoid duplicated code
-        // apparently this MUST be after setTextStyle
-        m->setMarkerType(MarkerType::SEGNO);
-    } else if (repeat == "coda") {
-        m = Factory::createMarker(score->dummy());
-        m->setMarkerType(MarkerType::CODA);
-    } else if (repeat == "fine") {
-        m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
-        m->setMarkerType(MarkerType::FINE);
-    } else if (repeat == "toCoda") {
-        m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
-        m->setMarkerType(MarkerType::TOCODA);
-    }
-    return m;
 }
 
 //---------------------------------------------------------
@@ -3768,17 +3728,67 @@ void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, cons
     _pass2.addInferredHairpin(_inferredHairpinStart);
 }
 
+static QString findDetachedRepeatNumber(const Measure* measure, const track_idx_t track, const Fraction tick, const QString& placement,
+                                        DelayedDirectionsList& directions)
+{
+    static const std::wregex number(L"^(i{1,3})$");
+    DelayedDirectionsList::iterator it;
+
+    for (it = directions.begin(); it != directions.end(); ++it) {
+        MusicXMLDelayedDirectionElement d = **it;
+        const EngravingItem* el = d.element();
+        if (d.track() == track && d.tick() == tick && d.placement() == placement && el->isTextBase()) {
+            const String text = toTextBase(el)->plainText();
+            if (String(text.toLower()).contains(number)) {
+                it = directions.erase(it);
+                return " " + QString(text);
+            }
+        }
+    }
+
+    Segment* s = measure->findSegment(SegmentType::ChordRest, tick);
+    if (s) {
+        for (EngravingItem* el : s->annotations()) {
+            if (el->tick() == tick && el->track() == track && el->placeAbove() == (placement == u"above") && el->isTextBase()) {
+                const String text = toTextBase(el)->plainText();
+                if (text.toLower().contains(number)) {
+                    s->removeAnnotation(el);
+                    return " " + QString(text);
+                }
+            }
+        }
+    }
+
+    return "";
+}
+
+static QString countSegno(const QString& plainWords)
+{
+    // Count how many 's' in D.S. or D.S.S...
+    std::wsmatch matches;
+    const std::wstring str = plainWords.toStdWString();
+    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
+    if (std::regex_search(str, matches, dalSegnoAlCoda)) {
+        const String segnoGroup = String::fromStdWString(matches.str(2)).toLower();
+        const int count = segnoGroup.count('s');
+        return QString::fromStdString(std::string(count, 'i'));
+    }
+    return "";
+}
+
 //---------------------------------------------------------
 //   handleRepeats
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick)
+void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda,
+                                            SegnoStack& segnos, DelayedDirectionsList& delayedDirections)
 {
     if (!configuration()->inferTextType()) {
         return;
     }
     // Try to recognize the various repeats
     QString repeat = "";
+    const QString plainWords = MScoreTextToMXML::toPlainText(_wordsText.toLower().simplified());
     if (_sndCoda != "") {
         repeat = "coda";
     } else if (_sndDacapo != "") {
@@ -3792,12 +3802,73 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
     } else if (_sndToCoda != "") {
         repeat = "toCoda";
     } else {
-        repeat = matchRepeat();
+        repeat = matchRepeat(plainWords);
+    }
+    // Check if repeat number has become detached
+    if (repeat == "coda" || repeat == "segno") {
+        _wordsText += findDetachedRepeatNumber(measure, track, tick, placement(), delayedDirections);
+    }
+
+    // Check if coda is numbered by checking numerals after 'coda' or 'segno'
+    if (repeat == "daCapoAlCoda" || repeat == "toCoda" || repeat == "coda") {
+        _codaId = getMarkerId(plainWords);
+    } else if (repeat == "dalSegnoAlFine" || repeat == "segno" || repeat == "dalSegno") {
+        _segnoId = getMarkerId(plainWords);
+    } else if (repeat == "dalSegnoAlCoda") {
+        // Find numerals eg D.S I al Coda II
+        std::wsmatch matches;
+        std::wstring str = plainWords.toStdWString();
+        static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})?(\\(.*\\))? al coda ?(i{0,3})?$");
+        if (std::regex_search(str, matches, dalSegnoAlCoda)) {
+            _segnoId = String::fromStdWString(matches.str(3));
+            _codaId = String::fromStdWString(matches.str(5));
+        }
+    }
+
+    if ((repeat == "dalSegno" || repeat == "dalSegnoAlCoda") && _segnoId.isEmpty()) {
+        // If no numeral, count how many 's' in D.S. or D.S.S...
+        _segnoId = countSegno(plainWords);
     }
 
     if (repeat != "") {
         TextBase* tb = nullptr;
-        if ((tb = findJump(repeat, _score)) || (tb = findMarker(repeat, _score))) {
+        if (_codaId == u"i") {
+            _codaId.clear();
+        }
+        if (_segnoId == u"i") {
+            _segnoId.clear();
+        }
+        _wordsText = TextBase::unEscape(_wordsText);
+        if ((repeat == "coda" || repeat == u"toCoda") && measureHasCoda) {
+            // If there is already a coda in the bar, discard this marker
+            _wordsText.clear();
+            return;
+        } else if ((tb = findJump(repeat)) || (tb = findMarker(repeat))) {
+            if (tb->isMarker()) {
+                if (repeat == "segno") {
+                    if (Marker* prevSegno = mu::value(segnos, tick.ticks(), nullptr)) {
+                        // If there is another segno at this tick, combine their text and increase the label
+                        // eg. two segno symbols will have the label 'segnoii'
+                        if (prevSegno->xmlText().contains(u"<sym>segno</sym>") && _wordsText.contains(u"<sym>segno</sym>")) {
+                            prevSegno->setXmlText(prevSegno->xmlText() + u" " + String(_wordsText));
+                            _wordsText.clear();
+                            const int segnoCount = prevSegno->xmlText().count(u"<sym>segno</sym>");
+                            const String label = String::fromStdString(std::string(segnoCount, 'i'));
+                            prevSegno->setLabel(prevSegno->label() + label);
+
+                            return;
+                        }
+                    } else {
+                        segnos.insert(std::pair<int, Marker*>(tick.ticks(), toMarker(tb)));
+                    }
+                } else {
+                    if (repeat == "coda" || repeat == "toCoda") {
+                        measureHasCoda = true;
+                        addSymbolsToCoda(_wordsText, _codaId);
+                    }
+                }
+            }
+
             tb->setTrack(track);
             if (!_wordsText.isEmpty()) {
                 tb->setXmlText(_wordsText);
@@ -3826,6 +3897,63 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
             measure->add(tb);
         }
     }
+}
+
+Marker* MusicXMLParserDirection::findMarker(const String& repeat) const
+{
+    Marker* m = nullptr;
+    if (repeat == u"segno") {
+        m = Factory::createMarker(_score->dummy());
+        // note: Marker::read() also contains code to set text style based on type
+        // avoid duplicated code
+        // apparently this MUST be after setTextStyle
+        m->setMarkerType(MarkerType::SEGNO);
+        m->setLabel(m->label() + String(_segnoId));
+    } else if (repeat == u"coda") {
+        m = Factory::createMarker(_score->dummy());
+        m->setMarkerType(MarkerType::CODA);
+        m->setLabel(m->label() + String(_codaId));
+    } else if (repeat == u"fine") {
+        m = Factory::createMarker(_score->dummy(), TextStyleType::REPEAT_RIGHT);
+        m->setMarkerType(MarkerType::FINE);
+    } else if (repeat == u"toCoda") {
+        m = Factory::createMarker(_score->dummy(), TextStyleType::REPEAT_RIGHT);
+        m->setMarkerType(MarkerType::TOCODA);
+        m->setLabel(m->label() + String(_codaId));
+    }
+    return m;
+}
+
+Jump* MusicXMLParserDirection::findJump(const String& repeat) const
+{
+    Jump* jp = nullptr;
+    if (repeat == u"daCapo") {
+        jp = Factory::createJump(_score->dummy()->measure());
+        jp->setJumpType(JumpType::DC);
+    } else if (repeat == u"daCapoAlCoda") {
+        jp = Factory::createJump(_score->dummy()->measure());
+        jp->setJumpType(JumpType::DC_AL_CODA);
+        jp->setPlayUntil(jp->playUntil() + String(_codaId));
+        jp->setContinueAt(jp->continueAt() + String(_codaId));
+    } else if (repeat == u"daCapoAlFine") {
+        jp = Factory::createJump(_score->dummy()->measure());
+        jp->setJumpType(JumpType::DC_AL_FINE);
+    } else if (repeat == u"dalSegno") {
+        jp = Factory::createJump(_score->dummy()->measure());
+        jp->setJumpType(JumpType::DS);
+        jp->setJumpTo(jp->jumpTo() + String(_segnoId));
+    } else if (repeat == u"dalSegnoAlCoda") {
+        jp = Factory::createJump(_score->dummy()->measure());
+        jp->setJumpType(JumpType::DS_AL_CODA);
+        jp->setJumpTo(jp->jumpTo() + String(_segnoId));
+        jp->setPlayUntil(jp->playUntil() + String(_codaId));
+        jp->setContinueAt(jp->continueAt() + String(_codaId));
+    } else if (repeat == u"dalSegnoAlFine") {
+        jp = Factory::createJump(_score->dummy()->measure());
+        jp->setJumpType(JumpType::DS_AL_FINE);
+        jp->setJumpTo(jp->jumpTo() + String(_segnoId));
+    }
+    return jp;
 }
 
 //---------------------------------------------------------
