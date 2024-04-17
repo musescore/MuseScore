@@ -3238,7 +3238,7 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, ReadChor
     readChordListHook.validate();
 }
 
-bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
+bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx, std::optional<double> spatium)
 {
     while (e.readNextStartElement()) {
         ctx.setTrack(mu::nidx);
@@ -3277,17 +3277,13 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "showMargins") {
             score->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            double sp = score->style().value(Sid::spatium).toReal();
             ReadChordListHook clhook(score);
             readStyle206(&score->style(), e, ctx, clhook);
             if (score->style().styleSt(Sid::MusicalTextFont) == "MuseJazz") {
                 score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
             }
-            // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
-            if (score->layoutMode() == LayoutMode::FLOAT) {
-                // style should not change spatium in
-                // float mode
-                score->style().set(Sid::spatium, sp);
+            if (spatium.has_value()) [[unlikely]] {
+                score->style().set(Sid::spatium, spatium.value());
             }
             score->setEngravingFont(engravingFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString()));
         } else if (tag == "copyright" || tag == "rights") {
@@ -3367,7 +3363,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 ReadContext exCtx(s);
                 exCtx.setMasterCtx(&ctx);
 
-                readScore206(s, e, exCtx);
+                readScore206(s, e, exCtx, spatium);
 
                 ex->setTracksMapping(ctx.tracks());
                 m->addExcerpt(ex);
@@ -3421,7 +3417,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out, std::optional<double> spatium)
 {
     ReadContext ctx(score);
     DEFER {
@@ -3437,7 +3433,7 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "programRevision") {
             score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
-            if (!readScore206(score, e, ctx)) {
+            if (!readScore206(score, e, ctx, spatium)) {
                 return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {

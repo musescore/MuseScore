@@ -33,7 +33,8 @@ public:
     //   read114
     //    import old version <= 1.3 files
     //---------------------------------------------------------
-    Err readScore(Score* masterScore, XmlReader& e, rw::ReadInOutData* out) override;
+    Err readScore(Score* masterScore, XmlReader& e, rw::ReadInOutData* out,
+                  std::optional<double> spatium = std::nullopt) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;

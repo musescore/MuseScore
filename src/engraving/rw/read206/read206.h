@@ -66,7 +66,8 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
+    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out,
+                  std::optional<double> spatium = std::nullopt) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
@@ -95,7 +96,8 @@ public:
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 
-    static bool readScore206(Score* score, XmlReader& e, read400::ReadContext& ctx);
+    static bool readScore206(Score* score, XmlReader& e, read400::ReadContext& ctx,
+                             std::optional<double> spatium = std::nullopt);
     static void readPart206(Part* part, XmlReader& e, read400::ReadContext& ctx);
 };
 }

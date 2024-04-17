@@ -35,9 +35,11 @@ class Read410 : public rw::IReader
 {
 public:
 
-    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* data) override;
+    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* data,
+                  std::optional<double> spatium = std::nullopt) override;
 
-    static bool readScore410(Score* score, XmlReader& e, ReadContext& ctx);
+    static bool readScore410(Score* score, XmlReader& e, ReadContext& ctx,
+                             std::optional<double> spatium = std::nullopt);
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;

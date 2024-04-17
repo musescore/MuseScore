@@ -52,7 +52,7 @@ using namespace mu::engraving::read400;
 using namespace mu::engraving::read302;
 using namespace mu::engraving::compat;
 
-bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
+bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx, std::optional<double> spatium)
 {
     while (e.readNextStartElement()) {
         ctx.setTrack(mu::nidx);
@@ -91,15 +91,10 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "markIrregularMeasures") {
             score->m_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            double sp = score->style().value(Sid::spatium).toReal();
-
             ReadStyleHook::readStyleTag(score, e);
 
-            // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
-            if (score->layoutOptions().isMode(LayoutMode::FLOAT)) {
-                // style should not change spatium in
-                // float mode
-                score->style().set(Sid::spatium, sp);
+            if (spatium.has_value()) [[unlikely]] {
+                score->style().set(Sid::spatium, spatium.value());
             }
             score->m_engravingFont = engravingFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString());
         } else if (tag == "copyright" || tag == "rights") {
@@ -253,7 +248,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out, std::optional<double> spatium)
 {
     ReadContext ctx(score);
 
@@ -270,7 +265,7 @@ Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "programRevision") {
             score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
-            if (!readScore302(score, e, ctx)) {
+            if (!readScore302(score, e, ctx, spatium)) {
                 if (e.error() == XmlStreamReader::CustomError) {
                     return Err::FileCriticallyCorrupted;
                 }

@@ -2836,7 +2836,7 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out, std::optional<double> spatium)
 {
     IF_ASSERT_FAILED(score->isMaster()) {
         return Err::FileUnknownError;
@@ -2900,7 +2900,11 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "SyntiSettings") {
             masterScore->m_synthesizerState.read(e);
         } else if (tag == "Spatium") {
-            masterScore->style().setSpatium(e.readDouble() * DPMM);
+            if (spatium.has_value()) [[unlikely]] {
+                e.skipCurrentElement();
+            } else {
+                masterScore->style().setSpatium(e.readDouble() * DPMM);
+            }
         } else if (tag == "Division") {
             masterScore->m_fileDivision = e.readInt();
         } else if (tag == "showInvisible") {
@@ -2910,7 +2914,6 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "showMargins") {
             masterScore->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            double sp = masterScore->style().spatium();
             compat::ReadChordListHook clhook(masterScore);
             readStyle(&masterScore->style(), e, clhook);
             //style()->load(e);
@@ -2919,10 +2922,8 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             if (masterScore->style().styleB(Sid::useGermanNoteNames)) {
                 masterScore->style().set(Sid::useStandardNoteNames, false);
             }
-            if (masterScore->layoutMode() == LayoutMode::FLOAT) {
-                // style should not change spatium in
-                // float mode
-                masterScore->style().setSpatium(sp);
+            if (spatium.has_value()) [[unlikely]] {
+                masterScore->style().setSpatium(spatium.value());
             }
         } else if (tag == "TextStyle") {
             e.skipCurrentElement();

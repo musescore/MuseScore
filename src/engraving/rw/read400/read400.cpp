@@ -55,7 +55,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
-Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
+Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data, std::optional<double> spatium)
 {
     ReadContext ctx(score);
 
@@ -78,7 +78,7 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         } else if (tag == "Revision") {
             e.skipCurrentElement();
         } else if (tag == "Score") {
-            if (!readScore400(score, e, ctx)) {
+            if (!readScore400(score, e, ctx, spatium)) {
                 if (e.error() == XmlStreamReader::CustomError) {
                     return Err::FileCriticallyCorrupted;
                 }
@@ -106,7 +106,7 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
     return Err::NoError;
 }
 
-bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
+bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx, std::optional<double> spatium)
 {
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
@@ -148,6 +148,9 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "markIrregularMeasures") {
             score->m_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
+            if (spatium.has_value()) [[unlikely]] {
+                score->style().set(Sid::spatium, spatium.value());
+            }
             // Since version 400, the style is stored in a separate file
             e.skipCurrentElement();
         } else if (tag == "copyright" || tag == "rights") {

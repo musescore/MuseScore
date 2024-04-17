@@ -71,7 +71,7 @@ static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
 }
 
 mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
-                            bool ignoreVersionError)
+                            bool ignoreVersionError, std::optional<double> spatium)
 {
     TRACEFUNC;
 
@@ -127,7 +127,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
         XmlReader xml(scoreData);
         xml.setDocName(docName);
 
-        ret = readMasterScore(masterScore, xml, ignoreVersionError, &masterReadOutData, &styleHook);
+        ret = readMasterScore(masterScore, xml, ignoreVersionError, &masterReadOutData, &styleHook, spatium);
     }
 
     // Read excerpts
@@ -161,7 +161,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
                 break;
             }
 
-            Err err = reader.val->readScore(partScore, xml, &partReadInData);
+            Err err = reader.val->readScore(partScore, xml, &partReadInData, spatium);
             ret =  make_ret(err);
             if (!ret) {
                 break;
@@ -203,7 +203,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 }
 
 mu::Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVersionError, ReadInOutData* out,
-                                   compat::ReadStyleHook* styleHook)
+                                   compat::ReadStyleHook* styleHook, std::optional<double> spatium)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -235,7 +235,7 @@ mu::Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignore
                 score->checkChordList();
             }
 
-            Err err = reader.val->readScore(score, e, out);
+            Err err = reader.val->readScore(score, e, out, spatium);
 
             score->setExcerptsChanged(false);
 

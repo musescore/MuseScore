@@ -43,12 +43,12 @@ class MscLoader
 public:
     MscLoader() = default;
 
-    Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
+    Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError, std::optional<double> spatium = std::nullopt);
 
 private:
     friend class MasterScore;
     Ret readMasterScore(MasterScore* score, XmlReader&, bool ignoreVersionError, rw::ReadInOutData* out = nullptr,
-                        compat::ReadStyleHook* styleHook = nullptr);
+                        compat::ReadStyleHook* styleHook = nullptr, std::optional<double> spatium = std::nullopt);
 };
 }
 

@@ -60,7 +60,8 @@ class IReader
 public:
     virtual ~IReader() = default;
 
-    virtual Err readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
+    virtual Err readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out,
+                          std::optional<double> spatium = std::nullopt) = 0;
 
     using Supported = std::variant<std::monostate,
                                    Accidental*,
