@@ -2686,6 +2686,9 @@ void MusicXMLParserPass2::staffDetails(const String& partId, Measure* measure)
             }
         } else if (m_e.name() == "staff-tuning") {
             staffTuning(t);
+        } else if (m_e.name() == "staff-size") {
+            const double val = m_e.readText().toDouble() / 100;
+            m_score->staff(staffIdx)->setProperty(Pid::MAG, val);
         } else {
             skipLogCurrElem();
         }

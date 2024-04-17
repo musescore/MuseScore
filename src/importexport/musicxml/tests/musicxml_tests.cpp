@@ -951,8 +951,11 @@ TEST_F(Musicxml_Tests, sound2) {
 TEST_F(Musicxml_Tests, specialCharacters) {
     mxmlIoTest("testSpecialCharacters");
 }
-TEST_F(Musicxml_Tests, testStaffEmptiness) {
+TEST_F(Musicxml_Tests, staffEmptiness) {
     mxmlImportTestRef("testStaffEmptiness");
+}
+TEST_F(Musicxml_Tests, staffSize) {
+    mxmlIoTest("testStaffSize");
 }
 TEST_F(Musicxml_Tests, staffTwoKeySigs) {
     mxmlIoTest("testStaffTwoKeySigs");
