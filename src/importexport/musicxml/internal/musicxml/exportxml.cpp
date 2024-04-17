@@ -134,6 +134,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::io;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;

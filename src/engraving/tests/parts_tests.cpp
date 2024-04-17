@@ -1025,7 +1025,7 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveMeasureRepeat)
 //   Image
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, DISABLED_createPartImage)
+TEST_F(Engraving_PartsTests, createPartImage)
 {
     testPartCreation(u"part-image");
 }
@@ -1134,7 +1134,7 @@ TEST_F(Engraving_PartsTests, removeImage)
 //   undoRemoveImage
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, DISABLED_undoRemoveImage)
+TEST_F(Engraving_PartsTests, undoRemoveImage)
 {
     MasterScore* score = doRemoveImage();
     score->undoRedo(true, 0);
