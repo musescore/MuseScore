@@ -19,8 +19,8 @@ Freeware=true
 CommercialUse=true
 
 [Version]
-PackageVersion=@MUSESCORE_VERSION@.1
-DisplayVersion=@MUSESCORE_VERSION@
+PackageVersion=@MUSE_APP_VERSION@.1
+DisplayVersion=@MUSE_APP_VERSION@
 
 [Control]
 Icons=1

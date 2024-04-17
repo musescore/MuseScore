@@ -130,9 +130,9 @@ static void setTempo(mu::engraving::Score* score, int tempo)
     tt->setTempo(double(tempo) / 60.0);
     tt->setTrack(0);
     tt->setFollowText(true);
-    mu::String tempoText = mu::engraving::TempoText::duration2tempoTextString(mu::engraving::DurationType::V_QUARTER);
+    muse::String tempoText = mu::engraving::TempoText::duration2tempoTextString(mu::engraving::DurationType::V_QUARTER);
     tempoText += u" = ";
-    tempoText += mu::String::number(tempo);
+    tempoText += muse::String::number(tempo);
     tt->setXmlText(tempoText);
     segment->add(tt);
 }
