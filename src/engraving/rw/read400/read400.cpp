@@ -108,6 +108,9 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data, std:
 
 bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx, std::optional<double> spatium)
 {
+    if (spatium.has_value()) [[unlikely]] {
+        score->style().set(Sid::spatium, spatium.value());
+    }
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
         ctx.setTrack(mu::nidx);
@@ -148,9 +151,6 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx, std::op
         } else if (tag == "markIrregularMeasures") {
             score->m_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            if (spatium.has_value()) [[unlikely]] {
-                score->style().set(Sid::spatium, spatium.value());
-            }
             // Since version 400, the style is stored in a separate file
             e.skipCurrentElement();
         } else if (tag == "copyright" || tag == "rights") {
