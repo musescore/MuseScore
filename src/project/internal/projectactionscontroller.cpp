@@ -248,8 +248,19 @@ Ret ProjectActionsController::openProject(const muse::io::path_t& givenPath, con
 
     //! Step 5. If it's a cloud project, download the latest version
     if (configuration()->isCloudProject(actualPath) && !configuration()->isLegacyCloudProject(actualPath)) {
-        downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
-        return make_ret(Ret::Code::Ok);
+        bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
+        if (isCloudAvailable) {
+            downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
+            return make_ret(Ret::Code::Ok);
+        }
+
+        if (fileSystem()->exists(actualPath)) {
+            return doOpenCloudProjectOffline(actualPath, displayNameOverride);
+        }
+
+        Ret ret = make_ret(cloud::Err::NetworkError);
+        openSaveProjectScenario()->showCloudOpenError(ret);
+        return ret;
     }
 
     //! Step 6. Open project in the current window
@@ -344,6 +355,24 @@ Ret ProjectActionsController::doOpenCloudProject(const muse::io::path_t& filePat
         recentFilesController()->prependRecentFile(makeRecentFile(project));
     }
 
+    globalContext()->setCurrentProject(project);
+
+    return doFinishOpenProject();
+}
+
+muse::Ret ProjectActionsController::doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride)
+{
+    RetVal<INotationProjectPtr> rv = loadProject(filePath);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    INotationProjectPtr project = rv.val;
+    CloudProjectInfo info = project->cloudInfo();
+    info.name = displayNameOverride;
+    project->setCloudInfo(info);
+
+    recentFilesController()->prependRecentFile(makeRecentFile(project));
     globalContext()->setCurrentProject(project);
 
     return doFinishOpenProject();

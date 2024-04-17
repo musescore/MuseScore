@@ -194,6 +194,7 @@ private:
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);
     muse::Ret doOpenProject(const muse::io::path_t& filePath);
     muse::Ret doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
+    muse::Ret doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride);
 
     muse::Ret doFinishOpenProject();
     muse::Ret openPageIfNeed(muse::Uri pageUri);
