@@ -234,10 +234,11 @@ using SegnoStack = std::map<int, Marker*>;
 class MusicXMLParserNotations
 {
 public:
-    MusicXMLParserNotations(muse::XmlStreamReader& e, Score* score, MxmlLogger* logger);
+    MusicXMLParserNotations(muse::XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap,
+                    DelayedArpMap& delayedArps);
     String errors() const { return m_errors; }
     MusicXmlTupletDesc tupletDesc() const { return m_tupletDesc; }
     String tremoloType() const { return m_tremoloType; }
@@ -262,7 +263,8 @@ private:
     void tuplet();
     void otherNotation();
     muse::XmlStreamReader& m_e;
-    const Score* m_score = nullptr;                         // the score
+    MusicXMLParserPass1& m_pass1;
+    Score* m_score = nullptr;                         // the score
     MxmlLogger* m_logger = nullptr;                              // the error logger
     String m_errors;                    // errors to present to the user
     MusicXmlTupletDesc m_tupletDesc;
@@ -376,7 +378,7 @@ private:
 
     Glissando* m_glissandi[MAX_NUMBER_LEVEL][2];     // Current slides ([0]) / glissandi ([1])
 
-    Tie* m_tie = nullptr;
+    std::map<int, Tie*> m_ties;
     Volta* m_lastVolta = nullptr;
     bool m_hasDrumset;                             // drumset defined TODO: move to pass 1
 
