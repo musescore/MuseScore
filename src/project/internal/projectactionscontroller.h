@@ -189,6 +189,7 @@ private:
     RetVal<INotationProjectPtr> loadProject(const io::path_t& filePath);
     Ret doOpenProject(const io::path_t& filePath);
     Ret doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
+    Ret doOpenCloudProjectOffline(const io::path_t& filePath, const QString& displayNameOverride);
 
     Ret doFinishOpenProject();
     Ret openPageIfNeed(Uri pageUri);
