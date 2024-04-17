@@ -56,6 +56,10 @@ public:
 
     bool inferTextType() const override;
     void setInferTextType(bool value) override;
+    void setInferTextTypeOverride(std::optional<bool> value) override;
+
+private:
+    std::optional<bool> m_inferTextTypeOverride;
 };
 }
 

@@ -63,6 +63,7 @@ public:
 
     virtual bool inferTextType() const = 0;
     virtual void setInferTextType(bool value) = 0;
+    virtual void setInferTextTypeOverride(std::optional<bool> value) = 0;
 };
 }
 

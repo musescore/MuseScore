@@ -138,10 +138,19 @@ void MusicXmlConfiguration::setNeedAskAboutApplyingNewStyle(bool value)
 
 bool MusicXmlConfiguration::inferTextType() const
 {
+    if (m_inferTextTypeOverride.has_value()) {
+        return m_inferTextTypeOverride.value();
+    }
+
     return settings()->value(MUSICXML_IMPORT_INFER_TEXT_TYPE).toBool();
 }
 
 void MusicXmlConfiguration::setInferTextType(bool value)
 {
     settings()->setSharedValue(MUSICXML_IMPORT_INFER_TEXT_TYPE, Val(value));
+}
+
+void MusicXmlConfiguration::setInferTextTypeOverride(std::optional<bool> value)
+{
+    m_inferTextTypeOverride = value;
 }
