@@ -1157,9 +1157,16 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
                   articSym = SymId::ornamentDownMordent;
             }
       if (articSym != SymId::noSym) {
+            const QString place = notation.attribute("placement");
             const QColor color { notation.attribute("color") };
             Articulation* na = new Articulation(cr->score());
             na->setSymId(articSym);
+            if (place == "above")
+                  na->setAnchor(ArticulationAnchor::TOP_CHORD);
+            else if (place == "below")
+                  na->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+            else
+                  na->setAnchor(ArticulationAnchor::CHORD);
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   na->setColor(color);
             cr->add(na);
@@ -1295,7 +1302,7 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  */
 
 static void addTextToNote(int l, int c, QString txt, QString placement, QString fontWeight,
-                          qreal fontSize, QString fontStyle, QString fontFamily, Tid subType, Score* score, Note* note)
+                          qreal fontSize, QString fontStyle, QString fontFamily, QColor color, Tid subType, Score* score, Note* note)
       {
       if (note) {
             if (!txt.isEmpty()) {
@@ -1323,6 +1330,10 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
                   if (!placement.isEmpty()) {
                         t->setPlacement(placement == "below" ? Placement::BELOW : Placement::ABOVE);
                         t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                        }
+                  if (color.isValid()) {
+                        t->setColor(color);
+                        t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
                         }
                   note->add(t);
                   }
@@ -3280,6 +3291,11 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t->setFrameRound(0);
                         }
 
+                  if (_color.isValid()) {
+                        t->setColor(_color);
+                        t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+                        }
+
                   QString wordsPlacement = placement();
                   // Case-based defaults
                   if (wordsPlacement.isEmpty()) {
@@ -3462,6 +3478,8 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                         n--;  // make zero-based
                   }
             QString type = _e.attributes().value("type").toString();
+            _color       = _e.attributes().value("color").toString();
+
             if  (_e.name() == "metronome")
                   _metroText = metronome(_tpoMetro);
             else if (_e.name() == "words") {
@@ -3966,7 +3984,8 @@ void MusicXMLInferredFingering::addToNotes(std::vector<Note*>& notes) const
       Q_ASSERT(static_cast<int>(notes.size()) >= _fingerings.size());
       for (int i = 0; i < _fingerings.size(); ++i) {
             // Fingerings in reverse order
-            addTextToNote(-1, -1, _fingerings[_fingerings.size() - 1 - i], _placement, "", -1, "", "", Tid::FINGERING, notes[i]->score(), notes[i]);
+            addTextToNote(-1, -1, _fingerings[_fingerings.size() - 1 - i], _placement, "", -1, "", "",
+                        QColor(), Tid::FINGERING, notes[i]->score(), notes[i]);
             }
       }
 
@@ -5484,6 +5503,14 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, const Fractio
 //   handleSmallness
 //---------------------------------------------------------
 
+/**
+ * Handle the distinction between small notes and a small
+ * chord, to ensure a chord with all small notes is small.
+ * This also handles the fact that a small note being added
+ * to a small chord should not itself be small.
+ * I.e. a chord is "small until proven otherwise".
+ */
+
 static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
       {
       if (cueOrSmall)
@@ -6009,6 +6036,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             }
       else {
+            handleSmallness(cue || isSmall, note, c);
+            note->setPlay(!cue);          // cue notes don't play
+            note->setHeadGroup(headGroup);
+            if (noteColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+                  note->setColor(noteColor);
+            setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
+            note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
+
             if (!grace) {
                   handleSmallness(cue || isSmall, note, c);
                   note->setPlay(!cue);          // cue notes don't play
@@ -6527,8 +6562,6 @@ FretDiagram* MusicXMLParserPass2::frame(qreal& defaultY, qreal& relativeY)
 void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const Fraction sTime, DelayedDirectionsList& delayedDirections)
       {
       int track = _pass1.trackForPart(partId);
-
-
       qreal defaultY = 0;
       qreal relativeY = 0;
       bool hasTotalY = false;
@@ -6696,8 +6729,12 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       ha->render();
 
       ha->setVisible(printObject);
-      if (color.isValid())
+      if (placement == "below")
+            ha->setPlacement(Placement::BELOW);
+      if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
             ha->setColor(color);
+            ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+            }
 
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
@@ -7122,8 +7159,17 @@ void MusicXMLParserNotations::articulations()
                         _breath = SymId::breathMarkComma;
                   }
             else if (_e.name() == "caesura") {
+                  auto value = _e.readElementText();
+                  if (value == "curved")
+                        _breath = SymId::caesuraCurved;
+                  else if (value == "short")
+                        _breath = SymId::caesuraShort;
+                  else if (value == "thick")
+                        _breath = SymId::caesuraThick;
+                  else if (value == "single")
+                        _breath = SymId::caesuraSingleStroke;
+                  else // Use as the default symbol
                         _breath = SymId::caesura;
-                        _e.skipCurrentElement();  // skip but don't log
                   }
             else if (_e.name() == "doit"
                      || _e.name() == "falloff"
@@ -7272,16 +7318,17 @@ void MusicXMLParserNotations::harmonic()
 
 void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
       {
-      QString placement = notation.attribute("placement");
-      QString fontWeight = notation.attribute("font-weight");
-      qreal fontSize = notation.attribute("font-size").toDouble();
-      QString fontStyle = notation.attribute("font-style");
-      QString fontFamily = notation.attribute("font-family");
+      const QString placement = notation.attribute("placement");
+      const QString fontWeight = notation.attribute("font-weight");
+      const qreal fontSize = notation.attribute("font-size").toDouble();
+      const QString fontStyle = notation.attribute("font-style");
+      const QString fontFamily = notation.attribute("font-family");
+      const QColor color = notation.attribute("color");
       if (notation.name() == "fingering") {
             // TODO: distinguish between keyboards (style Tid::FINGERING)
             // and (plucked) strings (style Tid::LH_GUITAR_FINGERING)
             addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                          Tid::FINGERING, _score, note);
+                          color, Tid::FINGERING, _score, note);
             }
       else if (notation.name() == "fret") {
             auto fret = notation.text().toInt();
@@ -7294,7 +7341,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
             }
       else if (notation.name() == "pluck") {
             addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                          Tid::RH_GUITAR_FINGERING, _score, note);
+                          color, Tid::RH_GUITAR_FINGERING, _score, note);
             }
       else if (notation.name() == "string") {
             if (note) {
@@ -7302,7 +7349,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
                         note->setString(notation.text().toInt() - 1);
                   else
                         addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                                      Tid::STRING_NUMBER, _score, note);
+                                      color, Tid::STRING_NUMBER, _score, note);
                   }
             else
                   _logger->logError("no note for string", &_e);
@@ -7708,7 +7755,8 @@ void MusicXMLParserNotations::parse()
       while (_e.readNextStartElement()) {
             if (_e.name() == "arpeggiate") {
                   _arpeggioType = _e.attributes().value("direction").toString();
-                  if (_arpeggioType.isEmpty()) _arpeggioType = "none";
+                  if (_arpeggioType.isEmpty())
+                        _arpeggioType = "none";
                   _e.skipCurrentElement();  // skip but don't log
                   }
             else if (_e.name() == "articulations") {

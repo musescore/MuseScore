@@ -25,12 +25,8 @@
  Definition of class MusicXML
 */
 
-#include "libmscore/fraction.h"
-#include "libmscore/mscore.h"
-#include "libmscore/pitchspelling.h"
 #include "libmscore/line.h"
-#include "importxmlfirstpass.h"
-#include "musicxmlsupport.h"
+#include "libmscore/mscore.h"
 
 namespace Ms {
 

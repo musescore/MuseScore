@@ -371,7 +371,7 @@
         <stem>down</stem>
         <notations>
           <articulations>
-            <breath-mark>comma</breath-mark>
+            <breath-mark placement="above">comma</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -386,7 +386,7 @@
         <stem>down</stem>
         <notations>
           <articulations>
-            <breath-mark>comma</breath-mark>
+            <breath-mark placement="above">comma</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -569,7 +569,7 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <caesura/>
+            <caesura placement="above"/>
             </articulations>
           </notations>
         </note>

@@ -59,7 +59,7 @@
         <voice>1</voice>
         <notations>
           <articulations>
-            <breath-mark>comma</breath-mark>
+            <breath-mark placement="above">comma</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -71,7 +71,7 @@
         <voice>1</voice>
         <notations>
           <articulations>
-            <breath-mark>tick</breath-mark>
+            <breath-mark placement="above">tick</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -83,7 +83,7 @@
         <voice>1</voice>
         <notations>
           <articulations>
-            <breath-mark>upbow</breath-mark>
+            <breath-mark placement="above">upbow</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -95,7 +95,7 @@
         <voice>1</voice>
         <notations>
           <articulations>
-            <breath-mark>salzedo</breath-mark>
+            <breath-mark placement="above">salzedo</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -111,7 +111,7 @@
         <type>whole</type>
         <notations>
           <articulations>
-            <breath-mark>comma</breath-mark>
+            <breath-mark placement="above">comma</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -127,7 +127,7 @@
         <type>whole</type>
         <notations>
           <articulations>
-            <breath-mark>tick</breath-mark>
+            <breath-mark placement="above">tick</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -143,7 +143,7 @@
         <type>whole</type>
         <notations>
           <articulations>
-            <breath-mark>upbow</breath-mark>
+            <breath-mark placement="above">upbow</breath-mark>
             </articulations>
           </notations>
         </note>
@@ -159,7 +159,7 @@
         <type>whole</type>
         <notations>
           <articulations>
-            <breath-mark>salzedo</breath-mark>
+            <breath-mark placement="above">salzedo</breath-mark>
             </articulations>
           </notations>
         </note>

@@ -23,6 +23,7 @@
 
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "importmxml.h"
+#include "musicxmlsupport.h"
 
 namespace Ms {
 

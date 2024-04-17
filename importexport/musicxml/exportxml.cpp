@@ -3054,28 +3054,64 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notations& notations, Articulations& articulations)
       {
       if (breath && ExportMusicXml::canWrite(breath)) {
+            QString tagName;
+            QString type;
+
             notations.tag(xml);
             articulations.tag(xml);
-            if (breath->isCaesura())
-                  xml.tagE("caesura");
+            if (breath->isCaesura()) {
+                  tagName = "caesura";
+                  switch (breath->symId()) {
+                        case SymId::caesuraCurved:
+                              type = "curved";
+                              break;
+                        case SymId::caesuraShort:
+                              type = "short";
+                              break;
+                        case SymId::caesuraThick:
+                              type = "thick";
+                              break;
+                        case SymId::caesuraSingleStroke:
+                        case SymId::chantCaesura:
+                              type = "single";
+                              break;
+                        case SymId::caesura:
+                        default:
+                              ; //type = ""; // "normal" is correct too, but see below
+                        }
+                  }
             else {
-                  QString breathMarkType;
+                  tagName = "breath-mark";
                   switch (breath->symId()) {
                         case SymId::breathMarkTick:
-                              breathMarkType = "tick";
+                              type = "tick";
                               break;
                         case SymId::breathMarkUpbow:
-                              breathMarkType = "upbow";
+                              type = "upbow";
                               break;
                         case SymId::breathMarkSalzedo:
-                              breathMarkType = "salzedo";
+                              type = "salzedo";
                               break;
+                        case SymId::breathMarkComma:
                         default:
-                              breathMarkType = "comma";
+                              type = "comma";
                         }
-
-                  xml.tag("breath-mark", breathMarkType);
                   }
+            tagName += color2xml(breath);
+            if (breath->placement() == Placement::BELOW)
+                  tagName += " placement=\"below\"";
+            else/* if (preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))*/ {
+                  // MuseScore 3.6.2 and earlier as well as all 4.x prior to 4.3 otherwise default to below on import
+                  tagName += " placement=\"above\"";
+                  }
+
+            if (breath->isCaesura() && (type.isEmpty()/* || preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT)*/)) {
+                  // for backwards compatibility, as 3.6.2 and earlier can't import those special caesuras,
+                  // but reports corruption on all subsequent measures and imports them entirely empty.
+                  xml.tagE(tagName);
+                  }
+            else
+                  xml.tag(tagName, type);
             }
       }
 
@@ -3142,6 +3178,12 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             auto mxmlOrnam = symIdToOrnam(sid);
 
             if (!mxmlOrnam.isEmpty()) {
+                  QString placement;
+
+                  if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD)
+                        placement = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
+                  if (!placement.isEmpty())
+                        mxmlOrnam += QString(" placement=\"%1\"").arg(placement);
                   mxmlOrnam += color2xml(a);
 
                   notations.tag(_xml);
@@ -4745,15 +4787,17 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             }
 
       directionTag(_xml, _attr, hp);
-      if (hp->tick() == tick)
+      const bool hpTick = hp->tick() == tick;
+      if (hpTick)
             writeHairpinText(_xml, hp, hp->tick() == tick);
       if (isLineType) {
             if (hp->lineVisible()) {
-                  if (hp->tick() == tick) {
+                  if (hpTick) {
                         _xml.stag("direction-type");
                         QString tag = "dashes type=\"start\"";
                         tag += QString(" number=\"%1\"").arg(n + 1);
-                        tag += positioningAttributes(hp, hp->tick() == tick);
+                        tag += color2xml(hp);
+                        tag += positioningAttributes(hp, hpTick);
                         _xml.tagE(tag);
                         _xml.etag();
                         }
@@ -4767,7 +4811,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
       else {
             _xml.stag("direction-type");
             QString tag = "wedge type=";
-            if (hp->tick() == tick) {
+            if (hpTick) {
                   if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                         tag += "\"crescendo\"";
                         if (hp->hairpinCircledTip()) {
@@ -4778,6 +4822,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                         tag += "\"diminuendo\"";
                         }
                   tag += color2xml(hp);
+                  tag += positioningAttributes(hp, hpTick);
                   }
             else {
                   tag += "\"stop\"";
@@ -4786,11 +4831,10 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                         }
                   }
             tag += QString(" number=\"%1\"").arg(n + 1);
-            tag += positioningAttributes(hp, hp->tick() == tick);
             _xml.tagE(tag);
             _xml.etag();
             }
-      if (hp->tick() != tick)
+      if (!hpTick)
             writeHairpinText(_xml, hp, hp->tick() == tick);
       directionETag(_xml, staff);
       }
@@ -4901,7 +4945,8 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
                               pedalType = pd->lineVisible() ? "resume" : "start";
                               break;
                               }
-                        // FALLTHROUGH
+                        else
+                              // FALLTHROUGH
                   default:
                         pedalType = "start";
                   }
@@ -4936,7 +4981,8 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
 int ExportMusicXml::findBracket(const TextLineBase* tl) const
       {
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            if (brackets[i] == tl) return i;
+            if (brackets[i] == tl)
+                  return i;
       return -1;
       }
 
@@ -5336,11 +5382,12 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
       if (!sound.isEmpty()) {
             xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
-            QString positioning = positioningAttributes(jp);
+            QString attrs = color2xml(jp);
+            attrs += positioningAttributes(jp);
             if (!type.isEmpty())
-                  xml.tagE(type + positioning);
+                  xml.tagE(type + attrs);
             if (!words.isEmpty())
-                  xml.tag("words" + positioning, words);
+                  xml.tag("words" + attrs, words);
             xml.etag();
             if (!sound.isEmpty())
                   xml.tagE(QString("sound ") + sound);
@@ -5453,11 +5500,12 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
       if (!sound.isEmpty()) {
             xml.stag(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
-            QString positioning = positioningAttributes(m);
+            QString attrs = color2xml(m);
+            attrs += positioningAttributes(m);
             if (!type.isEmpty())
-                  xml.tagE(type + positioning);
+                  xml.tagE(type + attrs);
             if (!words.isEmpty())
-                  xml.tag("words" + positioning, words);
+                  xml.tag("words" + attrs, words);
             xml.etag();
             if (!sound.isEmpty())
                   xml.tagE(QString("sound ") + sound);
