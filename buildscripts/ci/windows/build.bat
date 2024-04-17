@@ -27,16 +27,16 @@ IF NOT %TARGET_PROCESSOR_BITS% == 64 (
 )
 
 SET /p BUILD_MODE=<%ARTIFACTS_DIR%\env\build_mode.env
-SET "MUSESCORE_BUILD_MODE=dev"
-IF %BUILD_MODE% == devel_build   ( SET "MUSESCORE_BUILD_MODE=dev" ) ELSE (
-IF %BUILD_MODE% == nightly_build ( SET "MUSESCORE_BUILD_MODE=dev" ) ELSE (
-IF %BUILD_MODE% == testing_build ( SET "MUSESCORE_BUILD_MODE=testing" ) ELSE (
-IF %BUILD_MODE% == stable_build  ( SET "MUSESCORE_BUILD_MODE=release" ) ELSE (
+SET "MUSE_APP_BUILD_MODE=dev"
+IF %BUILD_MODE% == devel_build   ( SET "MUSE_APP_BUILD_MODE=dev" ) ELSE (
+IF %BUILD_MODE% == nightly_build ( SET "MUSE_APP_BUILD_MODE=dev" ) ELSE (
+IF %BUILD_MODE% == testing_build ( SET "MUSE_APP_BUILD_MODE=testing" ) ELSE (
+IF %BUILD_MODE% == stable_build  ( SET "MUSE_APP_BUILD_MODE=release" ) ELSE (
     ECHO "error: unknown BUILD_MODE: %BUILD_MODE%"
     EXIT /b 1
 ))))
 
-ECHO "MUSESCORE_BUILD_MODE: %MUSESCORE_BUILD_MODE%"
+ECHO "MUSE_APP_BUILD_MODE: %MUSE_APP_BUILD_MODE%"
 ECHO "BUILD_NUMBER: %BUILD_NUMBER%"
 ECHO "TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
 ECHO "CRASH_LOG_SERVER_URL: %CRASH_LOG_SERVER_URL%"
@@ -68,7 +68,7 @@ bash ./buildscripts/ci/tools/make_revision_env.sh
 SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\build_revision.env
 
 SET MUSESCORE_BUILD_CONFIGURATION=%MUSESCORE_BUILD_CONFIGURATION%
-SET MUSESCORE_BUILD_MODE=%MUSESCORE_BUILD_MODE%
+SET MUSE_APP_BUILD_MODE=%MUSE_APP_BUILD_MODE%
 SET MUSESCORE_BUILD_NUMBER=%BUILD_NUMBER%
 SET MUSESCORE_REVISION=%MUSESCORE_REVISION%
 SET MUSESCORE_INSTALL_DIR=%INSTALL_DIR%
@@ -79,6 +79,6 @@ SET MUSESCORE_QT5_COMPAT=%QT5_COMPAT%
 
 CALL ninja_build.bat -t installrelwithdebinfo || exit \b 1
 
-bash ./buildscripts/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_MODE%
+bash ./buildscripts/ci/tools/make_release_channel_env.sh -c %MUSE_APP_BUILD_MODE%
 bash ./buildscripts/ci/tools/make_version_env.sh %BUILD_NUMBER%
 bash ./buildscripts/ci/tools/make_branch_env.sh
