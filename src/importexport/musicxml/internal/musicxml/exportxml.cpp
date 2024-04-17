@@ -129,11 +129,13 @@
 #include "modularity/ioc.h"
 #include "../../imusicxmlconfiguration.h"
 #include "global/iapplication.h"
+#include "global/realfn.h"
 #include "engraving/iengravingconfiguration.h"
 
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::io;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
