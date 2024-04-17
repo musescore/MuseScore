@@ -3342,27 +3342,62 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notations& notations, Articulations& articulations)
 {
     if (breath && ExportMusicXml::canWrite(breath)) {
+        String tagName;
+        String type;
+
         notations.tag(xml, breath);
         articulations.tag(xml);
         if (breath->isCaesura()) {
-            xml.tag("caesura");
+            tagName = u"caesura";
+            switch (breath->symId()) {
+            case SymId::caesuraCurved:
+                type = u"curved";
+                break;
+            case SymId::caesuraShort:
+                type = u"short";
+                break;
+            case SymId::caesuraThick:
+                type = u"thick";
+                break;
+            case SymId::caesuraSingleStroke:
+            case SymId::chantCaesura:
+                type = u"single";
+                break;
+            case SymId::caesura:
+            default:
+                ; //type = u"normal"; // is correct too, but see below
+            }
         } else {
-            String breathMarkType;
+            tagName = u"breath-mark";
             switch (breath->symId()) {
             case SymId::breathMarkTick:
-                breathMarkType = u"tick";
+                type = u"tick";
                 break;
             case SymId::breathMarkUpbow:
-                breathMarkType = u"upbow";
+                type = u"upbow";
                 break;
             case SymId::breathMarkSalzedo:
-                breathMarkType = u"salzedo";
+                type = u"salzedo";
                 break;
+            case SymId::breathMarkComma:
             default:
-                breathMarkType = u"comma";
+                type = u"comma";
             }
+        }
+        tagName += color2xml(breath);
+        if (breath->placement() == PlacementV::BELOW) {
+            tagName += u" placement=\"below\"";
+        } else if (ExportMusicXml::configuration()->musicxmlExportMu3Compat()) {
+            // MuseScore versions prior to 4.3 otherwise default to below on import
+            tagName += u" placement=\"above\"";
+        }
 
-            xml.tag("breath-mark", breathMarkType);
+        if (breath->isCaesura() && (type.isEmpty() || ExportMusicXml::configuration()->musicxmlExportMu3Compat())) {
+            // for backwards compatibility, as 3.6.2 and earlier can't import those special caesuras,
+            // but reports corruption on all subsequent measures and imports them entirely empty.
+            xml.tagRaw(tagName);
+        } else {
+            xml.tagRaw(tagName, type);
         }
     }
 }
@@ -3433,6 +3468,14 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         auto mxmlOrnam = symIdToOrnam(sid);
 
         if (mxmlOrnam != "") {
+            String placement;
+
+            if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::AUTO) {
+                placement = (a->anchor() == ArticulationAnchor::BOTTOM ? u"below" : u"above");
+            }
+            if (!placement.empty()) {
+                mxmlOrnam += String(u" placement=\"%1\"").arg(placement);
+            }
             mxmlOrnam += color2xml(a);
 
             notations.tag(m_xml, a);
@@ -5229,17 +5272,18 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
     }
 
     directionTag(m_xml, m_attr, hp);
-    if (hp->tick() == tick) {
-        writeHairpinText(m_xml, hp, hp->tick() == tick);
+    const bool hpTick = hp->tick() == tick;
+    if (hpTick) {
+        writeHairpinText(m_xml, hp, hpTick);
     }
     if (isLineType) {
         if (hp->lineVisible()) {
-            if (hp->tick() == tick) {
+            if (hpTick) {
                 m_xml.startElement("direction-type");
                 String tag = u"dashes type=\"start\"";
                 tag += String(u" number=\"%1\"").arg(n + 1);
                 tag += color2xml(hp);
-                tag += positioningAttributes(hp, hp->tick() == tick);
+                tag += positioningAttributes(hp, hpTick);
                 m_xml.tagRaw(tag);
                 m_xml.endElement();
             } else {
@@ -5251,7 +5295,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
     } else {
         m_xml.startElement("direction-type");
         String tag = u"wedge type=";
-        if (hp->tick() == tick) {
+        if (hpTick) {
             if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                 tag += u"\"crescendo\"";
                 if (hp->hairpinCircledTip()) {
@@ -5261,6 +5305,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
                 tag += u"\"diminuendo\"";
             }
             tag += color2xml(hp);
+            tag += positioningAttributes(hp, hpTick);
         } else {
             tag += u"\"stop\"";
             if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
@@ -5268,12 +5313,11 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             }
         }
         tag += String(u" number=\"%1\"").arg(n + 1);
-        tag += positioningAttributes(hp, hp->tick() == tick);
         m_xml.tagRaw(tag);
         m_xml.endElement();
     }
-    if (hp->tick() != tick) {
-        writeHairpinText(m_xml, hp, hp->tick() == tick);
+    if (!hpTick) {
+        writeHairpinText(m_xml, hp, hpTick);
     }
     directionETag(m_xml, staff);
 }
@@ -5844,12 +5888,13 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     if (sound != "") {
         xml.startElement("direction", { { "placement", (jp->placement() == PlacementV::BELOW) ? "below" : "above" } });
         xml.startElement("direction-type");
-        String positioning = ExportMusicXml::positioningAttributes(jp);
+        String attrs = color2xml(jp);
+        attrs += ExportMusicXml::positioningAttributes(jp);
         if (type != "") {
-            xml.tagRaw(type + positioning);
+            xml.tagRaw(type + attrs);
         }
         if (words != "") {
-            xml.tagRaw(u"words" + positioning, words);
+            xml.tagRaw(u"words" + attrs, words);
         }
         xml.endElement();
         if (sound != "") {
@@ -5973,12 +6018,13 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     if (!sound.empty()) {
         xml.startElement("direction", { { "placement", (m->placement() == PlacementV::BELOW) ? "below" : "above" } });
         xml.startElement("direction-type");
-        String positioning = ExportMusicXml::positioningAttributes(m);
+        String attrs = color2xml(m);
+        attrs += ExportMusicXml::positioningAttributes(m);
         if (!type.empty()) {
-            xml.tagRaw(type + positioning);
+            xml.tagRaw(type + attrs);
         }
         if (!words.empty()) {
-            xml.tagRaw(u"words" + positioning, words);
+            xml.tagRaw(u"words" + attrs, words);
         }
         xml.endElement();
         if (!sound.empty()) {

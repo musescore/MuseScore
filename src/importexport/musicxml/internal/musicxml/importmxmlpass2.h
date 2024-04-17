@@ -450,6 +450,7 @@ private:
     MusicXMLParserPass2& m_pass2;                // the pass2 results
     MxmlLogger* m_logger = nullptr;                        // Error logger
 
+    Color m_color;
     Hairpin* m_inferredHairpinStart = nullptr;
     StringList m_dynamicsList;
     String m_enclosure;
