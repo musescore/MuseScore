@@ -2187,8 +2187,19 @@ void MusicXMLParserPass1::scorePart()
             String name = m_e.readText();
             m_parts[id].setName(name);
         } else if (m_e.name() == "part-name-display") {
-            // TODO
-            m_e.skipCurrentElement();       // skip but don't log
+            String name;
+            while (m_e.readNextStartElement()) {
+                if (m_e.name() == "display-text") {
+                    name += m_e.readText();
+                } else if (m_e.name() == "accidental-text") {
+                    name += mxmlAccidentalTextToChar(m_e.readText());
+                } else {
+                    skipLogCurrElem();
+                }
+            }
+            if (!name.empty()) {
+                m_parts[id].setName(name);
+            }
         } else if (m_e.name() == "part-abbreviation") {
             // EngravingItem part-name contains the displayed (abbreviated) part name
             // It is displayed by default, but can be suppressed (print-object=”no”)
@@ -2198,9 +2209,27 @@ void MusicXMLParserPass1::scorePart()
             String name = m_e.readText();
             m_parts[id].setAbbr(name);
         } else if (m_e.name() == "part-abbreviation-display") {
-            m_e.skipCurrentElement();        // skip but don't log
+            String name;
+            while (m_e.readNextStartElement()) {
+                if (m_e.name() == "display-text") {
+                    name += m_e.readText();
+                } else if (m_e.name() == "accidental-text") {
+                    name += mxmlAccidentalTextToChar(m_e.readText());
+                } else {
+                    skipLogCurrElem();
+                }
+            }
+            if (!name.empty()) {
+                m_parts[id].setAbbr(name);
+            }
+        } else if (m_e.name() == "group") {
+            // TODO
+            m_e.skipCurrentElement();          // skip but don't log
         } else if (m_e.name() == "score-instrument") {
             scoreInstrument(id);
+        } else if (m_e.name() == "player") {
+            // unsupported
+            m_e.skipCurrentElement();          // skip but don't log
         } else if (m_e.name() == "midi-device") {
             if (!m_e.hasAttribute("port")) {
                 m_e.readText();         // empty string
