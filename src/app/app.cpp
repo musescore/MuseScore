@@ -444,6 +444,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, IAp
     midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
     guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
+    musicXmlConfiguration()->setNeedUseDefaultFontOverride(options.importMusicXML.useDefaultFont);
     musicXmlConfiguration()->setInferTextTypeOverride(options.importMusicXML.inferTextType);
 #endif
 

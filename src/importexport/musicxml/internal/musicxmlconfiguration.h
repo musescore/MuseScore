@@ -50,6 +50,7 @@ public:
 
     bool needUseDefaultFont() const override;
     void setNeedUseDefaultFont(bool value) override;
+    void setNeedUseDefaultFontOverride(std::optional<bool> value) override;
 
     bool needAskAboutApplyingNewStyle() const override;
     void setNeedAskAboutApplyingNewStyle(bool value) override;
@@ -59,6 +60,7 @@ public:
     void setInferTextTypeOverride(std::optional<bool> value) override;
 
 private:
+    std::optional<bool> m_needUseDefaultFontOverride;
     std::optional<bool> m_inferTextTypeOverride;
 };
 }

@@ -121,12 +121,21 @@ void MusicXmlConfiguration::setMusicxmlExportInvisibleElements(bool value)
 
 bool MusicXmlConfiguration::needUseDefaultFont() const
 {
+    if (m_needUseDefaultFontOverride.has_value()) {
+        return m_needUseDefaultFontOverride.value();
+    }
+
     return settings()->value(MIGRATION_APPLY_EDWIN_FOR_XML).toBool();
 }
 
 void MusicXmlConfiguration::setNeedUseDefaultFont(bool value)
 {
     settings()->setSharedValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(value));
+}
+
+void MusicXmlConfiguration::setNeedUseDefaultFontOverride(std::optional<bool> value)
+{
+    m_needUseDefaultFontOverride = value;
 }
 
 bool MusicXmlConfiguration::needAskAboutApplyingNewStyle() const
