@@ -225,8 +225,8 @@ void PlaybackContext::updatePlayTechMap(const ID partId, const Score* score, con
             return;
         }
 
-        mpe::staff_layer_idx_t startIdx = part->staves().front()->idx();
-        mpe::staff_layer_idx_t endIdx = startIdx + part->nstaves();
+        mpe::staff_layer_idx_t startIdx = static_cast <staff_layer_idx_t>(part->staves().front()->idx());
+        mpe::staff_layer_idx_t endIdx = static_cast <staff_layer_idx_t>(startIdx + part->nstaves());
 
         for (mpe::staff_layer_idx_t idx = startIdx; idx < endIdx; ++idx) {
             PlaybackParam ordTechnique { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(mpe::ORDINARY_PLAYING_TECHNIQUE_CODE), idx };
