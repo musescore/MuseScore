@@ -4382,12 +4382,36 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
     auto& spdesc = m_pass2.getSpanner({ ElementType::PEDAL, number });
     if (type == u"start" || type == u"resume" || type == u"sostenuto") {
         if (spdesc.isStarted && !spdesc.isStopped) {
-            // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
-            // TODO: if "change", create 0-length spanner rather than delete
-            m_pass2.deleteHandledSpanner(spdesc.sp);
-            spdesc.isStarted = false;
+            // Previous pedal unterminated
+            // if previous pedal was a change, create a new change instead of a new pedal start
+            if (toPedal(spdesc.sp)->beginHookType() == HookType::HOOK_45) {
+                auto p = Factory::createPedal(m_score->dummy());
+                p->setBeginHookType(HookType::HOOK_45);
+                p->setEndHookType(HookType::HOOK_90);
+                if (line == "yes") {
+                    p->setLineVisible(true);
+                } else {
+                    p->setLineVisible(false);
+                }
+                if (sign == u"no") {
+                    p->setBeginText(u"");
+                    p->setContinueText(u"");
+                    p->setEndText(u"");
+                }
+                if (color.isValid()) {
+                    p->setColor(color);
+                }
+                starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+                m_e.skipCurrentElement();
+
+                return;
+            } else {
+                // likely an unrecorded "discontinue", so delete the line.
+                m_pass2.deleteHandledSpanner(spdesc.sp);
+                spdesc.isStarted = false;
+            }
         }
-        auto p = spdesc.isStopped ? toPedal(spdesc.sp) : new Pedal(m_score->dummy());
+        auto p = spdesc.isStopped ? toPedal(spdesc.sp) : Factory::createPedal(m_score->dummy());
         if (line == "yes") {
             p->setLineVisible(true);
         } else {
@@ -4411,13 +4435,13 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
         }
         starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
     } else if (type == u"stop" || type == u"discontinue") {
-        auto p = spdesc.isStarted ? toPedal(spdesc.sp) : new Pedal(m_score->dummy());
+        auto p = spdesc.isStarted ? toPedal(spdesc.sp) : Factory::createPedal(m_score->dummy());
         if (line == "yes") {
             p->setLineVisible(true);
         } else if (line == "no") {
             p->setLineVisible(false);
         }
-        if (!p->lineVisible() || sign == u"yes") {
+        if ((!p->lineVisible() || sign == u"yes") && p->endHookType() == HookType::NONE) {
             p->setEndText(u"<sym>keyboardPedalUp</sym>");
         } else {
             p->setEndHookType(type == "discontinue" ? HookType::NONE : HookType::HOOK_90);
@@ -4439,7 +4463,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
             m_logger->logError(String(u"\"change\" type pedal created without existing pedal"), &m_e);
         }
         // then start a new one
-        auto p = new Pedal(m_score->dummy());
+        auto p = Factory::createPedal(m_score->dummy());
         p->setBeginHookType(HookType::HOOK_45);
         p->setEndHookType(HookType::HOOK_90);
         if (line == "yes") {
