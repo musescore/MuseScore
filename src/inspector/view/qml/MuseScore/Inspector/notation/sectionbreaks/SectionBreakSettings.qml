@@ -71,11 +71,22 @@ Column {
     }
 
     PropertyCheckBox {
+        id: shouldResetBarNums
         text: qsTrc("inspector", "Reset measure numbers for new section")
         propertyItem: root.model ? root.model.shouldResetBarNums : null
 
         navigation.name: "ResetBarNumbers"
         navigation.panel: root.navigationPanel
         navigation.row: startWithLongInstrNames.navigation.row + 1
+    }
+
+    PropertyCheckBox {
+        id: startWithfirstSystemIndented
+        text: qsTrc("inspector", "Indent first system of new section")
+        propertyItem: root.model ? root.model.firstSystemIndent : null
+
+        navigation.name: "FirstSystemIndent"
+        navigation.panel: root.navigationPanel
+        navigation.row: shouldResetBarNums.navigation.row + 1
     }
 }
