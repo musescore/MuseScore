@@ -1155,10 +1155,15 @@ char* XMLNode::ParseDeep( char* p, StrPair* parentEndTag, int* curLineNumPtr )
                 }
             }
             if ( !wellLocated ) {
+#ifdef TINYXML_SKIP_DECLARATION_IN_MIDDLE
+                _document->DeleteNode( node );
+                continue;
+#else           // default behavior
                 _document->SetError( XML_ERROR_PARSING_DECLARATION, initialLineNum, "XMLDeclaration value=%s", decl->Value());
                 _document->DeleteNode( node );
                 break;
-            }
+#endif
+             }
         }
 
         XMLElement* ele = node->ToElement();
