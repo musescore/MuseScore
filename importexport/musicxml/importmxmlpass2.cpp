@@ -4125,6 +4125,7 @@ void MusicXMLParserDirection::textToCrescLine(QString& text)
 
       line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DECRESC_LINE);
       line->setBeginText(simplifiedText);
+      line->setContinueText("");
       line->setProperty(Pid::LINE_VISIBLE, false);
       _inferredHairpinStart = line;
       }
