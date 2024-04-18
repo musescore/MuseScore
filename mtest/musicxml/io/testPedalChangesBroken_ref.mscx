@@ -360,6 +360,18 @@
         </Measure>
       <Measure>
         <voice>
+          <Spanner type="Pedal">
+            <Pedal>
+              <endHookType>1</endHookType>
+              <beginHookType>2</beginHookType>
+              </Pedal>
+            <next>
+              <location>
+                <measures>2</measures>
+                <fractions>1/1</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
@@ -440,18 +452,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <Pedal>
-              <endHookType>1</endHookType>
-              <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
-              <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
-              </Pedal>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -477,6 +477,7 @@
           <Spanner type="Pedal">
             <prev>
               <location>
+                <measures>-2</measures>
                 <fractions>-1/1</fractions>
                 </location>
               </prev>
