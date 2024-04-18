@@ -102,11 +102,11 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
 
   BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
-  ARTIFACT_NAME=MuseScoreNightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
+  ARTIFACT_NAME=MuseScore-Studio-Nightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
 
 else
 
-  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}.dmg  
+  ARTIFACT_NAME=MuseScore-Studio-${BUILD_VERSION}.dmg  
 
 fi
 
