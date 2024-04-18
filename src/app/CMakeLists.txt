@@ -52,9 +52,9 @@ if (OS_IS_WIN)
 
 elseif(OS_IS_LIN)
 
-    if (MUSESCORE_INSTALL_SUFFIX)
-        set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MUSESCORE_INSTALL_SUFFIX}")
-    endif(MUSESCORE_INSTALL_SUFFIX)
+    if (MUSE_APP_INSTALL_SUFFIX)
+        set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
+    endif(MUSE_APP_INSTALL_SUFFIX)
 
     set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
     if (BUILD_SHARED_LIBS)
@@ -446,10 +446,10 @@ elseif(OS_IS_LIN)
     if (LN_EXECUTABLE)
        add_custom_target(mscore_alias ALL
            COMMAND echo "Creating symlink alias for mscore executable."
-           COMMAND ${LN_EXECUTABLE} -sf "mscore${MUSESCORE_INSTALL_SUFFIX}" "musescore${MUSESCORE_INSTALL_SUFFIX}"
-           COMMAND echo 'Symlink alias: musescore${MUSESCORE_INSTALL_SUFFIX} -> mscore${MUSESCORE_INSTALL_SUFFIX}'
+           COMMAND ${LN_EXECUTABLE} -sf "mscore${MUSE_APP_INSTALL_SUFFIX}" "musescore${MUSE_APP_INSTALL_SUFFIX}"
+           COMMAND echo 'Symlink alias: musescore${MUSE_APP_INSTALL_SUFFIX} -> mscore${MUSE_APP_INSTALL_SUFFIX}'
            )
-       install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore${MUSESCORE_INSTALL_SUFFIX} DESTINATION bin)
+       install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore${MUSE_APP_INSTALL_SUFFIX} DESTINATION bin)
     else (LN_EXECUTABLE)
        add_custom_target(mscore_alias ALL COMMAND echo "No symlink aliases will be created." VERBATIM )
     endif (LN_EXECUTABLE)
