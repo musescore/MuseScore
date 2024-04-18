@@ -1170,8 +1170,16 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
     }
     if (articSym != SymId::noSym) {
         const QColor color { notation.attribute("color") };
+        const QString place = notation.attribute("placement");
         Articulation* na = Factory::createArticulation(cr);
         na->setSymId(articSym);
+        if (place == "above") {
+            na->setAnchor(ArticulationAnchor::TOP);
+        } else if (place == "below") {
+            na->setAnchor(ArticulationAnchor::BOTTOM);
+        } else {
+            na->setAnchor(ArticulationAnchor::AUTO);
+        }
         if (color.isValid()) {
             na->setColor(color);
         }
@@ -1335,7 +1343,8 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
  */
 
 static void addTextToNote(int l, int c, QString txt, QString placement, QString fontWeight,
-                          qreal fontSize, QString fontStyle, QString fontFamily, TextStyleType subType, Score*, Note* note)
+                          qreal fontSize, QString fontStyle, QString fontFamily, QColor color,
+                          TextStyleType subType, Score*, Note* note)
 {
     if (note) {
         if (!txt.isEmpty()) {
@@ -1361,6 +1370,10 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
             if (!placement.isEmpty()) {
                 t->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
                 t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            }
+            if (color.isValid()) {
+                t->setColor(color);
+                t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
             }
             note->add(t);
         }
@@ -3023,6 +3036,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 t->setFrameRound(0);
             }
 
+            if (_color.isValid()) {
+                t->setColor(_color);
+            }
+
             QString wordsPlacement = _placement;
             // Case-based defaults
             if (wordsPlacement.isEmpty()) {
@@ -3327,7 +3344,8 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
             }
         }
 
-        String type = _e.attributes().value("type").toString();
+        QString type = _e.attributes().value("type").toString();
+        _color = _e.attributes().value("color").toString();
         if (_e.name() == "metronome") {
             _metroText = metronome(_tpoMetro);
         } else if (_e.name() == "words") {
@@ -3645,7 +3663,8 @@ void MusicXMLInferredFingering::addToNotes(std::vector<Note*>& notes) const
     for (size_t i = 0; i < m_fingerings.size(); ++i) {
         // Fingerings in reverse order
         addTextToNote(-1, -1,
-                      m_fingerings[m_fingerings.size() - 1 - i], m_placement, "", -1, "", "", TextStyleType::FINGERING,
+                      m_fingerings[m_fingerings.size() - 1 - i], m_placement, "", -1, "", "",
+                      Qt::black, TextStyleType::FINGERING,
                       notes[i]->score(),
                       notes[i]);
     }
@@ -6647,8 +6666,12 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     ha->render();
 
     ha->setVisible(printObject);
+    if (placement == u"below") {
+        ha->setPlacement(PlacementV::BELOW);
+    }
     if (color.isValid()) {
         ha->setColor(color);
+        ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
 
     // TODO-LV: do this only if ha points to a valid harmony
@@ -7054,8 +7077,19 @@ void MusicXMLParserNotations::articulations()
                 _breath = SymId::breathMarkComma;
             }
         } else if (_e.name() == "caesura") {
-            _breath = SymId::caesura;
-            _e.skipCurrentElement();  // skip but don't log
+            auto value = _e.readElementText();
+            if (value == "curved") {
+                _breath = SymId::caesuraCurved;
+            } else if (value == "short") {
+                _breath = SymId::caesuraShort;
+            } else if (value == "thick") {
+                _breath = SymId::caesuraThick;
+            } else if (value == "single") {
+                _breath = SymId::caesuraSingleStroke;
+            } else {
+                // Use caesura as the default symbol
+                _breath = SymId::caesura;
+            }
         } else if (_e.name() == "doit"
                    || _e.name() == "falloff"
                    || _e.name() == "plop"
@@ -7199,16 +7233,17 @@ void MusicXMLParserNotations::harmonic()
 
 void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
 {
-    QString placement = notation.attribute("placement");
-    QString fontWeight = notation.attribute("font-weight");
-    qreal fontSize = notation.attribute("font-size").toDouble();
-    QString fontStyle = notation.attribute("font-style");
-    QString fontFamily = notation.attribute("font-family");
+    const QString placement = notation.attribute("placement");
+    const QString fontWeight = notation.attribute("font-weight");
+    const qreal fontSize = notation.attribute("font-size").toDouble();
+    const QString fontStyle = notation.attribute("font-style");
+    const QString fontFamily = notation.attribute("font-family");
+    const QColor color = notation.attribute("color");
     if (notation.name() == "fingering") {
         // TODO: distinguish between keyboards (style TextStyleName::FINGERING)
         // and (plucked) strings (style TextStyleName::LH_GUITAR_FINGERING)
         addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                      TextStyleType::FINGERING, _score, note);
+                      color, TextStyleType::FINGERING, _score, note);
     } else if (notation.name() == "fret") {
         auto fret = notation.text().toInt();
         if (note) {
@@ -7220,14 +7255,14 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
         }
     } else if (notation.name() == "pluck") {
         addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                      TextStyleType::RH_GUITAR_FINGERING, _score, note);
+                      color, TextStyleType::RH_GUITAR_FINGERING, _score, note);
     } else if (notation.name() == "string") {
         if (note) {
             if (note->staff()->isTabStaff(Fraction(0, 1))) {
                 note->setString(notation.text().toInt() - 1);
             } else {
                 addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                              TextStyleType::STRING_NUMBER, _score, note);
+                              color, TextStyleType::STRING_NUMBER, _score, note);
             }
         } else {
             _logger->logError("no note for string", &_e);
