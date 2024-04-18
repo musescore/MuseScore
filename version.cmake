@@ -20,7 +20,7 @@
 
 set(MUSE_APP_NAME "MuseScoreStudio")
 set(MUSE_APP_NAME_WITH_SPACE "MuseScore Studio")
-set(MUSE_APP_GUI_IDENTIFIER org.musescore.${MUSE_APP_NAME})
+set(MUSE_APP_GUI_IDENTIFIER org.musescore.MuseScore)
 set(MUSE_APP_VERSION_MAJOR "4")
 set(MUSE_APP_VERSION_MINOR "4")
 set(MUSE_APP_VERSION_PATCH "0")

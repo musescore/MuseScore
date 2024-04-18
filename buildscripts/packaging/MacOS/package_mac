@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# LONG_NAME is used for dmg naming, LONGER_NAME is used when renaming the .app later. LONGER_NAME can't be updated
+# to "MuseScore Studio" yet, as it will prevent users from seeing the prompt asking them to replace an old version
+# of MuseScore (potentially resulting in 2 copies of version 4). This will be updated on the next major release.
 APPNAME=mscore
-LONG_NAME="MuseScore"
+LONG_NAME="MuseScore-Studio"
 LONGER_NAME="MuseScore 4"
 VERSION=0
 
