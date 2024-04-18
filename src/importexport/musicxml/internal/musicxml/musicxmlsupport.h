@@ -26,6 +26,7 @@
 #include "engraving/types/fraction.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/fret.h"
 
 namespace muse {
 class XmlStreamReader;
@@ -73,6 +74,27 @@ struct MusicXmlArpeggioDesc {
         : arp(arp), no(no) {}
 };
 typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
+
+/**
+ The description of a chord symbol with or without a fret diagram
+ */
+
+struct HarmonyDesc
+{
+    track_idx_t m_track;
+    bool fretDiagramVisible() const { return m_fretDiagram ? m_fretDiagram->visible() : false; }
+    Harmony* m_harmony;
+    FretDiagram* m_fretDiagram;
+
+    HarmonyDesc(track_idx_t m_track, Harmony* m_harmony, FretDiagram* m_fretDiagram)
+        : m_track(m_track), m_harmony(m_harmony),
+        m_fretDiagram(m_fretDiagram) {}
+
+    HarmonyDesc()
+        : m_track(0), m_harmony(nullptr), m_fretDiagram(nullptr) {}
+};
+
+using HarmonyMap = std::multimap<int, HarmonyDesc>;
 
 //---------------------------------------------------------
 //   VoiceDesc
