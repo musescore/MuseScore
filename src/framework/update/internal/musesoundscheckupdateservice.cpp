@@ -35,7 +35,7 @@
 #include "defer.h"
 #include "log.h"
 
-static const muse::Uri MUSEHUB_APP_URI("musehub://launch?from=musescore");
+static const muse::Uri MUSEHUB_APP_URI("musehub://?from=musescore");
 
 using namespace muse::update;
 using namespace muse::network;
@@ -131,7 +131,7 @@ void MuseSoundsCheckUpdateService::openMuseHub()
 
 #ifdef Q_OS_WIN
     interactive()->openApp(MUSEHUB_APP_URI).onReject(this, [=](int, const std::string&) {
-        static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://launch?from=musescore");
+        static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://?from=musescore");
         interactive()->openApp(MUSEHUB_APP_V1_URI).onReject(this, [=](int, const std::string&) {
             openMuseHubWebsite();
         });
