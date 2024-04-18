@@ -1273,7 +1273,14 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
 
     if (meiAccid.HasAccid() || meiAccid.HasAccidGes()) {
         pugi::xml_node accidNode = m_currentNode.append_child();
-        meiAccid.Write(accidNode, this->getLayerXmlIdFor(ACCID_L));
+        Accidental* acc = note->accidental();
+        if (acc) {
+            Convert::colorToMEI(acc, meiAccid);
+            std::string xmlId = this->getXmlIdFor(acc, 'a');
+            meiAccid.Write(accidNode, xmlId);
+        } else {
+            meiAccid.Write(accidNode, this->getLayerXmlIdFor(ACCID_L));
+        }
     }
 
     // non critical assert
