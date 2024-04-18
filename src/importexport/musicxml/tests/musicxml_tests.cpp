@@ -1127,6 +1127,9 @@ TEST_F(Musicxml_Tests, unnecessaryBarlines) {
 TEST_F(Musicxml_Tests, unusualDurations) {
     mxmlIoTestRef("testUnusualDurations");
 }
+TEST_F(Musicxml_Tests, unterminatedTies) {
+    mxmlImportTestRef("testUnterminatedTies");
+}
 TEST_F(Musicxml_Tests, virtualInstruments) {
     mxmlIoTestRef("testVirtualInstruments");
 }
