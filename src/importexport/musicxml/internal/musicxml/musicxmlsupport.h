@@ -75,19 +75,23 @@ struct MusicXmlArpeggioDesc {
 };
 typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
 
+/**
+ The description of a chord symbol with or without a fret diagram
+ */
+
 struct HarmonyDesc
 {
     track_idx_t m_track;
-    bool fretVisible() const { return m_diagram ? m_diagram->visible() : false; }
+    bool fretDiagramVisible() const { return m_fretDiagram ? m_fretDiagram->visible() : false; }
     Harmony* m_harmony;
-    FretDiagram* m_diagram;
+    FretDiagram* m_fretDiagram;
 
-    HarmonyDesc(track_idx_t m_track, Harmony* m_harmony, FretDiagram* m_diagram)
+    HarmonyDesc(track_idx_t m_track, Harmony* m_harmony, FretDiagram* m_fretDiagram)
         : m_track(m_track), m_harmony(m_harmony),
-        m_diagram(m_diagram) {}
+        m_fretDiagram(m_fretDiagram) {}
 
     HarmonyDesc()
-        : m_track(0), m_harmony(nullptr), m_diagram(nullptr) {}
+        : m_track(0), m_harmony(nullptr), m_fretDiagram(nullptr) {}
 };
 
 using HarmonyMap = std::multimap<int, HarmonyDesc>;
