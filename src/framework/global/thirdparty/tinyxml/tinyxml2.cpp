@@ -23,6 +23,8 @@ distribution.
 
 #include "tinyxml2.h"
 
+#include "mu_patch.h"
+
 #include <new>		// yes, this one new style header, is in the Android SDK.
 #if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
 #   include <stddef.h>
