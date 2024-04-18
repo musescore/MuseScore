@@ -236,10 +236,11 @@ using SegnoStack = std::map<int, Marker*>;
 class MusicXMLParserNotations
 {
 public:
-    MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
+    MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap,
+                    DelayedArpMap& delayedArps);
     QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
@@ -264,6 +265,7 @@ private:
     void tuplet();
     void otherNotation();
     QXmlStreamReader& _e;
+    MusicXMLParserPass1& _pass1;
     Score* const _score;                        // the score
     MxmlLogger* _logger;                              // the error logger
     QString _errors;                    // errors to present to the user
@@ -335,7 +337,7 @@ private:
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
     FretDiagram* frame();
-    void harmony(const QString& partId, Measure* measure, const Fraction sTime);
+    void harmony(const QString& partId, Measure* measure, const Fraction& sTime, HarmonyMap& harmonyMap);
     Accidental* accidental();
     void beam(QMap<int, QString>& beamTypes);
     void duration(Fraction& dura);
@@ -379,7 +381,7 @@ private:
 
     Glissando* _glissandi[MAX_NUMBER_LEVEL][2];     ///< Current slides ([0]) / glissandi ([1])
 
-    Tie* _tie;
+    std::map<int, Tie*> _ties;
     Volta* _lastVolta;
     bool _hasDrumset;                             ///< drumset defined TODO: move to pass 1
 
@@ -413,8 +415,8 @@ class MusicXMLParserDirection
 public:
     MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
     void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, bool& measureHasCoda,
-                   SegnoStack& segnos);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, HarmonyMap& harmonyMap,
+                   bool& measureHasCoda, SegnoStack& segnos);
     qreal totalY() const { return _defaultY + _relativeY; }
     QString placement() const;
 
@@ -468,6 +470,7 @@ private:
     Marker* findMarker(const String& repeat) const;
     Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
+    void handleChordSym(const track_idx_t track, const Fraction tick, HarmonyMap& harmonyMap);
     void handleTempo();
     QString matchRepeat(const QString& plainWords) const;
     void skipLogCurrElem();

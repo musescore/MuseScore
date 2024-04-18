@@ -122,8 +122,8 @@ static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 //   function declarations
 //---------------------------------------------------------
 
-static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track, Tie*& tie, MxmlLogger* logger,
-                   const QXmlStreamReader* const xmlreader);
+static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track, std::map<int, Tie*>& ties,
+                   MxmlLogger* logger, const QXmlStreamReader* const xmlreader, const bool fixForCrossStaff);
 
 //---------------------------------------------------------
 //   support enums / structs / classes
@@ -1555,7 +1555,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
 {
     Q_UNUSED(partId);
     _timeSigDura = Fraction(0, 0);               // invalid
-    _tie    = 0;
+    _ties.clear();
     _lastVolta = 0;
     _hasDrumset = false;
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
@@ -1613,6 +1613,61 @@ SpannerSet MusicXMLParserPass2::findIncompleteSpannersAtPartEnd()
         _pedal = {};
     }
     return res;
+}
+
+//---------------------------------------------------------
+//   addArticLaissezVibrer
+//---------------------------------------------------------
+
+static void addArticLaissezVibrer(const Note* const note)
+{
+    IF_ASSERT_FAILED(note) {
+        return;
+    }
+
+    Chord* chord = note->chord();
+    if (!findLaissezVibrer(chord)) {
+        Articulation* na = Factory::createArticulation(chord);
+        na->setSymId(SymId::articLaissezVibrerBelow);
+        chord->add(na);
+    }
+}
+
+//---------------------------------------------------------
+//   cleanupUnterminatedTie
+//---------------------------------------------------------
+/**
+ Delete tie and add Laissez Vibrer where it was
+ */
+
+static void cleanupUnterminatedTie(Tie* tie, const Score* score, bool fixForCrossStaff = false)
+{
+    Note* unterminatedTieNote = tie->startNote();
+    const Chord* unterminatedChord = unterminatedTieNote->chord();
+
+    // Dolet 6 doesn't export cross staff information
+    // If a tie is unterminated, try to find a candidate to tie it to on a different track/stave
+    if (fixForCrossStaff) {
+        const Segment* nextSeg = score->tick2leftSegment(unterminatedChord->tick() + unterminatedChord->ticks());
+        if (nextSeg) {
+            const Part* part = unterminatedTieNote->part();
+            for (track_idx_t track = part->startTrack(); track <= part->endTrack(); ++track) {
+                const EngravingItem* el = nextSeg->element(track);
+                if (el && el->isChord()) {
+                    Note* matchingNote = toChord(el)->findNote(unterminatedTieNote->pitch());
+                    if (matchingNote && matchingNote->tpc() == unterminatedTieNote->tpc()) {
+                        tie->setEndNote(matchingNote);
+                        matchingNote->setTieBack(tie);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // Delete unterminated ties pending fully featured l.v. ties & ties over repeats
+    unterminatedTieNote->remove(tie);
+    delete tie;
 }
 
 //---------------------------------------------------------
@@ -2010,6 +2065,15 @@ void MusicXMLParserPass2::part()
     }
     _spanners.clear();
 
+    // Clean up unterminated ties
+    for (auto tie : _ties) {
+        if (tie.second) {
+            cleanupUnterminatedTie(tie.second, _score, _pass1.exporterString().contains(u"dolet 6"));
+            _ties[tie.first] = nullptr;
+        }
+    }
+    _ties.clear();
+
     if (_hasDrumset) {
         Drumset* drumset = new Drumset;
         const auto& instrumentsAfterPass2 = _pass1.getInstruments(id);
@@ -2355,6 +2419,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
     ArpeggioMap arpMap;
     DelayedArpMap delayedArps;
+    HarmonyMap delayedHarmony;
     bool measureHasCoda = false;
 
     // collect candidates for courtesy accidentals to work out at measure end
@@ -2365,14 +2430,15 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (_e.name() == "direction") {
             MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
-            dir.direction(partId, measure, time + mTime, _spanners, delayedDirections, inferredFingerings, measureHasCoda, _segnos);
+            dir.direction(partId, measure, time + mTime, _spanners, delayedDirections, inferredFingerings, delayedHarmony, measureHasCoda,
+                          _segnos);
         } else if (_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
                 fbl.append(fb);
             }
         } else if (_e.name() == "harmony") {
-            harmony(partId, measure, time + mTime);
+            harmony(partId, measure, time + mTime, delayedHarmony);
         } else if (_e.name() == "note") {
             // Correct delayed ottava tick
             if (_delayedOttava && _delayedOttava->tick2() < time + mTime) {
@@ -2507,6 +2573,23 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
             delayedDirections.push_back(inferredFingering->toDelayedDirection());
         }
         delete inferredFingering;
+    }
+
+    for (auto& harmony : delayedHarmony) {
+        HarmonyDesc harmonyDesc = harmony.second;
+        Fraction tick = Fraction::fromTicks(harmony.first);
+        if (harmonyDesc.m_fretDiagram) {
+            harmonyDesc.m_fretDiagram->setTrack(harmonyDesc.m_track);
+            Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+            harmonyDesc.m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+            s->add(harmonyDesc.m_fretDiagram);
+        }
+
+        if (harmonyDesc.m_harmony) {
+            harmonyDesc.m_harmony->setTrack(harmonyDesc.m_track);
+            Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+            s->add(harmonyDesc.m_harmony);
+        }
     }
 
     // Sort and add delayed directions
@@ -2897,6 +2980,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                                         MusicXmlSpannerMap& spanners,
                                         DelayedDirectionsList& delayedDirections,
                                         InferredFingeringsList& inferredFingerings,
+                                        HarmonyMap& harmonyMap,
                                         bool& measureHasCoda,
                                         SegnoStack& segnos)
 {
@@ -2944,6 +3028,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     handleTempo();
     handleRepeats(measure, track, tick + _offset, measureHasCoda, segnos, delayedDirections);
     handleNmiCmi(measure, track, tick + _offset, delayedDirections);
+    handleChordSym(track, tick + _offset, harmonyMap);
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
     // if necessary, use the value calculated by metronome()
@@ -3722,6 +3807,7 @@ void MusicXMLParserDirection::textToCrescLine(String& text)
 
     line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DECRESC_LINE);
     line->setBeginText(simplifiedText);
+    line->setContinueText(u"");
     line->setProperty(Pid::LINE_VISIBLE, false);
     _inferredHairpinStart = line;
 }
@@ -4000,6 +4086,46 @@ void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t t
     _wordsText.replace("NmiCmi", "N.C.");
 }
 
+void MusicXMLParserDirection::handleChordSym(const track_idx_t track, const Fraction tick, HarmonyMap& harmonyMap)
+{
+    if (!configuration()->inferTextType()) {
+        return;
+    }
+
+    static const std::wregex re(L"^([abcdefg])(([#b♯♭])\3?)?(maj|min|m)?[769]?((add[#b♯♭]?(9|11|))|(sus[24]?))?(\\(.*\\))?$");
+    String plainWords = _wordsText.simplified().toLower();
+    if (!plainWords.contains(re)) {
+        return;
+    }
+
+    Harmony* ha = Factory::createHarmony(_score->dummy()->segment());
+    ha->setHarmony(_wordsText);
+    ha->setTrack(track);
+    ha->setPlacement(placement() == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
+    ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    HarmonyDesc newHarmonyDesc(track, ha, nullptr);
+
+    const int ticks = tick.ticks();
+    bool insert = true;
+    for (auto itr = harmonyMap.begin(); itr != harmonyMap.end(); itr++) {
+        if (itr->first != ticks) {
+            continue;
+        }
+        HarmonyDesc& foundHarmonyDesc = itr->second;
+
+        // Don't insert if there is a matching chord symbol
+        // This symbol doesn't have a fret diagram, so no need to check that here
+        if (track2staff(foundHarmonyDesc.m_track) == track2staff(track) && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
+            insert = false;
+        }
+    }
+
+    if (insert) {
+        harmonyMap.insert(std::pair<int, HarmonyDesc>(ticks, newHarmonyDesc));
+    }
+    _wordsText.clear();
+}
+
 void MusicXMLParserDirection::handleTempo()
 {
     if (!configuration()->inferTextType()) {
@@ -4259,14 +4385,38 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         }
     }
     auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
-    if (type == "start" || type == "resume" || type == "sostenuto") {
+    if (type == u"start" || type == u"resume" || type == u"sostenuto") {
         if (spdesc._isStarted && !spdesc._isStopped) {
-            // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
-            // TODO: if "change", create 0-length spanner rather than delete
-            _pass2.deleteHandledSpanner(spdesc._sp);
-            spdesc._isStarted = false;
+            // Previous pedal unterminated
+            // if previous pedal was a change, create a new change instead of a new pedal start
+            if (toPedal(spdesc._sp)->beginHookType() == HookType::HOOK_45) {
+                auto p = Factory::createPedal(_score->dummy());
+                p->setBeginHookType(HookType::HOOK_45);
+                p->setEndHookType(HookType::HOOK_90);
+                if (line == "yes") {
+                    p->setLineVisible(true);
+                } else {
+                    p->setLineVisible(false);
+                }
+                if (sign == u"no") {
+                    p->setBeginText(u"");
+                    p->setContinueText(u"");
+                    p->setEndText(u"");
+                }
+                if (color.isValid()) {
+                    p->setColor(color);
+                }
+                starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+                _e.skipCurrentElement();
+
+                return;
+            } else {
+                // likely an unrecorded "discontinue", so delete the line.
+                _pass2.deleteHandledSpanner(spdesc._sp);
+                spdesc._isStarted = false;
+            }
         }
-        auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
+        auto p = spdesc._isStopped ? toPedal(spdesc._sp) : Factory::createPedal(_score->dummy());
         if (line == "yes") {
             p->setLineVisible(true);
         } else {
@@ -4288,15 +4438,15 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         if (color.isValid()) {
             p->setLineColor(color);
         }
-        starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
-    } else if (type == "stop" || type == "discontinue") {
-        auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
+        starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+    } else if (type == u"stop" || type == u"discontinue") {
+        auto p = spdesc._isStarted ? toPedal(spdesc._sp) : Factory::createPedal(_score->dummy());
         if (line == "yes") {
             p->setLineVisible(true);
         } else if (line == "no") {
             p->setLineVisible(false);
         }
-        if (!p->lineVisible() || sign == "yes") {
+        if ((!p->lineVisible() || sign == u"yes") && p->endHookType() == HookType::NONE) {
             p->setEndText(u"<sym>keyboardPedalUp</sym>");
         } else {
             p->setEndHookType(type == "discontinue" ? HookType::NONE : HookType::HOOK_90);
@@ -4318,7 +4468,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             _logger->logError(QString("\"change\" type pedal created without existing pedal"), &_e);
         }
         // then start a new one
-        auto p = new Pedal(_score->dummy());
+        Pedal* p = Factory::createPedal(_score->dummy());
         p->setBeginHookType(HookType::HOOK_45);
         p->setEndHookType(HookType::HOOK_90);
         if (line == "yes") {
@@ -5761,7 +5911,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     QString instrumentId;
     QString tieType;
     MusicXMLParserLyric lyric { _pass1.getMusicXmlPart(partId).lyricNumberHandler(), _e, _score, _logger };
-    MusicXMLParserNotations notations { _e, _score, _logger };
+    MusicXMLParserNotations notations { _e, _score, _logger, _pass1 };
 
     mxmlNoteDuration mnd { _divs, _logger, &_pass1 };
     mxmlNotePitch mnp { _logger };
@@ -6065,14 +6215,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
     // handle notations
     if (cr) {
-        notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie, arpMap, delayedArps);
+        notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _ties, arpMap, delayedArps);
 
         // if no tie added yet, convert the "tie" into "tied" and add it.
         if (note && !note->tieFor() && !tieType.isEmpty()) {
             Notation notation { "tied" };
             const QString type2 { "type" };
             notation.addAttribute(&type2, &tieType);
-            addTie(notation, _score, note, cr->track(), _tie, _logger, &_e);
+            addTie(notation, _score, note, cr->track(), _ties, _logger, &_e, _pass1.exporterString().contains(u"dolet 6"));
         }
     }
 
@@ -6511,7 +6661,7 @@ FretDiagram* MusicXMLParserPass2::frame()
  Parse the /score-partwise/part/measure/harmony node.
  */
 
-void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const Fraction sTime)
+void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const Fraction& sTime, HarmonyMap& harmonyMap)
 {
     track_idx_t track = _pass1.trackForPart(partId);
 
@@ -6522,7 +6672,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     QString kind, kindText, functionText, symbols, parens;
     std::list<HDegree> degreeList;
 
-    FretDiagram* fd = 0;
+    FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(_score->dummy()->segment());
     Fraction offset;
     if (!placement.isEmpty()) {
@@ -6644,14 +6794,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
         }
     }
 
-    if (fd) {
-        fd->setTrack(track);
-        Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
-        ha->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
-        s->add(fd);
-    }
-
-    const ChordDescription* d = 0;
+    const ChordDescription* d = nullptr;
     if (ha->rootTpc() != Tpc::TPC_INVALID) {
         d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
     }
@@ -6674,11 +6817,34 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
         ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
 
-    // TODO-LV: do this only if ha points to a valid harmony
-    // harmony = ha;
-    ha->setTrack(track);
-    Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
-    s->add(ha);
+    const HarmonyDesc newHarmonyDesc(track, ha, fd);
+    bool insert = true;
+    if (_pass1.exporterString().contains(u"dolet")) {
+        const int ticks = (sTime + offset).ticks();
+        for (auto itr = harmonyMap.begin(); itr != harmonyMap.end(); itr++) {
+            if (itr->first != ticks) {
+                continue;
+            }
+            HarmonyDesc& foundHarmonyDesc = itr->second;
+            if (track2staff(foundHarmonyDesc.m_track) == track2staff(track) && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
+                if (foundHarmonyDesc.m_harmony && foundHarmonyDesc.fretDiagramVisible() == newHarmonyDesc.fretDiagramVisible()) {
+                    // Matching harmony with matching visibility of fret diagram.  No need to add
+                    insert = false;
+                } else if (fd && fd->visible() && !foundHarmonyDesc.fretDiagramVisible()) {
+                    // Matching harmony without a fret diagram found at this tick, replace with this harmony and its fret diagram
+                    foundHarmonyDesc.m_harmony = ha;
+                    foundHarmonyDesc.m_fretDiagram = fd;
+                    foundHarmonyDesc.m_track = track;
+                    insert = false;
+                }
+            }
+        }
+    }
+
+    if (insert) {
+        // No harmony at this tick, add to the map
+        harmonyMap.insert(std::pair<int, HarmonyDesc>((sTime + offset).ticks(), newHarmonyDesc));
+    }
 }
 
 //---------------------------------------------------------
@@ -7006,7 +7172,11 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
 void MusicXMLParserNotations::tied()
 {
     Notation notation = Notation::notationWithAttributes(_e.name().toString(), _e.attributes(), "notations");
-    _notations.push_back(notation);
+    if (notation.attribute("type") == u"stop") {
+        _notations.insert(_notations.begin(), notation);
+    } else {
+        _notations.push_back(notation);
+    }
     QString tiedType = notation.attribute("type");
     if (tiedType != "start" && tiedType != "stop" && tiedType != "let-ring") {
         _logger->logError(QString("unknown tied type %1").arg(tiedType), &_e);
@@ -7439,29 +7609,11 @@ static void addArpeggio(ChordRest* cr, QString& arpeggioType, int arpeggioNo, Ar
 }
 
 //---------------------------------------------------------
-//   addArticLaissezVibrer
-//---------------------------------------------------------
-
-static void addArticLaissezVibrer(const Note* const note)
-{
-    IF_ASSERT_FAILED(note) {
-        return;
-    }
-
-    auto chord = note->chord();
-    if (!findLaissezVibrer(chord)) {
-        Articulation* na = Factory::createArticulation(chord);
-        na->setSymId(SymId::articLaissezVibrerBelow);
-        chord->add(na);
-    }
-}
-
-//---------------------------------------------------------
 //   addTie
 //---------------------------------------------------------
 
 static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track,
-                   Tie*& tie, MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
+                   std::map<int, Tie*>& ties, MxmlLogger* logger, const QXmlStreamReader* const xmlreader, const bool fixForCrossStaff)
 {
     IF_ASSERT_FAILED(note) {
         return;
@@ -7474,41 +7626,61 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
 
     if (type == "") {
         // ignore, nothing to do
-    } else if (type == "start") {
-        if (tie) {
-            logger->logError(QString("Tie already active"), xmlreader);
+    } else if (type == u"start") {
+        if (ties[note->pitch()]) {
+            logger->logError(String(u"Tie already active"), xmlreader);
+            cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
+            ties[note->pitch()] = nullptr;
         }
-        tie = new Tie(score->dummy());
-        note->setTieFor(tie);
-        tie->setStartNote(note);
-        tie->setTrack(track);
+        ties[note->pitch()] = Factory::createTie(note);
+        Tie* currTie = ties[note->pitch()];
+        note->setTieFor(currTie);
+        currTie->setStartNote(note);
+        currTie->setTrack(track);
 
         const QColor color { notation.attribute("color") };
         if (color.isValid()) {
-            tie->setColor(color);
+            currTie->setColor(color);
         }
 
         if (configuration()->musicxmlImportLayout()) {
-            if (orientation == "over" || placement == "above") {
-                tie->setSlurDirection(DirectionV::UP);
-            } else if (orientation == "under" || placement == "below") {
-                tie->setSlurDirection(DirectionV::DOWN);
-            } else if (orientation == "" || placement == "") {
+            if (orientation == u"over" || placement == u"above") {
+                currTie->setSlurDirection(DirectionV::UP);
+            } else if (orientation == u"under" || placement == u"below") {
+                currTie->setSlurDirection(DirectionV::DOWN);
+            } else if (orientation.isEmpty() || placement.isEmpty()) {
                 // ignore
             } else {
                 logger->logError(QString("unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
             }
         }
 
-        if (lineType == "dashed") {
-            tie->setStyleType(SlurStyleType::Dashed);
-        } else if (lineType == "dotted") {
-            tie->setStyleType(SlurStyleType::Dotted);
-        } else if (lineType == "solid" || lineType == "") {
-            tie->setStyleType(SlurStyleType::Solid);
+        if (lineType == u"dashed") {
+            currTie->setStyleType(SlurStyleType::Dashed);
+        } else if (lineType == u"dotted") {
+            currTie->setStyleType(SlurStyleType::Dotted);
+        } else if (lineType == u"solid" || lineType.isEmpty()) {
+            currTie->setStyleType(SlurStyleType::Solid);
         }
-        tie = nullptr;
+        currTie = nullptr;
     } else if (type == "stop") {
+        if (ties[note->pitch()]) {
+            Tie* currTie = ties[note->pitch()];
+            const Note* startNote = currTie->startNote();
+            const Chord* startChord = startNote ? startNote->chord() : nullptr;
+            const Chord* endChord = note->chord();
+            const Measure* startMeasure = startChord ? startChord->measure() : nullptr;
+            if (startMeasure == endChord->measure() || startChord->tick() + startChord->ticks() == endChord->tick()) {
+                // only connect if they're in the same bar, or there are no notes/rests in the same voice between them
+                currTie->setEndNote(note);
+                note->setTieBack(currTie);
+            } else {
+                cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
+            }
+            ties[note->pitch()] = nullptr;
+        } else {
+            logger->logError(String(u"Non-started tie terminated. No-op."), xmlreader);
+        }
         // ignore
     } else if (type == "let-ring") {
         addArticLaissezVibrer(note);
@@ -7681,8 +7853,8 @@ QString Notation::print() const
 //   MusicXMLParserNotations
 //---------------------------------------------------------
 
-MusicXMLParserNotations::MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger)
-    : _e(e), _score(score), _logger(logger)
+MusicXMLParserNotations::MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1)
+    : _e(e), _pass1(pass1), _score(score), _logger(logger)
 {
     // nothing
 }
@@ -7830,7 +8002,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
 
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
-                                         TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
+                                         TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
 {
     addArpeggio(cr, _arpeggioType, _arpeggioNo, arpMap, _logger, &_e, delayedArps);
     addBreath(cr, cr->tick(), _breath);
@@ -7844,7 +8016,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
         } else if (note && (notation.name() == "glissando" || notation.name() == "slide")) {
             addGlissandoSlide(notation, note, glissandi, spanners, _logger, &_e);
         } else if (note && notation.name() == "tied") {
-            addTie(notation, _score, note, cr->track(), tie, _logger, &_e);
+            addTie(notation, _score, note, cr->track(), ties, _logger, &_e, _pass1.exporterString().contains(u"dolet 6"));
         } else if (note && notation.parent() == "technical") {
             addTechnical(notation, note);
         } else {
