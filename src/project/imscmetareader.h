@@ -29,6 +29,7 @@
 #include "types/retval.h"
 
 #include "types/projectmeta.h"
+#include "types/projecttypes.h"
 
 namespace mu::project {
 class IMscMetaReader : MODULE_EXPORT_INTERFACE
@@ -39,6 +40,7 @@ public:
     virtual ~IMscMetaReader() = default;
 
     virtual RetVal<ProjectMeta> readMeta(const io::path_t& filePath) const = 0;
+    virtual RetVal<CloudProjectInfo> readCloudProjectInfo(const io::path_t& filePath) const = 0;
 };
 }
 

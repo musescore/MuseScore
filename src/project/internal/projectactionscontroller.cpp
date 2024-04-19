@@ -248,8 +248,19 @@ Ret ProjectActionsController::openProject(const io::path_t& givenPath, const QSt
 
     //! Step 5. If it's a cloud project, download the latest version
     if (configuration()->isCloudProject(actualPath) && !configuration()->isLegacyCloudProject(actualPath)) {
-        downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
-        return make_ret(Ret::Code::Ok);
+        bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
+        if (isCloudAvailable) {
+            downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
+            return make_ret(Ret::Code::Ok);
+        }
+
+        if (fileSystem()->exists(actualPath)) {
+            return doOpenCloudProjectOffline(actualPath, displayNameOverride);
+        }
+
+        Ret ret = make_ret(cloud::Err::NetworkError);
+        openSaveProjectScenario()->showCloudOpenError(ret);
+        return ret;
     }
 
     //! Step 6. Open project in the current window
@@ -349,6 +360,24 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
     return doFinishOpenProject();
 }
 
+Ret ProjectActionsController::doOpenCloudProjectOffline(const io::path_t& filePath, const QString& displayNameOverride)
+{
+    RetVal<INotationProjectPtr> rv = loadProject(filePath);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    INotationProjectPtr project = rv.val;
+    CloudProjectInfo info = project->cloudInfo();
+    info.name = displayNameOverride;
+    project->setCloudInfo(info);
+
+    recentFilesController()->prependRecentFile(makeRecentFile(project));
+    globalContext()->setCurrentProject(project);
+
+    return doFinishOpenProject();
+}
+
 Ret ProjectActionsController::doFinishOpenProject()
 {
     //! Show MuseSampler update if need
@@ -395,6 +424,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     }
 
     CloudProjectInfo info;
+    io::path_t localPath = configuration()->cloudProjectPath(scoreId);
 
     if (isOwner) {
         RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
@@ -408,10 +438,20 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
         info.visibility = scoreInfo.val.visibility;
         info.sourceUrl = scoreInfo.val.url;
         info.revisionId = scoreInfo.val.revisionId;
+
+        RetVal<CloudProjectInfo> localInfo = mscMetaReader()->readCloudProjectInfo(localPath);
+
+        if (localInfo.ret) {
+            if (localInfo.val.revisionId == scoreInfo.val.revisionId) {
+                doOpenCloudProject(localPath, info, isOwner);
+                return;
+            }
+        } else {
+            LOGE() << localInfo.ret;
+        }
     }
 
     // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
-    io::path_t localPath = configuration()->cloudProjectPath(scoreId);
     QFile* projectData = new QFile(localPath.toQString());
     if (!projectData->open(QIODevice::WriteOnly)) {
         openSaveProjectScenario()->showCloudOpenError(make_ret(Err::FileOpenError));
