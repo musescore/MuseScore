@@ -766,7 +766,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
     std::vector<Note*> tmpnl;
     std::vector<Note*> _nl = nl;
     bool selIsList = selection().isList();
-    bool selIsSingle = _nl.size() == 1 && selIsList;
+    bool selIsSingle = selIsList && _nl.size() == 1;
     bool shouldSelectFirstNote = selIsSingle && _nl[0]->tieFor();
 
     std::sort(_nl.begin(), _nl.end(), [](const Note* a, const Note* b) -> bool {
@@ -786,7 +786,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                 currNote = currNote->tieFor() ? currNote->tieFor()->endNote() : nullptr;
             }while (currNote);
         }
-        if (n->selected()) {
+        if (selIsList && n->selected()) {
             deselect(n);
         }
     }
@@ -804,8 +804,8 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         bool forceAccidental = false;
         if (std::abs(valTmp) != 7 || accidental) {
             int line      = on->line() - valTmp;
-            Fraction tick      = chord->tick();
-            Staff* estaff = staff(on->staffIdx() + chord->staffMove());
+            Fraction tick = chord->tick();
+            Staff* estaff = staff(chord->vStaffIdx());
             ClefType clef = estaff->clef(tick);
             Key key       = estaff->key(tick);
             int ntpc;
@@ -880,19 +880,20 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         }
 
         setPlayNote(true);
-        if (note && selIsList) {
+        if (selIsList && note) {
             notesToSelect.push_back(dynamic_cast<EngravingItem*>(note));
         }
     }
     if (m_is.noteEntryMode()) {
         m_is.setAccidentalType(AccidentalType::NONE);
     }
-    if (!notesToSelect.empty()) {
-        if (shouldSelectFirstNote) {
-            select(notesToSelect.front(), SelectType::SINGLE, 0);
-        } else {
-            select(notesToSelect, SelectType::ADD, 0);
-        }
+    if (notesToSelect.empty()) {
+        return;
+    }
+    if (shouldSelectFirstNote) {
+        select(notesToSelect.front(), SelectType::SINGLE, 0);
+    } else {
+        select(notesToSelect, SelectType::ADD, 0);
     }
     if (m_is.cr() == toChordRest(_nl[0]->chord()) && selIsSingle) {
         m_is.moveToNextInputPos();
