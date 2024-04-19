@@ -6672,6 +6672,7 @@ FretDiagram* MusicXMLParserPass2::frame()
 
 void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const Fraction& sTime, HarmonyMap& harmonyMap)
 {
+    UNUSED(measure);
     track_idx_t track = m_pass1.trackForPart(partId);
 
     const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
