@@ -203,7 +203,7 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
     }
 }
 
-TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
+TEST_F(Engraving_PlaybackContextTests, SoundFlags)
 {
     // [GIVEN] Score (piano with 2 staves) with sound flags
     Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags.mscx");
@@ -267,12 +267,42 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
     delete score;
 }
 
+TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
+{
+    // [GIVEN] Score with 5 measures. There is a measure repeat on the last 2 measures
+    // (so the previous 2 measures will be repeated)
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags_measure_repeats.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing sound flags
+    PlaybackContext ctx;
+
+    // [WHEN] Parse sound flags
+    ctx.update(parts.front()->id(), score);
+
+    // [THEN] The actual params match the expectation
+    PlaybackParamList secondMeasureParams { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("Espressivo"), 0 } };
+    PlaybackParamList thirdMeasureParams { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("bartok"), 0 } };
+
+    PlaybackParamMap expectedParams {
+        { timestampFromTicks(score, 1920), secondMeasureParams },
+        { timestampFromTicks(score, 3840), thirdMeasureParams },
+        { timestampFromTicks(score, 5760), secondMeasureParams }, // measure repeat
+        { timestampFromTicks(score, 7680), thirdMeasureParams }, // measure repeat
+    };
+
+    PlaybackParamMap actualParams = ctx.playbackParamMap(score);
+    EXPECT_EQ(actualParams, expectedParams);
+}
+
 /**
- * @brief Engraving_PlaybackContextTests_ParseSoundFlags_ArcoAndOrdCancelPlayingTechniques
+ * @brief Engraving_PlaybackContextTests_SoundFlags_ArcoAndOrdCancelPlayingTechniques
  *  @details Checks whether Arco & "Ord." correctly cancel playing techniques. See:
  *  https://github.com/musescore/MuseScore/issues/22403
  */
-TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags_ArcoAndOrdCancelPlayingTechniques)
+TEST_F(Engraving_PlaybackContextTests, SoundFlags_ArcoAndOrdCancelPlayingTechniques)
 {
     // [GIVEN] Score with sound flags & playing techniques
     Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags_arco.mscx");
