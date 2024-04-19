@@ -1276,8 +1276,8 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         Accidental* acc = note->accidental();
         if (acc) {
             Convert::colorToMEI(acc, meiAccid);
-            std::string xmlId = this->getXmlIdFor(acc, 'a');
-            meiAccid.Write(accidNode, xmlId);
+            std::string xmlIdAcc = this->getXmlIdFor(acc, 'a');
+            meiAccid.Write(accidNode, xmlIdAcc);
         } else {
             meiAccid.Write(accidNode, this->getLayerXmlIdFor(ACCID_L));
         }
