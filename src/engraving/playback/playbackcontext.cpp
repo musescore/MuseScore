@@ -455,6 +455,7 @@ void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat
             int endTick = referringMeasure->endTick().ticks() + tickPositionOffset;
 
             copyDynamicsInRange(startTick, endTick, newItemsOffsetTick);
+            copyPlaybackParamsInRange(startTick, endTick, newItemsOffsetTick);
             copyPlayTechniquesInRange(startTick, endTick, newItemsOffsetTick);
 
             currMeasure = currMeasure->nextMeasure();
@@ -486,6 +487,24 @@ void PlaybackContext::copyDynamicsInRange(const int rangeStartTick, const int ra
     }
 
     m_dynamicsMap.merge(std::move(newDynamics));
+}
+
+void PlaybackContext::copyPlaybackParamsInRange(const int rangeStartTick, const int rangeEndTick, const int newParamsOffsetTick)
+{
+    auto startIt = m_playbackParamMap.lower_bound(rangeStartTick);
+    if (startIt == m_playbackParamMap.end()) {
+        return;
+    }
+
+    auto endIt = m_playbackParamMap.lower_bound(rangeEndTick);
+
+    ParamMap newParams;
+    for (auto it = startIt; it != endIt; ++it) {
+        int tick = it->first + newParamsOffsetTick;
+        newParams.insert_or_assign(tick, it->second);
+    }
+
+    m_playbackParamMap.merge(std::move(newParams));
 }
 
 void PlaybackContext::copyPlayTechniquesInRange(const int rangeStartTick, const int rangeEndTick, const int newPlayTechOffsetTick)
