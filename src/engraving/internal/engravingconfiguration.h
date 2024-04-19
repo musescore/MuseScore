@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
 #include "ui/iuiconfiguration.h"
+#include "notation/inotationconfiguration.h"
 #include "accessibility/iaccessibilityconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
@@ -37,6 +38,7 @@ class EngravingConfiguration : public IEngravingConfiguration, public muse::Inje
 {
     muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<mu::notation::INotationConfiguration> notationConfiguration = { this };
     muse::Inject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration = { this };
     muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
 
