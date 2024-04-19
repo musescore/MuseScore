@@ -837,7 +837,7 @@ String Note::tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
         pitchStr.replace(u"#", u"♯");
     }
 
-    pitchStr = muse::mtrc("engraving", pitchStr);
+    pitchStr = muse::mtrc("global", pitchStr);
 
     const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
