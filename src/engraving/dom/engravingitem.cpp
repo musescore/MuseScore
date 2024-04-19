@@ -637,7 +637,7 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (m_colorsInversionEnabled && engravingConfiguration()->scoreInversionEnabled()) {
-        return engravingConfiguration()->scoreInversionColor();
+        return normalColor.inverted();
     }
 
     return normalColor;

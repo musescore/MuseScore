@@ -67,6 +67,8 @@ public:
     void setBlue(int value);
     void setAlpha(int value);
 
+    Color inverted() const;
+
     bool operator==(const Color& other) const;
     bool operator!=(const Color& other) const;
 

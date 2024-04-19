@@ -206,6 +206,14 @@ void Color::setRgba(Rgba rgba)
     m_isValid = true;
 }
 
+Color Color::inverted() const
+{
+    int m = std::min(red() < green() ? red() : green(), blue());
+    int M = std::max(red() > green() ? red() : green(), blue());
+    int x = 255 - m - M;
+    return Color(red() + x, green() + x, blue() + x, alpha());
+}
+
 static constexpr int fromHex(char c)
 {
     return ((c >= '0') && (c <= '9')) ? int(c - '0')
