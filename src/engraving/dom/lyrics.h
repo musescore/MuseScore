@@ -103,6 +103,9 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
     void triggerLayout() const override;
 
+    double yRelativeToStaff() const;
+    void setYRelativeToStaff(double y);
+
 protected:
     int m_no = 0;  // row index
     bool m_even = false;

@@ -195,6 +195,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     ldata->setPosX(x);
+    item->setYRelativeToStaff(0.0);
 
     if (item->ticks().isNotZero()) {
         // set melisma end
@@ -612,7 +613,7 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& ly
         LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = -(totVersesAbove - verse) * lyrics->lineHeight() * lyricsLineHeightFactor;
-            lyrics->mutldata()->setPosY(y);
+            lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
             Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
@@ -626,7 +627,7 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& ly
         LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = staffHeight + verse * lyrics->lineHeight() * lyricsLineHeightFactor;
-            lyrics->mutldata()->setPosY(y);
+            lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
             Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
@@ -678,11 +679,15 @@ SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, LyricsVer
     if (lyricsVerses.count(verse) > 0) {
         LyricsVerse& lyricsVerse = lyricsVerses[verse];
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
-            Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->pos().y()));
-            lyricsSkyline.add(lyricsShape);
+            if (lyrics->addToSkyline()) {
+                Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff()));
+                lyricsSkyline.add(lyricsShape);
+            }
         }
         for (LyricsLineSegment* lyricsLineSeg : lyricsVerse.lines()) {
-            lyricsSkyline.add(lyricsLineSeg->shape().translate(lyricsLineSeg->pos()));
+            if (lyricsLineSeg->lyricsLine()->lyrics()->addToSkyline()) {
+                lyricsSkyline.add(lyricsLineSeg->shape().translate(lyricsLineSeg->pos()));
+            }
         }
     }
 
@@ -718,28 +723,39 @@ void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutCont
                                 LyricsVersesMap& lyricsVersesBelow)
 {
     double systemX = system->pageX();
-    double lyricsVerticalPadding = ctx.conf().styleMM(Sid::lyricsMinBottomDistance);
+    // HACK: subtract minVerticalDistance here because it's added later during staff distance calculations. Needs a better solution.
+    double lyricsVerticalPadding = ctx.conf().styleMM(Sid::lyricsMinBottomDistance) - ctx.conf().styleMM(Sid::minVerticalDistance);
     Skyline& skyline = system->staff(staffIdx)->skyline();
     for (auto& pair : lyricsVersesAbove) {
         LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
-            Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->pos().y()));
-            skyline.north().add(lyricsShape.adjust(0.0, -lyricsVerticalPadding, 0.0, 0.0));
+            if (lyrics->addToSkyline()) {
+                Shape lyricsShape
+                    = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff()));
+                skyline.north().add(lyricsShape.adjust(0.0, -lyricsVerticalPadding, 0.0, 0.0));
+            }
         }
         for (LyricsLineSegment* lyricsLineSeg : lyricsVerse.lines()) {
-            Shape lineShape = lyricsLineSeg->shape().translate(lyricsLineSeg->pos());
-            skyline.north().add(lineShape.adjust(0.0, -lyricsVerticalPadding, 0.0, 0.0));
+            if (lyricsLineSeg->lyricsLine()->lyrics()->addToSkyline()) {
+                Shape lineShape = lyricsLineSeg->shape().translate(lyricsLineSeg->pos());
+                skyline.north().add(lineShape.adjust(0.0, -lyricsVerticalPadding, 0.0, 0.0));
+            }
         }
     }
     for (auto& pair : lyricsVersesBelow) {
         LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
-            Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->pos().y()));
-            skyline.south().add(lyricsShape.adjust(0.0, 0.0, 0.0, lyricsVerticalPadding));
+            if (lyrics->addToSkyline()) {
+                Shape lyricsShape
+                    = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff()));
+                skyline.south().add(lyricsShape.adjust(0.0, 0.0, 0.0, lyricsVerticalPadding));
+            }
         }
         for (LyricsLineSegment* lyricsLineSeg : lyricsVerse.lines()) {
-            Shape lineShape = lyricsLineSeg->shape().translate(lyricsLineSeg->pos());
-            skyline.south().add(lineShape.adjust(0.0, 0.0, 0.0, lyricsVerticalPadding));
+            if (lyricsLineSeg->lyricsLine()->lyrics()->addToSkyline()) {
+                Shape lineShape = lyricsLineSeg->shape().translate(lyricsLineSeg->pos());
+                skyline.south().add(lineShape.adjust(0.0, 0.0, 0.0, lyricsVerticalPadding));
+            }
         }
     }
 }

@@ -489,6 +489,16 @@ void Lyrics::triggerLayout() const
     }
 }
 
+double Lyrics::yRelativeToStaff() const
+{
+    return pos().y() + chordRest()->pos().y();
+}
+
+void Lyrics::setYRelativeToStaff(double y)
+{
+    mutldata()->setPosY(y - chordRest()->pos().y());
+}
+
 //---------------------------------------------------------
 //   forAllLyrics
 //---------------------------------------------------------
@@ -522,21 +532,6 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
                 TextBase::undoChangeProperty(Pid::PLACEMENT, int(p), ps);
                 break;
             }
-        }
-        TextBase::undoChangeProperty(id, v, ps);
-        return;
-    } else if (id == Pid::AUTOPLACE && v.toBool() != autoplace()) {
-        if (v.toBool()) {
-            // setting autoplace
-            // reset offset
-            undoResetProperty(Pid::OFFSET);
-        } else {
-            // unsetting autoplace
-            // rebase offset
-            PointF off = offset();
-            double y = pos().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
-            off.ry() = placeAbove() ? y : y - staff()->staffHeight();
-            undoChangeProperty(Pid::OFFSET, off, PropertyFlags::UNSTYLED);
         }
         TextBase::undoChangeProperty(id, v, ps);
         return;
