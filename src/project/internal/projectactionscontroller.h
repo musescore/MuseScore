@@ -40,6 +40,7 @@
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
 #include "iopensaveprojectscenario.h"
+#include "imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
@@ -63,6 +64,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     INJECT(IProjectAutoSaver, projectAutoSaver)
     INJECT(IOpenSaveProjectScenario, openSaveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
+    INJECT(IMscMetaReader, mscMetaReader)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(muse::IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
@@ -194,6 +196,7 @@ private:
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);
     muse::Ret doOpenProject(const muse::io::path_t& filePath);
     muse::Ret doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
+    muse::Ret doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride);
 
     muse::Ret doFinishOpenProject();
     muse::Ret openPageIfNeed(muse::Uri pageUri);

@@ -37,7 +37,8 @@ class MscMetaReader : public IMscMetaReader
     INJECT(muse::io::IFileSystem, fileSystem)
 
 public:
-    muse::RetVal<ProjectMeta> readMeta(const muse::io::path_t& filePath) const;
+    muse::RetVal<ProjectMeta> readMeta(const muse::io::path_t& filePath) const override;
+    muse::RetVal<CloudProjectInfo> readCloudProjectInfo(const muse::io::path_t& filePath) const override;
 
 private:
 
@@ -64,8 +65,12 @@ private:
         QString arranger;
         QString creationDate;
 
+        QVariantMap additionalTags;
+
         size_t partsCount = 0;
     };
+
+    muse::Ret prepareReader(const muse::io::path_t& filePath, mu::engraving::MscReader& reader) const;
 
     void doReadMeta(muse::deprecated::XmlReader& xmlReader, ProjectMeta& meta) const;
     RawMeta doReadBox(muse::deprecated::XmlReader& xmlReader) const;
