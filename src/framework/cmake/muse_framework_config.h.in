@@ -2,7 +2,7 @@
 /* App                                            */
 /* ============================================== */
 
-#cmakedefine MUSE_APP_NAME "${MUSE_APP_NAME}"
+#cmakedefine MUSE_APP_TITLE "${MUSE_APP_TITLE}"
 #cmakedefine MUSE_APP_UNSTABLE 1
 #cmakedefine MUSE_APP_REVISION "${MUSE_APP_REVISION}"
 #cmakedefine MUSE_APP_BUILD_NUMBER "${MUSE_APP_BUILD_NUMBER}"

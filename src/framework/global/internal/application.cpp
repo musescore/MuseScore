@@ -36,8 +36,8 @@ using namespace muse;
 
 String Application::name() const
 {
-#ifdef MUSE_APP_NAME
-    return String::fromAscii(MUSE_APP_NAME);
+#ifdef MUSE_APP_TITLE
+    return String::fromAscii(MUSE_APP_TITLE);
 #else
     return String();
 #endif

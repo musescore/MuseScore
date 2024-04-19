@@ -68,10 +68,10 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
   BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
   BUILD_REVISION=$(cat $ARTIFACTS_DIR/env/build_revision.env)
-  ARTIFACT_NAME=MuseScoreNightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}-${PACKARCH}
+  ARTIFACT_NAME=MuseScore-Studio-Nightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}-${PACKARCH}
 else
   BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
-  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-${PACKARCH}
+  ARTIFACT_NAME=MuseScore-Studio-${BUILD_VERSION}-${PACKARCH}
 fi
 
 if [ "$PACKTYPE" == "7z" ]; then
