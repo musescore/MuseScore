@@ -24,7 +24,6 @@
 
 #include <functional>
 #include <QQuickView>
-#include <QQuickWidget>
 #include <QQmlEngine>
 #include <QUrl>
 #include <QQmlContext>
