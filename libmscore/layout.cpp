@@ -382,8 +382,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                           // the most important rules for sharing noteheads on unisons between voices are
                                           // that notes must be one same line with same tpc
                                           // noteheads must be unmirrored and of same group
-                                          // and chords must be same size (or else sharing code won't work)
-                                          if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->mirror() || p->mirror() || nchord->isSmall() != pchord->isSmall()) {
+                                          // and chords must be same size if notehead is anything other than HEAD_QUARTER
+                                          if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->mirror() || p->mirror()
+                                              || (nchord->isSmall() != pchord->isSmall()
+                                                  && (nHeadType != NoteHead::Type::HEAD_QUARTER || pHeadType != NoteHead::Type::HEAD_QUARTER))) {
                                                 shareHeads = false;
                                                 }
                                           else {
@@ -458,10 +460,16 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     Note* previousNote = overlapNotes[i-1];
                                     Note* n = overlapNotes[i];
                                     if (!(previousNote->chord()->isNudged() || n->chord()->isNudged())) {
+                                          const bool prevChordSmall = previousNote->chord()->isSmall();
+                                          const bool nChordSmall = n->chord()->isSmall();
                                           if (previousNote->chord()->dots() == n->chord()->dots()) {
-                                                // hide one set dots
+                                                // Hide the small augmentation dot if present
                                                 bool onLine = !(previousNote->line() & 1);
-                                                if (onLine) {
+                                                if (prevChordSmall)
+                                                      previousNote->setDotsHidden(true);
+                                                else if (nChordSmall)
+                                                      n->setDotsHidden(true);
+                                                else if (onLine) {
                                                       // hide dots for lower voice
                                                       if (previousNote->voice() & 1)
                                                             previousNote->setDotsHidden(true);
@@ -476,6 +484,15 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                                             n->setDotsHidden(true);
                                                       }
                                                 }
+                                          // If either chord is small, adjust offset
+                                          Chord* smallChord = prevChordSmall ? previousNote->chord() : nullptr;
+                                          smallChord = nChordSmall ? n->chord() : smallChord;
+                                          if (smallChord && !(prevChordSmall && nChordSmall)) {
+                                                if (smallChord->up())
+                                                      centerUp *= 2;
+                                                else
+                                                      centerDown = 0;
+                                          }
                                           // formerly we hid noteheads in an effort to fix playback
                                           // but this doesn't work for cases where noteheads cannot be shared
                                           // so better to solve the problem elsewhere
@@ -1616,8 +1633,8 @@ void Score::connectArpeggios()
                               Chord* chord = toChord(segment->elist()[i]);
                               if (chord->arpeggio() && chord->arpeggio()->visible()) {
                                     if (chord->pagePos() == QPointF(0, 0)) doLayout();
-                                    qreal localTop = chord->arpeggio()->pageBoundingRect().top();                   
-                                    qreal localBottom = chord->arpeggio()->pageBoundingRect().bottom();                             
+                                    qreal localTop = chord->arpeggio()->pageBoundingRect().top();
+                                    qreal localBottom = chord->arpeggio()->pageBoundingRect().bottom();
                                     minTop = qMin(localTop, minTop);
                                     maxBottom = qMax(localBottom, maxBottom);
                                     if (firstArpeggio == -1)
@@ -1625,7 +1642,7 @@ void Score::connectArpeggios()
                                           firstArpeggio = i;
                                     else {
                                           // Hide arpeggio; firstArpeggio will be extended to cover it.
-                                          chord->arpeggio()->setVisible(false);                                          
+                                          chord->arpeggio()->setVisible(false);
                                           multipleArpeggios = true;
                                           }
                                     }
