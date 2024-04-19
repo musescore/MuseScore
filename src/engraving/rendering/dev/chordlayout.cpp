@@ -1716,10 +1716,11 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         // the most important rules for sharing noteheads on unisons between voices are
                         // that notes must be one same line with same tpc
                         // noteheads must be unmirrored and of same group
-                        // and chords must be same size (or else sharing code won't work)
+                        // and chords must be same size if notehead is anything other than HEAD_QUARTER
                         if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->ldata()->mirror()
                             || p->ldata()->mirror()
-                            || nchord->isSmall() != pchord->isSmall()) {
+                            || (nchord->isSmall() != pchord->isSmall()
+                                && (nHeadType != NoteHeadType::HEAD_QUARTER || pHeadType != NoteHeadType::HEAD_QUARTER))) {
                             shareHeads = false;
                         } else {
                             // noteheads are potentially shareable
@@ -1798,10 +1799,17 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         Note* previousNote = overlapNotes[i - 1];
                         Note* n = overlapNotes[i];
                         if (!(previousNote->chord()->isNudged() || n->chord()->isNudged())) {
+                            const bool prevChordSmall = previousNote->chord()->isSmall();
+                            const bool nChordSmall = n->chord()->isSmall();
                             if (previousNote->chord()->dots() == n->chord()->dots()) {
-                                // hide one set dots
+                                // hide one set of dots
+                                // Hide the small augmentation dot if present
                                 bool onLine = !(previousNote->line() & 1);
-                                if (onLine) {
+                                if (prevChordSmall) {
+                                    previousNote->setDotsHidden(true);
+                                } else if (nChordSmall) {
+                                    n->setDotsHidden(true);
+                                } else if (onLine) {
                                     // hide dots for lower voice
                                     if (previousNote->voice() & 1) {
                                         previousNote->setDotsHidden(true);
@@ -1815,6 +1823,16 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                                     } else {
                                         n->setDotsHidden(true);
                                     }
+                                }
+                            }
+                            // If either chord is small, adjust offset
+                            Chord* smallChord = prevChordSmall ? previousNote->chord() : nullptr;
+                            smallChord = nChordSmall ? n->chord() : smallChord;
+                            if (smallChord && !(prevChordSmall && nChordSmall)) {
+                                if (smallChord->up()) {
+                                    centerUp *= 2;
+                                } else {
+                                    centerDown = 0;
                                 }
                             }
                             // formerly we hid noteheads in an effort to fix playback
