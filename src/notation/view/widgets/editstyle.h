@@ -134,7 +134,6 @@ private slots:
     void on_comboFBFont_currentIndexChanged(int index);
     void on_buttonTogglePagelist_clicked();
     void on_resetStylesButton_clicked();
-    void on_resetTabStylesButton_clicked();
     void on_pageRowSelectionChanged();
     void editUserStyleName();
     void endEditUserStyleName();

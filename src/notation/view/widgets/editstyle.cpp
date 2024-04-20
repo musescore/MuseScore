@@ -1888,18 +1888,6 @@ void EditStyle::on_resetStylesButton_clicked()
 }
 
 //---------------------------------------------------------
-//    On resetTabStylesButton clicked
-//---------------------------------------------------------
-
-void EditStyle::on_resetTabStylesButton_clicked()
-{
-    // TODO: now button is hidden, make sure default styles are chosen correctly
-    for (int i = static_cast<int>(StyleId::slurShowTabSimple); i <= static_cast<int>(StyleId::golpeShowTabCommon); i++) {
-        resetStyleValue(i);
-    }
-}
-
-//---------------------------------------------------------
 //    On pageRowSelectionChanged
 //---------------------------------------------------------
 
