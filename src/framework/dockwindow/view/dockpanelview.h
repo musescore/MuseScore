@@ -25,8 +25,6 @@
 
 #include "internal/dockbase.h"
 
-#include "framework/uicomponents/view/qmllistproperty.h"
-
 #include "uicomponents/view/abstractmenumodel.h"
 
 namespace muse::uicomponents {

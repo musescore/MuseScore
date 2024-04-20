@@ -28,11 +28,9 @@
 #include "compatmidirender.h"
 #include "compatmidirenderinternal.h"
 
-#include <set>
 #include <cmath>
 
 #include "compat/midi/event.h"
-#include "style/style.h"
 #include "types/constants.h"
 
 #include "dom/accidental.h"
@@ -42,7 +40,6 @@
 #include "dom/chord.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
-#include "dom/easeInOut.h"
 #include "dom/glissando.h"
 #include "dom/hairpin.h"
 #include "dom/instrument.h"
@@ -52,19 +49,14 @@
 #include "dom/measurerepeat.h"
 #include "dom/note.h"
 #include "dom/noteevent.h"
-#include "dom/palmmute.h"
 #include "dom/part.h"
 #include "dom/repeatlist.h"
 #include "dom/score.h"
 #include "dom/segment.h"
-#include "dom/sig.h"
-#include "dom/slur.h"
 #include "dom/staff.h"
 #include "dom/stafftextbase.h"
 #include "dom/stretchedbend.h"
 #include "dom/swing.h"
-#include "dom/synthesizerstate.h"
-#include "dom/tempo.h"
 #include "dom/tie.h"
 #include "dom/trill.h"
 #include "dom/undo.h"
