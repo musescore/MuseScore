@@ -231,7 +231,6 @@ Item {
                     Loader {
                         id: treeItemDelegateLoader
 
-                        property var item: model ? model.itemRole : null
                         property int delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
                         property bool isSelected: model ? model.itemRole.isSelected : false
 
@@ -247,7 +246,7 @@ Item {
                             InstrumentsTreeItemDelegate {
                                 treeView: instrumentsTreeView
 
-                                item: treeItemDelegateLoader.item
+                                item: model ? model.itemRole : null
 
                                 sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
