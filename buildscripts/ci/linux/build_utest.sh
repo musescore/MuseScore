@@ -64,6 +64,6 @@ MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
 MUSESCORE_QT5_COMPAT=OFF \
 MUSESCORE_DOWNLOAD_SOUNDFONT=OFF \
 MUSESCORE_BUILD_UNIT_TESTS=ON \
-bash ./ninja_build.sh -t debug          
+bash ./ninja_build.sh -t installdebug          
 
 df -h .
