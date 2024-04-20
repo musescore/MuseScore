@@ -158,7 +158,7 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
 {
     bool found = false;
 
-    auto findBeam = [&found, score](ChordRest* cr) {
+    auto findBeam = [&found](ChordRest* cr) {
         Beam* beam = cr->beam();
         if (beam && beam->userModified() && beam->cross() && beam->elements().front() == cr) {
             found = true;

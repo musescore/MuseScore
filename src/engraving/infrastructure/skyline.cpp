@@ -37,17 +37,6 @@ using namespace mu;
 using namespace muse::draw;
 
 namespace mu::engraving {
-static const double MAXIMUM_Y = 1000000.0;
-static const double MINIMUM_Y = -1000000.0;
-
-// #define SKL_DEBUG
-
-#ifdef SKL_DEBUG
-#define DP(...)   printf(__VA_ARGS__)
-#else
-#define DP(...)
-#endif
-
 void Skyline::add(const ShapeElement& r)
 {
     if (r.ignoreForLayout()) {
