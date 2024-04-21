@@ -1,19 +1,18 @@
 {
-  "version": 3,
+  "version": 6,
   "configurePresets": [
     {
       "name": "windows-base",
       "description": "Target Windows with the Visual Studio development environment.",
       "hidden": true,
       "generator": "Visual Studio 17 2022",
-      //"generator": "Ninja",
       "binaryDir": "${sourceDir}/msvc.build/${presetName}",
       "installDir": "${sourceDir}/msvc.install/${presetName}",
       "cacheVariables": {
         "CMAKE_C_COMPILER": "cl.exe",
         "CMAKE_CXX_COMPILER": "cl.exe",
         "CMAKE_WARN_DEPRECATED": "FALSE",
-        "CMAKE_PREFIX_PATH": "$env{PATH};${sourceDir}\\dependencies"
+        "CMAKE_PRESET_NAME" : "${presetName}"
       },
       "condition": {
         "type": "equals",
@@ -31,7 +30,6 @@
         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_LIBRARY_PATH": "${sourceDir}\\dependencies\\libx64",
         "CMAKE_BUILD_TYPE": "Debug",
         "MUSE_COMPILE_BUILD_64": "ON"
       }
@@ -73,7 +71,6 @@
         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_LIBRARY_PATH": "${sourceDir}\\dependencies\\libx86",
         "CMAKE_BUILD_TYPE": "Debug",
         "MUSE_COMPILE_BUILD_64": "OFF"
       }
