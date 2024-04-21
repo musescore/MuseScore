@@ -216,7 +216,7 @@ void PlaybackController::seek(const midi::tick_t tick)
     seek(tickToMsecs(tick));
 }
 
-void PlaybackController::seek(const audio::msecs_t msecs)
+void PlaybackController::seek(const msecs_t msecs)
 {
     IF_ASSERT_FAILED(playback()) {
         return;
@@ -1057,7 +1057,7 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
 
     outParams.muted = !isActive;
 
-    audio::TrackId trackId = m_instrumentTrackIdMap[instrumentTrackId];
+    TrackId trackId = m_instrumentTrackIdMap[instrumentTrackId];
     playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(outParams));
 }
 
@@ -1145,7 +1145,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
         return;
     }
 
-    const audio::AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
+    const AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
     playback()->audioOutput()->setMasterOutputParams(masterOutputParams);
 
     subscribeOnAudioParamsChanges();
@@ -1157,7 +1157,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
 
 void PlaybackController::subscribeOnAudioParamsChanges()
 {
-    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this, [this](const audio::AudioOutputParams& params) {
+    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
         audioSettings()->setMasterAudioOutputParams(params);
     });
 
@@ -1284,7 +1284,7 @@ void PlaybackController::setupSequenceTracks()
 void PlaybackController::setupSequencePlayer()
 {
     playback()->player()->playbackPositionMsecs().onReceive(
-        this, [this](const TrackSequenceId id, const audio::msecs_t& msecs) {
+        this, [this](const TrackSequenceId id, const msecs_t& msecs) {
         if (m_currentSequenceId != id) {
             return;
         }
@@ -1295,7 +1295,7 @@ void PlaybackController::setupSequencePlayer()
 
     playback()->player()->setDuration(m_currentSequenceId, notationPlayback()->totalPlayTime());
 
-    notationPlayback()->totalPlayTimeChanged().onReceive(this, [this](const audio::msecs_t totalPlaybackTime) {
+    notationPlayback()->totalPlayTimeChanged().onReceive(this, [this](const msecs_t totalPlaybackTime) {
         playback()->player()->setDuration(m_currentSequenceId, totalPlaybackTime);
         m_totalPlayTimeChanged.notify();
     });
@@ -1382,7 +1382,7 @@ void PlaybackController::updateSoloMuteStates()
         params.muted = soloMuteState.mute || shouldForceMute;
         params.forceMute = shouldForceMute;
 
-        audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
+        TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
         playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
     }
 
