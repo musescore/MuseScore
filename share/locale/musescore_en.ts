@@ -18426,12 +18426,13 @@ pickup measure</translation>
         <translation type="unfinished">File “%1” is not a valid MusicXML file.</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="49"/>
-        <source>Export to MusicXML compatible with older MuseScore versions</source>
-        <translation type="unfinished">Export to MusicXML compatible with older MuseScore versions</translation>
+        <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="52"/>
+        <source>Limit MusicXML export for compatibility with MuseScore 3</source>
+        <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
+        <translation type="unfinished">Limit MusicXML export for compatibility with MuseScore 3</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="54"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="57"/>
         <source>Export invisible elements to MusicXML</source>
         <translation type="unfinished">Export invisible elements to MusicXML</translation>
     </message>
