@@ -45,8 +45,10 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_MU3_COMPAT_KEY, Val(false));
-    settings()->setDescription(MUSICXML_EXPORT_MU3_COMPAT_KEY, mu::qtrc("project/export",
-                                                                        "Export to MusicXML compatible with older MuseScore versions").toStdString());
+    settings()->setDescription(MUSICXML_EXPORT_MU3_COMPAT_KEY,
+                               //: Means that less information will be included in exported MusicXML files,
+                               //: to prevent errors when importing them into MuseScore 3
+                               mu::trc("iex_musicxml", "Limit MusicXML export for compatibility with MuseScore 3"));
     settings()->setCanBeManuallyEdited(MUSICXML_EXPORT_MU3_COMPAT_KEY, true);
     settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicxmlExportBreaksType::All));
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));

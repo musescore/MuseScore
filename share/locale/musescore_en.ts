@@ -1821,11 +1821,6 @@
         <translation type="unfinished">Musical symbols font:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
-        <source>MuseScore will change the style to suit the font better</source>
-        <translation type="unfinished">MuseScore will change the style to suit the font better</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="353"/>
         <source>Automatically load style settings based on font</source>
         <translation type="unfinished">Automatically load style settings based on font</translation>
@@ -2418,6 +2413,11 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Clefs, key &amp; time signatures</source>
         <translation type="unfinished">Clefs, key &amp; time signatures</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
+        <source>MuseScore Studio will change the style to suit the font better</source>
+        <translation type="unfinished">MuseScore Studio will change the style to suit the font better</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="927"/>
@@ -8613,6 +8613,11 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished">&amp;Full screen</translation>
     </message>
     <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="62"/>
+        <source>&amp;About MuseScore Studio…</source>
+        <translation type="unfinished">&amp;About MuseScore Studio…</translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="67"/>
         <source>About &amp;Qt…</source>
         <translation type="unfinished">About &amp;Qt…</translation>
@@ -8746,11 +8751,6 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="56"/>
         <source>Full screen</source>
         <translation type="unfinished">Full screen</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="62"/>
-        <source>&amp;About MuseScore…</source>
-        <translation type="unfinished">&amp;About MuseScore…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="78"/>
@@ -9952,12 +9952,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished">Drumset tools</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
-        <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
-        <source>MuseScore 4</source>
-        <translation type="unfinished">MuseScore 4</translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="100"/>
         <source>Undo/redo toolbar</source>
         <translation type="unfinished">Undo/redo toolbar</translation>
@@ -9989,13 +9983,13 @@ This action will not delete any of your scores.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="268"/>
-        <source>Would you like to restart MuseScore now?</source>
-        <translation type="unfinished">Would you like to restart MuseScore now?</translation>
+        <source>Would you like to restart MuseScore Studio now?</source>
+        <translation type="unfinished">Would you like to restart MuseScore Studio now?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
-        <source>MuseScore needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished">MuseScore needs to be restarted for these changes to take effect.</translation>
+        <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
+        <translation type="unfinished">MuseScore Studio needs to be restarted for these changes to take effect.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="274"/>
@@ -10031,11 +10025,6 @@ This action will not delete any of your scores.</translation>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="95"/>
         <source>DevTools</source>
         <translation type="unfinished">DevTools</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
-        <source>MuseScore</source>
-        <translation type="unfinished">MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="79"/>
@@ -10082,13 +10071,20 @@ This action will not delete any of your scores.</translation>
         <source>Loading score…‎</source>
         <translation type="unfinished">Loading score…‎</translation>
     </message>
+    <message>
+        <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
+        <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
+        <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
+        <source>MuseScore Studio</source>
+        <translation type="unfinished">MuseScore Studio</translation>
+    </message>
 </context>
 <context>
     <name>appshell/about</name>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="32"/>
-        <source>About MuseScore</source>
-        <translation type="unfinished">About MuseScore</translation>
+        <source>About MuseScore Studio</source>
+        <translation type="unfinished">About MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="84"/>
@@ -10118,9 +10114,9 @@ This action will not delete any of your scores.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="139"/>
-        <source>Copyright © 1999-2024 MuseScore BVBA and others.
+        <source>Copyright © 1999-2024 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished">Copyright © 1999-2024 MuseScore BVBA and others.
+        <translation type="unfinished">Copyright © 1999-2024 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
     </message>
     <message>
@@ -10196,8 +10192,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
-        <source>Welcome to MuseScore 4</source>
-        <translation type="unfinished">Welcome to MuseScore 4</translation>
+        <source>Welcome to MuseScore Studio</source>
+        <translation type="unfinished">Welcome to MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10491,13 +10487,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
-        <source>Check to see if a new version of MuseScore is available</source>
-        <translation type="unfinished">Check to see if a new version of MuseScore is available</translation>
+        <source>Check to see if a new version of MuseScore Studio is available</source>
+        <translation type="unfinished">Check to see if a new version of MuseScore Studio is available</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
-        <source>Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished">Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</translation>
+        <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
+        <translation type="unfinished">Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -11211,8 +11207,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
-        <source>Sign in successful! You’re good to go back to the MuseScore desktop app.</source>
-        <translation type="unfinished">Sign in successful! You’re good to go back to the MuseScore desktop app.</translation>
+        <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
+        <translation type="unfinished">Sign in successful! You’re good to go back to MuseScore Studio.</translation>
     </message>
 </context>
 <context>
@@ -11224,8 +11220,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
-        <source>This will create a .zip file with information about your MuseScore setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation type="unfinished">This will create a .zip file with information about your MuseScore setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</translation>
+        <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
+        <translation type="unfinished">This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
@@ -11489,103 +11485,103 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">%1 (sounding as %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2180"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2181"/>
         <source>Acciaccatura</source>
         <translation type="unfinished">Acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2182"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2183"/>
         <source>Appoggiatura</source>
         <translation type="unfinished">Appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2186"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2187"/>
         <source>Grace note after</source>
         <translation type="unfinished">Grace note after</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2190"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2191"/>
         <source>Grace note before</source>
         <translation type="unfinished">Grace note before</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2192"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2193"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="184"/>
         <source>Note</source>
         <translation type="unfinished">Note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3081"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3119"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3082"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3120"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation type="unfinished">Voice: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3089"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3090"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation type="unfinished">(on %1‰ off %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3095"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3124"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3096"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3125"/>
         <source>Beat slash</source>
         <translation type="unfinished">Beat slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3095"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3124"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3096"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3125"/>
         <source>Rhythm slash</source>
         <translation type="unfinished">Rhythm slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3099"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3128"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3100"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3129"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished">%1; String: %2; Fret: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3105"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3106"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished">%1; Pitch: %2; Duration: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3134"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3135"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished">%1 head %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3136"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3137"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation type="unfinished">Cross-staff above</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3138"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3139"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation type="unfinished">Cross-staff below</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3142"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3143"/>
         <source>too low</source>
         <translation type="unfinished">too low</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3144"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3145"/>
         <source>too high</source>
         <translation type="unfinished">too high</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3146"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
         <source>too low for amateurs</source>
         <translation type="unfinished">too low for amateurs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3148"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3149"/>
         <source>too high for amateurs</source>
         <translation type="unfinished">too high for amateurs</translation>
     </message>
@@ -11649,8 +11645,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1164"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1086"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3174"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3186"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3175"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3187"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2265"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
@@ -11659,8 +11655,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1167"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1089"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1099"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3178"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3194"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3179"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2280"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
@@ -12052,7 +12048,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="211"/>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="337"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="372"/>
         <source>Staff text</source>
         <translation type="unfinished">Staff text</translation>
     </message>
@@ -13132,8 +13128,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
-        <source>This file was saved using a newer version of MuseScore. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished">This file was saved using a newer version of MuseScore. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</translation>
+        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
+        <translation type="unfinished">This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -15084,7 +15080,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">%1 (Customized)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="650"/>
+        <location filename="../../src/notation/notationtypes.h" line="616"/>
         <source>Custom</source>
         <translation type="unfinished">Custom</translation>
     </message>
@@ -17171,7 +17167,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="131"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="233"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="97"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
@@ -17193,7 +17189,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="85"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="145"/>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="101"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="341"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="376"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="398"/>
@@ -17256,7 +17252,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="101"/>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="266"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
         <source>Close</source>
         <translation type="unfinished">Close</translation>
     </message>
@@ -17590,7 +17586,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">pt</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
     </message>
@@ -17661,77 +17657,77 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">s</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
         <source>Save all</source>
         <translation type="unfinished">Save all</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
         <source>Don’t save</source>
         <translation type="unfinished">Don’t save</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
         <source>Open</source>
         <translation type="unfinished">Open</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
         <source>Yes</source>
         <translation type="unfinished">Yes</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
         <source>Yes to all</source>
         <translation type="unfinished">Yes to all</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
         <source>No to all</source>
         <translation type="unfinished">No to all</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
         <source>Abort</source>
         <translation type="unfinished">Abort</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
         <source>Retry</source>
         <translation type="unfinished">Retry</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
         <source>Ignore</source>
         <translation type="unfinished">Ignore</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
         <source>Discard</source>
         <translation type="unfinished">Discard</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
         <source>Help</source>
         <translation type="unfinished">Help</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
         <source>Apply</source>
         <translation type="unfinished">Apply</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="115"/>
         <source>Reset</source>
         <translation type="unfinished">Reset</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="115"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="116"/>
         <source>Continue</source>
         <translation type="unfinished">Continue</translation>
     </message>
@@ -17742,7 +17738,7 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1271"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1330"/>
         <source>Success!</source>
         <translation type="unfinished">Success!</translation>
     </message>
@@ -17893,8 +17889,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
-        <source>MuseScore instrument</source>
-        <translation type="unfinished">MuseScore instrument</translation>
+        <source>MuseScore Studio instrument</source>
+        <translation type="unfinished">MuseScore Studio instrument</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -18130,6 +18126,12 @@ pickup measure</translation>
         <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="211"/>
         <source>File “%1” is not a valid MusicXML file.</source>
         <translation type="unfinished">File “%1” is not a valid MusicXML file.</translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="51"/>
+        <source>Limit MusicXML export for compatibility with MuseScore 3</source>
+        <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
+        <translation type="unfinished">Limit MusicXML export for compatibility with MuseScore 3</translation>
     </message>
 </context>
 <context>
@@ -20745,7 +20747,7 @@ pickup measure</translation>
         <translation type="unfinished">Note: linked staves contain identical information.</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="201"/>
+        <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="191"/>
         <source>All instruments</source>
         <translation type="unfinished">All instruments</translation>
     </message>
@@ -20805,21 +20807,26 @@ pickup measure</translation>
             <numerusform>This will remove the %n instrument(s) from the full score and all part scores.</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>
+        <source>Other</source>
+        <translation type="unfinished">Other</translation>
+    </message>
 </context>
 <context>
     <name>languages</name>
     <message>
-        <location filename="../../src/languages/internal/languagesservice.cpp" line="356"/>
+        <location filename="../../src/languages/internal/languagesservice.cpp" line="363"/>
         <source>Checking for updates…</source>
         <translation type="unfinished">Checking for updates…</translation>
     </message>
     <message>
-        <location filename="../../src/languages/internal/languagesservice.cpp" line="410"/>
+        <location filename="../../src/languages/internal/languagesservice.cpp" line="417"/>
         <source>Downloading…</source>
         <translation type="unfinished">Downloading…</translation>
     </message>
     <message>
-        <location filename="../../src/languages/internal/languagesservice.cpp" line="427"/>
+        <location filename="../../src/languages/internal/languagesservice.cpp" line="434"/>
         <source>Unpacking…</source>
         <translation type="unfinished">Unpacking…</translation>
     </message>
@@ -20915,7 +20922,7 @@ pickup measure</translation>
         <translation type="unfinished">Creator, Mastering MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/learn/view/learnpagemodel.cpp" line="81"/>
+        <location filename="../../src/learn/view/learnpagemodel.cpp" line="83"/>
         <source>Welcome to Mastering MuseScore – the most comprehensive resource for learning the world’s most popular music notation software! My name is Marc Sabatella, and I have been helping develop, support, and promote MuseScore since its initial release over ten years ago.
 
 Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore. 
@@ -20928,7 +20935,7 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!</translation>
     </message>
     <message>
-        <location filename="../../src/learn/view/learnpagemodel.cpp" line="94"/>
+        <location filename="../../src/learn/view/learnpagemodel.cpp" line="96"/>
         <source>Mastering MuseScore</source>
         <translation type="unfinished">Mastering MuseScore</translation>
     </message>
@@ -21327,8 +21334,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
-        <source>Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished">Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</translation>
+        <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
+        <translation type="unfinished">Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1623"/>
@@ -22028,69 +22035,69 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">The selection is empty</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="296"/>
+        <location filename="../../src/notation/notationtypes.h" line="288"/>
         <source>Percentage</source>
         <translation type="unfinished">Percentage</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="297"/>
+        <location filename="../../src/notation/notationtypes.h" line="289"/>
         <source>Page width</source>
         <translation type="unfinished">Page width</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="298"/>
+        <location filename="../../src/notation/notationtypes.h" line="290"/>
         <source>Whole page</source>
         <translation type="unfinished">Whole page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="299"/>
+        <location filename="../../src/notation/notationtypes.h" line="291"/>
         <source>Two pages</source>
         <translation type="unfinished">Two pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="363"/>
+        <location filename="../../src/notation/notationtypes.h" line="329"/>
         <source>%1 %2</source>
         <comment>Tuned instrument displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;). Example: &quot;D Tin Whistle&quot;</extracomment>
         <translation type="unfinished">%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="367"/>
+        <location filename="../../src/notation/notationtypes.h" line="333"/>
         <source>%1 in %2</source>
         <comment>Transposing instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
         <translation type="unfinished">%1 in %2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="371"/>
+        <location filename="../../src/notation/notationtypes.h" line="337"/>
         <source>%1 (%2)</source>
         <comment>String instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;). Example: &quot;Tenor Lute (7-course)&quot;</extracomment>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="392"/>
+        <location filename="../../src/notation/notationtypes.h" line="358"/>
         <source>%1 %2 %3</source>
         <comment>One of several tuned instruments displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;), %3=number (&quot;2&quot;). Example: &quot;D Tin Whistle 2&quot;</extracomment>
         <translation type="unfinished">%1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="396"/>
+        <location filename="../../src/notation/notationtypes.h" line="362"/>
         <source>%1 in %2 %3</source>
         <comment>One of several transposing instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
         <translation type="unfinished">%1 in %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="400"/>
+        <location filename="../../src/notation/notationtypes.h" line="366"/>
         <source>%1 (%2) %3</source>
         <comment>One of several string instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;), %3=number (&quot;2&quot;). Example: &quot;Tenor Lute (7-course) 2&quot;</extracomment>
         <translation type="unfinished">%1 (%2) %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="404"/>
+        <location filename="../../src/notation/notationtypes.h" line="370"/>
         <source>%1 %2</source>
         <comment>One of several instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
@@ -22592,13 +22599,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1284"/>
-        <source>MuseScore version this score was last saved with</source>
-        <translation type="unfinished">MuseScore version this score was last saved with</translation>
+        <source>MuseScore Studio version this score was last saved with</source>
+        <translation type="unfinished">MuseScore Studio version this score was last saved with</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1286"/>
-        <source>MuseScore revision this score was last saved with</source>
-        <translation type="unfinished">MuseScore revision this score was last saved with</translation>
+        <source>MuseScore Studio revision this score was last saved with</source>
+        <translation type="unfinished">MuseScore Studio revision this score was last saved with</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1288"/>
@@ -23894,8 +23901,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="902"/>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="905"/>
-        <source>MuseScore palette</source>
-        <translation type="unfinished">MuseScore palette</translation>
+        <source>MuseScore Studio palette</source>
+        <translation type="unfinished">MuseScore Studio palette</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="904"/>
@@ -23925,8 +23932,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="667"/>
-        <source>MuseScore may not be able to load this drumset file.</source>
-        <translation type="unfinished">MuseScore may not be able to load this drumset file.</translation>
+        <source>MuseScore Studio may not be able to load this drumset file.</source>
+        <translation type="unfinished">MuseScore Studio may not be able to load this drumset file.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="698"/>
@@ -25772,47 +25779,52 @@ failed.</translation>
         <translation type="unfinished">Aux sends</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="59"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
         <source>Modify sound</source>
         <translation type="unfinished">Modify sound</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="82"/>
-        <source>Extended techniques</source>
-        <translation type="unfinished">Extended techniques</translation>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>
+        <source>Playing techniques</source>
+        <translation type="unfinished">Playing techniques</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="102"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
         <source>Sound flag options are not available for this sound.</source>
         <translation type="unfinished">Sound flag options are not available for this sound.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="91"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
         <source>Sound flag settings</source>
         <translation type="unfinished">Sound flag settings</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="131"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="132"/>
         <source>Sound flag menu</source>
         <translation type="unfinished">Sound flag menu</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="73"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
         <source>Ord. (default)</source>
         <translation type="unfinished">Ord. (default)</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="281"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="282"/>
         <source>Reset to default sound</source>
         <translation type="unfinished">Reset to default sound</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="291"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="294"/>
         <source>Allow multiple selection</source>
         <translation type="unfinished">Allow multiple selection</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="356"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="307"/>
+        <source>Apply selection to all staves</source>
+        <translation type="unfinished">Apply selection to all staves</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="391"/>
         <source>ordinary</source>
         <translation type="unfinished">ordinary</translation>
     </message>
@@ -26025,106 +26037,106 @@ failed.</translation>
         <translation type="unfinished">Open other…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="655"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="714"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation type="unfinished">Do you want to save changes to the score “%1” before closing?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="658"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="717"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation type="unfinished">Your changes will be lost if you don’t save them.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1587"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1609"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1646"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1668"/>
         <source>Open anyway</source>
         <translation type="unfinished">Open anyway</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1606"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1659"/>
+        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
+        <translation type="unfinished">This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
         <source>File “%1” is corrupted</source>
         <translation type="unfinished">File “%1” is corrupted</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1607"/>
-        <source>This file contains errors that could cause MuseScore to malfunction.</source>
-        <translation type="unfinished">This file contains errors that could cause MuseScore to malfunction.</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1621"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1680"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation type="unfinished">File “%1” is corrupted and cannot be opened</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1681"/>
         <source>Get help for this issue on musescore.org.</source>
         <translation type="unfinished">Get help for this issue on musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1477"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1624"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1536"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
         <source>Get help</source>
         <translation type="unfinished">Get help</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1392"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1474"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1451"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1533"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation type="unfinished">Your score cannot be uploaded to the cloud</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1393"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1452"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
         <translation type="unfinished">This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1400"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1459"/>
         <source>Save as…</source>
         <translation type="unfinished">Save as…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1405"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1441"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1464"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1500"/>
         <source>Revert to last saved</source>
         <translation type="unfinished">Revert to last saved</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1426"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1485"/>
         <source>This score has become corrupted and contains errors</source>
         <translation type="unfinished">This score has become corrupted and contains errors</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1427"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1486"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
         <translation type="unfinished">You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1429"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1488"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
         <translation type="unfinished">You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1436"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1495"/>
         <source>Save anyway</source>
         <translation type="unfinished">Save anyway</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1473"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1532"/>
         <source>Your score cannot be saved</source>
         <translation type="unfinished">Your score cannot be saved</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1475"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1534"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
         <translation type="unfinished">This score is corrupted. You can get help for this issue on musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1508"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1567"/>
         <source>Revert to last saved?</source>
         <translation type="unfinished">Revert to last saved?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1509"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1568"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation type="unfinished">Your changes will be lost. This action cannot be undone.</translation>
     </message>
@@ -26139,108 +26151,108 @@ failed.</translation>
         <translation type="unfinished">This score is invalid.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1599"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1638"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1658"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1697"/>
         <source>Cannot read file %1</source>
         <translation type="unfinished">Cannot read file %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1600"/>
-        <source>This file was saved using a newer version of MuseScore. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished">This file was saved using a newer version of MuseScore. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1643"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1702"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation type="unfinished">This file does not exist or cannot be accessed at the moment.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1646"/>
-        <source>This file could not be opened. Please make sure that MuseScore has permission to read this file.</source>
-        <translation type="unfinished">This file could not be opened. Please make sure that MuseScore has permission to read this file.</translation>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1666"/>
+        <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
+        <translation type="unfinished">This file contains errors that could cause MuseScore Studio to malfunction.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1652"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
+        <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
+        <translation type="unfinished">This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
         <source>An error occurred while reading this file.</source>
         <translation type="unfinished">An error occurred while reading this file.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1764"/>
         <source>All supported files</source>
         <translation type="unfinished">All supported files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1706"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1765"/>
         <source>MuseScore files</source>
         <translation type="unfinished">MuseScore files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1707"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>
         <source>MusicXML files</source>
         <translation type="unfinished">MusicXML files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1708"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1767"/>
         <source>MIDI files</source>
         <translation type="unfinished">MIDI files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1709"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1768"/>
         <source>MuseData files</source>
         <translation type="unfinished">MuseData files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1710"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1769"/>
         <source>Capella files</source>
         <translation type="unfinished">Capella files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1770"/>
         <source>BB files (experimental)</source>
         <translation type="unfinished">BB files (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1712"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1771"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation type="unfinished">Overture / Score Writer files (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1713"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1772"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation type="unfinished">Bagpipe Music Writer files (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1714"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1773"/>
         <source>Guitar Pro files</source>
         <translation type="unfinished">Guitar Pro files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1774"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation type="unfinished">Power Tab Editor files (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1716"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1775"/>
         <source>MEI files</source>
         <translation type="unfinished">MEI files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1717"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1776"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation type="unfinished">Uncompressed MuseScore folders (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1718"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1777"/>
         <source>MuseScore developer files</source>
         <translation type="unfinished">MuseScore developer files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1719"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1778"/>
         <source>MuseScore backup files</source>
         <translation type="unfinished">MuseScore backup files</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1731"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
         <source>Open</source>
         <translation type="unfinished">Open</translation>
     </message>
@@ -26938,8 +26950,8 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="172"/>
-        <source>Please note: score layouts will be affected by improvements to MuseScore 4</source>
-        <translation type="unfinished">Please note: score layouts will be affected by improvements to MuseScore 4</translation>
+        <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
+        <translation type="unfinished">Please note: score layouts will be affected by improvements to MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="178"/>
@@ -27303,8 +27315,8 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
-        <source>MuseScore version:</source>
-        <translation type="unfinished">MuseScore version:</translation>
+        <source>MuseScore Studio version:</source>
+        <translation type="unfinished">MuseScore Studio version:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -27541,23 +27553,23 @@ failed.</translation>
         <translation type="unfinished">This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="372"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="458"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="420"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="517"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
         <translation type="unfinished">Log in or create a free account on musescore.com to open this score.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1265"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1324"/>
         <source>View online</source>
         <translation type="unfinished">View online</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1268"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1327"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
         <translation type="unfinished">All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1493"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation type="unfinished">An unknown error occurred while saving this file.</translation>
     </message>
@@ -27568,7 +27580,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="887"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="946"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
         <translation type="unfinished">Log in to musescore.com to save this score to the cloud.</translation>
     </message>
@@ -27645,12 +27657,12 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="402"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1342"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1401"/>
         <source>Unable to connect to the cloud</source>
         <translation type="unfinished">Unable to connect to the cloud</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1343"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1402"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation type="unfinished">Your changes will be saved to a local file until the connection resumes.</translation>
     </message>
@@ -27667,12 +27679,12 @@ failed.</translation>
         <translation type="unfinished">Please check your internet connection or try again later.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1501"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1560"/>
         <source>Your score could not be saved</source>
         <translation type="unfinished">Your score could not be saved</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1356"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1415"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation type="unfinished">Please add at least one instrument to enable saving.</translation>
     </message>
@@ -27853,8 +27865,8 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
-        <source>MuseScore shortcuts file</source>
-        <translation type="unfinished">MuseScore shortcuts file</translation>
+        <source>MuseScore Studio shortcuts file</source>
+        <translation type="unfinished">MuseScore Studio shortcuts file</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
@@ -28265,75 +28277,85 @@ failed.</translation>
 <context>
     <name>update</name>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseInfoBottomPanel.qml" line="51"/>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/AppReleaseInfoBottomPanel.qml" line="51"/>
         <source>Skip this version</source>
         <translation type="unfinished">Skip this version</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseInfoBottomPanel.qml" line="70"/>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/AppReleaseInfoBottomPanel.qml" line="70"/>
         <source>Remind me later</source>
         <translation type="unfinished">Remind me later</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseInfoBottomPanel.qml" line="86"/>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/AppReleaseInfoBottomPanel.qml" line="86"/>
         <source>Install update</source>
         <translation type="unfinished">Install update</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/ReleaseInfoDialog.qml" line="82"/>
-        <source>A new version of MuseScore is available!</source>
-        <translation type="unfinished">A new version of MuseScore is available!</translation>
+        <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="82"/>
+        <source>A new version of MuseScore Studio is available!</source>
+        <translation type="unfinished">A new version of MuseScore Studio is available!</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/ReleaseInfoDialog.qml" line="89"/>
+        <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="89"/>
         <source>Release notes</source>
         <translation type="unfinished">Release notes</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="185"/>
-        <source>You already have the latest version of MuseScore. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished">You already have the latest version of MuseScore. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</translation>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="141"/>
+        <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
+        <translation type="unfinished">You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="192"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="148"/>
         <source>You’re up to date!</source>
         <translation type="unfinished">You’re up to date!</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="221"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="177"/>
         <source>Cannot connect to server</source>
         <translation type="unfinished">Cannot connect to server</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="222"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="178"/>
         <source>Sorry - please try again later</source>
         <translation type="unfinished">Sorry - please try again later</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="238"/>
-        <source>MuseScore needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore closes.</source>
-        <translation type="unfinished">MuseScore needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore closes.</translation>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="194"/>
+        <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
+        <translation type="unfinished">MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="244"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="200"/>
         <source>Close</source>
         <translation type="unfinished">Close</translation>
-    </message>
-    <message>
-        <location filename="../../src/update/view/updatemodel.cpp" line="37"/>
-        <source>Updating MuseScore</source>
-        <translation type="unfinished">Updating MuseScore</translation>
-    </message>
-    <message>
-        <location filename="../../src/update/internal/updateservice.cpp" line="112"/>
-        <source>Downloading MuseScore %1</source>
-        <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation type="unfinished">Downloading MuseScore %1</translation>
     </message>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
         <translation type="unfinished">Read the %1 release notes</translation>
+    </message>
+    <message>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
+        <source>No thanks</source>
+        <translation type="unfinished">No thanks</translation>
+    </message>
+    <message>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
+        <source>Take me to Muse Hub</source>
+        <translation type="unfinished">Take me to Muse Hub</translation>
+    </message>
+    <message>
+        <location filename="../../src/update/internal/appupdateservice.cpp" line="111"/>
+        <source>Downloading MuseScore Studio %1</source>
+        <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
+        <translation type="unfinished">Downloading MuseScore Studio %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/update/view/updatemodel.cpp" line="37"/>
+        <source>Updating MuseScore Studio</source>
+        <translation type="unfinished">Updating MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -28356,8 +28378,8 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
-        <source>Use workspaces to save different arrangements of the MuseScore interface</source>
-        <translation type="unfinished">Use workspaces to save different arrangements of the MuseScore interface</translation>
+        <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
+        <translation type="unfinished">Use workspaces to save different arrangements of the MuseScore Studio interface</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>
