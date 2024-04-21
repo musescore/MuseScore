@@ -2249,11 +2249,11 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
     if (accidental && Accidental::isMicrotonal(accidental->accidentalType()) && tpc2 > Tpc::TPC_INVALID) {
         while (tpc2 < Tpc::TPC_F) {
             tpc2 += TPC_DELTA_SEMITONE;
-            microAccShift --;
+            microAccShift--;
         }
         while (tpc2 > Tpc::TPC_B) {
             tpc2 -= TPC_DELTA_SEMITONE;
-            microAccShift ++;
+            microAccShift++;
         }
     }
     // update microtonal accidental if needed
