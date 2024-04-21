@@ -139,6 +139,34 @@ void PlaybackController::init()
     });
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
+
+    m_playbackPositionChanged.onNotify(this, [this]() {
+        updateCurrentTempo();
+
+        msecs_t endMsecs = playbackEndMsecs();
+        const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
+        if (m_currentPlaybackTimeMsecs == endMsecs && m_currentPlaybackTimeMsecs != loop.loopOutTick) {
+            stop();
+        }
+    });
+
+    m_remoteSeek.onReceive(this, [this](const msecs_t msecs) {
+        seek(msecs);
+    });
+
+    m_remotePlayOrStop.onReceive(this, [this](const bool playOrStop) {
+        if (playOrStop) {
+            if (isPlaying()) {
+                resume();
+            } else {
+                play();
+            }
+        } else {
+            if (isPlaying()) {
+                pause();
+            }
+        }
+    });
 }
 
 void PlaybackController::updateCurrentTempo()
@@ -232,6 +260,22 @@ void PlaybackController::seek(const audio::secs_t secs)
     }
 
     currentPlayer()->seek(secs);
+}
+
+void PlaybackController::remoteSeek(const msecs_t msecs)
+{
+    IF_ASSERT_FAILED(playback()) {
+        return;
+    }
+    m_remoteSeek.send(msecs);
+}
+
+void PlaybackController::remotePlayOrStop(const bool playOrStop)
+{
+    if (!isPlayAllowed()) {
+        return;
+    }
+    m_remotePlayOrStop.send(playOrStop);
 }
 
 muse::async::Channel<secs_t, tick_t> PlaybackController::currentPlaybackPositionChanged() const
@@ -1102,7 +1146,7 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
 
     outParams.muted = !isActive;
 
-    audio::TrackId trackId = m_instrumentTrackIdMap[instrumentTrackId];
+    TrackId trackId = m_instrumentTrackIdMap[instrumentTrackId];
     playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(outParams));
 }
 
@@ -1205,7 +1249,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
         return;
     }
 
-    const audio::AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
+    const AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
     playback()->audioOutput()->setMasterOutputParams(masterOutputParams);
 
     subscribeOnAudioParamsChanges();
@@ -1217,7 +1261,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
 
 void PlaybackController::subscribeOnAudioParamsChanges()
 {
-    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this, [this](const audio::AudioOutputParams& params) {
+    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
         audioSettings()->setMasterAudioOutputParams(params);
     });
 
@@ -1445,7 +1489,7 @@ void PlaybackController::updateSoloMuteStates()
         params.muted = soloMuteState.mute || shouldForceMute;
         params.forceMute = shouldForceMute;
 
-        audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
+        TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
         playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
     }
 
