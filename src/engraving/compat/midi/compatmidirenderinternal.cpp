@@ -278,8 +278,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
     }
 
     ev.setVelo(0);
-    if (!note->part()->instrument(note->tick())->useDrumset()
-        && params.offTime != -1) {
+    if (params.offTime != -1) {
         events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.offTime - params.offset), ev));
     }
 }
