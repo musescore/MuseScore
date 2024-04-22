@@ -58,6 +58,9 @@ using namespace mu::engraving::read400;
 Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
 {
     ReadContext ctx(score);
+    if (data->overridedSpatium.has_value()) {
+        ctx.setSpatium(data->overridedSpatium.value());
+    }
 
     if (!score->isMaster() && data) {
         ctx.initLinks(data->links);
