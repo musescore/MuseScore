@@ -133,7 +133,8 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STEP_OFFSET:
         m_staffType->setStepOffset(v.toInt());
         break;
-    case Pid::STAFF_LINES: {
+    case Pid::STAFF_LINES:
+    {
         int linesOld = m_staffType->lines();
         int linesNew = v.toInt();
         Spatium yOffset = m_staffType->yoffset();
@@ -172,7 +173,8 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STAFF_GEN_KEYSIG:
         m_staffType->setGenKeysig(v.toBool());
         break;
-    case Pid::MAG: {
+    case Pid::MAG:
+    {
         double _spatium = spatium();
         m_staffType->setUserMag(v.toDouble());
         Staff* _staff = staff();
@@ -181,7 +183,8 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
         }
     }
     break;
-    case Pid::SMALL: {
+    case Pid::SMALL:
+    {
         double _spatium = spatium();
         m_staffType->setSmall(v.toBool());
         Staff* _staff = staff();
