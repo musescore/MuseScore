@@ -149,8 +149,14 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     }
     break;
     case Pid::LINE_DISTANCE:
+    {
+        Spatium yOffset = m_staffType->yoffset() - 2 * m_staffType->lineDistance();
         m_staffType->setLineDistance(v.value<Spatium>());
-        break;
+        if (m_staffType->lines() == 1) {
+            m_staffType->setYoffset(yOffset + Spatium(2 * m_staffType->lineDistance()));
+        }
+    }
+    break;
     case Pid::STAFF_SHOW_BARLINES:
         m_staffType->setShowBarlines(v.toBool());
         break;
