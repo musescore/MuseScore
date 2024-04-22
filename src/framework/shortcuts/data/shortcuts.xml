@@ -891,7 +891,7 @@
   </SC>
   <SC>
     <key>add-melisma</key>
-    <seq>Shift+-</seq>
+    <seq>_</seq>
   </SC>
   <SC>
     <key>next-lyric-verse</key>
