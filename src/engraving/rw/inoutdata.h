@@ -45,6 +45,7 @@ struct ReadInOutData {
     // for master - out
     // for except - in
     ReadLinks links;
+    std::optional<double> overridedSpatium = std::nullopt;
 
     // out
     SettingsCompat settingsCompat;

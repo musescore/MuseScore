@@ -71,7 +71,7 @@ static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
 }
 
 mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
-                            bool ignoreVersionError)
+                            bool ignoreVersionError, rw::ReadInOutData* inOut)
 {
     TRACEFUNC;
 
@@ -114,6 +114,9 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
     }
 
     ReadInOutData masterReadOutData;
+    if (!inOut) {
+        inOut = &masterReadOutData;
+    }
 
     Ret ret = make_ok();
 
@@ -127,7 +130,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
         XmlReader xml(scoreData);
         xml.setDocName(docName);
 
-        ret = readMasterScore(masterScore, xml, ignoreVersionError, &masterReadOutData, &styleHook);
+        ret = readMasterScore(masterScore, xml, ignoreVersionError, inOut, &styleHook);
     }
 
     // Read excerpts
@@ -153,7 +156,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
             xml.setDocName(excerptFileName);
 
             ReadInOutData partReadInData;
-            partReadInData.links = masterReadOutData.links;
+            partReadInData.links = inOut->links;
 
             RetVal<IReaderPtr> reader = makeReader(masterScore->mscVersion(), ignoreVersionError);
             if (!reader.ret) {
@@ -197,7 +200,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
         }
     }
 
-    settingsCompat = std::move(masterReadOutData.settingsCompat);
+    settingsCompat = std::move(inOut->settingsCompat);
 
     return ret;
 }
