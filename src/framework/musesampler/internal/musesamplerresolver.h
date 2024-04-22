@@ -55,7 +55,7 @@ public:
     std::vector<Instrument> instruments() const override;
 
 private:
-    bool checkLibrary() const;
+    bool checkLibrary();
     bool isVersionSupported() const;
 
     void loadSoundPresetAttributes(muse::audio::SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const;

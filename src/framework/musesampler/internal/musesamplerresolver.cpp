@@ -304,12 +304,19 @@ std::vector<Instrument> MuseSamplerResolver::instruments() const
     return result;
 }
 
-bool MuseSamplerResolver::checkLibrary() const
+bool MuseSamplerResolver::checkLibrary()
 {
     if (!m_libHandler->isValid()) {
         LOGE() << "Incompatible MuseSampler library; ignoring";
         return false;
     }
+
+    if (m_libHandler->initLib() != ms_Result_OK) {
+        LOGE() << "Could not initialize MuseSampler library; ignoring";
+        m_libHandler.reset();
+        return false;
+    }
+
 
     return true;
 }
