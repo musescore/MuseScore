@@ -137,13 +137,12 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     {
         int linesOld = m_staffType->lines();
         int linesNew = v.toInt();
-        Spatium yOffset = m_staffType->yoffset();
 
-        // if change to one line staff, center by setting y offset 2
+        // if change to one line staff, center by setting y offset 2 Spatium * lineDistance
         if (linesNew == 1 && linesOld != 1) {
-            m_staffType->setYoffset(yOffset + Spatium(2));
+            m_staffType->setYoffset(Spatium(2 * m_staffType->lineDistance()));
         } else if (linesOld == 1 && linesNew != 1) {
-            m_staffType->setYoffset(yOffset - Spatium(2));
+            m_staffType->setYoffset(Spatium(0));
         }
 
         m_staffType->setLines(linesNew);
