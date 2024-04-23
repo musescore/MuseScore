@@ -912,8 +912,10 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         }
     }
 
-    const int line = engraving::ClefInfo::line(clef);
-    meiClef.SetLine(line);
+    if (meiClef.GetShape() != libmei::CLEFSHAPE_perc) {
+        const int line = engraving::ClefInfo::line(clef);
+        meiClef.SetLine(line);
+    }
 
     // @dis and @dis.place
     switch (clef) {
