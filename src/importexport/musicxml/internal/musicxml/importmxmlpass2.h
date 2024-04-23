@@ -451,6 +451,7 @@ private:
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<String> metaTags);
     bool isLikelyFingering() const;
+    bool isLikelySticking();
 
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 
@@ -482,6 +483,7 @@ private:
     double m_defaultY = 0.0;
     bool m_hasRelativeY = false;
     double m_relativeY = 0.0;
+    double m_relativeX = 0.0;
     double m_tpoMetro = 0.0;                   // tempo according to metronome
     double m_tpoSound = 0.0;                   // tempo according to sound
     std::vector<EngravingItem*> m_elems;

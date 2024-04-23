@@ -183,6 +183,7 @@ public:
     const CreditWordsList& credits() const { return m_credits; }
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
     bool isVocalStaff(const String& id) const { return m_parts.at(id).isVocalStaff(); }
+    bool isPercussionStaff(const String& id) const { return m_parts.at(id).isPercussionStaff(); }
     static VBox* createAndAddVBoxForCreditWords(Score* score, const int miny = 0, const int maxy = 75);
     static void reformatHeaderVBox(MeasureBase* mb);
     void createDefaultHeader(Score* const score);

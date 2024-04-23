@@ -99,6 +99,7 @@ public:
     void setMaxStaff(const int staff);
     int maxStaff() const { return m_maxStaff; }
     bool isVocalStaff() const;
+    bool isPercussionStaff() const;
     void hasLyrics(bool b) { m_hasLyrics = b; }
 private:
     String m_id;
