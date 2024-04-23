@@ -483,6 +483,8 @@ enum class Sid {
     alwaysShowBracketsWhenEmptyStavesAreHidden,
     alwaysShowSquareBracketsWhenEmptyStavesAreHidden,
     hideInstrumentNameIfOneInstrument,
+    firstSystemInstNameVisibility,
+    subsSystemInstNameVisibility,
     gateTime,
     tenutoGateTime,
     staccatoGateTime,

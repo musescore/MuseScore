@@ -94,13 +94,19 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         measure = measure->findPotentialSectionBreak();
     }
 
+    bool firstSysLongName = ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>()
+                            == InstrumentLabelVisibility::LONG;
+    bool subsSysLongName = ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
+                           == InstrumentLabelVisibility::LONG;
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isFloatMode());
         ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
                                             && ctx.conf().firstSystemIndent()
                                             && layoutBreak->firstSystemIndentation());
-        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
+        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && firstSysLongName && layoutBreak->startWithLongNames());
+    } else {
+        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && firstSysLongName);
     }
 
     System* system = getNextSystem(ctx);
@@ -108,7 +114,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
 
     Fraction lcmTick = ctx.state().curMeasure()->tick();
-    SystemLayout::setInstrumentNames(system, ctx, ctx.state().startWithLongNames(), lcmTick);
+    bool longNames = ctx.mutState().firstSystem() ? ctx.mutState().startWithLongNames() : subsSysLongName;
+    SystemLayout::setInstrumentNames(system, ctx, longNames, lcmTick);
 
     double curSysWidth = 0.0;
     double layoutSystemMinWidth = 0.0;
@@ -522,24 +529,6 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     layoutSystemElements(system, ctx);
     SystemLayout::layout2(system, ctx);     // compute staff distances
-
-    // TODO: now that the code at the top of this function does this same backwards search,
-    // we might be able to eliminate this block
-    // but, lc might be used elsewhere so we need to be careful
-    measure = system->measures().back();
-
-    if (measure) {
-        measure = measure->findPotentialSectionBreak();
-    }
-
-    if (measure) {
-        const LayoutBreak* layoutBreak = measure->sectionBreakElement();
-        ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isMode(LayoutMode::FLOAT));
-        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
-                                            && ctx.conf().firstSystemIndent()
-                                            && layoutBreak->firstSystemIndentation());
-        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
-    }
 
     if (oldSystem && !oldSystem->measures().empty() && oldSystem->measures().front()->tick() >= system->endTick()
         && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
@@ -2576,7 +2565,12 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
         return;
     }
     if (!ctx.conf().isShowInstrumentNames()
-        || (ctx.conf().styleB(Sid::hideInstrumentNameIfOneInstrument) && ctx.dom().visiblePartCount() <= 1)) {
+        || (ctx.conf().styleB(Sid::hideInstrumentNameIfOneInstrument) && ctx.dom().visiblePartCount() <= 1)
+        || (ctx.state().firstSystem()
+            && ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE)
+        || (!ctx.state().firstSystem()
+            && ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
+            == InstrumentLabelVisibility::HIDE)) {
         for (SysStaff* staff : system->staves()) {
             for (InstrumentName* t : staff->instrumentNames) {
                 ctx.mutDom().removeElement(t);

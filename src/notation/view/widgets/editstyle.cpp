@@ -291,6 +291,16 @@ EditStyle::EditStyle(QWidget* parent)
     keysigVisibility->addButton(radioShowAllKeys, true);
     keysigVisibility->addButton(radioHideKeys, false);
 
+    QButtonGroup* firstSysLabels = new QButtonGroup(this);
+    firstSysLabels->addButton(firstLongBtn, int(InstrumentLabelVisibility::LONG));
+    firstSysLabels->addButton(firstShortBtn, int(InstrumentLabelVisibility::SHORT));
+    firstSysLabels->addButton(firstHideBtn, int(InstrumentLabelVisibility::HIDE));
+
+    QButtonGroup* subsSysLabels = new QButtonGroup(this);
+    subsSysLabels->addButton(subsLongBtn, int(InstrumentLabelVisibility::LONG));
+    subsSysLabels->addButton(subsShortBtn, int(InstrumentLabelVisibility::SHORT));
+    subsSysLabels->addButton(subsHideBtn, int(InstrumentLabelVisibility::HIDE));
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -407,6 +417,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::firstSystemIndentationValue, false, indentationValue, resetFirstSystemIndentation },
         { StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, false, alwaysShowBrackets, 0 },
         { StyleId::hideInstrumentNameIfOneInstrument, false, hideInstrumentNameIfOneInstrument, 0 },
+        { StyleId::firstSystemInstNameVisibility, false, firstSysLabels, resetFirstSystemLabel },
+        { StyleId::subsSystemInstNameVisibility, false, subsSysLabels, resetSubsSystemLabel },
         { StyleId::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
         { StyleId::accidentalDistance,      false, accidentalDistance,      0 },
         { StyleId::bracketedAccidentalPadding, false, accidentalsBracketsBadding, resetAccidentalsBracketPadding },
