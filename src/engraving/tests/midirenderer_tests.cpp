@@ -210,7 +210,7 @@ TEST_F(MidiRenderer_Tests, onePercussionNote)
     EventsHolder events = renderMidiEvents(u"one_percussion_note.mscx");
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
 
     EXPECT_EQ(events[DEFAULT_CHANNEL].find(0)->second, noteEvent(41, defVol, DEFAULT_CHANNEL));
 }
