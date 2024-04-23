@@ -2992,6 +2992,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     _placement = _e.attributes().value("placement").toString();
     track_idx_t track = _pass1.trackForPart(partId);
     bool isVocalStaff = _pass1.isVocalStaff(partId);
+    bool isPercussionStaff = _pass1.isPercussionStaff(partId);
     bool isExpressionText = false;
     bool delayOttava = _pass1.exporterString().contains(u"sibelius");
     //LOGD("direction track %d", track);
@@ -3076,6 +3077,26 @@ void MusicXMLParserDirection::direction(const QString& partId,
         }
 
         addElemOffset(tt, track, placement(), measure, tick + _offset);
+    } else if (isLikelySticking() && isPercussionStaff) {
+        Sticking* sticking = Factory::createSticking(_score->dummy()->segment());
+        sticking->setXmlText(_wordsText);
+        if (!RealIsNull(m_relativeX) || !RealIsNull(_relativeY)) {
+            PointF offset = sticking->offset();
+            offset.setX(!RealIsNull(m_relativeX) ? m_relativeX : sticking->offset().x());
+            offset.setY(!RealIsNull(_relativeY) ? _relativeY : sticking->offset().y());
+            sticking->setOffset(offset);
+            sticking->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+        }
+
+        if (hasTotalY()) {
+            // Add element to score later, after collecting all the others and sorting by default-y
+            // This allows default-y to be at least respected by the order of elements
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
+                totalY(), sticking, track, placement(), measure, tick + _offset);
+            delayedDirections.push_back(delayedDirection);
+        } else {
+            addElemOffset(sticking, track, placement(), measure, tick + _offset);
+        }
     } else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
         TextBase* t = 0;
         if (_tpoSound > 0.1) {
@@ -3421,7 +3442,10 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
 {
     while (_e.readNextStartElement()) {
         _defaultY = _e.attributes().value("default-y").toDouble(&_hasDefaultY) * -0.1;
+        m_relativeX = _e.attributes().value("relative-x").toDouble() / 10 * _score->style().spatium();
+        _relativeY = _e.attributes().value("relative-y").toDouble() / -10 * _score->style().spatium();
         QString number = _e.attributes().value("number").toString();
+
         int n = 0;
         if (number != "") {
             n = number.toInt();
@@ -3780,9 +3804,11 @@ void MusicXMLParserDirection::textToDynamic(String& text)
         return;
     }
     String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+    // We don't want to count a single 'm', 'r', 's' or 'z' as a whole dynamic
+    static const std::wregex singleCharDynamic = std::wregex(L"^[mrsz]$");
     // try to find a dynamic - xml representation or
     // if found add to dynamics list and set text to blank string
-    if (TConv::dynamicValid(simplifiedText.toStdString())) {
+    if (!simplifiedText.contains(singleCharDynamic) && TConv::dynamicValid(simplifiedText.toStdString())) {
         DynamicType dt = TConv::fromXml(simplifiedText.toStdString(), DynamicType::OTHER);
         if (dt != DynamicType::OTHER) {
             _dynaVelocity = String::number(round(Dynamic::dynamicVelocity(dt) / 0.9));
@@ -4091,7 +4117,7 @@ void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t t
 
 void MusicXMLParserDirection::handleChordSym(const track_idx_t track, const Fraction tick, HarmonyMap& harmonyMap)
 {
-    if (!configuration()->inferTextType()) {
+    if (!configuration()->inferTextType() || placement() == "below") {
         return;
     }
 
@@ -4185,6 +4211,20 @@ void MusicXMLParserDirection::handleTempo()
             _tpoMetro = 4 * duration.fraction().numerator() * d / duration.fraction().denominator();
         }
     }
+}
+
+bool MusicXMLParserDirection::isLikelySticking()
+{
+    if (!configuration()->inferTextType()) {
+        return false;
+    }
+
+    String plainWords = MScoreTextToMXML::toPlainText(_wordsText.simplified());
+    static const std::wregex sticking(L"^[lrbLRB]$");
+    return plainWords.contains(sticking)
+           && _rehearsalText.isEmpty()
+           && _metroText.isEmpty()
+           && _tpoSound < 0.1;
 }
 
 //---------------------------------------------------------

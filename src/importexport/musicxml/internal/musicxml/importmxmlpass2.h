@@ -456,6 +456,7 @@ private:
     bool _hasRelativeY;
     qreal _relativeY;
     bool hasTotalY() const { return _hasRelativeY || _hasDefaultY; }
+    double m_relativeX = 0.0;
     double _tpoMetro;                   // tempo according to metronome
     double _tpoSound;                   // tempo according to sound
     QList<EngravingItem*> _elems;
@@ -491,6 +492,7 @@ private:
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags);
     bool isLikelyFingering() const;
+    bool isLikelySticking();
 };
 
 //---------------------------------------------------------

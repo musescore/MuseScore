@@ -99,6 +99,7 @@ public:
     void setMaxStaff(const int staff);
     int maxStaff() const { return _maxStaff; }
     bool isVocalStaff() const;
+    bool isPercussionStaff() const;
     void hasLyrics(bool b) { _hasLyrics = b; }
 private:
     QString id;

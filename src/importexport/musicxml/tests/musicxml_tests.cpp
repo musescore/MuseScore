@@ -945,6 +945,9 @@ TEST_F(Musicxml_Tests, staffSize) {
 TEST_F(Musicxml_Tests, staffTwoKeySigs) {
     mxmlIoTest("testStaffTwoKeySigs");
 }
+TEST_F(Musicxml_Tests, sticking) {
+    mxmlImportTestRef("testSticking");
+}
 TEST_F(Musicxml_Tests, stringData) {
     mxmlIoTest("testStringData");
 }

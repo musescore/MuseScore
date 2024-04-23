@@ -180,6 +180,7 @@ public:
     const CreditWordsList& credits() const { return _credits; }
     bool hasBeamingInfo() const { return _hasBeamingInfo; }
     bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
+    bool isPercussionStaff(const String& id) const { return _parts[id].isPercussionStaff(); }
     static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
     static void reformatHeaderVBox(MeasureBase* mb);
     void createDefaultHeader(Score* const score);
