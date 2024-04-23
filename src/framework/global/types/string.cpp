@@ -1359,6 +1359,11 @@ void StringList::insert(size_t idx, const String& str)
     std::vector<String>::insert(begin() + idx, str);
 }
 
+void StringList::insert(const_iterator it, const String& str)
+{
+    std::vector<String>::insert(it, str);
+}
+
 void StringList::replace(size_t idx, const String& str)
 {
     this->operator [](idx) = str;
