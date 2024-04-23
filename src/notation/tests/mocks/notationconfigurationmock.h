@@ -63,7 +63,8 @@ public:
     MOCK_METHOD(QColor, borderColor, (), (const, override));
     MOCK_METHOD(int, borderWidth, (), (const, override));
 
-    MOCK_METHOD(QColor, anchorLineColor, (), (const, override));
+    MOCK_METHOD(QColor, anchorColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<QColor>, anchorColorChanged, (), (const, override));
 
     MOCK_METHOD(QColor, playbackCursorColor, (), (const, override));
     MOCK_METHOD(QColor, loopMarkerColor, (), (const, override));
