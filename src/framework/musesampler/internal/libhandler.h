@@ -34,8 +34,6 @@
 namespace muse::musesampler {
 struct MuseSamplerLibHandler
 {
-    ms_init initLib = nullptr;
-    ms_disable_reverb disableReverb = nullptr;
     ms_get_version_major getVersionMajor = nullptr;
     ms_get_version_minor getVersionMinor = nullptr;
     ms_get_version_revision getVersionRevision = nullptr;
@@ -103,6 +101,8 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_all_notes_off allNotesOff = nullptr;
 
 private:
+    ms_init initLib = nullptr;
+    ms_disable_reverb disableReverb = nullptr;
     ms_MuseSampler_add_track_dynamics_event addDynamicsEventInternal = nullptr;
     ms_MuseSampler_add_track_dynamics_event_2 addDynamicsEventInternal2 = nullptr;
     ms_MuseSampler_add_track_pedal_event addPedalEventInternal = nullptr;
@@ -388,14 +388,6 @@ public:
         setPlaying = (ms_MuseSampler_set_playing)muse::getLibFunc(m_lib, "ms_MuseSampler_set_playing");
         process = (ms_MuseSampler_process)muse::getLibFunc(m_lib, "ms_MuseSampler_process");
         allNotesOff = (ms_MuseSampler_all_notes_off)muse::getLibFunc(m_lib, "ms_MuseSampler_all_notes_off");
-
-        if (initLib) {
-            initLib();
-
-            if (disableReverb) {
-                disableReverb();
-            }
-        }
     }
 
     ~MuseSamplerLibHandler()
@@ -405,6 +397,27 @@ public:
         }
 
         muse::closeLib(m_lib);
+    }
+
+    bool init()
+    {
+        if (!initLib) {
+            LOGE() << "Could not find ms_init";
+            return false;
+        }
+
+        if (initLib() != ms_Result_OK) {
+            LOGE() << "Could not init lib";
+            return false;
+        }
+
+        if (disableReverb) {
+            if (disableReverb() != ms_Result_OK) {
+                LOGW() << "Could not disable reverb";
+            }
+        }
+
+        return true;
     }
 
     bool isValid() const
