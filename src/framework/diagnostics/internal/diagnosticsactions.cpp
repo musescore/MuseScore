@@ -59,7 +59,7 @@ const UiActionList DiagnosticsActions::m_actions = {
     UiAction("diagnostic-accessible-tree-dump",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
-             TranslatableString::untranslatable("Accessible &dump")
+             TranslatableString("action", "Accessible &dump")
              ),
     UiAction("diagnostic-show-engraving-elements",
              muse::ui::UiCtxAny,
