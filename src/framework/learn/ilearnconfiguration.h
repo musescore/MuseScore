@@ -37,6 +37,7 @@ public:
 
     virtual QUrl startedPlaylistUrl() const = 0;
     virtual QUrl advancedPlaylistUrl() const = 0;
+    virtual bool classesEnabled() const = 0;
 };
 }
 
