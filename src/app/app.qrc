@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>configs/update.cfg</file>
         <file>configs/languages.cfg</file>
+        <file>configs/learn.cfg</file>
     </qresource>
 </RCC>

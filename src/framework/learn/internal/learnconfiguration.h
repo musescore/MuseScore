@@ -23,10 +23,15 @@
 #define MUSE_LEARN_LEARNCONFIGURATION_H
 
 #include "ilearnconfiguration.h"
+#include "iglobalconfiguration.h"
+#include "global/types/config.h"
+#include "modularity/ioc.h"
 
 namespace muse::learn {
 class LearnConfiguration : public ILearnConfiguration
 {
+    Inject<IGlobalConfiguration> globalConfiguration;
+
 public:
     void init();
 
@@ -36,6 +41,7 @@ public:
     QUrl advancedPlaylistUrl() const override;
 
 private:
+    Config m_config;
     bool isTestingMode() const;
 };
 }
