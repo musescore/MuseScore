@@ -317,7 +317,6 @@ bool MuseSamplerResolver::checkLibrary()
         return false;
     }
 
-
     return true;
 }
 
