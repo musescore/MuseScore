@@ -99,6 +99,11 @@ QVariantMap LearnPageModel::classesAuthor() const
     return author;
 }
 
+bool LearnPageModel::classesEnabled()
+{
+    return learnConfiguration()->classesEnabled();
+}
+
 void LearnPageModel::setStartedPlaylist(Playlist startedPlaylist)
 {
     if (m_startedPlaylist == startedPlaylist) {

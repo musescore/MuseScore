@@ -34,6 +34,7 @@ static const Settings::Key GET_PLAYLISTS_TESTING_MODE_KEY(module_name, "learn/ge
 void LearnConfiguration::init()
 {
     m_config = ConfigReader::read(":/configs/learn.cfg");
+
     settings()->setDefaultValue(GET_PLAYLISTS_TESTING_MODE_KEY, Val(false));
 }
 
@@ -54,6 +55,11 @@ QUrl LearnConfiguration::advancedPlaylistUrl() const
 {
     return !isTestingMode() ? QUrl(m_config.value("advanced_playlist_url").toQString())
            : QUrl(m_config.value("advanced_playlist_url.test").toQString());
+}
+
+bool LearnConfiguration::classesEnabled() const
+{
+    return m_config.value("classes_enabled", Val(true)).toBool();
 }
 
 bool LearnConfiguration::isTestingMode() const

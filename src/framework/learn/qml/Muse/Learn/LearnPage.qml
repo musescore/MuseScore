@@ -185,6 +185,8 @@ FocusScope {
         StyledTabButton {
             text: qsTrc("learn", "Classes")
 
+            visible: pageModel.classesEnabled()
+
             navigation.name: "Classes"
             navigation.panel: navTabPanel
             navigation.column: 3
@@ -234,6 +236,8 @@ FocusScope {
 
         ClassesPage {
             id: classesComp
+
+            visible: pageModel.classesEnabled()
 
             property var author: pageModel.classesAuthor()
 
