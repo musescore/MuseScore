@@ -1435,6 +1435,7 @@ void Score::addElement(Element* element)
                   }
                   break;
             case ElementType::HARMONY:
+            case ElementType::FRET_DIAGRAM:
                   element->part()->updateHarmonyChannels(true);
                   break;
             case ElementType::IMAGE:
@@ -1602,6 +1603,7 @@ void Score::removeElement(Element* element)
                   }
                   break;
             case ElementType::HARMONY:
+            case ElementType::FRET_DIAGRAM:
                   element->part()->updateHarmonyChannels(true, true);
                   break;
             case ElementType::IMAGE:
