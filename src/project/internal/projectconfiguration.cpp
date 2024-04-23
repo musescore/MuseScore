@@ -301,7 +301,7 @@ muse::io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr
                 folderPath = io::dirpath(projectPath);
             }
 
-            filename = io::filename(projectPath, false);
+            filename = project->metaInfo().title;
         } else {
             projectPath = engraving::containerPath(projectPath);
             folderPath = io::dirpath(projectPath);
