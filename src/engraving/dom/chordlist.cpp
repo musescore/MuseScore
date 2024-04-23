@@ -1685,8 +1685,13 @@ void ChordList::read(XmlReader& e)
                     String code = e.attribute("code");
                     String symClass = e.attribute("class");
                     if (!code.empty()) {
+                        int base = 0; // guess, based on content
+                        if (!code.startsWith(u"0") && !(code.startsWith(u"&#") && code.endsWith(u";"))) {
+                            // fix broken chord lists, see https://github.com/musescore/MuseScore/issues/16363
+                            base = 16; // force hex
+                        }
                         bool ok = true;
-                        char32_t val = code.toUInt(&ok, 0);
+                        char32_t val = code.toUInt(&ok, base);
                         if (!ok) {
                             cs.code = 0;
                             cs.value = code;
@@ -1780,7 +1785,8 @@ void ChordList::write(XmlWriter& xml) const
                 if (s.code.isNull()) {
                     xml.tag("sym", { { "name", s.name }, { "value", s.value } });
                 } else {
-                    xml.tag("sym", { { "name", s.name }, { "code", String::number(s.code.unicode(), 16) } });
+                    // write hex numbers with a "0x" prefix, so they can convert back properly on read
+                    xml.tag("sym", { { "name", s.name }, { "code", u"0x" + String::number(s.code.unicode(), 16) } });
                 }
             }
         }
