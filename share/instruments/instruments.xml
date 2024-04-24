@@ -13496,11 +13496,11 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="violins">
+            <Instrument id="violin-section">
                   <family>orchestral-strings</family>
-                  <trackName>Violins (section)</trackName>
-                  <longName>Violins</longName>
-                  <shortName>Vlns.</shortName>
+                  <trackName>Violin (section)</trackName>
+                  <longName>Violin</longName>
+                  <shortName>Vln.</shortName>
                   <description>Violin section.</description>
                   <musicXMLid>strings.group</musicXMLid>
                   <clef>G</clef>
@@ -13552,11 +13552,11 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="violas">
+            <Instrument id="viola-section">
                   <family>orchestral-strings</family>
-                  <trackName>Violas (section)</trackName>
-                  <longName>Violas</longName>
-                  <shortName>Vlas.</shortName>
+                  <trackName>Viola (section)</trackName>
+                  <longName>Viola</longName>
+                  <shortName>Vla.</shortName>
                   <description>Viola section.</description>
                   <musicXMLid>strings.group</musicXMLid>
                   <clef>C3</clef>
@@ -13609,11 +13609,11 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="violoncellos">
+            <Instrument id="violoncello-section">
                   <family>orchestral-strings</family>
-                  <trackName>Violoncellos (section)</trackName>
-                  <longName>Violoncellos</longName>
-                  <shortName>Vcs.</shortName>
+                  <trackName>Violoncello (section)</trackName>
+                  <longName>Violoncello</longName>
+                  <shortName>Vc.</shortName>
                   <description>Violoncello section.</description>
                   <musicXMLid>strings.group</musicXMLid>
                   <clef>F</clef>
@@ -13669,11 +13669,11 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
-            <Instrument id="contrabasses">
+            <Instrument id="contrabass-section">
                   <family>orchestral-strings</family>
-                  <trackName>Contrabasses (section)</trackName>
-                  <longName>Contrabasses</longName>
-                  <shortName>Cbs.</shortName>
+                  <trackName>Contrabass (section)</trackName>
+                  <longName>Contrabass</longName>
+                  <shortName>Cb.</shortName>
                   <description>Contrabass (double bass) section.</description>
                   <musicXMLid>strings.group</musicXMLid>
                   <transposingClef>F</transposingClef>
