@@ -45,7 +45,7 @@ protected:
         bool useRead302 = MScore::useRead302InTestMode;
         MScore::useRead302InTestMode = false;
 
-        m_score = ScoreRW::readScore(u"playbackeventsrenderer_data/guitar_bends/guitar_bends.mscx");
+        m_score = ScoreRW::readScore(u"playback/playbackeventsrenderer_data/guitar_bends/guitar_bends.mscx");
 
         ASSERT_TRUE(m_score);
         ASSERT_EQ(m_score->parts().size(), 1);

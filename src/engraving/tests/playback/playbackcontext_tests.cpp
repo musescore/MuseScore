@@ -37,7 +37,7 @@ using namespace mu::engraving;
 using namespace muse::mpe;
 using namespace muse;
 
-static const muse::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
+static const muse::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playback/playbackcontext_data/");
 
 static constexpr int HAIRPIN_STEPS = 24;
 static constexpr int TICKS_STEP = 480;
