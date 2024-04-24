@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "barline.h"
 #include "box.h"
 #include "page.h"
 #include "measure.h"
@@ -948,8 +949,10 @@ void TextBlock::layout(TextBase* t)
                         }
                         break;
                   case ElementType::MEASURE: {
+                        // ignore courtesy keysig, timesig, but fall back if needed
                         Measure* m = toMeasure(e);
-                        layoutWidth = m->bbox().width();
+                        const BarLine* bl = m->endBarLine();
+                        layoutWidth = bl ? bl->segment()->x() + bl->width() : m->bbox().width();
                         }
                         break;
                   default:
