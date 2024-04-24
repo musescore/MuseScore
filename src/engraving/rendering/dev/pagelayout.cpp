@@ -360,6 +360,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                         Fingering* fingering = toFingering(e);
                                         if (fingering->isOnCrossBeamSide()) {
                                             TLayout::layoutFingering(fingering, fingering->mutldata());
+                                            if (fingering->addToSkyline()) {
+                                                const Note* n = fingering->note();
+                                                const RectF r
+                                                    = fingering->ldata()->bbox().translated(
+                                                          fingering->pos() + n->pos() + n->chord()->pos() + segment->pos()
+                                                          + segment->measure()->pos());
+                                                s->staff(fingering->note()->chord()->vStaffIdx())->skyline().add(r);
+                                            }
                                         }
                                     }
                                 }
