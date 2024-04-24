@@ -7573,6 +7573,10 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             }
             xml.startElement("staff-details", attributes);
 
+            if (st->links()) {
+                xml.tag("staff-type", "alternate");
+            }
+
             xml.tag("staff-lines", st->lines(Fraction(0, 1)));
             if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
                 std::vector<instrString> l = instrument->stringData()->stringList();
