@@ -961,6 +961,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(item->tremoloTwoChord(), xml, ctx);
     }
 
+    writeProperty(item, xml, Pid::ARTIC_STEM_H_ALIGN);
     writeProperty(item, xml, Pid::COMBINE_VOICE);
 
     for (EngravingItem* e : item->el()) {

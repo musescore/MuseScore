@@ -254,6 +254,8 @@ public:
     std::vector<Articulation*>& articulations() { return m_articulations; }
     const std::vector<Articulation*>& articulations() const { return m_articulations; }
     std::set<SymId> articulationSymbolIds() const;
+    ArticulationStemSideAlign articStemHAlign() const { return m_articStemHAlign; }
+    void setArticStemHAlign(ArticulationStemSideAlign v) { m_articStemHAlign = v; }
     Articulation* hasArticulation(const Articulation*);
     bool hasSingleArticulation() const { return m_articulations.size() == 1; }
 
@@ -400,6 +402,7 @@ private:
     AutoOnOff m_combineVoice = AutoOnOff::AUTO;
 
     std::vector<Articulation*> m_articulations;
+    ArticulationStemSideAlign m_articStemHAlign;
 };
 } // namespace mu::engraving
 #endif

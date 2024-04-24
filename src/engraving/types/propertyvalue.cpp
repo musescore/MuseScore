@@ -135,6 +135,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::ORIENTATION: return static_cast<int>(value<Orientation>());
     case P_TYPE::BEAM_MODE:   return static_cast<int>(value<BeamMode>());
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<AccidentalRole>());
+    case P_TYPE::ARTIC_STEM_H_ALIGN: return static_cast<int>(value<ArticulationStemSideAlign>());
 
     // Sound
     case P_TYPE::FRACTION:    return value<Fraction>().toString().toQString();
@@ -246,6 +247,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::ORIENTATION:   return PropertyValue(Orientation(v.toInt()));
     case P_TYPE::BEAM_MODE:     return PropertyValue(BeamMode(v.toInt()));
     case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(AccidentalRole(v.toInt()));
+    case P_TYPE::ARTIC_STEM_H_ALIGN: return PropertyValue(ArticulationStemSideAlign(v.toInt()));
 
     // Duration
     case P_TYPE::FRACTION:      return PropertyValue(Fraction::fromString(v.toString()));

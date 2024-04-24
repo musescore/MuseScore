@@ -547,6 +547,22 @@ AutoOnOff TConv::fromXml(const AsciiStringView& str, AutoOnOff def)
     return findTypeByXmlTag<AutoOnOff>(AUTO_ON_OFF, str, def);
 }
 
+static const std::vector<Item<ArticulationStemSideAlign> > ARTICULATION_STEM_SIDE_ALIGN = {
+    { ArticulationStemSideAlign::STEM,     "stem" },
+    { ArticulationStemSideAlign::NOTEHEAD, "notehead" },
+    { ArticulationStemSideAlign::AVERAGE,  "average" },
+};
+
+AsciiStringView TConv::toXml(ArticulationStemSideAlign articulationStemSideAlign)
+{
+    return findXmlTagByType<ArticulationStemSideAlign>(ARTICULATION_STEM_SIDE_ALIGN, articulationStemSideAlign);
+}
+
+ArticulationStemSideAlign TConv::fromXml(const AsciiStringView& str, ArticulationStemSideAlign def)
+{
+    return findTypeByXmlTag<ArticulationStemSideAlign>(ARTICULATION_STEM_SIDE_ALIGN, str, def);
+}
+
 static const std::vector<Item<PartialSpannerDirection> > PARTIAL_SPANNER_DIRECTION = {
     { PartialSpannerDirection::NONE,     "none" },
     { PartialSpannerDirection::OUTGOING, "outgoing" },

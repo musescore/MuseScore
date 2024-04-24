@@ -888,6 +888,14 @@ enum class ChangeMethod : signed char {
     EASE_IN_OUT        // and shake it all about
 };
 
+// P_TYPE::ARTIC_STEM_H_ALIGN
+enum class ArticulationStemSideAlign : unsigned char {
+    // horizontal align for stem-side articulation layout
+    STEM,                // attribute is placed directly over the stem
+    NOTEHEAD,            // attribute is centered on the notehead
+    AVERAGE,             // attribute is placed at the average of stem pos and notehead center
+};
+
 enum class ChangeDirection : signed char {
     INCREASING,
     DECREASING

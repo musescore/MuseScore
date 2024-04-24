@@ -76,6 +76,7 @@ enum class P_TYPE : unsigned char {
     ORIENTATION,
     BEAM_MODE,
     ACCIDENTAL_ROLE,
+    ARTIC_STEM_H_ALIGN,
     TIE_PLACEMENT,
     TIE_DOTS_PLACEMENT,
 
@@ -214,6 +215,9 @@ public:
 
     PropertyValue(const AccidentalRole& v)
         : m_type(P_TYPE::ACCIDENTAL_ROLE), m_data(make_data<AccidentalRole>(v)) {}
+
+    PropertyValue(const ArticulationStemSideAlign& v)
+        : m_type(P_TYPE::ARTIC_STEM_H_ALIGN), m_data(make_data<ArticulationStemSideAlign>(v)) {}
 
     PropertyValue(TiePlacement v)
         : m_type(P_TYPE::TIE_PLACEMENT), m_data(make_data<TiePlacement>(v)) {}

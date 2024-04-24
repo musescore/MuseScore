@@ -2767,6 +2767,7 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         ChordLine* cl = Factory::createChordLine(ch);
         TRead::read(cl, e, ctx);
         ch->add(cl);
+    } else if (readProperty(ch, tag, e, ctx, Pid::ARTIC_STEM_H_ALIGN)) {
     } else if (tag == "combineVoice") {
         // Handle mistake in 4.4 & convert from bool
         if (ch->score()->mscoreVersion() == u"4.4.0") {

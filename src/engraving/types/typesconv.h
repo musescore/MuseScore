@@ -245,6 +245,9 @@ public:
     static AsciiStringView toXml(AutoOnOff autoOnOff);
     static AutoOnOff fromXml(const AsciiStringView& str, AutoOnOff def);
 
+    static AsciiStringView toXml(ArticulationStemSideAlign articulationStemSideAlign);
+    static ArticulationStemSideAlign fromXml(const AsciiStringView& str, ArticulationStemSideAlign def);
+
     static AsciiStringView toXml(PartialSpannerDirection v);
     static PartialSpannerDirection fromXml(const AsciiStringView& str, PartialSpannerDirection def);
 

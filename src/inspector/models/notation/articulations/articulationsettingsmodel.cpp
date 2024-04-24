@@ -22,11 +22,13 @@
 #include "articulationsettingsmodel.h"
 
 #include "engraving/dom/articulation.h"
+#include "engraving/dom/chord.h"
 
 #include "log.h"
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -39,25 +41,80 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRe
 
 void ArticulationSettingsModel::createProperties()
 {
-    m_placement = buildPropertyItem(mu::engraving::Pid::ARTICULATION_ANCHOR);
+    m_placement = buildPropertyItem(Pid::ARTICULATION_ANCHOR,
+                                    [this](const Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        updateIsArticStemHAlignAvailable();
+    });
+    m_articStemHAlign = buildPropertyItem(Pid::ARTIC_STEM_H_ALIGN);
 }
 
 void ArticulationSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION);
+    m_elementList.clear();
+    for (EngravingItem* it : m_repository->findElementsByType(ElementType::ARTICULATION)) {
+        if (toArticulation(it)->chordRest()->isChord()) {
+            m_elementList << it;
+        }
+    }
+    for (EngravingItem* it : m_repository->findElementsByType(ElementType::CHORD)) {
+        if (!toChord(it)->articulations().empty()) {
+            m_elementList << it;
+        }
+    }
 }
 
 void ArticulationSettingsModel::loadProperties()
 {
     loadPropertyItem(m_placement);
+    loadPropertyItem(m_articStemHAlign);
+    updateIsArticStemHAlignAvailable();
 }
 
 void ArticulationSettingsModel::resetProperties()
 {
     m_placement->resetToDefault();
+    m_articStemHAlign->resetToDefault();
+}
+
+void ArticulationSettingsModel::updateIsArticStemHAlignAvailable()
+{
+    bool available = false;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isArticulation()) {
+            continue;
+        }
+        Articulation* a = toArticulation(item);
+        Chord* chord = a->chordRest()->isChord() ? toChord(a->chordRest()) : nullptr;
+        if (chord && a->up() == chord->up()) {
+            available = true;
+            break;
+        }
+    }
+    setIsArticStemHAlignAvailable(available);
+}
+
+void ArticulationSettingsModel::setIsArticStemHAlignAvailable(bool isArticStemHAlignAvailable)
+{
+    if (m_isArticStemHAlignAvailable == isArticStemHAlignAvailable) {
+        return;
+    }
+
+    m_isArticStemHAlignAvailable = isArticStemHAlignAvailable;
+    emit isArticStemHAlignAvailableChanged(isArticStemHAlignAvailable);
+}
+
+bool ArticulationSettingsModel::isArticStemHAlignAvailable() const
+{
+    return m_isArticStemHAlignAvailable;
 }
 
 PropertyItem* ArticulationSettingsModel::placement() const
 {
     return m_placement;
+}
+
+PropertyItem* ArticulationSettingsModel::articStemHAlign() const
+{
+    return m_articStemHAlign;
 }

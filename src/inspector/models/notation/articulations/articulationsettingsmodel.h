@@ -30,11 +30,23 @@ class ArticulationSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(PropertyItem * articStemHAlign READ articStemHAlign CONSTANT)
+
+    Q_PROPERTY(bool isArticStemHAlignAvailable READ isArticStemHAlignAvailable NOTIFY isArticStemHAlignAvailableChanged)
 
 public:
     explicit ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* placement() const;
+    PropertyItem* articStemHAlign() const;
+
+    bool isArticStemHAlignAvailable() const;
+
+public slots:
+    void setIsArticStemHAlignAvailable(bool isArticStemHAlignAvailable);
+
+signals:
+    void isArticStemHAlignAvailableChanged(bool isArticStemHAlignAvailable);
 
 private:
     void createProperties() override;
@@ -42,8 +54,13 @@ private:
     void loadProperties() override;
     void resetProperties() override;
 
+    void updateIsArticStemHAlignAvailable();
+
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_placement = nullptr;
+    PropertyItem* m_articStemHAlign = nullptr;
+
+    bool m_isArticStemHAlignAvailable = false;
 };
 }
 

@@ -59,4 +59,21 @@ Column {
             { text: qsTrc("inspector", "Below"), value: ArticulationTypes.TYPE_BOTTOM }
         ]
     }
+
+    FlatRadioButtonGroupPropertyView {
+        id: articStemHALignSection
+
+        titleText: qsTrc("inspector", "Articulation alignment when positioned at the stem")
+        propertyItem: root.model ? root.model.articStemHAlign : null
+        visible: root.model ? root.model.isArticStemHAlignAvailable : false
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: placementSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Align with stem"), value: ArticulationTypes.STEM },
+            { text: qsTrc("inspector", "Align with notehead"), value: ArticulationTypes.NOTEHEAD },
+            { text: qsTrc("inspector", "Center between stem and notehead"), value: ArticulationTypes.AVERAGE }
+        ]
+    }
 }

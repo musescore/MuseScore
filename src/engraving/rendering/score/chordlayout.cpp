@@ -775,7 +775,6 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     double _spatium       = ctx.conf().spatium() * mag;
     double _lineDist       = _spatium * staffType->lineDistance().val() / 2;
     const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance) * mag;
-    const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
     const double stemSideDistance = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
     const double headSideDistance = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
@@ -840,7 +839,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
         double y = 0.0;
         double x;
         if ((!headSide || !a->isBasicArticulation()) && item->stem()) {
-            switch (articulationHAlign) {
+            switch (item->articStemHAlign()) {
             case ArticulationStemSideAlign::STEM:
                 x = item->stem()->width() * .5;
                 break;
@@ -999,7 +998,6 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
 void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool layoutOnCrossBeamSide)
 {
-    ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     for (Chord* gc : item->graceNotes()) {
         layoutArticulations2(gc, ctx);
     }
@@ -1010,7 +1008,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     double headSideX = item->centerX();
     double stemSideX = headSideX;
     if (item->stem()) {
-        switch (articulationHAlign) {
+        switch (item->articStemHAlign()) {
         case ArticulationStemSideAlign::STEM:
             stemSideX = item->stem()->width() * .5;
             break;

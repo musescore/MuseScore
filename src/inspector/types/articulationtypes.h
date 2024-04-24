@@ -24,7 +24,6 @@
 
 #include "qobjectdefs.h"
 
-namespace mu::inspector {
 class ArticulationTypes
 {
     Q_GADGET
@@ -41,9 +40,15 @@ public:
         STYLE_BAROQUE
     };
 
+    enum class ArticulationStemSideAlign {
+        STEM,
+        NOTEHEAD,
+        AVERAGE
+    };
+
     Q_ENUM(Placement)
     Q_ENUM(Style)
+    Q_ENUM(ArticulationStemSideAlign)
 };
-}
 
 #endif // MU_INSPECTOR_ARTICULATIONTYPES_H

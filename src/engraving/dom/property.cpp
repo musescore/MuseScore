@@ -81,6 +81,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::VELO_TYPE,               false, "veloType",              P_TYPE::VELO_TYPE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "velocity type") },
     { Pid::USER_VELOCITY,           false, "velocity",              P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "velocity") },
     { Pid::ARTICULATION_ANCHOR,     false, "anchor",                P_TYPE::INT,                PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "anchor") },
+    { Pid::ARTIC_STEM_H_ALIGN,      false, "articHStemAlign",       P_TYPE::ARTIC_STEM_H_ALIGN, PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "horizontal stem alignment") },
 
     { Pid::DIRECTION,               false, "direction",             P_TYPE::DIRECTION_V,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "direction") },
     { Pid::HORIZONTAL_DIRECTION,    false, "horizontalDirection",   P_TYPE::DIRECTION_H,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "horizontal direction") },
