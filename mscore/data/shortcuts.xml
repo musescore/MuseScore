@@ -119,6 +119,7 @@
   <SC>
     <key>note-b</key>
     <seq>B</seq>
+    <seq>H</seq>
     </SC>
   <SC>
     <key>note-c</key>
@@ -147,6 +148,7 @@
   <SC>
     <key>chord-b</key>
     <seq>Shift+B</seq>
+    <seq>Shift+H</seq>
     </SC>
   <SC>
     <key>chord-c</key>
@@ -179,6 +181,7 @@
   <SC>
     <key>insert-b</key>
     <seq>Ctrl+Shift+B</seq>
+    <seq>Ctrl+Shift+H</seq>
     </SC>
   <SC>
     <key>insert-c</key>
