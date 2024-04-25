@@ -175,9 +175,9 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
 
         Note* note = nullptr;
         if (isTied(chord)) {
-            note = addNoteToTiedChord(chord, nval, /* forceAccidental */ false, is.articulationIds());
+            note = addNoteToTiedChord(chord, nval, /* forceAccidental */ false);
             if (!note) {
-                note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
+                note = addNote(chord, nval, /* forceAccidental */ false, /* articulationIds */ {}, externalInputState);
             }
         } else {
             note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
