@@ -119,7 +119,7 @@ void AbstractCloudService::initOAuthIfNecessary()
 #else
     m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QMultiMap<QString, QVariant>* parameters) {
         for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
-            parameters->insert(key, m_serverConfig.authorizationParameters.value(key));
+            parameters->replace(key, m_serverConfig.authorizationParameters.value(key));
         }
     });
 #endif
