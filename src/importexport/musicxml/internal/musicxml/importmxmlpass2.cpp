@@ -1216,7 +1216,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
     static std::map<String, SymId> map;         // map MusicXML articulation name to MuseScore symbol
     if (map.empty()) {
         map[u"accent"]           = SymId::articAccentAbove;
-        map[u"staccatissimo"]    = SymId::articStaccatissimoAbove;
+        map[u"staccatissimo"]    = SymId::articStaccatissimoWedgeAbove;
         map[u"staccato"]         = SymId::articStaccatoAbove;
         map[u"tenuto"]           = SymId::articTenutoAbove;
         map[u"strong-accent"]    = SymId::articMarcatoAbove;
@@ -1227,7 +1227,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         map[u"up-bow"]           = SymId::stringsUpBow;
         map[u"down-bow"]         = SymId::stringsDownBow;
         map[u"detached-legato"]  = SymId::articTenutoStaccatoAbove;
-        map[u"spiccato"]         = SymId::articStaccatissimoStrokeAbove;
+        map[u"spiccato"]         = SymId::articStaccatissimoAbove;
         map[u"snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
         map[u"schleifer"]        = SymId::ornamentPrecompSlide;
         map[u"open"]             = SymId::brassMuteOpen;
