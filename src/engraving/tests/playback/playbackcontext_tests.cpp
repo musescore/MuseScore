@@ -37,7 +37,7 @@ using namespace mu::engraving;
 using namespace muse::mpe;
 using namespace muse;
 
-static const muse::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
+static const muse::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playback/playbackcontext_data/");
 
 static constexpr int HAIRPIN_STEPS = 24;
 static constexpr int TICKS_STEP = 480;
@@ -159,6 +159,74 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     };
 
     EXPECT_EQ(actualDynamics, expectedDynamics);
+}
+
+TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
+{
+    // [GIVEN] Score with playing technique annotations
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "play_techniques/play_tech_annotations.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing techniques
+    PlaybackContext ctx;
+
+    // [THEN] No technique parsed, returns the "Standard" acticulation
+    int maxTick = score->endTick().ticks();
+
+    for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Standard);
+    }
+
+    // [WHEN] Parse techniques
+    ctx.update(parts.front()->id(), score);
+
+    // [THEN] The techniques successfully parsed
+    std::map<int /*tick*/, ArticulationType> expectedArticulationTypes {
+        { 0, ArticulationType::Pizzicato },
+        { 1440, ArticulationType::Open },
+        { 1920, ArticulationType::Mute },
+        { 3840, ArticulationType::Tremolo64th },
+        { 5760, ArticulationType::Detache },
+        { 7680, ArticulationType::Martele },
+        { 9600, ArticulationType::ColLegno },
+        { 11520, ArticulationType::SulPont },
+        { 13440, ArticulationType::SulTasto },
+//        { 15360, ArticulationType::Vibrato },
+//        { 17280, ArticulationType::Legato },
+        { 19200, ArticulationType::Distortion },
+        { 21120, ArticulationType::Overdrive },
+        { 23040, ArticulationType::Harmonic },
+        { 24960, ArticulationType::JazzTone },
+    };
+
+    auto findExpectedType = [&expectedArticulationTypes](int tick) {
+        auto it = muse::findLessOrEqual(expectedArticulationTypes, tick);
+        if (it == expectedArticulationTypes.end()) {
+            return ArticulationType::Standard;
+        }
+
+        return it->second;
+    };
+
+    for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        ArticulationType expectedType = findExpectedType(tick);
+        EXPECT_EQ(actualType, expectedType);
+    }
+
+    // [WHEN] Clear the context
+    ctx.clear();
+
+    // [THEN] No technique parsed, returns the "Standard" acticulation
+    for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Standard);
+    }
+
+    delete score;
 }
 
 TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
