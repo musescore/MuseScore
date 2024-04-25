@@ -1876,6 +1876,7 @@ EngravingItem* Note::drop(EditData& data)
     {
         // calculate correct transposed tpc
         Note* n = toNote(e);
+        const Segment* segment = ch->segment();
         Interval v = staff()->transpose(ch->tick());
         v.flip();
         n->setTpc2(mu::engraving::transposeTpc(n->tpc1(), v, true));
@@ -1886,6 +1887,15 @@ EngravingItem* Note::drop(EditData& data)
             n->tieBack()->setEndNote(n);
             this->setTieBack(nullptr);
         }
+        // Set correct stem direction for drum staves
+        const StaffGroup staffGroup = st->staffType(segment->tick())->group();
+        DirectionV stemDirection = DirectionV::AUTO;
+        if (staffGroup == StaffGroup::PERCUSSION) {
+            const Drumset* ds = st->part()->instrument(segment->tick())->drumset();
+            stemDirection = ds->stemDirection(n->noteVal().pitch);
+        }
+        ch->setStemDirection(stemDirection);
+
         score()->undoRemoveElement(this);
         score()->undoAddElement(n);
         return n;
