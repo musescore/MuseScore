@@ -384,6 +384,7 @@ public:
 
         PLUGIN = 0xF440,
         LYRICS = 0xF441,
+        LEARN = 0xF441,
 
         STOP_FILL = 0xF447,
 
