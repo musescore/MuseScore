@@ -5913,6 +5913,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool noStem = false;
       bool hasHead = true;
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
+      NoteHead::Scheme headScheme = NoteHead::Scheme::HEAD_AUTO;
       const QColor noteColor { _e.attributes().value("color").toString() };
       QColor noteheadColor = QColor::Invalid;
       bool noteheadParentheses = false;
@@ -5969,9 +5970,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   noteheadColor.setNamedColor(_e.attributes().value("color").toString());
                   noteheadParentheses = _e.attributes().value("parentheses") == "yes";
                   noteheadFilled = _e.attributes().value("filled").toString();
-                  auto noteheadValue = _e.readElementText();
+                  QString noteheadValue = _e.readElementText();
                   if (noteheadValue == "none")
                         hasHead = false;
+                  else if (noteheadValue == "named" && _pass1.exporterString().contains("noteflight"))
+                        headScheme = NoteHead::Scheme::HEAD_PITCHNAME;
                   else
                         headGroup = convertNotehead(noteheadValue);
                   }
@@ -6161,6 +6164,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             handleSmallness(cue || isSmall, note, c);
             note->setPlay(!cue);          // cue notes don't play
             note->setHeadGroup(headGroup);
+            if (headScheme != NoteHead::Scheme::HEAD_AUTO)
+                  note->setHeadScheme(headScheme);
             if (noteColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   note->setColor(noteColor);
             setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
