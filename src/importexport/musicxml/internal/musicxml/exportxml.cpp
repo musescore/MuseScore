@@ -4780,6 +4780,9 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
         QString tagName = QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no");
         tagName += color2xml(text);
         tagName += ExportMusicXml::positioningAttributes(text);
+        if (!text->visible()) {
+            tagName += u" print-object=\"no\"";
+        }
         xml.startElementRaw(tagName);
         int len1 = 0;
         TDuration dur;

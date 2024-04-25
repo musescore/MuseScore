@@ -714,6 +714,9 @@ TEST_F(Musicxml_Tests, invalidLayout) {
 TEST_F(Musicxml_Tests, invalidTimesig) {
     mxmlIoTestRef("testInvalidTimesig");
 }
+TEST_F(Musicxml_Tests, invisibleDirection) {
+    mxmlIoTest("testInvisibleDirection");
+}
 TEST_F(Musicxml_Tests, invisibleElements) {
     mxmlIoTest("testInvisibleElements");
 }

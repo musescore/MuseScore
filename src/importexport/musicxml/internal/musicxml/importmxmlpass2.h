@@ -461,6 +461,7 @@ private:
     double _tpoSound;                   // tempo according to sound
     QList<EngravingItem*> _elems;
     Fraction _offset;
+    bool m_visible = true;
 
     void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
     void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
