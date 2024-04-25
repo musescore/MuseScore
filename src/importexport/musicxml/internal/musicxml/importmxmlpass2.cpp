@@ -5944,6 +5944,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
     const QColor noteColor { _e.attributes().value("color").toString() };
     QColor noteheadColor = QColor::Invalid;
+    NoteHeadScheme headScheme = NoteHeadScheme::HEAD_AUTO;
     bool noteheadParentheses = false;
     QString noteheadFilled;
     int velocity = round(_e.attributes().value("dynamics").toDouble() * 0.9);
@@ -5991,7 +5992,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             noteheadParentheses = _e.attributes().value("parentheses") == "yes";
             noteheadFilled = _e.attributes().value("filled").toString();
             auto noteheadValue = _e.readElementText();
-            if (noteheadValue != "none") {
+            if (noteheadValue == "named" && _pass1.exporterString().contains(u"noteflight")) {
+                headScheme = NoteHeadScheme::HEAD_PITCHNAME;
+            } else if (noteheadValue != "none") {
                 headGroup = convertNotehead(noteheadValue);
             }
         } else if (_e.name() == "rest") {
@@ -6180,6 +6183,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         handleSmallness(cue || isSmall, note, c);
         note->setPlay(!cue);          // cue notes don't play
         note->setHeadGroup(headGroup);
+        if (headScheme != NoteHeadScheme::HEAD_AUTO) {
+            note->setHeadScheme(headScheme);
+        }
         if (noteColor.isValid()) {
             note->setColor(noteColor);
         }
