@@ -4512,6 +4512,8 @@ static void wordsMetronome(XmlWriter& xml, Score* s, TextBase const* const text,
             QString tagName = QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no");
             tagName += color2xml(text);
             tagName += positioningAttributes(text);
+            if (!text->visible())
+                  tagName += " print-object=\"no\"";
             xml.stag(tagName);
             int len1 = 0;
             TDuration dur;
@@ -4571,13 +4573,11 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
              qPrintable(text->xmlText()));
       */
       _attr.doAttr(_xml, false);
-      if (text->visible()) {
-            _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() == Placement::BELOW ) ? "below" : "above"));
-            wordsMetronome(_xml, _score, text, offset);
+      _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() == Placement::BELOW ) ? "below" : "above"));
+      wordsMetronome(_xml, _score, text, offset);
 
-            if (staff)
-                  _xml.tag("staff", staff);
-            }
+      if (staff)
+            _xml.tag("staff", staff);
 
       // Format tempo with maximum 2 decimal places, because in some MuseScore files tempo is stored
       // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
@@ -4585,8 +4585,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       qreal bpmRounded = round(bpm * 100) / 100;
       _xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(bpmRounded)));
 
-      if (text->visible())
-            _xml.etag();
+      _xml.etag();
       }
 
 //---------------------------------------------------------

@@ -174,6 +174,7 @@ private slots:
       void instrumentSound() { mxmlIoTestRef("testInstrumentSound"); }
       void invalidLayout() { mxmlMscxExportTestRef("testInvalidLayout"); }
       void invalidTimesig() { mxmlIoTestRef("testInvalidTimesig"); }
+      void invisibleDirection() { mxmlIoTest("testInvisibleDirection"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void invisibleNote() { mxmlMscxExportTestRef("testInvisibleNote"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }

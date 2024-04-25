@@ -3281,6 +3281,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   if (tt->plainText().contains('='))
                         tt->setFollowText(true);
                   }
+            tt->setVisible(_visible);
 
             addElemOffset(tt, track, placement(), measure, tick + _offset);
             }
@@ -3351,6 +3352,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
                         }
 
+                  t->setVisible(_visible);
+
                   QString wordsPlacement = placement();
                   // Case-based defaults
                   if (wordsPlacement.isEmpty()) {
@@ -3408,8 +3411,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         dynaValue = 127;
                   else if (dynaValue < 0)
                         dynaValue = 0;
-                  dyn->setVelocity( dynaValue );
+                  dyn->setVelocity(dynaValue);
                   }
+
+            dyn->setVisible(_visible);
 
             QString dynamicsPlacement = placement();
             // Case-based defaults
@@ -3499,6 +3504,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         else
                               spannerPlacement = totalY() < 0 ? "above" : "below";
                         }
+                  desc._sp->setVisible(_visible);
                   if (spdesc._isStopped) {
                         _pass2.addSpanner(desc);
                         // handleSpannerStart and handleSpannerStop must be called in order
@@ -3540,6 +3546,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
             _hasDefaultY |= hasDefaultYCandidate;
             _hasRelativeY |= hasRelativeYCandidate;
             _isBold &= _e.attributes().value("font-weight").toString() == "bold";
+            _visible = _e.attributes().value("print-object").toString() != "no";
             QString number = _e.attributes().value("number").toString();
             int n = 0;
             if (!number.isEmpty()) {
@@ -4233,6 +4240,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
                         measure = measure->prevMeasure();
                   else if (tb->tid() == Tid::REPEAT_LEFT && !closerToLeft && measure->nextMeasure())
                         measure = measure->nextMeasure();
+                  tb->setVisible(_visible);
                   measure->add(tb);
                   }
             }
