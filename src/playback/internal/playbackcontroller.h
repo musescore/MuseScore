@@ -92,7 +92,7 @@ public:
 
     notation::INotationSoloMuteState::SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
-                               const notation::INotationSoloMuteState::SoloMuteState& state) const override;
+                               const notation::INotationSoloMuteState::SoloMuteState& state) override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;

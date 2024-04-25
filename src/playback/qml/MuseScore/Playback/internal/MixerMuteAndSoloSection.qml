@@ -52,7 +52,7 @@ MixerPanelSection {
                 checked: channelItem.muted
 
                 // TODO: not use `enabled` for this, but present visually in some other way
-                enabled: !(channelItem.muted && channelItem.forceMute) && channelItem.type !== MixerChannelItem.Metronome
+                enabled: !(channelItem.muted && channelItem.forceMute)
 
                 navigation.name: "MuteButton"
                 navigation.panel: channelItem.panel

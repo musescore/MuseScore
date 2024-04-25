@@ -126,7 +126,7 @@ mu::notation::INotationSoloMuteState::SoloMuteState PlaybackControllerStub::trac
 }
 
 void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTrackId&,
-                                                   const notation::INotationSoloMuteState::SoloMuteState&) const
+                                                   const notation::INotationSoloMuteState::SoloMuteState&)
 {
 }
 
