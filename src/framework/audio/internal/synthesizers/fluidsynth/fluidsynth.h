@@ -102,7 +102,8 @@ private:
     void toggleExpressionController();
 
     int setExpressionLevel(int level);
-    int setControllerValue(const midi::Event& event);
+    int setControllerValue(int channel, int ctrl, int value);
+    int setPitchBend(int channel, int pitchBend);
 
     std::shared_ptr<Fluid> m_fluid = nullptr;
 
