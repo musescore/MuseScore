@@ -10,32 +10,30 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "score.h"
-
-#include "rest.h"
-#include "staff.h"
-#include "measure.h"
-#include "harmony.h"
-#include "fret.h"
-#include "breath.h"
+#include "articulation.h"
 #include "beam.h"
+#include "breath.h"
+#include "chord.h"
+#include "drumset.h"
 #include "figuredbass.h"
-#include "ottava.h"
-#include "part.h"
-#include "lyrics.h"
+#include "fret.h"
 #include "hairpin.h"
+#include "harmony.h"
+#include "image.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "part.h"
+#include "repeat.h"
+#include "rest.h"
+#include "score.h"
+#include "sig.h"
+#include "staff.h"
 #include "tie.h"
 #include "timesig.h"
+#include "tremolo.h"
 #include "tuplet.h"
 #include "utils.h"
 #include "xml.h"
-#include "image.h"
-#include "repeat.h"
-#include "chord.h"
-#include "tremolo.h"
-#include "slur.h"
-#include "articulation.h"
-#include "sig.h"
 
 namespace Ms {
 
@@ -1011,8 +1009,17 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
             Measure* m = segment->measure()->mmRestFirst();
             segment = m->findSegment(SegmentType::ChordRest, m->tick());
             }
+
+      const Staff* staff = target->staff();
+      const StaffGroup staffGroup = staff->staffType(segment->tick())->group();
+      Direction stemDirection = Direction::AUTO;
+      if (staffGroup == StaffGroup::PERCUSSION) {
+            const Drumset* ds = staff->part()->instrument(segment->tick())->drumset();
+            stemDirection = ds->stemDirection(with->noteVal().pitch);
+            }
+
       segment = target->score()->setNoteRest(segment, target->track(),
-                                             with->noteVal(), duration, Direction::AUTO, false, false, &target->score()->inputState());
+                                             with->noteVal(), duration, stemDirection, false, false, &target->score()->inputState());
       return toChord(segment->nextChordRest(target->track()))->upNote();
       }
 

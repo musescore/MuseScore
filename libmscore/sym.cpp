@@ -10,15 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QDirIterator>
+
+#include "mscore.h"
+#include "score.h"
 #include "style.h"
 #include "sym.h"
-#include "utils.h"
-#include "score.h"
-#include "xml.h"
-#include "mscore.h"
+
 #include "mscore/preferences.h"
 
-#include <QDirIterator>
 
 #include FT_GLYPH_H
 #include FT_IMAGE_H
@@ -6655,7 +6655,7 @@ void ScoreFont::scanUserFonts(const QString& path, bool system)
             }
 
 
-      qDebug() << "Found" << userfonts.count() << (system ? "system" : "user") << "score fonts in" << path <<".";
+      qDebug() << "Found" << userfonts.count() << (system ? "system" : "user") << "score font" << (userfonts.count() > 1? "s" : "") << " in" << path <<".";
 
       // TODO: Check for fonts that duplicate built-in fonts
       if (!system) // reset list when re-reading due to changed Preferences

@@ -15,65 +15,56 @@
  Handling of several GUI commands.
 */
 
-#include <assert.h>
-
-#include "types.h"
-#include "musescoreCore.h"
-#include "score.h"
-#include "utils.h"
-#include "key.h"
-#include "clef.h"
-#include "navigate.h"
-#include "slur.h"
-#include "tie.h"
-#include "note.h"
-#include "rest.h"
-#include "chord.h"
-#include "text.h"
-#include "sig.h"
-#include "staff.h"
-#include "part.h"
-#include "style.h"
-#include "page.h"
-#include "barline.h"
-#include "tuplet.h"
-#include "xml.h"
-#include "ottava.h"
-#include "trill.h"
-#include "pedal.h"
-#include "hairpin.h"
-#include "textline.h"
-#include "keysig.h"
-#include "volta.h"
-#include "dynamic.h"
-#include "box.h"
-#include "harmony.h"
-#include "system.h"
-#include "stafftext.h"
-#include "articulation.h"
-#include "layoutbreak.h"
-#include "drumset.h"
-#include "beam.h"
-#include "lyrics.h"
-#include "pitchspelling.h"
-#include "measure.h"
-#include "tempo.h"
-#include "undo.h"
-#include "timesig.h"
-#include "repeat.h"
-#include "tempotext.h"
-#include "noteevent.h"
-#include "breath.h"
-#include "stringdata.h"
-#include "stafftype.h"
-#include "segment.h"
-#include "chordlist.h"
-#include "mscore.h"
 #include "accidental.h"
-#include "sequencer.h"
-#include "tremolo.h"
+#include "articulation.h"
+#include "barline.h"
+#include "beam.h"
+#include "box.h"
+#include "chord.h"
+#include "chordlist.h"
+#include "clef.h"
+#include "drumset.h"
+#include "dynamic.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "key.h"
+#include "keysig.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "mscore.h"
+#include "musescoreCore.h"
+#include "navigate.h"
+#include "note.h"
+#include "noteevent.h"
+#include "ottava.h"
+#include "page.h"
+#include "part.h"
+#include "pitchspelling.h"
 #include "rehearsalmark.h"
+#include "repeat.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "sequencer.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "stringdata.h"
+#include "style.h"
+#include "textline.h"
 #include "sym.h"
+#include "system.h"
+#include "tie.h"
+#include "timesig.h"
+#include "tremolo.h"
+#include "trill.h"
+#include "tuplet.h"
+#include "types.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -1382,10 +1373,16 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
       Fraction f     = dstF;
       ChordRest* cr1 = cr;
       Chord* oc      = 0;
+      Segment* s     = cr->segment();
 
       bool first = true;
       Fraction totalLen = cr->rtick() + f;
-      for (Fraction f2 : qAsConst(flist)) {
+      for (const Fraction& f2 : flist) {
+            if (!cr1) {
+                  expandVoice(s, track);
+                  cr1 = toChordRest(s->element(track));
+                  }
+
             f  -= f2;
             if (totalLen.reduced() > Fraction(1, 1)) {
                   if (auto nm = cr1->measure()->nextMeasure()) {
@@ -1469,11 +1466,11 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                               }
                         }
                   }
-            Measure* m  = cr1->measure();
-            Measure* m1 = m->nextMeasure();
+            const Measure* m  = cr1->measure();
+            const Measure* m1 = m->nextMeasure();
             if (!m1)
                   break;
-            Segment* s = m1->first(SegmentType::ChordRest);
+            s = m1->first(SegmentType::ChordRest);
             cr1 = toChordRest(s->element(track));
             if (!cr1)
                   break;

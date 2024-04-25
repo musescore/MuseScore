@@ -214,6 +214,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
       chord->setTrack(oc->track());
       chord->setDurationType(d);
       chord->setTicks(d.fraction());
+      chord->setStemDirection(oc->stemDirection());
 
       for (Note* n : oc->notes()) {
             Note* nn = new Note(this);
