@@ -377,6 +377,7 @@ public:
 
         CLOUD = 0xF435,
 
+        WAVEFORM = 0xF43C,
         CROSS_STAFF_BEAMING = 0xF43D,
 
         TEMPO_CHANGE = 0xF43F,
