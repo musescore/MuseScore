@@ -107,6 +107,8 @@ bool Score::read(XmlReader& e)
                   _showFrames = e.readInt();
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
+            else if (tag == "open") // + Mu4 compat
+                  e.skipCurrentElement(); // irgnore, even in Mu4 it doesn't seem to have any usefull meaning
             else if (tag == "markIrregularMeasures")
                   _markIrregularMeasures = e.readInt();
             else if (tag == "Style") {
