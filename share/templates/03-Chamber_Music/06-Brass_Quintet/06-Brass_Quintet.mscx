@@ -52,10 +52,11 @@
         <bracket type="0" span="5" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 1</trackName>
+      <trackName>Trumpet in B♭ 1</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet 1</longName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 1</longName>
+        <shortName>Tpt. in B♭ 1</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -124,10 +125,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 2</trackName>
+      <trackName>Trumpet in B♭ 2</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet 2</longName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 2</longName>
+        <shortName>Tpt. in B♭ 2</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -199,7 +201,8 @@
       <trackName>Horn in F</trackName>
       <Instrument id="horn">
         <longName>Horn in F</longName>
-        <trackName>Horn in F</trackName>
+        <shortName>Hn. in F</shortName>
+        <trackName>Horn</trackName>
         <minPitchP>31</minPitchP>
         <maxPitchP>77</maxPitchP>
         <minPitchA>41</minPitchA>
@@ -266,6 +269,7 @@
       <trackName>Trombone</trackName>
       <Instrument id="trombone">
         <longName>Trombone</longName>
+        <shortName>Tbn.</shortName>
         <trackName>Trombone</trackName>
         <minPitchP>35</minPitchP>
         <maxPitchP>74</maxPitchP>
@@ -331,6 +335,7 @@
       <trackName>Tuba</trackName>
       <Instrument id="tuba">
         <longName>Tuba</longName>
+        <shortName>Tba.</shortName>
         <trackName>Tuba</trackName>
         <minPitchP>22</minPitchP>
         <maxPitchP>72</maxPitchP>
