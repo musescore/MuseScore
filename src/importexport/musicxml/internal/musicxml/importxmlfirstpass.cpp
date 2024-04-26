@@ -37,6 +37,25 @@ static const std::vector<String> vocalInstrumentNames = { u"Voice",
                                                           u"Women",
                                                           u"Men" };
 
+static const std::vector<String> percussionInstrumentNames = { u"Percussion",
+                                                               u"Timpani",
+                                                               u"Glockenspiel",
+                                                               u"Xylophone",
+                                                               u"Vibraphone",
+                                                               u"Marimba",
+                                                               u"Bell",
+                                                               u"Drum"
+                                                               u"Cymbal",
+                                                               u"Triangle",
+                                                               u"Claves",
+                                                               u"Wood Blocks",
+                                                               u"Tambourine",
+                                                               u"Finger Snap",
+                                                               u"Hand Clap",
+                                                               u"Slap",
+                                                               u"Stamp"
+};
+
 MusicXmlPart::MusicXmlPart(String id, String name)
     : m_id(id), m_name(name)
 {
@@ -149,6 +168,16 @@ bool MusicXmlPart::isVocalStaff() const
 {
     return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), m_name) != vocalInstrumentNames.end()
            || m_hasLyrics;
+}
+
+bool MusicXmlPart::isPercussionStaff() const
+{
+    for (const String& name : percussionInstrumentNames) {
+        if (m_name.contains(name)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //---------------------------------------------------------
