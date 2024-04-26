@@ -2093,17 +2093,21 @@ void Score::toggleDynamic(DynamicType dt)
                     continue;
                 }
             }
-            Dynamic* dy = Factory::createDynamic(this->dummy()->segment()); 
+            Dynamic* dy = Factory::createDynamic(cr->segment()); 
             dy->setDynamicType(dt);
-            dy->setVelocity(6);
-            undoAddElement(dy);
+            dy->setTrack(cr->track());
+            cr->segment()->add(dy);
 
-            Articulation* na = Factory::createArticulation(this->dummy()->chord());
-            switch (dt) {
+
+            //undoAddElement(dy);
+ 
+            /*Articulation* na = Factory::createArticulation(this->dummy()->chord());
+            switch (dt) {*/
             /*case DynamicType::PP:
                 na->setSymId(SymId::dynamicPP);
                 break;*/
-            case DynamicType::P:
+            /*case DynamicType::P:
+                addDynamic()
                 na->setSymId(SymId::dynamicPiano);
                 break;
             case DynamicType::F:
@@ -2123,8 +2127,7 @@ void Score::toggleDynamic(DynamicType dt)
             if (cr) {
                 set.insert(cr);
             }
-
-            break;
+            break; */
         }
     }
 }
@@ -2135,6 +2138,7 @@ void Score::toggleDynamic(DynamicType dt)
 
 bool Score::changeDynamic(EngravingItem* el, Articulation* a)
 {
+    /*
     Chord* c;
     if (el->isNote()) {
         c = toNote(el)->chord();
@@ -2175,7 +2179,7 @@ bool Score::changeDynamic(EngravingItem* el, Articulation* a)
         }
         articCopy->setAnchor(ArticulationAnchor::BOTTOM);
         delete articCopy;
-    }
+    }*/
     return true;
 }
 
