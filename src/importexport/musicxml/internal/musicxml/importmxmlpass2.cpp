@@ -5945,6 +5945,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     bool noStem = false;
     bool hasHead = true;
     NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
+    NoteHeadScheme headScheme = NoteHeadScheme::HEAD_AUTO;
     const Color noteColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     Color noteheadColor;
     bool noteheadParentheses = false;
@@ -5993,9 +5994,11 @@ Note* MusicXMLParserPass2::note(const String& partId,
             noteheadColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             noteheadParentheses = m_e.asciiAttribute("parentheses") == "yes";
             noteheadFilled = m_e.attribute("filled");
-            auto noteheadValue = m_e.readText();
+            String noteheadValue = m_e.readText();
             if (noteheadValue == "none") {
                 hasHead = false;
+            } else if (noteheadValue == "named" && m_pass1.exporterString().contains(u"noteflight")) {
+                headScheme = NoteHeadScheme::HEAD_PITCHNAME;
             } else {
                 headGroup = convertNotehead(noteheadValue);
             }
@@ -6185,6 +6188,9 @@ Note* MusicXMLParserPass2::note(const String& partId,
         handleSmallness(cue || isSmall, note, c);
         note->setPlay(!cue);          // cue notes don't play
         note->setHeadGroup(headGroup);
+        if (headScheme != NoteHeadScheme::HEAD_AUTO) {
+            note->setHeadScheme(headScheme);
+        }
         if (noteColor.isValid()) {
             note->setColor(noteColor);
         }
