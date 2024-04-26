@@ -446,14 +446,19 @@ void NotationInteraction::toggleVisible()
     apply();
 }
 
-EngravingItem* NotationInteraction::hitElement(const PointF& pos, float width) const
+EngravingItem* NotationInteraction::hitElement(const PointF& pos, float width, bool selectSubElements) const
 {
-    std::vector<mu::engraving::EngravingItem*> elements = hitElements(pos, width);
+    std::vector<mu::engraving::EngravingItem*> elements = hitElements(pos, width, selectSubElements);
     if (elements.empty()) {
         return nullptr;
     }
     m_selection->onElementHit(elements.back());
     return elements.back();
+}
+
+EngravingItem* NotationInteraction::hitSubElement(const PointF& pos, float width) const
+{
+    return hitElement(pos, width, true);
 }
 
 Staff* NotationInteraction::hitStaff(const PointF& pos) const
@@ -497,7 +502,7 @@ EngravingItem* NotationInteraction::elementAt(const PointF& p) const
     return el.empty() || el.back()->isPage() ? nullptr : el.back();
 }
 
-std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, float w) const
+std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, float w, bool selectSubElements) const
 {
     mu::engraving::Page* page = point2page(p_in);
     if (!page) {
@@ -571,7 +576,22 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
             }
 
             if (element->hitShapeIntersects(r)) {
-                ll.push_back(element);
+                if (!selectSubElements) {
+                    ll.push_back(element);
+                    continue;
+                }
+                if (element->isTextLineBase()) {
+                    mu::engraving::TextLineBase* tlb = toTextLineBase(element);
+                    if (tlb->beginText()->hitShapeIntersects(r)) {
+                        ll.push_back(tlb->beginText());
+                    }
+                    if (tlb->continueText()->hitShapeIntersects(r)) {
+                        ll.push_back(tlb->continueText());
+                    }
+                    if (tlb->endText()->hitShapeIntersects(r)) {
+                        ll.push_back(tlb->endText());
+                    }
+                }
             }
         }
     }
@@ -2926,7 +2946,7 @@ bool NotationInteraction::isTextEditingStarted() const
 
 bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const
 {
-    return element && element->isEditable() && (element->isTextBase() || element->isTBox());
+    return element && element->isEditable() && (element->isTextBase() || element->isTextLineBase() || element->isTBox());
 }
 
 void NotationInteraction::startEditText(EngravingItem* element, const PointF& cursorPos)

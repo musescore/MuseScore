@@ -171,6 +171,7 @@ private:
         muse::PointF logicClickPos;
         const QMouseEvent* event = nullptr;
         mu::engraving::EngravingItem* hitElement = nullptr;
+        mu::engraving::EngravingItem* hitSubElement = nullptr;
         bool isHitGrip = false;
     };
 

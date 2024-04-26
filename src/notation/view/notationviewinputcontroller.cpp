@@ -575,10 +575,16 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
         INotationInteraction::HitElementContext context;
         context.element = viewInteraction()->hitElement(logicPos, hitWidth());
+        if (context.element->isTextLineBase()) {
+            context.subElement = viewInteraction()->hitSubElement(logicPos, hitWidth());
+        } else {
+            context.subElement = nullptr;
+        }
         context.staff = viewInteraction()->hitStaff(logicPos);
         viewInteraction()->setHitElementContext(context);
 
         hitElement = context.element;
+        hitSubElement = context.subElement;
         hitStaffIndex = context.staff ? context.staff->idx() : muse::nidx;
     }
 
@@ -884,7 +890,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     }
 
     if (interaction->textEditingAllowed(ctx.element)) {
-        interaction->startEditText(ctx.element, m_logicalBeginPoint);
+        interaction->startEditText(ctx.subElement, m_logicalBeginPoint);
     }
 }
 
@@ -905,7 +911,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         viewInteraction()->selectText(mu::engraving::SelectTextType::Word);
         return;
     } else if (viewInteraction()->textEditingAllowed(ctx.element)) {
-        viewInteraction()->startEditText(ctx.element, m_logicalBeginPoint);
+        viewInteraction()->startEditText(ctx.subElement, m_logicalBeginPoint);
     }
 
     PointF logicPos = m_view->toLogical(event->pos());

@@ -58,6 +58,7 @@ public:
     struct HitElementContext
     {
         notation::EngravingItem* element = nullptr;
+        notation::EngravingItem* subElement = nullptr;
         notation::Staff* staff = nullptr;
 
         bool operator ==(const HitElementContext& other) const
