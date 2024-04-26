@@ -397,6 +397,7 @@ public:
     String join(const String& sep) const;
 
     void insert(size_t idx, const String& str);
+    void insert(const_iterator it, const String& str);
     void replace(size_t idx, const String& str);
     bool removeAll(const String& str);
     void removeAt(size_t i);
