@@ -303,8 +303,17 @@ mu::notation::INotationSoloMuteState::SoloMuteState PlaybackController::trackSol
 }
 
 void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
-                                               const notation::INotationSoloMuteState::SoloMuteState& state) const
+                                               const notation::INotationSoloMuteState::SoloMuteState& state)
 {
+    if (trackId == notationPlayback()->metronomeTrackId()) {
+        if (state.mute != notationConfiguration()->isMetronomeEnabled()) {
+            return;
+        }
+
+        toggleMetronome();
+        return;
+    }
+
     m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
 }
 
