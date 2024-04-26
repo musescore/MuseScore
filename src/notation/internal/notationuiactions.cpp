@@ -1366,7 +1366,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("nonuplet",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Nontuplet"),
+             TranslatableString("action", "&Nonuplet"),
              TranslatableString("action", "Enter tuplet: nonuplet")
              ),
     UiAction("tuplet-dialog",
