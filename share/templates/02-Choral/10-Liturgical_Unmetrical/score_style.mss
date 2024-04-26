@@ -359,6 +359,8 @@
     <firstSystemIndentationValue>5</firstSystemIndentationValue>
     <alwaysShowBracketsWhenEmptyStavesAreHidden>0</alwaysShowBracketsWhenEmptyStavesAreHidden>
     <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+    <firstSystemInsNameVisibility>0</firstSystemInsNameVisibility>
+    <subsSystemInstNameVisibility>2</subsSystemInstNameVisibility>
     <gateTime>100</gateTime>
     <tenutoGateTime>100</tenutoGateTime>
     <staccatoGateTime>50</staccatoGateTime>

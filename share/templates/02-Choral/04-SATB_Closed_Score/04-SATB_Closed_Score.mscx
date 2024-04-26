@@ -47,6 +47,8 @@
       <Instrument id="women">
         <longName>S
 A</longName>
+        <shortName>S
+A</shortName>
         <trackName>Women</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -118,6 +120,8 @@ A</longName>
       <Instrument id="men">
         <longName>T
 B</longName>
+        <shortName>T
+B</shortName>
         <trackName>Men</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>69</maxPitchP>
