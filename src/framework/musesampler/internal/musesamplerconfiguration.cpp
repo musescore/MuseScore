@@ -60,7 +60,8 @@ static const muse::io::path_t FALLBACK_PATH = LIB_NAME;
 
 muse::io::path_t MuseSamplerConfiguration::defaultPath() const
 {
-    return globalConfig()->genericDataPath() + "\\MuseSampler\\lib\\" + LIB_NAME;
+    io::path_t path = globalConfig()->genericDataPath() + "/MuseSampler/lib/" + LIB_NAME;
+    return path;
 }
 
 #endif
