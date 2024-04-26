@@ -83,11 +83,11 @@
         <bracket type="2" span="2" col="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violins I</trackName>
+      <trackName>Violins 1</trackName>
       <Instrument id="violins">
-        <longName>Violins I</longName>
-        <shortName>Vlns. I</shortName>
-        <trackName>Violins</trackName>
+        <longName>Violins 1</longName>
+        <shortName>Vlns. 1</shortName>
+        <trackName>Violins (section)</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
         <minPitchA>55</minPitchA>
@@ -160,11 +160,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violins II</trackName>
+      <trackName>Violins 2</trackName>
       <Instrument id="violins">
-        <longName>Violins II</longName>
-        <shortName>Vlns. II</shortName>
-        <trackName>Violins</trackName>
+        <longName>Violins 2</longName>
+        <shortName>Vlns. 2</shortName>
+        <trackName>Violins (section)</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
         <minPitchA>55</minPitchA>
@@ -242,7 +242,7 @@
       <Instrument id="violas">
         <longName>Violas</longName>
         <shortName>Vlas.</shortName>
-        <trackName>Violas</trackName>
+        <trackName>Violas (section)</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>93</maxPitchP>
         <minPitchA>48</minPitchA>
@@ -321,7 +321,7 @@
       <Instrument id="violoncellos">
         <longName>Violoncellos</longName>
         <shortName>Vcs.</shortName>
-        <trackName>Violoncellos</trackName>
+        <trackName>Violoncellos (section)</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>
         <minPitchA>36</minPitchA>
@@ -400,7 +400,7 @@
       <Instrument id="contrabasses">
         <longName>Contrabasses</longName>
         <shortName>Cbs.</shortName>
-        <trackName>Contrabasses</trackName>
+        <trackName>Contrabasses (section)</trackName>
         <minPitchP>24</minPitchP>
         <maxPitchP>67</maxPitchP>
         <minPitchA>28</minPitchA>
