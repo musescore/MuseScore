@@ -188,7 +188,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>90</per-minute>
             </metronome>

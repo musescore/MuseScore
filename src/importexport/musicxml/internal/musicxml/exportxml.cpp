@@ -4855,6 +4855,9 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
         String tagName = String(u"metronome parentheses=\"%1\"").arg(hasParen ? u"yes" : u"no");
         tagName += color2xml(text);
         tagName += ExportMusicXml::positioningAttributes(text);
+        if (!text->visible()) {
+            tagName += u" print-object=\"no\"";
+        }
         xml.startElementRaw(tagName);
         int len1 = 0;
         TDuration dur;

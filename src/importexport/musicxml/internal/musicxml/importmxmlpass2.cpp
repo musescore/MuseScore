@@ -3062,6 +3062,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 tt->setFollowText(true);
             }
         }
+        tt->setVisible(m_visible);
 
         addElemOffset(tt, track, placement(), measure, tick + m_offset);
     } else if (isLikelySticking() && isPercussionStaff) {
@@ -3137,6 +3138,8 @@ void MusicXMLParserDirection::direction(const String& partId,
                 t->setColor(m_color);
             }
 
+            t->setVisible(m_visible);
+
             String wordsPlacement = m_placement;
             // Case-based defaults
             if (wordsPlacement.empty()) {
@@ -3198,6 +3201,8 @@ void MusicXMLParserDirection::direction(const String& partId,
             }
             dyn->setVelocity(dynaValue);
         }
+
+        dyn->setVisible(m_visible);
 
         String dynamicsPlacement = placement();
         // Case-based defaults
@@ -3285,6 +3290,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                     spannerPlacement = totalY() < 0 ? u"above" : u"below";
                 }
             }
+            desc.sp->setVisible(m_visible);
             if (spdesc.isStopped) {
                 m_pass2.addSpanner(desc);
                 // handleSpannerStart and handleSpannerStop must be called in order
@@ -3440,6 +3446,7 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         m_defaultY = m_e.asciiAttribute("default-y").toDouble(&m_hasDefaultY) * -0.1;
         m_relativeX = m_e.doubleAttribute("relative-x") / 10 * m_score->style().spatium();
         m_relativeY = m_e.doubleAttribute("relative-y") / -10 * m_score->style().spatium();
+        m_visible = m_e.asciiAttribute("print-object") != "no";
         String number = m_e.attribute("number");
         int n = 0;
         if (!number.empty()) {
@@ -4020,6 +4027,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
                 MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
                 toHBox(gap)->setBoxWidth(Spatium(10));
             }
+            tb->setVisible(m_visible);
             measure->add(tb);
         }
     }
@@ -4124,6 +4132,7 @@ void MusicXMLParserDirection::handleChordSym(const track_idx_t track, const Frac
     ha->setTrack(track);
     ha->setPlacement(placement() == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
     ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    ha->setVisible(m_visible);
     HarmonyDesc newHarmonyDesc(track, ha, nullptr);
 
     const int ticks = tick.ticks();

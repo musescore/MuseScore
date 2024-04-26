@@ -213,7 +213,7 @@
         </direction>
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>81</per-minute>
             </metronome>
@@ -229,7 +229,7 @@
     <measure number="9">
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>82</per-minute>
             </metronome>
@@ -246,7 +246,7 @@
       <print new-system="yes"/>
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>81</per-minute>
             </metronome>
@@ -272,7 +272,7 @@
     <measure number="11">
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>82</per-minute>
             </metronome>
@@ -288,7 +288,7 @@
     <measure number="12">
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>83</per-minute>
             </metronome>
@@ -304,7 +304,7 @@
     <measure number="13">
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>84</per-minute>
             </metronome>
@@ -321,7 +321,7 @@
       <print new-system="yes"/>
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>85</per-minute>
             </metronome>
@@ -342,7 +342,7 @@
     <measure number="15">
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>86</per-minute>
             </metronome>
@@ -358,7 +358,7 @@
     <measure number="16">
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
+          <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>87</per-minute>
             </metronome>
