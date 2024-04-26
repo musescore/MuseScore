@@ -37,9 +37,9 @@ namespace muse {
 inline void* loadLib(const io::path_t& path)
 {
 #if defined(Q_OS_WIN) && !defined(__MINGW64__)
-    return LoadLibrary(path.toStdWString().c_str());
+    return LoadLibrary(io::toNativeSeparators(path).toStdWString().data());
 #else
-    return dlopen(path.c_str(), RTLD_LAZY);
+    return dlopen(io::toNativeSeparators(path).toStdString().data(), RTLD_LAZY);
 #endif
 }
 
