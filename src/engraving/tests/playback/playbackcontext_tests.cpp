@@ -366,24 +366,24 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
 }
 
 /**
- * @brief Engraving_PlaybackContextTests_SoundFlags_ArcoAndOrdCancelPlayingTechniques
- *  @details Checks whether Arco & "Ord." correctly cancel playing techniques. See:
+ * @brief Engraving_PlaybackContextTests_SoundFlags_CancelPlayingTechniques
+ *  @details Checks whether Arco & Open & "Ord." correctly cancel playing techniques. See:
  *  https://github.com/musescore/MuseScore/issues/22403
  */
-TEST_F(Engraving_PlaybackContextTests, SoundFlags_ArcoAndOrdCancelPlayingTechniques)
+TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
 {
-    // [GIVEN] Score with sound flags & playing techniques
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags_arco.mscx");
+    // [GIVEN] Score (violin + brass) with sound flags & playing techniques
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/cancel_playing_technique.mscx");
 
     const std::vector<Part*>& parts = score->parts();
-    ASSERT_FALSE(parts.empty());
+    ASSERT_EQ(parts.size(), 2);
 
     // [GIVEN] Context for parsing sound flags & playing techniques
     PlaybackContext ctx;
 
-    // [WHEN] Parse the sound flags & playing techniques
-    const Part* part = parts.front();
-    ctx.update(part->id(), score);
+    // [WHEN] Parse the violin part
+    const Part* violinPart = parts.at(0);
+    ctx.update(violinPart->id(), score);
 
     // [THEN] 1st measure: Pizz.
     for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
@@ -409,6 +409,34 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_ArcoAndOrdCancelPlayingTechniq
     };
 
     PlaybackParamMap params = ctx.playbackParamMap(score);
+    EXPECT_EQ(params, expectedParams);
+
+    // [WHEN] Parse the brass part
+    const Part* brassPart = parts.at(1);
+    ctx.clear();
+    ctx.update(brassPart->id(), score);
+
+    // [THEN] 1st measure: Standard
+    for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Standard);
+    }
+
+    // [THEN] "Open" starting from the 2nd measure
+    for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
+        ArticulationType actualType = ctx.persistentArticulationType(tick);
+        EXPECT_EQ(actualType, ArticulationType::Open);
+    }
+
+    // [THEN] The actual params match the expectation
+    PlaybackParamList mute { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("mute"), 0 } };
+
+    expectedParams = {
+        { timestampFromTicks(score, 0), mute }, // 1st measure
+        { timestampFromTicks(score, 1920), ordinary }, // 2nd measure (canceled by Open)
+    };
+
+    params = ctx.playbackParamMap(score);
     EXPECT_EQ(params, expectedParams);
 
     delete score;
