@@ -257,12 +257,9 @@ void MuseSamplerWrapper::setIsActive(bool arg)
 
     m_samplerLib->setPlaying(m_sampler, arg);
 
-    if (!isActive()) {
-        //! NOTE: restore the current position because setPlaying(m_sampler, false) resets it
+    if (arg) {
         m_samplerLib->setPosition(m_sampler, m_currentPosition);
     }
-
-    LOGD() << "Toggled playing status, isPlaying: " << arg;
 }
 
 InstrumentInfo MuseSamplerWrapper::resolveInstrument(const mpe::PlaybackSetupData& setupData) const
@@ -357,9 +354,10 @@ void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
     }
 
     m_currentPosition = samples;
-    m_samplerLib->setPosition(m_sampler, m_currentPosition);
 
-    LOGD() << "Seek a new playback position, newPosition: " << m_currentPosition;
+    if (isActive()) {
+        m_samplerLib->setPosition(m_sampler, m_currentPosition);
+    }
 }
 
 void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* output)
