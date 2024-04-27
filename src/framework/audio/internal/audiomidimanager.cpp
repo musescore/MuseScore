@@ -108,7 +108,7 @@ const AudioMidiManager::Spec& AudioMidiManager::activeSpec() const
 AudioDeviceID AudioMidiManager::outputDevice() const
 {
     if (m_current_audioDriverState != nullptr) {
-        return m_current_audioDriverState->m_deviceId;
+        return m_current_audioDriverState->deviceId;
     } else {
         LOGE() << "device is not opened, deviceId: " << m_deviceId;
         return m_deviceId; // FIX: should return optional type
@@ -255,7 +255,7 @@ void AudioMidiManager::setAudioDelayCompensate(const int frames)
 
 unsigned int AudioMidiManager::outputDeviceBufferSize() const
 {
-    return m_current_audioDriverState->m_spec.samples;
+    return m_current_audioDriverState->deviceSpec.samples;
 }
 
 bool AudioMidiManager::setOutputDeviceBufferSize(unsigned int bufferSize)
@@ -295,7 +295,7 @@ std::vector<unsigned int> AudioMidiManager::availableOutputDeviceBufferSizes() c
 //      unsigned int LinuxAudioDriver::sampleRate() const
 unsigned int AudioMidiManager::outputDeviceSampleRate() const
 {
-    return m_current_audioDriverState->m_spec.sampleRate;
+    return m_current_audioDriverState->deviceSpec.sampleRate;
 }
 
 // FIX-JACK-20240823: merge this code
