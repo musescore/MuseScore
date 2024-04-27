@@ -99,7 +99,7 @@ void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
         return;
     }
 
-    m_buffer->setMinSamplesToReserve(readBufferSize);
+    m_buffer->setMinSamplesPerChannelToReserve(readBufferSize);
 }
 
 void AudioEngine::setAudioChannelsCount(const audioch_t count)
