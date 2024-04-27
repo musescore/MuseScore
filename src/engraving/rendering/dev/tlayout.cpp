@@ -5803,6 +5803,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     item->npointsRef() = 0;
     TextLineBase* tl = item->textLineBase();
     double _spatium = tl->spatium();
+    bool isSingleOrBegin = item->isSingleBeginType();
 
     if (item->spanner()->placeBelow()) {
         ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
@@ -5837,25 +5838,20 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         }
     };
 
-    switch (item->spannerSegmentType()) {
-    case SpannerSegmentType::SINGLE:
-    case SpannerSegmentType::BEGIN:
+    if (isSingleOrBegin) {
         item->text()->setXmlText(tl->beginText());
         item->text()->setFamily(tl->beginFontFamily());
         item->text()->setSize(tl->beginFontSize());
         item->text()->setOffset(tl->beginTextOffset() * item->mag());
         item->text()->setAlign(tl->beginTextAlign());
         item->text()->setFontStyle(tl->beginFontStyle());
-        break;
-    case SpannerSegmentType::MIDDLE:
-    case SpannerSegmentType::END:
+    } else {
         item->text()->setXmlText(tl->continueText());
         item->text()->setFamily(tl->continueFontFamily());
         item->text()->setSize(tl->continueFontSize());
         item->text()->setOffset(tl->continueTextOffset() * item->mag());
         item->text()->setAlign(tl->continueTextAlign());
         item->text()->setFontStyle(tl->continueFontStyle());
-        break;
     }
     item->text()->setPlacement(PlacementV::ABOVE);
     item->text()->setTrack(item->track());
@@ -5887,7 +5883,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 
     // line with no text or hooks - just use the basic rectangle for line
     if (item->text()->empty() && item->endText()->empty()
-        && (!item->isSingleBeginType() || tl->beginHookType() == HookType::NONE)
+        && (!isSingleOrBegin || tl->beginHookType() == HookType::NONE)
         && (!item->isSingleEndType() || tl->endHookType() == HookType::NONE)) {
         item->npointsRef() = 2;
         item->pointsRef()[0] = pp1;
@@ -5906,14 +5902,31 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     double y1 = std::min(0.0, pp2.y()) + y0;
     double y2 = std::max(0.0, pp2.y()) - y0;
 
-    double l = 0.0;
-    if (!item->text()->empty()) {
-        double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
-        if ((item->isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
-            || (!item->isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-            l = item->text()->pos().x() + item->text()->ldata()->bbox().width() + gapBetweenTextAndLine;
-        }
+    double l1 = 0.0;
+    double l2 = 0.0;
+    double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
 
+    bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
+    bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
+    bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
+    bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
+    bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
+    bool hasEndText = !item->endText()->empty() && item->isSingleEndType();
+
+    if (!item->text()->empty()) {
+        if ((isSingleOrBegin && alignBeginText) || (!isSingleOrBegin && alignContinueText)) {
+            l1 = gapBetweenTextAndLine;
+            switch (item->text()->align().horizontal) {
+            case AlignH::LEFT:
+                l1 += item->text()->ldata()->bbox().width();
+                break;
+            case AlignH::HCENTER:
+                l1 += item->text()->ldata()->bbox().width() / 2;
+                break;
+            default:
+                break;
+            }
+        }
         double h = item->text()->height();
         if (tl->beginTextPlace() == TextPlace::ABOVE) {
             y1 = std::min(y1, -h);
@@ -5949,21 +5962,28 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
     // set end text position and extend bbox
     if (!item->endText()->empty()) {
+        if (alignEndText) {
+            l2 = gapBetweenTextAndLine;
+            switch (item->endText()->align().horizontal) {
+            case AlignH::RIGHT:
+                l2 += item->endText()->ldata()->bbox().width();
+                break;
+            case AlignH::HCENTER:
+                l2 += item->endText()->ldata()->bbox().width() / 2;
+                break;
+            default:
+                break;
+            }
+        }
         item->endText()->mutldata()->moveX(ldata->bbox().right());
         ldata->addBbox(item->endText()->ldata()->bbox().translated(item->endText()->pos()));
     }
 
     if (tl->lineVisible() || !ctx.conf().isPrintingMode()) {
-        pp1 = PointF(l, 0.0);
+        pp1 = PointF(l1, 0.0);
+        pp2.rx() -= l2;
 
         // Make sure baseline of text and line are properly aligned (accounting for line thickness)
-        bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
-        bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
-        bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
-        bool isSingleOrBegin = item->isSingleBeginType();
-        bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
-        bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
-        bool hasEndText = !item->endText()->empty() && item->isSingleEndType();
         if ((hasBeginText && alignBeginText) || (hasContinueText && alignContinueText)) {
             alignBaseLine(item->text(), pp1, pp2);
         } else if (hasEndText && alignEndText) {
@@ -5990,7 +6010,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
             return;
         }
 
-        if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+        if (isSingleOrBegin && tl->beginHookType() != HookType::NONE) {
             // We use the term "endpoint" for the point that does not touch the main line.
             const PointF& beginHookEndpoint = item->pointsRef()[item->npointsRef()++]
                                                   = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
@@ -6027,10 +6047,9 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
                 PointF& endHookStartpoint = item->pointsRef()[item->npointsRef()++] = pp2;
 
                 if (tl->lineStyle() == LineType::DASHED) {
-                    bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
-
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
+                    bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
                     extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->lineWidth() * item->mag(), checkAngle);
                 }
             }
