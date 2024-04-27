@@ -45,15 +45,17 @@ public:
     void changedPlaying() const override;
     void changedPosition() const override;
 
-    void* m_alsaDeviceHandle = nullptr;
+    void* alsaDeviceHandle = nullptr;
+    float* buffer = nullptr;
+    bool audioProcessingDone = false;
 
-    float* m_buffer = nullptr;
-    bool m_audioProcessingDone = false;
-    pthread_t m_threadHandle = 0;
 private:
+    void alsaCleanup();
+
+    pthread_t m_threadHandle = 0;
+
     async::Channel<muse::midi::tick_t, muse::midi::Event > m_eventReceived;
     std::string m_deviceName = "default";
-    void alsaCleanup();
 };
 }
 

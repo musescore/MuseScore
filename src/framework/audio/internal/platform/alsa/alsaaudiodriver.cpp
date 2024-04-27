@@ -43,22 +43,22 @@ static void* alsaThread(void* aParam)
     muse::runtime::setThreadName("audio_driver");
     AlsaDriverState* state = static_cast<AlsaDriverState*>(aParam);
 
-    int ret = snd_pcm_wait(static_cast<snd_pcm_t*>(state->m_alsaDeviceHandle), 1000);
+    int ret = snd_pcm_wait(static_cast<snd_pcm_t*>(state->alsaDeviceHandle), 1000);
     IF_ASSERT_FAILED(ret > 0) {
         return nullptr;
     }
 
-    while (!state->m_audioProcessingDone)
+    while (!state->audioProcessingDone)
     {
-        uint8_t* stream = (uint8_t*)state->m_buffer;
-        int len = state->m_spec.samples * state->m_spec.channels * sizeof(float);
+        uint8_t* stream = (uint8_t*)state->buffer;
+        int len = state->deviceSpec.samples * state->deviceSpec.channels * sizeof(float);
 
-        state->m_spec.callback(state->m_spec.userdata, stream, len);
+        state->deviceSpec.callback(state->deviceSpec.userdata, stream, len);
 
-        snd_pcm_sframes_t pcm = snd_pcm_writei(static_cast<snd_pcm_t*>(state->m_alsaDeviceHandle), state->m_buffer, state->m_spec.samples);
+        snd_pcm_sframes_t pcm = snd_pcm_writei(static_cast<snd_pcm_t*>(state->alsaDeviceHandle), state->buffer, state->deviceSpec.samples);
         if (pcm != -EPIPE) {
         } else {
-            snd_pcm_prepare(static_cast<snd_pcm_t*>(state->m_alsaDeviceHandle));
+            snd_pcm_prepare(static_cast<snd_pcm_t*>(state->alsaDeviceHandle));
         }
     }
 
@@ -68,7 +68,7 @@ static void* alsaThread(void* aParam)
 
 AlsaDriverState::AlsaDriverState()
 {
-    m_deviceId = "alsa";
+    deviceId = "alsa";
     m_deviceName = ALSA_DEFAULT_DEVICE_ID;
 }
 
@@ -79,25 +79,25 @@ AlsaDriverState::~AlsaDriverState()
 
 void AlsaDriverState::alsaCleanup()
 {
-    m_audioProcessingDone = true;
+    audioProcessingDone = true;
     if (m_threadHandle) {
         pthread_join(m_threadHandle, nullptr);
     }
-    if (m_alsaDeviceHandle != nullptr) {
-        snd_pcm_t* aDevice = static_cast<snd_pcm_t*>(m_alsaDeviceHandle);
+    if (alsaDeviceHandle != nullptr) {
+        snd_pcm_t* aDevice = static_cast<snd_pcm_t*>(alsaDeviceHandle);
         snd_pcm_drain(aDevice);
         snd_pcm_close(aDevice);
-        m_alsaDeviceHandle = nullptr;
+        alsaDeviceHandle = nullptr;
     }
-    if (m_buffer) {
-        delete[] m_buffer;
+    if (buffer) {
+        delete[] buffer;
     }
-    m_buffer = nullptr;
+    buffer = nullptr;
 }
 
 std::string AlsaDriverState::name() const
 {
-    return m_deviceId;
+    return deviceId;
 }
 
 std::string AlsaDriverState::deviceName() const
@@ -116,10 +116,10 @@ void AlsaDriverState::setAudioDelayCompensate([[maybe_unused]] const int frames)
 
 bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
 {
-    m_spec.samples = spec.samples;
-    m_spec.channels = spec.channels;
-    m_spec.callback = spec.callback;
-    m_spec.userdata = spec.userdata;
+    deviceSpec.samples = spec.samples;
+    deviceSpec.channels = spec.channels;
+    deviceSpec.callback = spec.callback;
+    deviceSpec.userdata = spec.userdata;
 
     snd_pcm_t* handle;
     int rc = snd_pcm_open(&handle, m_deviceName.c_str(), SND_PCM_STREAM_PLAYBACK, 0);
@@ -128,7 +128,7 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         return false;
     }
 
-    m_alsaDeviceHandle = handle;
+    alsaDeviceHandle = handle;
 
     snd_pcm_hw_params_t* params;
     snd_pcm_hw_params_alloca(&params);
@@ -147,12 +147,12 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         return false;
     }
 
-    long unsigned int samples = m_spec.samples;
+    long unsigned int samples = deviceSpec.samples;
     rc = snd_pcm_hw_params_set_buffer_size_near(handle, params, &samples);
     if (rc < 0) {
         LOGE() << "Unable to set buffer size: " << samples << ", err code: " << rc;
     }
-    m_spec.samples = (int)samples;
+    deviceSpec.samples = (int)samples;
 
     rc = snd_pcm_hw_params(handle, params);
     if (rc < 0) {
@@ -161,21 +161,21 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
     snd_pcm_hw_params_get_rate(params, &val, &dir);
     aSamplerate = val;
-    m_spec.sampleRate = aSamplerate;
+    deviceSpec.sampleRate = aSamplerate;
 
-    if (m_buffer != nullptr) {
+    if (buffer != nullptr) {
         LOGW() << "open before close";
-        delete[] m_buffer;
-        m_buffer = nullptr;
+        delete[] buffer;
+        buffer = nullptr;
     }
 
-    m_buffer = new float[m_spec.samples * m_spec.channels];
+    buffer = new float[deviceSpec.samples * deviceSpec.channels];
 
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = IAudioDriver::Format::AudioF32;
         activeSpec->sampleRate = aSamplerate;
-        m_spec = *activeSpec;
+        deviceSpec = *activeSpec;
     }
 
     m_threadHandle = 0;
@@ -195,7 +195,7 @@ void AlsaDriverState::close()
 
 bool AlsaDriverState::isOpened() const
 {
-    return m_alsaDeviceHandle != nullptr;
+    return alsaDeviceHandle != nullptr;
 }
 
 void AlsaDriverState::changedPlaying() const
