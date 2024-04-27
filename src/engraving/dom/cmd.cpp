@@ -2093,20 +2093,20 @@ void Score::toggleDynamic(DynamicType dt)
                     continue;
                 }
             }
-            Dynamic* dy = Factory::createDynamic(cr->segment()); 
+            /*Dynamic* dy = Factory::createDynamic(cr->segment());
             dy->setDynamicType(dt);
             dy->setTrack(cr->track());
-            cr->segment()->add(dy);
+            cr->segment()->add(dy);*/
 
 
             //undoAddElement(dy);
  
-            /*Articulation* na = Factory::createArticulation(this->dummy()->chord());
-            switch (dt) {*/
+            Articulation* na = Factory::createArticulation(this->dummy()->chord());
+            switch (dt) {
             /*case DynamicType::PP:
                 na->setSymId(SymId::dynamicPP);
                 break;*/
-            /*case DynamicType::P:
+            case DynamicType::P:
                 addDynamic()
                 na->setSymId(SymId::dynamicPiano);
                 break;
@@ -2127,7 +2127,7 @@ void Score::toggleDynamic(DynamicType dt)
             if (cr) {
                 set.insert(cr);
             }
-            break; */
+            break;
         }
     }
 }
