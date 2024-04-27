@@ -2107,7 +2107,6 @@ void Score::toggleDynamic(DynamicType dt)
                 na->setSymId(SymId::dynamicPP);
                 break;*/
             case DynamicType::P:
-                addDynamic()
                 na->setSymId(SymId::dynamicPiano);
                 break;
             case DynamicType::F:
