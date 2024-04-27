@@ -165,7 +165,7 @@ bool musescore_seek(unsigned int pos)
 
 void JackDriverState::changedPlaying() const
 {
-    jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
+    jack_client_t* client = static_cast<jack_client_t*>(jackDeviceHandle);
 
     if (s_jackDriver->isPlaying()) {
         jack_nframes_t frames = static_cast<jack_nframes_t>(s_jackDriver->playbackPositionInSeconds() * g_samplerate);
@@ -180,7 +180,7 @@ void JackDriverState::changedPlaying() const
 
 void JackDriverState::changedPosition() const
 {
-    jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
+    jack_client_t* client = static_cast<jack_client_t*>(jackDeviceHandle);
     jack_nframes_t frames = static_cast<jack_nframes_t>(s_jackDriver->playbackPositionInSeconds() * g_samplerate);
 
     // worker thread is updating muse_frame (which runs every 100ms)
@@ -312,7 +312,7 @@ static int framecnt = 0;
 
 void check_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
 {
-    jack_client_t* client = static_cast<jack_client_t*>(state->m_jackDeviceHandle);
+    jack_client_t* client = static_cast<jack_client_t*>(state->jackDeviceHandle);
 
     jack_muse_update_verify_sync(state, client);
 
@@ -399,17 +399,17 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
 {
     JackDriverState* state = static_cast<JackDriverState*>(args);
 
-    jack_default_audio_sample_t* l = (float*)jack_port_get_buffer(state->m_outputPorts[0], nframes);
-    jack_default_audio_sample_t* r = (float*)jack_port_get_buffer(state->m_outputPorts[1], nframes);
+    jack_default_audio_sample_t* l = (float*)jack_port_get_buffer(state->outputPorts[0], nframes);
+    jack_default_audio_sample_t* r = (float*)jack_port_get_buffer(state->outputPorts[1], nframes);
 
-    uint8_t* stream = (uint8_t*)state->m_buffer;
-    state->m_spec.callback(state->m_spec.userdata, stream, nframes * state->m_spec.channels * sizeof(float));
-    float* sp = state->m_buffer;
+    uint8_t* stream = (uint8_t*)state->buffer;
+    state->deviceSpec.callback(state->deviceSpec.userdata, stream, nframes * state->deviceSpec.channels * sizeof(float));
+    float* sp = state->buffer;
     for (size_t i = 0; i < nframes; i++) {
         *l++ = *sp++;
         *r++ = *sp++;
     }
-    jack_client_t* client = static_cast<jack_client_t*>(state->m_jackDeviceHandle);
+    jack_client_t* client = static_cast<jack_client_t*>(state->jackDeviceHandle);
     // if (!isConnected()) {
     //    LOGI() << "---- JACK-midi output sendEvent SORRY, not connected";
     //    return make_ret(Err::MidiNotConnected);
@@ -420,8 +420,8 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
     }
     check_jack_midi_transport(state, nframes);
 
-    if (!state->m_midiOutputPorts.empty()) {
-        jack_port_t* port = state->m_midiOutputPorts.front();
+    if (!state->midiOutputPorts.empty()) {
+        jack_port_t* port = state->midiOutputPorts.front();
         if (port) {
             int segmentSize = jack_get_buffer_size(client);
             void* pb = jack_port_get_buffer(port, segmentSize);
@@ -429,7 +429,7 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
             // FIX: can portBuffer be nullptr?
             muse::midi::Event e;
             while (1) {
-                if (state->m_midiQueue.pop(e)) {
+                if (state->midiQueue.pop(e)) {
                     sendEvent(e, pb);
                 } else {
                     break;
@@ -439,7 +439,7 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
     } else {
         muse::midi::Event e;
         while (1) {
-            if (state->m_midiQueue.pop(e)) {
+            if (state->midiQueue.pop(e)) {
                 LOGW() << "no jack-midi-outport, consumed unused Event: " << e.to_string();
             } else {
                 break;
@@ -447,8 +447,8 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
         }
     }
 
-    if (!state->m_midiInputPorts.empty()) {
-        jack_port_t* port = state->m_midiInputPorts.front();
+    if (!state->midiInputPorts.empty()) {
+        jack_port_t* port = state->midiInputPorts.front();
         if (port) {
             int segmentSize = jack_get_buffer_size(client);
             void* pb = jack_port_get_buffer(port, segmentSize);
@@ -475,7 +475,7 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
                                  event.buffer[1],
                                  event.buffer[2],
                                  event.buffer[0]);
-                            state->m_eventReceived.send(static_cast<tick_t>(0), e);
+                            state->eventReceived.send(static_cast<tick_t>(0), e);
                         }
                     }
                 }
@@ -500,22 +500,22 @@ static void jack_cleanup_callback(void*)
 JackDriverState::JackDriverState(IAudioDriver* amm)
 {
     s_jackDriver = this;
-    m_deviceId = JACK_DEFAULT_DEVICE_ID;
+    deviceId = JACK_DEFAULT_DEVICE_ID;
     m_deviceName = JACK_DEFAULT_IDENTIFY_AS;
     m_audiomidiManager = amm;
 }
 
 JackDriverState::~JackDriverState()
 {
-    if (m_jackDeviceHandle != nullptr) {
-        jack_client_close(static_cast<jack_client_t*>(m_jackDeviceHandle));
+    if (jackDeviceHandle != nullptr) {
+        jack_client_close(static_cast<jack_client_t*>(jackDeviceHandle));
     }
-    delete[] m_buffer;
+    delete[] buffer;
 }
 
 std::string JackDriverState::name() const
 {
-    return m_deviceId;
+    return deviceId;
 }
 
 std::string JackDriverState::deviceName() const
@@ -552,10 +552,10 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         return true;
     }
 
-    // m_spec.samples  = spec.samples; // client doesn't set sample-rate
-    m_spec.channels = spec.channels;
-    m_spec.callback = spec.callback;
-    m_spec.userdata = spec.userdata;
+    deviceSpec.samples  = spec.samples; // client doesn't set sample-rate
+    deviceSpec.channels = spec.channels;
+    deviceSpec.callback = spec.callback;
+    deviceSpec.userdata = spec.userdata;
 
     const char* clientName = m_deviceName.c_str();
     jack_status_t status;
@@ -564,10 +564,10 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         LOGE() << "jack_client_open() failed: " << status;
         return false;
     }
-    m_jackDeviceHandle = handle;
+    jackDeviceHandle = handle;
 
     unsigned int jackSamplerate = jack_get_sample_rate(handle);
-    m_spec.sampleRate = jackSamplerate;
+    deviceSpec.sampleRate = jackSamplerate;
     g_samplerate = jackSamplerate;
     // FIX: at samplerate change, this need to be adjusted
     g_frameslimit = static_cast<msecs_t>((double)g_samplerate * (double)FRAMESLIMIT / 1000.0d);
@@ -586,20 +586,20 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     //threadv.push_back(std::move(thread_musescore_state));
     //threads = std::move(threadv);
 
-    jack_set_sample_rate_callback(handle, jack_srate_callback, (void*)&m_spec);
+    jack_set_sample_rate_callback(handle, jack_srate_callback, (void*)&deviceSpec);
 
     jack_port_t* output_port_left = jack_port_register(handle, "audio_out_left", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-    m_outputPorts.push_back(output_port_left);
+    outputPorts.push_back(output_port_left);
     jack_port_t* output_port_right = jack_port_register(handle, "audio_out_right", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-    m_outputPorts.push_back(output_port_right);
-    m_spec.samples = jack_get_buffer_size(handle);
-    m_buffer = new float[m_spec.samples * m_spec.channels];
+    outputPorts.push_back(output_port_right);
+    deviceSpec.samples = jack_get_buffer_size(handle);
+    buffer = new float[deviceSpec.samples * deviceSpec.channels];
 
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = IAudioDriver::Format::AudioF32;
         activeSpec->sampleRate = jackSamplerate;
-        m_spec = *activeSpec;
+        deviceSpec = *activeSpec;
     }
 
     jack_on_shutdown(handle, jack_cleanup_callback, (void*)this);
@@ -613,13 +613,13 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
     // midi input
     jack_port_t* midi_input_port = jack_port_register(handle, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
-    m_midiInputPorts.push_back(midi_input_port);
+    midiInputPorts.push_back(midi_input_port);
 
     // midi output
     int portFlag = JackPortIsOutput;
     const char* portType = JACK_DEFAULT_MIDI_TYPE;
     jack_port_t* port = jack_port_register(handle, "Musescore", portType, portFlag, 0);
-    m_midiOutputPorts.push_back(port);
+    midiOutputPorts.push_back(port);
 
     muse_seek_requested = 0;
     mpos_frame = muse_frame = static_cast<unsigned int>(s_jackDriver->playbackPositionInSeconds() * jackSamplerate);
@@ -638,15 +638,15 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
 void JackDriverState::close()
 {
-    jack_client_close(static_cast<jack_client_t*>(m_jackDeviceHandle));
-    m_jackDeviceHandle = nullptr;
-    delete[] m_buffer;
-    m_buffer = nullptr;
+    jack_client_close(static_cast<jack_client_t*>(jackDeviceHandle));
+    jackDeviceHandle = nullptr;
+    delete[] buffer;
+    buffer = nullptr;
 }
 
 bool JackDriverState::isOpened() const
 {
-    return m_jackDeviceHandle != nullptr;
+    return jackDeviceHandle != nullptr;
 }
 
 bool JackDriverState::isPlaying() const
@@ -675,20 +675,20 @@ void JackDriverState::remoteSeek(msecs_t millis) const
 
 bool JackDriverState::pushMidiEvent(muse::midi::Event& e)
 {
-    m_midiQueue.push(e);
+    midiQueue.push(e);
     return true;
 }
 
 void JackDriverState::registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event > midiInputQueue)
 {
-    m_eventReceived = midiInputQueue;
+    eventReceived = midiInputQueue;
 }
 
 std::vector<muse::midi::MidiDevice> JackDriverState::availableMidiDevices(muse::midi::MidiPortDirection direction) const
 {
     std::vector<muse::midi::MidiDevice> ports;
     std::vector<muse::midi::MidiDevice> ret;
-    jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
+    jack_client_t* client = static_cast<jack_client_t*>(jackDeviceHandle);
     const char** prts = jack_get_ports(client, 0, "midi", 0);
     if (!prts) {
         return ports;
