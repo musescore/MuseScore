@@ -48,15 +48,6 @@ public:
     void deviceName(const std::string newDeviceName);
     std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const;
 
-    void* m_jackDeviceHandle = nullptr;
-    float* m_buffer = nullptr;
-    std::vector<jack_port_t*> m_outputPorts;
-    std::vector<jack_port_t*> m_midiInputPorts;
-    std::vector<jack_port_t*> m_midiOutputPorts;
-    ThreadSafeQueue<muse::midi::Event> m_midiQueue;
-    async::Channel<muse::midi::tick_t, muse::midi::Event> m_eventReceived;
-    mu::playback::IPlaybackController* m_playbackController;
-
     void changedPlaying() const override;
     void changedPosition() const override;
 
@@ -64,6 +55,15 @@ public:
     float playbackPositionInSeconds() const;
     void remotePlayOrStop(bool) const;
     void remoteSeek(msecs_t) const;
+
+    void* jackDeviceHandle = nullptr;
+    float* buffer = nullptr;
+    std::vector<jack_port_t*> outputPorts;
+    std::vector<jack_port_t*> midiInputPorts;
+    std::vector<jack_port_t*> midiOutputPorts;
+    ThreadSafeQueue<muse::midi::Event> midiQueue;
+    async::Channel<muse::midi::tick_t, muse::midi::Event> eventReceived;
+    mu::playback::IPlaybackController* playbackController;
 
 private:
     IAudioDriver* m_audiomidiManager;

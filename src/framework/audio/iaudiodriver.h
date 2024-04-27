@@ -120,8 +120,8 @@ public:
     virtual void changedPlaying() const = 0;
     virtual void changedPosition() const = 0;
 
-    IAudioDriver::Spec m_spec; // current running spec
-    std::string m_deviceId;
+    IAudioDriver::Spec deviceSpec; // current running spec
+    std::string deviceId;
 };
 }
 
