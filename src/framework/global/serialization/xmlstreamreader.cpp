@@ -208,23 +208,37 @@ XmlStreamReader::TokenType XmlStreamReader::readNext()
     return m_token;
 }
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#define strdup _strdup // avoid a warning from MSVC on a perfectly valid POSIX function
+#endif
 void XmlStreamReader::tryParseEntity(Xml* xml)
 {
     static const char* ENTITY = { "ENTITY" };
 
     const char* str = xml->node->Value();
     if (std::strncmp(str, ENTITY, 6) == 0) {
-        String val = String::fromUtf8(str);
-        StringList list = val.split(' ');
-        if (list.size() == 3) {
-            String name = list.at(1);
-            String val2 = list.at(2);
-            m_entities[u'&' + name + u';'] = val2.mid(1, val2.size() - 2);
-        } else {
-            LOGW() << "unknown ENTITY: " << val;
+        // Syntax: '<!ENTITY [%] Name [SYSTEM|PUBLIC] "Value" [additional info] >'
+        // the '<!' and '>' stripped away already from str
+        // let's ignore %, SYSTEM, PUBLIC and any spaces in the 1st token
+        // and not read the (optional) 3rd token at all
+        char* string = strdup(str); // create local copy
+        const char sep[] = "\"";
+        char* token = std::strtok(string + 6, sep); // start at the space after "ENTITY"
+        String name = String::fromUtf8(token).remove(u"%").remove(u"SYSTEM").remove(u"PUBLIC").remove(u" ");
+        token = std::strtok(NULL, sep); // read 2nd token
+        String value = String::fromUtf8(token);
+        free(string); // not needed anymore
+        if (!name.empty() && !value.empty()) {
+            m_entities[u'&' + name + u';'] = value;
+            return;
         }
+        LOGW() << "Ignoring malformed ENTITY: " << str;
     }
 }
+
+#if (defined(_MSCVER) || defined(_MSC_VER))
+#undef strdup
+#endif
 
 String XmlStreamReader::nodeValue(Xml* xml) const
 {
