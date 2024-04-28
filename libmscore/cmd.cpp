@@ -4425,7 +4425,6 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "pitch-spell",                [](Score* cs, EditData&){ cs->spell();                                                    }},
             { "select-all",                 [](Score* cs, EditData&){ cs->cmdSelectAll();                                             }},
             { "select-section",             [](Score* cs, EditData&){ cs->cmdSelectSection();                                         }},
-            { "toggle-mouse-entry",         [](Score* cs, EditData&){ cs->cmdToggleMouseEntry();                                      }},
             { "add-brackets",               [](Score* cs, EditData&){ cs->cmdAddBracket();                                            }},
             { "add-parentheses",            [](Score* cs, EditData&){ cs->cmdAddParentheses();                                        }},
             { "add-braces",                 [](Score* cs, EditData&){ cs->cmdAddBraces();                                        }},

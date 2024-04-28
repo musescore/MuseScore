@@ -2866,6 +2866,10 @@ void ScoreView::cmd(const char* s)
                         cv->score()->endCmd();
                         }
                   }},
+            {{"toggle-mouse-entry"}, [](ScoreView*, const QByteArray&) {
+                  MScore::disableMouseEntry = !MScore::disableMouseEntry;
+                  preferences.setPreference(PREF_SCORE_NOTE_INPUT_DISABLE_MOUSE_INPUT, MScore::disableMouseEntry);
+                  }},
             {{"toggle-edit-playback"}, [](ScoreView* /*cv*/, const QByteArray&) {
 
                   bool value = preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK);
