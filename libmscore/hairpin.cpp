@@ -10,20 +10,19 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "hairpin.h"
+#include "changeMap.h"
 #include "dynamichairpingroup.h"
-#include "style.h"
-#include "xml.h"
-#include "utils.h"
-#include "score.h"
+#include "hairpin.h"
 #include "measure.h"
+#include "mscore.h"
+#include "score.h"
 #include "segment.h"
+#include "staff.h"
+#include "style.h"
 #include "system.h"
 #include "undo.h"
-#include "staff.h"
-#include "mscore.h"
-#include "chord.h"
-#include "changeMap.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -110,7 +109,8 @@ void HairpinSegment::layout()
                                     sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                               }
                         }
-                  if (sd && sd->addToSkyline() && sd->placement() == hairpin()->placement()) {
+                  if (sd && sd->addToSkyline() && sd->placement() == hairpin()->placement()
+                      && (hairpin()->lineVisible() || !_text->empty())) {
                         const qreal sdRight = sd->bbox().right() + sd->pos().x()
                                               + sd->segment()->pos().x() + sd->measure()->pos().x();
                         const qreal dist    = qMax(sdRight - pos().x() + minDynamicsDistance, 0.0);
@@ -126,7 +126,8 @@ void HairpinSegment::layout()
                         // systems may be unknown at layout stage.
                         ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                         }
-                  if (ed && ed->addToSkyline() && ed->placement() == hairpin()->placement()) {
+                  if (ed && ed->addToSkyline() && ed->placement() == hairpin()->placement()
+                      && (hairpin()->lineVisible() || !_endText->empty())) {
                         const qreal edLeft  = ed->bbox().left() + ed->pos().x()
                                               + ed->segment()->pos().x() + ed->measure()->pos().x();
                         const qreal dist    = edLeft - pos2().x() - pos().x() - minDynamicsDistance;
@@ -304,9 +305,11 @@ void HairpinSegment::layout()
                   rypos() += yd;
                   }
 
-            if (hairpin()->addToSkyline() && !hairpin()->diagonal()) {
+            if (hairpin()->addToSkyline() && !hairpin()->lineVisible()
+                && !hairpin()->diagonal()) {
                   // align dynamics with hairpin
-                  if (sd && sd->autoplace() && sd->placement() == hairpin()->placement()) {
+                  if (sd && sd->autoplace() && sd->placement() == hairpin()->placement()
+                      && (hairpin()->lineVisible() || !_text->empty())){
                         qreal ny = y() + ddiff - sd->offset().y();
                         if (sd->placeAbove())
                               ny = qMin(ny, sd->ipos().y());
@@ -324,7 +327,8 @@ void HairpinSegment::layout()
                                     }
                               }
                         }
-                  if (ed && ed->autoplace() && ed->placement() == hairpin()->placement()) {
+                  if (ed && ed->autoplace() && ed->placement() == hairpin()->placement()
+                      && (hairpin()->lineVisible() || !_endText->empty())) {
                         qreal ny = y() + ddiff - ed->offset().y();
                         if (ed->placeAbove())
                               ny = qMin(ny, ed->ipos().y());
