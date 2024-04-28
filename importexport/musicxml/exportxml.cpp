@@ -6839,6 +6839,8 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
                   if (!st->show())
                         details += " print-object=\"no\"";
                   xml.stag(details);
+                  if (st->links() && st->links()->contains(part->staff(i - 1)))
+                        xml.tag("staff-type", "alternate");
                   xml.tag("staff-lines", st->lines(Fraction(0,1)));
                   if (st->isTabStaff(Fraction(0,1)) && instrument->stringData()) {
                         QList<instrString> l = instrument->stringData()->stringList();
