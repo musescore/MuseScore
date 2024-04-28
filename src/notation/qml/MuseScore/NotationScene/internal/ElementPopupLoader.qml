@@ -58,17 +58,6 @@ Item {
             return null
         }
 
-        function loadPopup() {
-            loader.active = true
-        }
-
-        function unloadPopup() {
-            loader.sourceComponent = undefined
-            loader.active = false
-
-            Qt.callLater(container.closed)
-        }
-
         function updateContainerPosition(elementRect) {
             container.x = elementRect.x
             container.y = elementRect.y
@@ -80,10 +69,9 @@ Item {
     }
 
     function show(elementType, elementRect) {
-        prv.unloadPopup()
-        prv.loadPopup()
+        close()
 
-        var popup = loader.createPopup(prv.componentByType(elementType), elementRect)
+        var popup = loader.loadPopup(prv.componentByType(elementType), elementRect)
         popup.open()
 
         popup.opened.connect(function() {
@@ -91,7 +79,8 @@ Item {
         })
 
         popup.closed.connect(function() {
-            prv.unloadPopup()
+            loader.unloadPopup()
+            container.closed()
         })
     }
 
@@ -107,8 +96,9 @@ Item {
         anchors.fill: parent
         active: false
 
-        function createPopup(comp, elementRect) {
+        function loadPopup(comp, elementRect) {
             loader.sourceComponent = comp
+            loader.active = true
             loader.item.parent = container
 
             prv.updateContainerPosition(elementRect)
@@ -125,6 +115,11 @@ Item {
             loader.item.navigationOrderStart = container.navigationOrderStart
 
             return loader.item
+        }
+
+        function unloadPopup() {
+            loader.active = false
+            loader.sourceComponent = null
         }
     }
 
