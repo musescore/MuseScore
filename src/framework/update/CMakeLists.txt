@@ -59,6 +59,6 @@ set(MODULE_SRC
 
 setup_module()
 
-if (MUE_BUILD_UPDATE_TESTS)
+if (MUSE_MODULE_UPDATE_TESTS)
     add_subdirectory(tests)
 endif()

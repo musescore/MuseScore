@@ -26,7 +26,7 @@ set(MODULE_TEST_SRC
 )
 
 set(MODULE_TEST_LINK
-    update
+    muse_update
 )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
