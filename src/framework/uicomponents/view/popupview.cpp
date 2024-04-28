@@ -31,6 +31,8 @@
 #include <QTimer>
 #include <QScreen>
 
+#include "ui/inavigation.h"
+
 #include "popupwindow/popupwindow_qquickview.h"
 
 #if defined(Q_OS_MAC)

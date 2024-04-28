@@ -33,7 +33,6 @@
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/inavigationcontroller.h"
-#include "ui/view/navigationcontrol.h"
 
 #include "popupwindow/ipopupwindow.h"
 #include "internal/popupviewclosecontroller.h"
@@ -43,6 +42,10 @@ Q_MOC_INCLUDE(< QWindow >)
 #endif
 
 class QQuickCloseEvent;
+
+namespace muse::ui {
+class INavigationControl;
+}
 
 namespace muse::uicomponents {
 class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
