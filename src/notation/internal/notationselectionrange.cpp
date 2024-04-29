@@ -158,6 +158,10 @@ bool NotationSelectionRange::containsItem(const EngravingItem* item) const
     Fraction selectionStartTick = startTick();
     Fraction selectionEndTick = endTick();
 
+    if (item->isMeasure()) {
+        return itemTick >= selectionStartTick && itemTick < selectionEndTick;
+    }
+
     if (itemTick < selectionStartTick || itemTick > selectionEndTick) {
         return false;
     }
