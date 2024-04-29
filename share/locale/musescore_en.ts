@@ -7760,6 +7760,11 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished">Enter tuplet: octuplet</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
+        <source>&amp;Nonuplet</source>
+        <translation type="unfinished">&amp;Nonuplet</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
         <source>Enter tuplet: nonuplet</source>
         <translation type="unfinished">Enter tuplet: nonuplet</translation>
@@ -8339,6 +8344,41 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
         <source>Show/hide page margins</source>
         <translation type="unfinished">Show/hide page margins</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2410"/>
+        <source>Show element bounding rectangles</source>
+        <translation type="unfinished">Show element bounding rectangles</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2416"/>
+        <source>Color element shapes</source>
+        <translation type="unfinished">Color element shapes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
+        <source>Show segment shapes</source>
+        <translation type="unfinished">Show segment shapes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
+        <source>Color segment shapes</source>
+        <translation type="unfinished">Color segment shapes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
+        <source>Show skylines</source>
+        <translation type="unfinished">Show skylines</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
+        <source>Show system bounding rectangles</source>
+        <translation type="unfinished">Show system bounding rectangles</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2446"/>
+        <source>Show corrupted measures</source>
+        <translation type="unfinished">Show corrupted measures</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
@@ -9448,11 +9488,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished">&amp;Octuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
-        <source>&amp;Nontuplet</source>
-        <translation type="unfinished">&amp;Nontuplet</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1366"/>
         <source>Othe&amp;r…</source>
         <translation type="unfinished">Othe&amp;r…</translation>
@@ -9820,13 +9855,18 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
-        <source>Show &amp;accessible tree…</source>
-        <translation type="unfinished">Show &amp;accessible tree…</translation>
+        <source>Show &amp;accessibility tree…</source>
+        <translation type="unfinished">Show &amp;accessibility tree…</translation>
+    </message>
+    <message>
+        <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
+        <source>&amp;Dump accessibility tree to console</source>
+        <translation type="unfinished">&amp;Dump accessibility tree to console</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="65"/>
-        <source>Engraving &amp;elements</source>
-        <translation type="unfinished">Engraving &amp;elements</translation>
+        <source>Show engraving &amp;elements</source>
+        <translation type="unfinished">Show engraving &amp;elements</translation>
     </message>
     <message>
         <location filename="../../src/multiinstances/internal/multiinstancesuiactions.cpp" line="35"/>
