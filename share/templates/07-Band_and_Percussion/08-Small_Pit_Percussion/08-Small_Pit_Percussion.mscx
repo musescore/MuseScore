@@ -302,7 +302,7 @@
       <trackName>Marimba 1</trackName>
       <Instrument id="marimba">
         <longName>Marimba 1</longName>
-        <shortName>Mba. 1</shortName>
+        <shortName>Mrm. 1</shortName>
         <trackName>Marimba</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>96</maxPitchP>
@@ -366,7 +366,7 @@
       <trackName>Marimba 2</trackName>
       <Instrument id="marimba">
         <longName>Marimba 2</longName>
-        <shortName>Mba. 2</shortName>
+        <shortName>Mrm. 2</shortName>
         <trackName>Marimba</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>96</maxPitchP>
@@ -430,7 +430,7 @@
       <trackName>Marimba 3</trackName>
       <Instrument id="marimba">
         <longName>Marimba 3</longName>
-        <shortName>Mba. 3</shortName>
+        <shortName>Mrm. 3</shortName>
         <trackName>Marimba</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>96</maxPitchP>
@@ -497,7 +497,7 @@
       <trackName>Glockenspiel</trackName>
       <Instrument id="glockenspiel">
         <longName>Glockenspiel</longName>
-        <shortName>Glk.</shortName>
+        <shortName>Glock.</shortName>
         <trackName>Glockenspiel</trackName>
         <minPitchP>77</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -632,11 +632,11 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Drumset</trackName>
+      <trackName>Large Drum Kit</trackName>
       <Instrument id="drumset">
-        <longName>Drumset</longName>
-        <shortName>Drs.</shortName>
-        <trackName>Drumset</trackName>
+        <longName>Drum Kit</longName>
+        <shortName>D. Kit</shortName>
+        <trackName>Large Drum Kit</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">
@@ -1098,11 +1098,11 @@
         <bracket type="0" span="4" col="0"/>
         <barLineSpan>3</barLineSpan>
         </Staff>
-      <trackName>Snare Drum</trackName>
+      <trackName>Marching Snare Drum</trackName>
       <Instrument id="marching-snare">
         <longName>Snare Drum</longName>
         <shortName>S.D.</shortName>
-        <trackName>Snare Drum</trackName>
+        <trackName>Marching Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="48">
@@ -1250,11 +1250,11 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>2</barLineSpan>
         </Staff>
-      <trackName>Quads</trackName>
+      <trackName>Marching Tenor Drums</trackName>
       <Instrument id="marching-tenor-drums">
         <longName>Tenor Drums</longName>
         <shortName>T.D.</shortName>
-        <trackName>Tenor Drums</trackName>
+        <trackName>Marching Tenor Drums</trackName>
         <instrumentId>drum.tenor-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="36">
@@ -1500,11 +1500,11 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bass Drums</trackName>
+      <trackName>Marching Bass Drums</trackName>
       <Instrument id="marching-bass-drums">
         <longName>Bass Drums</longName>
         <shortName>B.D.</shortName>
-        <trackName>Bass Drums</trackName>
+        <trackName>Marching Bass Drums</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="37">
@@ -1651,11 +1651,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Cymbals</trackName>
+      <trackName>Marching Cymbals</trackName>
       <Instrument id="marching-cymbals">
         <longName>Cymbals</longName>
         <shortName>Cym.</shortName>
-        <trackName>Cymbals</trackName>
+        <trackName>Marching Cymbals</trackName>
         <instrumentId>metal.cymbal.crash</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="72">

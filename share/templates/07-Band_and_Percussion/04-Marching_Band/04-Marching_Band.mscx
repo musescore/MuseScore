@@ -285,11 +285,11 @@
         <bracket type="2" span="2" col="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Clarinets 1 &amp; 2</trackName>
+      <trackName>Clarinet in B♭ 1 &amp; 2</trackName>
       <Instrument id="bb-clarinet">
-        <longName>Clarinet 1 &amp; 2</longName>
-        <shortName>Cl. 1&amp;2</shortName>
-        <trackName>B♭ Clarinet</trackName>
+        <longName>Clarinet in  1 &amp; 2</longName>
+        <shortName>Cl. in B♭ 1&amp;2</shortName>
+        <trackName>Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>
@@ -354,11 +354,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Clarinets 3 &amp; 4</trackName>
+      <trackName>Clarinet in B♭ 3 &amp; 4</trackName>
       <Instrument id="bb-clarinet">
-        <longName>Clarinet 3 &amp; 4</longName>
-        <shortName>Cl. 3&amp;4</shortName>
-        <trackName>B♭ Clarinet</trackName>
+        <longName>Clarinet in  3 &amp; 4</longName>
+        <shortName>Cl. in B♭ 3&amp;4</shortName>
+        <trackName>Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>
@@ -712,7 +712,7 @@
       <trackName>Baritone Saxophone</trackName>
       <Instrument id="baritone-saxophone">
         <longName>Baritone Sax</longName>
-        <shortName>Bari. Sax.</shortName>
+        <shortName>Bar. Sax.</shortName>
         <trackName>Baritone Saxophone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>75</maxPitchP>
@@ -782,11 +782,11 @@
         <bracket type="2" span="2" col="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 1 &amp; 2</trackName>
+      <trackName>Trumpet in B♭ 1 &amp; 2</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 1 &amp; 2</longName>
-        <shortName>Tpt. 1&amp;2</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 1 &amp; 2</longName>
+        <shortName>Tpt. in B♭ 1&amp;2</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -859,11 +859,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 3 &amp; 4</trackName>
+      <trackName>Trumpet in B♭ 3 &amp; 4</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 3 &amp; 4</longName>
-        <shortName>Tpt. 3&amp;4</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 3 &amp; 4</longName>
+        <shortName>Tpt. in B♭ 3&amp;4</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -937,10 +937,10 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Mellophone</trackName>
-      <Instrument id="horn">
+      <Instrument id="mellophone">
         <longName>Mellophone</longName>
-        <shortName>Mph.</shortName>
-        <trackName>Horn in F</trackName>
+        <shortName>Mello.</shortName>
+        <trackName>Mellophone</trackName>
         <minPitchP>31</minPitchP>
         <maxPitchP>77</maxPitchP>
         <minPitchA>41</minPitchA>
@@ -1081,10 +1081,10 @@
         <defaultClef>F</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Baritone</trackName>
+      <trackName>Baritone Horn</trackName>
       <Instrument id="baritone-horn">
-        <longName>Baritone</longName>
-        <shortName>Bar.</shortName>
+        <longName>Baritone Horn</longName>
+        <shortName>Bar. Hn.</shortName>
         <trackName>Baritone Horn</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>70</maxPitchP>
@@ -1223,7 +1223,7 @@
       <trackName>Glockenspiel</trackName>
       <Instrument id="glockenspiel">
         <longName>Glockenspiel</longName>
-        <shortName>Glk.</shortName>
+        <shortName>Glock.</shortName>
         <trackName>Glockenspiel</trackName>
         <minPitchP>79</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -1848,11 +1848,11 @@
         <bracket type="0" span="4" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Snare Drum</trackName>
+      <trackName>Marching Snare Drum</trackName>
       <Instrument id="marching-snare">
         <longName>Snare Drum</longName>
         <shortName>S.D.</shortName>
-        <trackName>Snare Drum</trackName>
+        <trackName>Marching Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="48">
@@ -1998,11 +1998,11 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Tenor Drums</trackName>
+      <trackName>Marching Tenor Drums</trackName>
       <Instrument id="marching-tenor-drums">
         <longName>Tenor Drums</longName>
         <shortName>T.D.</shortName>
-        <trackName>Tenor Drums</trackName>
+        <trackName>Marching Tenor Drums</trackName>
         <instrumentId>drum.tenor-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="36">
@@ -2247,11 +2247,11 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bass Drums</trackName>
+      <trackName>Marching Bass Drums</trackName>
       <Instrument id="marching-bass-drums">
         <longName>Bass Drums</longName>
         <shortName>B.D.</shortName>
-        <trackName>Bass Drums</trackName>
+        <trackName>Marching Bass Drums</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="37">
@@ -2397,11 +2397,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Cymbals</trackName>
+      <trackName>Marching Cymbals</trackName>
       <Instrument id="marching-cymbals">
         <longName>Cymbals</longName>
         <shortName>Cym.</shortName>
-        <trackName>Cymbals</trackName>
+        <trackName>Marching Cymbals</trackName>
         <instrumentId>metal.cymbal.crash</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="72">

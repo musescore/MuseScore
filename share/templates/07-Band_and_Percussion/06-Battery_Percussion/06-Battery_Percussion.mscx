@@ -28,11 +28,11 @@
         <bracket type="0" span="4" col="0"/>
         <barLineSpan>3</barLineSpan>
         </Staff>
-      <trackName>Snare Drum</trackName>
+      <trackName>Marching Snare Drum</trackName>
       <Instrument id="marching-snare">
         <longName>Snare Drum</longName>
         <shortName>S.D.</shortName>
-        <trackName>Snare Drum</trackName>
+        <trackName>Marching Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="48">
@@ -180,11 +180,11 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>2</barLineSpan>
         </Staff>
-      <trackName>Tenor Drums</trackName>
+      <trackName>Marching Tenor Drums</trackName>
       <Instrument id="marching-tenor-drums">
         <longName>Tenor Drums</longName>
         <shortName>T.D.</shortName>
-        <trackName>Tenor Drums</trackName>
+        <trackName>Marching Tenor Drums</trackName>
         <instrumentId>drum.tenor-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="36">
@@ -430,11 +430,11 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bass Drums</trackName>
+      <trackName>Marching Bass Drums</trackName>
       <Instrument id="marching-bass-drums">
         <longName>Bass Drums</longName>
         <shortName>B.D.</shortName>
-        <trackName>Bass Drums</trackName>
+        <trackName>Marching Bass Drums</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="37">
@@ -581,11 +581,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Cymbals</trackName>
+      <trackName>Marching Cymbals</trackName>
       <Instrument id="marching-cymbals">
         <longName>Cymbals</longName>
         <shortName>Cym.</shortName>
-        <trackName>Cymbals</trackName>
+        <trackName>Marching Cymbals</trackName>
         <instrumentId>metal.cymbal.crash</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="72">

@@ -323,11 +323,11 @@
         <bracket type="2" span="2" col="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Clarinet 1</trackName>
+      <trackName>Clarinet in B♭ 1</trackName>
       <Instrument id="bb-clarinet">
-        <longName>B♭ Clarinet 1</longName>
-        <shortName>B♭ Cl. 1</shortName>
-        <trackName>B♭ Clarinet</trackName>
+        <longName>Clarinet in B♭ 1</longName>
+        <shortName>Cl. in B♭ 1</shortName>
+        <trackName>Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>
@@ -392,11 +392,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Clarinet 2</trackName>
+      <trackName>Clarinet in B♭ 2</trackName>
       <Instrument id="bb-clarinet">
-        <longName>B♭ Clarinet 2</longName>
-        <shortName>B♭ Cl. 2</shortName>
-        <trackName>B♭ Clarinet</trackName>
+        <longName>Clarinet in B♭ 2</longName>
+        <shortName>Cl. in B♭ 2</shortName>
+        <trackName>Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>
@@ -752,8 +752,8 @@
       <trackName>Horn in F</trackName>
       <Instrument id="horn">
         <longName>Horn in F</longName>
-        <shortName>F Hn.</shortName>
-        <trackName>Horn in F</trackName>
+        <shortName>Hn. in F</shortName>
+        <trackName>Horn</trackName>
         <minPitchP>31</minPitchP>
         <maxPitchP>77</maxPitchP>
         <minPitchA>41</minPitchA>
@@ -825,11 +825,11 @@
         <bracket type="2" span="2" col="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 1</trackName>
+      <trackName>Trumpet in B♭ 1</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet 1</longName>
-        <shortName>B♭ Tpt. 1</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 1</longName>
+        <shortName>Tpt. in B♭ 1</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -902,11 +902,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 2</trackName>
+      <trackName>Trumpet in B♭ 2</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet 2</longName>
-        <shortName>B♭ Tpt. 2</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 2</longName>
+        <shortName>Tpt. in B♭ 2</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -1342,7 +1342,7 @@ B. Tbn.</shortName>
       <trackName>Glockenspiel</trackName>
       <Instrument id="glockenspiel">
         <longName>Glockenspiel</longName>
-        <shortName>Glk.</shortName>
+        <shortName>Glock.</shortName>
         <trackName>Glockenspiel</trackName>
         <minPitchP>76</minPitchP>
         <maxPitchP>108</maxPitchP>
