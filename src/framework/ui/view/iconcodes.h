@@ -347,6 +347,8 @@ public:
         DIMINUENDO = 0xF414,
         CRESCENDO = 0xF415,
 
+        MICROPHONE = 0xF41B,
+
         APP_MINIMIZE = 0xF41C,
         APP_MAXIMIZE = 0xF41D,
         APP_UNMAXIMIZE = 0xF41E,
