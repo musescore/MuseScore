@@ -127,8 +127,9 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
 
         double x1 = sectionStartSegment->pagePos().x();
         double x2 = sectionEndSegment->pageBoundingRect().topRight().x();
-        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y();
-        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y();
+        const int SELECTION_BOX_PADDING = 0.5 * scoreFirstStaff->spatium(startSegment->tick());
+        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - SELECTION_BOX_PADDING;
+        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + SELECTION_BOX_PADDING;
 
         if (sectionStartSegment->measure()->firstEnabled() == sectionStartSegment) {
             x1 = sectionStartSegment->measure()->pagePos().x();
@@ -157,6 +158,10 @@ bool NotationSelectionRange::containsItem(const EngravingItem* item) const
     Fraction itemTick = item->tick();
     Fraction selectionStartTick = startTick();
     Fraction selectionEndTick = endTick();
+
+    if (item->isMeasure()) {
+        return itemTick >= selectionStartTick && itemTick < selectionEndTick;
+    }
 
     if (itemTick < selectionStartTick || itemTick > selectionEndTick) {
         return false;

@@ -2421,7 +2421,9 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
 
     QColor selectionColor = configuration()->selectionColor();
-    qreal penWidth = 3.0 / currentScaling(painter);
+    double penWidth = 3.0 / currentScaling(painter);
+    double minPenWidth = 0.20 * m_selection->range()->measureRange().startMeasure->spatium();
+    penWidth = std::max(penWidth, minPenWidth);
 
     Pen pen;
     pen.setColor(selectionColor);
@@ -2432,7 +2434,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
     for (const RectF& rect: rangeArea) {
         PainterPath path;
-        path.addRect(rect);
+        path.addRoundedRect(rect, 4, 4);
 
         QColor fillColor = selectionColor;
         fillColor.setAlpha(10);
