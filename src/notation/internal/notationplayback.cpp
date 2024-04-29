@@ -474,6 +474,11 @@ void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
     m_notationChanged.notify();
 }
 
+bool NotationPlayback::hasSoundFlags()
+{
+    return m_playbackModel.hasSoundFlags();
+}
+
 bool NotationPlayback::hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet)
 {
     TRACEFUNC;

@@ -68,6 +68,7 @@ public:
     InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
     bool isChordSymbolsTrack(const InstrumentTrackId& trackId) const;
 
+    bool hasSoundFlags() const;
     bool hasSoundFlags(const InstrumentTrackId& trackId) const;
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
