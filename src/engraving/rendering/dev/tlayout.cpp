@@ -3024,7 +3024,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         // Try to fit between adjacent dynamics
         double minDynamicsDistance = ctx.conf().styleMM(Sid::autoplaceHairpinDynamicsDistance) * item->staff()->staffMag(item->tick());
         if (item->isSingleType() || item->isBeginType()) {
-            if (sd && sd->addToSkyline() && sd->placement() == item->hairpin()->placement()) {
+            if (sd && sd->addToSkyline() && sd->placement() == item->hairpin()->placement()
+                && (item->hairpin()->lineVisible() || !item->text()->empty())) {
                 double segmentXPos = sd->segment()->pos().x() + sd->measure()->pos().x();
                 double sdRight = sd->pos().x() + segmentXPos + sd->ldata()->bbox().right();
                 if (sd->snappedExpression()) {
@@ -3040,7 +3041,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
             }
         }
         if (item->isSingleType() || item->isEndType()) {
-            if (ed && ed->addToSkyline() && ed->placement() == item->hairpin()->placement()) {
+            if (ed && ed->addToSkyline() && ed->placement() == item->hairpin()->placement()
+                && (item->hairpin()->lineVisible() || !item->endText()->empty())) {
                 const double edLeft = ed->ldata()->bbox().left() + ed->pos().x()
                                       + ed->segment()->pos().x() + ed->measure()->pos().x();
                 const double dist = edLeft - item->pos2().x() - item->pos().x() - minDynamicsDistance;
@@ -3241,7 +3243,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
         if (item->hairpin()->addToSkyline() && !item->hairpin()->diagonal()) {
             // align dynamics with hairpin
-            if (sd && sd->autoplace() && sd->placement() == item->hairpin()->placement()) {
+            if (sd && sd->autoplace() && sd->placement() == item->hairpin()->placement()
+                && (item->hairpin()->lineVisible() || !item->text()->empty())) {
                 double ny = item->y() + ddiff - sd->offset().y();
                 if (sd->placeAbove()) {
                     ny = std::min(ny, sd->ldata()->pos().y());
@@ -3263,7 +3266,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                     }
                 }
             }
-            if (ed && ed->autoplace() && ed->placement() == item->hairpin()->placement()) {
+            if (ed && ed->autoplace() && ed->placement() == item->hairpin()->placement()
+                && (item->hairpin()->lineVisible() || !item->endText()->empty())) {
                 double ny = item->y() + ddiff - ed->offset().y();
                 if (ed->placeAbove()) {
                     ny = std::min(ny, ed->ldata()->pos().y());
