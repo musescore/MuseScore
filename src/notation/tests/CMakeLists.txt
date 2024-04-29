@@ -28,6 +28,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationinteractionmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationselectionmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/notationselectionrangemock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/controlledviewmock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
