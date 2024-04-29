@@ -409,7 +409,7 @@ constexpr qreal notationScreenPadding = 25.0;
 void NotationViewInputController::moveScreen(int direction)
 {
     auto notation = currentNotation();
-    if (!notation || RealIsNull(m_view->width())) {
+    if (!notation || muse::RealIsNull(m_view->width())) {
         return;
     }
     auto scale = m_view->currentScaling();
