@@ -84,6 +84,7 @@
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/letring.h"
+#include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
@@ -7573,7 +7574,7 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             }
             xml.startElement("staff-details", attributes);
 
-            if (st->links()) {
+            if (st->links() && st->links()->contains(part->staff(i - 1))) {
                 xml.tag("staff-type", "alternate");
             }
 
