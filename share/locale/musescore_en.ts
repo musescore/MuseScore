@@ -9855,18 +9855,18 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
-        <source>Show &amp;accessible tree…</source>
-        <translation type="unfinished">Show &amp;accessible tree…</translation>
+        <source>Show &amp;accessibility tree…</source>
+        <translation type="unfinished">Show &amp;accessibility tree…</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
-        <source>Accessible &amp;dump</source>
-        <translation type="unfinished">Accessible &amp;dump</translation>
+        <source>&amp;Dump accessibility tree to console</source>
+        <translation type="unfinished">&amp;Dump accessibility tree to console</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="65"/>
-        <source>Engraving &amp;elements</source>
-        <translation type="unfinished">Engraving &amp;elements</translation>
+        <source>Show engraving &amp;elements</source>
+        <translation type="unfinished">Show engraving &amp;elements</translation>
     </message>
     <message>
         <location filename="../../src/multiinstances/internal/multiinstancesuiactions.cpp" line="35"/>
