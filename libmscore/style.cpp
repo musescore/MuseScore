@@ -3074,7 +3074,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "lyricsDashLineThickness") { // 0.1 -> 0.15
                   qreal lyricsDashLineThickness = e.readDouble();
                   if (qFuzzyCompare(lyricsDashLineThickness, 0.1)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::lyricsDashLineThickness, Spatium(lyricsDashLineThickness));
                   }
@@ -3087,7 +3087,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "minMeasureWidth") { // 8 -> 5
                   qreal minMeasureWidth = e.readDouble();
                   if (qFuzzyCompare(minMeasureWidth, 8.0)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::minMeasureWidth, Spatium(minMeasureWidth));
                   }
@@ -3098,7 +3098,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "bracketWidth") { // 0.45 -> 0.44
                   qreal bracketWidth = e.readDouble();
                   if (qFuzzyCompare(bracketWidth, 0.45)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::bracketWidth, Spatium(bracketWidth));
                   }
@@ -3107,21 +3107,21 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "akkoladeWidth") { // 1.5 -> 1.6
                   qreal akkoladeWidth = e.readDouble();
                   if (qFuzzyCompare(akkoladeWidth, 1.5)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::akkoladeWidth, Spatium(akkoladeWidth));
                   }
             else if (isMu4 && tag == "akkoladeBarDistance") { // 0.35 -> 0.4
                   qreal akkoladeBarDistance = e.readDouble();
                   if (qFuzzyCompare(akkoladeBarDistance, 0.35)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::akkoladeBarDistance, Spatium(akkoladeBarDistance));
                   }
             else if (isMu4 && tag == "clefLeftMargin") { // 0.75 -> 0.8
                   qreal clefLeftMargin = e.readDouble();
                   if (qFuzzyCompare(clefLeftMargin, 0.75)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::clefLeftMargin, Spatium(clefLeftMargin));
                   }
@@ -3137,7 +3137,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "shortestStem") { // 2.5 -> 2.25
                   qreal shortestStem = e.readDouble();
                   if (qFuzzyCompare(shortestStem, 2.5)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::shortestStem, Spatium(shortestStem));
                   }
@@ -3147,7 +3147,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "minNoteDistance") { // 0.5 -> 0.2
                   qreal minNoteDistance = e.readDouble();
                   if (qFuzzyCompare(minNoteDistance, 0.5)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::minNoteDistance, Spatium(minNoteDistance));
                   }
@@ -3173,7 +3173,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "beamMinLen") { // 1.1 -> 1.3
                   qreal beamMinLen = e.readDouble();
                   if (qFuzzyCompare(beamMinLen, 1.1)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::beamMinLen, Spatium(beamMinLen));
                   }
@@ -3191,14 +3191,14 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "hairpinLinePosAbove") { // y: -1.5 -> -3
                   QPointF hairpinLinePosAbove = e.readPoint();
                   if (qFuzzyCompare(hairpinLinePosAbove.y(), -1.5)) // 4.2+ default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::hairpinLinePosAbove, QPointF(hairpinLinePosAbove));
                   }
             else if (isMu4 && tag == "hairpinLinePosBelow") { // y: 4 (Mu4.0-4.1), 2.5 (Mu4.2+) -> 4
                   QPointF hairpinLinePosBelow = e.readPoint();
                   if (qFuzzyCompare(hairpinLinePosBelow.y(), 2.5)) // 4.2+ default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::hairpinLinePosBelow, QPointF(hairpinLinePosBelow));
                   }
@@ -3241,7 +3241,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "pedalFontSize") { // 12 -> 10
                   qreal pedalFontSize = e.readDouble();
                   if (qFuzzyCompare(pedalFontSize, 10.0)) // 4.4+ default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::pedalFontSize, pedalFontSize);
                   }
@@ -3256,14 +3256,14 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "chordSymbolAFontSize") { // 10 -> 11
                   qreal chordSymbolAFontSize = e.readDouble();
                   if (qFuzzyCompare(chordSymbolAFontSize, 10.0)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::chordSymbolAFontSize, QVariant(chordSymbolAFontSize));
                   }
             else if (isMu4 && tag == "chordSymbolBFontSize") { // 10 -> 11
                   qreal chordSymbolBFontSize = e.readDouble();
                   if (qFuzzyCompare(chordSymbolBFontSize, 10.0)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::chordSymbolBFontSize, QVariant(chordSymbolBFontSize));
                   }
@@ -3279,14 +3279,14 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "minMMRestWidth") { // 4. resp. 6 -> 4
                   qreal minMMRestWidth = e.readDouble();
                   if (qFuzzyCompare(minMMRestWidth, 6.0)) // 4.1 default (4.0 same as 3.6), let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::minMMRestWidth, Spatium(minMMRestWidth));
                   }
             else if (isMu4 && tag == "mmRestNumberPos") { // -0.5 -> -1.5, maybe keep the Mu4 default?
                   qreal mmRestNumberPos = e.readDouble();
                   if (qFuzzyCompare(mmRestNumberPos, -0.5)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::mmRestNumberPos, Spatium(mmRestNumberPos));
                   }
@@ -3308,14 +3308,14 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "ArpeggioNoteDistance") { // 0.4 (Mu4.2+) -> 0.5 (Mu3.7)
                   qreal ArpeggioNoteDistance = e.readDouble();
                   if (qFuzzyCompare(ArpeggioNoteDistance, 0.4)) // 4.2+ default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::ArpeggioNoteDistance, Spatium(ArpeggioNoteDistance));
                   }
             else if (isMu4 && tag == "ArpeggioAccidentalDistance") { // 0.3 (Mu4.2+) -> 0.5 (Mu3.7)
                   qreal ArpeggioAccidentalDistance = e.readDouble();
                   if (qFuzzyCompare(ArpeggioAccidentalDistance, 0.3)) // 4.2+ default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::ArpeggioAccidentalDistance, Spatium(ArpeggioAccidentalDistance));
                   }
@@ -3360,14 +3360,14 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "tupletStemLeftDistance") { // 0.5 -> 0
                   qreal tupletStemLeftDistance = e.readDouble();
                   if (qFuzzyCompare(tupletStemLeftDistance, 0.5)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::tupletStemLeftDistance, Spatium(tupletStemLeftDistance));
                   }
             else if (isMu4 && tag == "tupletNoteLeftDistance") { // 0 -> -0.5
                   qreal tupletNoteLeftDistance = e.readDouble();
                   if (qFuzzyCompare(tupletNoteLeftDistance, 0.0)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::tupletNoteLeftDistance, Spatium(tupletNoteLeftDistance));
                   }
@@ -3391,7 +3391,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "subTitleFontSize") { // 14 -> 16
                   qreal subTitleFontSize = e.readDouble();
                   if (qFuzzyCompare(subTitleFontSize, 14.0)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::subTitleFontSize, QVariant(subTitleFontSize));
                   }
@@ -3405,7 +3405,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "measureNumberPosBelow") { // y: 1 -> 2
                   QPointF measureNumberPosBelow = e.readPoint();
                   if (qFuzzyCompare(measureNumberPosBelow.y(), 1.0)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::measureNumberPosBelow, QPointF(measureNumberPosBelow));
                   }
@@ -3416,7 +3416,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "repeatLeftFontSize") { // 18 -> 11
                   qreal repeatLeftFontSize = e.readDouble();
                   if (qFuzzyCompare(repeatLeftFontSize, 11)) // 4.4+ default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::repeatLeftFontSize, repeatLeftFontSize);
                   }
@@ -3431,14 +3431,14 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "footerOffset") { // y: 0 -> 5, better use Mu3's default to prevent collisions.
                   QPointF footerOffset = e.readPoint();
                   if (qFuzzyCompare(footerOffset.y(), 0.0)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::footerOffset, QPointF(footerOffset));
                   }
             else if (isMu4 && tag == "letRingLineWidth") { // 0.11 -> 0.15
                   qreal letRingLineWidth = e.readDouble();
                   if (qFuzzyCompare(letRingLineWidth, 0.11)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::letRingLineWidth, Spatium(letRingLineWidth));
                   }
@@ -3457,21 +3457,21 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (isMu4 && tag == "palmMutePosAbove") { // y: -4 resp. 0 -> -4
                   QPointF palmMutePosAbove = e.readPoint();
                   if (qFuzzyCompare(palmMutePosAbove.y(), 0.0)) // 4.1 default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::palmMutePosAbove, QPointF(palmMutePosAbove));
                   }
             else if (isMu4 && tag == "palmMutePosBelow") { // y: 4 resp. 0 -> 4
                   QPointF palmMutePosBelow = e.readPoint();
                   if (qFuzzyCompare(palmMutePosBelow.y(), 0.0)) // 4.1 default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::palmMutePosBelow, QPointF(palmMutePosBelow));
                   }
             else if (isMu4 && tag == "palmMuteLineWidth") { // 0.11 -> 0.15
                   qreal palmMuteLineWidth = e.readDouble();
                   if (qFuzzyCompare(palmMuteLineWidth, 0.11)) // 4.x default, let's skip, i.e. reset back
-                        e.skipCurrentElement();
+                        continue;
                   else
                         set(Sid::palmMuteLineWidth, Spatium(palmMuteLineWidth));
                   }
