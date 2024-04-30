@@ -74,6 +74,7 @@
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmonicmark.h"
 #include "engraving/dom/harmony.h"
@@ -4017,6 +4018,43 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
 }
 
 //---------------------------------------------------------
+//   writeGuitarBend
+//---------------------------------------------------------
+
+static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& technical, const Note* const note)
+{
+    if (note->bendBack()) {
+        const GuitarBend* bend = note->bendBack();
+        if (bend->type() == GuitarBendType::PRE_BEND || bend->type() == GuitarBendType::GRACE_NOTE_BEND) {
+            XmlWriter::Attributes bendAttrs;
+            notations.tag(xml, note);
+            technical.tag(xml);
+            bendAttrs.push_back({ "first-beat", bend->startTimeFactor() * 100 });
+            bendAttrs.push_back({ "last-beat", bend->endTimeFactor() * 100 });
+            addColorAttr(bend, bendAttrs);
+            xml.startElement("bend", bendAttrs);
+            xml.tag("bend-alter", String::number(-0.5 * bend->bendAmountInQuarterTones(), 2));
+            xml.tag("pre-bend");
+            xml.endElement();
+        }
+    }
+    if (note->bendFor()) {
+        const GuitarBend* bend = note->bendFor();
+        if (bend->type() == GuitarBendType::BEND || bend->type() == GuitarBendType::SLIGHT_BEND) {
+            notations.tag(xml, note);
+            technical.tag(xml);
+            XmlWriter::Attributes bendAttrs;
+            bendAttrs.push_back({ "first-beat", bend->startTimeFactor() * 100 });
+            bendAttrs.push_back({ "last-beat", bend->endTimeFactor() * 100 });
+            addColorAttr(bend, bendAttrs);
+            xml.startElement("bend", bendAttrs);
+            xml.tag("bend-alter", String::number(0.5 * bend->bendAmountInQuarterTones(), 2));
+            xml.endElement();
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   writeFingering
 //---------------------------------------------------------
 
@@ -4481,6 +4519,8 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
                 m_xml.tag("fret", note->fret());
             }
         }
+
+        writeGuitarBend(m_xml, notations, technical, note);
 
         technical.etag(m_xml);
         if (chord->arpeggio()) {
