@@ -1248,17 +1248,26 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setEndHookType(HookType::HOOK_90);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setLineVisible(false);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_90);
     pedal->setEndHookType(HookType::HOOK_90);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (straight hooks)"));
 
     if (!defaultPalette) {
@@ -1266,18 +1275,27 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         pedal->setLen(w);
         pedal->setBeginHookType(HookType::HOOK_90);
         pedal->setEndHookType(HookType::HOOK_45);
+        pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+        pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+        pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
         sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled end hook)"));
 
         pedal = makeElement<Pedal>(gpaletteScore);
         pedal->setLen(w);
         pedal->setBeginHookType(HookType::HOOK_45);
         pedal->setEndHookType(HookType::HOOK_45);
+        pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+        pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+        pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
         sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (both hooks angled)"));
 
         pedal = makeElement<Pedal>(gpaletteScore);
         pedal->setLen(w);
         pedal->setBeginHookType(HookType::HOOK_45);
         pedal->setEndHookType(HookType::HOOK_90);
+        pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+        pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+        pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
         sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
     }
 
@@ -1939,35 +1957,53 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setLineVisible(false);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setEndHookType(HookType::HOOK_90);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_90);
     pedal->setEndHookType(HookType::HOOK_90);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (straight hooks)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_90);
     pedal->setEndHookType(HookType::HOOK_45);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled end hook)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_45);
     pedal->setEndHookType(HookType::HOOK_45);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (both hooks angled)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_45);
     pedal->setEndHookType(HookType::HOOK_90);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
 
     return sp;
