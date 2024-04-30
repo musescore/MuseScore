@@ -25,6 +25,8 @@
 
 #include "iuiconfiguration.h"
 
+#include "iglobalconfiguration.h"
+#include "global/types/config.h"
 #include "modularity/ioc.h"
 #include "imainwindow.h"
 #include "internal/iplatformtheme.h"
@@ -38,6 +40,7 @@ class UiConfiguration : public IUiConfiguration, public async::Asyncable
 {
     INJECT(IMainWindow, mainWindow)
     INJECT(IPlatformTheme, platformTheme)
+    Inject<IGlobalConfiguration> globalConfiguration;
 
 public:
     void init();
