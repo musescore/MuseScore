@@ -253,7 +253,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
-    if (out->overridedSpatium.has_value()) {
+    if (out && out->overridedSpatium.has_value()) {
         ctx.setSpatium(out->overridedSpatium.value());
         ctx.setOverrideSpatium(true);
     }

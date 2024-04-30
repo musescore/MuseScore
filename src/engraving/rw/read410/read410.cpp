@@ -61,7 +61,7 @@ using namespace mu::engraving::read410;
 Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
 {
     ReadContext ctx(score);
-    if (data->overridedSpatium.has_value()) {
+    if (data && data->overridedSpatium.has_value()) {
         ctx.setSpatium(data->overridedSpatium.value());
     }
 
