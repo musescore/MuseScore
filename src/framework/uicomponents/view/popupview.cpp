@@ -31,6 +31,8 @@
 #include <QTimer>
 #include <QScreen>
 
+#include "ui/inavigation.h"
+
 #include "popupwindow/popupwindow_qquickview.h"
 
 #if defined(Q_OS_MAC)
@@ -130,7 +132,7 @@ void PopupView::init()
         return;
     }
 
-    m_window = new PopupWindow_QQuickView();
+    m_window = new PopupWindow_QQuickView(this);
     m_window->init(engine, isDialog(), frameless());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_component, m_contentItem);
