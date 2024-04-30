@@ -2309,8 +2309,8 @@ RectF TextBase::pageRectangle() const
 void TextBase::computeHighResShape(const FontMetrics& fontMetrics)
 {
     Shape& highResShape = mutldata()->highResShape.mut_value();
-    highResShape.elements().reserve(m_text.size());
     highResShape.clear();
+    highResShape.elements().reserve(m_text.size());
 
     for (const TextBlock& block : ldata()->blocks) {
         double x = 0;

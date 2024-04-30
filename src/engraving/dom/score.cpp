@@ -4553,12 +4553,12 @@ ChordRest* Score::findChordRestEndingBeforeTickInTrack(const Fraction& tick, tra
         return nullptr;
     }
 
-    for (Segment* segment = measure->last(); segment; segment = segment->prev()) {
-        if (!segment->isChordRestType() || !segment->elementAt(trackIdx)) {
+    for (const Segment* segment = measure->last(); segment; segment = segment->prev()) {
+        EngravingItem* item = segment->elementAt(trackIdx);
+        if (!segment->isChordRestType() || !item) {
             continue;
         }
-        ChordRest* chordRest = toChordRest(segment->elementAt(trackIdx));
-        chordRest->actualTicks().toString();
+        ChordRest* chordRest = toChordRest(item);
         if (segment->tick() + chordRest->actualTicks() <= tick) {
             return chordRest;
         }

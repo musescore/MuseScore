@@ -599,8 +599,8 @@ void LyricsLayout::collectLyricsVerses(staff_idx_t staffIdx, System* system, Lyr
     }
 }
 
-void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& lyricsVersesAbove,
-                                       LyricsVersesMap& lyricsVersesBelow,
+void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesMap& lyricsVersesAbove,
+                                       const LyricsVersesMap& lyricsVersesBelow,
                                        LayoutContext& ctx)
 {
     double staffHeight = ctx.dom().staff(staffIdx)->staffHeight();
@@ -610,7 +610,7 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& ly
 
     for (auto& pair : lyricsVersesAbove) {
         int verse = pair.first;
-        LyricsVerse& lyricsVerse = pair.second;
+        const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = -(totVersesAbove - verse) * lyrics->lineHeight() * lyricsLineHeightFactor;
             lyrics->setYRelativeToStaff(y);
@@ -624,7 +624,7 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& ly
 
     for (auto& pair : lyricsVersesBelow) {
         int verse = pair.first;
-        LyricsVerse& lyricsVerse = pair.second;
+        const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = staffHeight + verse * lyrics->lineHeight() * lyricsLineHeightFactor;
             lyrics->setYRelativeToStaff(y);
@@ -638,8 +638,8 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& ly
 }
 
 void LyricsLayout::checkCollisionsWithStaffElements(System* system, staff_idx_t staffIdx,  LayoutContext& ctx,
-                                                    LyricsVersesMap& lyricsVersesAbove,
-                                                    LyricsVersesMap& lyricsVersesBelow)
+                                                    const LyricsVersesMap& lyricsVersesAbove,
+                                                    const LyricsVersesMap& lyricsVersesBelow)
 {
     SysStaff* systemStaff = system->staff(staffIdx);
 
@@ -670,14 +670,14 @@ void LyricsLayout::checkCollisionsWithStaffElements(System* system, staff_idx_t 
     }
 }
 
-SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, LyricsVersesMap& lyricsVerses, System* system)
+SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, const LyricsVersesMap& lyricsVerses, System* system)
 {
     double systemX = system->pageX();
 
     SkylineLine lyricsSkyline(north);
 
     if (lyricsVerses.count(verse) > 0) {
-        LyricsVerse& lyricsVerse = lyricsVerses[verse];
+        const LyricsVerse& lyricsVerse = lyricsVerses.at(verse);
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             if (lyrics->addToSkyline()) {
                 Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff()));
@@ -694,11 +694,11 @@ SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, LyricsVer
     return lyricsSkyline;
 }
 
-void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, LyricsVersesMap lyricsVerses)
+void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, const LyricsVersesMap& lyricsVerses)
 {
     auto moveVerse = [&](int verse) {
         if (lyricsVerses.count(verse) > 0) {
-            LyricsVerse& lyricsVerse = lyricsVerses[verse];
+            const LyricsVerse& lyricsVerse = lyricsVerses.at(verse);
             for (Lyrics* lyrics : lyricsVerse.lyrics()) {
                 lyrics->move(PointF(0.0, diff));
             }
@@ -719,15 +719,15 @@ void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool abov
     }
 }
 
-void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, LyricsVersesMap& lyricsVersesAbove,
-                                LyricsVersesMap& lyricsVersesBelow)
+void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
+                                const LyricsVersesMap& lyricsVersesBelow)
 {
     double systemX = system->pageX();
     // HACK: subtract minVerticalDistance here because it's added later during staff distance calculations. Needs a better solution.
     double lyricsVerticalPadding = ctx.conf().styleMM(Sid::lyricsMinBottomDistance) - ctx.conf().styleMM(Sid::minVerticalDistance);
     Skyline& skyline = system->staff(staffIdx)->skyline();
     for (auto& pair : lyricsVersesAbove) {
-        LyricsVerse& lyricsVerse = pair.second;
+        const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             if (lyrics->addToSkyline()) {
                 Shape lyricsShape
@@ -743,7 +743,7 @@ void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutCont
         }
     }
     for (auto& pair : lyricsVersesBelow) {
-        LyricsVerse& lyricsVerse = pair.second;
+        const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             if (lyrics->addToSkyline()) {
                 Shape lyricsShape

@@ -44,8 +44,8 @@ class LyricsLayout
         void addLyrics(Lyrics* l) { m_lyrics.push_back(l); }
         void addLine(LyricsLineSegment* lls) { m_lines.push_back(lls); }
 
-        const std::vector<Lyrics*>& lyrics() { return m_lyrics; }
-        const std::vector<LyricsLineSegment*>& lines() { return m_lines; }
+        const std::vector<Lyrics*>& lyrics() const { return m_lyrics; }
+        const std::vector<LyricsLineSegment*>& lines() const { return m_lines; }
     };
 
     using LyricsVersesMap = std::map<int, LyricsVerse>;
@@ -71,16 +71,16 @@ private:
     static void collectLyricsVerses(staff_idx_t staffIdx, System* system, LyricsVersesMap& lyricsVersesAbove,
                                     LyricsVersesMap& lyricsVersesBelow);
 
-    static void setDefaultPositions(staff_idx_t staffIdx, LyricsVersesMap& lyricsVersesAbove, LyricsVersesMap& lyricsVersesBelow,
-                                    LayoutContext& ctx);
+    static void setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesMap& lyricsVersesAbove,
+                                    const LyricsVersesMap& lyricsVersesBelow, LayoutContext& ctx);
 
     static void checkCollisionsWithStaffElements(System* system, staff_idx_t staffIdx,  LayoutContext& ctx,
-                                                 LyricsVersesMap& lyricsVersesAbove, LyricsVersesMap& lyricsVersesBelow);
-    static SkylineLine createSkylineForVerse(int verse, bool north, LyricsVersesMap& lyricsVerses, System* system);
-    static void moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, LyricsVersesMap lyricsVerses);
+                                                 const LyricsVersesMap& lyricsVersesAbove, const LyricsVersesMap& lyricsVersesBelow);
+    static SkylineLine createSkylineForVerse(int verse, bool north, const LyricsVersesMap& lyricsVerses, System* system);
+    static void moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, const LyricsVersesMap& lyricsVerses);
 
-    static void addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, LyricsVersesMap& lyricsVersesAbove,
-                             LyricsVersesMap& lyricsVersesBelow);
+    static void addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
+                             const LyricsVersesMap& lyricsVersesBelow);
 };
 }
 #endif // MU_ENGRAVING_LYRICSLAYOUT_DEV_H
