@@ -2786,12 +2786,12 @@ double Segment::computeDurationStretch(const Segment* prevSeg, Fraction minTicks
         static constexpr double maxRatio = 32.0;
         double dMinTicks = minTicks.toDouble();
         double dMaxTicks = maxTicks.toDouble();
-        double maxSysRatio = dMaxTicks / dMinTicks;
         if (muse::RealIsEqualOrMore(dMaxTicks / dMinTicks, 2.0) && dMinTicks < longNoteThreshold) {
             /* HACK: we trick the system to ignore the shortest note and use the "next"
              * shortest. For example, if the shortest is a 32nd, we make it a 16th. */
             dMinTicks *= 2.0;
         }
+        double maxSysRatio = dMaxTicks / dMinTicks;
         double ratio = curTicks.toDouble() / dMinTicks;
         if (maxSysRatio > maxRatio) {
             double A = (dMinTicks * (maxRatio - 1)) / (dMaxTicks - dMinTicks);
