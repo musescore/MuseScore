@@ -454,7 +454,7 @@ private:
       void hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags);
       void textToDynamic(QString& text) const;
       bool directionToDynamic();
-      bool isLikelyTempoText() const;
+      bool isLikelyTempoText(const int track) const;
       bool attemptTempoTextCoercion(const Fraction& tick);
       double convertTextToNotes();
       void skipLogCurrElem();

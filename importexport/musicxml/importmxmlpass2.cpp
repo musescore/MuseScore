@@ -3249,7 +3249,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             // Ignore (TBD: print to footer?)
             return;
             }
-      else if (isLikelyTempoText()) {
+      else if (isLikelyTempoText(track)) {
             TempoText* tt = new TempoText(_score);
             tt->setXmlText(_wordsText + _metroText);
             if (_tpoSound > 0 && canAddTempoText(_score->tempomap(), tick.ticks())) {
@@ -3892,9 +3892,12 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
             && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.\\sDo not photocopy\\."));
       }
 
-bool MusicXMLParserDirection::isLikelyTempoText() const
+bool MusicXMLParserDirection::isLikelyTempoText(const int track) const
       {
-      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE) || !_wordsText.contains("<b>") || _placement == "below") {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE)
+          || _wordsText.contains("<i>")
+          || placement() == "below"
+          || track2staff(track) != 0) {
             return false;
             }
 
