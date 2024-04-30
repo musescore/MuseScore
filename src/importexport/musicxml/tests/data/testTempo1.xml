@@ -237,8 +237,9 @@
     <measure number="5">
       <direction placement="above">
         <direction-type>
-          <words>Vivace</words>
+          <words font-weight="bold" font-size="12">Vivace</words>
           </direction-type>
+        <sound tempo="120"/>
         </direction>
       <direction placement="above">
         <direction-type>
