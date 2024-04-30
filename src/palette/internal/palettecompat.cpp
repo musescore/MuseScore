@@ -33,6 +33,7 @@
 #include "engraving/dom/expression.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/ornament.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stringtunings.h"
@@ -80,6 +81,24 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
             newExpression->setXmlText(oldExpression->xmlText());
         }
         element.reset(newExpression);
+        return;
+    }
+
+    if (item->isPedal()) {
+        Pedal* newPedal = Factory::createPedal(paletteScore->dummy());
+        Pedal* oldPedal = toPedal(item);
+
+        newPedal->setLen(oldPedal->frontSegment()->pos2().x());
+        newPedal->setLineVisible(oldPedal->lineVisible());
+        newPedal->setBeginHookType(oldPedal->beginHookType());
+        newPedal->setEndHookType(oldPedal->endHookType());
+
+        newPedal->setBeginText(newPedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+        newPedal->setContinueText(newPedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+        newPedal->setEndText(newPedal->propertyDefault(Pid::END_TEXT).value<String>());
+
+        element.reset(newPedal);
+        return;
     }
 }
 
