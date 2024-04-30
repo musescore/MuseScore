@@ -228,7 +228,7 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
         token = std::strtok(NULL, sep); // read 2nd token
         String value = String::fromUtf8(token);
         free(string); // not needed anymore
-        if (!name.empty() && !value.empty()) {
+        if (!name.empty()) {
             m_entities[u'&' + name + u';'] = value;
             return;
         }
