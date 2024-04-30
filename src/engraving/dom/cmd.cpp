@@ -714,7 +714,9 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
     // Prepare note selection in case there are not selected tied notes and sort them
     std::vector<Note*> tmpnl;
     std::vector<Note*> _nl = nl;
-    bool shouldSelectFirstNote = _nl.size() == 1 && _nl[0]->tieFor();
+    bool selIsList = selection().isList();
+    bool selIsSingle = selIsList && _nl.size() == 1;
+    bool shouldSelectFirstNote = selIsSingle && _nl[0]->tieFor();
 
     std::sort(_nl.begin(), _nl.end(), [](const Note* a, const Note* b) -> bool {
         return a->tick() < b->tick();
@@ -733,18 +735,15 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                 currNote = currNote->tieFor() ? currNote->tieFor()->endNote() : nullptr;
             }while (currNote);
         }
+        if (selIsList && n->selected()) {
+            deselect(n);
+        }
     }
 
     Note* prevTied = nullptr;
-    Chord* firstChord = nullptr;
+    std::vector<EngravingItem*> notesToSelect;
     for (Note* on : tmpnl) {
         Chord* chord = on->chord();
-        if (!firstChord) {
-            firstChord = chord;
-        }
-        Note* note = Factory::createNote(chord);
-        note->setParent(chord);
-        note->setTrack(chord->track());
         int valTmp = val < 0 ? val + 1 : val - 1;
 
         int npitch;
@@ -754,8 +753,8 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         bool forceAccidental = false;
         if (abs(valTmp) != 7 || accidental) {
             int line      = on->line() - valTmp;
-            Fraction tick      = chord->tick();
-            Staff* estaff = staff(on->staffIdx() + chord->staffMove());
+            Fraction tick = chord->tick();
+            Staff* estaff = staff(chord->vStaffIdx());
             ClefType clef = estaff->clef(tick);
             Key key       = estaff->key(tick);
             int ntpc;
@@ -795,13 +794,16 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             ntpc2 = on->tpc2();
         }
         if (npitch < 0 || npitch > 127) {
-            delete note;
-            endCmd();
-            return;
+            notesToSelect.push_back(dynamic_cast<EngravingItem*>(on));
+            continue;
         }
-        note->setPitch(npitch, ntpc1, ntpc2);
 
+        Note* note = Factory::createNote(chord);
+        note->setParent(chord);
+        note->setTrack(chord->track());
+        note->setPitch(npitch, ntpc1, ntpc2);
         undoAddElement(note);
+
         if (forceAccidental) {
             Accidental* a = Factory::createAccidental(note);
             a->setAccidentalType(m_is.accidentalType());
@@ -827,17 +829,22 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         }
 
         setPlayNote(true);
-        if (shouldSelectFirstNote && firstChord && !firstChord->notes().empty()) {
-            Note* noteToSelect = firstChord->notes()[firstChord->notes().size() - 1];
-            select(noteToSelect, SelectType::SINGLE, 0);
-        } else {
-            select(note, SelectType::SINGLE, 0);
+        if (selIsList && note) {
+            notesToSelect.push_back(dynamic_cast<EngravingItem*>(note));
         }
     }
     if (m_is.noteEntryMode()) {
         m_is.setAccidentalType(AccidentalType::NONE);
     }
-    if (!shouldSelectFirstNote) {
+    if (notesToSelect.empty()) {
+        return;
+    }
+    if (shouldSelectFirstNote) {
+        select(notesToSelect.front(), SelectType::SINGLE, 0);
+    } else {
+        select(notesToSelect, SelectType::ADD, 0);
+    }
+    if (m_is.cr() == toChordRest(_nl[0]->chord()) && selIsSingle) {
         m_is.moveToNextInputPos();
     }
 }

@@ -27,6 +27,7 @@
 
 using namespace mu::playback;
 using namespace mu::project;
+using namespace mu::framework;
 
 SoundProfilesModel::SoundProfilesModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -99,6 +100,10 @@ void SoundProfilesModel::setActiveProfile(const QString& newActiveProfile)
         return;
     }
 
+    if (!askAboutChangingSounds()) {
+        return;
+    }
+
     m_activeProfile = newActiveProfile;
 
     if (INotationProjectPtr project = context()->currentProject()) {
@@ -125,6 +130,45 @@ void SoundProfilesModel::setDefaultProjectsProfile(const QString& newDefaultProj
     config()->setDefaultProfileForNewProjects(SoundProfileName::fromQString(newDefaultProjectsProfile));
 
     emit defaultProjectsProfileChanged();
+}
+
+mu::notation::INotationPlaybackPtr SoundProfilesModel::notationPlayback() const
+{
+    project::INotationProjectPtr project = context()->currentProject();
+    return project ? project->masterNotation()->playback() : nullptr;
+}
+
+bool SoundProfilesModel::askAboutChangingSounds()
+{
+    if (!config()->needToShowResetSoundFlagsWhenChangePlaybackProfileWarning()) {
+        return true;
+    }
+
+    if (!notationPlayback()->hasSoundFlags()) {
+        return true;
+    }
+
+    int changeBtn = int(IInteractive::Button::Apply);
+    IInteractive::Options options = IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox;
+    IInteractive::ButtonDatas buttons = {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        IInteractive::ButtonData(changeBtn, trc("playback", "Change sounds"), true /*accent*/)
+    };
+
+    IInteractive::Result result = interactive()->warning(trc("playback", "Are you sure you want to change sounds?"),
+                                                         trc("playback",
+                                                             "Sound flags may be reset, but staff text will remain. This action can’t be undone."),
+                                                         buttons, changeBtn, options);
+
+    if (result.button() == changeBtn) {
+        if (!result.showAgain()) {
+            config()->setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(false);
+        }
+
+        return true;
+    } else {
+        return false;
+    }
 }
 
 const QString& SoundProfilesModel::currentlySelectedProfile() const

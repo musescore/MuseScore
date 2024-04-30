@@ -88,7 +88,12 @@ struct PlaybackSetupData
 
     void add(const SoundSubCategory subcategory)
     {
-        subCategories.push_back(soundSubCategoryToString(subcategory));
+        auto insertPos = std::find_if(subCategories.cbegin(), subCategories.cend(), [subcategory](const String& str) {
+            SoundSubCategory existingSubCategory = soundSubCategoryFromString(str);
+            return subcategory < existingSubCategory;
+        });
+
+        subCategories.insert(insertPos, soundSubCategoryToString(subcategory));
     }
 
     bool operator==(const PlaybackSetupData& other) const

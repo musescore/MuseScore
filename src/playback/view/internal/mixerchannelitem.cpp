@@ -630,7 +630,7 @@ void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
 
 bool MixerChannelItem::askAboutChangingSound()
 {
-    if (!configuration()->needToShowChangeSoundWarning()) {
+    if (!configuration()->needToShowResetSoundFlagsWhenChangeSoundWarning()) {
         return true;
     }
 
@@ -652,7 +652,7 @@ bool MixerChannelItem::askAboutChangingSound()
 
     if (result.button() == changeBtn) {
         if (!result.showAgain()) {
-            configuration()->setNeedToShowChangeSoundWarning(false);
+            configuration()->setNeedToShowResetSoundFlagsWhenChangeSoundWarning(false);
         }
 
         return true;
