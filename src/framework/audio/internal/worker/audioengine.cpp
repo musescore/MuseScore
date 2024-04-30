@@ -99,7 +99,9 @@ void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
         return;
     }
 
-    m_buffer->setMinSamplesPerChannelToReserve(readBufferSize);
+    //! NOTE: Found experimentally. Smaller value leads to distorted audio
+    samples_t minSamplesToReserve = std::max(readBufferSize, uint16_t(512));
+    m_buffer->setMinSamplesPerChannelToReserve(minSamplesToReserve);
 }
 
 void AudioEngine::setAudioChannelsCount(const audioch_t count)

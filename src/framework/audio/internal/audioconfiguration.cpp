@@ -56,8 +56,10 @@ static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
 void AudioConfiguration::init()
 {
     int defaultBufferSize = 0;
-#ifdef Q_OS_WASM
+#if defined(Q_OS_WASM)
     defaultBufferSize = 8192;
+#elif defined(Q_OS_MAC)
+    defaultBufferSize = 512;
 #else
     defaultBufferSize = 1024;
 #endif

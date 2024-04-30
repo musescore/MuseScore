@@ -270,7 +270,7 @@ std::vector<unsigned int> WasapiAudioDriver::availableOutputDeviceBufferSizes() 
 {
     std::vector<unsigned int> result;
 
-    unsigned int n = 4096;
+    unsigned int n = MAXIMUM_BUFFER_SIZE;
     while (n >= MINIMUM_BUFFER_SIZE) {
         result.push_back(n);
         n /= 2;
