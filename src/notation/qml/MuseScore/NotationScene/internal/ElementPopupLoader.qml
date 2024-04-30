@@ -73,15 +73,6 @@ Item {
 
         var popup = loader.loadPopup(prv.componentByType(elementType), elementRect)
         popup.open()
-
-        popup.opened.connect(function() {
-            container.opened()
-        })
-
-        popup.closed.connect(function() {
-            loader.unloadPopup()
-            container.closed()
-        })
     }
 
     function close() {
@@ -99,22 +90,35 @@ Item {
         function loadPopup(comp, elementRect) {
             loader.sourceComponent = comp
             loader.active = true
-            loader.item.parent = container
+
+            const popup = loader.item
+            console.assert(popup)
+
+            popup.parent = container
+
+            popup.opened.connect(function() {
+                container.opened()
+            })
+
+            popup.closed.connect(function() {
+                loader.unloadPopup()
+                container.closed()
+            })
 
             prv.updateContainerPosition(elementRect)
-            loader.item.elementRectChanged.connect(function(elementRect) {
+            popup.elementRectChanged.connect(function(elementRect) {
                 prv.updateContainerPosition(elementRect)
             })
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
             //        This is necessary so that popups do not activate navigation in the new section,
             //        but at the same time, when clicking on the component (text input), the focus in popup's window should be activated
-            loader.item.navigationSection = null
+            popup.navigationSection = null
 
-            loader.item.notationViewNavigationSection = container.notationViewNavigationSection
-            loader.item.navigationOrderStart = container.navigationOrderStart
+            popup.notationViewNavigationSection = container.notationViewNavigationSection
+            popup.navigationOrderStart = container.navigationOrderStart
 
-            return loader.item
+            return popup
         }
 
         function unloadPopup() {
