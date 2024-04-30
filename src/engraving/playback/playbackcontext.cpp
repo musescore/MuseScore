@@ -218,7 +218,9 @@ void PlaybackContext::updatePlayTechMap(const ID partId, const Score* score, con
 
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
 
-    if (type == PlayingTechniqueType::Natural && !m_playbackParamMap.empty()) {
+    bool cancelPlayTechniques = type == PlayingTechniqueType::Natural || type == PlayingTechniqueType::Open;
+
+    if (cancelPlayTechniques && !m_playbackParamMap.empty()) {
         const Part* part = score->partById(partId);
         IF_ASSERT_FAILED(part && !part->staves().empty()) {
             return;
