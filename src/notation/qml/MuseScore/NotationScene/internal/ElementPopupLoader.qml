@@ -58,17 +58,6 @@ Item {
             return null
         }
 
-        function loadPopup() {
-            loader.active = true
-        }
-
-        function unloadPopup() {
-            loader.sourceComponent = undefined
-            loader.active = false
-
-            Qt.callLater(container.closed)
-        }
-
         function updateContainerPosition(elementRect) {
             container.x = elementRect.x
             container.y = elementRect.y
@@ -80,19 +69,10 @@ Item {
     }
 
     function show(elementType, elementRect) {
-        prv.unloadPopup()
-        prv.loadPopup()
+        close()
 
-        var popup = loader.createPopup(prv.componentByType(elementType), elementRect)
+        var popup = loader.loadPopup(prv.componentByType(elementType), elementRect)
         popup.open()
-
-        popup.opened.connect(function() {
-            container.opened()
-        })
-
-        popup.closed.connect(function() {
-            prv.unloadPopup()
-        })
     }
 
     function close() {
@@ -107,24 +87,43 @@ Item {
         anchors.fill: parent
         active: false
 
-        function createPopup(comp, elementRect) {
+        function loadPopup(comp, elementRect) {
             loader.sourceComponent = comp
-            loader.item.parent = container
+            loader.active = true
+
+            const popup = loader.item
+            console.assert(popup)
+
+            popup.parent = container
+
+            popup.opened.connect(function() {
+                container.opened()
+            })
+
+            popup.closed.connect(function() {
+                loader.unloadPopup()
+                container.closed()
+            })
 
             prv.updateContainerPosition(elementRect)
-            loader.item.elementRectChanged.connect(function(elementRect) {
+            popup.elementRectChanged.connect(function(elementRect) {
                 prv.updateContainerPosition(elementRect)
             })
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
             //        This is necessary so that popups do not activate navigation in the new section,
             //        but at the same time, when clicking on the component (text input), the focus in popup's window should be activated
-            loader.item.navigationSection = null
+            popup.navigationSection = null
 
-            loader.item.notationViewNavigationSection = container.notationViewNavigationSection
-            loader.item.navigationOrderStart = container.navigationOrderStart
+            popup.notationViewNavigationSection = container.notationViewNavigationSection
+            popup.navigationOrderStart = container.navigationOrderStart
 
-            return loader.item
+            return popup
+        }
+
+        function unloadPopup() {
+            loader.active = false
+            loader.sourceComponent = null
         }
     }
 

@@ -33,12 +33,15 @@
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/inavigationcontroller.h"
-#include "ui/view/navigationcontrol.h"
 
 #include "popupwindow/ipopupwindow.h"
 #include "internal/popupviewclosecontroller.h"
 
 class QQuickCloseEvent;
+
+namespace mu::ui {
+class INavigationControl;
+}
 
 namespace mu::uicomponents {
 class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
