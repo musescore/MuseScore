@@ -113,8 +113,8 @@ StyledPopupView {
             visible: settingsModel.isMainScore
 
             onClicked: {
+                settingsModel.replaceInstrument()
                 root.close()
-                Qt.callLater(settingsModel.replaceInstrument)
             }
         }
 
@@ -129,8 +129,8 @@ StyledPopupView {
             visible: !settingsModel.isMainScore
 
             onClicked: {
+                settingsModel.resetAllFormatting()
                 root.close()
-                Qt.callLater(settingsModel.resetAllFormatting)
             }
         }
     }
