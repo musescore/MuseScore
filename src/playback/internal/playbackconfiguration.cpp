@@ -51,7 +51,10 @@ static const Settings::Key MIXER_FADER_SECTION_VISIBLE_KEY(moduleName, "playback
 static const Settings::Key MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/muteAndSoloSectionVisible");
 static const Settings::Key MIXER_TITLE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/titleSectionVisible");
 
-static const Settings::Key MIXER_NEED_TO_SHOW_CHANGE_SOUND_WARNING(moduleName, "playback/mixer/needToShowChangeSoundWarning");
+static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING(moduleName,
+                                                                             "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangeSoundWarning");
+static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING(moduleName,
+                                                                                        "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangePlaybackProfileWarning");
 
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
 
@@ -93,7 +96,8 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
-    settings()->setDefaultValue(MIXER_NEED_TO_SHOW_CHANGE_SOUND_WARNING, Val(true));
+    settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(true));
+    settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(true));
 
     for (MixerSectionType sectionType : allMixerSectionTypes()) {
         bool sectionEnabledByDefault = sectionType != MixerSectionType::Volume;
@@ -271,14 +275,24 @@ void PlaybackConfiguration::setSoundPresetsMultiSelectionEnabled(bool enabled)
     settings()->setSharedValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(enabled));
 }
 
-bool PlaybackConfiguration::needToShowChangeSoundWarning() const
+bool PlaybackConfiguration::needToShowResetSoundFlagsWhenChangeSoundWarning() const
 {
-    return settings()->value(MIXER_NEED_TO_SHOW_CHANGE_SOUND_WARNING).toBool();
+    return settings()->value(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING).toBool();
 }
 
-void PlaybackConfiguration::setNeedToShowChangeSoundWarning(bool show)
+void PlaybackConfiguration::setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool show)
 {
-    settings()->setSharedValue(MIXER_NEED_TO_SHOW_CHANGE_SOUND_WARNING, Val(show));
+    settings()->setSharedValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(show));
+}
+
+bool PlaybackConfiguration::needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const
+{
+    return settings()->value(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING).toBool();
+}
+
+void PlaybackConfiguration::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show)
+{
+    settings()->setSharedValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(show));
 }
 
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const

@@ -67,8 +67,11 @@ public:
     bool soundPresetsMultiSelectionEnabled() const override;
     void setSoundPresetsMultiSelectionEnabled(bool enabled) override;
 
-    bool needToShowChangeSoundWarning() const override;
-    void setNeedToShowChangeSoundWarning(bool show) override;
+    bool needToShowResetSoundFlagsWhenChangeSoundWarning() const override;
+    void setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool show) override;
+
+    bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const override;
+    void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) override;
 };
 }
 

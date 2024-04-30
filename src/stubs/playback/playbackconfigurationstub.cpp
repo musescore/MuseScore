@@ -148,11 +148,20 @@ void PlaybackConfigurationStub::setSoundPresetsMultiSelectionEnabled(bool)
 {
 }
 
-bool PlaybackConfigurationStub::needToShowChangeSoundWarning() const
+bool mu::playback::PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangeSoundWarning() const
 {
     return false;
 }
 
-void PlaybackConfigurationStub::setNeedToShowChangeSoundWarning(bool)
+void mu::playback::PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool)
+{
+}
+
+bool mu::playback::PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const
+{
+    return false;
+}
+
+void mu::playback::PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool)
 {
 }

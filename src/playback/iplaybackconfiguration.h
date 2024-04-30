@@ -73,8 +73,11 @@ public:
     virtual bool soundPresetsMultiSelectionEnabled() const = 0;
     virtual void setSoundPresetsMultiSelectionEnabled(bool enabled) = 0;
 
-    virtual bool needToShowChangeSoundWarning() const = 0;
-    virtual void setNeedToShowChangeSoundWarning(bool show) = 0;
+    virtual bool needToShowResetSoundFlagsWhenChangeSoundWarning() const = 0;
+    virtual void setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool show) = 0;
+
+    virtual bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const = 0;
+    virtual void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) = 0;
 };
 }
 
