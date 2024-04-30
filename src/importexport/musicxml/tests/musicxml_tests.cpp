@@ -699,6 +699,9 @@ TEST_F(Musicxml_Tests, inferredDynamicsExpression) {
 TEST_F(Musicxml_Tests, inferredTempoText) {
     mxmlImportTestRef("testInferredTempoText");
 }
+TEST_F(Musicxml_Tests, inferredTempoText2) {
+    mxmlImportTestRef("testInferredTempoText2");
+}
 TEST_F(Musicxml_Tests, inferredCrescLines2) {
     mxmlImportTestRef("testInferredCrescLines2");
 }

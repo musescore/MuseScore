@@ -3065,7 +3065,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     } else if (isLikelyLegallyDownloaded(tick)) {
         // Ignore (TBD: print to footer?)
         return;
-    } else if (isLikelyTempoText()) {
+    } else if (isLikelyTempoText(track)) {
         TempoText* tt = Factory::createTempoText(_score->dummy()->segment());
         tt->setXmlText(_wordsText + _metroText);
         if (_tpoSound > 0 && canAddTempoText(_score->tempomap(), tick.ticks())) {
@@ -3372,9 +3372,9 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
            && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.\\sDo not photocopy\\."));
 }
 
-bool MusicXMLParserDirection::isLikelyTempoText() const
+bool MusicXMLParserDirection::isLikelyTempoText(const track_idx_t track) const
 {
-    if (!configuration()->inferTextType() || !_wordsText.contains(u"<b>") || _placement == u"below") {
+    if (!configuration()->inferTextType() || _wordsText.contains(u"<i>") || placement() == u"below" || track2staff(track) != 0) {
         return false;
     }
 
