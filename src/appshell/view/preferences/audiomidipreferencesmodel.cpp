@@ -99,6 +99,10 @@ void AudioMidiPreferencesModel::init()
     playbackConfiguration()->muteHiddenInstrumentsChanged().onReceive(this, [this](bool mute) {
         emit muteHiddenInstrumentsChanged(mute);
     });
+
+    playbackConfiguration()->jackTransportEnableChanged().onReceive(this, [this](bool mute) {
+        emit jackTransportEnableChanged(mute);
+    });
 }
 
 QStringList AudioMidiPreferencesModel::audioApiList() const
@@ -187,4 +191,18 @@ void AudioMidiPreferencesModel::setMuteHiddenInstruments(bool mute)
     }
 
     playbackConfiguration()->setMuteHiddenInstruments(mute);
+}
+
+bool PlaybackPreferencesModel::jackTransportEnable() const
+{
+    return playbackConfiguration()->jackTransportEnable();
+}
+
+void PlaybackPreferencesModel::setJackTransportEnable(bool enable)
+{
+    if (enable == jackTransportEnable()) {
+        return;
+    }
+
+    playbackConfiguration()->setJackTransportEnable(enable);
 }

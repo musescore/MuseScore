@@ -30,12 +30,15 @@
 #include "iaudiodriver.h"
 
 #include "platform/lin/audiodeviceslistener.h"
+#include "playback/iplaybackconfiguration.h"
 #include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
 class AudioMidiManager : public IAudioDriver, public async::Asyncable
 {
+    Inject<mu::playback::IPlaybackConfiguration> playbackConfiguration;
     Inject<mu::playback::IPlaybackController> playbackController;
+
     Inject<muse::midi::IMidiInPort> midiInPort;
 public:
     AudioMidiManager();

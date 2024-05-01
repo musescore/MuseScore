@@ -33,7 +33,7 @@ namespace muse::audio {
 class JackDriverState : public AudioDriverState, public async::Asyncable
 {
 public:
-    JackDriverState(IAudioDriver* amm);
+    JackDriverState(IAudioDriver* amm, bool transportEnable);
     ~JackDriverState();
 
     std::string name() const override;

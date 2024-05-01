@@ -48,6 +48,7 @@ static int g_jackTransportDelay = 0;
 using namespace muse::audio;
 using namespace muse::midi;
 namespace muse::audio {
+static bool g_transportEnable = false;
 // variables to communicate between soft-realtime jack thread and musescore
 static msecs_t mpos_frame; // musescore frame and state
 static jack_nframes_t muse_frame; // musescore frame and state
@@ -165,6 +166,9 @@ bool musescore_seek(unsigned int pos)
 
 void JackDriverState::changedPlaying() const
 {
+    if (!g_transportEnable) {
+        return;
+    }
     jack_client_t* client = static_cast<jack_client_t*>(jackDeviceHandle);
 
     if (s_jackDriver->isPlaying()) {
@@ -180,6 +184,9 @@ void JackDriverState::changedPlaying() const
 
 void JackDriverState::changedPosition() const
 {
+    if (!g_transportEnable) {
+        return;
+    }
     jack_client_t* client = static_cast<jack_client_t*>(jackDeviceHandle);
     jack_nframes_t frames = static_cast<jack_nframes_t>(s_jackDriver->playbackPositionInSeconds() * g_samplerate);
 
@@ -415,10 +422,12 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
     //    return make_ret(Err::MidiNotConnected);
     // }
 
-    if (muse_state == JackTransportRolling) {
-        mpos_frame += nframes;
+    if (g_transportEnable) {
+        if (muse_state == JackTransportRolling) {
+            mpos_frame += nframes;
+        }
+        check_jack_midi_transport(state, nframes);
     }
-    check_jack_midi_transport(state, nframes);
 
     if (!state->midiOutputPorts.empty()) {
         jack_port_t* port = state->midiOutputPorts.front();
@@ -497,12 +506,13 @@ static void jack_cleanup_callback(void*)
 }
 }
 
-JackDriverState::JackDriverState(IAudioDriver* amm)
+JackDriverState::JackDriverState(IAudioDriver* amm, bool transportEnable)
 {
     s_jackDriver = this;
     deviceId = JACK_DEFAULT_DEVICE_ID;
     m_deviceName = JACK_DEFAULT_IDENTIFY_AS;
     m_audiomidiManager = amm;
+    g_transportEnable = transportEnable;
 }
 
 JackDriverState::~JackDriverState()
@@ -546,7 +556,7 @@ void JackDriverState::setAudioDelayCompensate(const int frames)
 
 bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
 {
-    LOGI("using jackTransportDelay: %i", g_jackTransportDelay);
+    LOGI("using jack-transport: %b, jackTransportDelay: %i", g_transportEnable, g_jackTransportDelay);
     if (isOpened()) {
         LOGW() << "Jack is already opened";
         return true;
@@ -578,13 +588,15 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         //return false;
     }
 
-    // start musescore state thread
-    running_musescore_state = true;
-    std::thread thread_musescore_state(musescore_state);
-    thread_musescore_state.detach();
-    //std::vector<std::thread> threadv;
-    //threadv.push_back(std::move(thread_musescore_state));
-    //threads = std::move(threadv);
+    if (g_transportEnable) {
+        // start musescore state thread
+        running_musescore_state = true;
+        std::thread thread_musescore_state(musescore_state);
+        thread_musescore_state.detach();
+        //std::vector<std::thread> threadv;
+        //threadv.push_back(std::move(thread_musescore_state));
+        //threads = std::move(threadv);
+    }
 
     jack_set_sample_rate_callback(handle, jack_srate_callback, (void*)&deviceSpec);
 

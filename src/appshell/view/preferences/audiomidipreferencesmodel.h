@@ -50,6 +50,8 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
 
     Q_PROPERTY(bool muteHiddenInstruments READ muteHiddenInstruments WRITE setMuteHiddenInstruments NOTIFY muteHiddenInstrumentsChanged)
 
+    Q_PROPERTY(bool jackTransportEnable READ jackTransportEnable WRITE setJackTransportEnable NOTIFY jackTransportEnableChanged)
+
     muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
     muse::Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
     muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
@@ -81,12 +83,16 @@ public:
 
     bool muteHiddenInstruments() const;
 
+    bool jackTransportEnable() const;
+
 public slots:
     void setCurrentAudioApiIndex(int index);
 
     void setUseMIDI20Output(bool use);
 
     void setMuteHiddenInstruments(bool mute);
+
+    void setJackTransportEnable(bool enable);
 
 signals:
     void currentAudioApiIndexChanged(int index);
@@ -99,6 +105,8 @@ signals:
     void useMIDI20OutputChanged();
 
     void muteHiddenInstrumentsChanged(bool mute);
+
+    void jackTransportEnableChanged(bool enable);
 
 private:
     muse::midi::MidiDeviceID midiInputDeviceId(int index) const;

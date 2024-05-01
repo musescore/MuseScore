@@ -58,6 +58,8 @@ static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_
 
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
 
+static const Settings::Key JACK_TRANSPORT_ENABLE(moduleName, "playback/jack/transportEnable");
+
 static const Settings::Key DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS(moduleName, "playback/profiles/defaultProfileName");
 static const SoundProfileName BASIC_PROFILE_NAME(u"MuseScore Basic");
 static const SoundProfileName MUSE_PROFILE_NAME(u"Muse Sounds");
@@ -119,6 +121,11 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(MUTE_HIDDEN_INSTRUMENTS, Val(true));
     settings()->valueChanged(MUTE_HIDDEN_INSTRUMENTS).onReceive(nullptr, [this](const Val& mute) {
         m_muteHiddenInstrumentsChanged.send(mute.toBool());
+    });
+
+    settings()->setDefaultValue(JACK_TRANSPORT_ENABLE, Val(true));
+    settings()->valueChanged(JACK_TRANSPORT_ENABLE).onReceive(nullptr, [this](const Val& enable) {
+        m_jackTransportEnableChanged.send(enable.toBool());
     });
 
     settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
@@ -267,6 +274,21 @@ void PlaybackConfiguration::setMuteHiddenInstruments(bool mute)
 muse::async::Channel<bool> PlaybackConfiguration::muteHiddenInstrumentsChanged() const
 {
     return m_muteHiddenInstrumentsChanged;
+}
+
+bool PlaybackConfiguration::jackTransportEnable() const
+{
+    return settings()->value(JACK_TRANSPORT_ENABLE).toBool();
+}
+
+void PlaybackConfiguration::setJackTransportEnable(bool enable)
+{
+    settings()->setSharedValue(JACK_TRANSPORT_ENABLE, Val(enable));
+}
+
+muse::async::Channel<bool> PlaybackConfiguration::jackTransportEnableChanged() const
+{
+    return m_jackTransportEnableChanged;
 }
 
 const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const

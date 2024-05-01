@@ -103,6 +103,7 @@
         <file>qml/Preferences/internal/MeiSection.qml</file>
         <file>qml/Preferences/internal/PublishMuseScoreComSection.qml</file>
         <file>qml/Preferences/internal/MixerSection.qml</file>
+        <file>qml/Preferences/internal/JackSection.qml</file>
         <file>qml/DevTools/Extensions/ExtensionsListView.qml</file>
         <file>qml/platform/PlatformMenuBar.qml</file>
         <file>qml/Preferences/PercussionPreferencesPage.qml</file>
