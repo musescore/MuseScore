@@ -298,10 +298,11 @@ muse::io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr
     if (isLocalProject) {
         if (project->isNewlyCreated()) {
             if (io::isAbsolute(projectPath)) {
+                filename = io::filename(projectPath, false);
                 folderPath = io::dirpath(projectPath);
+            } else {
+                filename = io::filename(projectPath, true);
             }
-
-            filename = io::filename(projectPath, false);
         } else {
             projectPath = engraving::containerPath(projectPath);
             folderPath = io::dirpath(projectPath);
