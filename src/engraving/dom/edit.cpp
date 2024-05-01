@@ -3931,7 +3931,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
         if (cr->isChord()) {
             std::set<Spanner*> startingSpanners = toChord(e)->startingSpanners();
             for (Spanner* spanner : startingSpanners) {
-                if (spanner->isTrill()) {
+                if (spanner->isTrill() || spanner->isSlur()) {
                     doUndoRemoveElement(spanner);
                 }
             }
