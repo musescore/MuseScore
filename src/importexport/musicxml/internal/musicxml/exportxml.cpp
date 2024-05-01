@@ -2977,18 +2977,23 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
         String type;
 
         if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
-            type = u"single";
-            switch (st) {
-            case TremoloType::R8:  count = 1;
-                break;
-            case TremoloType::R16: count = 2;
-                break;
-            case TremoloType::R32: count = 3;
-                break;
-            case TremoloType::R64: count = 4;
-                break;
-            default: LOGD("unknown tremolo single %d", int(st));
-                break;
+            if (st == TremoloType::BUZZ_ROLL) {
+                type = u"unmeasured";
+                count = 0;
+            } else {
+                type = u"single";
+                switch (st) {
+                case TremoloType::R8:  count = 1;
+                    break;
+                case TremoloType::R16: count = 2;
+                    break;
+                case TremoloType::R32: count = 3;
+                    break;
+                case TremoloType::R64: count = 4;
+                    break;
+                default: LOGD("unknown tremolo single %d", int(st));
+                    break;
+                }
             }
         } else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstChord) {
             type = u"start";
@@ -3022,11 +3027,11 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             LOGD("unknown tremolo subtype %d", int(st));
         }
 
-        if (type != "" && count > 0) {
+        if (!type.empty() && ((count > 0 && type != u"unmeasured") || (count == 0 && type == u"unmeasured"))) {
             notations.tag(xml, tr);
             ornaments.tag(xml);
             XmlWriter::Attributes attrs = { { "type", type } };
-            if (type == "single" || type == "start") {
+            if (type != u"stop") {
                 addColorAttr(tr, attrs);
             }
             xml.tag("tremolo", attrs, count);
