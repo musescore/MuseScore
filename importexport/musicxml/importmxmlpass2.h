@@ -225,7 +225,9 @@ public:
                       std::map<int, Tie*>& ties);
       QString errors() const { return _errors; }
       MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
+      bool hasTremolo() const { return _hasTremolo; }
       QString tremoloType() const { return _tremoloType; }
+      QString tremoloSmufl() const { return _tremoloSmufl; }
       int tremoloNr() const { return _tremoloNr; }
       bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
 private:
@@ -242,6 +244,7 @@ private:
       void slur();
       void skipLogCurrElem();
       void technical();
+      void otherTechnical();
       void tied();
       void tuplet();
       void otherNotation();
@@ -255,8 +258,10 @@ private:
       QStringList _dynamicsList;
       std::vector<Notation> _notations;
       SymId _breath { SymId::noSym };
+      bool _hasTremolo = false;
       QString _tremoloType;
       int _tremoloNr { 0 };
+      QString _tremoloSmufl;
       QString _wavyLineType;
       int _wavyLineNo { 0 };
       QString _arpeggioType;

@@ -2696,13 +2696,19 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             QString type;
 
             if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
-                  type = "single";
-                  switch (st) {
-                        case TremoloType::R8:  count = 1; break;
-                        case TremoloType::R16: count = 2; break;
-                        case TremoloType::R32: count = 3; break;
-                        case TremoloType::R64: count = 4; break;
-                        default: qDebug("unknown tremolo single %d", int(st)); break;
+                  if (st == TremoloType::BUZZ_ROLL) {
+                        type = "unmeasured";
+                        count = 0;
+                        }
+                  else {
+                        type = "single";
+                        switch (st) {
+                              case TremoloType::R8:  count = 1; break;
+                              case TremoloType::R16: count = 2; break;
+                              case TremoloType::R32: count = 3; break;
+                              case TremoloType::R64: count = 4; break;
+                              default: qDebug("unknown tremolo single %d", int(st)); break;
+                              }
                         }
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
@@ -2728,12 +2734,12 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             else qDebug("unknown tremolo subtype %d", int(st));
 
 
-            if (!type.isEmpty() && count > 0) {
+            if (!type.isEmpty() && ((count > 0 && type != "unmeasured") || (count == 0 && type == "unmeasured"))) {
                   notations.tag(xml);
                   ornaments.tag(xml);
                   QString tagName = "tremolo";
                   tagName += QString(" type=\"%1\"").arg(type);
-                  if (type == "single" || type == "start")
+                  if (type != "stop")
                         tagName += color2xml(tr);
                   xml.tag(tagName, count);
                   }
