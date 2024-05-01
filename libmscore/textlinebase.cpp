@@ -342,6 +342,9 @@ void TextLineBaseSegment::layout()
       if (!_text->empty()) {
             if ((isSingleOrBegin && alignBeginText) || (!isSingleOrBegin && alignContinueText)) {
                   l1 = textlineTextDistance;
+                  auto txtPlace = textLineBase()->beginTextPlace();
+                  if (txtPlace == PlaceText::AUTO || txtPlace == PlaceText::LEFT)
+                        l1 += _text->bbox().right();
                   switch (_text->align()) {
                         case Align::LEFT:
                               l1 += _text->bbox().width();
