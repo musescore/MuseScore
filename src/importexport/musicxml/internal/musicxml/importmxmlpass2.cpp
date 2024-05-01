@@ -5768,7 +5768,7 @@ static void addFiguredBassElements(FiguredBassList& fbl, const Fraction noteStar
 //---------------------------------------------------------
 
 static void addTremolo(ChordRest* cr,
-                       const int tremoloNr, const QString& tremoloType,
+                       const int tremoloNr, const QString& tremoloType, const String& tremoloSmufl,
                        Chord*& tremStart,
                        MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
                        Fraction& timeMod)
@@ -5835,6 +5835,11 @@ static void addTremolo(ChordRest* cr,
         } else {
             logger->logError(QString("unknown tremolo type %1").arg(tremoloNr), xmlreader);
         }
+    } else if (tremoloNr == 0 && (tremoloType == "unmeasured" || tremoloType.isEmpty() || tremoloSmufl == "buzzRoll")) {
+        // Out of all the SMuFL unmeasured tremolos, we only support 'buzzRoll'
+        Tremolo* tremolo = Factory::createTremolo(mu::engraving::toChord(cr));
+        tremolo->setTremoloType(TremoloType::BUZZ_ROLL);
+        cr->add(tremolo);
     }
 }
 
@@ -6288,8 +6293,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     }
 
     // handle tremolo before handling tuplet (two note tremolos modify timeMod)
-    if (cr) {
-        addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), _tremStart, _logger, &_e, timeMod);
+    if (cr && notations.hasTremolo()) {
+        addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), notations.tremoloSmufl(), _tremStart, _logger, &_e, timeMod);
     }
 
     // handle tuplet state for the current chord or rest
@@ -7381,8 +7386,10 @@ void MusicXMLParserNotations::ornaments()
             }
             _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "tremolo") {
+            m_hasTremolo = true;
             _tremoloType = _e.attributes().value("type").toString();
             _tremoloNr = _e.readElementText().toInt();
+            m_tremoloSmufl = _e.attributes().value("smufl").toString();
         } else if (_e.name() == "inverted-mordent"
                    || _e.name() == "mordent") {
             mordentNormalOrInverted();
@@ -7428,9 +7435,23 @@ void MusicXMLParserNotations::technical()
             _notations.push_back(notation);
         } else if (_e.name() == "harmonic") {
             harmonic();
+        } else if (_e.name() == "other-technical") {
+            otherTechnical();
         } else {
             skipLogCurrElem();
         }
+    }
+}
+
+void MusicXMLParserNotations::otherTechnical()
+{
+    String text = _e.readElementText();
+
+    if (text == u"z") {
+        // Buzz roll
+        m_hasTremolo = true;
+        _tremoloNr = 0;
+        _tremoloType = "unmeasured";
     }
 }
 

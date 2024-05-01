@@ -249,8 +249,10 @@ public:
                     DelayedArpMap& delayedArps);
     QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
+    bool hasTremolo() const { return m_hasTremolo; }
     QString tremoloType() const { return _tremoloType; }
     int tremoloNr() const { return _tremoloNr; }
+    String tremoloSmufl() const { return m_tremoloSmufl; }
     bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
 private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
@@ -267,6 +269,7 @@ private:
     void slur();
     void skipLogCurrElem();
     void technical();
+    void otherTechnical();
     void tied();
     void tuplet();
     void otherNotation();
@@ -282,6 +285,8 @@ private:
     SymId _breath { SymId::noSym };
     QString _tremoloType;
     int _tremoloNr { 0 };
+    String m_tremoloSmufl;
+    bool m_hasTremolo = false;
     QString _wavyLineType;
     int _wavyLineNo { 0 };
     QString _arpeggioType;

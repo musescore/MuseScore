@@ -450,6 +450,9 @@ TEST_F(Musicxml_Tests, breaksSystem) {
 TEST_F(Musicxml_Tests, breathMarks) {
     mxmlIoTest("testBreathMarks");
 }
+TEST_F(Musicxml_Tests, buzzRoll) {
+    mxmlImportTestRef("testBuzzRoll");
+}
 TEST_F(Musicxml_Tests, changeTranspose) {
     mxmlIoTest("testChangeTranspose");
 }
