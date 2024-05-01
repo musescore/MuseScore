@@ -3910,7 +3910,8 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
     std::set<Segment*> segments;
     for (EngravingObject* e : cr->linkList()) {
         if (cr->isChord()) {
-            for (Spanner* spanner : toChord(e)->startingSpanners()) {
+            std::set<Spanner*> startingSpanners = toChord(e)->startingSpanners();
+            for (Spanner* spanner : startingSpanners) {
                 if (spanner->isTrill()) {
                     doUndoRemoveElement(spanner);
                 }
