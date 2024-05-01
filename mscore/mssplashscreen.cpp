@@ -17,11 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "mssplashscreen.h"
-
-#include "musescore.h"
-#include "libmscore/fraction.h"
 #include "config.h"
+#include "mssplashscreen.h"
+#include "musescore.h"
 
 #include <random>
 
@@ -39,8 +37,8 @@ const QRectF MsSplashScreen::designMiscTextRect     { 25.0, 326.0, 670.0, 56.0 }
 
 const double MsSplashScreen::gradientDitherAmount { 0.25 };
 
-const std::tuple<QColor, QColor> MsSplashScreen::stableBuildGradientColors   { "#0885DD", "#0C70B6" };
-const std::tuple<QColor, QColor> MsSplashScreen::unstableBuildGradientColors { "#04426E", "#063759" };
+const std::tuple<QColor, QColor> MsSplashScreen::stableBuildGradientColors   { "#508BFF", "#1043A9" };
+const std::tuple<QColor, QColor> MsSplashScreen::unstableBuildGradientColors { "#3464C1", "#0C2B6B" };
 
 const QColor MsSplashScreen::textColor { 0xCCFFFFFF };
 
