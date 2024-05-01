@@ -10,44 +10,42 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "chord.h"
-#include "note.h"
-#include "xml.h"
-#include "style.h"
-#include "segment.h"
-#include "text.h"
-#include "measure.h"
-#include "system.h"
-#include "tuplet.h"
-#include "hook.h"
-#include "tie.h"
+#include "accidental.h"
 #include "arpeggio.h"
-#include "score.h"
-#include "tremolo.h"
-#include "glissando.h"
-#include "staff.h"
-#include "part.h"
-#include "utils.h"
 #include "articulation.h"
-#include "undo.h"
+#include "beam.h"
+#include "chord.h"
 #include "chordline.h"
-#include "lyrics.h"
+#include "drumset.h"
+#include "fingering.h"
+#include "glissando.h"
+#include "hook.h"
+#include "key.h"
+#include "ledgerline.h"
+#include "measure.h"
+#include "mscore.h"
 #include "navigate.h"
+#include "note.h"
+#include "noteevent.h"
+#include "part.h"
+#include "pitchspelling.h"
+#include "score.h"
+#include "segment.h"
+#include "slur.h"
+#include "staff.h"
 #include "stafftype.h"
 #include "stem.h"
-#include "mscore.h"
-#include "accidental.h"
-#include "noteevent.h"
-#include "pitchspelling.h"
 #include "stemslash.h"
-#include "ledgerline.h"
-#include "drumset.h"
-#include "key.h"
-#include "sym.h"
 #include "stringdata.h"
-#include "beam.h"
-#include "slur.h"
-#include "fingering.h"
+#include "style.h"
+#include "sym.h"
+#include "system.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -1133,7 +1131,7 @@ bool Chord::readProperties(XmlReader& e)
             _arpeggio->read(e);
             _arpeggio->setParent(this);
             }
-      else if (tag == "Tremolo") {
+      else if (tag == "Tremolo" || tag == "TremoloSingleChord") { // + Mu4 compat
             _tremolo = new Tremolo(score());
             _tremolo->setTrack(track());
             _tremolo->read(e);
