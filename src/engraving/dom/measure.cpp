@@ -2449,17 +2449,17 @@ bool Measure::isOnlyRests(track_idx_t track) const
 }
 
 //---------------------------------------------------------
-//   isOnlyDeletedRests
+//   containsInvisibleRestsOnly
 //---------------------------------------------------------
 
-bool Measure::isOnlyDeletedRests(track_idx_t track) const
+bool Measure::containsInvisibleRestsOnly(track_idx_t track) const
 {
     static const SegmentType st { SegmentType::ChordRest };
     for (const Segment* s = first(st); s; s = s->next(st)) {
         if (s->segmentType() != st || !s->element(track)) {
             continue;
         }
-        if (s->element(track)->isRest() ? !toRest(s->element(track))->isGap() : !s->element(track)->isRest()) {
+        if (s->element(track)->isRest() ? toRest(s->element(track))->visible() : !s->element(track)->isRest()) {
             return false;
         }
     }

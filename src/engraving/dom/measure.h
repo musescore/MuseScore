@@ -293,7 +293,7 @@ public:
 
     bool empty() const;
     bool isOnlyRests(track_idx_t track) const;
-    bool isOnlyDeletedRests(track_idx_t track) const;
+    bool containsInvisibleRestsOnly(track_idx_t track) const;
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }

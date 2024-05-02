@@ -2550,36 +2550,40 @@ void Score::deleteItem(EngravingItem* el)
     // fall through
     case ElementType::MMREST:
     case ElementType::REST:
-        //
-        // only allow for voices != 0
-        //    e.g. voice 0 rests cannot be removed
-        //
     {
         Rest* rest = toRest(el);
         if (rest->tuplet() && rest->tuplet()->elements().empty()) {
             undoRemoveElement(rest->tuplet());
         }
+
+        /*
+         * Rest deletion is not allowed for voice 0. For non-zero voices, the only time we'll
+         * actually delete a rest is when the measure contains only invisible rests (otherwise
+         * we simply make the rest invisible).
+         */
+
         if ((el->voice() != 0) && !rest->tuplet()) {
-            rest->undoChangeProperty(Pid::GAP, true);
+            // make the rest we're trying to delete invisible
+            rest->undoChangeProperty(Pid::VISIBLE, true);
             rest->undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
             for (EngravingObject* r : el->linkList()) {
                 Rest* rr = toRest(r);
                 if (rr->track() % VOICES) {
-                    rr->undoChangeProperty(Pid::GAP, true);
+                    rr->undoChangeProperty(Pid::VISIBLE, false);
                 }
             }
 
-            // delete them really when only gap rests are in the actual measure.
+            // actually delete the rest(s) if the measure contains no visible rests
             Measure* m = toRest(el)->measure();
             track_idx_t track = el->track();
-            if (m->isOnlyDeletedRests(track)) {
+            if (m->containsInvisibleRestsOnly(track)) {
                 static const SegmentType st { SegmentType::ChordRest };
                 for (const Segment* s = m->first(st); s; s = s->next(st)) {
                     EngravingItem* del = s->element(track);
                     if (s->segmentType() != st || !del) {
                         continue;
                     }
-                    if (toRest(del)->isGap()) {
+                    if (!toRest(del)->visible()) {
                         undoRemoveElement(del);
                     }
                 }
@@ -2593,7 +2597,7 @@ void Score::deleteItem(EngravingItem* el)
                 EngravingItem* pe = 0;
                 for (Segment* ps = s->prev(SegmentType::ChordRest); ps; ps = ps->prev(SegmentType::ChordRest)) {
                     EngravingItem* elm = ps->element(track);
-                    if (elm && elm->isRest() && toRest(elm)->isGap()) {
+                    if (elm && elm->isRest() && !toRest(elm)->visible()) {
                         pe = el;
                         rests.push_back(toRest(elm));
                     } else if (elm) {
@@ -2605,7 +2609,7 @@ void Score::deleteItem(EngravingItem* el)
                 EngravingItem* ne = 0;
                 for (ns = s->next(SegmentType::ChordRest); ns; ns = ns->next(SegmentType::ChordRest)) {
                     EngravingItem* elm = ns->element(track);
-                    if (elm && elm->isRest() && toRest(elm)->isGap()) {
+                    if (elm && elm->isRest() && !toRest(elm)->visible()) {
                         ne = elm;
                         rests.push_back(toRest(elm));
                     } else if (elm) {
@@ -2642,7 +2646,7 @@ void Score::deleteItem(EngravingItem* el)
                         rr->setTicks(d.fraction());
                         rr->setDurationType(d);
                         rr->setTrack(track);
-                        rr->setGap(true);
+                        rr->setVisible(false);
                         undoAddCR(rr, m, stick);
                     }
                 }

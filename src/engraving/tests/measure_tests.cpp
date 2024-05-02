@@ -343,7 +343,7 @@ TEST_F(Engraving_MeasureTests, gap)
     EXPECT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
-    EXPECT_TRUE(toRest(tst)->isGap());
+    EXPECT_TRUE(!toRest(tst)->visible());
     /*&& toRest(tst)->durationType() == DurationType::V_QUARTER*/
 
     //Select and delete second quarter rest in third Measure (voice 4)
@@ -359,7 +359,7 @@ TEST_F(Engraving_MeasureTests, gap)
     EXPECT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
-    EXPECT_TRUE(toRest(tst)->isGap());
+    EXPECT_TRUE(!toRest(tst)->visible());
     /*&& toRest(tst)->durationType() == DurationType::V_QUARTER*/
 
     //Select and delete first quarter rest in third Measure (voice 4)
@@ -374,7 +374,7 @@ TEST_F(Engraving_MeasureTests, gap)
     EXPECT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
-    EXPECT_TRUE(toRest(tst)->isGap());
+    EXPECT_TRUE(!toRest(tst)->visible());
     EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(960));
     /*&& toRest(tst)->durationType() == DurationType::V_HALF*/
 
