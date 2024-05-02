@@ -28,8 +28,8 @@
 namespace mu::engraving {
 struct Constants
 {
-    static constexpr int MSC_VERSION = 420;
-    static constexpr const char* MSC_VERSION_STR = "4.20";
+    static constexpr int MSC_VERSION = 430;
+    static constexpr const char* MSC_VERSION_STR = "4.30";
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -89,6 +89,10 @@ struct Constants
 //       - By default, frames are not cloned to parts
 //       - Corrections to key signature and transposition (#18998)
 //       - New inside/outside style for ties
+
+//    4.30 (Version 4.3)
+//       - New styles for tab notation
+//       - Sound flags
 
     constexpr static int DIVISION = 480;
     constexpr static BeatsPerSecond DEFAULT_TEMPO = 2.0; //default tempo is equal 120 bpm
