@@ -131,6 +131,12 @@ RadioDelegate {
         implicitWidth: root.leftPadding + contentRow.implicitWidth + root.rightPadding
         implicitHeight: contentRow.implicitHeight
 
+        TextMetrics {
+            id: textMetricsSelected
+            font: root.selectedStateFont
+            text: root.title
+        }
+
         Row {
             id: contentRow
             anchors.fill: parent
@@ -146,9 +152,10 @@ RadioDelegate {
                 id: textLabel
                 anchors.verticalCenter: parent.verticalCenter
 
-                horizontalAlignment: Text.AlignLeft
+                horizontalAlignment: root.isVertical ? Text.AlignHCenter : Text.AlignLeft
                 font: root.normalStateFont
                 text: root.title
+                width: textMetricsSelected.advanceWidth
 
                 visible: !root.iconOnly
             }
