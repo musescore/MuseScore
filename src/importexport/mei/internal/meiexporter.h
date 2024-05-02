@@ -110,6 +110,7 @@ private:
     bool writeChord(const engraving::Chord* chord, const engraving::Staff* staff);
     bool writeGraceGrp(const engraving::Chord* chord, const engraving::Staff* staff, bool isAfter = false);
     bool writeNote(const engraving::Note* note, const engraving::Chord* chord, const engraving::Staff* staff, bool isChord);
+    bool writeMRpt(const engraving::MeasureRepeat* measureRepeat);
     bool writeRest(const engraving::Rest* rest, const engraving::Staff* staff);
     bool writeSyl(const engraving::Lyrics* lyrics, const muse::String& text, ElisionType elision);
     bool writeTuplet(const engraving::Tuplet* tuplet, const engraving::EngravingItem* item, bool& closing);
