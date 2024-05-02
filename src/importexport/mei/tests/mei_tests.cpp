@@ -219,6 +219,10 @@ TEST_F(Mei_Tests, mei_measure_02) {
     meiReadTest("measure-02");
 }
 
+TEST_F(Mei_Tests, mei_mrpt_01) {
+    meiReadTest("measure-repeat-01");
+}
+
 TEST_F(Mei_Tests, mei_metadata_01) {
     meiReadTest("metadata-01");
 }
