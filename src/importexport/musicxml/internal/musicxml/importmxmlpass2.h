@@ -492,6 +492,7 @@ private:
     double m_tpoMetro = 0.0;                   // tempo according to metronome
     double m_tpoSound = 0.0;                   // tempo according to sound
     bool m_visible = true;
+    bool m_systemDirection = false;
     std::vector<EngravingItem*> m_elems;
     Fraction m_offset;
 };

@@ -2984,6 +2984,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     bool isPercussionStaff = m_pass1.isPercussionStaff(partId);
     bool isExpressionText = false;
     bool delayOttava = m_pass1.exporterString().contains(u"sibelius");
+    m_systemDirection = m_e.attribute("system") == "only-top";
     //LOGD("direction track %d", track);
     std::vector<MusicXmlSpannerDesc> starts;
     std::vector<MusicXmlSpannerDesc> stops;
@@ -3107,6 +3108,8 @@ void MusicXMLParserDirection::direction(const String& partId,
                 isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty();
                 if (isExpressionText) {
                     t = Factory::createExpression(m_score->dummy()->segment());
+                } else if (m_systemDirection) {
+                    t = Factory::createSystemText(m_score->dummy()->segment());
                 } else {
                     t = Factory::createStaffText(m_score->dummy()->segment());
                 }
@@ -4256,6 +4259,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
         } else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
             if (!sline) {
                 sline = new TextLine(m_score->dummy());
+                sline->setSystemFlag(m_systemDirection);
             }
             auto textLine = toTextLine(sline);
             // if (placement == "") placement = "above";  // TODO ? set default
