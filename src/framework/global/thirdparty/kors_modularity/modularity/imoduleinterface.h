@@ -27,6 +27,7 @@ SOFTWARE.
 #include <memory>
 #include <string_view>
 
+#include "context.h"
 #include "funcinfo.h"
 
 namespace kors::modularity {
