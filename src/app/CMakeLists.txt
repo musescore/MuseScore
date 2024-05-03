@@ -243,13 +243,16 @@ endif()
 add_executable(${EXECUTABLE_NAME}
       ${APP_RCC_SOURCES}
       main.cpp
-      app.cpp
-      app.h
       commandlineparser.cpp
       commandlineparser.h
       ${MSCORE_APPEND_SRC}
       appfactory.cpp
       appfactory.h
+      iapp.h
+      consoleapp.cpp
+      consoleapp.h
+      guiapp.cpp
+      guiapp.h
       )
 
 ###########################################
