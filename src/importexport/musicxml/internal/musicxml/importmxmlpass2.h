@@ -458,8 +458,8 @@ private:
     String _placement;
     bool _hasDefaultY;
     qreal _defaultY;
-    bool _hasRelativeY;
     qreal _relativeY;
+    bool _hasRelativeY;
     bool hasTotalY() const { return _hasRelativeY || _hasDefaultY; }
     double m_relativeX = 0.0;
     double _tpoMetro;                   // tempo according to metronome
@@ -467,6 +467,7 @@ private:
     QList<EngravingItem*> _elems;
     Fraction _offset;
     bool m_visible = true;
+    bool m_systemDirection = false;
 
     void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
     void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);

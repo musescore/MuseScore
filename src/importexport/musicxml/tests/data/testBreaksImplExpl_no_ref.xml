@@ -121,7 +121,7 @@
         </note>
       </measure>
     <measure number="12">
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After system break</words>
           </direction-type>

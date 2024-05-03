@@ -209,7 +209,7 @@
         </barline>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal color="#009193" font-weight="bold" font-size="14">B</rehearsal>
           </direction-type>

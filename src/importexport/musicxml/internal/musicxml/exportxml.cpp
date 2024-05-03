@@ -4501,7 +4501,8 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                    || el->type() == ElementType::CAPO
                    || el->type() == ElementType::STRING_TUNINGS
                    || el->type() == ElementType::SYMBOL
-                   || el->type() == ElementType::TEXT) {
+                   || el->type() == ElementType::TEXT
+                   || el->type() == ElementType::SYSTEM_TEXT) {
             // handle other elements attached (e.g. via Segment / Measure) to a system
             // find the system containing this element
             for (const EngravingItem* e = el; e; e = e->parentItem()) {
@@ -4569,6 +4570,10 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                 }
             }
         }           // if (pel && ...
+
+        if (el->systemFlag()) {
+            tagname += u" system=\"only-top\"";
+        }
     }
     xml.startElementRaw(tagname);
 }

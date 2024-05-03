@@ -109,7 +109,7 @@
         <duration>4</duration>
         <voice>1</voice>
         </note>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal font-weight="bold" font-size="14">A</rehearsal>
           </direction-type>

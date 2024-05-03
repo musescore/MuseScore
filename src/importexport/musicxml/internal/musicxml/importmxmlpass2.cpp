@@ -2995,6 +2995,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     bool isPercussionStaff = _pass1.isPercussionStaff(partId);
     bool isExpressionText = false;
     bool delayOttava = _pass1.exporterString().contains(u"sibelius");
+    m_systemDirection = _e.attributes().value("system").toString() == "only-top";
     //LOGD("direction track %d", track);
     QList<MusicXmlSpannerDesc> starts;
     QList<MusicXmlSpannerDesc> stops;
@@ -3119,6 +3120,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 isExpressionText = _wordsText.contains(u"<i>") && _metroText.isEmpty();
                 if (isExpressionText) {
                     t = Factory::createExpression(_score->dummy()->segment());
+                } else if (m_systemDirection) {
+                    t = Factory::createSystemText(_score->dummy()->segment());
                 } else {
                     t = Factory::createStaffText(_score->dummy()->segment());
                 }
@@ -4265,6 +4268,7 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
         } else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
             if (!sline) {
                 sline = new TextLine(_score->dummy());
+                sline->setSystemFlag(m_systemDirection);
             }
             auto textLine = toTextLine(sline);
             // if (placement == "") placement = "above";  // TODO ? set default

@@ -44,7 +44,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>First system (no frames above)</words>
           </direction-type>
@@ -60,7 +60,7 @@
       <attributes>
         <divisions>1</divisions>
         </attributes>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After section break</words>
           </direction-type>
@@ -73,7 +73,7 @@
       </measure>
     <measure number="2">
       <print new-system="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After system break in horizontal frame</words>
           </direction-type>
@@ -89,7 +89,7 @@
       <attributes>
         <divisions>1</divisions>
         </attributes>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After section break in horizontal frame</words>
           </direction-type>
@@ -102,7 +102,7 @@
       </measure>
     <measure number="2">
       <print new-page="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After page break in horizontal frame</words>
           </direction-type>
@@ -115,7 +115,7 @@
       </measure>
     <measure number="3">
       <print new-system="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After vframe</words>
           </direction-type>
@@ -133,7 +133,7 @@
           <words valign="top" font-size="12">Tframe</words>
           </direction-type>
         </direction>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After tframe</words>
           </direction-type>
@@ -146,7 +146,7 @@
       </measure>
     <measure number="5">
       <print new-system="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After system break in hframe</words>
           </direction-type>

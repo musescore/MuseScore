@@ -132,7 +132,7 @@
       </measure>
     <measure number="12">
       <print new-page="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After system break</words>
           </direction-type>
