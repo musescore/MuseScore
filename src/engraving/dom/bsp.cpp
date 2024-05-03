@@ -222,7 +222,7 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
     Node* node = &m_nodes[index];
     if (index == 0) {
         node->type = Node::Type::HORIZONTAL;
-        node->offset = rec.center().x();
+        node->offset = rec.center().y();
     }
 
     if (dep) {
