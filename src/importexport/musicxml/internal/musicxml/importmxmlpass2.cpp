@@ -3082,10 +3082,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
     } else if (isLikelySticking() && isPercussionStaff) {
         Sticking* sticking = Factory::createSticking(_score->dummy()->segment());
         sticking->setXmlText(_wordsText);
-        if (!RealIsNull(m_relativeX) || !RealIsNull(_relativeY)) {
+        if (!RealIsNull(m_relativeX)) {
             PointF offset = sticking->offset();
-            offset.setX(!RealIsNull(m_relativeX) ? m_relativeX : sticking->offset().x());
-            offset.setY(!RealIsNull(_relativeY) ? _relativeY : sticking->offset().y());
+            offset.setX(m_relativeX);
             sticking->setOffset(offset);
             sticking->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         }
@@ -3451,7 +3450,6 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
     while (_e.readNextStartElement()) {
         _defaultY = _e.attributes().value("default-y").toDouble(&_hasDefaultY) * -0.1;
         m_relativeX = _e.attributes().value("relative-x").toDouble() / 10 * _score->style().spatium();
-        _relativeY = _e.attributes().value("relative-y").toDouble() / -10 * _score->style().spatium();
         m_visible = _e.attributes().value("print-object").toString() != "no";
         QString number = _e.attributes().value("number").toString();
         int n = 0;
