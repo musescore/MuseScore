@@ -48,11 +48,6 @@ using namespace mu::appshell;
 //! NOTE Separately to initialize logger and profiler as early as possible
 static muse::GlobalModule globalModule;
 
-static void app_init_qrc()
-{
-    Q_INIT_RESOURCE(app);
-}
-
 App::App()
 {
 }
@@ -64,57 +59,6 @@ void App::addModule(modularity::IModuleSetup* module)
 
 int App::run(int argc, char** argv)
 {
-    // ====================================================
-    // Setup global Qt application variables
-    // ====================================================
-    app_init_qrc();
-
-    qputenv("QT_STYLE_OVERRIDE", "Fusion");
-    qputenv("QML_DISABLE_DISK_CACHE", "true");
-
-#ifdef Q_OS_LINUX
-    if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen") {
-        qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
-    }
-#endif
-
-    const char* appName;
-    if (globalModule.app()->unstable()) {
-        appName  = "MuseScore4Development";
-    } else {
-        appName  = "MuseScore4";
-    }
-
-#ifdef Q_OS_WIN
-    // NOTE: There are some problems with rendering the application window on some integrated graphics processors
-    //       see https://github.com/musescore/MuseScore/issues/8270
-    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-
-    if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
-        qputenv("QT_OPENGL_BUGLIST", ":/resources/win_opengl_buglist.json");
-    }
-#endif
-
-#ifdef MU_QT5_COMPAT
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
-
-    //! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
-    //!       Because of this, some elements are drawn with a shift on the score.
-    //!       Let's make a Linux hack and round values above 0.75(see RoundPreferFloor)
-#ifdef Q_OS_LINUX
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
-#elif defined(Q_OS_WIN)
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
-#endif
-
-    QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
-
-#ifndef MU_QT5_COMPAT
-    // Necessary for QQuickWidget, but potentially suboptimal for performance.
-    // Remove as soon as possible.
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-#endif
 
     // ====================================================
     // Parse command line options
@@ -131,19 +75,6 @@ int App::run(int argc, char** argv)
     } else {
         qapp = new QApplication(argc, argv);
     }
-
-    QCoreApplication::setApplicationName(appName);
-    QCoreApplication::setOrganizationName("MuseScore");
-    QCoreApplication::setOrganizationDomain("musescore.org");
-    QCoreApplication::setApplicationVersion(globalModule.app()->fullVersion().toString());
-
-#if !defined(Q_OS_WIN) && !defined(Q_OS_DARWIN) && !defined(Q_OS_WASM)
-    // Any OS that uses Freedesktop.org Desktop Entry Specification (e.g. Linux, BSD)
-#ifndef MUSE_APP_INSTALL_SUFFIX
-#define MUSE_APP_INSTALL_SUFFIX ""
-#endif
-    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" + QString(MUSE_APP_INSTALL_SUFFIX) + ".desktop");
-#endif
 
     commandLineParser.processBuiltinArgs(*qapp);
 
