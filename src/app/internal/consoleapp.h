@@ -76,7 +76,7 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
 
 public:
-    ConsoleApp(const CmdOptions& options);
+    ConsoleApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
 
     void addModule(muse::modularity::IModuleSetup* module);
 

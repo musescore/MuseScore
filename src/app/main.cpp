@@ -182,7 +182,7 @@ int main(int argc, char** argv)
     // ====================================================
     CommandLineParser commandLineParser;
     commandLineParser.init();
-    commandLineParser.parse(argc, argv);
+    commandLineParser.parse(argcFinal, argvFinal);
 
     IApplication::RunMode runMode = commandLineParser.runMode();
     QCoreApplication* qapp = nullptr;

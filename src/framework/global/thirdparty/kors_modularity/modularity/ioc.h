@@ -69,6 +69,7 @@ public: \
 
 namespace kors::modularity {
 ModulesIoC* ioc(const ContextPtr& ctx = nullptr);
+void removeIoC(const ContextPtr& ctx = nullptr);
 
 struct StaticMutex
 {
@@ -88,7 +89,8 @@ public:
         if (!m_i) {
             const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
             if (!m_i) {
-                m_i = ioc(m_ctx)->resolve<I>("");
+                static std::string_view module = "";
+                m_i = ioc(m_ctx)->template resolve<I>(module);
             }
         }
         return m_i;

@@ -27,6 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 #include "types/version.h"
+#include "modularity/ioc.h"
 
 #ifndef NO_QT_SUPPORT
 class QObject;
@@ -55,13 +56,15 @@ public:
     virtual String build() const = 0;
     virtual String revision() const = 0;
 
-    virtual void setRunMode(const RunMode& mode) = 0;
     virtual RunMode runMode() const = 0;
     virtual bool noGui() const = 0;
 
     virtual void perform() = 0;
     virtual void finish() = 0;
     virtual void restart() = 0;
+
+    virtual const modularity::ContextPtr iocContext() const = 0;
+    virtual modularity::ModulesIoC* ioc() const = 0;
 
 #ifndef NO_QT_SUPPORT
     virtual QWindow* focusWindow() const = 0;

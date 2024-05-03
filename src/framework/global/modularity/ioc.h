@@ -41,13 +41,20 @@ using Inject = kors::modularity::Inject<I>;
 
 namespace muse::modularity {
 using ModulesIoC = kors::modularity::ModulesIoC;
+using Context = kors::modularity::Context;
+using ContextPtr = kors::modularity::ContextPtr;
 
 template<class T>
 using Creator = kors::modularity::Creator<T>;
 
-inline ModulesIoC* ioc()
+inline ModulesIoC* ioc(const ContextPtr& ctx = nullptr)
 {
-    return kors::modularity::ioc();
+    return kors::modularity::ioc(ctx);
+}
+
+inline void removeIoC(const ContextPtr& ctx = nullptr)
+{
+    kors::modularity::removeIoC(ctx);
 }
 }
 

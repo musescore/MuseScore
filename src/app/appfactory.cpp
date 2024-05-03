@@ -203,7 +203,11 @@ std::shared_ptr<muse::IApplication> AppFactory::newApp(const CmdOptions& options
 
 std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& options) const
 {
-    std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options);
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ++m_lastID;
+    ctx->id = m_lastID;
+
+    std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options, ctx);
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
@@ -296,13 +300,17 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
 std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
 {
-    //! TODO Some modules can be removed
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ++m_lastID;
+    ctx->id = m_lastID;
 
-    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options);
+    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options, ctx);
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
+
+    //! TODO Some modules can be removed
 
     // framework
     app->addModule(new muse::accessibility::AccessibilityModule());
