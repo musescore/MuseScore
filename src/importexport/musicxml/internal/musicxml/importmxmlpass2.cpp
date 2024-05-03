@@ -3068,10 +3068,9 @@ void MusicXMLParserDirection::direction(const String& partId,
     } else if (isLikelySticking() && isPercussionStaff) {
         Sticking* sticking = Factory::createSticking(m_score->dummy()->segment());
         sticking->setXmlText(m_wordsText);
-        if (!RealIsNull(m_relativeX) || !RealIsNull(m_relativeY)) {
+        if (!RealIsNull(m_relativeX)) {
             PointF offset = sticking->offset();
-            offset.setX(!RealIsNull(m_relativeX) ? m_relativeX : sticking->offset().x());
-            offset.setY(!RealIsNull(m_relativeY) ? m_relativeY : sticking->offset().y());
+            offset.setX(m_relativeX);
             sticking->setOffset(offset);
             sticking->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         }
@@ -3445,7 +3444,6 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
     while (m_e.readNextStartElement()) {
         m_defaultY = m_e.asciiAttribute("default-y").toDouble(&m_hasDefaultY) * -0.1;
         m_relativeX = m_e.doubleAttribute("relative-x") / 10 * m_score->style().spatium();
-        m_relativeY = m_e.doubleAttribute("relative-y") / -10 * m_score->style().spatium();
         m_visible = m_e.asciiAttribute("print-object") != "no";
         String number = m_e.attribute("number");
         int n = 0;
