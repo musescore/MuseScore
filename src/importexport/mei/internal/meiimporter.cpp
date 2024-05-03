@@ -578,7 +578,8 @@ ChordRest* MeiImporter::findStart(const libmei::Element& meiElement, Measure* me
         std::string startId = this->xmlIdFrom(startIdAtt->GetStartid());
         // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
         if (!m_startIdChordRests.count(startId) || !m_startIdChordRests.at(startId)) {
-            Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
+            Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(
+                                                                                               startIdAtt->GetStartid())));
             return nullptr;
         }
         chordRest = m_startIdChordRests.at(startId);
@@ -1569,6 +1570,8 @@ bool MeiImporter::readElements(pugi::xml_node parentNode, Measure* measure, int 
             success = success && this->readMRest(xpathNode.node(), measure, track, ticks);
         } else if (elementName == "note") {
             success = success && this->readNote(xpathNode.node(), measure, track, ticks);
+        } else if (elementName == "mRpt") {
+            success = success && this->readMRpt(xpathNode.node(), measure, track, ticks);
         } else if (elementName == "rest" && !m_readingGraceNotes) {
             success = success && this->readRest(xpathNode.node(), measure, track, ticks);
         } else if (elementName == "space" && !m_readingGraceNotes) {
@@ -1820,6 +1823,33 @@ bool MeiImporter::readMRest(pugi::xml_node mRestNode, Measure* measure, int trac
 
     // The duration is the duration according to the timesig
     ticks += rest->ticks().ticks();
+
+    return true;
+}
+
+/**
+ * Read a mRpt.
+ */
+
+bool MeiImporter::readMRpt(pugi::xml_node mRptNode, Measure* measure, int track, int& ticks)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning = false;
+    libmei::MRpt meiMRpt;
+    meiMRpt.Read(mRptNode);
+
+    Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(ticks) + measure->tick());
+    MeasureRepeat* measureRepeat = Factory::createMeasureRepeat(segment);
+    Convert::colorFromMEI(measureRepeat, meiMRpt);
+    m_uids->reg(measureRepeat, meiMRpt.m_xmlId);
+    measureRepeat->setTrack(track);
+    measureRepeat->setTicks(measure->ticks());
+    measureRepeat->setNumMeasures(1);
+    measure->setMeasureRepeatCount(1, track2staff(track));
+    segment->add(measureRepeat);
 
     return true;
 }
