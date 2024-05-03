@@ -16,6 +16,8 @@ public:
 private:
     std::shared_ptr<muse::IApplication> newGuiApp(const CmdOptions& options) const;
     std::shared_ptr<muse::IApplication> newConsoleApp(const CmdOptions& options) const;
+
+    mutable int m_lastID = 0;
 };
 }
 

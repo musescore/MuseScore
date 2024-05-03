@@ -29,7 +29,7 @@ class BaseApplication : public IApplication
 {
 public:
 
-    BaseApplication() = default;
+    BaseApplication(const modularity::ContextPtr& ctx);
 
     static String appName();
     static bool appUnstable();
@@ -45,19 +45,27 @@ public:
     String build() const override { return appBuild(); }
     String revision() const override { return appRevision(); }
 
-    void setRunMode(const RunMode& mode) override;
+    void setRunMode(const RunMode& mode);
     RunMode runMode() const override;
     bool noGui() const override;
 
     void restart() override;
+
+    const modularity::ContextPtr iocContext() const override;
+    modularity::ModulesIoC* ioc() const override;
 
 #ifndef NO_QT_SUPPORT
     QWindow* focusWindow() const override;
     bool notify(QObject* object, QEvent* event) override;
 #endif
 
+protected:
+
+    void removeIoC();
+
 private:
     RunMode m_runMode = RunMode::GuiApp;
+    modularity::ContextPtr m_iocContext;
 };
 }
 

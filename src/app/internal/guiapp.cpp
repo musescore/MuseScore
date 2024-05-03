@@ -16,8 +16,8 @@ using namespace mu;
 using namespace mu::app;
 using namespace mu::appshell;
 
-GuiApp::GuiApp(const CmdOptions& options)
-    : m_options(options)
+GuiApp::GuiApp(const CmdOptions& options, const modularity::ContextPtr& ctx)
+    : muse::BaseApplication(ctx), m_options(options)
 {
 }
 
@@ -34,6 +34,8 @@ void GuiApp::perform()
     IF_ASSERT_FAILED(runMode == IApplication::RunMode::GuiApp) {
         return;
     }
+
+    setRunMode(runMode);
 
 #ifdef MUE_BUILD_APPSHELL_MODULE
     // ====================================================
@@ -63,7 +65,7 @@ void GuiApp::perform()
     // ====================================================
     // Setup modules: apply the command line options
     // ====================================================
-    muapplication()->setRunMode(runMode);
+
     //applyCommandLineOptions(commandLineParser.options(), runMode);
 
     // ====================================================
@@ -224,5 +226,6 @@ void GuiApp::finish()
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
-    modularity::ioc()->reset();
+
+    removeIoC();
 }

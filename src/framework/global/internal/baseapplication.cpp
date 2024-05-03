@@ -98,6 +98,11 @@ String BaseApplication::appRevision()
 #endif
 }
 
+BaseApplication::BaseApplication(const modularity::ContextPtr& ctx)
+    : m_iocContext(ctx)
+{
+}
+
 void BaseApplication::setRunMode(const RunMode& mode)
 {
     m_runMode = mode;
@@ -146,4 +151,20 @@ void BaseApplication::restart()
 #else
     NOT_SUPPORTED;
 #endif
+}
+
+const modularity::ContextPtr BaseApplication::iocContext() const
+{
+    return m_iocContext;
+}
+
+modularity::ModulesIoC* BaseApplication::ioc() const
+{
+    return modularity::ioc(m_iocContext);
+}
+
+void BaseApplication::removeIoC()
+{
+    modularity::ioc(m_iocContext)->reset();
+    modularity::removeIoC(m_iocContext);
 }

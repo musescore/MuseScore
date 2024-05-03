@@ -23,7 +23,7 @@ class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this
     INJECT(appshell::IStartupScenario, startupScenario)
 
 public:
-    GuiApp(const CmdOptions& options);
+    GuiApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
 
     void addModule(muse::modularity::IModuleSetup* module);
 

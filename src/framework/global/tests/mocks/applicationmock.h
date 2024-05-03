@@ -39,7 +39,6 @@ public:
     MOCK_METHOD(String, build, (), (const, override));
     MOCK_METHOD(String, revision, (), (const, override));
 
-    MOCK_METHOD(void, setRunMode, (const RunMode&), (override));
     MOCK_METHOD(RunMode, runMode, (), (const, override));
     MOCK_METHOD(bool, noGui, (), (const, override));
 
@@ -47,7 +46,12 @@ public:
 
     MOCK_METHOD(bool, notify, (QObject*, QEvent*), (override));
 
+    MOCK_METHOD(void, perform, (), (override));
+    MOCK_METHOD(void, finish, (), (override));
     MOCK_METHOD(void, restart, (), (override));
+
+    MOCK_METHOD(const modularity::ContextPtr, iocContext, (), (const, override));
+    MOCK_METHOD(modularity::ModulesIoC*, ioc, (), (const, override));
 };
 }
 

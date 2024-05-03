@@ -25,6 +25,8 @@ SOFTWARE.
 
 std::mutex kors::modularity::StaticMutex::mutex;
 
+static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
+
 kors::modularity::ModulesIoC* kors::modularity::ioc(const ContextPtr& ctx)
 {
     if (!ctx || ctx->id < 0) {
@@ -32,12 +34,23 @@ kors::modularity::ModulesIoC* kors::modularity::ioc(const ContextPtr& ctx)
         return &global;
     }
 
-    static std::map<IoCID, ModulesIoC*> map;
-
-    auto it = map.find(ctx->id);
-    if (it != map.end()) {
+    auto it = s_map.find(ctx->id);
+    if (it != s_map.end()) {
         return it->second;
     }
 
-    return map.insert({ ctx->id, new ModulesIoC() }).first->second;
+    return s_map.insert({ ctx->id, new ModulesIoC() }).first->second;
+}
+
+void kors::modularity::removeIoC(const ContextPtr& ctx)
+{
+    if (!ctx || ctx->id < 0) {
+        //! NOTE Can't remove global ioc
+        return;
+    }
+
+    auto it = s_map.find(ctx->id);
+    if (it != s_map.end()) {
+        s_map.erase(it);
+    }
 }
