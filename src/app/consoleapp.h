@@ -20,10 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APP_APP_H
-#define MU_APP_APP_H
+#ifndef MU_CONSOLEAPP_APP_H
+#define MU_CONSOLEAPP_APP_H
 
-#include <QList>
+#include <vector>
+
+#include "iapp.h"
 
 #include "global/globalmodule.h"
 
@@ -52,7 +54,7 @@
 #include "commandlineparser.h"
 
 namespace mu::app {
-class App
+class ConsoleApp : public IApp
 {
     INJECT(muse::IApplication, muapplication)
     INJECT(converter::IConverterController, converter)
@@ -74,11 +76,12 @@ class App
     INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
 
 public:
-    App();
+    ConsoleApp();
 
     void addModule(muse::modularity::IModuleSetup* module);
 
-    int run(int argc, char** argv);
+    void perform(const CommandLineParser& commandLineParser) override;
+    void finish() override;
 
 private:
     void applyCommandLineOptions(const CommandLineParser::Options& options, muse::IApplication::RunMode runMode);
@@ -90,8 +93,8 @@ private:
     //! NOTE Separately to initialize logger and profiler as early as possible
     muse::GlobalModule m_globalModule;
 
-    QList<muse::modularity::IModuleSetup*> m_modules;
+    std::vector<muse::modularity::IModuleSetup*> m_modules;
 };
 }
 
-#endif // MU_APP_APP_H
+#endif // MU_CONSOLEAPP_APP_H

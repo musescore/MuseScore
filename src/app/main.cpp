@@ -20,20 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 #include <csignal>
 
 #include <QTextCodec>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QStyleHints>
 #include <QQuickWindow>
 
 #include "appfactory.h"
+#include "commandlineparser.h"
+#include "global/iapplication.h"
 
 #include "muse_framework_config.h"
 
 #include "log.h"
-
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #include <vector>
@@ -126,6 +126,10 @@ int main(int argc, char** argv)
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
 #endif
 
+    //! Needs to be set because we use transparent windows for PopupView.
+    //! Needs to be called before any QQuickWindows are shown.
+    QQuickWindow::setDefaultAlphaBuffer(true);
+
     QCoreApplication::setApplicationName(MUSE_APP_TITLE);
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");
@@ -138,10 +142,6 @@ int main(int argc, char** argv)
 #endif
     QGuiApplication::setDesktopFileName("org.musescore.MuseScore" + QString(MUSE_APP_INSTALL_SUFFIX) + ".desktop");
 #endif
-
-
-    mu::app::AppFactory f;
-    std::shared_ptr<mu::app::App> app = f.newApp();
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
     // On MSVC under Windows, we need to manually retrieve the command-line arguments and convert them from UTF-16 to UTF-8.
@@ -174,7 +174,45 @@ int main(int argc, char** argv)
 
 #endif
 
-    int code = app->run(argcFinal, argvFinal);
+    using namespace muse;
+    using namespace mu::app;
+
+    // ====================================================
+    // Parse command line options
+    // ====================================================
+    CommandLineParser commandLineParser;
+    commandLineParser.init();
+    commandLineParser.parse(argc, argv);
+
+    IApplication::RunMode runMode = commandLineParser.runMode();
+    QCoreApplication* qapp = nullptr;
+
+    if (runMode == IApplication::RunMode::AudioPluginRegistration) {
+        qapp = new QCoreApplication(argc, argv);
+    } else {
+        qapp = new QApplication(argc, argv);
+    }
+
+    commandLineParser.processBuiltinArgs(*qapp);
+
+    AppFactory f;
+    std::shared_ptr<IApp> app = f.newApp(runMode);
+
+    app->perform(commandLineParser);
+
+    // ====================================================
+    // Run main loop
+    // ====================================================
+    int code = qapp->exec();
+
+    // ====================================================
+    // Quit
+    // ====================================================
+
+    app->finish();
+
+    delete qapp;
+
     LOGI() << "Goodbye!! code: " << code;
     return code;
 }

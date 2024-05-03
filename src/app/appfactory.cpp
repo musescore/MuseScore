@@ -1,5 +1,8 @@
 #include "appfactory.h"
 
+#include "guiapp.h"
+#include "consoleapp.h"
+
 #include "muse_framework_config.h"
 
 #ifdef MUSE_MODULE_ACCESSIBILITY
@@ -186,12 +189,116 @@
 #include "wasmtest/wasmtestmodule.h"
 #endif
 
-
+using namespace muse;
 using namespace mu::app;
 
-std::shared_ptr<App> AppFactory::newApp() const
+std::shared_ptr<IApp> AppFactory::newApp(IApplication::RunMode& mode) const
 {
-    std::shared_ptr<App> app = std::make_shared<App>();
+    if (mode == IApplication::RunMode::GuiApp) {
+        return newGuiApp();
+    } else {
+        return newConsoleApp();
+    }
+}
+
+std::shared_ptr<IApp> AppFactory::newGuiApp() const
+{
+    std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>();
+
+    //! NOTE `diagnostics` must be first, because it installs the crash handler.
+    //! For other modules, the order is (an should be) unimportant.
+    app->addModule(new muse::diagnostics::DiagnosticsModule());
+
+    // framework
+    app->addModule(new muse::accessibility::AccessibilityModule());
+    app->addModule(new muse::actions::ActionsModule());
+    app->addModule(new muse::audio::AudioModule());
+    app->addModule(new muse::draw::DrawModule());
+    app->addModule(new muse::midi::MidiModule());
+    app->addModule(new muse::mpe::MpeModule());
+#ifdef MUSE_MODULE_MUSESAMPLER
+    app->addModule(new muse::musesampler::MuseSamplerModule());
+#endif
+    app->addModule(new muse::network::NetworkModule());
+    app->addModule(new muse::shortcuts::ShortcutsModule());
+#ifdef MUSE_MODULE_UI
+    app->addModule(new muse::ui::UiModule());
+    app->addModule(new muse::uicomponents::UiComponentsModule());
+    app->addModule(new muse::dock::DockModule());
+#endif
+    app->addModule(new muse::vst::VSTModule());
+
+// modules
+#ifdef MUE_BUILD_APPSHELL_MODULE
+    app->addModule(new mu::appshell::AppShellModule());
+#endif
+
+#ifdef MUSE_MODULE_AUTOBOT
+    app->addModule(new muse::autobot::AutobotModule());
+#endif
+
+    app->addModule(new mu::braille::BrailleModule());
+
+    app->addModule(new muse::cloud::CloudModule());
+    app->addModule(new mu::commonscene::CommonSceneModule());
+    app->addModule(new mu::context::ContextModule());
+
+#ifdef MUE_BUILD_CONVERTER_MODULE
+    app->addModule(new mu::converter::ConverterModule());
+#endif
+
+    app->addModule(new mu::engraving::EngravingModule());
+
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+    app->addModule(new mu::iex::bb::BBModule());
+    app->addModule(new mu::iex::bww::BwwModule());
+    app->addModule(new mu::iex::musicxml::MusicXmlModule());
+    app->addModule(new mu::iex::capella::CapellaModule());
+    app->addModule(new mu::iex::guitarpro::GuitarProModule());
+    app->addModule(new mu::iex::midi::MidiModule());
+    app->addModule(new mu::iex::musedata::MuseDataModule());
+    app->addModule(new mu::iex::ove::OveModule());
+    app->addModule(new mu::iex::audioexport::AudioExportModule());
+    app->addModule(new mu::iex::imagesexport::ImagesExportModule());
+    app->addModule(new mu::iex::mei::MeiModule());
+#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+    app->addModule(new mu::iex::videoexport::VideoExportModule());
+#endif
+#else
+#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
+    app->addModule(new mu::iex::imagesexport::ImagesExportModule());
+#endif
+#endif
+
+    app->addModule(new mu::inspector::InspectorModule());
+    app->addModule(new mu::instrumentsscene::InstrumentsSceneModule());
+    app->addModule(new muse::languages::LanguagesModule());
+    app->addModule(new muse::learn::LearnModule());
+    app->addModule(new muse::mi::MultiInstancesModule());
+    app->addModule(new mu::notation::NotationModule());
+    app->addModule(new mu::palette::PaletteModule());
+    app->addModule(new mu::playback::PlaybackModule());
+#ifdef MUSE_MODULE_EXTENSIONS
+    app->addModule(new muse::extensions::ExtensionsModule());
+#endif
+    app->addModule(new mu::print::PrintModule());
+    app->addModule(new mu::project::ProjectModule());
+    app->addModule(new muse::update::UpdateModule());
+    app->addModule(new muse::workspace::WorkspaceModule());
+    app->addModule(new mu::workspacescene::WorkspaceSceneModule());
+
+#ifdef Q_OS_WASM
+    app->addModule(new mu::wasmtest::WasmTestModule());
+#endif
+
+    return app;
+}
+
+std::shared_ptr<IApp> AppFactory::newConsoleApp() const
+{
+    //! TODO Some modules can be removed
+
+    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>();
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.

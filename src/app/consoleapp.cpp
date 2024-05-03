@@ -20,20 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "app.h"
+#include "consoleapp.h"
 
 #include <QApplication>
-#include <QQmlApplicationEngine>
-#include <QQuickWindow>
-#include <QStyleHints>
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
 
-#include "appshell/view/internal/splashscreen/splashscreen.h"
-
 #include "modularity/ioc.h"
-#include "framework/ui/iuiengine.h"
 
 #include "muse_framework_config.h"
 
@@ -43,36 +37,17 @@ using namespace muse;
 using namespace mu::app;
 using namespace mu::appshell;
 
-App::App()
+ConsoleApp::ConsoleApp()
 {
 }
 
-void App::addModule(modularity::IModuleSetup* module)
+void ConsoleApp::addModule(modularity::IModuleSetup* module)
 {
     m_modules.push_back(module);
 }
 
-int App::run(int argc, char** argv)
+void ConsoleApp::perform(const CommandLineParser& commandLineParser)
 {
-
-    // ====================================================
-    // Parse command line options
-    // ====================================================
-    CommandLineParser commandLineParser;
-    commandLineParser.init();
-    commandLineParser.parse(argc, argv);
-
-    IApplication::RunMode runMode = commandLineParser.runMode();
-    QCoreApplication* qapp = nullptr;
-
-    if (runMode == IApplication::RunMode::AudioPluginRegistration) {
-        qapp = new QCoreApplication(argc, argv);
-    } else {
-        qapp = new QApplication(argc, argv);
-    }
-
-    commandLineParser.processBuiltinArgs(*qapp);
-
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
@@ -96,6 +71,7 @@ int App::run(int argc, char** argv)
         m->registerApi();
     }
 
+    IApplication::RunMode runMode = commandLineParser.runMode();
     // ====================================================
     // Setup modules: apply the command line options
     // ====================================================
@@ -109,32 +85,6 @@ int App::run(int argc, char** argv)
     for (modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
-
-#ifdef MUE_BUILD_APPSHELL_MODULE
-    SplashScreen* splashScreen = nullptr;
-    if (runMode == IApplication::RunMode::GuiApp) {
-        if (multiInstancesProvider()->isMainInstance()) {
-            splashScreen = new SplashScreen(SplashScreen::Default);
-        } else {
-            const project::ProjectFile& file = startupScenario()->startupScoreFile();
-            if (file.isValid()) {
-                if (file.hasDisplayName()) {
-                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
-                } else {
-                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
-                }
-            } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
-            } else {
-                splashScreen = new SplashScreen(SplashScreen::Default);
-            }
-        }
-    }
-
-    if (splashScreen) {
-        splashScreen->show();
-    }
-#endif
 
     // ====================================================
     // Setup modules: onInit
@@ -198,73 +148,6 @@ int App::run(int argc, char** argv)
             }
         }
     } break;
-    case IApplication::RunMode::GuiApp: {
-#ifdef MUE_BUILD_APPSHELL_MODULE
-        // ====================================================
-        // Setup Qml Engine
-        // ====================================================
-        QQmlApplicationEngine* engine = modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
-
-#if defined(Q_OS_WIN)
-        const QString mainQmlFile = "/platform/win/Main.qml";
-#elif defined(Q_OS_MACOS)
-        const QString mainQmlFile = "/platform/mac/Main.qml";
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-        const QString mainQmlFile = "/platform/linux/Main.qml";
-#elif defined(Q_OS_WASM)
-        const QString mainQmlFile = "/Main.wasm.qml";
-#endif
-
-#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
-        const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
-#else
-        const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
-#endif
-
-        QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                         qapp, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
-                if (!obj && url == objUrl) {
-                    LOGE() << "failed Qml load\n";
-                    QCoreApplication::exit(-1);
-                    return;
-                }
-
-                if (url == objUrl) {
-                    // ====================================================
-                    // Setup modules: onDelayedInit
-                    // ====================================================
-
-                    m_globalModule.onDelayedInit();
-                    for (modularity::IModuleSetup* m : m_modules) {
-                        m->onDelayedInit();
-                    }
-
-                    if (splashScreen) {
-                        splashScreen->close();
-                        delete splashScreen;
-                    }
-
-                    startupScenario()->run();
-                }
-            }, Qt::QueuedConnection);
-
-        QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
-                for (const QQmlError& e : warnings) {
-                    LOGE() << "error: " << e.toString().toStdString() << "\n";
-                }
-            });
-
-        // ====================================================
-        // Load Main qml
-        // ====================================================
-
-        //! Needs to be set because we use transparent windows for PopupView.
-        //! Needs to be called before any QQuickWindows are shown.
-        QQuickWindow::setDefaultAlphaBuffer(true);
-
-        engine->load(url);
-#endif // MUE_BUILD_APPSHELL_MODULE
-    } break;
     case IApplication::RunMode::AudioPluginRegistration: {
         CommandLineParser::AudioPluginRegistration pluginRegistration = commandLineParser.audioPluginRegistration();
 
@@ -273,31 +156,23 @@ int App::run(int argc, char** argv)
                 qApp->exit(code);
             }, Qt::QueuedConnection);
     } break;
+    default: {
+        UNREACHABLE;
     }
+    }
+}
 
-    // ====================================================
-    // Run main loop
-    // ====================================================
-    int retCode = qapp->exec();
-
-    // ====================================================
-    // Quit
-    // ====================================================
-
+void ConsoleApp::finish()
+{
     PROFILER_PRINT;
 
-    // Wait Thread Poll
+// Wait Thread Poll
 #ifndef Q_OS_WASM
     QThreadPool* globalThreadPool = QThreadPool::globalInstance();
     if (globalThreadPool) {
         LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
         globalThreadPool->waitForDone();
     }
-#endif
-
-#ifdef MUE_BUILD_APPSHELL_MODULE
-    // Engine quit
-    modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
 #endif
 
     // Deinit
@@ -320,13 +195,9 @@ int App::run(int argc, char** argv)
     qDeleteAll(m_modules);
     m_modules.clear();
     modularity::ioc()->reset();
-
-    delete qapp;
-
-    return retCode;
 }
 
-void App::applyCommandLineOptions(const CommandLineParser::Options& options, IApplication::RunMode runMode)
+void ConsoleApp::applyCommandLineOptions(const CommandLineParser::Options& options, IApplication::RunMode runMode)
 {
     uiConfiguration()->setPhysicalDotsPerInch(options.ui.physicalDotsPerInch);
 
@@ -397,7 +268,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, IAp
     }
 }
 
-int App::processConverter(const CommandLineParser::ConverterTask& task)
+int ConsoleApp::processConverter(const CommandLineParser::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
     muse::io::path_t stylePath = task.params[CommandLineParser::ParamKey::StylePath].toString();
@@ -452,7 +323,7 @@ int App::processConverter(const CommandLineParser::ConverterTask& task)
     return ret.code();
 }
 
-int App::processDiagnostic(const CommandLineParser::Diagnostic& task)
+int ConsoleApp::processDiagnostic(const CommandLineParser::Diagnostic& task)
 {
     if (!diagnosticDrawProvider()) {
         return make_ret(Ret::Code::NotSupported);
@@ -507,7 +378,7 @@ int App::processDiagnostic(const CommandLineParser::Diagnostic& task)
     return ret.code();
 }
 
-int App::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task)
+int ConsoleApp::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
 
@@ -524,7 +395,7 @@ int App::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegi
     return ret.code();
 }
 
-void App::processAutobot(const CommandLineParser::Autobot& task)
+void ConsoleApp::processAutobot(const CommandLineParser::Autobot& task)
 {
     using namespace muse::autobot;
     muse::async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
