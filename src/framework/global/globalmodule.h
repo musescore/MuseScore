@@ -35,7 +35,7 @@ namespace muse {
 class SystemInfo;
 class Invoker;
 class GlobalConfiguration;
-class Application;
+class BaseApplication;
 class GlobalModule : public modularity::IModuleSetup
 {
     Inject<io::IFileSystem> fileSystem;
@@ -43,6 +43,8 @@ class GlobalModule : public modularity::IModuleSetup
 public:
 
     GlobalModule();
+
+    void setApplication(std::shared_ptr<BaseApplication> app);
 
     std::string moduleName() const override;
     void registerExports() override;
@@ -55,10 +57,10 @@ public:
 
     void setLoggerLevel(const muse::logger::Level& level);
 
-    std::shared_ptr<Application> app() const;
+    std::shared_ptr<BaseApplication> app() const;
 
 private:
-    std::shared_ptr<Application> m_application;
+    std::shared_ptr<BaseApplication> m_application;
     std::shared_ptr<GlobalConfiguration> m_configuration;
     std::shared_ptr<SystemInfo> m_systemInfo;
 

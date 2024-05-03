@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "application.h"
+#include "baseapplication.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QApplication>
@@ -34,7 +34,7 @@
 
 using namespace muse;
 
-String Application::name() const
+String BaseApplication::appName()
 {
 #ifdef MUSE_APP_TITLE
     return String::fromAscii(MUSE_APP_TITLE);
@@ -43,7 +43,7 @@ String Application::name() const
 #endif
 }
 
-bool Application::unstable() const
+bool BaseApplication::appUnstable()
 {
 #ifdef MUSE_APP_UNSTABLE
     return true;
@@ -52,7 +52,7 @@ bool Application::unstable() const
 #endif
 }
 
-Version Application::version() const
+Version BaseApplication::appVersion()
 {
 #ifdef MUSE_APP_VERSION
     static Version v(MUSE_APP_VERSION);
@@ -62,9 +62,9 @@ Version Application::version() const
     return v;
 }
 
-Version Application::fullVersion() const
+Version BaseApplication::appFullVersion()
 {
-    static Version fv(version());
+    static Version fv(appVersion());
 
 #ifdef MUSE_APP_VERSION_LABEL
     static bool once = false;
@@ -80,7 +80,7 @@ Version Application::fullVersion() const
     return fv;
 }
 
-String Application::build() const
+String BaseApplication::appBuild()
 {
 #ifdef MUSE_APP_BUILD_NUMBER
     return String::fromAscii(MUSE_APP_BUILD_NUMBER);
@@ -89,7 +89,7 @@ String Application::build() const
 #endif
 }
 
-String Application::revision() const
+String BaseApplication::appRevision()
 {
 #ifdef MUSE_APP_REVISION
     return String::fromAscii(MUSE_APP_REVISION);
@@ -98,17 +98,17 @@ String Application::revision() const
 #endif
 }
 
-void Application::setRunMode(const RunMode& mode)
+void BaseApplication::setRunMode(const RunMode& mode)
 {
     m_runMode = mode;
 }
 
-IApplication::RunMode Application::runMode() const
+IApplication::RunMode BaseApplication::runMode() const
 {
     return m_runMode;
 }
 
-bool Application::noGui() const
+bool BaseApplication::noGui() const
 {
     switch (m_runMode) {
     case RunMode::GuiApp: return false;
@@ -119,19 +119,19 @@ bool Application::noGui() const
 }
 
 #ifndef NO_QT_SUPPORT
-QWindow* Application::focusWindow() const
+QWindow* BaseApplication::focusWindow() const
 {
     return qApp->focusWindow();
 }
 
-bool Application::notify(QObject* object, QEvent* event)
+bool BaseApplication::notify(QObject* object, QEvent* event)
 {
     return qApp->notify(object, event);
 }
 
 #endif
 
-void Application::restart()
+void BaseApplication::restart()
 {
 #ifndef NO_QT_SUPPORT
     QString program = qApp->arguments()[0];

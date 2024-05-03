@@ -37,7 +37,8 @@ using namespace muse;
 using namespace mu::app;
 using namespace mu::appshell;
 
-ConsoleApp::ConsoleApp()
+ConsoleApp::ConsoleApp(const CmdOptions& options)
+    : m_options(options)
 {
 }
 
@@ -46,11 +47,14 @@ void ConsoleApp::addModule(modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void ConsoleApp::perform(const CmdOptions& options)
+void ConsoleApp::perform()
 {
+    const CmdOptions& options = m_options;
+
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
+    m_globalModule.setApplication(shared_from_this());
     m_globalModule.registerResources();
     m_globalModule.registerExports();
     m_globalModule.registerUiTypes();

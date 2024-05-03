@@ -192,18 +192,18 @@
 using namespace muse;
 using namespace mu::app;
 
-std::shared_ptr<IApp> AppFactory::newApp(IApplication::RunMode& mode) const
+std::shared_ptr<muse::IApplication> AppFactory::newApp(const CmdOptions& options) const
 {
-    if (mode == IApplication::RunMode::GuiApp) {
-        return newGuiApp();
+    if (options.runMode == IApplication::RunMode::GuiApp) {
+        return newGuiApp(options);
     } else {
-        return newConsoleApp();
+        return newConsoleApp(options);
     }
 }
 
-std::shared_ptr<IApp> AppFactory::newGuiApp() const
+std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& options) const
 {
-    std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>();
+    std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options);
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
@@ -294,11 +294,11 @@ std::shared_ptr<IApp> AppFactory::newGuiApp() const
     return app;
 }
 
-std::shared_ptr<IApp> AppFactory::newConsoleApp() const
+std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
 {
     //! TODO Some modules can be removed
 
-    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>();
+    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options);
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.

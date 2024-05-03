@@ -196,9 +196,9 @@ int main(int argc, char** argv)
     commandLineParser.processBuiltinArgs(*qapp);
 
     AppFactory f;
-    std::shared_ptr<IApp> app = f.newApp(runMode);
+    std::shared_ptr<muse::IApplication> app = f.newApp(commandLineParser.options());
 
-    app->perform(commandLineParser.options());
+    app->perform();
 
     // ====================================================
     // Run main loop

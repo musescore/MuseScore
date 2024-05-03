@@ -1,8 +1,9 @@
 #ifndef MU_APP_APPFACTORY_H
 #define MU_APP_APPFACTORY_H
 
-#include "iapp.h"
 #include "global/iapplication.h"
+
+#include "cmdoptions.h"
 
 namespace mu::app {
 class AppFactory
@@ -10,11 +11,11 @@ class AppFactory
 public:
     AppFactory() = default;
 
-    std::shared_ptr<IApp> newApp(muse::IApplication::RunMode& mode) const;
+    std::shared_ptr<muse::IApplication> newApp(const CmdOptions& options) const;
 
 private:
-    std::shared_ptr<IApp> newGuiApp() const;
-    std::shared_ptr<IApp> newConsoleApp() const;
+    std::shared_ptr<muse::IApplication> newGuiApp(const CmdOptions& options) const;
+    std::shared_ptr<muse::IApplication> newConsoleApp(const CmdOptions& options) const;
 };
 }
 

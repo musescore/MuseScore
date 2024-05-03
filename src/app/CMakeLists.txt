@@ -245,7 +245,6 @@ add_executable(${EXECUTABLE_NAME}
     ${MSCORE_APPEND_SRC}
     main.cpp
     cmdoptions.h
-    iapp.h
     appfactory.cpp
     appfactory.h
 

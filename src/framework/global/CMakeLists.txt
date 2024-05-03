@@ -165,8 +165,8 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/api/filesystemapi.cpp
         ${CMAKE_CURRENT_LIST_DIR}/api/filesystemapi.h
 
-        ${CMAKE_CURRENT_LIST_DIR}/internal/application.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/application.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/baseapplication.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/baseapplication.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp

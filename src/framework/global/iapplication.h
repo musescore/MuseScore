@@ -59,6 +59,8 @@ public:
     virtual RunMode runMode() const = 0;
     virtual bool noGui() const = 0;
 
+    virtual void perform() = 0;
+    virtual void finish() = 0;
     virtual void restart() = 0;
 
 #ifndef NO_QT_SUPPORT

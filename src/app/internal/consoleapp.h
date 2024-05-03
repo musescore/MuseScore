@@ -24,8 +24,10 @@
 #define MU_CONSOLEAPP_APP_H
 
 #include <vector>
+#include <memory>
 
-#include "iapp.h"
+#include "global/internal/baseapplication.h"
+#include "../cmdoptions.h"
 
 #include "global/globalmodule.h"
 
@@ -51,10 +53,8 @@
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 
-#include "commandlineparser.h"
-
 namespace mu::app {
-class ConsoleApp : public IApp
+class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
 {
     INJECT(muse::IApplication, muapplication)
     INJECT(converter::IConverterController, converter)
@@ -76,11 +76,11 @@ class ConsoleApp : public IApp
     INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
 
 public:
-    ConsoleApp();
+    ConsoleApp(const CmdOptions& options);
 
     void addModule(muse::modularity::IModuleSetup* module);
 
-    void perform(const CmdOptions& options) override;
+    void perform() override;
     void finish() override;
 
 private:
@@ -89,6 +89,8 @@ private:
     int processDiagnostic(const CmdOptions::Diagnostic& task);
     int processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task);
     void processAutobot(const CmdOptions::Autobot& task);
+
+    CmdOptions m_options;
 
     //! NOTE Separately to initialize logger and profiler as early as possible
     muse::GlobalModule m_globalModule;

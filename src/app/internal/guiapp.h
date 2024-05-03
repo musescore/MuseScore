@@ -2,8 +2,11 @@
 #define MU_APP_GUIAPP_H
 
 #include <vector>
+#include <memory>
 
-#include "iapp.h"
+#include "global/internal/baseapplication.h"
+#include "../cmdoptions.h"
+
 #include "modularity/imodulesetup.h"
 #include "global/globalmodule.h"
 
@@ -13,21 +16,23 @@
 #include "appshell/internal/istartupscenario.h"
 
 namespace mu::app {
-class GuiApp : public IApp
+class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
 {
     INJECT(muse::IApplication, muapplication)
     INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(appshell::IStartupScenario, startupScenario)
 
 public:
-    GuiApp() = default;
+    GuiApp(const CmdOptions& options);
 
     void addModule(muse::modularity::IModuleSetup* module);
 
-    void perform(const CmdOptions& options) override;
+    void perform() override;
     void finish() override;
 
 private:
+
+    CmdOptions m_options;
 
     //! NOTE Separately to initialize logger and profiler as early as possible
     muse::GlobalModule m_globalModule;
