@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2020 Igor Korsukov
+Copyright (c) 2024 Igor Korsukov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "modulesioc.h"
+#ifndef KORS_MODULARITY_CONTEXT_H
+#define KORS_MODULARITY_CONTEXT_H
 
-#include "ioc.h"
+#include <memory>
 
-using namespace kors::modularity;
-
-std::mutex StaticMutex::mutex;
-
-ModulesIoC* ModulesIoC::instance()
+namespace kors::modularity {
+using IoCID = int;
+struct Context
 {
-    static ModulesIoC p;
-    return &p;
+    IoCID id = -1;
+};
+
+using ContextPtr = std::shared_ptr<Context>;
 }
+
+#endif // KORS_MODULARITY_CONTEXT_H

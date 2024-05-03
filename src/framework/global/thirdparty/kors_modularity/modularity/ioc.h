@@ -27,7 +27,9 @@ SOFTWARE.
 #include <memory>
 #include <mutex>
 
+#include "context.h"
 #include "modulesioc.h"
+#include "injectable.h"
 
 #define INJECT(Interface, getter) \
 private: \
@@ -66,10 +68,7 @@ public: \
     } \
 
 namespace kors::modularity {
-inline ModulesIoC* ioc()
-{
-    return ModulesIoC::instance();
-}
+ModulesIoC* ioc(const ContextPtr& ctx = nullptr);
 
 struct StaticMutex
 {
@@ -81,15 +80,15 @@ class Inject
 {
 public:
 
-    Inject(const std::string_view& module = std::string_view())
-        : m_module(module) {}
+    Inject(const ContextPtr& ctx = nullptr)
+        : m_ctx(ctx) {}
 
     const std::shared_ptr<I>& get() const
     {
         if (!m_i) {
             const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
             if (!m_i) {
-                m_i = ioc()->resolve<I>(m_module);
+                m_i = ioc(m_ctx)->resolve<I>("");
             }
         }
         return m_i;
@@ -107,7 +106,7 @@ public:
 
 private:
 
-    std::string_view m_module;
+    const ContextPtr m_ctx;
     mutable std::shared_ptr<I> m_i = nullptr;
 };
 }

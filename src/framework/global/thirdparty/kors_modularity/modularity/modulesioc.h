@@ -37,7 +37,7 @@ class ModulesIoC
 {
 public:
 
-    static ModulesIoC* instance();
+    ModulesIoC() = default;
 
     // Register Export
     template<class I>
@@ -169,8 +169,6 @@ public:
     }
 
 private:
-
-    ModulesIoC() = default;
 
     void unregisterService(const InterfaceInfo& info)
     {

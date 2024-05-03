@@ -47,7 +47,7 @@ using Creator = kors::modularity::Creator<T>;
 
 inline ModulesIoC* ioc()
 {
-    return kors::modularity::ModulesIoC::instance();
+    return kors::modularity::ioc();
 }
 }
 
