@@ -28,7 +28,7 @@
 #include <QQuickWindow>
 
 #include "appfactory.h"
-#include "commandlineparser.h"
+#include "internal/commandlineparser.h"
 #include "global/iapplication.h"
 
 #include "muse_framework_config.h"
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
     AppFactory f;
     std::shared_ptr<IApp> app = f.newApp(runMode);
 
-    app->perform(commandLineParser);
+    app->perform(commandLineParser.options());
 
     // ====================================================
     // Run main loop

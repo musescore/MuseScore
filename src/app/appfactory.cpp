@@ -1,7 +1,7 @@
 #include "appfactory.h"
 
-#include "guiapp.h"
-#include "consoleapp.h"
+#include "internal/guiapp.h"
+#include "internal/consoleapp.h"
 
 #include "muse_framework_config.h"
 

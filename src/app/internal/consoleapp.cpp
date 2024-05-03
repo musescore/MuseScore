@@ -46,7 +46,7 @@ void ConsoleApp::addModule(modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void ConsoleApp::perform(const CommandLineParser& commandLineParser)
+void ConsoleApp::perform(const CmdOptions& options)
 {
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
@@ -71,12 +71,12 @@ void ConsoleApp::perform(const CommandLineParser& commandLineParser)
         m->registerApi();
     }
 
-    IApplication::RunMode runMode = commandLineParser.runMode();
+    IApplication::RunMode runMode = options.runMode;
     // ====================================================
     // Setup modules: apply the command line options
     // ====================================================
     muapplication()->setRunMode(runMode);
-    applyCommandLineOptions(commandLineParser.options(), runMode);
+    applyCommandLineOptions(options, runMode);
 
     // ====================================================
     // Setup modules: onPreInit
@@ -121,7 +121,7 @@ void ConsoleApp::perform(const CommandLineParser& commandLineParser)
         // ====================================================
         // Process Autobot
         // ====================================================
-        CommandLineParser::Autobot autobot = commandLineParser.autobot();
+        CmdOptions::Autobot autobot = options.autobot;
         if (!autobot.testCaseNameOrFile.isEmpty()) {
             QMetaObject::invokeMethod(qApp, [this, autobot]() {
                     processAutobot(autobot);
@@ -130,8 +130,8 @@ void ConsoleApp::perform(const CommandLineParser& commandLineParser)
             // ====================================================
             // Process Diagnostic
             // ====================================================
-            CommandLineParser::Diagnostic diagnostic = commandLineParser.diagnostic();
-            if (diagnostic.type != CommandLineParser::DiagnosticType::Undefined) {
+            CmdOptions::Diagnostic diagnostic = options.diagnostic;
+            if (diagnostic.type != DiagnosticType::Undefined) {
                 QMetaObject::invokeMethod(qApp, [this, diagnostic]() {
                         int code = processDiagnostic(diagnostic);
                         qApp->exit(code);
@@ -140,7 +140,7 @@ void ConsoleApp::perform(const CommandLineParser& commandLineParser)
                 // ====================================================
                 // Process Converter
                 // ====================================================
-                CommandLineParser::ConverterTask task = commandLineParser.converterTask();
+                CmdOptions::ConverterTask task = options.converterTask;
                 QMetaObject::invokeMethod(qApp, [this, task]() {
                         int code = processConverter(task);
                         qApp->exit(code);
@@ -149,7 +149,7 @@ void ConsoleApp::perform(const CommandLineParser& commandLineParser)
         }
     } break;
     case IApplication::RunMode::AudioPluginRegistration: {
-        CommandLineParser::AudioPluginRegistration pluginRegistration = commandLineParser.audioPluginRegistration();
+        CmdOptions::AudioPluginRegistration pluginRegistration = options.audioPluginRegistration;
 
         QMetaObject::invokeMethod(qApp, [this, pluginRegistration]() {
                 int code = processAudioPluginRegistration(pluginRegistration);
@@ -197,7 +197,7 @@ void ConsoleApp::finish()
     modularity::ioc()->reset();
 }
 
-void ConsoleApp::applyCommandLineOptions(const CommandLineParser::Options& options, IApplication::RunMode runMode)
+void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication::RunMode runMode)
 {
     uiConfiguration()->setPhysicalDotsPerInch(options.ui.physicalDotsPerInch);
 
@@ -268,12 +268,12 @@ void ConsoleApp::applyCommandLineOptions(const CommandLineParser::Options& optio
     }
 }
 
-int ConsoleApp::processConverter(const CommandLineParser::ConverterTask& task)
+int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
-    muse::io::path_t stylePath = task.params[CommandLineParser::ParamKey::StylePath].toString();
-    bool forceMode = task.params[CommandLineParser::ParamKey::ForceMode].toBool();
-    String soundProfile = task.params[CommandLineParser::ParamKey::SoundProfile].toString();
+    muse::io::path_t stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
+    bool forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
+    String soundProfile = task.params[CmdOptions::ParamKey::SoundProfile].toString();
 
     if (!soundProfile.isEmpty() && !soundProfilesRepository()->containsProfile(soundProfile)) {
         LOGE() << "Unknown sound profile: " << soundProfile;
@@ -281,37 +281,37 @@ int ConsoleApp::processConverter(const CommandLineParser::ConverterTask& task)
     }
 
     switch (task.type) {
-    case CommandLineParser::ConvertType::Batch:
+    case ConvertType::Batch:
         ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile);
         break;
-    case CommandLineParser::ConvertType::File:
+    case ConvertType::File:
         ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile);
         break;
-    case CommandLineParser::ConvertType::ConvertScoreParts:
+    case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
         break;
-    case CommandLineParser::ConvertType::ExportScoreMedia: {
-        muse::io::path_t highlightConfigPath = task.params[CommandLineParser::ParamKey::HighlightConfigPath].toString();
+    case ConvertType::ExportScoreMedia: {
+        muse::io::path_t highlightConfigPath = task.params[CmdOptions::ParamKey::HighlightConfigPath].toString();
         ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath, forceMode);
     } break;
-    case CommandLineParser::ConvertType::ExportScoreMeta:
+    case ConvertType::ExportScoreMeta:
         ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineParser::ConvertType::ExportScoreParts:
+    case ConvertType::ExportScoreParts:
         ret = converter()->exportScoreParts(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineParser::ConvertType::ExportScorePartsPdf:
+    case ConvertType::ExportScorePartsPdf:
         ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineParser::ConvertType::ExportScoreTranspose: {
-        std::string scoreTranspose = task.params[CommandLineParser::ParamKey::ScoreTransposeOptions].toString().toStdString();
+    case ConvertType::ExportScoreTranspose: {
+        std::string scoreTranspose = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
         ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
     } break;
-    case CommandLineParser::ConvertType::ExportScoreVideo: {
+    case ConvertType::ExportScoreVideo: {
         ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
     } break;
-    case CommandLineParser::ConvertType::SourceUpdate: {
-        std::string scoreSource = task.params[CommandLineParser::ParamKey::ScoreSource].toString().toStdString();
+    case ConvertType::SourceUpdate: {
+        std::string scoreSource = task.params[CmdOptions::ParamKey::ScoreSource].toString().toStdString();
         ret = converter()->updateSource(task.inputFile, scoreSource, forceMode);
     } break;
     }
@@ -323,7 +323,7 @@ int ConsoleApp::processConverter(const CommandLineParser::ConverterTask& task)
     return ret.code();
 }
 
-int ConsoleApp::processDiagnostic(const CommandLineParser::Diagnostic& task)
+int ConsoleApp::processDiagnostic(const CmdOptions::Diagnostic& task)
 {
     if (!diagnosticDrawProvider()) {
         return make_ret(Ret::Code::NotSupported);
@@ -347,19 +347,19 @@ int ConsoleApp::processDiagnostic(const CommandLineParser::Diagnostic& task)
     }
 
     switch (task.type) {
-    case CommandLineParser::DiagnosticType::GenDrawData:
+    case DiagnosticType::GenDrawData:
         ret = diagnosticDrawProvider()->generateDrawData(input.front(), output);
         break;
-    case CommandLineParser::DiagnosticType::ComDrawData:
+    case DiagnosticType::ComDrawData:
         IF_ASSERT_FAILED(input.size() == 2) {
             return make_ret(Ret::Code::UnknownError);
         }
         ret = diagnosticDrawProvider()->compareDrawData(input.at(0), input.at(1), output);
         break;
-    case CommandLineParser::DiagnosticType::DrawDataToPng:
+    case DiagnosticType::DrawDataToPng:
         ret = diagnosticDrawProvider()->drawDataToPng(input.front(), output);
         break;
-    case CommandLineParser::DiagnosticType::DrawDiffToPng: {
+    case DiagnosticType::DrawDiffToPng: {
         muse::io::path_t diffPath = input.at(0);
         muse::io::path_t refPath;
         if (input.size() > 1) {
@@ -378,7 +378,7 @@ int ConsoleApp::processDiagnostic(const CommandLineParser::Diagnostic& task)
     return ret.code();
 }
 
-int ConsoleApp::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task)
+int ConsoleApp::processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
 
@@ -395,7 +395,7 @@ int ConsoleApp::processAudioPluginRegistration(const CommandLineParser::AudioPlu
     return ret.code();
 }
 
-void ConsoleApp::processAutobot(const CommandLineParser::Autobot& task)
+void ConsoleApp::processAutobot(const CmdOptions::Autobot& task)
 {
     using namespace muse::autobot;
     muse::async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();

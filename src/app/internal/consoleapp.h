@@ -80,15 +80,15 @@ public:
 
     void addModule(muse::modularity::IModuleSetup* module);
 
-    void perform(const CommandLineParser& commandLineParser) override;
+    void perform(const CmdOptions& options) override;
     void finish() override;
 
 private:
-    void applyCommandLineOptions(const CommandLineParser::Options& options, muse::IApplication::RunMode runMode);
-    int processConverter(const CommandLineParser::ConverterTask& task);
-    int processDiagnostic(const CommandLineParser::Diagnostic& task);
-    int processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);
-    void processAutobot(const CommandLineParser::Autobot& task);
+    void applyCommandLineOptions(const CmdOptions& options, muse::IApplication::RunMode runMode);
+    int processConverter(const CmdOptions::ConverterTask& task);
+    int processDiagnostic(const CmdOptions::Diagnostic& task);
+    int processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task);
+    void processAutobot(const CmdOptions::Autobot& task);
 
     //! NOTE Separately to initialize logger and profiler as early as possible
     muse::GlobalModule m_globalModule;

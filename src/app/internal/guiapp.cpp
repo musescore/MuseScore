@@ -1,10 +1,13 @@
 #include "guiapp.h"
 
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QThreadPool>
 
 #include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "ui/iuiengine.h"
+
+#include "muse_framework_config.h"
 
 #include "log.h"
 
@@ -18,8 +21,14 @@ void GuiApp::addModule(muse::modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void GuiApp::perform(const CommandLineParser& commandLineParser)
+void GuiApp::perform(const CmdOptions& options)
 {
+    IApplication::RunMode runMode = options.runMode;
+    IF_ASSERT_FAILED(runMode == IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+#ifdef MUE_BUILD_APPSHELL_MODULE
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
@@ -43,7 +52,6 @@ void GuiApp::perform(const CommandLineParser& commandLineParser)
         m->registerApi();
     }
 
-    IApplication::RunMode runMode = commandLineParser.runMode();
     // ====================================================
     // Setup modules: apply the command line options
     // ====================================================
@@ -110,71 +118,67 @@ void GuiApp::perform(const CommandLineParser& commandLineParser)
     // Run
     // ====================================================
 
-    switch (runMode) {
-    case IApplication::RunMode::GuiApp: {
-#ifdef MUE_BUILD_APPSHELL_MODULE
-        // ====================================================
-        // Setup Qml Engine
-        // ====================================================
-        QQmlApplicationEngine* engine = modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    // ====================================================
+    // Setup Qml Engine
+    // ====================================================
+    QQmlApplicationEngine* engine = modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
 #if defined(Q_OS_WIN)
-        const QString mainQmlFile = "/platform/win/Main.qml";
+    const QString mainQmlFile = "/platform/win/Main.qml";
 #elif defined(Q_OS_MACOS)
-        const QString mainQmlFile = "/platform/mac/Main.qml";
+    const QString mainQmlFile = "/platform/mac/Main.qml";
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-        const QString mainQmlFile = "/platform/linux/Main.qml";
+    const QString mainQmlFile = "/platform/linux/Main.qml";
 #elif defined(Q_OS_WASM)
-        const QString mainQmlFile = "/Main.wasm.qml";
+    const QString mainQmlFile = "/Main.wasm.qml";
 #endif
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
-        const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
+    const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
 #else
-        const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
+    const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
 #endif
 
-        QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                         qApp, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
-                if (!obj && url == objUrl) {
-                    LOGE() << "failed Qml load\n";
-                    QCoreApplication::exit(-1);
-                    return;
-                }
+    QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
+                     qApp, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
+        if (!obj && url == objUrl) {
+            LOGE() << "failed Qml load\n";
+            QCoreApplication::exit(-1);
+            return;
+        }
 
-                if (url == objUrl) {
-                    // ====================================================
-                    // Setup modules: onDelayedInit
-                    // ====================================================
+        if (url == objUrl) {
+            // ====================================================
+            // Setup modules: onDelayedInit
+            // ====================================================
 
-                    m_globalModule.onDelayedInit();
-                    for (modularity::IModuleSetup* m : m_modules) {
-                        m->onDelayedInit();
-                    }
+            m_globalModule.onDelayedInit();
+            for (modularity::IModuleSetup* m : m_modules) {
+                m->onDelayedInit();
+            }
 
-                    if (splashScreen) {
-                        splashScreen->close();
-                        delete splashScreen;
-                    }
+            if (splashScreen) {
+                splashScreen->close();
+                delete splashScreen;
+            }
 
-                    startupScenario()->run();
-                }
-            }, Qt::QueuedConnection);
+            startupScenario()->run();
+        }
+    }, Qt::QueuedConnection);
 
-        QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
-                for (const QQmlError& e : warnings) {
-                    LOGE() << "error: " << e.toString().toStdString() << "\n";
-                }
-            });
+    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
+        for (const QQmlError& e : warnings) {
+            LOGE() << "error: " << e.toString().toStdString() << "\n";
+        }
+    });
 
-        // ====================================================
-        // Load Main qml
-        // ====================================================
+    // ====================================================
+    // Load Main qml
+    // ====================================================
 
-        engine->load(url);
+    engine->load(url);
+
 #endif // MUE_BUILD_APPSHELL_MODULE
-    } break;
-    }
 }
 
 void GuiApp::finish()
