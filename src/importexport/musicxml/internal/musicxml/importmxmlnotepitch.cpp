@@ -61,7 +61,7 @@ static Accidental* accidental(muse::XmlStreamReader& e, Score* score)
     const AccidentalType type = mxmlString2accidentalType(s, smufl);
 
     if (type != AccidentalType::NONE) {
-        auto a = Factory::createAccidental(score->dummy());
+        Accidental* a = Factory::createAccidental(score->dummy());
         a->setAccidentalType(type);
         if (cautionary || editorial) { // no way to tell one from the other
             a->setRole(AccidentalRole::USER);
@@ -139,7 +139,7 @@ void MxmlNotePitch::pitch(muse::XmlStreamReader& e)
             if (!ok || m_alter < -2 || m_alter > 2) {
                 m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
-                const auto altervalue = alter.toDouble(&ok2);
+                const double altervalue = alter.toDouble(&ok2);
                 if (ok2 && (std::abs(altervalue) < 2.0) && (m_accType == AccidentalType::NONE)) {
                     // try to see if a microtonal accidental is needed
                     m_accType = microtonalGuess(altervalue);

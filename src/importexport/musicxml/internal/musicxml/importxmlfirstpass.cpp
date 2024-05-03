@@ -85,8 +85,8 @@ Fraction MusicXmlPart::measureDuration(size_t i) const
 
 String MusicXmlPart::toString() const
 {
-    auto res = String(u"part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
-               .arg(m_id, m_name).arg(m_printName).arg(m_abbr).arg(m_printAbbr, m_maxStaff);
+    String res = String(u"part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
+                 .arg(m_id, m_name).arg(m_printName).arg(m_abbr).arg(m_printAbbr, m_maxStaff);
 
     for (VoiceList::const_iterator i = voicelist.cbegin(); i != voicelist.cend(); ++i) {
         res += String(u"voice %1 map staff data %2\n")
