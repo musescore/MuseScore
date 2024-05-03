@@ -24,7 +24,7 @@
 #include <QDir>
 
 #include "global/io/dir.h"
-#include "global/internal/application.h"
+#include "global/internal/baseapplication.h"
 
 #include "log.h"
 
@@ -535,12 +535,11 @@ CmdOptions::AudioPluginRegistration CommandLineParser::audioPluginRegistration()
 
 void CommandLineParser::printLongVersion() const
 {
-    Application app;
-    if (app.unstable()) {
+    if (BaseApplication::appUnstable()) {
         printf("MuseScore: Music Score Editor\nUnstable Prerelease for Version %s; Build %s\n",
-               app.version().toStdString().c_str(), app.revision().toStdString().c_str());
+               BaseApplication::appVersion().toStdString().c_str(), BaseApplication::appRevision().toStdString().c_str());
     } else {
         printf("MuseScore: Music Score Editor; Version %s; Build %s\n",
-               app.version().toStdString().c_str(), app.revision().toStdString().c_str());
+               BaseApplication::appVersion().toStdString().c_str(), BaseApplication::appRevision().toStdString().c_str());
     }
 }

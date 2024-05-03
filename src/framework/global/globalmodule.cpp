@@ -30,7 +30,7 @@
 #include "logremover.h"
 #include "profiler.h"
 
-#include "internal/application.h"
+#include "internal/baseapplication.h"
 #include "internal/invoker.h"
 #include "internal/cryptographichash.h"
 #include "internal/process.h"
@@ -66,9 +66,21 @@ using namespace muse::io;
 
 std::shared_ptr<Invoker> GlobalModule::s_asyncInvoker = {};
 
+class ApplicationStub : public BaseApplication
+{
+public:
+
+    void perform() override {}
+    void finish() override {}
+};
+
 GlobalModule::GlobalModule()
 {
-    m_application = std::make_shared<Application>();
+}
+
+void GlobalModule::setApplication(std::shared_ptr<BaseApplication> app)
+{
+    m_application = app;
 }
 
 std::string GlobalModule::moduleName() const
@@ -78,6 +90,10 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
+    if (!m_application) {
+        m_application = std::make_shared<ApplicationStub>();
+    }
+
     m_configuration = std::make_shared<GlobalConfiguration>();
     s_asyncInvoker = std::make_shared<Invoker>();
     m_systemInfo = std::make_shared<SystemInfo>();
@@ -236,7 +252,7 @@ void GlobalModule::setLoggerLevel(const muse::logger::Level& level)
     m_loggerLevel = level;
 }
 
-std::shared_ptr<Application> GlobalModule::app() const
+std::shared_ptr<BaseApplication> GlobalModule::app() const
 {
     return m_application;
 }
