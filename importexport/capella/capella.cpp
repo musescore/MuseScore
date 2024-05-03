@@ -20,40 +20,39 @@
 //
 //    Capella 2000 import filter
 //
-#include <assert.h>
-#include "libmscore/mscore.h"
 #include "capella.h"
-#include "libmscore/score.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/rest.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/utils.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/timesig.h"
-#include "libmscore/clef.h"
-#include "libmscore/pitchspelling.h"
-#include "libmscore/keysig.h"
-#include "libmscore/slur.h"
-#include "libmscore/tie.h"
-#include "libmscore/box.h"
-#include "libmscore/measure.h"
-#include "libmscore/sig.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/segment.h"
-#include "libmscore/layoutbreak.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/barline.h"
-#include "libmscore/volta.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/trill.h"
 #include "libmscore/arpeggio.h"
-#include "libmscore/breath.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/sym.h"
 #include "libmscore/articulation.h"
+#include "libmscore/barline.h"
+#include "libmscore/box.h"
+#include "libmscore/breath.h"
+#include "libmscore/chord.h"
+#include "libmscore/clef.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
+#include "libmscore/keysig.h"
+#include "libmscore/layoutbreak.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/measure.h"
+#include "libmscore/mscore.h"
+#include "libmscore/note.h"
+#include "libmscore/part.h"
+#include "libmscore/pitchspelling.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/slur.h"
+#include "libmscore/sig.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/sym.h"
+#include "libmscore/tie.h"
+#include "libmscore/timesig.h"
+#include "libmscore/trill.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/utils.h"
+#include "libmscore/volta.h"
 
 extern QString rtf2html(const QString &);
 
@@ -230,7 +229,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           default:
                                                 break;
                                           }
-                                    if (cr->type() == ElementType::CHORD)
+                                    if (cr && cr->type() == ElementType::CHORD)
                                           switch (code) {
 #if 0 // TODO-ws
                                                 case 't':   //  trill
@@ -571,9 +570,10 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
       bool tupletprol = false;
       int nTuplet     = 0;
       Fraction tupletTick = Fraction(0,1);
+      ClefType pclef = score->staff(staffIdx)->defaultClefType()._concertClef;
 
       QList<Chord*> graceNotes;
-      foreach(NoteObj* no, cvoice->objects) {
+      for (NoteObj* no : cvoice->objects) {
             switch (no->type()) {
                   case CapellaNoteObjectType::REST:
                         {
@@ -765,7 +765,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               };
                         off += keyOffsets[int(key) + 7];
 
-                        for (CNote n : o->notes) {
+                        for (const CNote& n : o->notes) {
                               Note* note = new Note(score);
                               int pitch = 0;
                               // .cap import: pitch contains the diatonic note number relative to clef and key
@@ -849,15 +849,16 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         CapClef* o = static_cast<CapClef*>(no);
                         ClefType nclef = o->clef();
                         qDebug("%d:%d <Clef> %s line %d oct %d clef %d",
-                           tick.ticks(), staffIdx, o->name(), int(o->line), int(o->oct), int(o->clef()));
-                        if (nclef == ClefType::INVALID)
+                               tick.ticks(), staffIdx, o->name(), int(o->line), int(o->oct), int(o->clef()));
+                        if (nclef == ClefType::INVALID || nclef == pclef)
                               break;
+                        pclef = nclef;
                         // staff(staffIdx)->setClef(tick, nclef);
                         Clef* clef = new Clef(score);
                         clef->setClefType(nclef);
                         clef->setTrack(staffIdx * VOICES);
-                        Measure* m = score->getCreateMeasure(tick);
                         Segment* s;
+                        Measure* m = score->getCreateMeasure(tick);
                         if (tick == m->tick())
                               s = m->getSegment(SegmentType::HeaderClef, tick);
                         else
@@ -939,13 +940,13 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         // qDebug("pm %p", pm);
 
                         BarLineType st = o->type();
-                        if (st == BarLineType::NORMAL)
+                        if (st & BarLineType::NORMAL)
                               break;
 
-//TODO                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
+//TODO                        if (pm && (st & BarLineType::DOUBLE || st & BarLineType::END || st & BarLineType::BROKEN))
 //                              pm->setEndBarLineType(st, false, true);
 
-                        if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
+                        if (st & BarLineType::START_REPEAT || st & BarLineType::END_START_REPEAT) {
                               Measure* nm = 0; // the next measure (the one started by this barline)
                               nm = score->getCreateMeasure(tick);
                               // qDebug("nm %p", nm);
@@ -953,7 +954,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                                     nm->setRepeatStart(true);
                               }
 
-                        if (st == BarLineType::END_REPEAT || st == BarLineType::END_START_REPEAT) {
+                        if (st & BarLineType::END_REPEAT || st & BarLineType::END_START_REPEAT) {
                               if (pm)
                                     pm->setRepeatEnd(true);
                               }
@@ -970,7 +971,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
       // pass II
       //
       tick = startTick;
-      foreach(NoteObj* no, cvoice->objects) {
+      for (NoteObj* no : cvoice->objects) {
             BasicDurationalObj* d = 0;
             if (no->type() == CapellaNoteObjectType::REST)
                   d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(no));
@@ -1342,10 +1343,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
                   qDebug("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
                   int staffIdx = cstaff->iLayout;
-                  int voice = 0;
                   for (CapVoice* cvoice : cstaff->voices) {
                         Fraction tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
-                        ++voice;
                         if (tick > mtick)
                               mtick = tick;
                         }

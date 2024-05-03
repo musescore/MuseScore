@@ -51,10 +51,6 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>3</accidental>
             </KeySig>

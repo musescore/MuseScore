@@ -48,10 +48,6 @@
         </VBox>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>3</accidental>
             </KeySig>
@@ -201,10 +197,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>5</accidental>
             </KeySig>
@@ -350,10 +342,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>7</accidental>
             </KeySig>
@@ -499,10 +487,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>-3</accidental>
             </KeySig>
@@ -648,10 +632,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>-5</accidental>
             </KeySig>
@@ -800,10 +780,6 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>-7</accidental>
             </KeySig>

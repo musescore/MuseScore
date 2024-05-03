@@ -48,10 +48,6 @@
         </VBox>
       <Measure len="2/4">
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>

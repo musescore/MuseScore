@@ -47,12 +47,8 @@
       <VBox>
         <height>5</height>
         </VBox>
-      <Measure len="4/4">
+      <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
