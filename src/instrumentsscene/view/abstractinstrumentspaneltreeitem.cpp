@@ -203,6 +203,10 @@ void AbstractInstrumentsPanelTreeItem::appendChild(AbstractInstrumentsPanelTreeI
     child->setParentItem(this);
 
     m_children.append(child);
+
+    if (isSelected()) {
+        child->setIsSelected(true);
+    }
 }
 
 void AbstractInstrumentsPanelTreeItem::insertChild(AbstractInstrumentsPanelTreeItem* child, int beforeRow)
@@ -214,6 +218,10 @@ void AbstractInstrumentsPanelTreeItem::insertChild(AbstractInstrumentsPanelTreeI
     child->setParentItem(this);
 
     m_children.insert(beforeRow, child);
+
+    if (isSelected()) {
+        child->setIsSelected(true);
+    }
 }
 
 bool AbstractInstrumentsPanelTreeItem::isEmpty() const
