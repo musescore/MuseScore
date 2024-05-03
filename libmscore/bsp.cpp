@@ -207,7 +207,7 @@ void BspTree::initialize(const QRectF& rec, int dep, int index)
       Node* node = &nodes[index];
       if (index == 0) {
             node->type = Node::Type::HORIZONTAL;
-            node->offset = rec.center().x();
+            node->offset = rec.center().y();
             }
 
       if (dep) {
