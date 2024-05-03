@@ -77,7 +77,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal font-weight="bold" font-size="14">Default rehearsal mark</rehearsal>
           </direction-type>
@@ -93,7 +93,7 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal font-size="24">Big, not bold</rehearsal>
           </direction-type>
@@ -121,7 +121,7 @@
         </note>
       </measure>
     <measure number="6">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal font-style="italic" font-size="14">italic</rehearsal>
           </direction-type>
@@ -137,7 +137,7 @@
         </note>
       </measure>
     <measure number="7">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal underline="1" font-size="14">underlined</rehearsal>
           </direction-type>
@@ -165,7 +165,7 @@
         </note>
       </measure>
     <measure number="9">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal font-size="14">not bold</rehearsal>
           </direction-type>
@@ -181,7 +181,7 @@
         </note>
       </measure>
     <measure number="10">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal enclosure="none" font-weight="bold" font-size="14">No frame</rehearsal>
           </direction-type>
@@ -209,7 +209,7 @@
         </note>
       </measure>
     <measure number="12">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words enclosure="rectangle">Boxed Staff Text</words>
           </direction-type>
@@ -225,7 +225,7 @@
         </note>
       </measure>
     <measure number="13">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words enclosure="circle">Circled</words>
           </direction-type>
@@ -242,7 +242,7 @@
       </measure>
     <measure number="14">
       <print new-system="yes"/>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>Normal Staff Text</words>
           </direction-type>

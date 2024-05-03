@@ -129,7 +129,7 @@
         </note>
       </measure>
     <measure number="5">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>System</words>
           </direction-type>
@@ -157,7 +157,7 @@
         <voice>1</voice>
         <type>whole</type>
         </note>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <bracket type="stop" number="1" line-end="down" end-length="15"/>
           </direction-type>

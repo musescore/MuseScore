@@ -1002,6 +1002,9 @@ TEST_F(Musicxml_Tests, systemBrackets4) {
 TEST_F(Musicxml_Tests, systemBrackets5) {
     mxmlIoTest("testSystemBrackets1");
 }
+TEST_F(Musicxml_Tests, systemDirection) {
+    mxmlIoTest("testSystemDirection");
+}
 #ifndef DISABLED_SOME_TESTS
 TEST_F(Musicxml_Tests, systemDistance) {
     mxmlMscxExportTestRef("testSystemDistance", true);

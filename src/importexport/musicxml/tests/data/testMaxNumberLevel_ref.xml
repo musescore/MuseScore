@@ -105,7 +105,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>Test MAX_NUMBER_LEVEL for all element types using a different implementation
 </words>
