@@ -250,6 +250,25 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>MEI File</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mei</string>
+				<string>xml</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/x-mei+xml</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>MIDI File</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>

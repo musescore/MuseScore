@@ -172,7 +172,7 @@
         <glob pattern="*.gtp"/><!-- Versions 1 and 2 -->
     </mime-type>
 
-    <mime-type type="application/mei+xml">
+    <mime-type type="application/x-mei+xml">
         <!-- https://www.music-encoding.org/ -->
         <comment>MEI File</comment>
         <glob pattern="*.mei"/><!-- preferred extension must go first -->

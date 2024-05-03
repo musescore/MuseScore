@@ -118,6 +118,7 @@
                     <RegistryValue Name=".xml" Value="" Type="string" />
                     <RegistryValue Name=".musicxml" Value="" Type="string" />
                     <RegistryValue Name=".mxl" Value="" Type="string" />
+                    <RegistryValue Name=".mei" Value="" Type="string" />
                     <RegistryValue Name=".cap" Value="" Type="string" />
                     <RegistryValue Name=".capx" Value="" Type="string" />
                     <RegistryValue Name=".scw" Value="" Type="string" />
