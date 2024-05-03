@@ -151,7 +151,7 @@
         </note>
       </measure>
     <measure number="2">
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Swing</words>
           </direction-type>
@@ -253,7 +253,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Straight</words>
           </direction-type>
@@ -547,7 +547,7 @@
         </note>
       </measure>
     <measure number="5">
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Swing 16ths</words>
           </direction-type>
@@ -753,7 +753,7 @@
         </note>
       </measure>
     <measure number="6">
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Straight</words>
           </direction-type>

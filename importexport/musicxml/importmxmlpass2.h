@@ -426,6 +426,7 @@ private:
       bool _isBold;
       double _tpoMetro;                 // tempo according to metronome
       double _tpoSound;                 // tempo according to sound
+      bool _systemDirection = false;
       QList<Element*> _elems;
       Fraction _offset;
 

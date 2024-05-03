@@ -4182,7 +4182,8 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                      || el->type() == ElementType::REHEARSAL_MARK
                      || el->type() == ElementType::STAFF_TEXT
                      || el->type() == ElementType::SYMBOL
-                     || el->type() == ElementType::TEXT) {
+                     || el->type() == ElementType::TEXT
+                     || el->type() == ElementType::SYSTEM_TEXT) {
                   // handle other elements attached (e.g. via Segment / Measure) to a system
                   // find the system containing this element
                   for (const Element* e = el; e; e = e->parent()) {
@@ -4248,6 +4249,9 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                               tagname += " placement=\"below\"";
                         }
                   } // if (pel && ...
+
+            if (el->systemFlag())
+                  tagname += " system=\"only-top\"";
             }
       xml.stag(tagname);
       }

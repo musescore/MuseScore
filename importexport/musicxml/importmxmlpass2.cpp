@@ -3179,6 +3179,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       bool isVocalStaff = _pass1.isVocalStaff(partId);
       bool isExpressionText = false;
       bool delayOttava = _pass1.exporterString().contains("sibelius");
+      _systemDirection = _e.attributes().value("system").toString() == "only-top";
       //qDebug("direction track %d", track);
       QList<MusicXmlSpannerDesc> starts;
       QList<MusicXmlSpannerDesc> stops;
@@ -3293,6 +3294,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
                   if (isExpressionText)
                         t = new StaffText(_score, Tid::EXPRESSION);
+                  else if (_systemDirection)
+                        t = new SystemText(_score);
                   else
                         t = new StaffText(_score);
                   t->setXmlText(_wordsText + _metroText);
@@ -4258,8 +4261,10 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
                         _logger->logError(QString("line-end not supported for line-type \"wavy\""));
                   }
             else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
-                  if (!sline)
+                  if (!sline) {
                         sline = new TextLine(_score);
+                        sline->setSystemFlag(_systemDirection);
+                        }
                   auto textLine = toTextLine(sline);
                   // if (placement.isEmpty()) placement = "above";  // TODO ? set default
 
