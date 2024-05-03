@@ -248,6 +248,8 @@ add_executable(${EXECUTABLE_NAME}
       commandlineparser.cpp
       commandlineparser.h
       ${MSCORE_APPEND_SRC}
+      appfactory.cpp
+      appfactory.h
       )
 
 ###########################################

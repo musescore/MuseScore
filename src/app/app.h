@@ -25,6 +25,8 @@
 
 #include <QList>
 
+#include "global/globalmodule.h"
+
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
@@ -84,6 +86,9 @@ private:
     int processDiagnostic(const CommandLineParser::Diagnostic& task);
     int processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);
     void processAutobot(const CommandLineParser::Autobot& task);
+
+    //! NOTE Separately to initialize logger and profiler as early as possible
+    muse::GlobalModule m_globalModule;
 
     QList<muse::modularity::IModuleSetup*> m_modules;
 };

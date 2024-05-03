@@ -33,8 +33,6 @@
 #include "appshell/view/internal/splashscreen/splashscreen.h"
 
 #include "modularity/ioc.h"
-#include "framework/global/globalmodule.h"
-#include "framework/global/internal/application.h"
 #include "framework/ui/iuiengine.h"
 
 #include "muse_framework_config.h"
@@ -44,9 +42,6 @@
 using namespace muse;
 using namespace mu::app;
 using namespace mu::appshell;
-
-//! NOTE Separately to initialize logger and profiler as early as possible
-static muse::GlobalModule globalModule;
 
 App::App()
 {
@@ -81,9 +76,9 @@ int App::run(int argc, char** argv)
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
-    globalModule.registerResources();
-    globalModule.registerExports();
-    globalModule.registerUiTypes();
+    m_globalModule.registerResources();
+    m_globalModule.registerExports();
+    m_globalModule.registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->registerResources();
@@ -93,8 +88,8 @@ int App::run(int argc, char** argv)
         m->registerExports();
     }
 
-    globalModule.resolveImports();
-    globalModule.registerApi();
+    m_globalModule.resolveImports();
+    m_globalModule.registerApi();
     for (modularity::IModuleSetup* m : m_modules) {
         m->registerUiTypes();
         m->resolveImports();
@@ -110,7 +105,7 @@ int App::run(int argc, char** argv)
     // ====================================================
     // Setup modules: onPreInit
     // ====================================================
-    globalModule.onPreInit(runMode);
+    m_globalModule.onPreInit(runMode);
     for (modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
@@ -144,7 +139,7 @@ int App::run(int argc, char** argv)
     // ====================================================
     // Setup modules: onInit
     // ====================================================
-    globalModule.onInit(runMode);
+    m_globalModule.onInit(runMode);
     for (modularity::IModuleSetup* m : m_modules) {
         m->onInit(runMode);
     }
@@ -152,7 +147,7 @@ int App::run(int argc, char** argv)
     // ====================================================
     // Setup modules: onAllInited
     // ====================================================
-    globalModule.onAllInited(runMode);
+    m_globalModule.onAllInited(runMode);
     for (modularity::IModuleSetup* m : m_modules) {
         m->onAllInited(runMode);
     }
@@ -161,7 +156,7 @@ int App::run(int argc, char** argv)
     // Setup modules: onStartApp (on next event loop)
     // ====================================================
     QMetaObject::invokeMethod(qApp, [this]() {
-        globalModule.onStartApp();
+        m_globalModule.onStartApp();
         for (modularity::IModuleSetup* m : m_modules) {
             m->onStartApp();
         }
@@ -239,7 +234,7 @@ int App::run(int argc, char** argv)
                     // Setup modules: onDelayedInit
                     // ====================================================
 
-                    globalModule.onDelayedInit();
+                    m_globalModule.onDelayedInit();
                     for (modularity::IModuleSetup* m : m_modules) {
                         m->onDelayedInit();
                     }
@@ -307,19 +302,19 @@ int App::run(int argc, char** argv)
 
     // Deinit
 
-    globalModule.invokeQueuedCalls();
+    m_globalModule.invokeQueuedCalls();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }
 
-    globalModule.onDeinit();
+    m_globalModule.onDeinit();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->onDestroy();
     }
 
-    globalModule.onDestroy();
+    m_globalModule.onDestroy();
 
     // Delete modules
     qDeleteAll(m_modules);
@@ -398,7 +393,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, IAp
     }
 
     if (options.app.loggerLevel) {
-        globalModule.setLoggerLevel(options.app.loggerLevel.value());
+        m_globalModule.setLoggerLevel(options.app.loggerLevel.value());
     }
 }
 
