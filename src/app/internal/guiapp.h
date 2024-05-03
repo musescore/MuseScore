@@ -24,7 +24,7 @@ public:
 
     void addModule(muse::modularity::IModuleSetup* module);
 
-    void perform(const CommandLineParser& commandLineParser) override;
+    void perform(const CmdOptions& options) override;
     void finish() override;
 
 private:
