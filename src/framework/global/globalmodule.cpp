@@ -81,11 +81,6 @@ GlobalModule::GlobalModule()
 {
 }
 
-void GlobalModule::setApplication(std::shared_ptr<BaseApplication> app)
-{
-    m_application = app;
-}
-
 std::string GlobalModule::moduleName() const
 {
     return "global";
@@ -253,9 +248,4 @@ void GlobalModule::invokeQueuedCalls()
 void GlobalModule::setLoggerLevel(const muse::logger::Level& level)
 {
     m_loggerLevel = level;
-}
-
-std::shared_ptr<BaseApplication> GlobalModule::app() const
-{
-    return m_application;
 }

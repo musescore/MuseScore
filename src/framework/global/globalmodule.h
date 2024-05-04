@@ -44,8 +44,6 @@ public:
 
     GlobalModule();
 
-    void setApplication(std::shared_ptr<BaseApplication> app);
-
     std::string moduleName() const override;
     void registerExports() override;
     void registerApi() override;
@@ -57,10 +55,7 @@ public:
 
     void setLoggerLevel(const muse::logger::Level& level);
 
-    std::shared_ptr<BaseApplication> app() const;
-
 private:
-    std::shared_ptr<BaseApplication> m_application;
     std::shared_ptr<GlobalConfiguration> m_configuration;
     std::shared_ptr<SystemInfo> m_systemInfo;
 

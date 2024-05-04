@@ -63,6 +63,7 @@ void ConsoleApp::perform()
     m_globalModule.registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_modules) {
+        m->setApplication(shared_from_this());
         m->registerResources();
     }
 
