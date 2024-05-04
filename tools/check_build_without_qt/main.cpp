@@ -9,7 +9,7 @@
 
 int main()
 {
-    muse::modularity::ioc()->registerExport<muse::draw::IFontProvider>("test", new muse::draw::FontProviderStub());
+    muse::modularity::globalIoc()->registerExport<muse::draw::IFontProvider>("test", new muse::draw::FontProviderStub());
 
     mu::engraving::compat::ScoreAccess::createMasterScore();
 

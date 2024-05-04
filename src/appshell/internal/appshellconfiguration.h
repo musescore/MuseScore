@@ -40,15 +40,15 @@
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public muse::async::Asyncable
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(muse::IApplication, application)
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(project::IProjectConfiguration, projectConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
-    INJECT(muse::languages::ILanguagesConfiguration, languagesConfiguration)
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::Inject<muse::IApplication> application;
+    muse::Inject<muse::io::IFileSystem> fileSystem;
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::Inject<project::IProjectConfiguration> projectConfiguration;
+    muse::Inject<notation::INotationConfiguration> notationConfiguration;
+    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration;
+    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
 
 public:
     void init();

@@ -37,6 +37,7 @@
 namespace muse::audio {
 class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public async::Asyncable
 {
+public:
     INJECT(IKnownAudioPluginsRegister, knownPluginsRegister)
     INJECT(IAudioPluginsScannerRegister, scannerRegister)
     INJECT(IAudioPluginMetaReaderRegister, metaReaderRegister)

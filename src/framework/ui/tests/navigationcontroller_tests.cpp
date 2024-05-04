@@ -56,11 +56,11 @@ public:
         m_controller = std::make_shared<NavigationController>();
 
         m_dispatcher = std::make_shared<actions::ActionsDispatcher>();
-        m_controller->setdispatcher(m_dispatcher);
+        m_controller->dispatcher.set(m_dispatcher);
 
         m_mainWindow = std::make_shared<ui::MainWindowMock>();
         ON_CALL(*m_mainWindow, qWindow()).WillByDefault(Return(&m_window));
-        m_controller->setmainWindow(m_mainWindow);
+        m_controller->mainWindow.set(m_mainWindow);
 
         m_applicationMock = std::make_shared<muse::ApplicationMock>();
         ON_CALL(*m_applicationMock, focusWindow()).WillByDefault(Return(&m_window));
@@ -126,7 +126,7 @@ public:
 
         setComponentWindow(navCtrl, &m_window);
 
-        navCtrl->setnavigationController(m_controller);
+        navCtrl->navigationController.set(m_controller);
 
         c->control = navCtrl;
 
@@ -162,7 +162,7 @@ public:
 
         setComponentWindow(navPanel, &m_window);
 
-        navPanel->setnavigationController(m_controller);
+        navPanel->navigationController.set(m_controller);
 
         p->panel = navPanel;
 
@@ -195,9 +195,9 @@ public:
         navSection->setOrder(idx.order());
 
         setComponentWindow(navSection, &m_window);
-        navSection->setapplication(m_applicationMock);
+        navSection->application.set(m_applicationMock);
 
-        navSection->setnavigationController(m_controller);
+        navSection->navigationController.set(m_controller);
 
         s->section = navSection;
 

@@ -53,6 +53,7 @@ class AbstractNavigation : public QObject, public QQmlParserStatus, public async
 
     Q_INTERFACES(QQmlParserStatus)
 
+public:
     INJECT(INavigationController, navigationController)
 
 public:

@@ -33,6 +33,7 @@
 namespace mu::project {
 class TemplatesRepository : public ITemplatesRepository
 {
+public:
     INJECT(IProjectConfiguration, configuration)
     INJECT(IMscMetaReader, mscReader)
     INJECT(muse::io::IFileSystem, fileSystem)

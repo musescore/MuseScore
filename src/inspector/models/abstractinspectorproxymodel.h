@@ -38,6 +38,7 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 
     Q_PROPERTY(InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
 
+public:
     INJECT(IInspectorModelCreator, inspectorModelCreator)
 
 public:

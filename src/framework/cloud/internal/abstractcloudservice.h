@@ -56,7 +56,7 @@ class OAuthHttpServerReplyHandler;
 class AbstractCloudService : public QObject, public IAuthorizationService, public async::Asyncable
 {
     Q_OBJECT
-
+public:
     INJECT(ICloudConfiguration, configuration)
     INJECT(ui::IUiConfiguration, uiConfig)
     INJECT(io::IFileSystem, fileSystem)

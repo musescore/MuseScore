@@ -37,11 +37,12 @@ class AbstractElementPopupModel : public QObject, public muse::async::Asyncable,
 {
     Q_OBJECT
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(context::IGlobalContext, globalContext)
-
     Q_PROPERTY(PopupModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(QRect itemRect READ itemRect NOTIFY itemRectChanged)
+
+public:
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     enum class PopupModelType {

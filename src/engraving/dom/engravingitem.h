@@ -153,12 +153,13 @@ public:
 
 class EngravingItem : public EngravingObject
 {
-    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
-    INJECT_STATIC(rendering::IScoreRenderer, renderer)
-
     M_PROPERTY2(bool, isPositionLinkedToMaster, setPositionLinkedToMaster, true)
     M_PROPERTY2(bool, isAppearanceLinkedToMaster, setAppearanceLinkedToMaster, true)
     M_PROPERTY2(bool, excludeFromOtherParts, setExcludeFromOtherParts, false)
+
+public:
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(rendering::IScoreRenderer, renderer)
 
 public:
 

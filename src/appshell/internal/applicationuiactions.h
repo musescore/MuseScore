@@ -35,10 +35,10 @@
 namespace mu::appshell {
 class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
 {
-    INJECT(muse::ui::IMainWindow, mainWindow)
-    INJECT(muse::dock::IDockWindowProvider, dockWindowProvider)
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(braille::IBrailleConfiguration, brailleConfiguration)
+    muse::Inject<muse::ui::IMainWindow> mainWindow;
+    muse::Inject<muse::dock::IDockWindowProvider> dockWindowProvider;
+    muse::Inject<IAppShellConfiguration> configuration;
+    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration;
 
 public:
     ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller);

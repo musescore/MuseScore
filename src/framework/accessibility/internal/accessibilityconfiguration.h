@@ -28,12 +28,14 @@
 #include "ui/inavigationcontroller.h"
 
 namespace muse::accessibility {
-class AccessibilityConfiguration : public IAccessibilityConfiguration
+class AccessibilityConfiguration : public IAccessibilityConfiguration, public Injectable
 {
-    Inject<ui::INavigationController> navigationController;
+    Inject<ui::INavigationController> navigationController { this };
 
 public:
-    AccessibilityConfiguration() = default;
+    AccessibilityConfiguration(const modularity::ContextPtr& ctx)
+        : Injectable(ctx) {}
+
     ~AccessibilityConfiguration() override;
 
     void init();

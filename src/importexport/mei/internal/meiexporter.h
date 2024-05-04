@@ -73,6 +73,7 @@ enum layerElementCounter {
 
 class MeiExporter
 {
+public:
     INJECT_STATIC(mu::iex::mei::IMeiConfiguration, configuration)
 
 public:

@@ -136,7 +136,7 @@ private:
     friend class LineSegment;
 
     Millimetre m_lineWidth;
-    Color m_lineColor { engravingConfiguration()->defaultColor() };
+    Color m_lineColor;
     LineType m_lineStyle = LineType::SOLID;
     double m_dashLineLen = 5.0;
     double m_dashGapLen = 5.0;

@@ -355,6 +355,7 @@ typedef std::map<const Instrument*, int> MxmlInstrumentMap;
 
 class ExportMusicXml
 {
+public:
     INJECT_STATIC(mu::iex::musicxml::IMusicXmlConfiguration, configuration)
     INJECT_STATIC(muse::IApplication, application)
 

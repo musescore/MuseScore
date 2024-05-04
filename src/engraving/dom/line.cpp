@@ -837,6 +837,7 @@ SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);
+    m_lineColor = engravingConfiguration()->defaultColor();
     m_lineWidth = 0.15 * spatium();
 }
 

@@ -38,10 +38,10 @@ std::string BrailleModule::moduleName() const
 
 void BrailleModule::registerExports()
 {
-    modularity::ioc()->registerExport<IBrailleConfiguration>(moduleName(), new BrailleConfigurationStub());
+    ioc()->registerExport<IBrailleConfiguration>(moduleName(), new BrailleConfigurationStub());
 }
 
 void BrailleModule::registerUiTypes()
 {
-    modularity::ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
+    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
 }

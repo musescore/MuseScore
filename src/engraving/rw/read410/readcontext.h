@@ -70,6 +70,7 @@ struct TextStyleMap {
 
 class ReadContext
 {
+public:
     INJECT(IEngravingFontsProvider, engravingFonts)
 public:
 

@@ -18,9 +18,9 @@
 namespace mu::app {
 class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
 {
-    INJECT(muse::IApplication, muapplication)
-    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(appshell::IStartupScenario, startupScenario)
+    muse::Inject<muse::IApplication> muapplication;
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::Inject<appshell::IStartupScenario> startupScenario;
 
 public:
     GuiApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
