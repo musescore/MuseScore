@@ -2239,10 +2239,20 @@ void Score::cmdFlip()
         }
 
         if (e->isBeam()) {
-            auto beam = toBeam(e);
+            Beam* beam = toBeam(e);
             flipOnce(beam, [beam]() {
-                DirectionV dir = beam->up() ? DirectionV::DOWN : DirectionV::UP;
-                beam->undoChangeProperty(Pid::STEM_DIRECTION, dir);
+                if (beam->cross()) {
+                    int newCrossStaffMove = beam->crossStaffMove() + 1;
+                    if (beam->acceptCrossStaffMove(newCrossStaffMove)) {
+                        beam->undoChangeProperty(Pid::BEAM_CROSS_STAFF_MOVE, newCrossStaffMove);
+                    } else {
+                        beam->undoChangeProperty(Pid::BEAM_CROSS_STAFF_MOVE,
+                                                 beam->minCRMove() - beam->defaultCrossStaffIdx());
+                    }
+                } else {
+                    DirectionV dir = beam->up() ? DirectionV::DOWN : DirectionV::UP;
+                    beam->undoChangeProperty(Pid::STEM_DIRECTION, dir);
+                }
             });
         } else if (e->isType(ElementType::TREMOLO_TWOCHORD)) {
             TremoloTwoChord* tremolo = item_cast<TremoloTwoChord*>(e);
