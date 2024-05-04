@@ -122,7 +122,7 @@ void NotationModule::resolveImports()
         ar->reg(m_notationUiActions);
     }
 
-    auto writers = modularity::ioc()->resolve<project::INotationWritersRegister>(moduleName());
+    auto writers = ioc()->resolve<project::INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
         writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
@@ -220,7 +220,7 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
 
     Notation::init();
 
-    auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("instruments", m_configuration->instrumentListPath());
 

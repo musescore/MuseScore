@@ -660,7 +660,7 @@ void Technical::etag(XmlWriter& xml)
 
 static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfiguration()
 {
-    return muse::modularity::ioc()->resolve<mu::engraving::IEngravingConfiguration>("iex_musicxml");
+    return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingConfiguration>("iex_musicxml");
 }
 
 //---------------------------------------------------------

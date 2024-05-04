@@ -42,12 +42,12 @@ void OveModule::registerExports()
 {
     m_configuration = std::make_shared<OveConfiguration>();
 
-    modularity::ioc()->registerExport<IOveConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IOveConfiguration>(moduleName(), m_configuration);
 }
 
 void OveModule::resolveImports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     }

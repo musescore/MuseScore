@@ -41,7 +41,7 @@ public: \
             const std::lock_guard<std::mutex> getter##lock(getter##mutex); \
             if (!m_##getter) { \
                 static const std::string_view sig(FUNC_SIG); \
-                m_##getter = kors::modularity::ioc()->resolve<Interface>(kors::funcinfo::moduleNameBySig(sig), sig); \
+                m_##getter = kors::modularity::_ioc()->resolve<Interface>(kors::funcinfo::moduleNameBySig(sig), sig); \
             } \
         } \
         return m_##getter; \
@@ -57,7 +57,7 @@ public: \
             const std::lock_guard<std::mutex> getter##lock(getter##mutex); \
             if (!s_##getter) { \
                 static const std::string_view sig(FUNC_SIG); \
-                s_##getter = kors::modularity::ioc()->resolve<Interface>(kors::funcinfo::moduleNameBySig(sig), sig); \
+                s_##getter = kors::modularity::_ioc()->resolve<Interface>(kors::funcinfo::moduleNameBySig(sig), sig); \
             } \
         } \
         return s_##getter; \
@@ -68,7 +68,7 @@ public: \
     } \
 
 namespace kors::modularity {
-ModulesIoC* ioc(const ContextPtr& ctx = nullptr);
+ModulesIoC* _ioc(const ContextPtr& ctx = nullptr);
 void removeIoC(const ContextPtr& ctx = nullptr);
 
 struct StaticMutex
@@ -90,7 +90,7 @@ public:
             const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
             if (!m_i) {
                 static std::string_view module = "";
-                m_i = ioc(m_ctx)->template resolve<I>(module);
+                m_i = _ioc(m_ctx)->template resolve<I>(module);
             }
         }
         return m_i;

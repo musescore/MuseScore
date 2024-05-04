@@ -1596,7 +1596,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c)
 {
-    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::ioc()->resolve<IEngravingFontsProvider>("engraving");
+    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
 
     SymId symId = provider->fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";

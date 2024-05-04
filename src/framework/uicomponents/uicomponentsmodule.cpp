@@ -126,7 +126,7 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterUncreatableType<QQuickSelectionMode1>("Muse.UiComponents.Private", 1, 0, "SelectionMode",
                                                      QLatin1String("Do not create objects of type SelectionMode"));
 
-    auto ui = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
+    auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
         ui->addSourceImportPath(muse_uicomponents_QML_IMPORT);
     }

@@ -52,7 +52,7 @@ namespace mu::engraving {
 #ifndef MUSICXML_NO_INTERACTIVE
 static IInteractive::Button musicXMLImportErrorDialog(const String& text, const String& detailedText)
 {
-    auto interactive = modularity::ioc()->resolve<IInteractive>("musicxml");
+    auto interactive = modularity::fixmeIoc()->resolve<IInteractive>("musicxml");
 
     std::string msg = text.toStdString();
     msg += '\n';

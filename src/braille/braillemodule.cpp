@@ -54,7 +54,7 @@ std::string BrailleModule::moduleName() const
 
 void BrailleModule::resolveImports()
 {
-    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
     }
@@ -71,9 +71,9 @@ void BrailleModule::registerExports()
     m_brailleConverter = std::make_shared<BrailleConverter>();
     m_notationBraille = std::make_shared<NotationBraille>();
 
-    modularity::ioc()->registerExport<IBrailleConfiguration>(moduleName(), m_brailleConfiguration);
-    modularity::ioc()->registerExport<IBrailleConverter>(moduleName(), m_brailleConverter);
-    modularity::ioc()->registerExport<INotationBraille>(moduleName(), m_notationBraille);
+    ioc()->registerExport<IBrailleConfiguration>(moduleName(), m_brailleConfiguration);
+    ioc()->registerExport<IBrailleConverter>(moduleName(), m_brailleConverter);
+    ioc()->registerExport<INotationBraille>(moduleName(), m_notationBraille);
 }
 
 void BrailleModule::registerUiTypes()
@@ -82,7 +82,7 @@ void BrailleModule::registerUiTypes()
 
     qmlRegisterType<BrailleModel>("MuseScore.Braille", 1, 0, "BrailleModel");
 
-    modularity::ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
+    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
 }
 
 void BrailleModule::onInit(const IApplication::RunMode& mode)

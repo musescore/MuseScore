@@ -47,9 +47,19 @@ using ContextPtr = kors::modularity::ContextPtr;
 template<class T>
 using Creator = kors::modularity::Creator<T>;
 
-inline ModulesIoC* ioc(const ContextPtr& ctx = nullptr)
+inline ModulesIoC* _ioc(const ContextPtr& ctx = nullptr)
 {
-    return kors::modularity::ioc(ctx);
+    return kors::modularity::_ioc(ctx);
+}
+
+inline ModulesIoC* globalIoc()
+{
+    return kors::modularity::_ioc(nullptr);
+}
+
+inline ModulesIoC* fixmeIoc()
+{
+    return kors::modularity::_ioc(nullptr);
 }
 
 inline void removeIoC(const ContextPtr& ctx = nullptr)
