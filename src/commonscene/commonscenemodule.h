@@ -28,6 +28,7 @@ namespace mu::commonscene {
 class CommonSceneModule : public muse::modularity::IModuleSetup
 {
 public:
+
     std::string moduleName() const override;
 
     void registerResources() override;

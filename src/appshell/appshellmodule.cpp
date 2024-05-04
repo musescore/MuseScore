@@ -82,10 +82,6 @@ static void appshell_init_qrc()
     Q_INIT_RESOURCE(appshell);
 }
 
-AppShellModule::AppShellModule()
-{
-}
-
 std::string AppShellModule::moduleName() const
 {
     return "appshell";
