@@ -191,6 +191,7 @@ inline mu::engraving::Drumset* gpSurdoSet = nullptr;
 
 class GuitarPro
 {
+public:
     INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
 protected:

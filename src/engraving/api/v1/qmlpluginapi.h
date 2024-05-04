@@ -121,6 +121,7 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
 
+public:
     // Should be initialized in qmlpluginapi.cpp
     /// Contains mu::engraving::ElementType enumeration values
     DECLARE_API_ENUM(Element,          elementTypeEnum,        mu::engraving::apiv1::enums::ElementType)

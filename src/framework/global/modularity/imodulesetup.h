@@ -57,6 +57,8 @@ public:
         m_application = app;
     }
 
+    std::shared_ptr<IApplication> application() const { return m_application; }
+
     const modularity::ContextPtr iocContext() const { return m_application->iocContext(); }
     ModulesIoC* ioc() const { return m_application->ioc(); }
 

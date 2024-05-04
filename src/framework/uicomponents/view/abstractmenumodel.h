@@ -37,11 +37,12 @@ class AbstractMenuModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-
     Q_PROPERTY(int length READ rowCount NOTIFY itemsChanged)
     Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
+
+public:
+    INJECT(ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit AbstractMenuModel(QObject* parent = nullptr);

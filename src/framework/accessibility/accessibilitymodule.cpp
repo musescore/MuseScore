@@ -44,7 +44,7 @@ std::string AccessibilityModule::moduleName() const
 
 void AccessibilityModule::registerExports()
 {
-    m_configuration = std::make_shared<AccessibilityConfiguration>();
+    m_configuration = std::make_shared<AccessibilityConfiguration>(iocContext());
 
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAccessibilityController>(moduleName(), std::make_shared<AccessibilityController>());

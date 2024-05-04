@@ -32,7 +32,11 @@ using Inject = kors::modularity::Inject<I>;
 namespace muse {
 template<class I>
 using Inject = kors::modularity::Inject<I>;
+using Injectable = kors::modularity::Injectable;
 }
+
+#define INJECT(Interface, getter) muse::Inject<Interface> getter;
+#define INJECT_STATIC(Interface, getter) static inline muse::Inject<Interface> getter;
 
 namespace mu {
 template<class I>

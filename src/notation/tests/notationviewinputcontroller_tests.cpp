@@ -69,10 +69,10 @@ public:
         m_controller = new NotationViewInputController(&m_view);
 
         m_configuration = std::make_shared<NotationConfigurationMock>();
-        m_controller->setconfiguration(m_configuration);
+        m_controller->configuration.set(m_configuration);
 
         m_playbackController = std::make_shared<playback::PlaybackControllerMock>();
-        m_controller->setplaybackController(m_playbackController);
+        m_controller->playbackController.set(m_playbackController);
 
         setNoWaylandForLinux();
     }

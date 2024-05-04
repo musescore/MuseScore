@@ -198,6 +198,7 @@ public:
 
 class EngravingObject
 {
+public:
     INJECT_STATIC(IEngravingElementsProvider, elementsProvider)
 
 public:

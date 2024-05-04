@@ -36,7 +36,7 @@ class AccessibleRoot;
 class AccessibleItem : public muse::accessibility::IAccessible, public std::enable_shared_from_this<AccessibleItem>
 {
     OBJECT_ALLOCATOR(engraving, AccessibleItem)
-
+public:
     INJECT_STATIC(muse::accessibility::IAccessibilityController, accessibilityController)
 
 public:

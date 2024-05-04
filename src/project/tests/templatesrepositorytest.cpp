@@ -50,9 +50,9 @@ protected:
         m_fileSystem = std::make_shared<FileSystemMock>();
         m_configuration = std::make_shared<ProjectConfigurationMock>();
 
-        m_repository->setconfiguration(m_configuration);
-        m_repository->setmscReader(m_msczReader);
-        m_repository->setfileSystem(m_fileSystem);
+        m_repository->configuration.set(m_configuration);
+        m_repository->mscReader.set(m_msczReader);
+        m_repository->fileSystem.set(m_fileSystem);
     }
 
     QVariantMap buildCategory(const QString& title, const QStringList& files) const

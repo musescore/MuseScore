@@ -50,6 +50,7 @@ class RepeatList;
 
 class PlaybackModel : public muse::async::Asyncable
 {
+public:
     INJECT(muse::mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:

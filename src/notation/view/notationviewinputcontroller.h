@@ -85,6 +85,7 @@ public:
 
 class NotationViewInputController : public muse::actions::Actionable, public muse::async::Asyncable
 {
+public:
     INJECT(INotationConfiguration, configuration)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(playback::IPlaybackController, playbackController)

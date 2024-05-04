@@ -56,24 +56,24 @@
 namespace mu::app {
 class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
 {
-    INJECT(muse::IApplication, muapplication)
-    INJECT(converter::IConverterController, converter)
-    INJECT(engraving::IDiagnosticDrawProvider, diagnosticDrawProvider)
-    INJECT(muse::autobot::IAutobot, autobot)
-    INJECT(muse::audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
-    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(appshell::IAppShellConfiguration, appshellConfiguration)
-    INJECT(appshell::IStartupScenario, startupScenario)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(project::IProjectConfiguration, projectConfiguration)
-    INJECT(playback::ISoundProfilesRepository, soundProfilesRepository)
-    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
-    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
-    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
+    muse::Inject<muse::IApplication> muapplication;
+    muse::Inject<converter::IConverterController> converter;
+    muse::Inject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
+    muse::Inject<muse::autobot::IAutobot> autobot;
+    muse::Inject<muse::audio::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration;
+    muse::Inject<appshell::IStartupScenario> startupScenario;
+    muse::Inject<notation::INotationConfiguration> notationConfiguration;
+    muse::Inject<project::IProjectConfiguration> projectConfiguration;
+    muse::Inject<playback::ISoundProfilesRepository> soundProfilesRepository;
+    muse::Inject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
+    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
+    muse::Inject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
+    muse::Inject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
+    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
+    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
 
 public:
     ConsoleApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);

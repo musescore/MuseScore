@@ -117,7 +117,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -152,7 +152,7 @@ TEST_F(Engraving_PlaybackModelTests, Two_Ending_Repeat)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -211,7 +211,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -273,7 +273,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -321,7 +321,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Fine)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -357,7 +357,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Coda)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -392,7 +392,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Fine)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -427,7 +427,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Coda)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -466,7 +466,7 @@ TEST_F(Engraving_PlaybackModelTests, Spanners)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -541,7 +541,7 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const DynamicLevelMap& dynamicLevelMap = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamicLevelMap;
@@ -627,7 +627,7 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -688,7 +688,7 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     // [WHEN] Request events for Winds
@@ -762,7 +762,7 @@ TEST_F(Engraving_PlaybackModelTests, Single_Measure_Repeat)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -799,7 +799,7 @@ TEST_F(Engraving_PlaybackModelTests, Multi_Measure_Repeat)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -836,7 +836,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
 
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
@@ -881,7 +881,7 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
@@ -1005,7 +1005,7 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_4_4)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
@@ -1040,7 +1040,7 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
@@ -1087,7 +1087,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
@@ -1152,7 +1152,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
 
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
@@ -1237,7 +1237,7 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
-    model.setprofilesRepository(m_repositoryMock);
+    model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     // [THEN] Result matches with our expectations

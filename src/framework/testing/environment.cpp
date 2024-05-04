@@ -29,6 +29,7 @@ using namespace muse::testing;
 Environment::Modules Environment::m_dependencyModules;
 Environment::PreInit Environment::m_preInit;
 Environment::PostInit Environment::m_postInit;
+Environment::PostInit Environment::m_deInit;
 
 void Environment::setDependency(const Modules& modules)
 {
@@ -45,6 +46,11 @@ void Environment::setPostInit(const PostInit& postInit)
     m_postInit = postInit;
 }
 
+void Environment::setDeInit(const DeInit& deInit)
+{
+    m_deInit = deInit;
+}
+
 void Environment::setup()
 {
     static muse::GlobalModule globalModule;
@@ -56,6 +62,7 @@ void Environment::setup()
     globalModule.registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_dependencyModules) {
+        m->setApplication(globalModule.application());
         m->registerResources();
     }
 
@@ -97,5 +104,12 @@ void Environment::setup()
 
     if (m_postInit) {
         m_postInit();
+    }
+}
+
+void Environment::deinit()
+{
+    if (m_deInit) {
+        m_deInit();
     }
 }

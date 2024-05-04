@@ -31,42 +31,6 @@ SOFTWARE.
 #include "modulesioc.h"
 #include "injectable.h"
 
-#define INJECT(Interface, getter) \
-private: \
-    mutable std::shared_ptr<Interface> m_##getter = nullptr; \
-public: \
-    std::shared_ptr<Interface> getter() const {  \
-        if (!m_##getter) { \
-            static std::mutex getter##mutex; \
-            const std::lock_guard<std::mutex> getter##lock(getter##mutex); \
-            if (!m_##getter) { \
-                static const std::string_view sig(FUNC_SIG); \
-                m_##getter = kors::modularity::_ioc()->resolve<Interface>(kors::funcinfo::moduleNameBySig(sig), sig); \
-            } \
-        } \
-        return m_##getter; \
-    } \
-    void set##getter(std::shared_ptr<Interface> impl) { m_##getter = impl; } \
-
-#define INJECT_STATIC(Interface, getter) \
-public: \
-    static std::shared_ptr<Interface>& getter() {  \
-        static std::shared_ptr<Interface> s_##getter = nullptr; \
-        if (!s_##getter) { \
-            static std::mutex getter##mutex; \
-            const std::lock_guard<std::mutex> getter##lock(getter##mutex); \
-            if (!s_##getter) { \
-                static const std::string_view sig(FUNC_SIG); \
-                s_##getter = kors::modularity::_ioc()->resolve<Interface>(kors::funcinfo::moduleNameBySig(sig), sig); \
-            } \
-        } \
-        return s_##getter; \
-    } \
-    static void set##getter(std::shared_ptr<Interface> impl) { \
-        std::shared_ptr<Interface>& s_##getter = getter(); \
-        s_##getter = impl; \
-    } \
-
 namespace kors::modularity {
 ModulesIoC* _ioc(const ContextPtr& ctx = nullptr);
 void removeIoC(const ContextPtr& ctx = nullptr);
@@ -83,6 +47,9 @@ public:
 
     Inject(const ContextPtr& ctx = nullptr)
         : m_ctx(ctx) {}
+
+    Inject(const Injectable* o)
+        : m_ctx(o->iocContext()) {}
 
     const std::shared_ptr<I>& get() const
     {
@@ -101,9 +68,9 @@ public:
         m_i = impl;
     }
 
-    I* operator()() const
+    const std::shared_ptr<I>& operator()() const
     {
-        return get().get();
+        return get();
     }
 
 private:

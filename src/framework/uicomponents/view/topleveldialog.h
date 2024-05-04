@@ -31,6 +31,7 @@
 namespace muse::uicomponents {
 class TopLevelDialog : public QDialog
 {
+public:
     INJECT(ui::IMainWindow, mainWindow)
 
 public:

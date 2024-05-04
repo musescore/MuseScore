@@ -39,6 +39,7 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     Q_OBJECT
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
+public:
     INJECT(IApplication, application)
     INJECT(INavigationController, navigationController)
 

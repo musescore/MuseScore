@@ -42,6 +42,7 @@ class EditDrumsetDialog : public QDialog, private Ui::EditDrumsetDialog
 {
     Q_OBJECT
 
+public:
     INJECT(muse::IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(notation::INotationConfiguration, notationConfiguration)

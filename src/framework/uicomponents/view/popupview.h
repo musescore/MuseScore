@@ -91,6 +91,7 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_PROPERTY(bool alwaysOnTop READ alwaysOnTop WRITE setAlwaysOnTop NOTIFY alwaysOnTopChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
+public:
     INJECT(ui::IMainWindow, mainWindow)
     INJECT(ui::IUiConfiguration, uiConfiguration)
     INJECT(ui::INavigationController, navigationController)

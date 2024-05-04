@@ -78,6 +78,8 @@ GTEST_API_ int main(int argc, char** argv)
 
     int code = RUN_ALL_TESTS();
 
+    muse::testing::Environment::deinit();
+
     PROFILER_PRINT;
 
     return code;

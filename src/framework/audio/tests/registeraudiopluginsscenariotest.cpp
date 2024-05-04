@@ -59,12 +59,12 @@ protected:
         m_metaReaderRegister = std::make_shared<AudioPluginMetaReaderRegisterMock>();
         m_metaReaders = { std::make_shared<AudioPluginMetaReaderMock>() };
 
-        m_scenario->setglobalConfiguration(m_globalConfiguration);
-        m_scenario->setinteractive(m_interactive);
-        m_scenario->setprocess(m_process);
-        m_scenario->setknownPluginsRegister(m_knownPlugins);
-        m_scenario->setscannerRegister(m_scannerRegister);
-        m_scenario->setmetaReaderRegister(m_metaReaderRegister);
+        m_scenario->globalConfiguration.set(m_globalConfiguration);
+        m_scenario->interactive.set(m_interactive);
+        m_scenario->process.set(m_process);
+        m_scenario->knownPluginsRegister.set(m_knownPlugins);
+        m_scenario->scannerRegister.set(m_scannerRegister);
+        m_scenario->metaReaderRegister.set(m_metaReaderRegister);
 
         ON_CALL(*m_globalConfiguration, appBinPath())
         .WillByDefault(Return(m_appPath));
