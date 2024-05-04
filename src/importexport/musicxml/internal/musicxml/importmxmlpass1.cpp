@@ -534,7 +534,7 @@ static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreakType 
 
 static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const mb, const LayoutBreakType type)
 {
-    const auto pm = mb->prev();
+    MeasureBase* const pm = mb->prev();
     if (pm && musicxmlImportBreaks()) {
         addBreak(score, pm, type);
     }
@@ -610,7 +610,7 @@ static void findYMinYMaxInWords(const std::vector<const CreditWords*>& words, in
 
     miny = words.at(0)->defaultY;
     maxy = words.at(0)->defaultY;
-    for (const auto w : words) {
+    for (const CreditWords* w : words) {
         if (w->defaultY < miny) {
             miny = w->defaultY;
         }
@@ -669,9 +669,9 @@ static TextStyleType creditWordTypeToTid(const String& type)
 
 static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
 {
-    const auto pw1 = pageWidth / 3;
-    const auto pw2 = pageWidth * 2 / 3;
-    const auto defx = word->defaultX;
+    const double pw1 = pageWidth / 3;
+    const double pw2 = pageWidth * 2 / 3;
+    const double defx = word->defaultX;
     // composer is in the right column
     if (pw2 < defx) {
         // found composer
@@ -685,7 +685,7 @@ static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vec
     // title is in the middle column
     else {
         // if another word in the middle column has a larger font size, this word is not the title
-        for (const auto w : words) {
+        for (const CreditWords* w : words) {
             if (w == word) {
                 continue;                 // it's me
             }
@@ -722,7 +722,7 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 
 VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score, const int miny, const int maxy)
 {
-    auto vbox = Factory::createVBox(score->dummy()->system());
+    VBox* vbox = Factory::createVBox(score->dummy()->system());
     double vboxHeight = 10;                           // default height in tenths
     double diff = maxy - miny;                       // calculate height in tenths
     if (diff > vboxHeight) {                         // and size is reasonable
@@ -859,7 +859,7 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
 
     std::vector<const CreditWords*> headerWords;
     std::vector<const CreditWords*> footerWords;
-    for (const auto w : crWords) {
+    for (const CreditWords* w : crWords) {
         if (w->page == pageNr) {
             if (w->defaultY > (pageSize.height() / 2)) {
                 headerWords.push_back(w);
@@ -890,10 +890,10 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
     int maxy = 0;
     findYMinYMaxInWords(words, miny, maxy);
 
-    for (const auto w : words) {
+    for (const CreditWords* w : words) {
         if (mustAddWordToVbox(w->type)) {
-            const auto align = alignForCreditWords(w, pageSize.width());
-            const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
+            const Align align = alignForCreditWords(w, pageSize.width());
+            const TextStyleType tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
             double yoffs = (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
                 vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
@@ -956,7 +956,7 @@ void MusicXMLParserPass1::createDefaultHeader(Score* score)
         strTranslator = metaTranslator;
     }
 
-    const auto vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
+    VBox* const vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
     vbox->setExcludeFromOtherParts(false);
     addText(vbox, score, strTitle.toXmlEscaped(),      TextStyleType::TITLE);
     addText(vbox, score, strSubTitle.toXmlEscaped(),   TextStyleType::SUBTITLE);
@@ -1084,7 +1084,7 @@ Err MusicXMLParserPass1::parse(const ByteArray& data)
     m_logger->logDebugTrace(u"MusicXMLParserPass1::parse device");
     m_parts.clear();
     m_e.setData(data);
-    auto res = parse();
+    Err res = parse();
     if (res != Err::NoError) {
         return res;
     }
@@ -1165,7 +1165,7 @@ static bool allStaffGroupsIdentical(Part const* const p)
 
 static bool isRedundantBracket(Staff const* const staff, const BracketType bracketType, const size_t span)
 {
-    for (auto bracket : staff->brackets()) {
+    for (const BracketItem* bracket : staff->brackets()) {
         if (bracket->bracketType() == bracketType && bracket->bracketSpan() == span) {
             return true;
         }
@@ -1245,7 +1245,7 @@ void MusicXMLParserPass1::scorePartwise()
             stavesSpan += spannedPart->nstaves();
 
             if (pg->barlineSpan) {
-                for (auto spannedStaff : spannedPart->staves()) {
+                for (Staff* spannedStaff : spannedPart->staves()) {
                     if ((j == pg->span - 1) && (spannedStaff == spannedPart->staves().back())) {
                         // Very last staff of group,
                         continue;
@@ -1277,7 +1277,7 @@ void MusicXMLParserPass1::scorePartwise()
             p->staff(0)->setBracketSpan(column, p->nstaves());
             if (allStaffGroupsIdentical(p)) {
                 // span only if the same types
-                for (auto spannedStaff : p->staves()) {
+                for (Staff* spannedStaff : p->staves()) {
                     if (spannedStaff != p->staves().back()) { // not last staff
                         spannedStaff->setBarLineSpan(true);
                     }
@@ -1508,7 +1508,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::credit", &m_e);
 
-    const auto page = m_e.intAttribute("page");         // ignoring errors implies incorrect conversion defaults to the first page
+    const int page = m_e.intAttribute("page");         // ignoring errors implies incorrect conversion defaults to the first page
     // multiple credit-words elements may be present,
     // which are appended
     // use the position info from the first one
@@ -1593,15 +1593,15 @@ static void updateStyles(Score* score,
                          const String& wordFamily, const String& wordSize,
                          const String& lyricFamily, const String& lyricSize)
 {
-    const auto dblWordSize = wordSize.toDouble();     // note conversion error results in value 0.0
-    const auto dblLyricSize = lyricSize.toDouble();   // but avoid comparing (double) floating point number with exact value later
-    const auto epsilon = 0.001;                       // use epsilon instead
+    const double dblWordSize = wordSize.toDouble();     // note conversion error results in value 0.0
+    const double dblLyricSize = lyricSize.toDouble();   // but avoid comparing (double) floating point number with exact value later
+    const double epsilon = 0.001;                       // use epsilon instead
 
     bool needUseDefaultFont = configuration()->needUseDefaultFont();
 
     // loop over all text styles (except the empty, always hidden, first one)
     // set all text styles to the MusicXML defaults
-    for (const auto tid : allTextStyles()) {
+    for (const TextStyleType tid : allTextStyles()) {
         // The MusicXML specification does not specify to which kinds of text
         // the word-font setting applies. Setting all sizes to the size specified
         // gives bad results, so a selection is made:
@@ -1619,7 +1619,7 @@ static void updateStyles(Score* score,
                                   || isHarpPedalStyle(tid);
 
         const TextStyle* ts = textStyle(tid);
-        for (const auto& a :*ts) {
+        for (const TextStyleProperty& a :*ts) {
             if (a.pid == Pid::FONT_FACE && !needUseDefaultFont) {
                 score->style().set(a.sid, wordFamily);
             } else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon && !needUseDefaultSize) {
@@ -3228,7 +3228,7 @@ static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalT
 {
     UNUSED(timeMod);
     bool res = false;
-    const auto actualNotes = state.actualNotes;
+    const int actualNotes = state.actualNotes;
     /*
     const auto normalNotes = state.m_normalNotes;
     LOGD("duration %s normalType %s timeMod %s normalNotes %d actualNotes %d",
@@ -3240,8 +3240,8 @@ static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalT
            );
     */
 
-    auto tupletType = state.tupletType;
-    auto tupletCount = state.tupletCount;
+    int tupletType = state.tupletType;
+    int tupletCount = state.tupletCount;
 
     if (normalType.isValid()) {
         int matchedNormalType  = int(normalType.type());
@@ -3283,7 +3283,7 @@ Fraction missingTupletDuration(const Fraction duration)
     Fraction tupletFullDuration;
 
     determineTupletFractionAndFullDuration(duration, tupletFraction, tupletFullDuration);
-    auto missing = (Fraction(1, 1) - tupletFraction) * tupletFullDuration;
+    Fraction missing = (Fraction(1, 1) - tupletFraction) * tupletFullDuration;
 
     return missing;
 }
@@ -3329,8 +3329,8 @@ MxmlTupletFlags MxmlTupletState::determineTupletAction(const Fraction noteDurati
                                                        Fraction& missingPreviousDuration,
                                                        Fraction& missingCurrentDuration)
 {
-    const auto actNotes = timeMod.denominator();
-    const auto norNotes = timeMod.numerator();
+    const int actNotes = timeMod.denominator();
+    const int norNotes = timeMod.numerator();
     MxmlTupletFlags res = MxmlTupletFlag::NONE;
 
     // check for unexpected termination of previous tuplet
@@ -3479,8 +3479,8 @@ void MusicXMLParserPass1::note(const String& partId,
             bRest = true;
             rest();
         } else if (m_e.name() == "staff") {
-            auto ok = false;
-            auto strStaff = m_e.readText();
+            bool ok = false;
+            String strStaff = m_e.readText();
             staff = m_parts[partId].staffNumberToIndex(strStaff.toInt(&ok));
             m_parts[partId].setMaxStaff(staff);
             Part* part = muse::value(m_partMap, partId);
@@ -3525,7 +3525,7 @@ void MusicXMLParserPass1::note(const String& partId,
 
     // check for timing error(s) and set dura
     // keep in this order as checkTiming() might change dura
-    auto errorStr = mnd.checkTiming(type, bRest, grace);
+    String errorStr = mnd.checkTiming(type, bRest, grace);
     dura = mnd.duration();
     if (errorStr != "") {
         m_logger->logError(errorStr, &m_e);
@@ -3541,8 +3541,8 @@ void MusicXMLParserPass1::note(const String& partId,
 
     if (!chord && !grace) {
         // do tuplet
-        auto timeMod = mnd.timeMod();
-        auto& tupletState = tupletStates[voice];
+        Fraction timeMod = mnd.timeMod();
+        MxmlTupletState& tupletState = tupletStates[voice];
         tupletState.determineTupletAction(mnd.duration(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
     }
 
@@ -3621,7 +3621,7 @@ Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const int& _divisio
         if (muse::contains(m_adjustedDurations, dura)) {
             dura = m_adjustedDurations.at(dura);
         } else if (dura.reduced().denominator() > 64) {
-            for (auto seenDenominator : m_seenDenominators) {
+            for (int seenDenominator : m_seenDenominators) {
                 int seenDenominatorTicks = Fraction(1, seenDenominator).ticks();
                 if (std::abs(dura.ticks() % seenDenominatorTicks) <= m_maxDiff) {
                     Fraction roundedDura = Fraction(std::round(dura.ticks() / double(seenDenominatorTicks)), seenDenominator);
