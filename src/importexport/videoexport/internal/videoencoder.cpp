@@ -352,8 +352,13 @@ bool VideoEncoder::encodeImage(const QImage& img)
 
     convertImage_sws(img);
 
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(60, 3, 100)
+    m_ffmpeg->ppicture->pts = av_rescale_q(m_ffmpeg->codecCtx->frame_num, m_ffmpeg->codecCtx->time_base,
+                                           m_ffmpeg->videoStream->time_base);
+#else
     m_ffmpeg->ppicture->pts = av_rescale_q(m_ffmpeg->codecCtx->frame_number, m_ffmpeg->codecCtx->time_base,
                                            m_ffmpeg->videoStream->time_base);
+#endif
 
     int ret = avcodec_send_frame(m_ffmpeg->codecCtx, m_ffmpeg->ppicture);
     if (ret < 0) {
