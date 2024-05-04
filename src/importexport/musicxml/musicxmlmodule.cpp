@@ -59,7 +59,7 @@ void MusicXmlModule::registerExports()
 {
 #ifndef MUSICXML_NO_INTERNAL
     m_configuration = std::make_shared<MusicXmlConfiguration>();
-    modularity::ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), m_configuration);
 #endif
 }
 
@@ -68,12 +68,12 @@ void MusicXmlModule::resolveImports()
 #ifndef MUSICXML_NO_INTERNAL
     using namespace mu::project;
 
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXmlReader>());
     }
 
-    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
         writers->reg({ "mxl" }, std::make_shared<MxlWriter>());

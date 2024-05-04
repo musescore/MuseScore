@@ -61,7 +61,7 @@ void LanguagesModule::onPreInit(const IApplication::RunMode& mode)
     m_languagesService->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = modularity::ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
         pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());

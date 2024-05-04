@@ -106,12 +106,12 @@ using namespace mu::engraving::rendering::dev;
 namespace mu::engraving {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
-    return muse::modularity::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
+    return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
 }
 
 static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 {
-    return muse::modularity::ioc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
+    return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
 }
 
 //---------------------------------------------------------

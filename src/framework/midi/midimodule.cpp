@@ -71,9 +71,9 @@ void MidiModule::registerExports()
     m_midiInPort = std::make_shared<DummyMidiInPort>();
     #endif
 
-    modularity::ioc()->registerExport<IMidiConfiguration>(moduleName(), m_configuration);
-    modularity::ioc()->registerExport<IMidiOutPort>(moduleName(), m_midiOutPort);
-    modularity::ioc()->registerExport<IMidiInPort>(moduleName(), m_midiInPort);
+    ioc()->registerExport<IMidiConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IMidiOutPort>(moduleName(), m_midiOutPort);
+    ioc()->registerExport<IMidiInPort>(moduleName(), m_midiInPort);
 }
 
 void MidiModule::registerUiTypes()

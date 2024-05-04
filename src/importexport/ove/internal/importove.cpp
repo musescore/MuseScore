@@ -78,7 +78,7 @@
 namespace ove {
 static std::shared_ptr<mu::iex::ove::IOveConfiguration> configuration()
 {
-    return muse::modularity::ioc()->resolve<mu::iex::ove::IOveConfiguration>("iex_ove");
+    return muse::modularity::globalIoc()->resolve<mu::iex::ove::IOveConfiguration>("iex_ove");
 }
 }
 

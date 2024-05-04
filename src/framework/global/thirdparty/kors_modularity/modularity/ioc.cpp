@@ -27,7 +27,7 @@ std::mutex kors::modularity::StaticMutex::mutex;
 
 static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 
-kors::modularity::ModulesIoC* kors::modularity::ioc(const ContextPtr& ctx)
+kors::modularity::ModulesIoC* kors::modularity::_ioc(const ContextPtr& ctx)
 {
     if (!ctx || ctx->id < 0) {
         static ModulesIoC global;

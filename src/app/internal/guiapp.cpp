@@ -132,7 +132,7 @@ void GuiApp::perform()
     // ====================================================
     // Setup Qml Engine
     // ====================================================
-    QQmlApplicationEngine* engine = modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
 #if defined(Q_OS_WIN)
     const QString mainQmlFile = "/platform/win/Main.qml";
@@ -206,7 +206,7 @@ void GuiApp::finish()
 #endif
 
     // Engine quit
-    modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
+    ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
 
     // Deinit
 

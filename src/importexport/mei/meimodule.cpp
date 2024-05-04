@@ -44,17 +44,17 @@ void MeiModule::registerExports()
 {
     m_configuration = std::make_shared<MeiConfiguration>();
 
-    modularity::ioc()->registerExport<IMeiConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IMeiConfiguration>(moduleName(), m_configuration);
 }
 
 void MeiModule::resolveImports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mei" }, std::make_shared<MeiReader>());
     }
 
-    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "mei" }, std::make_shared<MeiWriter>());
     }

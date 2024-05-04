@@ -160,11 +160,11 @@ const modularity::ContextPtr BaseApplication::iocContext() const
 
 modularity::ModulesIoC* BaseApplication::ioc() const
 {
-    return modularity::ioc(m_iocContext);
+    return modularity::_ioc(m_iocContext);
 }
 
 void BaseApplication::removeIoC()
 {
-    modularity::ioc(m_iocContext)->reset();
+    modularity::_ioc(m_iocContext)->reset();
     modularity::removeIoC(m_iocContext);
 }

@@ -57,28 +57,28 @@ void AutobotModule::registerExports()
     m_autobot = std::make_shared<Autobot>();
     m_actionsController = std::make_shared<AutobotActionsController>();
 
-    modularity::ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
-    modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
-    modularity::ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
+    ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
+    ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
 
     // draw::Painter::extended = AbPaintProvider::instance();
 }
 
 void AutobotModule::resolveImports()
 {
-    auto ir = modularity::ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://autobot/batchtests"), "Muse/Autobot/BatchTestsDialog.qml");
         ir->registerQmlUri(Uri("muse://autobot/scripts"), "Muse/Autobot/ScriptsDialog.qml");
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse/Autobot/AutobotSelectFileDialog.qml");
     }
 
-    auto ar = modularity::ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<AutobotActions>());
     }
 
-    auto api = modularity::ioc()->resolve<IApiRegister>(moduleName());
+    auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator("autobot", "api.autobot", new ApiCreator<api::AutobotApi>());
         api->regApiCreator("autobot", "api.context", new ApiCreator<ContextApi>());
@@ -101,7 +101,7 @@ void AutobotModule::onInit(const IApplication::RunMode& mode)
     m_actionsController->init();
 
     //! --- Diagnostics ---
-    auto pr = modularity::ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         for (const io::path_t& p : m_configuration->scriptsDirPaths()) {
             pr->reg("autobotScriptsPath", p);

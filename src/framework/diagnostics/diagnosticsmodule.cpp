@@ -113,7 +113,7 @@ void DiagnosticsModule::onInit(const IApplication::RunMode& mode)
     m_configuration->init();
     m_actionsController->init();
 
-    auto globalConf = modularity::ioc()->resolve<IGlobalConfiguration>(moduleName());
+    auto globalConf = ioc()->resolve<IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
     }
