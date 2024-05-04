@@ -281,6 +281,7 @@ void ScoreAccessibility::currentInfoChanged()
 
             QString staff = "";
             QString optimizedStaff = "";
+
             if (e->staffIdx() + 1) {
                   _oldStaff = e->staffIdx();
                   staff = tr("Staff: %1").arg(QString::number(e->staffIdx() + 1));
@@ -292,13 +293,13 @@ void ScoreAccessibility::currentInfoChanged()
                         rez = QString("%1; %2").arg(rez).arg(staff);
                         }
                   else {
-                        rez = QString("%1; %2 (%3)").arg(rez).arg(staff).arg(staffName.replace('\n', ' ')); // no newlines in the status bar
+                        rez = QString("%1; %2 (%3)").arg(rez).arg(staff).arg(staffName);
                         }
                   if (e->staffIdx() != oldStaff)
                         optimizedStaff = QString("%1 (%2)").arg(staff).arg(staffName);
                   }
 
-            statusBarLabel->setText(rez);
+            statusBarLabel->setText(rez.simplified()); // no linebreaks in statusbar
 
             if (scoreView->mscoreState() & STATE_ALLTEXTUAL_EDIT) {
                   // Don't say element name during text editing.
