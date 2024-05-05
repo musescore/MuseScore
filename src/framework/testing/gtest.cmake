@@ -1,4 +1,3 @@
-#=============================================================================
 # SPDX-License-Identifier: GPL-3.0-only
 # MuseScore-Studio-CLA-applies
 #
@@ -18,7 +17,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>. 
-#=============================================================================
 
 ## Setup
 # set(MODULE_TEST somename)          - set module (target) name
