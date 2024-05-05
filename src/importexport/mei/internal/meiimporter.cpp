@@ -1837,7 +1837,6 @@ bool MeiImporter::readMRpt(pugi::xml_node mRptNode, Measure* measure, int track,
         return false;
     }
 
-    bool warning = false;
     libmei::MRpt meiMRpt;
     meiMRpt.Read(mRptNode);
 
