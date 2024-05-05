@@ -183,7 +183,7 @@
         <magic>
             <match type="string" value="&lt;?xml" offset="0">
                 <match type="string" value="&lt;mei" offset="0:128">
-                    <match type="string" value="music" offset="0:512">
+                    <match type="string" value="music" offset="0:512"/>
                 </match>
             </match>
         </magic>
