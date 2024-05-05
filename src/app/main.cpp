@@ -130,7 +130,13 @@ int main(int argc, char** argv)
     //! Needs to be called before any QQuickWindows are shown.
     QQuickWindow::setDefaultAlphaBuffer(true);
 
-    QCoreApplication::setApplicationName(MUSE_APP_TITLE);
+    // Can't use MUSE_APP_TITLE until next major release, because this "application name" is used to determine
+    // where user settings are stored. Changing it would result in all user settings being lost.
+#ifdef MUSE_APP_UNSTABLE
+    QCoreApplication::setApplicationName("MuseScore4Development");
+#else
+    QCoreApplication::setApplicationName("MuseScore4");
+#endif
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");
     QCoreApplication::setApplicationVersion(MUSE_APP_VERSION);
