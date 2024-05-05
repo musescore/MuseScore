@@ -45,11 +45,6 @@
         </VBox>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <KeySig>
             <concertKey>3</concertKey>
             </KeySig>
@@ -199,11 +194,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <KeySig>
             <concertKey>5</concertKey>
             </KeySig>
@@ -349,11 +339,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <KeySig>
             <concertKey>7</concertKey>
             </KeySig>
@@ -499,11 +484,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <KeySig>
             <concertKey>-3</concertKey>
             </KeySig>
@@ -649,11 +629,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <KeySig>
             <concertKey>-5</concertKey>
             </KeySig>
@@ -802,11 +777,6 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <KeySig>
             <concertKey>-7</concertKey>
             </KeySig>

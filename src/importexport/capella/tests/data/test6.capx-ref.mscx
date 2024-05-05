@@ -45,11 +45,6 @@
         </VBox>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <KeySig>
             <concertKey>2</concertKey>
             </KeySig>
@@ -168,11 +163,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <Chord>
             <durationType>quarter</durationType>
             <Note>

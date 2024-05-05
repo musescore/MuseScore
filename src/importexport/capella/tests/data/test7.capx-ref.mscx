@@ -45,10 +45,6 @@
         </VBox>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <concertKey>3</concertKey>
             </KeySig>

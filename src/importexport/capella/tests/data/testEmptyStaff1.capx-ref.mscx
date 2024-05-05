@@ -73,11 +73,6 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -92,11 +87,6 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -110,11 +100,6 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -126,11 +111,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -142,11 +122,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
           <Chord>
             <durationType>whole</durationType>
             <Note>
