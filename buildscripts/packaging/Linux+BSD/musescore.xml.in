@@ -172,6 +172,23 @@
         <glob pattern="*.gtp"/><!-- Versions 1 and 2 -->
     </mime-type>
 
+    <mime-type type="application/x-mei+xml">
+        <!-- https://www.music-encoding.org/ -->
+        <comment>MEI File</comment>
+        <glob pattern="*.mei"/><!-- preferred extension must go first -->
+        <glob pattern="*.xml" weight="25"/><!-- reduced weight (default 50) to avoid matching ordinary XML files -->
+        <sub-class-of type="application/xml"/>
+        <root-XML namespaceURI="http://www.music-encoding.org/ns/mei" localName="mei"/>
+        <icon name="mei@MUSE_APP_INSTALL_SUFFIX@+xml"/>
+        <magic>
+            <match type="string" value="&lt;?xml" offset="0">
+                <match type="string" value="&lt;mei" offset="0:128">
+                    <match type="string" value="music" offset="0:512"/>
+                </match>
+            </match>
+        </magic>
+    </mime-type>
+
     <mime-type type="application/x-musedata"><!-- invented -->
         <!-- https://wiki.ccarh.org/wiki/MuseData_file_specification -->
         <comment>MuseData score</comment>
