@@ -90,6 +90,9 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
             Buffer buf(&styleData);
             buf.open(IODevice::ReadOnly);
             masterScore->style().read(&buf);
+            if (inOut) {
+                inOut->originalSpatium = masterScore->style().spatium();
+            }
         }
     }
 

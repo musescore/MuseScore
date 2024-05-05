@@ -2843,8 +2843,8 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     ReadContext ctx(score);
-    if (out && out->overridedSpatium.has_value()) {
-        ctx.setSpatium(out->overridedSpatium.value());
+    if (out && out->overriddenSpatium.has_value()) {
+        ctx.setSpatium(out->overriddenSpatium.value());
         ctx.setOverrideSpatium(true);
     }
 
@@ -2906,7 +2906,11 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "Spatium") {
             if (ctx.overrideSpatium()) {
                 masterScore->style().setSpatium(ctx.spatium());
-                e.skipCurrentElement();
+                if (out) {
+                    out->originalSpatium = e.readDouble() * DPMM;
+                } else {
+                    e.skipCurrentElement();
+                }
             } else {
                 masterScore->style().setSpatium(e.readDouble() * DPMM);
             }

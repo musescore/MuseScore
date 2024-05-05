@@ -98,6 +98,8 @@ public:
 
     double spatium() const;
     void setSpatium(double v);
+    double originalSpatium() const { return m_originalSpatium; }
+    void setOriginalSpatium(double v) { m_originalSpatium = v; }
     bool overrideSpatium() const { return m_overrideSpatium; }
     void setOverrideSpatium(bool v) { m_overrideSpatium = v; }
 
@@ -240,6 +242,7 @@ private:
 
     TimeSigMap m_compatTimeSigMap;
     bool m_overrideSpatium = false;
+    double m_originalSpatium = 0;
 };
 }
 
