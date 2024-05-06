@@ -28,11 +28,6 @@
 #include <QFile>
 #include <QtMath>
 
-#include "translation.h"
-#include "infrastructure/messagebox.h"
-
-#include "engraving/engravingerrors.h"
-
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/box.h"
@@ -66,7 +61,13 @@
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
 
+#include "engraving/engravingerrors.h"
+
+#include "infrastructure/messagebox.h"
+
 #include "log.h"
+
+#include "translation.h"
 
 extern QString rtf2html(const QString&);
 
@@ -243,7 +244,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     default:
                         break;
                     }
-                    if (cr->type() == ElementType::CHORD) {
+                    if (cr && cr->type() == ElementType::CHORD) {
                         switch (code) {
                         case 172:                           // arpeggio (short)
                         case 173:                           // arpeggio (long)
@@ -549,9 +550,10 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
     bool tupletprol = false;
     int nTuplet     = 0;
     Fraction tupletTick = Fraction(0, 1);
+    ClefType pclef = score->staff(staffIdx)->defaultClefType().concertClef;
 
     QList<Chord*> graceNotes;
-    foreach (NoteObj* no, cvoice->objects) {
+    for (NoteObj* no : cvoice->objects) {
         switch (no->type()) {
         case CapellaNoteObjectType::REST:
         {
@@ -763,7 +765,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             };
             off += keyOffsets[int(key) + 7];
 
-            for (CNote n : o->notes) {
+            for (const CNote& n : o->notes) {
                 Note* note = Factory::createNote(chord);
                 int pitch = 0;
                 // .cap import: pitch contains the diatonic note number relative to clef and key
@@ -843,12 +845,13 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             ClefType nclef = o->clef();
             LOGD("%d:%d <Clef> %s line %d oct %d clef %d",
                  tick.ticks(), staffIdx, o->name(), int(o->line), int(o->oct), int(o->clef()));
-            if (nclef == ClefType::INVALID) {
+            if (nclef == ClefType::INVALID || nclef == pclef) {
                 break;
             }
+            pclef = nclef;
             // staff(staffIdx)->setClef(tick, nclef);
-            Measure* m = score->getCreateMeasure(tick);
             Segment* s;
+            Measure* m = score->getCreateMeasure(tick);
             if (tick == m->tick()) {
                 s = m->getSegment(SegmentType::HeaderClef, tick);
             } else {
@@ -943,11 +946,11 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             }
 
             BarLineType st = o->type();
-            if (st == BarLineType::NORMAL) {
+            if (st & BarLineType::NORMAL) {
                 break;
             }
 
-            if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
+            if (st & BarLineType::START_REPEAT || st & BarLineType::END_START_REPEAT) {
                 Measure* nm = 0;               // the next measure (the one started by this barline)
                 nm = score->getCreateMeasure(tick);
                 if (nm) {
@@ -955,7 +958,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 }
             }
 
-            if (st == BarLineType::END_REPEAT || st == BarLineType::END_START_REPEAT) {
+            if (st & BarLineType::END_REPEAT || st & BarLineType::END_START_REPEAT) {
                 if (pm) {
                     pm->setRepeatEnd(true);
                 }
@@ -973,7 +976,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
     // pass II
     //
     tick = startTick;
-    foreach (NoteObj* no, cvoice->objects) {
+    for (NoteObj* no : cvoice->objects) {
         BasicDurationalObj* d = 0;
         if (no->type() == CapellaNoteObjectType::REST) {
             d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(no));
