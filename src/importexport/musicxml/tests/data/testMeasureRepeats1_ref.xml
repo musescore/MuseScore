@@ -70,7 +70,7 @@
       </measure>
     <measure number="2">
       <attributes>
-        <measure-style number="1">
+        <measure-style>
           <measure-repeat type="start">1</measure-repeat>
           </measure-style>
         </attributes>
@@ -119,7 +119,7 @@
       </measure>
     <measure number="4">
       <attributes>
-        <measure-style number="1">
+        <measure-style>
           <measure-repeat type="stop"></measure-repeat>
           </measure-style>
         </attributes>
@@ -158,7 +158,7 @@
       </measure>
     <measure number="6">
       <attributes>
-        <measure-style number="1">
+        <measure-style>
           <measure-repeat slashes="2" type="start">2</measure-repeat>
           </measure-style>
         </attributes>
@@ -231,7 +231,7 @@
       </measure>
     <measure number="10">
       <attributes>
-        <measure-style number="1">
+        <measure-style>
           <measure-repeat type="stop"></measure-repeat>
           </measure-style>
         </attributes>
@@ -311,7 +311,7 @@
       </measure>
     <measure number="14">
       <attributes>
-        <measure-style number="1">
+        <measure-style>
           <measure-repeat slashes="4" type="start">4</measure-repeat>
           </measure-style>
         </attributes>
