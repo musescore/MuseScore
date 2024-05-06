@@ -129,6 +129,7 @@ class Tuplet final : public DurationElement {
       bool cross() const;
 
       void setVisible(bool f) override;
+      void setColor(const QColor& col) override;
 
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant& v) override;

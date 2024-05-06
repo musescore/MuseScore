@@ -10,20 +10,20 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "tuplet.h"
-#include "score.h"
-#include "chord.h"
-#include "note.h"
-#include "xml.h"
-#include "staff.h"
-#include "style.h"
-#include "text.h"
-#include "element.h"
-#include "undo.h"
-#include "stem.h"
 #include "beam.h"
+#include "chord.h"
+#include "element.h"
 #include "measure.h"
+#include "note.h"
+#include "score.h"
+#include "staff.h"
+#include "stem.h"
+#include "style.h"
 #include "system.h"
+#include "text.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -119,6 +119,17 @@ void Tuplet::setVisible(bool f)
             _number->setVisible(f);
       }
 
+//---------------------------------------------------------
+//   setColor
+//---------------------------------------------------------
+
+void Tuplet::setColor(const QColor& col)
+      {
+      Element::setColor(col);
+      if (_number)
+            _number->setColor(col);
+      }
+
 #if 0
 //---------------------------------------------------------
 //   tick
@@ -180,12 +191,13 @@ void Tuplet::layout()
       //
       qreal _spatium = spatium();
       if (_numberType != TupletNumberType::NO_TEXT) {
-            if (_number == 0) {
+            if (_number == nullptr) {
                   _number = new Text(score(), Tid::TUPLET);
                   _number->setComposition(true);
                   _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
+                  _number->setColor(color());
                   resetNumberProperty();
                   }
             // tuplet properties are propagated to number automatically by setProperty()
@@ -876,6 +888,7 @@ bool Tuplet::readProperties(XmlReader& e)
             resetNumberProperty();
             _number->read(e);
             _number->setVisible(visible());     //?? override saved property
+            _number->setColor(color());
             _number->setTrack(track());
             // move property flags from _number back to tuplet
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN })

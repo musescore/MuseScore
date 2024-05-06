@@ -1568,6 +1568,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
                   tuplet->resetNumberProperty();
                   readText206(e, _number, tuplet);
                   _number->setVisible(tuplet->visible());     //?? override saved property
+                  _number->setColor(tuplet->color());
                   _number->setTrack(tuplet->track());
                   // move property flags from _number
                   for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT })
