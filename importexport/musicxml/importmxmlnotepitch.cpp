@@ -38,11 +38,11 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
       const QColor accColor = e.attributes().value("color").toString();
       const QString smufl = e.attributes().value("smufl").toString();
 
-      const auto s = e.readElementText();
-      const auto type = mxmlString2accidentalType(s, smufl);
+      const QString s = e.readElementText();
+      const AccidentalType type = mxmlString2accidentalType(s, smufl);
 
       if (type != AccidentalType::NONE) {
-            auto a = new Accidental(score);
+            Accidental* a = new Accidental(score);
             a->setAccidentalType(type);
             if (cautionary || editorial) // no way to tell one from the other
                   a->setRole(AccidentalRole::USER);
@@ -73,7 +73,7 @@ void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
       {
       while (e.readNextStartElement()) {
             if (e.name() == "display-step") {
-                  const auto step = e.readElementText();
+                  const QString step = e.readElementText();
                   int pos = QString("CDEFGAB").indexOf(step);
                   if (step.size() == 1 && pos >=0 && pos < 7)
                         _displayStep = pos;
@@ -82,7 +82,7 @@ void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
                         qDebug("invalid step '%s'", qPrintable(step));        // TODO
                   }
             else if (e.name() == "display-octave") {
-                  const auto oct = e.readElementText();
+                  const QString oct = e.readElementText();
                   bool ok;
                   _displayOctave = oct.toInt(&ok);
                   if (!ok || _displayOctave < 0 || _displayOctave > 9) {
@@ -113,13 +113,13 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
 
       while (e.readNextStartElement()) {
             if (e.name() == "alter") {
-                  const auto alter = e.readElementText();
+                  const QString alter = e.readElementText();
                   bool ok;
                   _alter = MxmlSupport::stringToInt(alter, &ok);       // fractions not supported by mscore
                   if (!ok || _alter < -2 || _alter > 2) {
                         _logger->logError(QString("invalid alter '%1'").arg(alter), &e);
                         bool ok2;
-                        const auto altervalue = alter.toDouble(&ok2);
+                        const double altervalue = alter.toDouble(&ok2);
                         if (ok2 && (qAbs(altervalue) < 2.0) && (_accType == AccidentalType::NONE)) {
                               // try to see if a microtonal accidental is needed
                               _accType = microtonalGuess(altervalue);
@@ -128,7 +128,7 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
                         }
                   }
             else if (e.name() == "octave") {
-                  const auto oct = e.readElementText();
+                  const QString oct = e.readElementText();
                   bool ok;
                   _octave = oct.toInt(&ok);
                   if (!ok || _octave < 0 || _octave > 9) {
@@ -137,8 +137,8 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
                         }
                   }
             else if (e.name() == "step") {
-                  const auto step = e.readElementText();
-                  const auto pos = QString("CDEFGAB").indexOf(step);
+                  const QString step = e.readElementText();
+                  const int pos = QString("CDEFGAB").indexOf(step);
                   if (step.size() == 1 && pos >=0 && pos < 7)
                         _step = pos;
                   else
