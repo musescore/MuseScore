@@ -1457,24 +1457,17 @@ MeasureBeat PlaybackController::currentBeat() const
 
 msecs_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) const
 {
-    if (!notationPlayback()) {
-        return 0;
-    }
-
-    int tick = notationPlayback()->beatToTick(measureIndex, beatIndex);
-    return tickToMsecs(tick);
+    return notationPlayback() ? tickToMsecs(notationPlayback()->beatToTick(measureIndex, beatIndex)) : 0;
 }
 
 double PlaybackController::tempoMultiplier() const
 {
-    INotationPlaybackPtr playback = notationPlayback();
-    return playback ? playback->tempoMultiplier() : 1.0;
+    return notationPlayback() ? notationPlayback()->tempoMultiplier() : 1.0;
 }
 
 void PlaybackController::setTempoMultiplier(double multiplier)
 {
-    INotationPlaybackPtr playback = notationPlayback();
-    if (!playback) {
+    if (!notationPlayback()) {
         return;
     }
 
@@ -1485,7 +1478,7 @@ void PlaybackController::setTempoMultiplier(double multiplier)
         pause();
     }
 
-    playback->setTempoMultiplier(multiplier);
+    notationPlayback()->setTempoMultiplier(multiplier);
     seek(tick);
     updateLoop();
 

@@ -93,8 +93,8 @@ void MeasurePropertiesDialog::initMeasure()
         return;
     }
 
-    INotationInteraction::HitElementContext context = m_notation->interaction()->hitElementContext();
-    mu::engraving::Measure* measure = mu::engraving::toMeasure(context.element);
+    INotationInteraction::HitElementContext ctx = m_notation->interaction()->hitElementContext();
+    mu::engraving::Measure* measure = mu::engraving::toMeasure(ctx.element);
 
     if (!measure) {
         INotationSelectionPtr selection = m_notation->interaction()->selection();

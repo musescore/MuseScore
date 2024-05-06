@@ -127,10 +127,10 @@ void ConsoleApp::perform()
         // ====================================================
         // Process Autobot
         // ====================================================
-        CmdOptions::Autobot autobot = options.autobot;
-        if (!autobot.testCaseNameOrFile.isEmpty()) {
-            QMetaObject::invokeMethod(qApp, [this, autobot]() {
-                    processAutobot(autobot);
+        CmdOptions::Autobot autobotOptions = options.autobot;
+        if (!autobotOptions.testCaseNameOrFile.isEmpty()) {
+            QMetaObject::invokeMethod(qApp, [this, autobotOptions]() {
+                    processAutobot(autobotOptions);
                 }, Qt::QueuedConnection);
         } else {
             // ====================================================
