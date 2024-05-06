@@ -40,6 +40,8 @@ public:
 
     virtual IAuthorizationServicePtr authorization() = 0;
 
+    virtual QUrl projectManagerUrl() const = 0;
+
     virtual ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& existingUrl,
                                     Visibility visibility = Visibility::Private, bool replaceExisting = false) = 0;
 
