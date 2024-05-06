@@ -137,6 +137,7 @@ public:
     const PointF& userP2() const { return m_userP2; }
 
     void setVisible(bool f) override;
+    void setColor(const Color& col) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;

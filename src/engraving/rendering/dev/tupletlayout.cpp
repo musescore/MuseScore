@@ -63,6 +63,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             number->setTrack(item->track());
             number->setParent(item);
             number->setVisible(item->visible());
+            number->setColor(item->color());
             item->setNumber(number);
             item->resetNumberProperty();
         }
