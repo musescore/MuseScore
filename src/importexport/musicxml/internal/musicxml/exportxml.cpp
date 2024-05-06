@@ -6223,12 +6223,17 @@ static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const
     const staff_idx_t scoreRelStaff = m->score()->staffIdx(part);
     for (size_t i = 0; i < part->nstaves(); ++i) {
         staff_idx_t staffIdx = scoreRelStaff + i;
+        XmlWriter::Attributes styleAttrs;
+        if (part->nstaves() > 1) {
+            styleAttrs.push_back({ "number", i + 1 });
+        }
         if (m->isMeasureRepeatGroup(staffIdx)
             && (!m->prevMeasure() || !m->prevMeasure()->isMeasureRepeatGroup(staffIdx)
                 || (m->measureRepeatNumMeasures(staffIdx) != m->prevMeasure()->measureRepeatNumMeasures(staffIdx)))) {
             attr.doAttr(xml, true);
-            xml.startElement("measure-style", { { "number", i + 1 } });
-            int numMeasures = m->measureRepeatNumMeasures(staffIdx);
+            addColorAttr(m->measureRepeatElement(staffIdx), styleAttrs);
+            xml.startElement("measure-style", styleAttrs);
+            const int numMeasures = m->measureRepeatNumMeasures(staffIdx);
             if (numMeasures > 1) {
                 // slashes == numMeasures for everything MuseScore currently supports
                 xml.tag("measure-repeat", { { "slashes", numMeasures }, { "type", "start" } }, numMeasures);
@@ -6244,7 +6249,7 @@ static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const
                                  || (m->prevMeasure()->measureRepeatElement(staffIdx) && m->measureRepeatElement(staffIdx)
                                      && (m->measureRepeatNumMeasures(staffIdx) != m->prevMeasure()->measureRepeatNumMeasures(staffIdx))))) {
             attr.doAttr(xml, true);
-            xml.startElement("measure-style", { { "number", i + 1 } });
+            xml.startElement("measure-style", styleAttrs);
             xml.tag("measure-repeat", { { "type", "stop" } }, "");
             xml.endElement();
         }
