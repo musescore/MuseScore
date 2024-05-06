@@ -6271,9 +6271,12 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
         attr.doAttr(xml, true);
         xml.startElement("measure-style");
         String multiRestTag = u"multiple-rest";
-        if (m->score()->style().styleB(Sid::oldStyleMultiMeasureRests)
-            && mmR1->mmRestCount() <= m->score()->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
-            multiRestTag += u" use-symbols=\"yes\"";
+        if (m->score()->style().styleB(Sid::oldStyleMultiMeasureRests)) {
+            if (mmR1->mmRestCount() <= m->score()->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
+                multiRestTag += u" use-symbols=\"yes\"";
+            } else {
+                multiRestTag += u" use-symbols=\"no\"";
+            }
         }
         xml.tagRaw(multiRestTag, mmR1->mmRestCount());
         xml.endElement();
