@@ -45,6 +45,8 @@ public:
 
     IAuthorizationServicePtr authorization() override;
 
+    QUrl projectManagerUrl() const override;
+
     CloudInfo cloudInfo() const override;
 
     ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& url,

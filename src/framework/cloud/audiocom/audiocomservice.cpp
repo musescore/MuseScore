@@ -77,6 +77,11 @@ CloudInfo AudioComService::cloudInfo() const
     };
 }
 
+QUrl AudioComService::projectManagerUrl() const
+{
+    return accountInfo().val.profileUrl.toString() + "/projects";
+}
+
 AbstractCloudService::ServerConfig AudioComService::serverConfig() const
 {
     ServerConfig serverConfig;
