@@ -6265,7 +6265,12 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
     if (m != mmR1 && m == mmR1->mmRestFirst()) {
         attr.doAttr(xml, true);
         xml.startElement("measure-style");
-        xml.tag("multiple-rest", mmR1->mmRestCount());
+        String multiRestTag = u"multiple-rest";
+        if (m->score()->style().styleB(Sid::oldStyleMultiMeasureRests)
+            && mmR1->mmRestCount() <= m->score()->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
+            multiRestTag += u" use-symbols=\"yes\"";
+        }
+        xml.tagRaw(multiRestTag, mmR1->mmRestCount());
         xml.endElement();
     } else {
         // measure repeat can only possibly be present if mmrest was not
