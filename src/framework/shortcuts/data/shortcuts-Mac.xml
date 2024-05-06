@@ -1096,7 +1096,7 @@
     </SC>
   <SC>
     <key>toggle-mmrest</key>
-    <seq>M</seq>
+    <seq>Ctrl+Shift+M</seq>
     </SC>
   <SC>
     <key>text-b</key>
