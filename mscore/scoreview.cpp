@@ -3853,13 +3853,16 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
       if (oldX == x && oldY == y)
             return;
 
-      int cx = 0, cy = 0;
-      constraintCanvas(&cx, &cy);
       x *= -physicalZoomLevel();
       y *= -physicalZoomLevel();
-      cx = (x < 0) ? x : cx + _matrix.dx();
-
-      setOffset(cx, y);
+      int cx = x;
+      int cy = y;
+      bool constrain = MScore::verticalOrientation() && preferences.getBool(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA);
+      if (constrain) {
+            constraintCanvas(&cx, &cy);
+            cx = (x < 0) ? x : cx + _matrix.dx();
+            }
+      setOffset(cx, cy);
       update();
       }
 
