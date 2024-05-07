@@ -8105,30 +8105,8 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
         String notationType = notation.attribute(u"type");
         String placement = notation.attribute(u"placement");
         if (notation.name() == u"fermata") {
-            if (!notationType.empty() && notationType != u"upright" && notationType != u"inverted") {
-                notationType.clear();
-                m_logger->logError(String(u"unknown fermata type %1").arg(notationType), &m_e);
-            }
             addFermataToChord(notation, cr);
         } else {
-            if (notation.name() == u"strong-accent") {
-                if (!notationType.empty() && notationType != u"up" && notationType != u"down") {
-                    notationType.clear();
-                    m_logger->logError(String(u"unknown %1 type %2").arg(notation.name(), notationType), &m_e);
-                }
-            } else if (notation.name() == u"harmonic" || notation.name() == u"delayed-turn"
-                       || notation.name() == u"turn" || notation.name() == u"inverted-turn") {
-                if (notation.name() == u"delayed-turn") {
-                    // TODO: actually this should be offset a bit to the right
-                }
-                if (placement != u"above" && placement != u"below") {
-                    placement.clear();
-                    m_logger->logError(String(u"unknown %1 placement %2").arg(notation.name(), placement), &m_e);
-                }
-            } else {
-                notationType.clear();           // TODO: Check for other symbols that have type
-                placement.clear();           // TODO: Check for other symbols that have placement
-            }
             addArticulationToChord(notation, cr);
         }
     } else if (notation.parent() == u"ornaments") {
