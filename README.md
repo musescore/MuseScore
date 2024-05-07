@@ -1,8 +1,6 @@
 ![MuseScore](mscore/data/musescore_logo_full.png)  
 Music notation and composition software
 
-[![Travis CI](https://secure.travis-ci.org/musescore/MuseScore.svg?branch=master)](https://travis-ci.org/musescore/MuseScore)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/bp3ww6v985i64ece/branch/master?svg=true)](https://ci.appveyor.com/project/MuseScore/musescore/branch/master)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
 MuseScore is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
@@ -131,4 +129,4 @@ See [mtest/README.md](/mtest/README.md) or [the developer handbook](https://muse
 The new [script testing facility](https://musescore.org/node/278278) is also available to create your own automated tests. Please try it out!
 
 ### Getting ready-made packages for MuseScore 3.7 Evolution and instructions how to 'install'
-See (https://sites.google.com/view/musescore-3-evolution/)
+See the [Wiki](https://github.com/Jojo-Schmitz/MuseScore/wiki)
