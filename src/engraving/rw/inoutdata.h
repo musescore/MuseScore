@@ -46,10 +46,11 @@ struct ReadInOutData {
     // for master - out
     // for except - in
     ReadLinks links;
-    std::optional<double> overridedSpatium = std::nullopt;
+    std::optional<double> overriddenSpatium = std::nullopt;
 
     // out
     SettingsCompat settingsCompat;
+    std::optional<double> originalSpatium = std::nullopt;
 };
 
 struct WriteInOutData {
