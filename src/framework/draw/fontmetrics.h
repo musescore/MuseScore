@@ -33,7 +33,7 @@
 namespace muse::draw {
 class FontMetrics
 {
-    Inject<IFontProvider> fontProvider;
+    GlobalInject<IFontProvider> fontProvider;
 
 public:
     FontMetrics(const Font& font);

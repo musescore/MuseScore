@@ -90,8 +90,8 @@ struct FontConfig
     FontSizeType sizeType = FontSizeType::BODY;
 };
 
-ThemeApi::ThemeApi()
-    : api::ApiObject(nullptr)
+ThemeApi::ThemeApi(IApiEngine* e)
+    : api::ApiObject(e)
 {
     setObjectName("UiTheme");
 }

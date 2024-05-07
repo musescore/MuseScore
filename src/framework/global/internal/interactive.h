@@ -31,12 +31,16 @@
 #include "../iinteractive.h"
 
 namespace muse {
-class Interactive : public IInteractive, public async::Asyncable
+class Interactive : public IInteractive, public Injectable, public async::Asyncable
 {
-    Inject<muse::ui::IInteractiveProvider> provider;
-    Inject<muse::ui::IMainWindow> mainWindow;
+    Inject<muse::ui::IInteractiveProvider> provider{ this };
+    Inject<muse::ui::IMainWindow> mainWindow{ this };
 
 public:
+
+    Interactive(const muse::modularity::ContextPtr& ctx)
+        : Injectable(ctx) {}
+
     // question
     Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
                     const Options& options = {}) const override;

@@ -26,7 +26,7 @@
 using namespace muse::autobot;
 
 TestCaseRunModel::TestCaseRunModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
     autobot()->statusChanged().onReceive(this, [this](const io::path_t&, const IAutobot::Status&) {
         emit statusChanged();
@@ -43,7 +43,7 @@ bool TestCaseRunModel::loadInfo(const QString& path)
     m_testCase.clear();
     m_steps.clear();
 
-    ScriptEngine engine;
+    ScriptEngine engine(iocContext());
     engine.setScriptPath(path);
     if (!engine.evaluate()) {
         LOGE() << "failed evaluate script, path: " << path;

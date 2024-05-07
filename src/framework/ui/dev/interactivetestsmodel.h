@@ -29,13 +29,13 @@
 #include "async/asyncable.h"
 
 namespace muse::ui {
-class InteractiveTestsModel : public QObject, async::Asyncable
+class InteractiveTestsModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IInteractive, interactive)
-
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
+
+    Inject<IInteractive> interactive = { this };
 
 public:
     explicit InteractiveTestsModel(QObject* parent = nullptr);

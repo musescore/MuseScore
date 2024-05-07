@@ -38,7 +38,7 @@ class GlobalConfiguration;
 class BaseApplication;
 class GlobalModule : public modularity::IModuleSetup
 {
-    Inject<io::IFileSystem> fileSystem;
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
 

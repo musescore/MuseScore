@@ -88,8 +88,8 @@ static bool isPointAllowedForDrop(const QPoint& point, const DropDestination& dr
 
 using namespace muse::dock;
 
-DropController::DropController(KDDockWidgets::DropArea* dropArea)
-    : KDDockWidgets::DropIndicatorOverlayInterface(dropArea)
+DropController::DropController(KDDockWidgets::DropArea* dropArea, const modularity::ContextPtr& iocCtx)
+    : KDDockWidgets::DropIndicatorOverlayInterface(dropArea), Injectable(iocCtx)
 {
     KDDockWidgets::DragController::instance()->setResolveDropAreaFunc([](const QPoint& globalPos) -> KDDockWidgets::DropArea* {
         for (auto mainWindow : KDDockWidgets::DockRegistry::self()->mainwindows()) {

@@ -42,18 +42,19 @@
 #include "autobotinteractive.h"
 
 namespace muse::autobot {
-class Autobot : public IAutobot, public async::Asyncable
+class Autobot : public IAutobot, public Injectable, public async::Asyncable
 {
-    INJECT(IApplication, application)
-    INJECT(IAutobotConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(muse::ui::INavigationController, navigation)
-    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(IInteractive, interactive)
-    INJECT(muse::ui::IMainWindow, mainWindow)
+    Inject<IApplication> application = { this };
+    Inject<IAutobotConfiguration> configuration= { this };
+    Inject<io::IFileSystem> fileSystem= { this };
+    Inject<muse::ui::INavigationController> navigation= { this };
+    Inject<shortcuts::IShortcutsRegister> shortcutsRegister= { this };
+    Inject<IInteractive> interactive= { this };
+    Inject<muse::ui::IMainWindow> mainWindow= { this };
 
 public:
-    Autobot() = default;
+    Autobot(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

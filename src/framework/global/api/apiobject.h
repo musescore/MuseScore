@@ -25,13 +25,14 @@
 #include <QObject>
 
 #include "iapiengine.h"
+#include "modularity/ioc.h"
 
 //! NOTE This class requires a `cpp` file.
 //! If we move it to the `api` module, we will have to link it to all other modules.
 //! That’s why it’s located here, because the `global` module links to everything.
 
 namespace muse::api {
-class ApiObject : public QObject
+class ApiObject : public QObject, public Injectable
 {
     Q_OBJECT
 

@@ -92,7 +92,7 @@ void GlobalModule::registerExports()
         m_application = std::make_shared<ApplicationStub>();
     }
 
-    m_configuration = std::make_shared<GlobalConfiguration>();
+    m_configuration = std::make_shared<GlobalConfiguration>(iocContext());
     s_asyncInvoker = std::make_shared<Invoker>();
     m_systemInfo = std::make_shared<SystemInfo>();
 
@@ -105,7 +105,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
 
 #ifdef MUSE_MODULE_UI
-    ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
+    ioc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
 #endif
 }
 

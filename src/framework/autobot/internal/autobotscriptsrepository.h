@@ -29,12 +29,13 @@
 #include "io/ifilesystem.h"
 
 namespace muse::autobot {
-class AutobotScriptsRepository : public IAutobotScriptsRepository
+class AutobotScriptsRepository : public IAutobotScriptsRepository, public Injectable
 {
-    INJECT(IAutobotConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<IAutobotConfiguration> configuration = { this };
+    GlobalInject<io::IFileSystem> fileSystem;
 public:
-    AutobotScriptsRepository() = default;
+    AutobotScriptsRepository(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     Scripts scripts() const override;
 };

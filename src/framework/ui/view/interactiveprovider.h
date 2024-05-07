@@ -50,16 +50,16 @@ private:
     QVariantMap m_data;
 };
 
-class InteractiveProvider : public QObject, public IInteractiveProvider
+class InteractiveProvider : public QObject, public IInteractiveProvider, public Injectable
 {
     Q_OBJECT
 
-    Inject<IInteractiveUriRegister> uriRegister;
-    Inject<IMainWindow> mainWindow;
-    Inject<muse::extensions::IExtensionsProvider> extensionsProvider;
+    Inject<IInteractiveUriRegister> uriRegister = { this };
+    Inject<IMainWindow> mainWindow = { this };
+    Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
 public:
-    explicit InteractiveProvider();
+    explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
     RetVal<Val> question(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
                          int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) override;

@@ -34,7 +34,8 @@ using namespace muse;
 using namespace muse::extensions;
 using namespace muse::api;
 
-ScriptEngine::ScriptEngine(int apiverion)
+ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiverion)
+    : m_iocContext(iocCtx)
 {
     m_engine = new QJSEngine();
     m_engine->installExtensions(QJSEngine::ConsoleExtension);
@@ -63,7 +64,8 @@ ScriptEngine::ScriptEngine(int apiverion)
 }
 
 ScriptEngine::ScriptEngine(ScriptEngine* engine)
-    : m_engine(engine->m_engine), m_api(engine->m_api), m_moduleLoader(engine->m_moduleLoader), m_isRequireMode(true)
+    : m_iocContext(engine->m_iocContext), m_engine(engine->m_engine), m_api(engine->m_api), m_moduleLoader(engine->m_moduleLoader),
+    m_isRequireMode(true)
 {
     m_moduleLoader->pushEngine(this);
 }
@@ -273,6 +275,11 @@ RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, co
     rv.val = m_engine->evaluate(QString(fileContent), filePath.toQString());
     rv.ret = jsValueToRet(rv.val);
     return rv;
+}
+
+const modularity::ContextPtr& ScriptEngine::iocContext() const
+{
+    return m_iocContext;
 }
 
 QJSValue ScriptEngine::newQObject(QObject* o)

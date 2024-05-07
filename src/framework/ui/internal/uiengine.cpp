@@ -32,18 +32,56 @@
 
 using namespace muse::ui;
 
-UiEngine::UiEngine()
+namespace muse::ui {
+class QmlApiEngine : public muse::api::IApiEngine
+{
+public:
+    QmlApiEngine(QQmlEngine* e, const modularity::ContextPtr& iocContext)
+        : m_engine(e), m_iocContext(iocContext) {}
+
+    const modularity::ContextPtr& iocContext() const override
+    {
+        return m_iocContext;
+    }
+
+    QJSValue newQObject(QObject* o) override
+    {
+        if (!o->parent()) {
+            o->setParent(m_engine);
+        }
+        return m_engine->newQObject(o);
+    }
+
+    QJSValue newObject() override
+    {
+        return m_engine->newObject();
+    }
+
+    QJSValue newArray(size_t length = 0) override
+    {
+        return m_engine->newArray(uint(length));
+    }
+
+private:
+    QQmlEngine* m_engine = nullptr;
+    const modularity::ContextPtr& m_iocContext;
+};
+}
+
+UiEngine::UiEngine(const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx)
 {
     m_engine = new QQmlApplicationEngine(this);
+    m_apiEngine = new QmlApiEngine(m_engine, iocContext());
     m_translation = new QmlTranslation(this);
-    m_interactiveProvider = std::make_shared<InteractiveProvider>();
-    m_api = new QmlApi(this);
+    m_interactiveProvider = std::make_shared<InteractiveProvider>(iocContext());
+    m_api = new QmlApi(this, iocContext());
     m_tooltip = new QmlToolTip(this);
 
     //! NOTE At the moment, UiTheme is also QProxyStyle
     //! Inside the theme, QApplication::setStyle(this) is calling and the QStyleSheetStyle becomes as parent.
     //! So, the UiTheme will be deleted when will deleted the application (as a child of QStyleSheetStyle).
-    m_theme = new api::ThemeApi();
+    m_theme = new api::ThemeApi(m_apiEngine);
 }
 
 UiEngine::~UiEngine()
@@ -57,6 +95,10 @@ void UiEngine::init()
     m_tooltip->init();
     m_engine->rootContext()->setContextProperty("ui", this);
     m_engine->rootContext()->setContextProperty("api", m_api);
+
+    QmlIoCContext* qmlIoc = new QmlIoCContext(this);
+    qmlIoc->ctx = iocContext();
+    m_engine->setProperty("ioc_context", QVariant::fromValue(qmlIoc));
 
     QJSValue translator = m_engine->newQObject(m_translation);
     QJSValue translateFn = translator.property("translate");

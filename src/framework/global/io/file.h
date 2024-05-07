@@ -31,7 +31,7 @@
 namespace muse::io {
 class File : public IODevice
 {
-    static inline Inject<IFileSystem> fileSystem;
+    static inline GlobalInject<IFileSystem> fileSystem;
 
 public:
 

@@ -36,7 +36,8 @@
 #include "languages/ilanguagesservice.h"
 
 namespace muse::ui {
-class UiEngine : public QObject, public IUiEngine
+class QmlApiEngine;
+class UiEngine : public QObject, public IUiEngine, public Injectable
 {
     Q_OBJECT
 
@@ -51,7 +52,7 @@ class UiEngine : public QObject, public IUiEngine
     Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
 
 public:
-    UiEngine();
+    UiEngine(const modularity::ContextPtr& iocCtx);
     ~UiEngine() override;
 
     void init();
@@ -86,6 +87,7 @@ signals:
 private:
 
     QQmlApplicationEngine* m_engine = nullptr;
+    QmlApiEngine* m_apiEngine = nullptr;
     QStringList m_sourceImportPaths;
     api::ThemeApi* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;

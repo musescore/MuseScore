@@ -34,7 +34,7 @@ class ProcessApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(IProcess, process)
+    Inject<IProcess> process = { this };
 
 public:
     explicit ProcessApi(IApiEngine* e);

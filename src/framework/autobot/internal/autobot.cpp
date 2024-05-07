@@ -203,7 +203,7 @@ void Autobot::execScript(const io::path_t& path, const Options& opt)
 
     affectOnServices();
 
-    m_engine = new ScriptEngine();
+    m_engine = new ScriptEngine(iocContext());
     m_engine->setScriptPath(path);
 
     m_context = std::make_shared<TestCaseContext>();

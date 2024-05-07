@@ -35,12 +35,12 @@ class DockPanelView;
 class DockingHolderView;
 class DockToolBarView;
 class DockPageView;
-class DropController : public KDDockWidgets::DropIndicatorOverlayInterface
+class DropController : public KDDockWidgets::DropIndicatorOverlayInterface, public Injectable
 {
-    INJECT(IDockWindowProvider, dockWindowProvider)
+    Inject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
-    explicit DropController(KDDockWidgets::DropArea* dropArea);
+    explicit DropController(KDDockWidgets::DropArea* dropArea, const modularity::ContextPtr& iocCtx);
 
     DropLocation hover_impl(QPoint globalPos) override;
     QPoint posForIndicator(DropLocation) const override;
