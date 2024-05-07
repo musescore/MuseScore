@@ -34,6 +34,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/beam_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/box_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/breath_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/bsptree_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/chordsymbol_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/clef_courtesy_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/clef_tests.cpp
