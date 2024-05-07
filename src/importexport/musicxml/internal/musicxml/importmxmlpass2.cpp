@@ -7758,8 +7758,6 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
                 arpeggio->setArpeggioType(ArpeggioType::DOWN);
             } else if (arpeggioType == "non-arpeggiate") {
                 arpeggio->setArpeggioType(ArpeggioType::BRACKET);
-            } else {
-                logger->logError(String(u"unknown arpeggio type %1").arg(arpeggioType), xmlreader);
             }
             // there can be only one
             if (!(static_cast<Chord*>(cr))->arpeggio()) {
