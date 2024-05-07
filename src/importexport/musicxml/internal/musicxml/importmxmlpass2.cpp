@@ -1288,8 +1288,6 @@ static SymId convertFermataToSymId(const String& mxmlName)
 
     if (muse::contains(map, mxmlName)) {
         return map.at(mxmlName);
-    } else {
-        LOGD("unknown fermata %s", muPrintable(mxmlName));
     }
     return SymId::fermataAbove;
 }
