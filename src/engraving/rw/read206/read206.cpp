@@ -3284,6 +3284,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
             }
             if (ctx.overrideSpatium()) {
+                ctx.setOriginalSpatium(score->style().spatium());
                 score->style().set(Sid::spatium, sp);
             }
             score->setEngravingFont(engravingFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString()));
@@ -3421,8 +3422,8 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
 Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
-    if (out && out->overridedSpatium.has_value()) {
-        ctx.setSpatium(out->overridedSpatium.value());
+    if (out && out->overriddenSpatium.has_value()) {
+        ctx.setSpatium(out->overriddenSpatium.value());
         ctx.setOverrideSpatium(true);
     }
     DEFER {
@@ -3440,6 +3441,10 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "Score") {
             if (!readScore206(score, e, ctx)) {
                 return Err::FileBadFormat;
+            }
+
+            if (ctx.overrideSpatium() && out) {
+                out->originalSpatium = ctx.originalSpatium();
             }
         } else if (tag == "Revision") {
             e.skipCurrentElement();
