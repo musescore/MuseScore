@@ -98,6 +98,7 @@ public:
     int fileDivision(int t) const;
 
     double spatium() const;
+    void setSpatium(double v);
 
     compat::DummyElement* dummy() const;
 

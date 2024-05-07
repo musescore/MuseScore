@@ -43,7 +43,8 @@ class MscLoader
 public:
     MscLoader() = default;
 
-    muse::Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
+    muse::Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError,
+                       rw::ReadInOutData* out = nullptr);
 
 private:
     friend class MasterScore;
