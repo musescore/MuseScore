@@ -759,7 +759,7 @@ void Spanner::doComputeStartElement()
             if (startEl) {
                 m_startElement = startEl;
             } else {
-                m_startElement = startSeg->elementAt(trackZeroVoice(track()));
+                m_startElement = startSeg->firstElement(track2staff(track()));
             }
         }
     }
@@ -811,11 +811,12 @@ void Spanner::doComputeEndElement()
         if (systemFlag()) {
             m_endElement = endSeg;
         } else {
-            EngravingItem* endEl = endSeg->elementAt(track2());
+            track_idx_t trackIdx = track2() != muse::nidx ? track2() : track();
+            EngravingItem* endEl = endSeg->elementAt(trackIdx);
             if (endEl) {
                 m_endElement = endEl;
             } else {
-                m_endElement = endSeg->elementAt(trackZeroVoice(track2()));
+                m_endElement = endSeg->firstElement(track2staff(trackIdx));
             }
         }
     }
@@ -1048,10 +1049,12 @@ Segment* Spanner::startSegment() const
 
     bool mmRest = style().styleB(Sid::createMultiMeasureRests);
     Fraction startTick = tick();
+    track_idx_t trackIdx = track();
+    staff_idx_t staffIdx = track2staff(trackIdx);
 
     Segment* startSeg = score()->tick2segment(startTick, true, SegmentType::ChordRest, mmRest);
 
-    if (!startSeg || !startSeg->elementAt(track())) {
+    if (!startSeg || !startSeg->hasElements(staffIdx) || (isVoiceSpecific() && !startSeg->elementAt(trackIdx))) {
         startSeg = score()->tick2segment(startTick, true, SegmentType::TimeTick, mmRest);
     }
 
@@ -1071,18 +1074,20 @@ Segment* Spanner::endSegment() const
     assert(score() != NULL);
 
     bool mmRest = style().styleB(Sid::createMultiMeasureRests);
-
     Fraction endTick = tick2();
+    track_idx_t trackIdx = track2() != muse::nidx ? track2() : track();
+    staff_idx_t staffIdx = track2staff(trackIdx);
 
     Segment* endSeg = score()->tick2segment(endTick, true, SegmentType::ChordRest, mmRest);
-    if (!endSeg || !endSeg->elementAt(track())) {
+
+    if (!endSeg || !endSeg->hasElements(staffIdx) || (isVoiceSpecific() && !endSeg->elementAt(trackIdx))) {
         endSeg = score()->tick2segment(endTick, true, SegmentType::TimeTick, mmRest);
     }
 
     if (!endSeg && !endTick.isZero()) {
         Measure* measure = mmRest ? score()->tick2measureMM(endTick) : score()->tick2measure(endTick);
         if (measure) {
-            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, endTick - measure->tick(), track2staff(track2()));
+            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, endTick - measure->tick(), track2staff(trackIdx));
             return anchor->segment();
         }
     }

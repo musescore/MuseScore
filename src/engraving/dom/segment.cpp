@@ -1253,6 +1253,13 @@ bool Segment::hasElements(track_idx_t minTrack, track_idx_t maxTrack) const
     return false;
 }
 
+bool Segment::hasElements(staff_idx_t staffIdx) const
+{
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES - 1;
+    return hasElements(startTrack, endTrack);
+}
+
 //---------------------------------------------------------
 //   allElementsInvisible
 ///  return true if all elements in the segment are invisible
@@ -2540,16 +2547,17 @@ double Segment::spacing() const
     return m_spacing;
 }
 
-bool Segment::canWriteSpannerStartEnd(track_idx_t track) const
+bool Segment::canWriteSpannerStartEnd(track_idx_t track, const Spanner* spanner) const
 {
-    if (isChordRestType() && elementAt(track)) {
+    staff_idx_t staffIdx = track2staff(track);
+    if (isChordRestType() && (elementAt(track) || (!spanner->isVoiceSpecific() && hasElements(staffIdx)))) {
         return true;
     }
 
     if (isTimeTickType()) {
         Segment* crSegAtSameTick
             = score()->tick2segment(tick(), true, SegmentType::ChordRest, style().styleB(Sid::createMultiMeasureRests));
-        if (!crSegAtSameTick || !crSegAtSameTick->elementAt(track)) {
+        if (!crSegAtSameTick || !crSegAtSameTick->canWriteSpannerStartEnd(track, spanner)) {
             return true;
         }
     }

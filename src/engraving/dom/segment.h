@@ -203,6 +203,7 @@ public:
     std::vector<EngravingItem*> findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
     bool hasElements() const;
     bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
+    bool hasElements(staff_idx_t staffIdx) const;
     bool allElementsInvisible() const;
 
     Spatium extraLeadingSpace() const { return m_extraLeadingSpace; }
@@ -282,7 +283,7 @@ public:
     bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }
     bool isRightAligned() const { return isClefType() || isBreathType(); }
 
-    bool canWriteSpannerStartEnd(track_idx_t track) const;
+    bool canWriteSpannerStartEnd(track_idx_t track, const Spanner* spanner) const;
 
     Fraction shortestChordRest() const;
     void computeCrossBeamType(Segment* nextSeg);

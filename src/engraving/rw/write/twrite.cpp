@@ -3286,8 +3286,11 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             Measure* m = segment->measure();
             // don't write spanners for multi measure rests
 
-            if ((!(m && m->isMMRest())) && segment->canWriteSpannerStartEnd(track)) {
+            if ((!(m && m->isMMRest()))) {
                 for (Spanner* s : spanners) {
+                    if (!segment->canWriteSpannerStartEnd(track, s)) {
+                        continue;
+                    }
                     if (s->track() == track) {
                         bool end = false;
                         if (s->anchor() == Spanner::Anchor::CHORD || s->anchor() == Spanner::Anchor::NOTE) {
