@@ -717,6 +717,89 @@ const InstrumentTemplate* searchTemplate(const String& name)
     return 0;
 }
 
+const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
+                                                 int program)
+{
+    if (mxmlId.empty() && name.empty() && transposition == -1 && bank == 0 && program == -1) {
+        // No instrument information provided
+        return nullptr;
+    }
+
+    String id = mxmlId;
+    if (mxmlId.empty()) {
+        if (name.contains(u"drum", mu::CaseInsensitive)) {
+            id = u"drum.group.set";
+        } else if (name.contains(u"piano", mu::CaseInsensitive)) {
+            id = u"keyboard.piano";
+        }
+    }
+
+    // This is to workaround old generic instrument templates
+    if ((mxmlId == u"wind.reed.clarinet" || mxmlId == u"brass.trumpet") && transposition == 10) {
+        id.append(u".bflat");
+    }
+
+    // Perform a weighted search over musicxml ID, instrument name, transposition, and midi program
+    static const int MXML_ID_WEIGHT = 4;
+    static const int TRACK_NAME_WEIGHT = 32;
+    static const int LONG_NAME_WEIGHT = 16;
+    static const int SHORT_NAME_WEIGHT = 8;
+    static const int MIDI_WEIGHT = 2;
+    static const int TRANSPOSITION_WEIGHT = 1;
+
+    // Exclude text weights from a perfect score as we only have one string to match, and it won't match all three track, long and short names
+    int perfectMatchStrength = 0 + (id.isEmpty() ? 0 : MXML_ID_WEIGHT)
+                               + (program == -1 ? 0 : MIDI_WEIGHT)
+                               + TRANSPOSITION_WEIGHT;
+    const InstrumentTemplate* bestMatch = nullptr;
+    int bestMatchStrength = 0;
+    for (const InstrumentGroup* g : instrumentGroups) {
+        for (const InstrumentTemplate* it : g->instrumentTemplates) {
+            if (it->trait.name == u"[hide]") {
+                continue;
+            }
+            int matchStrength = 0;
+            int nameWeight = 0;
+
+            // MusicXML ID
+            if (!it->musicXMLid.empty() && it->musicXMLid == id) {
+                matchStrength += MXML_ID_WEIGHT;
+            }
+
+            // Instrument names
+            if (!name.isEmpty()) {
+                nameWeight = 0 + (TRACK_NAME_WEIGHT * (it->trackName == name ? 1 : 0))
+                             + (LONG_NAME_WEIGHT * (mu::contains(it->longNames, StaffName(name)) ? 1 : 0))
+                             + (SHORT_NAME_WEIGHT * (mu::contains(it->shortNames, StaffName(name)) ? 1 : 0));
+                matchStrength += nameWeight;
+            }
+
+            // Midi program
+            for (const InstrChannel& channel : it->channel) {
+                if (channel.bank() == bank && channel.program() == program) {
+                    matchStrength += MIDI_WEIGHT;
+                    break;
+                }
+            }
+
+            // We aren't concerned about the octave of transpositions
+            if (transposition == (it->transpose.chromatic + 12) % 12) {
+                matchStrength += TRANSPOSITION_WEIGHT;
+            }
+
+            if (matchStrength > bestMatchStrength) {
+                bestMatch = it;
+                bestMatchStrength = matchStrength;
+                if (bestMatchStrength - nameWeight == perfectMatchStrength && nameWeight > 0) {
+                    return bestMatch; // stop looking for matches
+                }
+            }
+        }
+    }
+
+    return bestMatch;
+}
+
 const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId)
 {
     for (const InstrumentGroup* g : instrumentGroups) {
