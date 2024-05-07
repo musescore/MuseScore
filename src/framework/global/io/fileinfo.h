@@ -30,7 +30,7 @@
 namespace muse::io {
 class FileInfo
 {
-    static inline Inject<IFileSystem> fileSystem;
+    static inline GlobalInject<IFileSystem> fileSystem;
 
 public:
     FileInfo() = default;

@@ -35,7 +35,8 @@ class FileSystemApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(io::IFileSystem, fileSystem)
+    muse::GlobalInject<io::IFileSystem> fileSystem;
+
 public:
     FileSystemApi(IApiEngine* e);
 

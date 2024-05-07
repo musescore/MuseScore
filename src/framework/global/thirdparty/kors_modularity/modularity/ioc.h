@@ -49,7 +49,22 @@ public:
         : m_ctx(ctx) {}
 
     Inject(const Injectable* o)
-        : m_ctx(o->iocContext()) {}
+        : m_inj(o) {}
+
+    const ContextPtr& iocContext() const
+    {
+        if (m_ctx) {
+            return m_ctx;
+        }
+
+        //assert(m_inj);
+        if (m_inj) {
+            return m_inj->iocContext();
+        }
+
+        // null
+        return m_ctx;
+    }
 
     const std::shared_ptr<I>& get() const
     {
@@ -57,7 +72,7 @@ public:
             const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
             if (!m_i) {
                 static std::string_view module = "";
-                m_i = _ioc(m_ctx)->template resolve<I>(module);
+                m_i = _ioc(iocContext())->template resolve<I>(module);
             }
         }
         return m_i;
@@ -76,7 +91,16 @@ public:
 private:
 
     const ContextPtr m_ctx;
+    const Injectable* m_inj = nullptr;
     mutable std::shared_ptr<I> m_i = nullptr;
+};
+
+template<class I>
+class GlobalInject : public Inject<I>
+{
+public:
+    GlobalInject()
+        : Inject<I>(ContextPtr()) {}
 };
 }
 

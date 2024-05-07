@@ -61,8 +61,8 @@ private:
     std::function<void()> m_onHideCallBack;
 };
 
-InteractiveProvider::InteractiveProvider()
-    : QObject()
+InteractiveProvider::InteractiveProvider(const modularity::ContextPtr& iocCtx)
+    : QObject(), Injectable(iocCtx)
 {
     connect(qApp, &QGuiApplication::focusWindowChanged, this, [this](QWindow* window) {
         raiseWindowInStack(window);

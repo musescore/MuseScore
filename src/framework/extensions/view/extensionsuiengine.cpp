@@ -29,8 +29,13 @@ namespace muse::extensions {
 class QmlApiEngine : public muse::api::IApiEngine
 {
 public:
-    QmlApiEngine(QQmlEngine* e)
-        : m_engine(e) {}
+    QmlApiEngine(QQmlEngine* e, const modularity::ContextPtr& iocContext)
+        : m_engine(e), m_iocContext(iocContext) {}
+
+    const modularity::ContextPtr& iocContext() const override
+    {
+        return m_iocContext;
+    }
 
     QJSValue newQObject(QObject* o) override
     {
@@ -52,6 +57,7 @@ public:
 
 private:
     QQmlEngine* m_engine = nullptr;
+    const modularity::ContextPtr& m_iocContext;
 };
 }
 
@@ -72,7 +78,7 @@ void ExtensionsUiEngine::setup()
     QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
     m_engine->rootContext()->setContextProperty("ui", ui);
 
-    m_apiEngine = new QmlApiEngine(m_engine);
+    m_apiEngine = new QmlApiEngine(m_engine, iocContext());
     m_api = new api::ExtApi(m_apiEngine, m_engine);
     m_engine->globalObject().setProperty("api", m_engine->newQObject(m_api));
 
@@ -115,7 +121,7 @@ void ExtensionsUiEngine::setupV1()
     QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
     m_engineV1->rootContext()->setContextProperty("ui", ui);
 
-    m_apiEngineV1 = new QmlApiEngine(m_engineV1);
+    m_apiEngineV1 = new QmlApiEngine(m_engineV1, iocContext());
     m_apiV1 = new apiv1::ExtApiV1(m_apiEngineV1, m_engineV1);
     m_engineV1->globalObject().setProperty("api", m_engineV1->newQObject(m_apiV1));
 

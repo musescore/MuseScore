@@ -19,24 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONRUNNER_H
-#define MUSE_EXTENSIONS_EXTENSIONRUNNER_H
 
-#include "modularity/ioc.h"
-#include "global/types/ret.h"
-#include "../extensionstypes.h"
+#include "ioc.h"
 
-namespace muse::extensions {
-class ExtensionRunner
+#include "log.h"
+
+#ifndef NO_QT_SUPPORT
+#include <QtQml>
+
+muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {
-public:
-    ExtensionRunner(const modularity::ContextPtr& iocCtx);
+    return [o]() {
+        QQmlEngine* engine = qmlEngine(o);
+        if (!engine) {
+            engine = qmlEngine(o->parent());
+        }
 
-    Ret run(const Action& action);
+        IF_ASSERT_FAILED(engine) {
+            return modularity::ContextPtr();
+        }
 
-private:
-    const modularity::ContextPtr m_iocContext;
-};
+        QmlIoCContext* qmlIoc = engine->property("ioc_context").value<QmlIoCContext*>();
+        IF_ASSERT_FAILED(qmlIoc) {
+            return modularity::ContextPtr();
+        }
+
+        return qmlIoc->ctx;
+    };
 }
 
-#endif // MUSE_EXTENSIONS_EXTENSIONRUNNER_H
+#endif

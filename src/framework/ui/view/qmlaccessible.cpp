@@ -32,7 +32,7 @@ using namespace muse::ui;
 using namespace muse::accessibility;
 
 AccessibleItem::AccessibleItem(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

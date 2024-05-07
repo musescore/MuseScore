@@ -34,7 +34,7 @@ using namespace muse::ui;
 using namespace muse::modularity;
 
 MainWindowBridge::MainWindowBridge(QObject* parent)
-    : QObject(parent), m_window(nullptr)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this)), m_window(nullptr)
 {
 }
 

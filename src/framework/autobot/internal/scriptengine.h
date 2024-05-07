@@ -39,9 +39,9 @@ namespace muse::autobot {
 class JsModuleLoader;
 class ScriptEngine : public muse::api::IApiEngine
 {
-    INJECT(io::IFileSystem, fileSystem)
+    GlobalInject<io::IFileSystem> fileSystem;
 public:
-    ScriptEngine();
+    ScriptEngine(const modularity::ContextPtr& iocContext);
     ~ScriptEngine();
 
     struct CallData {
@@ -68,6 +68,7 @@ public:
     void setExports(const QJSValue& obj);
 
     // IApiEngine
+    const modularity::ContextPtr& iocContext() const override;
     QJSValue newQObject(QObject* o) override;
     QJSValue newObject() override;
     QJSValue newArray(size_t length = 0) override;
@@ -87,6 +88,7 @@ private:
         QJSValue func;
     };
 
+    const modularity::ContextPtr m_iocContext;
     QJSEngine* m_engine = nullptr;
     ScriptApi* m_api = nullptr;
     JsModuleLoader* m_moduleLoader = nullptr;

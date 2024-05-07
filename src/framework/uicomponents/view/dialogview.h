@@ -26,6 +26,7 @@
 #include <QEventLoop>
 
 #include "popupview.h"
+#include "modularity/ioc.h"
 #include "global/iapplication.h"
 
 namespace muse::uicomponents {
@@ -33,7 +34,7 @@ class DialogView : public PopupView
 {
     Q_OBJECT
 
-    Inject<muse::IApplication> application;
+    Inject<muse::IApplication> application = { this };
 
 public:
     explicit DialogView(QQuickItem* parent = nullptr);
@@ -48,6 +49,7 @@ public:
 
 private:
     bool isDialog() const override;
+    void beforeOpen() override;
     void onHidden() override;
 
     QScreen* resolveScreen() const override;

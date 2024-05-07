@@ -32,7 +32,7 @@
 #include "async/notification.h"
 
 namespace muse::ui {
-class MainWindowBridge : public QObject
+class MainWindowBridge : public QObject, public Injectable
 {
     Q_OBJECT
 
@@ -40,7 +40,7 @@ class MainWindowBridge : public QObject
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
     Q_PROPERTY(bool fileModified READ fileModified WRITE setFileModified NOTIFY fileModifiedChanged)
 
-    INJECT(IMainWindow, mainWindow)
+    Inject<IMainWindow> mainWindow = { this };
 
 public:
     explicit MainWindowBridge(QObject* parent = nullptr);

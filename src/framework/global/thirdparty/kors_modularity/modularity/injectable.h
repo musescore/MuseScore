@@ -2,6 +2,8 @@
 #define KORS_MODULARITY_INJECTABLE_H
 
 #include <cassert>
+#include <functional>
+
 #include "context.h"
 
 namespace kors::modularity {
@@ -10,25 +12,37 @@ class Injectable
 public:
     virtual ~Injectable() = default;
 
-    Injectable(const ContextPtr& ctx = nullptr)
+    using GetContext = std::function<modularity::ContextPtr()>;
+
+    Injectable(const modularity::ContextPtr& ctx = nullptr)
         : m_ctx(ctx) {}
 
-    Injectable(const Injectable* inj = nullptr)
+    Injectable(const Injectable* inj)
         : m_inj(inj) {}
 
-    const ContextPtr& iocContext() const
+    Injectable(const GetContext& getCtx)
+        : m_getCtx(getCtx) {}
+
+    const modularity::ContextPtr& iocContext() const
     {
         if (m_ctx) {
             return m_ctx;
         }
 
-        assert(m_inj);
-        return m_inj->iocContext();
+        assert(m_inj || m_getCtx);
+
+        if (m_inj) {
+            return m_inj->iocContext();
+        }
+
+        m_ctx = m_getCtx();
+        return m_ctx;
     }
 
 private:
-    const ContextPtr m_ctx;
+    mutable modularity::ContextPtr m_ctx;
     const Injectable* m_inj = nullptr;
+    const GetContext m_getCtx;
 };
 }
 

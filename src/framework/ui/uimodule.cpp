@@ -88,7 +88,7 @@ std::string UiModule::moduleName() const
 
 void UiModule::registerExports()
 {
-    m_uiengine = std::make_shared<UiEngine>();
+    m_uiengine = std::make_shared<UiEngine>(iocContext());
     m_configuration = std::make_shared<UiConfiguration>();
     m_uiactionsRegister = std::make_shared<UiActionsRegister>();
     m_keyNavigationController = std::make_shared<NavigationController>();

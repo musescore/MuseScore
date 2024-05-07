@@ -29,9 +29,14 @@
 using namespace muse;
 using namespace muse::extensions;
 
+ExtensionRunner::ExtensionRunner(const modularity::ContextPtr& iocCtx)
+    : m_iocContext(iocCtx)
+{
+}
+
 Ret ExtensionRunner::run(const Action& action)
 {
-    ScriptEngine engine(action.apiversion);
+    ScriptEngine engine(m_iocContext, action.apiversion);
     engine.setScriptPath(action.main);
     Ret ret = engine.evaluate();
     if (!ret) {

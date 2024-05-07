@@ -28,13 +28,14 @@
 #include "global/iinteractive.h"
 
 namespace muse::extensions {
-class ExtensionsProvider : public IExtensionsProvider
+class ExtensionsProvider : public IExtensionsProvider, public Injectable
 {
     Inject<IExtensionsConfiguration> configuration;
     Inject<IInteractive> interactive;
 
 public:
-    ExtensionsProvider() = default;
+    ExtensionsProvider(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void reloadPlugins() override;
 

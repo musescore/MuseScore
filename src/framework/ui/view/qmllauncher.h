@@ -28,14 +28,14 @@
 #include "iinteractive.h"
 
 namespace muse::ui {
-class QmlLauncher : public QObject
+class QmlLauncher : public QObject, public Injectable
 {
     Q_OBJECT
 
-    INJECT(IInteractive, interactive)
+    Inject<IInteractive> interactive = { this };
 
 public:
-    QmlLauncher(QObject* parent);
+    QmlLauncher(QObject* parent, const modularity::ContextPtr& iocCtx);
 
     Q_INVOKABLE bool open(const QString& uri);
     Q_INVOKABLE bool openUrl(const QString& url);

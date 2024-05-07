@@ -34,12 +34,12 @@ class QmlApi : public QObject
     Q_PROPERTY(QmlLauncher * launcher READ launcher CONSTANT)
 
 public:
-    explicit QmlApi(QObject* parent = nullptr);
+    explicit QmlApi(QObject* parent, const modularity::ContextPtr& iocCtx);
 
     QmlLauncher* launcher() const;
 
 private:
-
+    const modularity::ContextPtr m_iocContext;
     QmlLauncher* m_launcher = nullptr;
 };
 }

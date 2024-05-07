@@ -23,10 +23,10 @@
 
 using namespace muse::ui;
 
-QmlApi::QmlApi(QObject* parent)
-    : QObject(parent)
+QmlApi::QmlApi(QObject* parent, const modularity::ContextPtr& iocCtx)
+    : QObject(parent), m_iocContext(iocCtx)
 {
-    m_launcher = new QmlLauncher(this);
+    m_launcher = new QmlLauncher(this, m_iocContext);
 }
 
 QmlLauncher* QmlApi::launcher() const

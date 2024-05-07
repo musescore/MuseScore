@@ -88,10 +88,10 @@ class ThemeApi : public api::ApiObject, public async::Asyncable
 
 public:
 
-    Inject<ui::IUiConfiguration> configuration;
+    Inject<ui::IUiConfiguration> configuration = { this };
 
 public:
-    ThemeApi();
+    ThemeApi(IApiEngine* e);
 #ifdef MU_QT5_COMPAT
     ThemeApi(const ThemeApi& api)
         : ApiObject(api.engine()) {}

@@ -34,14 +34,16 @@
 
 namespace muse::extensions {
 class QmlApiEngine;
-class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
+class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine, public Injectable
 {
     Q_OBJECT
 
-    Inject<ui::IUiEngine> uiEngine;
+    Inject<ui::IUiEngine> uiEngine = { this };
 
 public:
-    ExtensionsUiEngine() = default;
+    ExtensionsUiEngine(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     ~ExtensionsUiEngine();
 
     QQmlEngine* qmlEngine() const;

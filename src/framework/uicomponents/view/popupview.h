@@ -48,7 +48,7 @@ class INavigationControl;
 }
 
 namespace muse::uicomponents {
-class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
+class PopupView : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -92,9 +92,9 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
 public:
-    INJECT(ui::IMainWindow, mainWindow)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
-    INJECT(ui::INavigationController, navigationController)
+    Inject<ui::IMainWindow> mainWindow = { this };
+    Inject<ui::IUiConfiguration> uiConfiguration = { this };
+    Inject<ui::INavigationController> navigationController= { this };
 
 public:
 
@@ -241,6 +241,7 @@ protected:
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
+    virtual void beforeOpen();
     void doOpen();
 
     QWindow* qWindow() const;

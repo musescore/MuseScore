@@ -32,7 +32,7 @@ class InteractiveApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(IInteractive, interactive)
+    Inject<IInteractive> interactive = { this };
 
 public:
     explicit InteractiveApi(IApiEngine* e);

@@ -22,26 +22,11 @@
 #ifndef MU_MODULARITY_IOC_H
 #define MU_MODULARITY_IOC_H
 
+#ifndef NO_QT_SUPPORT
+#include <QObject>
+#endif
+
 #include "../thirdparty/kors_modularity/modularity/ioc.h" // IWYU pragma: export
-
-namespace muse {
-template<class I>
-using Inject = kors::modularity::Inject<I>;
-}
-
-namespace muse {
-template<class I>
-using Inject = kors::modularity::Inject<I>;
-using Injectable = kors::modularity::Injectable;
-}
-
-#define INJECT(Interface, getter) muse::Inject<Interface> getter;
-#define INJECT_STATIC(Interface, getter) static inline muse::Inject<Interface> getter;
-
-namespace mu {
-template<class I>
-using Inject = kors::modularity::Inject<I>;
-}
 
 namespace muse::modularity {
 using ModulesIoC = kors::modularity::ModulesIoC;
@@ -70,6 +55,37 @@ inline void removeIoC(const ContextPtr& ctx = nullptr)
 {
     kors::modularity::removeIoC(ctx);
 }
+}
+
+namespace muse {
+template<class I>
+using Inject = kors::modularity::Inject<I>;
+template<class I>
+using GlobalInject = kors::modularity::GlobalInject<I>;
+
+#define INJECT(Interface, getter) muse::Inject<Interface> getter;
+#define INJECT_STATIC(Interface, getter) static inline muse::Inject<Interface> getter;
+
+using Injectable = kors::modularity::Injectable;
+
+#ifndef NO_QT_SUPPORT
+struct QmlIoCContext : public QObject
+{
+    Q_OBJECT
+public:
+    QmlIoCContext(QObject* p)
+        : QObject(p) {}
+
+    modularity::ContextPtr ctx;
+};
+
+Injectable::GetContext iocCtxForQmlObject(const QObject* o);
+#endif
+}
+
+namespace mu {
+template<class I>
+using Inject = kors::modularity::Inject<I>;
 }
 
 #endif // MU_MODULARITY_IOC_H

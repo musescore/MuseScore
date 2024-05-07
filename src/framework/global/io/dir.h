@@ -32,7 +32,7 @@
 namespace muse::io {
 class Dir
 {
-    static inline Inject<IFileSystem> fileSystem;
+    static inline GlobalInject<IFileSystem> fileSystem;
 
 public:
     Dir() = default;
