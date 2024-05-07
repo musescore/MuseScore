@@ -928,6 +928,8 @@ bool MeiExporter::writeLayer(track_idx_t track, const Staff* staff, const Measur
             this->writeRest(dynamic_cast<const Rest*>(item), staff);
         } else if (item->isBarLine()) {
             //
+        } else if (item->isBreath()) {
+            //
         } else if (item->isKeySig()) {
             if (m_keySig && (seg != m_keySig)) {
                 LOGD() << "MeiExporter::writeLayer unexpected KeySig segment";
