@@ -4785,7 +4785,6 @@ static bool determineBarLineType(const String& barStyle, const String& repeat,
         } else if (repeat == u"forward") {
             type = BarLineType::START_REPEAT;
         } else {
-            LOGD("empty bar type");             // TODO
             return false;
         }
     } else if ((barStyle == u"tick") || (barStyle == u"short")) {
