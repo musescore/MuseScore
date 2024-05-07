@@ -51,6 +51,8 @@ public:
     virtual PropertyValue propertyDefault(Pid propertyId) const override;
 
     int crossStaffIdx() const;
+    int defaultCrossStaffIdx() const;
+    bool acceptCrossStaffMove(int move) const;
 
     bool up() const { return m_up; }
     void setUp(bool v) { m_up = v; }
@@ -86,10 +88,6 @@ protected:
     BeamBase(const BeamBase&);
 
     bool m_up = true;
-
-private:
-    int defaultCrossStaffIdx() const;
-    bool acceptCrossStaffMove(int move) const;
 };
 }
 
