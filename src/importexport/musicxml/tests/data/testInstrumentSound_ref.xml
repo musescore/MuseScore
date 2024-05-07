@@ -40,7 +40,7 @@
       <midi-device id="P2-I1" port="1"></midi-device>
       <midi-instrument id="P2-I1">
         <midi-channel>3</midi-channel>
-        <midi-program>24</midi-program>
+        <midi-program>22</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>
