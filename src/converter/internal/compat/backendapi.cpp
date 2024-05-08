@@ -209,7 +209,7 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::pat
 {
     TRACEFUNC
 
-    auto notationProject = notationCreator()->newProject();
+    auto notationProject = notationCreator()->newProject(nullptr);
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Ret::Code::InternalError);
     }

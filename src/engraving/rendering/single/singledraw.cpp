@@ -464,7 +464,7 @@ void SingleDraw::draw(const Note* item, Painter* painter)
     }
 
     const Note::LayoutData* ldata = item->ldata();
-    auto config = item->engravingConfiguration();
+    auto config = item->configuration();
 
     bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
 
@@ -1873,7 +1873,7 @@ void SingleDraw::draw(const Image* item, Painter* painter)
 
     if (emptyImage) {
         painter->setBrush(BrushStyle::NoBrush);
-        painter->setPen(item->engravingConfiguration()->defaultColor());
+        painter->setPen(item->configuration()->defaultColor());
         painter->drawRect(ldata->bbox());
         painter->drawLine(0.0, 0.0, ldata->bbox().width(), ldata->bbox().height());
         painter->drawLine(ldata->bbox().width(), 0.0, 0.0, ldata->bbox().height());
@@ -1931,7 +1931,7 @@ void SingleDraw::draw(const KeySig* item, Painter* painter)
 
     if (!item->explicitParent() && (item->isAtonal() || item->isCustom()) && ldata->keySymbols.empty()) {
         // empty custom or atonal key signature - draw something for palette
-        painter->setPen(item->engravingConfiguration()->formattingMarksColor());
+        painter->setPen(item->configuration()->formattingMarksColor());
         item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
     }
 }
@@ -1941,7 +1941,7 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     Pen pen;
-    pen.setColor(item->engravingConfiguration()->fontPrimaryColor());
+    pen.setColor(item->configuration()->fontPrimaryColor());
     pen.setWidthF(item->lineWidth() / 2);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     pen.setCapStyle(PenCapStyle::SquareCap);
@@ -2062,7 +2062,7 @@ void SingleDraw::draw(const ShadowNote* item, Painter* painter)
     PointF ap(item->pagePos());
     painter->translate(ap);
     double lw = item->style().styleMM(Sid::stemWidth) * item->mag();
-    Pen pen(item->engravingConfiguration()->highlightSelectionColor(item->voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    Pen pen(item->configuration()->highlightSelectionColor(item->voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     bool up = item->computeUp();
@@ -2193,7 +2193,7 @@ void SingleDraw::draw(const Spacer* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    auto conf = item->engravingConfiguration();
+    auto conf = item->configuration();
 
     Pen pen(conf->fontPrimaryColor(), item->spatium() * 0.3);
 
@@ -2214,7 +2214,7 @@ void SingleDraw::draw(const StaffState* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     const StaffState::LayoutData* ldata = item->ldata();
-    auto conf = item->engravingConfiguration();
+    auto conf = item->configuration();
 
     Pen pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
             ldata->lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
@@ -2239,7 +2239,7 @@ void SingleDraw::draw(const StaffTypeChange* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    auto conf = item->engravingConfiguration();
+    auto conf = item->configuration();
 
     double _spatium = item->style().spatium();
     double h  = _spatium * 2.5;

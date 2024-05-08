@@ -349,7 +349,7 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
         }
     }
 
-    EngravingItem::renderer()->layoutText1(m_text);
+    m_text->renderer()->layoutText1(m_text);
 }
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
@@ -1707,7 +1707,7 @@ TextBase::~TextBase()
 
 void TextBase::drawSelection(Painter* p, const RectF& r) const
 {
-    Brush bg(engravingConfiguration()->selectionColor());
+    Brush bg(configuration()->selectionColor());
     p->setCompositionMode(CompositionMode::HardLight);
     p->setBrush(bg);
     p->setNoPen();
@@ -3261,14 +3261,14 @@ void TextBase::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
     }
 
     p->translate(-pos);
-    p->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
+    p->setPen(Pen(configuration()->formattingMarksColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
     double m = spatium();
     RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
 
     p->drawRect(r);
-    pen = Pen(engravingConfiguration()->defaultColor(), 0.0);
+    pen = Pen(configuration()->defaultColor(), 0.0);
 }
 
 //---------------------------------------------------------

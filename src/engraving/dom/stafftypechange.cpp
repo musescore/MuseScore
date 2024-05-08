@@ -233,7 +233,7 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_INVISIBLE:
         return false;
     case Pid::STAFF_COLOR:
-        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::STAFF_YOFFSET:
         return Spatium(0.0);
     default:

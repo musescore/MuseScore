@@ -40,7 +40,7 @@ class Engraving_DynamicTests : public ::testing::Test
 
 TEST_F(Engraving_DynamicTests, test1)
 {
-    MasterScore* score = compat::ScoreAccess::createMasterScore();
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
 
     Dynamic* dynamic = new Dynamic(score->dummy()->segment());
     dynamic->setDynamicType(DynamicType(1));

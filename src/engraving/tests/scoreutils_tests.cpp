@@ -38,7 +38,7 @@ public:
 TEST_F(Engraving_ScoreUtilsTests, StaffIdxSetFromRange)
 {
     // [GIVEN] Score containing a bunch of parts/staves (+ linked staves)
-    MasterScore* score = compat::ScoreAccess::createMasterScore();
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
     for (int i = 0; i < 3; ++i) {
         score->appendPart(new Part(score));
     }

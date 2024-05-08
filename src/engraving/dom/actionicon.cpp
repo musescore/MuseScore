@@ -23,6 +23,7 @@
 #include "actionicon.h"
 
 #include "property.h"
+#include "score.h"
 
 #include "log.h"
 
@@ -30,10 +31,10 @@ using namespace mu;
 using namespace muse::draw;
 using namespace mu::engraving;
 
-ActionIcon::ActionIcon(EngravingItem* score)
-    : EngravingItem(ElementType::ACTION_ICON, score)
+ActionIcon::ActionIcon(EngravingItem* parent)
+    : EngravingItem(ElementType::ACTION_ICON, parent)
 {
-    m_iconFont = Font(engravingConfiguration()->iconsFontFamily(), Font::Type::Icon);
+    m_iconFont = Font(configuration()->iconsFontFamily(), Font::Type::Icon);
     m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
 }
 

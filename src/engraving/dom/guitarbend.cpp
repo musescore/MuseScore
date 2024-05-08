@@ -623,7 +623,7 @@ Color GuitarBend::uiColor() const
         return curColor();
     }
 
-    auto engravingConfig = engravingConfiguration();
+    auto engravingConfig = configuration();
     if (m_isInvalid) {
         return selected() ? engravingConfig->criticalSelectedColor() : engravingConfig->criticalColor();
     }

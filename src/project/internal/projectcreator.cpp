@@ -25,7 +25,7 @@
 
 using namespace mu::project;
 
-INotationProjectPtr ProjectCreator::newProject() const
+INotationProjectPtr ProjectCreator::newProject(const muse::modularity::ContextPtr& iocCtx) const
 {
-    return std::make_shared<NotationProject>();
+    return std::make_shared<NotationProject>(iocCtx);
 }

@@ -50,4 +50,10 @@ muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
     };
 }
 
+muse::modularity::ContextPtr muse::iocCtxForQWidget(const QWidget*)
+{
+    //! TODO
+    return modularity::ContextPtr();
+}
+
 #endif

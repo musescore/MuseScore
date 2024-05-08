@@ -73,13 +73,9 @@ class Score;
 //   @P scores               array[mu::engraving::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
-class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV1
+class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV1, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(muse::actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(mu::context::IGlobalContext, context)
-    INJECT(muse::IApplication, application)
 
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
@@ -120,6 +116,11 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
     Q_PROPERTY(mu::engraving::apiv1::Score * curScore READ curScore CONSTANT)
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
+
+public:
+    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::Inject<mu::context::IGlobalContext> context = { this };
+    muse::Inject<muse::IApplication> application = { this };
 
 public:
     // Should be initialized in qmlpluginapi.cpp

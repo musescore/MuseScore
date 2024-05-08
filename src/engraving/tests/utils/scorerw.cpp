@@ -55,7 +55,7 @@ String ScoreRW::rootPath()
 MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportFunc importFunc)
 {
     muse::io::path_t path = isAbsolutePath ? name : (rootPath() + u"/" + name);
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = muse::io::suffix(path);
 

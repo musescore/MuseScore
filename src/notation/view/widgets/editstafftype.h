@@ -34,7 +34,7 @@ namespace mu::notation {
 //   EditStaffType
 //---------------------------------------------------------
 
-class EditStaffType : public QDialog, private Ui::EditStaffType
+class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Injectable
 {
     Q_OBJECT
 

@@ -32,12 +32,14 @@
 #include "async/asyncable.h"
 
 namespace muse::ui {
-class UiActionsRegister : public IUiActionsRegister, public async::Asyncable
+class UiActionsRegister : public IUiActionsRegister, public Injectable, public async::Asyncable
 {
-    INJECT(IUiContextResolver, uicontextResolver)
-    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
+    Inject<IUiContextResolver> uicontextResolver = { this };
+    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+
 public:
-    UiActionsRegister() = default;
+    UiActionsRegister(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

@@ -36,7 +36,7 @@ class Score;
 }
 
 namespace mu::palette {
-class NoteGroups : public QGroupBox, Ui::NoteGroups
+class NoteGroups : public QGroupBox, Ui::NoteGroups, public muse::Injectable
 {
     Q_OBJECT
 

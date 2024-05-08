@@ -76,7 +76,7 @@ UiEngine::UiEngine(const modularity::ContextPtr& iocCtx)
     m_translation = new QmlTranslation(this);
     m_interactiveProvider = std::make_shared<InteractiveProvider>(iocContext());
     m_api = new QmlApi(this, iocContext());
-    m_tooltip = new QmlToolTip(this);
+    m_tooltip = new QmlToolTip(this, iocContext());
 
     //! NOTE At the moment, UiTheme is also QProxyStyle
     //! Inside the theme, QApplication::setStyle(this) is calling and the QStyleSheetStyle becomes as parent.

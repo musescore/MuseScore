@@ -27,8 +27,8 @@ static constexpr int INTERVAL = 500;
 
 using namespace muse::ui;
 
-QmlToolTip::QmlToolTip(QObject* parent)
-    : QObject(parent)
+QmlToolTip::QmlToolTip(QObject* parent, const modularity::ContextPtr& iocCtx)
+    : QObject(parent), Injectable(iocCtx)
 {
     connect(&m_openTimer, &QTimer::timeout, this, &QmlToolTip::doShow);
 

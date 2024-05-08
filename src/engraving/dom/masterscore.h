@@ -205,8 +205,9 @@ private:
     friend class read114::Read114;
     friend class read400::Read400;
 
-    MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
-    MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
+    MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
+    MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle&,
+                std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
 
     void initParts(Excerpt*);
 

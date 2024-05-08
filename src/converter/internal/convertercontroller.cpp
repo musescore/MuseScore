@@ -80,7 +80,7 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
     TRACEFUNC;
 
     LOGI() << "in: " << in << ", out: " << out;
-    auto notationProject = notationCreator()->newProject();
+    auto notationProject = notationCreator()->newProject(iocContext());
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }
@@ -130,7 +130,7 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
 {
     TRACEFUNC;
 
-    auto notationProject = notationCreator()->newProject();
+    auto notationProject = notationCreator()->newProject(iocContext());
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }
@@ -365,7 +365,7 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
 {
     TRACEFUNC;
 
-    auto notationProject = notationCreator()->newProject();
+    auto notationProject = notationCreator()->newProject(iocContext());
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }

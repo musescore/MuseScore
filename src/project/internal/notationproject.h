@@ -45,17 +45,19 @@ class MscWriter;
 }
 
 namespace mu::project {
-class NotationProject : public INotationProject, public muse::async::Asyncable
+class NotationProject : public INotationProject, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(notation::INotationCreator, notationCreator)
-    INJECT(INotationReadersRegister, readers)
-    INJECT(INotationWritersRegister, writers)
-    INJECT(IProjectMigrator, migrator)
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<notation::INotationCreator> notationCreator = { this };
+    muse::Inject<INotationReadersRegister> readers = { this };
+    muse::Inject<INotationWritersRegister> writers = { this };
+    muse::Inject<IProjectMigrator> migrator = { this };
 
 public:
+    NotationProject(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
     ~NotationProject() override;
 
     muse::Ret load(const muse::io::path_t& path,

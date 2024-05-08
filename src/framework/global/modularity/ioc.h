@@ -80,6 +80,7 @@ public:
 };
 
 Injectable::GetContext iocCtxForQmlObject(const QObject* o);
+modularity::ContextPtr iocCtxForQWidget(const QWidget* o);
 #endif
 }
 

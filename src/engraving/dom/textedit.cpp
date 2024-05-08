@@ -1073,7 +1073,7 @@ void ChangeTextProperties::undo(EditData*)
     cursor().text()->resetFormatting();
     cursor().text()->setXmlText(m_xmlText);
     restoreSelection();
-    EngravingItem::renderer()->layoutText1(cursor().text());
+    cursor().text()->renderer()->layoutText1(cursor().text());
 }
 
 void ChangeTextProperties::redo(EditData*)

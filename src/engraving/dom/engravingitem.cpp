@@ -87,7 +87,7 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* parent, E
     : EngravingObject(type, parent)
 {
     m_flags         = f;
-    m_color         = engravingConfiguration()->defaultColor();
+    m_color         = configuration()->defaultColor();
     m_z             = -1;
     m_minDistance   = Spatium(0.0);
 }
@@ -173,6 +173,16 @@ EngravingItemList EngravingItem::childrenItems(bool all) const
     EngravingItemList list;
     collectChildrenItems(this, list, all);
     return list;
+}
+
+const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+{
+    return score()->configuration.get();
+}
+
+const std::shared_ptr<rendering::IScoreRenderer>& EngravingItem::renderer() const
+{
+    return score()->renderer.get();
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -616,11 +626,11 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 {
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
-        return (normalColor == engravingConfiguration()->defaultColor()) ? Color::BLACK : normalColor;
+        return (normalColor == configuration()->defaultColor()) ? Color::BLACK : normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
-        return engravingConfiguration()->highlightSelectionColor(track() == muse::nidx ? 0 : voice());
+        return configuration()->highlightSelectionColor(track() == muse::nidx ? 0 : voice());
     }
 
     bool marked = false;
@@ -629,14 +639,14 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        return engravingConfiguration()->selectionColor(track() == muse::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster());
+        return configuration()->selectionColor(track() == muse::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster());
     }
 
     if (!isVisible) {
-        return engravingConfiguration()->invisibleColor();
+        return configuration()->invisibleColor();
     }
 
-    if (m_colorsInversionEnabled && engravingConfiguration()->scoreInversionEnabled()) {
+    if (m_colorsInversionEnabled && configuration()->scoreInversionEnabled()) {
         return normalColor.inverted();
     }
 
@@ -815,6 +825,13 @@ bool EngravingItem::hitShapeContains(const PointF& p) const
 bool EngravingItem::hitShapeIntersects(const RectF& rr) const
 {
     return hitShape().intersects(rr.translated(-pagePos()));
+}
+
+void EngravingItem::drawAt(muse::draw::Painter* p, const PointF& pt) const
+{
+    p->translate(pt);
+    renderer()->drawItem(this, p);
+    p->translate(-pt);
 }
 
 //---------------------------------------------------------
@@ -1379,7 +1396,7 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::VISIBLE:
         return true;
     case Pid::COLOR:
-        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::PLACEMENT: {
         PropertyValue v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
@@ -1963,11 +1980,11 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
 {
     using namespace muse::draw;
-    Pen pen(engravingConfiguration()->defaultColor(), 0.0);
+    Pen pen(configuration()->defaultColor(), 0.0);
     p->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
-            p->setBrush(engravingConfiguration()->formattingMarksColor());
+            p->setBrush(configuration()->formattingMarksColor());
         } else {
             p->setBrush(BrushStyle::NoBrush);
         }
@@ -2344,7 +2361,7 @@ void EngravingItem::setSelected(bool f)
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 void EngravingItem::initAccessibleIfNeed()
 {
-    if (!engravingConfiguration()->isAccessibleEnabled()) {
+    if (!configuration()->isAccessibleEnabled()) {
         return;
     }
 

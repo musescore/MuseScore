@@ -254,9 +254,9 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     Fraction fr = f * Fraction(1, _ratio.denominator());
     if (!TDuration::isValid(fr)) {
-        MessageBox::warning(muse::mtrc("engraving", "Cannot create tuplet with ratio %1 for duration %2")
-                            .arg(_ratio.toString(), f.toString()).toStdString(),
-                            std::string(), { MessageBox::Ok });
+        MessageBox(iocContext()).warning(muse::mtrc("engraving", "Cannot create tuplet with ratio %1 for duration %2")
+                                         .arg(_ratio.toString(), f.toString()).toStdString(),
+                                         std::string(), { MessageBox::Ok });
         return nullptr;
     }
 

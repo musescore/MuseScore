@@ -29,13 +29,14 @@ public:
             return m_ctx;
         }
 
-        assert(m_inj || m_getCtx);
-
         if (m_inj) {
-            return m_inj->iocContext();
+            m_ctx = m_inj->iocContext();
         }
 
-        m_ctx = m_getCtx();
+        if (m_getCtx) {
+            m_ctx = m_getCtx();
+        }
+
         return m_ctx;
     }
 

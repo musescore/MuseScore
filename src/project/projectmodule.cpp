@@ -82,7 +82,7 @@ std::string ProjectModule::moduleName() const
 void ProjectModule::registerExports()
 {
     m_configuration = std::make_shared<ProjectConfiguration>();
-    m_actionsController = std::make_shared<ProjectActionsController>();
+    m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
     m_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
 
 #ifdef Q_OS_MAC

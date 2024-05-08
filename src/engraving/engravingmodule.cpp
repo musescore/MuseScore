@@ -309,15 +309,15 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 #ifndef ENGRAVING_NO_ACCESSIBILITY
         AccessibleItem::enabled = false;
 #endif
-        gpaletteScore = compat::ScoreAccess::createMasterScore();
+        gpaletteScore = compat::ScoreAccess::createMasterScore(iocContext());
         gpaletteScore->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(""));
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
         AccessibleItem::enabled = true;
 #endif
 
-        if (EngravingObject::elementsProvider()) {
-            EngravingObject::elementsProvider()->unreg(gpaletteScore);
+        if (gpaletteScore->elementsProvider()) {
+            gpaletteScore->elementsProvider()->unreg(gpaletteScore);
         }
 
 #ifndef ENGRAVING_NO_INTERNAL

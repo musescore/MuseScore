@@ -924,7 +924,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     /// adding extra space above slurs for notes in circles
-    if (Slur::engravingConfiguration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
+    if (item->configuration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
         auto adjustSlur = [](Chord* ch, PointF& coord, bool up) {
             const Fraction halfFraction = Fraction(1, 2);
             if (ch && ch->ticks() >= halfFraction) {

@@ -3804,6 +3804,6 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
 
 bool Note::negativeFretUsed() const
 {
-    return engravingConfiguration()->negativeFretsAllowed() && m_fret < 0;
+    return configuration()->negativeFretsAllowed() && m_fret < 0;
 }
 }

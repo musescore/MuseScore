@@ -305,7 +305,7 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
 
 void NotationInteraction::paint(Painter* painter)
 {
-    EngravingItem::renderer()->drawItem(score()->shadowNote(), painter);
+    score()->renderer()->drawItem(score()->shadowNote(), painter);
 
     drawAnchorLines(painter);
     drawTextEditMode(painter);
@@ -313,7 +313,7 @@ void NotationInteraction::paint(Painter* painter)
     drawGripPoints(painter);
 
     if (m_lasso && !m_lasso->isEmpty()) {
-        EngravingItem::renderer()->drawItem(m_lasso, painter);
+        score()->renderer()->drawItem(m_lasso, painter);
     }
 
     if (m_dropData.dropRect.isValid()) {
@@ -406,7 +406,7 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
                             inputState.accidentalType(), inputState.articulationIds());
     }
 
-    EngravingItem::renderer()->layoutItem(&shadowNote);
+    score()->renderer()->layoutItem(&shadowNote);
 
     shadowNote.setPos(position.pos);
 
@@ -2987,7 +2987,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
             cursor->updateCursorFormat();
             text->editInsertText(cursor, preeditString);
             text->setTextInvalid();
-            EngravingItem::renderer()->layoutText1(text);
+            score()->renderer()->layoutText1(text);
             score()->update();
         }
     }
