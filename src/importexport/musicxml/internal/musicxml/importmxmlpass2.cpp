@@ -3129,7 +3129,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
         } else {
             if (_wordsText != "" || _metroText != "") {
-                isExpressionText = _wordsText.contains(u"<i>") && _metroText.isEmpty();
+                isExpressionText = _wordsText.contains(u"<i>") && _metroText.isEmpty() && placement() == u"below";
                 if (isExpressionText) {
                     t = Factory::createExpression(_score->dummy()->segment());
                 } else if (m_systemDirection) {
