@@ -1249,8 +1249,6 @@ static SymId convertFermataToSymId(const QString& mxmlName)
 
       if (map.contains(mxmlName))
             return map.value(mxmlName);
-      else
-            qDebug("unknown fermata %s", qPrintable(mxmlName));
       return SymId::fermataAbove;
       }
 
@@ -4761,7 +4759,6 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
             else if (repeat == "forward")
                   type = BarLineType::START_REPEAT;
             else {
-                  qDebug("empty bar type");       // TODO
                   return false;
                   }
             }
@@ -7611,8 +7608,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
 //   addArpeggio
 //---------------------------------------------------------
 
-static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
-                        MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
+static void addArpeggio(ChordRest* cr, const QString& arpeggioType)
       {
       // no support for arpeggio on rest
       if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
@@ -7624,9 +7620,6 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
                   arpeggio->setArpeggioType(ArpeggioType::DOWN);
             else if (arpeggioType == "non-arpeggiate")
                   arpeggio->setArpeggioType(ArpeggioType::BRACKET);
-            else {
-                  logger->logError(QString("unknown arpeggio type %1").arg(arpeggioType), xmlreader);
-                  }
             // there can be only one
             if (!(static_cast<Chord*>(cr))->arpeggio()) {
                   cr->add(arpeggio.release());
@@ -7991,48 +7984,20 @@ void MusicXMLParserNotations::parse()
 void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* const cr, Note* const note)
       {
       if (notation.symId() != SymId::noSym) {
-            QString notationType = notation.attribute("type");
-            QString placement = notation.attribute("placement");
-            if (notation.name() == "fermata") {
-                  if (!notationType.isEmpty() && notationType != "upright" && notationType != "inverted") {
-                        notationType.clear();
-                        _logger->logError(QString("unknown fermata type %1").arg(notationType), &_e);
-                        }
+            if (notation.name() == "fermata")
                   addFermataToChord(notation, cr);
-                  }
-            else {
-                  if (notation.name().contains("strong-accent")) {
-                        if (!notationType.isEmpty() && notationType != "up" && notationType != "down") {
-                              notationType.clear();
-                              _logger->logError(QString("unknown %1 type %2").arg(notation.name(), notationType), &_e);
-                              }
-                        }
-                  else if (notation.name() == "harmonic" || notation.name() == "delayed-turn"
-                           || notation.name() == "turn" || notation.name() == "inverted-turn") {
-                        if (notation.name() == "delayed-turn") {
-                              // TODO: actually this should be offset a bit to the right
-                              }
-                        if (placement != "above" && placement != "below") {
-                              placement.clear();
-                              _logger->logError(QString("unknown %1 placement %2").arg(notation.name(), placement), &_e);
-                              }
-                        }
-                  else {
-                        notationType.clear();  // TODO: Check for other symbols that have type
-                        placement.clear();  // TODO: Check for other symbols that have placement
-                        }
+            else
                   addArticulationToChord(notation, cr);
-                  }
             }
       else if (notation.parent() == "ornaments") {
-            if (notation.name() == "mordent" || notation.name() == "inverted-mordent") {
+            if (notation.name() == "mordent" || notation.name() == "inverted-mordent")
                   addMordentToChord(notation, cr);
-                  }
+            //else if (notation.name() == "other-ornament")
+            //    addOtherOrnamentToChord(notation, cr); //TODO
             }
       else if (notation.parent() == "articulations") {
-            if (note && notation.name() == "chord-line") {
+            if (note && notation.name() == "chord-line")
                   addChordLine(notation, note, _logger, &_e);
-                  }
             }
       else {
             // qDebug("addNotation: notation has been skipped: %s %s", qPrintable(notation.name()), qPrintable(notation.parent()));
@@ -8054,7 +8019,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
                                          TrillStack& trills, std::map<int, Tie*>& ties)
       {
-      addArpeggio(cr, _arpeggioType, _logger, &_e);
+      addArpeggio(cr, _arpeggioType);
       addBreath(cr, cr->tick(), _breath);
       addWavyLine(cr, Fraction::fromTicks(tick), _wavyLineNo, _wavyLineType, spanners, trills, _logger, &_e);
 
