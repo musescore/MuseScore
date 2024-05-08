@@ -669,6 +669,12 @@ TEST_F(Musicxml_Tests, helloReadWriteCompr) {
 TEST_F(Musicxml_Tests, implicitMeasure1) {
     mxmlIoTest("testImplicitMeasure1");
 }
+TEST_F(Musicxml_Tests, importDrums) {
+    mxmlImportTestRef("testImportDrums");
+}
+TEST_F(Musicxml_Tests, importDrums2) {
+    mxmlImportTestRef("testImportDrums2");
+}
 TEST_F(Musicxml_Tests, incompleteTuplet) {
     mxmlIoTestRef("testIncompleteTuplet");
 }
@@ -716,6 +722,9 @@ TEST_F(Musicxml_Tests, instrumentChangeMIDIportExport) {
 }
 TEST_F(Musicxml_Tests, instrumentSound) {
     mxmlIoTestRef("testInstrumentSound");
+}
+TEST_F(Musicxml_Tests, instrImport) {
+    mxmlImportTestRef("testInstrImport");
 }
 TEST_F(Musicxml_Tests, invalidLayout) {
     mxmlMscxExportTestRef("testInvalidLayout");
