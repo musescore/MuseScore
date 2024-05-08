@@ -95,7 +95,7 @@ if(DEFINED ENV{QTDIR})
     endif()
 endif()
 
-fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake)
+fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake6 qmake)
 fn__set_qt_variables("${QMAKE}")
 message(STATUS "QT_LOCATION: ${QT_LOCATION}")
 message(STATUS "QT_VERSION: ${QT_VERSION}")
