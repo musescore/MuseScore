@@ -45,8 +45,13 @@ class Inject
 {
 public:
 
+#ifdef MUSE_MODULE_GLOBAL_MULTI_IOC
+    Inject(const ContextPtr& ctx)
+        : m_ctx(ctx) {}
+#else
     Inject(const ContextPtr& ctx = nullptr)
         : m_ctx(ctx) {}
+#endif
 
     Inject(const Injectable* o)
         : m_inj(o) {}
