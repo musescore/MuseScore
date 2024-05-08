@@ -1178,6 +1178,31 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
       }
 
 //---------------------------------------------------------
+//   addOtherOrnamentToChord
+//---------------------------------------------------------
+
+/**
+ Add Other Ornament to Chord.
+ */
+
+static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
+      {
+      const QString name = notation.name();
+      const QString symname = notation.attribute("smufl");
+      SymId sym = SymId::noSym;   // legal but impossible ArticulationType value here indicating "not found"
+      sym = Sym::name2id(symname);
+
+      if (sym != SymId::noSym) {
+            Articulation* na = new Articulation(cr->score());
+            na->setSymId(sym);
+            cr->add(na);
+            }
+      else {
+            qDebug("unknown ornament: name '%s': '%s'.", qPrintable(name), qPrintable(symname));
+            }
+      }
+
+//---------------------------------------------------------
 //   convertArticulationToSymId
 //---------------------------------------------------------
 
@@ -7377,6 +7402,12 @@ void MusicXMLParserNotations::ornaments()
                      || _e.name() == "mordent") {
                   mordentNormalOrInverted();
                   }
+            else if (_e.name() == "other-ornament") {
+                  Notation notation = Notation::notationWithAttributes(_e.name().toString(),
+                                                                       _e.attributes(), "ornaments");
+                  _notations.push_back(notation);
+                  _e.skipCurrentElement();  // skip but don't log
+                  }
             else {
                   skipLogCurrElem();
                   }
@@ -7992,8 +8023,8 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
       else if (notation.parent() == "ornaments") {
             if (notation.name() == "mordent" || notation.name() == "inverted-mordent")
                   addMordentToChord(notation, cr);
-            //else if (notation.name() == "other-ornament")
-            //    addOtherOrnamentToChord(notation, cr); //TODO
+            else if (notation.name() == "other-ornament")
+                  addOtherOrnamentToChord(notation, cr);
             }
       else if (notation.parent() == "articulations") {
             if (note && notation.name() == "chord-line")

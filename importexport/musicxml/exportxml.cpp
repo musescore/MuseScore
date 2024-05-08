@@ -2899,11 +2899,9 @@ static QString symIdToOrnam(const SymId sid)
                   return "inverted-mordent";
                   break;
             case SymId::ornamentTremblement:
-            case SymId::ornamentTremblementCouperin:
                   return "inverted-mordent long=\"yes\"";
                   break;
             case SymId::ornamentPrallMordent:
-            case SymId::ornamentPinceCouperin:
                   return "mordent long=\"yes\"";
                   break;
             case SymId::ornamentUpPrall:
@@ -2930,6 +2928,12 @@ static QString symIdToOrnam(const SymId sid)
                   break;
             case SymId::ornamentPrecompSlide:
                   return "schleifer";
+                  break;
+            case SymId::ornamentTremblementCouperin:
+                  return "other-ornament smufl=\"ornamentTremblementCouperin\"";
+                  break;
+            case SymId::ornamentPinceCouperin:
+                  return "other-ornament smufl=\"ornamentPinceCouperin\"";
                   break;
 
             default:
