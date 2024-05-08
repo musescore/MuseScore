@@ -3104,7 +3104,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             }
         } else {
             if (m_wordsText != "" || m_metroText != "") {
-                isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty();
+                isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty() && placement() == u"below";
                 if (isExpressionText) {
                     t = Factory::createExpression(m_score->dummy()->segment());
                 } else if (m_systemDirection) {
