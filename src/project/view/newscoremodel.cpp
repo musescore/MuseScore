@@ -31,7 +31,7 @@ using namespace muse::ui;
 using PreferredScoreCreationMode = IProjectConfiguration::PreferredScoreCreationMode;
 
 NewScoreModel::NewScoreModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -49,7 +49,7 @@ bool NewScoreModel::createScore(const QVariant& info)
 {
     ProjectCreateOptions options = parseOptions(info.toMap());
 
-    auto project = notationCreator()->newProject();
+    auto project = notationCreator()->newProject(iocContext());
     Ret ret = project->createNew(options);
 
     if (!ret) {

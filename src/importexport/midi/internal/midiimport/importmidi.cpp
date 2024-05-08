@@ -1273,9 +1273,9 @@ Err importMidi(MasterScore* score, const QString& name)
         }
         catch (QString errorText) {
             if (!MScore::noGui) {
-                MessageBox::warning(muse::trc("iex_midi", "Import MIDI"),
-                                    muse::qtrc("iex_midi", "Import failed: %1").arg(errorText).toStdString(),
-                                    { MessageBox::Ok });
+                MessageBox(score->iocContext()).warning(muse::trc("iex_midi", "Import MIDI"),
+                                                        muse::qtrc("iex_midi", "Import failed: %1").arg(errorText).toStdString(),
+                                                        { MessageBox::Ok });
             }
             fp.close();
             LOGD("importMidi: bad file format");

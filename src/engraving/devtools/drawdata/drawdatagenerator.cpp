@@ -101,7 +101,7 @@ Ret DrawDataGenerator::processFile(const muse::io::path_t& scoreFile, const muse
 
 DrawDataPtr DrawDataGenerator::genDrawData(const muse::io::path_t& scorePath, const GenOpt& opt) const
 {
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
     if (!loadScore(score, scorePath)) {
         LOGE() << "failed load score: " << scorePath;
         return nullptr;
@@ -139,7 +139,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const muse::io::path_t& scorePath, co
 Pixmap DrawDataGenerator::genImage(const muse::io::path_t& scorePath) const
 {
     LOGD() << "try: " << scorePath;
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
     if (!loadScore(score, scorePath)) {
         LOGE() << "failed load score: " << scorePath;
         return Pixmap();

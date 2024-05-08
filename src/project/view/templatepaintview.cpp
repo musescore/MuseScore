@@ -37,8 +37,6 @@ TemplatePaintView::TemplatePaintView(QQuickItem* parent)
     : AbstractNotationPaintView(parent)
 {
     setReadonly(true);
-
-    m_notationProject = notationCreator()->newProject();
 }
 
 TemplatePaintView::~TemplatePaintView()
@@ -55,6 +53,8 @@ void TemplatePaintView::load(const QString& templatePath)
     if (m_templatePath == templatePath) {
         return;
     }
+
+    m_notationProject = notationCreator()->newProject(iocContext());
 
     m_templatePath = templatePath;
 
@@ -105,7 +105,7 @@ void TemplatePaintView::onNotationSetup()
 {
     resetNotation();
 
-    m_notationProject = notationCreator()->newProject();
+    m_notationProject = notationCreator()->newProject(iocContext());
 
     Ret ret = m_notationProject->load(m_templatePath);
 

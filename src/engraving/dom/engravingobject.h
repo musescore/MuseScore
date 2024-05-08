@@ -199,9 +199,6 @@ public:
 class EngravingObject
 {
 public:
-    INJECT_STATIC(IEngravingElementsProvider, elementsProvider)
-
-public:
     EngravingObject(const ElementType& type, EngravingObject* parent);
     EngravingObject(const EngravingObject& se);
 

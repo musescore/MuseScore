@@ -89,9 +89,9 @@ std::string UiModule::moduleName() const
 void UiModule::registerExports()
 {
     m_uiengine = std::make_shared<UiEngine>(iocContext());
-    m_configuration = std::make_shared<UiConfiguration>();
-    m_uiactionsRegister = std::make_shared<UiActionsRegister>();
-    m_keyNavigationController = std::make_shared<NavigationController>();
+    m_configuration = std::make_shared<UiConfiguration>(iocContext());
+    m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
+    m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
     m_keyNavigationUiActions = std::make_shared<NavigationUiActions>();
 
     #ifdef Q_OS_MAC

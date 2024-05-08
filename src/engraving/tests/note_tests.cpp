@@ -56,7 +56,7 @@ class Engraving_NoteTests : public ::testing::Test
 
 TEST_F(Engraving_NoteTests, note)
 {
-    MasterScore* score = compat::ScoreAccess::createMasterScore();
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
     Chord* chord = Factory::createChord(score->dummy()->segment());
     Note* note = Factory::createNote(chord);
     chord->add(note);

@@ -54,30 +54,34 @@
 #include "iprojectautosaver.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider, public muse::actions::Actionable,
-    public muse::async::Asyncable
+class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider, public muse::Injectable,
+    public muse::actions::Actionable, public muse::async::Asyncable
 {
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(INotationReadersRegister, readers)
-    INJECT(IProjectCreator, projectCreator)
-    INJECT(IRecentFilesController, recentFilesController)
-    INJECT(IProjectAutoSaver, projectAutoSaver)
-    INJECT(IOpenSaveProjectScenario, openSaveProjectScenario)
-    INJECT(IExportProjectScenario, exportProjectScenario)
-    INJECT(IMscMetaReader, mscMetaReader)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
-    INJECT(muse::cloud::IAudioComService, audioComService)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(print::IPrintProvider, printProvider)
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(muse::update::IMuseSoundsCheckUpdateScenario, museSoundsCheckUpdateScenario)
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<INotationReadersRegister> readers = { this };
+    muse::Inject<IProjectCreator> projectCreator = { this };
+    muse::Inject<IRecentFilesController> recentFilesController = { this };
+    muse::Inject<IProjectAutoSaver> projectAutoSaver = { this };
+    muse::Inject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };
+    muse::Inject<IExportProjectScenario> exportProjectScenario = { this };
+    muse::Inject<IMscMetaReader> mscMetaReader = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::Inject<muse::cloud::IAudioComService> audioComService = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<print::IPrintProvider> printProvider = { this };
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
+    muse::Inject<muse::update::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
 
 public:
+
+    ProjectActionsController(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     void init();
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;

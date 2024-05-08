@@ -47,7 +47,7 @@ class Engraving_HarpDiagramTests : public ::testing::Test
 
 TEST_F(Engraving_HarpDiagramTests, harpdiagram)
 {
-    MasterScore* score = compat::ScoreAccess::createMasterScore();
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
 
     HarpPedalDiagram* diagram = Factory::createHarpPedalDiagram(score->dummy()->segment());
 

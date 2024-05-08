@@ -4330,7 +4330,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
         SymId nh = item->noteHead();
-        if (Note::engravingConfiguration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
+        if (item->configuration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
             nh = SymId::noteheadXBlack;
         }
 
@@ -5041,7 +5041,7 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
 //                  rypos() = 2 * _spatium;
     } else {
         _lines = 5;
-        item->setColor(StaffLines::engravingConfiguration()->defaultColor());
+        item->setColor(item->configuration()->defaultColor());
     }
     item->setLw(ctx.conf().styleS(Sid::staffLineWidth).val() * _spatium);
     double x1 = item->pos().x();

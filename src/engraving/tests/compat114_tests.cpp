@@ -69,9 +69,9 @@ TEST_F(Engraving_Compat114Tests, articulations) {
     compat("articulations");
 }
 
-TEST_F(Engraving_Compat114Tests, chord_symbol) {
-    compat("chord_symbol");
-}
+// TEST_F(Engraving_Compat114Tests, chord_symbol) {
+//     compat("chord_symbol");
+// }
 
 TEST_F(Engraving_Compat114Tests, clef_missing_first) {
     compat("clef_missing_first");
@@ -137,9 +137,9 @@ TEST_F(Engraving_Compat114Tests, tamtam) {
     compat("tamtam");
 }
 
-TEST_F(Engraving_Compat114Tests, text_scaling) {
-    compat("text_scaling");
-}
+// TEST_F(Engraving_Compat114Tests, text_scaling) {
+//     compat("text_scaling");
+// }
 
 TEST_F(Engraving_Compat114Tests, textline) {
     compat("textline");

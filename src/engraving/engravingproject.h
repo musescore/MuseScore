@@ -47,15 +47,16 @@ namespace mu::engraving {
 class MasterScore;
 class MStyle;
 
-class EngravingProject : public std::enable_shared_from_this<EngravingProject>
+class EngravingProject : public std::enable_shared_from_this<EngravingProject>, public muse::Injectable
 {
-    INJECT_STATIC(IEngravingElementsProvider, engravingElementsProvider)
+public:
+    Inject<IEngravingElementsProvider> engravingElementsProvider = { this };
 
 public:
     ~EngravingProject();
 
-    static std::shared_ptr<EngravingProject> create();
-    static std::shared_ptr<EngravingProject> create(const MStyle& style);
+    static std::shared_ptr<EngravingProject> create(const muse::modularity::ContextPtr& iocCtx);
+    static std::shared_ptr<EngravingProject> create(const MStyle& style, const muse::modularity::ContextPtr& iocCtx);
 
     IFileInfoProviderPtr fileInfoProvider() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
@@ -77,7 +78,7 @@ public:
 private:
     friend class MasterScore;
 
-    EngravingProject();
+    EngravingProject(const muse::modularity::ContextPtr& iocCtx);
 
     void init(const MStyle& style);
 

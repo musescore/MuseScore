@@ -50,7 +50,7 @@ namespace mu::engraving {
 MasterScore* MTest::readScore(const QString& name)
 {
     QString path = root + "/" + name;
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = muse::io::suffix(path);
 

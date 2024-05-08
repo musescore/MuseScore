@@ -2617,7 +2617,7 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
         lines->mutldata()->setPosY(st->yoffset().val() * _spatium);
     } else {
         _lines = 5;
-        lines->setColor(EngravingItem::engravingConfiguration()->defaultColor());
+        lines->setColor(lines->configuration()->defaultColor());
     }
     lines->setLw(ctx.conf().styleS(Sid::staffLineWidth).val() * _spatium);
     double x1 = lines->pos().x();

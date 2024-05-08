@@ -11,7 +11,7 @@ int main()
 {
     muse::modularity::globalIoc()->registerExport<muse::draw::IFontProvider>("test", new muse::draw::FontProviderStub());
 
-    mu::engraving::compat::ScoreAccess::createMasterScore();
+    mu::engraving::compat::ScoreAccess::createMasterScore(nullptr);
 
     mu::iex::guitarpro::GuitarProModule gm;
 }

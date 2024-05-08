@@ -141,13 +141,13 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     if (dragElement) {
         painter.save();
         painter.translate(dragElement->pagePos());
-        EngravingItem::renderer()->drawItem(dragElement, &painter);
+        gpaletteScore->renderer()->drawItem(dragElement, &painter);
         painter.restore();
     }
     foreach (Accidental* a, accidentals) {
         painter.save();
         painter.translate(a->pagePos());
-        EngravingItem::renderer()->drawItem(a, &painter);
+        gpaletteScore->renderer()->drawItem(a, &painter);
         painter.restore();
     }
     clef->setPos(0.0, 0.0);
@@ -155,7 +155,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     engravingRender()->layoutItem(clef);
 
     painter.translate(clef->pagePos());
-    EngravingItem::renderer()->drawItem(clef, &painter);
+    gpaletteScore->renderer()->drawItem(clef, &painter);
 }
 
 //---------------------------------------------------------

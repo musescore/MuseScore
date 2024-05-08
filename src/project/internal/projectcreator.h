@@ -28,7 +28,7 @@ namespace mu::project {
 class ProjectCreator : public IProjectCreator
 {
 public:
-    INotationProjectPtr newProject() const override;
+    INotationProjectPtr newProject(const muse::modularity::ContextPtr& iocCtx) const override;
 };
 }
 

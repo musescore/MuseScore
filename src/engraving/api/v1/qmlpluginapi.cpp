@@ -263,7 +263,7 @@ apiv1::Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, 
         currentScore()->endCmd();
     }
 
-    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
+    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle(iocContext());
 
     // TODO: Set path/filename
     NOT_IMPLEMENTED << "setting path/filename";

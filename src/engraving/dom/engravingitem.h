@@ -157,10 +157,6 @@ class EngravingItem : public EngravingObject
     M_PROPERTY2(bool, excludeFromOtherParts, setExcludeFromOtherParts, false)
 
 public:
-    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
-    INJECT_STATIC(rendering::IScoreRenderer, renderer)
-
-public:
 
     virtual ~EngravingItem();
 
@@ -173,6 +169,9 @@ public:
 
     EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems(bool all = false) const;
+
+    const std::shared_ptr<IEngravingConfiguration>& configuration() const;
+    const std::shared_ptr<rendering::IScoreRenderer>& renderer() const;
 
     EngravingItem* findAncestor(ElementType t);
     const EngravingItem* findAncestor(ElementType t) const;
@@ -268,12 +267,7 @@ public:
 
     virtual int subtype() const { return -1; }                    // for select gui
 
-    void drawAt(muse::draw::Painter* p, const PointF& pt) const
-    {
-        p->translate(pt);
-        renderer()->drawItem(this, p);
-        p->translate(-pt);
-    }
+    void drawAt(muse::draw::Painter* p, const PointF& pt) const;
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)

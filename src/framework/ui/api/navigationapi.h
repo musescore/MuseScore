@@ -35,8 +35,8 @@ class NavigationApi : public api::ApiObject
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(ui::INavigationController, navigation)
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<ui::INavigationController> navigation = { this };
 
 public:
     explicit NavigationApi(api::IApiEngine* e);

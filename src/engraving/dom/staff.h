@@ -295,7 +295,7 @@ private:
     bool m_mergeMatchingRests = false;      // merge matching rests in multiple voices
     HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
 
-    Color m_color   { engravingConfiguration()->defaultColor() };
+    Color m_color;
     Millimetre m_userDist     { Millimetre(0.0) };           ///< user edited extra distance
 
     StaffTypeList m_staffTypeList;

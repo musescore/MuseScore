@@ -2823,9 +2823,9 @@ Err importCapella(MasterScore* score, const QString& name)
     }
     catch (Capella::Error errNo) {
         if (!MScore::noGui) {
-            MessageBox::warning(muse::trc("iex_capella", "Import Capella"),
-                                muse::qtrc("iex_capella", "Import failed: %1").arg(cf.error(errNo)).toStdString(),
-                                { MessageBox::Ok });
+            MessageBox(score->iocContext()).warning(muse::trc("iex_capella", "Import Capella"),
+                                                    muse::qtrc("iex_capella", "Import failed: %1").arg(cf.error(errNo)).toStdString(),
+                                                    { MessageBox::Ok });
         }
         fp.close();
         // avoid another error message box

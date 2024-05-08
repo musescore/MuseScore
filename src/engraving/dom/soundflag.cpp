@@ -33,7 +33,7 @@ using namespace mu::engraving;
 SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
-    String fontFamily = engravingConfiguration()->iconsFontFamily();
+    String fontFamily = configuration()->iconsFontFamily();
     m_iconFontValid = !fontFamily.empty();
     m_iconFont = Font(fontFamily, Font::Type::Icon);
 

@@ -41,8 +41,6 @@ class UiEngine : public QObject, public IUiEngine, public Injectable
 {
     Q_OBJECT
 
-    INJECT(languages::ILanguagesService, languagesService)
-
     Q_PROPERTY(api::ThemeApi * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
 
@@ -50,6 +48,8 @@ class UiEngine : public QObject, public IUiEngine, public Injectable
 
     // for internal use
     Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
+
+    GlobalInject<languages::ILanguagesService> languagesService;
 
 public:
     UiEngine(const modularity::ContextPtr& iocCtx);

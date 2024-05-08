@@ -1274,7 +1274,7 @@ void Harmony::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
 
     Color originalColor = color();
     if (m_isMisspelled) {
-        setColor(engravingConfiguration()->criticalColor());
+        setColor(configuration()->criticalColor());
         setSelected(false);
     }
     PointF pos(canvasPos());

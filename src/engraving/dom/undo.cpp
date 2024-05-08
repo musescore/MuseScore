@@ -2633,7 +2633,7 @@ void ChangeClefType::flip(EditData*)
     concertClef     = ocl;
     transposingClef = otc;
     // layout the clef to align the currentClefType with the actual one immediately
-    EngravingItem::renderer()->layoutItem(clef);
+    clef->renderer()->layoutItem(clef);
 }
 
 //---------------------------------------------------------

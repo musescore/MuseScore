@@ -156,7 +156,7 @@ void ExampleView::drawElements(Painter& painter, const std::vector<EngravingItem
         e->itemDiscovered = 0;
         PointF pos(e->pagePos());
         painter.translate(pos);
-        EngravingItem::renderer()->drawItem(e, &painter);
+        e->renderer()->drawItem(e, &painter);
         painter.translate(-pos);
     }
 }
