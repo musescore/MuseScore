@@ -1105,6 +1105,10 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
         na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     }
 
+    if (cr->isChord() && toChord(cr)->hasArticulation(na)) {
+        return;
+    }
+
     cr->add(na);
 }
 
