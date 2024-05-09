@@ -811,7 +811,7 @@ void Spanner::doComputeEndElement()
         if (systemFlag()) {
             m_endElement = endSeg;
         } else {
-            track_idx_t trackIdx = track2() != muse::nidx ? track2() : track();
+            track_idx_t trackIdx = effectiveTrack2();
             EngravingItem* endEl = endSeg->elementAt(trackIdx);
             if (endEl) {
                 m_endElement = endEl;
@@ -1075,7 +1075,7 @@ Segment* Spanner::endSegment() const
 
     bool mmRest = style().styleB(Sid::createMultiMeasureRests);
     Fraction endTick = tick2();
-    track_idx_t trackIdx = track2() != muse::nidx ? track2() : track();
+    track_idx_t trackIdx = effectiveTrack2();
     staff_idx_t staffIdx = track2staff(trackIdx);
 
     Segment* endSeg = score()->tick2segment(endTick, true, SegmentType::ChordRest, mmRest);
