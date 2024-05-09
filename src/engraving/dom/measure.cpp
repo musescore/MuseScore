@@ -1324,6 +1324,7 @@ bool Measure::acceptDrop(EditData& data) const
 
     switch (e->type()) {
     case ElementType::MEASURE_LIST:
+    case ElementType::MEASURE_NUMBER:
     case ElementType::JUMP:
     case ElementType::MARKER:
     case ElementType::LAYOUT_BREAK:
@@ -1338,10 +1339,6 @@ bool Measure::acceptDrop(EditData& data) const
         } else {
             viewer->setDropRectangle(canvasBoundingRect());
         }
-        return true;
-
-    case ElementType::MEASURE_NUMBER:
-        viewer->setDropRectangle(canvasBoundingRect());
         return true;
 
     case ElementType::BRACKET:

@@ -1399,43 +1399,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::DYNAMIC:
     case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
-    {
-        EngravingItem* el = elementAt(pos);
-        if (el == 0 || el->type() == ElementType::STAFF_LINES) {
-            mu::engraving::staff_idx_t staffIdx;
-            mu::engraving::Segment* seg;
-            PointF offset;
-            el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
-            if (el && el->isMeasure()) {
-                m_dropData.ed.dropElement->setTrack(staffIdx * mu::engraving::VOICES);
-                m_dropData.ed.dropElement->setParent(seg);
-
-                if (applyUserOffset) {
-                    m_dropData.ed.dropElement->setOffset(offset);
-                }
-
-                score()->undoAddElement(m_dropData.ed.dropElement);
-            } else {
-                LOGD("cannot drop here");
-                resetDropElement();
-            }
-        } else {
-            score()->addRefresh(el->canvasBoundingRect());
-            score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-
-            if (!el->acceptDrop(m_dropData.ed)) {
-                LOGD("drop %s onto %s not accepted", m_dropData.ed.dropElement->typeName(), el->typeName());
-                break;
-            }
-            EngravingItem* dropElement = el->drop(m_dropData.ed);
-            score()->addRefresh(el->canvasBoundingRect());
-            if (dropElement) {
-                doSelect({ dropElement }, SelectType::SINGLE);
-                score()->addRefresh(dropElement->canvasBoundingRect());
-            }
-        }
-    }
-        accepted = true;
+        accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
         break;
     case ElementType::HBOX:
     case ElementType::VBOX:
@@ -1483,45 +1447,9 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::TREMOLOBAR:
     case ElementType::FIGURED_BASS:
     case ElementType::LYRICS:
-    case ElementType::HARP_DIAGRAM: {
-        EngravingItem* el = dropTarget(m_dropData.ed);
-        if (!el) {
-            if (!dropCanvas(m_dropData.ed.dropElement)) {
-                LOGD("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->typeName(), m_dropData.ed.dropElement);
-                resetDropElement();
-            }
-            break;
-        }
-        score()->addRefresh(el->canvasBoundingRect());
-
-        // TODO: HACK ALERT!
-        if (el->isMeasure() && m_dropData.ed.dropElement->isLayoutBreak()) {
-            Measure* m = toMeasure(el);
-            if (m->isMMRest()) {
-                el = m->mmRestLast();
-            }
-        }
-
-        EngravingItem* dropElement = el->drop(m_dropData.ed);
-
-        if (dropElement && dropElement->isInstrumentChange()) {
-            if (!selectInstrument(toInstrumentChange(dropElement))) {
-                rollback();
-                accepted = true;
-                break;
-            }
-        }
-
-        score()->addRefresh(el->canvasBoundingRect());
-        if (dropElement) {
-            if (!score()->noteEntryMode()) {
-                doSelect({ dropElement }, SelectType::SINGLE);
-            }
-            score()->addRefresh(dropElement->canvasBoundingRect());
-        }
-        accepted = true;
-    }
-    break;
+    case ElementType::HARP_DIAGRAM:
+        accepted = doDropStandard();
+        break;
     case ElementType::STAFFTYPE_CHANGE: {
         EngravingItem* el = dropTarget(m_dropData.ed);
         if (el->isMeasure()) {
@@ -1562,6 +1490,87 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     MScoreErrorsController::checkAndShowMScoreError();
 
     return accepted;
+}
+
+//! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for majority of elements (returns "accepted")
+bool NotationInteraction::doDropStandard()
+{
+    EngravingItem* el = dropTarget(m_dropData.ed);
+    if (!el) {
+        if (!dropCanvas(m_dropData.ed.dropElement)) {
+            LOGD("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->typeName(), m_dropData.ed.dropElement);
+            resetDropElement();
+        }
+        return false;
+    }
+    score()->addRefresh(el->canvasBoundingRect());
+
+    // TODO: HACK ALERT!
+    if (el->isMeasure() && m_dropData.ed.dropElement->isLayoutBreak()) {
+        Measure* m = toMeasure(el);
+        if (m->isMMRest()) {
+            el = m->mmRestLast();
+        }
+    }
+
+    EngravingItem* dropElement = el->drop(m_dropData.ed);
+
+    if (dropElement && dropElement->isInstrumentChange()) {
+        if (!selectInstrument(toInstrumentChange(dropElement))) {
+            rollback();
+            return true; // Really?
+        }
+    }
+
+    score()->addRefresh(el->canvasBoundingRect());
+    if (dropElement) {
+        if (!score()->noteEntryMode()) {
+            doSelect({ dropElement }, SelectType::SINGLE);
+        }
+        score()->addRefresh(dropElement->canvasBoundingRect());
+    }
+    return true;
+}
+
+//! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for text base items & symbols (returns "accepted")
+bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset)
+{
+    EngravingItem* el = elementAt(pos);
+    if (el == 0 || el->type() == ElementType::STAFF_LINES) {
+        mu::engraving::staff_idx_t staffIdx;
+        mu::engraving::Segment* seg;
+        PointF offset;
+        el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
+        if (el && el->isMeasure()) {
+            m_dropData.ed.dropElement->setTrack(staffIdx * mu::engraving::VOICES);
+            m_dropData.ed.dropElement->setParent(seg);
+
+            if (applyUserOffset) {
+                m_dropData.ed.dropElement->setOffset(offset);
+            }
+
+            score()->undoAddElement(m_dropData.ed.dropElement);
+        } else {
+            LOGD("cannot drop here");
+            resetDropElement();
+        }
+    } else {
+        score()->addRefresh(el->canvasBoundingRect());
+        score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+
+        if (!el->acceptDrop(m_dropData.ed)) {
+            LOGD("drop %s onto %s not accepted", m_dropData.ed.dropElement->typeName(), el->typeName());
+            return false;
+        }
+        EngravingItem* dropElement = el->drop(m_dropData.ed);
+        score()->addRefresh(el->canvasBoundingRect());
+        if (dropElement) {
+            doSelect({ dropElement }, SelectType::SINGLE);
+            score()->addRefresh(dropElement->canvasBoundingRect());
+        }
+    }
+
+    return true;
 }
 
 bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* instrumentChange)

@@ -305,6 +305,9 @@ private:
     void doEndEditElement();
     void doEndDrag();
 
+    bool doDropStandard();
+    bool doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset);
+
     void onElementDestroyed(EngravingItem* element);
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
