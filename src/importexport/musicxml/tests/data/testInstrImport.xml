@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 2.0 Partwise//EN"
+  "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="2.0">
+  <identification>
+    <encoding>
+      <software>Noteflight version 0.4</software>
+      <encoding-date>2024-04-24</encoding-date>
+      <supports attribute="new-system" element="print" type="no" value="no"/>
+      <supports attribute="new-page" element="print" type="no" value="no"/>
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>1.0583333339999998</millimeters>
+      <tenths>10</tenths>
+    </scaling>
+    <page-layout>
+      <page-height>3360</page-height>
+      <page-width>2040</page-width>
+      <page-margins type="both">
+        <left-margin>119.16666666666667</left-margin>
+        <right-margin>113.33333333333334</right-margin>
+        <top-margin>193.33333333333334</top-margin>
+        <bottom-margin>160</bottom-margin>
+      </page-margins>
+    </page-layout>
+    <system-layout>
+      <system-margins>
+        <left-margin>119.16666666666667</left-margin>
+        <right-margin>53.333333333333336</right-margin>
+      </system-margins>
+      <system-distance>92.5</system-distance>
+      <top-system-distance>199.16666666666669</top-system-distance>
+    </system-layout>
+    <staff-layout>
+      <staff-distance>72.5</staff-distance>
+    </staff-layout>
+  </defaults>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Flute</part-name>
+      <part-abbreviation>Flute Oboe</part-abbreviation>
+      <score-instrument id="P1I1">
+        <instrument-name>Flute</instrument-name>
+        <instrument-sound>wind.flutes.flute</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P1I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>74</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P2">
+      <part-name>Oboe</part-name>
+      <part-abbreviation>Ob.</part-abbreviation>
+      <score-instrument id="P2I1">
+        <instrument-name>Oboe</instrument-name>
+        <instrument-sound>wind.reed.oboe</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P2I1">
+        <midi-channel>2</midi-channel>
+        <midi-program>69</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P3">
+      <part-name>Bassoon</part-name>
+      <part-abbreviation>Bsn.</part-abbreviation>
+      <score-instrument id="P3I1">
+        <instrument-name>Bassoon</instrument-name>
+        <instrument-sound>wind.reed.bassoon</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P3I1">
+        <midi-channel>3</midi-channel>
+        <midi-program>71</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P4">
+      <part-name>Bb Clarinet</part-name>
+      <part-abbreviation>B¯ Clarinet B¯ Bass Clar.</part-abbreviation>
+      <score-instrument id="P4I1">
+        <instrument-name>Bb Clarinet</instrument-name>
+        <instrument-sound>wind.reed.clarinet</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P4I1">
+        <midi-channel>4</midi-channel>
+        <midi-program>72</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P5">
+      <part-name>Eb Alto Clarinet</part-name>
+      <part-abbreviation>Alto Cl.</part-abbreviation>
+      <score-instrument id="P5I1">
+        <instrument-name>Eb Alto Clarinet</instrument-name>
+        <instrument-sound>wind.reed.clarinet</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P5I1">
+        <midi-channel>5</midi-channel>
+        <midi-program>72</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P6">
+      <part-name>Bb Bass Clarinet</part-name>
+      <part-abbreviation>B. Cl.</part-abbreviation>
+      <score-instrument id="P6I1">
+        <instrument-name>Bb Bass Clarinet</instrument-name>
+        <instrument-sound>wind.reed.clarinet.bass</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P6I1">
+        <midi-channel>6</midi-channel>
+        <midi-program>72</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P7">
+      <part-name>Eb Alto Sax.</part-name>
+      <part-abbreviation>E¯ Alto Sax. E¯ Bar. Sax.</part-abbreviation>
+      <score-instrument id="P7I1">
+        <instrument-name>Eb Alto Sax.</instrument-name>
+        <instrument-sound>wind.reed.saxophone.alto</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P7I1">
+        <midi-channel>7</midi-channel>
+        <midi-program>66</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P8">
+      <part-name> Bb Tenor Sax.</part-name>
+      <part-abbreviation>Ten. Sax.</part-abbreviation>
+      <score-instrument id="P8I1">
+        <instrument-name> Bb Tenor Sax.</instrument-name>
+        <instrument-sound>wind.reed.saxophone.tenor</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P8I1">
+        <midi-channel>8</midi-channel>
+        <midi-program>67</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P9">
+      <part-name>Eb Baritone Sax.</part-name>
+      <part-abbreviation>Bari. Sax.</part-abbreviation>
+      <score-instrument id="P9I1">
+        <instrument-name>Eb Baritone Sax.</instrument-name>
+        <instrument-sound>wind.reed.saxophone.baritone</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P9I1">
+        <midi-channel>9</midi-channel>
+        <midi-program>68</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P10">
+      <part-name>Bb Trumpet</part-name>
+      <part-abbreviation>Tpt.</part-abbreviation>
+      <score-instrument id="P10I1">
+        <instrument-name>Bb Trumpet</instrument-name>
+        <instrument-sound>brass.trumpet</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P10I1">
+        <midi-channel>10</midi-channel>
+        <midi-program>57</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P11">
+      <part-name>F Horn</part-name>
+      <part-abbreviation>Hn.</part-abbreviation>
+      <score-instrument id="P11I1">
+        <instrument-name>F Horn</instrument-name>
+        <instrument-sound>brass.french-horn</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P11I1">
+        <midi-channel>11</midi-channel>
+        <midi-program>61</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P12">
+      <part-name>Trombone</part-name>
+      <part-abbreviation>Tbn.</part-abbreviation>
+      <score-instrument id="P12I1">
+        <instrument-name>Trombone</instrument-name>
+        <instrument-sound>brass.trombone</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P12I1">
+        <midi-channel>12</midi-channel>
+        <midi-program>58</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P13">
+      <part-name>Baritone (B.C.)</part-name>
+      <part-abbreviation>Bar. Hn.</part-abbreviation>
+      <score-instrument id="P13I1">
+        <instrument-name>Baritone (B.C.)</instrument-name>
+        <instrument-sound>brass.trumpet</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P13I1">
+        <midi-channel>13</midi-channel>
+        <midi-program>57</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P14">
+      <part-name>Baritone (T.C.)</part-name>
+      <part-abbreviation>Bar.</part-abbreviation>
+      <score-instrument id="P14I1">
+        <instrument-name>Baritone (T.C.)</instrument-name>
+        <instrument-sound>brass.trumpet</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P14I1">
+        <midi-channel>14</midi-channel>
+        <midi-program>57</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P15">
+      <part-name>Tuba</part-name>
+      <part-abbreviation>Tba.</part-abbreviation>
+      <score-instrument id="P15I1">
+        <instrument-name>Tuba</instrument-name>
+        <instrument-sound>brass.tuba</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P15I1">
+        <midi-channel>15</midi-channel>
+        <midi-program>59</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P16">
+      <part-name>Electric Bass</part-name>
+      <part-abbreviation>E. Bass</part-abbreviation>
+      <score-instrument id="P16I1">
+        <instrument-name>Electric Bass</instrument-name>
+        <instrument-sound>pluck.guitar</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P16I1">
+        <midi-channel>16</midi-channel>
+        <midi-program>25</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P17">
+      <part-name>Percussion</part-name>
+      <part-abbreviation>Perc.</part-abbreviation>
+      <score-instrument id="P17I1">
+        <instrument-name>Percussion</instrument-name>
+        <instrument-sound>drum.group.set</instrument-sound>
+        <useDrumset>1</useDrumset>
+      </score-instrument>
+      <midi-instrument id="P17I1">
+        <midi-channel>16</midi-channel>
+        <midi-program>48</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P18">
+      <part-name>Keyboard Percussion</part-name>
+      <part-abbreviation>Glock.</part-abbreviation>
+      <score-instrument id="P18I1">
+        <instrument-name>Keyboard Percussion</instrument-name>
+        <instrument-sound>pitched-percussion.glockenspiel</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P18I1">
+        <midi-channel>16</midi-channel>
+        <midi-program>10</midi-program>
+      </midi-instrument>
+    </score-part>
+  </part-list>
+  <part id="P1">
+  <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P2">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P3">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P4">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P5">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P6">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P7">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P8">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P9">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P10">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P11">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P12">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P13">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P14">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P15">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P16">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P17">
+  <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>percussion</sign>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+  <part id="P18">
+      <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+            <note default-x="93.52" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+  </part>
+</score-partwise>
