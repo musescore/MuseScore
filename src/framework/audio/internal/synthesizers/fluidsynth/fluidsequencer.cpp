@@ -71,8 +71,6 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events,
 void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                             const mpe::PlaybackParamLayers&)
 {
-    m_dynamicLevelLayers = dynamics;
-
     m_mainStreamEvents.clear();
     m_dynamicEvents.clear();
 
