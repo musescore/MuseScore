@@ -167,6 +167,13 @@ public:
         KEY_SIGNATURE = 0xEF81,
         LINE_DASHED = 0xEF82,
         LINE_WIDE_DASHED = 0xF434,
+
+        ZOOM_TOGGLE = 0xF437,
+        FIT_SELECTION = 0xF438,
+        FIT_PROJECT = 0xF439,
+        TRIM_AUDIO_OUTSIDE_SELECTION = 0xF43A,
+        SILENCE_AUDIO_SELECTION = 0xF43B,
+
         LINE_DOTTED = 0xEF83,
         LINE_NORMAL = 0xEF84,
         LINE_WITH_END_HOOK = 0xEF85,
@@ -388,7 +395,12 @@ public:
         LYRICS = 0xF441,
         LEARN = 0xF441,
 
+        PLAY_FILL = 0xF446,
         STOP_FILL = 0xF447,
+        REWIND_START_FILL = 0xF448,
+        REWIND_END_FILL = 0xF449,
+        RECORD_FILL = 0xF44A,
+        PAUSE_FILL = 0xF44B,
 
         REST_8TH = 0xF44C,
 
@@ -400,6 +412,8 @@ public:
 
         CLOUD_FILL = 0xF454,
         BRAILLE = 0xF455,
+
+        ENVELOPE = 0xF45C,
 
         GUITAR_BEND_REGULAR = 0xF45F,
         GUITAR_PRE_BEND = 0xF460,
