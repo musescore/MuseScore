@@ -1200,6 +1200,7 @@ engraving::DurationType Convert::durFromMEI(const libmei::data_DURATION meiDurat
     case (libmei::DURATION_128): return engraving::DurationType::V_128TH;
     case (libmei::DURATION_256): return engraving::DurationType::V_256TH;
     case (libmei::DURATION_512): return engraving::DurationType::V_512TH;
+    case (libmei::DURATION_1024): return engraving::DurationType::V_1024TH;
     default:
         warning = true;
         return engraving::DurationType::V_QUARTER;
@@ -1221,6 +1222,7 @@ libmei::data_DURATION Convert::durToMEI(const engraving::DurationType duration)
     case (engraving::DurationType::V_128TH): return libmei::DURATION_128;
     case (engraving::DurationType::V_256TH): return libmei::DURATION_256;
     case (engraving::DurationType::V_512TH): return libmei::DURATION_512;
+    case (engraving::DurationType::V_1024TH): return libmei::DURATION_1024;
     default:
         return libmei::DURATION_4;
     }
