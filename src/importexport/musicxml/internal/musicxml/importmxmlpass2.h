@@ -153,6 +153,12 @@ private:
     MxmlLogger* _logger;                        ///< Error logger
     QMap<int, Lyrics*> _numberedLyrics;   // lyrics with valid number
     QSet<Lyrics*> _extendedLyrics;        // lyrics with the extend flag set
+    double m_defaultY = 0.0;
+    double m_relativeY = 0.0;
+    String m_placement;
+    String placement() const;
+    double totalY() const { return m_defaultY + m_relativeY; }
+    bool hasTotalY() const { return !RealIsNull(m_defaultY) || !RealIsNull(m_relativeY); }
 };
 
 //---------------------------------------------------------
