@@ -86,7 +86,6 @@ private:
     bool m_inited = false;
     bool m_useDynamicEvents = false;
     ParamsMapping m_mapping;
-    mpe::PlaybackEventsMap m_playbackEventsMap;
 };
 }
 

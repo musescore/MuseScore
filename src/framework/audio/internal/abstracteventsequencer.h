@@ -56,11 +56,22 @@ public:
 
         m_mainStreamChanges = data.mainStream;
         m_offStreamChanges = data.offStream;
+        m_playbackEventMap = data.originEvents;
+        m_dynamicLevelLayers = data.dynamics;
+        m_playbackParamLayers = data.params;
 
-        m_mainStreamChanges.onReceive(this,
-                                      [this](const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                             const mpe::PlaybackParamLayers& params) {
-            updateMainStreamEvents(events, dynamics, params);
+        m_mainStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events,
+                                                   const mpe::DynamicLevelLayers& dynamics,
+                                                   const mpe::PlaybackParamLayers& params) {
+            m_playbackEventMap = events;
+            m_dynamicLevelLayers = dynamics;
+            m_playbackParamLayers = params;
+            m_shouldUpdateMainStreamEvents = true;
+
+            if (m_isActive) {
+                updateMainStreamEvents(events, dynamics, params);
+                m_shouldUpdateMainStreamEvents = false;
+            }
         });
 
         m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) {
@@ -76,7 +87,16 @@ public:
 
     void setActive(const bool active)
     {
+        if (m_isActive == active) {
+            return;
+        }
+
         m_isActive = active;
+
+        if (m_isActive && m_shouldUpdateMainStreamEvents) {
+            updateMainStreamEvents(m_playbackEventMap, m_dynamicLevelLayers, m_playbackParamLayers);
+            m_shouldUpdateMainStreamEvents = false;
+        }
     }
 
     bool isActive() const
@@ -225,7 +245,9 @@ protected:
     EventSequenceMap m_offStreamEvents;
     EventSequenceMap m_dynamicEvents;
 
+    mpe::PlaybackEventsMap m_playbackEventMap;
     mpe::DynamicLevelLayers m_dynamicLevelLayers;
+    mpe::PlaybackParamLayers m_playbackParamLayers;
 
     bool m_isActive = false;
 
@@ -234,6 +256,9 @@ protected:
 
     OnFlushedCallback m_onOffStreamFlushed;
     OnFlushedCallback m_onMainStreamFlushed;
+
+private:
+    bool m_shouldUpdateMainStreamEvents = false;
 };
 }
 

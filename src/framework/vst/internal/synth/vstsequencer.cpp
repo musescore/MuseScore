@@ -49,9 +49,7 @@ void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
     m_useDynamicEvents = useDynamicEvents;
     m_inited = true;
 
-    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelLayers, {});
-
-    m_playbackEventsMap.clear();
+    updateMainStreamEvents(m_playbackEventMap, m_dynamicLevelLayers, m_playbackParamLayers);
 }
 
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList&)
@@ -69,10 +67,7 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, c
 void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                           const mpe::PlaybackParamLayers&)
 {
-    m_dynamicLevelLayers = dynamics;
-
     if (!m_inited) {
-        m_playbackEventsMap = events;
         return;
     }
 
