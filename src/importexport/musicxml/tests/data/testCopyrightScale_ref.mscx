@@ -50,7 +50,7 @@ copyright copyright</metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Untitled score</metaTag>
+    <metaTag name="workTitle">Title title title title title title title title title title title title title title title title title title title title title title title</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -115,6 +115,15 @@ copyright copyright</metaTag>
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>3.5</height>
+        <Text>
+          <style>title</style>
+          <size>2.3</size>
+          <align>right,top</align>
+          <text><font size="2.3"/>Title title title title title title title title title title title title title title title title title title title title title title title</text>
+          </Text>
+        </VBox>
       <Measure>
         <voice>
           <Clef>

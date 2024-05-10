@@ -112,6 +112,7 @@ void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& f
 Fraction missingTupletDuration(const Fraction duration);
 bool isLikelyCreditText(const QString& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const QString& text, const bool caseInsensitive);
+static void scaleTitle(Score* score, Text* t);
 
 //---------------------------------------------------------
 //   MusicXMLParserPass1
