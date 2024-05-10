@@ -227,24 +227,24 @@ apt-get install -y \
 qt_version="624"
 qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
 
-##########################################################################
-# Compile and install nlohmann-json
-##########################################################################
-export CFLAGS="-Wno-psabi"
-export CXXFLAGS="-Wno-psabi"
-CURRDIR=${PWD}
-cd /
+# ##########################################################################
+# # Compile and install nlohmann-json
+# ##########################################################################
+# export CFLAGS="-Wno-psabi"
+# export CXXFLAGS="-Wno-psabi"
+# CURRDIR=${PWD}
+# cd /
 
-git clone https://github.com/nlohmann/json
-cd /json/
-git checkout --recurse-submodules v3.10.4
-git submodule update --init --recursive
-mkdir -p build
-cd build
-cmake -DJSON_BuildTests=OFF ..
-cmake --build . -j $(nproc)
-cmake --build . --target install
-cd /
+# git clone https://github.com/nlohmann/json
+# cd /json/
+# git checkout --recurse-submodules v3.10.4
+# git submodule update --init --recursive
+# mkdir -p build
+# cd build
+# cmake -DJSON_BuildTests=OFF ..
+# cmake --build . -j $(nproc)
+# cmake --build . --target install
+# cd /
 
 # ##########################################################################
 # # Compile and install linuxdeploy
@@ -267,26 +267,26 @@ cd /
 # $BUILD_TOOLS/linuxdeploy/linuxdeploy --version
 # cd /
 
-##########################################################################
-# Compile and install linuxdeploy-plugin-qt
-##########################################################################
+# ##########################################################################
+# # Compile and install linuxdeploy-plugin-qt
+# ##########################################################################
 
-git clone https://github.com/linuxdeploy/linuxdeploy-plugin-qt
-cd /linuxdeploy-plugin-qt/
-git checkout --recurse-submodules 9a388d32b1e95d8b69e201356f050137eb6c0aa3
-git submodule update --init --recursive
+# git clone https://github.com/linuxdeploy/linuxdeploy-plugin-qt
+# cd /linuxdeploy-plugin-qt/
+# git checkout --recurse-submodules 9a388d32b1e95d8b69e201356f050137eb6c0aa3
+# git submodule update --init --recursive
 
-# patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
-sed -i 's/wget --quiet "$url" -O -/curl "$url"/g' lib/linuxdeploy/src/core/generate-excludelist.sh
+# # patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
+# sed -i 's/wget --quiet "$url" -O -/curl "$url"/g' lib/linuxdeploy/src/core/generate-excludelist.sh
 
-mkdir -p build
-cd build
-cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
-cmake --build . -j $(nproc)
-mkdir -p $BUILD_TOOLS/linuxdeploy
-mv /linuxdeploy-plugin-qt/build/bin/linuxdeploy-plugin-qt $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt
-# $BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
-cd /
+# mkdir -p build
+# cd build
+# cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
+# cmake --build . -j $(nproc)
+# mkdir -p $BUILD_TOOLS/linuxdeploy
+# mv /linuxdeploy-plugin-qt/build/bin/linuxdeploy-plugin-qt $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt
+# # $BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
+# cd /
 
 # ##########################################################################
 # # Compile and install linuxdeploy-plugin-appimage
@@ -345,12 +345,12 @@ cd /
 # cd /
 # $BUILD_TOOLS/appimageupdatetool/appimageupdatetool --version
 
-cd ${CURRDIR}
+# cd ${CURRDIR}
 
-# delete build folders
-rm -rf /linuxdeploy*
-rm -rf /AppImageKit
-rm -rf /AppImageUpdate
+# # delete build folders
+# rm -rf /linuxdeploy*
+# rm -rf /AppImageKit
+# rm -rf /AppImageUpdate
 
 # Dump syms
 if [ "$PACKARCH" == "armv7l" ]; then
