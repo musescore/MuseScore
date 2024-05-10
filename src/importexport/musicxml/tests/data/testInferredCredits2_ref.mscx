@@ -164,7 +164,6 @@ Words &amp; Music by also Henry Ives (and ampersands)
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <offset x="0" y="-1.71429"/>
               <text>ha</text>
               </Lyrics>
             <Note>
@@ -176,7 +175,6 @@ Words &amp; Music by also Henry Ives (and ampersands)
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <offset x="0" y="-1.71429"/>
               <text>ha</text>
               </Lyrics>
             <Note>
@@ -197,7 +195,6 @@ Words &amp; Music by also Henry Ives (and ampersands)
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <offset x="0" y="-1.71429"/>
               <text>nice.</text>
               </Lyrics>
             <StemDirection>up</StemDirection>

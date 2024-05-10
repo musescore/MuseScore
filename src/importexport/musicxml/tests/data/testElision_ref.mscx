@@ -138,7 +138,6 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <offset x="0" y="-1.7145"/>
               <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -150,7 +149,6 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <offset x="0" y="-1.7145"/>
               <text>ce‿e in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -162,7 +160,6 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <offset x="0" y="-1.7145"/>
               <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -174,7 +171,6 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <offset x="0" y="-1.7145"/>
               <text>ce<sym>lyricsElision</sym>e‿in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>

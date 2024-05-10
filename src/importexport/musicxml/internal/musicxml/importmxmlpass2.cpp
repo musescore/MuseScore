@@ -7096,9 +7096,11 @@ void MusicXMLParserLyric::parse()
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     const bool printLyric = m_e.asciiAttribute("print-object") != "no";
-    const String placement = m_e.attribute("placement");
-    double relX = m_e.doubleAttribute("relative-x") / 10 * DPMM;
-    double relY = m_e.doubleAttribute("relative-y") / 10 * DPMM;
+    m_placement = m_e.attribute("placement");
+    double relX = m_e.doubleAttribute("relative-x") * 0.1 * DPMM;
+    m_relativeY = m_e.doubleAttribute("relative-y") * -0.1 * DPMM;
+    m_defaultY = m_e.doubleAttribute("default-y") * -0.1 * DPMM;
+
     String extendType;
     String formattedText;
 
@@ -7153,15 +7155,13 @@ void MusicXMLParserLyric::parse()
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
     lyric->setVisible(printLyric);
-    if (!placement.empty()) {
-        lyric->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
-        lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-    }
 
-    if (relX != 0 || relY != 0) {
+    lyric->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+    lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+
+    if (!RealIsNull(relX)) {
         PointF offset = lyric->offset();
-        offset.setX(relX != 0 ? relX : lyric->offset().x());
-        offset.setY(relY != 0 ? relY : lyric->offset().y());
+        offset.setX(relX);
         lyric->setOffset(offset);
         lyric->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
     }
@@ -7173,6 +7173,15 @@ void MusicXMLParserLyric::parse()
         && (extendType == "" || extendType == "start")
         && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
         m_extendedLyrics.insert(l);
+    }
+}
+
+String MusicXMLParserLyric::placement() const
+{
+    if (m_placement == "" && hasTotalY()) {
+        return totalY() < 0 ? u"above" : u"below";
+    } else {
+        return m_placement;
     }
 }
 

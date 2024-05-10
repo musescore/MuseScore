@@ -152,6 +152,12 @@ private:
     MxmlLogger* m_logger = nullptr;            // Error logger
     std::map<int, Lyrics*> m_numberedLyrics;   // lyrics with valid number
     std::set<Lyrics*> m_extendedLyrics;        // lyrics with the extend flag set
+    double m_defaultY = 0.0;
+    double m_relativeY = 0.0;
+    String m_placement;
+    String placement() const;
+    double totalY() const { return m_defaultY + m_relativeY; }
+    bool hasTotalY() const { return !muse::RealIsNull(m_defaultY) || !muse::RealIsNull(m_relativeY); }
 };
 
 //---------------------------------------------------------
