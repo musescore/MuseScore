@@ -574,7 +574,7 @@ static bool overrideTextStyleForComposer(const String& creditString)
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score*, const String& strTxt, const TextStyleType stl, const Align align, const double yoffs)
+static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextStyleType stl, const Align align, const double yoffs)
 {
     if (overrideTextStyleForComposer(strTxt)) {
         // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
@@ -592,6 +592,9 @@ static void addText2(VBox* vbx, Score*, const String& strTxt, const TextStyleTyp
         text->setOffset(muse::PointF(0.0, yoffs));
         text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
+        if (stl == TextStyleType::TITLE) {
+            scaleTitle(score, text);
+        }
     }
 }
 
@@ -1657,30 +1660,55 @@ static void setPageFormat(Score* score, const PageFormat& pf)
     score->style().set(Sid::pageTwosided, pf.twosided);
 }
 
-static void scaleCopyrightText(Score* score)
+static double scaleText(const String& str, const Sid fontFaceSid, const double fontSize, const Score* score)
 {
     // Scale text to fit within margins
+    const MStyle style = score->style();
+    const String fontFace = style.styleV(fontFaceSid).value<String>();
+    Font font(fontFace, Font::Type::Unknown);
+    font.setPointSizeF(fontSize);
+    const FontMetrics fm(font);
+
+    const double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
+    const double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
+    const double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
+    const double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, str).width();
+
+    return pagePrintableWidth / textWidth;
+}
+
+static void scaleCopyrightText(Score* score)
+{
     String copyright = score->metaTag(u"copyright");
     if (copyright.empty()) {
         return;
     }
 
-    MStyle style = score->style();
-    String fontFace = style.styleV(Sid::footerFontFace).value<String>();
-    Font footerFont(fontFace, Font::Type::Unknown);
-    double footerFontSize = style.styleV(Sid::footerFontSize).value<double>();
-    footerFont.setPointSizeF(footerFontSize);
-    FontMetrics fm(footerFont);
-
-    double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
-    double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
-    double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
-    double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, copyright).width();
-    double sizeRatio = pagePrintableWidth / textWidth;
+    const double fontSize = score->style().styleV(Sid::footerFontSize).value<double>();
+    const double sizeRatio = scaleText(copyright, Sid::footerFontFace, fontSize, score);
 
     if (sizeRatio < 1) {
-        double newSize = floor(footerFontSize * sizeRatio * 10) / 10;
+        const double newSize = floor(fontSize * sizeRatio * 10) / 10;
         score->style().set(Sid::footerFontSize, newSize);
+    }
+}
+
+static void scaleTitle(Score* score, Text* t)
+{
+    String title = score->metaTag(u"workTitle");
+    if (title.empty()) {
+        return;
+    }
+
+    const double fontSize = score->style().styleV(Sid::titleFontSize).value<double>();
+    const double sizeRatio = scaleText(title, Sid::titleFontFace, fontSize, score);
+
+    if (sizeRatio < 1) {
+        const double newSize = floor(fontSize * sizeRatio * 10) / 10;
+        // Need to layout text to generate fragments before changing its size
+        TLayout::layoutText(t, t->mutldata());
+        t->setProperty(Pid::FONT_SIZE, newSize);
+        t->setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
     }
 }
 

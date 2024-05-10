@@ -2,7 +2,7 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
   <work>
-    <work-title>Untitled score</work-title>
+    <work-title>Title title title title title title title title title title title title title title title title title title title title title title title</work-title>
     </work>
   <identification>
     <creator type="composer">Composer / arranger</creator>
@@ -69,6 +69,10 @@ copyright copyright</rights>
     <word-font font-family="Edwin" font-size="10"/>
     <lyric-font font-family="Edwin" font-size="10"/>
     </defaults>
+    <credit page="1">
+        <credit-type>title</credit-type>
+        <credit-words default-x="1020" default-y="3250" font-size="24" justify="right" valign="top">Title title title title title title title title title title title title title title title title title title title title title title title</credit-words>
+    </credit>
   <credit page="1">
     <credit-type>rights</credit-type>
     <credit-words default-x="148.790134" default-y="28.574964" justify="center" valign="bottom" font-size="9">Copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright 
