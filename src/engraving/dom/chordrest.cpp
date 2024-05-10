@@ -654,12 +654,12 @@ Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 void ChordRest::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps)
 {
     if (id == Pid::BEAM_MODE) {
-        if (ticks() > Fraction(1, 8)) {
+        if (m_durationType.hooks() == 0) {
             return;
         }
         BeamMode newBeamMode = newValue.value<BeamMode>();
-        if ((newBeamMode == BeamMode::BEGIN16 && ticks() > Fraction(1, 16))
-            || (newBeamMode == BeamMode::BEGIN32 && ticks() > Fraction(1, 32))) {
+        if ((newBeamMode == BeamMode::BEGIN16 && m_durationType.hooks() < 2)
+            || (newBeamMode == BeamMode::BEGIN32 && m_durationType.hooks() < 3)) {
             return;
         }
     }
