@@ -8099,8 +8099,6 @@ void MusicXMLParserNotations::parse()
 void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* const cr, Note* const note)
 {
     if (notation.symId() != SymId::noSym) {
-        String notationType = notation.attribute(u"type");
-        String placement = notation.attribute(u"placement");
         if (notation.name() == u"fermata") {
             addFermataToChord(notation, cr);
         } else {
