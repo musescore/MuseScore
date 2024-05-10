@@ -228,12 +228,16 @@ static Err doValidate(const QString& name, QIODevice* dev)
  Validate and import MusicXML data from file \a name contained in QIODevice \a dev into score \a score.
  */
 
-static Err doValidateAndImport(Score* score, const QString& name, QIODevice* dev)
+static Err doValidateAndImport(Score* score, const QString& name, QIODevice* dev, bool forceMode)
 {
-    // validate the file
-    Err res = doValidate(name, dev);
-    if (res != Err::NoError) {
-        return res;
+    Err res;
+
+    if (!forceMode) {
+        // Validate the file
+        res = doValidate(name, dev);
+        if (res != Err::NoError) {
+            return res;
+        }
     }
 
     // actually do the import
@@ -251,7 +255,7 @@ static Err doValidateAndImport(Score* score, const QString& name, QIODevice* dev
  Import MusicXML file \a name into the Score.
  */
 
-Err importMusicXml(MasterScore* score, QIODevice* dev, const QString& name)
+Err importMusicXml(MasterScore* score, QIODevice* dev, const QString& name, bool forceMode)
 {
     ScoreLoad sl;       // suppress warnings for undo push/pop
 
@@ -261,10 +265,10 @@ Err importMusicXml(MasterScore* score, QIODevice* dev, const QString& name)
     }
 
     // and import it
-    return doValidateAndImport(score, name, dev);
+    return doValidateAndImport(score, name, dev, forceMode);
 }
 
-Err importMusicXml(MasterScore* score, const QString& name)
+Err importMusicXml(MasterScore* score, const QString& name, bool forceMode)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
@@ -281,7 +285,7 @@ Err importMusicXml(MasterScore* score, const QString& name)
     }
 
     // and import it
-    return doValidateAndImport(score, name, &xmlFile);
+    return doValidateAndImport(score, name, &xmlFile, forceMode);
 }
 
 //---------------------------------------------------------
@@ -293,7 +297,7 @@ Err importMusicXml(MasterScore* score, const QString& name)
  Import compressed MusicXML file \a name into the Score.
  */
 
-Err importCompressedMusicXml(MasterScore* score, const QString& name)
+Err importCompressedMusicXml(MasterScore* score, const QString& name, bool forceMode)
 {
     //LOGD("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
 
@@ -316,7 +320,7 @@ Err importCompressedMusicXml(MasterScore* score, const QString& name)
     buffer.open(QIODevice::ReadOnly);
 
     // and import it
-    return doValidateAndImport(score, name, &buffer);
+    return doValidateAndImport(score, name, &buffer, forceMode);
 }
 
 //---------------------------------------------------------

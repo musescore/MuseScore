@@ -41,8 +41,8 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 extern bool saveMxl(Score*, const QString&);
-extern engraving::Err importMusicXml(MasterScore*, const QString&);
-extern engraving::Err importCompressedMusicXml(MasterScore*, const QString&);
+extern engraving::Err importMusicXml(MasterScore*, const QString&, bool forceMode);
+extern engraving::Err importCompressedMusicXml(MasterScore*, const QString&, bool forceMode);
 }
 
 static const String XML_IO_DATA_DIR("data/");
@@ -99,11 +99,11 @@ MasterScore* Musicxml_Tests::readScore(const String& fileName, bool isAbsolutePa
     String suffix = io::FileInfo::suffix(fileName);
 
     auto importXml = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
-        return mu::engraving::importMusicXml(score, path.toQString());
+        return mu::engraving::importMusicXml(score, path.toQString(), false);
     };
 
     auto importMxl = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
-        return mu::engraving::importCompressedMusicXml(score, path.toQString());
+        return mu::engraving::importCompressedMusicXml(score, path.toQString(), false);
     };
 
     ScoreRW::ImportFunc importFunc = nullptr;
