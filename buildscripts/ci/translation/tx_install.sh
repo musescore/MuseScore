@@ -27,9 +27,9 @@ ENV_FILE=$BUILD_TOOLS/tx/tx_environment.sh
 rm -f $ENV_FILE
 
 TRANSIFEX_API_TOKEN=""
-OS="linux" # linux, windows, masoc
+OS="linux" # linux, windows, macos
 
-TX_VERSION=v1.2.0
+TX_VERSION=v1.6.11
 TX_LIN_URL="https://github.com/transifex/cli/releases/download/${TX_VERSION}/tx-linux-amd64.tar.gz"
 TX_WIN_URL="https://github.com/transifex/cli/releases/download/${TX_VERSION}/tx-windows-386.zip"
 TX_MAC_URL="https://github.com/transifex/cli/releases/download/${TX_VERSION}/tx-darwin-amd64.tar.gz"
