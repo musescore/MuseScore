@@ -11843,7 +11843,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">%1; Duration: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2318"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2325"/>
         <source>Annotations:</source>
         <translation type="unfinished">Annotations:</translation>
     </message>
@@ -11853,7 +11853,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1102"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3218"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3230"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2344"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2351"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
     </message>
@@ -11863,17 +11863,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1104"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3222"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2359"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2366"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1500"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1505"/>
         <source>Start measure: %1; Start beat: %2</source>
         <translation type="unfinished">Start measure: %1; Start beat: %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1507"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1512"/>
         <source>End measure: %1; End beat: %2</source>
         <translation type="unfinished">End measure: %1; End beat: %2</translation>
     </message>
@@ -18156,12 +18156,12 @@ Fret %1 on strings %2</translation>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2823"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2826"/>
         <source>Import Capella</source>
         <translation type="unfinished">Import Capella</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2824"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2827"/>
         <source>Import failed: %1</source>
         <translation type="unfinished">Import failed: %1</translation>
     </message>
@@ -28283,25 +28283,25 @@ failed.</translation>
 <context>
     <name>ui</name>
     <message>
-        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="68"/>
+        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="75"/>
         <source>Light</source>
         <extracomment>The name of the light ui theme</extracomment>
         <translation type="unfinished">Light</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="71"/>
+        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="78"/>
         <source>Dark</source>
         <extracomment>The name of the dark ui theme</extracomment>
         <translation type="unfinished">Dark</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="74"/>
+        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="81"/>
         <source>White</source>
         <extracomment>The name of the high contrast light ui theme</extracomment>
         <translation type="unfinished">White</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="77"/>
+        <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="84"/>
         <source>Black</source>
         <extracomment>The name of the high contrast dark ui theme</extracomment>
         <translation type="unfinished">Black</translation>
