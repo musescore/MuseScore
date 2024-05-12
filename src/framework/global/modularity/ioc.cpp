@@ -30,10 +30,9 @@
 muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {
     return [o]() {
-        QQmlEngine* engine = qmlEngine(o);
-        if (!engine) {
-            engine = qmlEngine(o->parent());
-        }
+        const QObject* p = o;
+        QQmlEngine* engine = nullptr;
+        while (!(engine = qmlEngine(p)) && (p = p->parent())) {}
 
         IF_ASSERT_FAILED(engine) {
             return modularity::ContextPtr();
