@@ -192,6 +192,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
                               tuplet->setTuplet(oldTuplet);
+                              if (tuplet->staffIdx() > (nstaves() - 1)) {
+                                    delete tuplet;
+                                    MScore::setError(CANNOT_INSERT_TUPLET);
+                                    return false;
+                                    }
                               if (tuplet->rtick() + tuplet->actualTicks() > measure->ticks()) {
                                     delete tuplet;
                                     if (oldTuplet && oldTuplet->elements().empty())
