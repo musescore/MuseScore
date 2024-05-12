@@ -13,6 +13,7 @@
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "appshell/iappshellconfiguration.h"
 #include "appshell/internal/istartupscenario.h"
 
 namespace mu::app {
@@ -20,6 +21,7 @@ class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this
 {
     muse::Inject<muse::IApplication> muapplication;
     muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::Inject<appshell::IStartupScenario> startupScenario;
 
 public:
@@ -31,6 +33,7 @@ public:
     void finish() override;
 
 private:
+    void applyCommandLineOptions(const CmdOptions& options);
 
     CmdOptions m_options;
 

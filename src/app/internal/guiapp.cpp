@@ -66,8 +66,7 @@ void GuiApp::perform()
     // ====================================================
     // Setup modules: apply the command line options
     // ====================================================
-
-    //applyCommandLineOptions(commandLineParser.options(), runMode);
+    applyCommandLineOptions(options);
 
     // ====================================================
     // Setup modules: onPreInit
@@ -229,4 +228,27 @@ void GuiApp::finish()
     m_modules.clear();
 
     removeIoC();
+}
+
+void GuiApp::applyCommandLineOptions(const CmdOptions& options)
+{
+    if (options.app.revertToFactorySettings) {
+        appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
+    }
+
+    startupScenario()->setStartupType(options.startup.type);
+
+    if (options.startup.scoreUrl.has_value()) {
+        project::ProjectFile file { options.startup.scoreUrl.value() };
+
+        if (options.startup.scoreDisplayNameOverride.has_value()) {
+            file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();
+        }
+
+        startupScenario()->setStartupScoreFile(file);
+    }
+
+    if (options.app.loggerLevel) {
+        m_globalModule.setLoggerLevel(options.app.loggerLevel.value());
+    }
 }
