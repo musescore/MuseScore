@@ -291,11 +291,6 @@ EditStyle::EditStyle(QWidget* parent)
     keysigVisibility->addButton(radioShowAllKeys, true);
     keysigVisibility->addButton(radioHideKeys, false);
 
-    QButtonGroup* lyricsDashSystemStart = new QButtonGroup(this);
-    lyricsDashSystemStart->addButton(dashAlignStandard, int(LyricsDashSystemStart::STANDARD));
-    lyricsDashSystemStart->addButton(dashAlignHeader, int(LyricsDashSystemStart::UNDER_HEADER));
-    lyricsDashSystemStart->addButton(dashAlignFirstNote, int(LyricsDashSystemStart::UNDER_FIRST_NOTE));
-
     // ====================================================
     // Style widgets
     // ====================================================
@@ -337,8 +332,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::maxPageFillSpread,       false, maxPageFillSpread,       resetMaxPageFillSpread },
 
         { StyleId::lyricsPlacement,         false, lyricsPlacement,         resetLyricsPlacement },
-        { StyleId::lyricsPosAbove,          false, lyricsPosAbove,          resetLyricsPosAbove },
-        { StyleId::lyricsPosBelow,          false, lyricsPosBelow,          resetLyricsPosBelow },
+        { StyleId::lyricsPosAbove,          false, yLyricsPosAbove,         resetLyricsPosAbove },
+        { StyleId::lyricsPosBelow,          false, yLyricsPosBelow,         resetLyricsPosBelow },
         { StyleId::lyricsMinTopDistance,    false, lyricsMinTopDistance,    resetLyricsMinTopDistance },
         { StyleId::lyricsMinBottomDistance, false, lyricsMinBottomDistance, resetLyricsMinBottomDistance },
         { StyleId::lyricsMinDistance,       false, lyricsMinDistance,       resetLyricsMinDistance },
@@ -350,7 +345,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber },
         { StyleId::lyricsLineThickness,     false, lyricsLineThickness,     resetLyricsLineThickness },
         { StyleId::lyricsMelismaPad,        false, lyricsMelismaPad,        resetLyricsMelismaPad },
-        { StyleId::lyricsMelismaAlign,      false, lyricsMelismaAlign,      resetLyricsMelismaAlign },
         { StyleId::lyricsDashPad,           false, lyricsDashPad,           resetLyricsDashPad },
         { StyleId::lyricsDashLineThickness, false, lyricsDashLineThickness, resetLyricsDashLineThickness },
         { StyleId::lyricsDashYposRatio,     false, lyricsDashYposRatio,     resetLyricsDashYposRatio },
@@ -358,7 +352,7 @@ EditStyle::EditStyle(QWidget* parent)
           resetLyricsShowDashIfSyllableOnFirstNote },
         { StyleId::lyricsMelismaMinLength,  false, minMelismaLength,     resetMinMelismaLength },
         { StyleId::lyricsMelismaForce,      false, lyricsMelismaForce,   resetLyricsMelismaForce },
-        { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashSystemStart, 0 },
+        { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
 
         { StyleId::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
@@ -784,6 +778,13 @@ EditStyle::EditStyle(QWidget* parent)
     tupletBracketType->addItem(muse::qtrc("notation/editstyle", "Bracket"), int(TupletBracketType::SHOW_BRACKET));
     tupletBracketType->addItem(muse::qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
+    lyricsDashStartSystemPlacement->clear();
+    lyricsDashStartSystemPlacement->addItem(muse::qtrc("notation/editstyle", "Standard"), int(LyricsDashSystemStart::STANDARD));
+    lyricsDashStartSystemPlacement->addItem(muse::qtrc("notation/editstyle", "Inside the header"),
+                                            int(LyricsDashSystemStart::UNDER_HEADER));
+    lyricsDashStartSystemPlacement->addItem(muse::qtrc("notation/editstyle", "Under the first note"),
+                                            int(LyricsDashSystemStart::UNDER_FIRST_NOTE));
+
     musicalSymbolFont->clear();
     dynamicsFont->clear();
     for (auto i : engravingFonts()->fonts()) {
@@ -941,8 +942,6 @@ EditStyle::EditStyle(QWidget* parent)
 
     connect(radioShowAllClefs, &QRadioButton::toggled, this, &EditStyle::clefVisibilityChanged);
     connect(radioHideClefs,    &QRadioButton::toggled, this, &EditStyle::clefVisibilityChanged);
-
-    connect(tupletUseSymbols,  &QCheckBox::toggled,    this, &EditStyle::tupletUseSymbolsChanged);
 
     accidentalsGroup->setVisible(false);   // disable, not yet implemented
 
@@ -1156,6 +1155,14 @@ EditStyle::EditStyle(QWidget* parent)
     connect(pageList, &QListWidget::currentRowChanged, pageStack, &QStackedWidget::setCurrentIndex);
     connect(pageList, &QListWidget::currentRowChanged, this, &EditStyle::on_pageRowSelectionChanged);
     pageList->setCurrentRow(configuration()->styleDialogLastPageIndex());
+
+    editLyricsTextStyleButton->setChecked(false);
+    connect(editLyricsTextStyleButton, &QPushButton::clicked, pageList, [=](){
+        pageList->setCurrentRow(ALL_PAGE_CODES.indexOf("text-styles"));
+    });
+    connect(editLyricsTextStyleButton, &QPushButton::clicked, textStyles, [=](){
+        textStyles->setCurrentRow(ALL_TEXT_STYLE_SUBPAGE_CODES.indexOf("lyrics-odd-lines"));
+    });
 
     adjustPagesStackSize(0);
 
@@ -1954,6 +1961,9 @@ PropertyValue EditStyle::getValue(StyleId idx)
         } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
             QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
             v = bool(bg->checkedId());
+        } else if (sw.idx == StyleId::lyricsDashForce || sw.idx == StyleId::lyricsMelismaForce) { // special case where UI is presented with opposite wording
+            v = sw.widget->property("checked");
+            return !v.toBool();
         } else {
             v = sw.widget->property("checked");
             if (!v.isValid()) {
@@ -1995,6 +2005,10 @@ PropertyValue EditStyle::getValue(StyleId idx)
         }
     } break;
     case P_TYPE::POINT: {
+        if (idx == StyleId::lyricsPosAbove || idx == StyleId::lyricsPosBelow) {
+            QDoubleSpinBox* dsb = qobject_cast<QDoubleSpinBox*>(sw.widget);
+            return PointF(0.0, dsb->value());
+        }
         OffsetSelect* cb = qobject_cast<OffsetSelect*>(sw.widget);
         if (cb) {
             return PointF::fromQPointF(cb->offset());
@@ -2036,7 +2050,9 @@ void EditStyle::setValues()
         if (sw.widget) {
             sw.widget->blockSignals(true);
         }
-        PropertyValue val = styleValue(sw.idx);
+        PropertyValue val = sw.idx == StyleId::lyricsPosAbove || sw.idx == StyleId::lyricsPosBelow
+                            ? Spatium(styleValue(sw.idx).value<PointF>().y())
+                            : styleValue(sw.idx);
         if (sw.reset) {
             sw.reset->setEnabled(!hasDefaultStyleValue(sw.idx));
         }
@@ -2066,6 +2082,8 @@ void EditStyle::setValues()
             } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
                 qobject_cast<QButtonGroup*>(sw.widget)->button(1)->setChecked(value);
                 qobject_cast<QButtonGroup*>(sw.widget)->button(0)->setChecked(!value);
+            } else if (sw.idx == StyleId::lyricsDashForce || sw.idx == StyleId::lyricsMelismaForce) { // special case where UI is presented with opposite wording
+                sw.widget->setProperty("checked", !value);
             } else {
                 if (!sw.widget->setProperty("checked", value)) {
                     unhandledType(sw);
@@ -2571,7 +2589,6 @@ void EditStyle::textStyleChanged(int row)
         case TextStylePropertyType::MusicalSymbolsScale:
             textStyleMusicalSymbolsScale->setValue(styleValue(a.sid).toDouble() * 100);
             resetTextStyleMusicalSymbolsScale->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            row_textStyleMusicalSymbolsScale->setVisible(a.sid != Sid::dummyMusicalSymbolsScale);
             break;
 
         case TextStylePropertyType::FontStyle:
@@ -2646,7 +2663,6 @@ void EditStyle::textStyleChanged(int row)
 
     tupletUseSymbols->setVisible(tid == TextStyleType::TUPLET);
     resetTupletUseSymbols->setVisible(tid == TextStyleType::TUPLET);
-    row_textStyleMusicalSymbolsScale->setEnabled(tid != TextStyleType::TUPLET || tupletUseSymbols->isChecked());
 
     configuration()->setStyleDialogLastSubPageIndex(row);
 }
@@ -2755,9 +2771,4 @@ void EditStyle::clefVisibilityChanged(bool checked)
     } else {
         hideTabClefs->setEnabled(true);
     }
-}
-
-void EditStyle::tupletUseSymbolsChanged(bool checked)
-{
-    row_textStyleMusicalSymbolsScale->setEnabled(checked);
 }
