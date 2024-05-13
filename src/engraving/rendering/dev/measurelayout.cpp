@@ -2148,26 +2148,6 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
         return;
     }
     double x = 0.0;
-    bool first = m->isFirstInSystem();
-
-    // left barriere:
-    //    Make sure no elements crosses the left boarder if first measure in a system.
-    //
-    Shape ls(first ? RectF(0.0, -DBL_MAX, 0.0, DBL_MAX) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
-
-    x = HorizontalSpacing::minLeft(s, ls);
-
-    if (s->isStartRepeatBarLineType()) {
-        System* sys = m->system();
-        MeasureBase* pmb = m->prev();
-        if (pmb && pmb->isMeasure() && pmb->system() == sys && pmb->repeatEnd()) {
-            Segment* seg = toMeasure(pmb)->last();
-            // overlap end repeat barline with start repeat barline
-            if (seg->isEndBarLineType()) {
-                x -= ctx.conf().styleMM(Sid::endBarWidth) * m->mag();
-            }
-        }
-    }
 
     ChordLayout::updateGraceNotes(m, ctx);
 

@@ -297,7 +297,8 @@ double HorizontalSpacing::computeFirstSegmentXPosition(const Measure* m, const S
     Shape ls(RectF(0.0, 0.0, 0.0, m->spatium() * 4));
 
     // First, try to compute first segment x-position by padding against end barline of previous measure
-    Measure* prevMeas = (m->prev() && m->prev()->isMeasure() && m->prev()->system() == m->system()) ? toMeasure(m->prev()) : nullptr;
+    Measure* prevMeas
+        = (m->prevMM() && m->prevMM()->isMeasure() && m->prevMM()->system() == m->system()) ? toMeasure(m->prevMM()) : nullptr;
     Segment* prevMeasEnd = prevMeas ? prevMeas->lastEnabled() : nullptr;
     bool ignorePrev = !prevMeas || prevMeas->system() != m->system() || !prevMeasEnd
                       || (prevMeasEnd->segmentType() & SegmentType::BarLineType && segment->segmentType() & SegmentType::BarLineType);
