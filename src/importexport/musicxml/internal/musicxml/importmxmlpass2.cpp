@@ -1288,8 +1288,6 @@ static SymId convertFermataToSymId(const String& mxmlName)
 
     if (muse::contains(map, mxmlName)) {
         return map.at(mxmlName);
-    } else {
-        LOGD("unknown fermata %s", muPrintable(mxmlName));
     }
     return SymId::fermataAbove;
 }
@@ -4787,7 +4785,6 @@ static bool determineBarLineType(const String& barStyle, const String& repeat,
         } else if (repeat == u"forward") {
             type = BarLineType::START_REPEAT;
         } else {
-            LOGD("empty bar type");             // TODO
             return false;
         }
     } else if ((barStyle == u"tick") || (barStyle == u"short")) {
@@ -7717,7 +7714,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
 //---------------------------------------------------------
 
 static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, ArpeggioMap& arpMap,
-                        MxmlLogger* logger, const XmlStreamReader* const xmlreader, DelayedArpMap& delayedArps)
+                        DelayedArpMap& delayedArps)
 {
     if (cr->isRest() && !arpeggioType.empty()) {
         // If the arpeggio is attached to a rest, store to add to the next available chord
@@ -7761,8 +7758,6 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
                 arpeggio->setArpeggioType(ArpeggioType::DOWN);
             } else if (arpeggioType == "non-arpeggiate") {
                 arpeggio->setArpeggioType(ArpeggioType::BRACKET);
-            } else {
-                logger->logError(String(u"unknown arpeggio type %1").arg(arpeggioType), xmlreader);
             }
             // there can be only one
             if (!(static_cast<Chord*>(cr))->arpeggio()) {
@@ -8104,33 +8099,9 @@ void MusicXMLParserNotations::parse()
 void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* const cr, Note* const note)
 {
     if (notation.symId() != SymId::noSym) {
-        String notationType = notation.attribute(u"type");
-        String placement = notation.attribute(u"placement");
         if (notation.name() == u"fermata") {
-            if (!notationType.empty() && notationType != u"upright" && notationType != u"inverted") {
-                notationType.clear();
-                m_logger->logError(String(u"unknown fermata type %1").arg(notationType), &m_e);
-            }
             addFermataToChord(notation, cr);
         } else {
-            if (notation.name() == u"strong-accent") {
-                if (!notationType.empty() && notationType != u"up" && notationType != u"down") {
-                    notationType.clear();
-                    m_logger->logError(String(u"unknown %1 type %2").arg(notation.name(), notationType), &m_e);
-                }
-            } else if (notation.name() == u"harmonic" || notation.name() == u"delayed-turn"
-                       || notation.name() == u"turn" || notation.name() == u"inverted-turn") {
-                if (notation.name() == u"delayed-turn") {
-                    // TODO: actually this should be offset a bit to the right
-                }
-                if (placement != u"above" && placement != u"below") {
-                    placement.clear();
-                    m_logger->logError(String(u"unknown %1 placement %2").arg(notation.name(), placement), &m_e);
-                }
-            } else {
-                notationType.clear();           // TODO: Check for other symbols that have type
-                placement.clear();           // TODO: Check for other symbols that have placement
-            }
             addArticulationToChord(notation, cr);
         }
     } else if (notation.parent() == u"ornaments") {
@@ -8163,7 +8134,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
                                          TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
 {
-    addArpeggio(cr, m_arpeggioType, m_arpeggioNo, arpMap, m_logger, &m_e, delayedArps);
+    addArpeggio(cr, m_arpeggioType, m_arpeggioNo, arpMap, delayedArps);
     addBreath(cr, cr->tick(), m_breath);
     addWavyLine(cr, Fraction::fromTicks(tick), m_wavyLineNo, m_wavyLineType, spanners, trills, m_logger, &m_e);
 
