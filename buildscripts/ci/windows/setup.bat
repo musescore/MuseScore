@@ -3,16 +3,12 @@ ECHO "Setup Windows build environment"
 
 SET TARGET_PROCESSOR_BITS=64
 SET BUILD_WIN_PORTABLE=OFF
-SET QT5_COMPAT=OFF
 
 :GETOPTS
 IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2 & SHIFT
 IF /I "%1" == "--portable" SET BUILD_WIN_PORTABLE=%2 & SHIFT
-IF /I "%1" == "--qt5_compat" SET QT5_COMPAT=%2 & SHIFT
 SHIFT
 IF NOT "%1" == "" GOTO GETOPTS
-
-ECHO "QT5_COMPAT: %QT5_COMPAT%"
 
 IF NOT %TARGET_PROCESSOR_BITS% == 64 (
     IF NOT %TARGET_PROCESSOR_BITS% == 32 (
@@ -45,11 +41,6 @@ ECHO "=== Install Qt ==="
 
 SET "Qt_ARCHIVE=Qt624_msvc2019_64.7z"
 SET "QT_DIR=C:\Qt\6.2.4"
-IF %QT5_COMPAT% == ON (
-SET "Qt_ARCHIVE=Qt5152_msvc2019_64.7z"
-SET "QT_DIR=C:\Qt\5.15.2"
-)
-
 SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"

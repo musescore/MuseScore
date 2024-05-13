@@ -54,7 +54,6 @@ if(${MUSE_APP_INSTALL_SUFFIX} MATCHES "portable") # Note: "portableanything" wou
     install(PROGRAMS ${PROJECT_BINARY_DIR}/portable-utils
         ${CMAKE_CURRENT_LIST_DIR}/portable/ldd-recursive
         buildscripts/packaging/Linux+BSD/portable/rm-empty-dirs DESTINATION bin COMPONENT portable)
-    install(FILES ${CMAKE_CURRENT_LIST_DIR}/portable/qt.conf DESTINATION bin COMPONENT portable)
 else(${MUSE_APP_INSTALL_SUFFIX} MATCHES "portable")
     set(MAN_PORTABLE ".\\\"") # comment out lines in man page that are only relevant to the portable version
 endif(${MUSE_APP_INSTALL_SUFFIX} MATCHES "portable")

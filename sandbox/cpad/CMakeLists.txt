@@ -25,16 +25,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-g")
 
-find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
+set(QT_MIN_VERSION "6.2.4")
+find_package(Qt6Core ${QT_MIN_VERSION} REQUIRED)
 
 include_directories(
-    ${Qt5Core_INCLUDE_DIRS}
-    )
+    ${Qt6Core_INCLUDE_DIRS}
+)
 
 add_executable(app
     main.cpp
 )
 
 target_link_libraries(app
-    Qt5::Core
+    Qt6::Core
 )

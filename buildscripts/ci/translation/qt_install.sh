@@ -32,13 +32,14 @@ echo "echo 'Setup environment for run lupdate'" >> ${ENV_FILE}
 ##########################################################################
 # GET QT
 ##########################################################################
-qt_version="5152"
+qt_version="624"
 qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
   qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
-  wget -q --show-progress -O qt5.7z "${qt_url}"
-  7z x -y qt5.7z -o"${qt_dir}"
+  wget -q --show-progress -O qt.7z "${qt_url}"
+  7z x -y qt.7z -o"${qt_dir}"
+  rm qt.7z
 fi
 
 echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
