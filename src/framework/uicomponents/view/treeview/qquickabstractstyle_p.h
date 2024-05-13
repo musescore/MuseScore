@@ -63,13 +63,8 @@ public:
 
 private:
     static void data_append(QQmlListProperty<QObject> *list, QObject *object);
-#ifdef MU_QT5_COMPAT
-    static int data_count(QQmlListProperty<QObject> *list);
-    static QObject *data_at(QQmlListProperty<QObject> *list, int index);
-#else
     static qsizetype data_count(QQmlListProperty<QObject> *list);
     static QObject *data_at(QQmlListProperty<QObject> *list, qsizetype index);
-#endif
     static void data_clear(QQmlListProperty<QObject> *list);
 
     QQuickPadding1 m_padding;

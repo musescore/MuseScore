@@ -65,11 +65,7 @@ private:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseDoubleClickEvent(QMouseEvent* event) override;
-#ifdef MU_QT5_COMPAT
-    void enterEvent(QEvent* event) override;
-#else
     void enterEvent(QEnterEvent* event) override;
-#endif
     void leaveEvent(QEvent* event) override;
 
     int selectedDrumNote();

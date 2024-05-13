@@ -1169,14 +1169,6 @@ EditStyle::EditStyle(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-#ifdef MU_QT5_COMPAT
-EditStyle::EditStyle(const EditStyle& other)
-    : QDialog(other.parentWidget())
-{
-}
-
-#endif
-
 //---------------------------------------------------------
 //   showEvent
 //---------------------------------------------------------

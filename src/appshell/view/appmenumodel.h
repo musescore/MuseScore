@@ -22,9 +22,7 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
-#ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE(< QWindow >)
-#endif
 
 #include "uicomponents/view/abstractmenumodel.h"
 

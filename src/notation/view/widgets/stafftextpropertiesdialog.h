@@ -40,9 +40,6 @@ class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextProperties
 
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);
-#ifdef MU_QT5_COMPAT
-    StaffTextPropertiesDialog(const StaffTextPropertiesDialog& other);
-#endif
     ~StaffTextPropertiesDialog() override;
 
 private slots:

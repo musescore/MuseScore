@@ -45,10 +45,6 @@ class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog
 public:
     SelectNoteDialog(QWidget* parent = nullptr);
 
-#ifdef MU_QT5_COMPAT
-    SelectNoteDialog(const SelectNoteDialog& other);
-#endif
-
     bool doReplace() const;
     bool doAdd() const;
     bool doSubtract() const;

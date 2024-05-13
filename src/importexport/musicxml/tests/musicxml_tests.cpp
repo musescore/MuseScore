@@ -704,14 +704,12 @@ TEST_F(Musicxml_Tests, incorrectStaffNumber1) {
 TEST_F(Musicxml_Tests, incorrectStaffNumber2) {
     mxmlIoTestRef("testIncorrectStaffNumber2");
 }
-#ifndef MU_QT5_COMPAT
 TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits1)) {
     mxmlImportTestRef("testInferredCredits1");
 }
 TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits2)) {
     mxmlImportTestRef("testInferredCredits2");
 }
-#endif
 TEST_F(Musicxml_Tests, inferCodaII) {
     mxmlImportTestRef("testInferCodaII");
 }

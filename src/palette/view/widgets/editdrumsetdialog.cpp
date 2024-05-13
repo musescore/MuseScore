@@ -281,14 +281,6 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     setFocus();
 }
 
-#ifdef MU_QT5_COMPAT
-EditDrumsetDialog::EditDrumsetDialog(const EditDrumsetDialog& other)
-    : QDialog(other.parentWidget())
-{
-}
-
-#endif
-
 //---------------------------------------------------------
 //   customGboxToggled
 //---------------------------------------------------------

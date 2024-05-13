@@ -46,10 +46,6 @@ class TupletDialog : public QDialog, Ui::TupletDialog
 public:
     TupletDialog(QWidget* parent = nullptr);
 
-#ifdef MU_QT5_COMPAT
-    TupletDialog(const TupletDialog&);
-#endif
-
     void defaultToStyleSettings();
 
     TupletNumberType numberType() const;

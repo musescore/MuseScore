@@ -105,10 +105,6 @@ int main(int argc, char** argv)
     }
 #endif
 
-#ifdef MU_QT5_COMPAT
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
-
 //! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
 //!       Because of this, some elements are drawn with a shift on the score.
 //!       Let's make a Linux hack and round values above 0.75(see RoundPreferFloor)
@@ -120,11 +116,9 @@ int main(int argc, char** argv)
 
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
 
-#ifndef MU_QT5_COMPAT
     // Necessary for QQuickWidget, but potentially suboptimal for performance.
     // Remove as soon as possible.
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-#endif
 
     //! Needs to be set because we use transparent windows for PopupView.
     //! Needs to be called before any QQuickWindows are shown.

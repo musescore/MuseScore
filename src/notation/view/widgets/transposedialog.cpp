@@ -63,14 +63,6 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     setFocus();
 }
 
-#ifdef MU_QT5_COMPAT
-TransposeDialog::TransposeDialog(const TransposeDialog& dialog)
-    : TransposeDialog(dialog.parentWidget())
-{
-}
-
-#endif
-
 //---------------------------------------------------------
 //   TransposeDialog slots
 //---------------------------------------------------------

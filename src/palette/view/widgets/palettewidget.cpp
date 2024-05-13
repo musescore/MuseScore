@@ -846,11 +846,7 @@ void PaletteWidget::dragMoveEvent(QDragMoveEvent* event)
 {
     if (event->source() == this) {
         if (m_currentIdx != -1 && event->proposedAction() == Qt::MoveAction) {
-#ifdef MU_QT5_COMPAT
-            QPoint pos = event->pos();
-#else
             QPoint pos = event->position().toPoint();
-#endif
             int targetIdx = cellIndexForPoint(pos);
             if (targetIdx != -1 && targetIdx != m_currentIdx) {
                 PaletteCellPtr cell = m_palette->takeCell(m_currentIdx);
@@ -933,12 +929,8 @@ void PaletteWidget::dropEvent(QDropEvent* event)
     }
 
     element->setSelected(false);
-#ifdef MU_QT5_COMPAT
-    QPoint pos = event->pos();
-#else
-    QPoint pos = event->position().toPoint();
-#endif
-    int i = cellIndexForPoint(pos);
+
+    int i = cellIndexForPoint(event->position().toPoint());
     if (i == -1 || cells()[i]) {
         appendElement(element, name);
     } else {

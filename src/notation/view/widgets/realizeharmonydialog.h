@@ -41,9 +41,6 @@ class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase
 
 public:
     RealizeHarmonyDialog(QWidget* parent = nullptr);
-#ifdef MU_QT5_COMPAT
-    RealizeHarmonyDialog(const RealizeHarmonyDialog& dialog);
-#endif
 
 private slots:
     INotationInteractionPtr interaction() const;

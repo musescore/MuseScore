@@ -497,14 +497,6 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-#ifdef MU_QT5_COMPAT
-SpecialCharactersDialog::SpecialCharactersDialog(const SpecialCharactersDialog& other)
-    : TopLevelDialog(other.parentWidget())
-{
-}
-
-#endif
-
 void SpecialCharactersDialog::hideEvent(QHideEvent* event)
 {
     WidgetStateStore::saveGeometry(this);

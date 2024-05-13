@@ -36,9 +36,7 @@
 #include "part.h"
 #include "excerpt.h"
 
-#ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE("engraving/api/v1/selection.h")
-#endif
 
 namespace mu::engraving {
 class InstrumentTemplate;

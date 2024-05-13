@@ -42,9 +42,6 @@ class MasterPalette : public muse::uicomponents::TopLevelDialog, Ui::MasterPalet
 
 public:
     explicit MasterPalette(QWidget* parent = nullptr);
-#ifdef MU_QT5_COMPAT
-    MasterPalette(const MasterPalette& other);
-#endif
 
     QString selectedPaletteName() const;
 

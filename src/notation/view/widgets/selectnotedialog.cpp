@@ -100,14 +100,6 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     setFocus();
 }
 
-#ifdef MU_QT5_COMPAT
-SelectNoteDialog::SelectNoteDialog(const SelectNoteDialog& other)
-    : QDialog(other.parentWidget())
-{
-}
-
-#endif
-
 FilterNotesOptions SelectNoteDialog::noteOptions() const
 {
     FilterNotesOptions options;

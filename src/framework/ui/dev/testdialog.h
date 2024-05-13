@@ -36,9 +36,6 @@ class TestDialog : public QDialog
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
 
 public:
-#ifdef MU_QT5_COMPAT
-    TestDialog(const TestDialog& dialog);
-#endif
     explicit TestDialog(QWidget* parent = nullptr);
     ~TestDialog() override;
 

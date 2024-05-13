@@ -43,9 +43,6 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase
 
 public:
     TransposeDialog(QWidget* parent = 0);
-#ifdef MU_QT5_COMPAT
-    TransposeDialog(const TransposeDialog& dialog);
-#endif
 
 private slots:
     void transposeByKeyToggled(bool);

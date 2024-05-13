@@ -33,9 +33,7 @@
 #include "internal/dockbase.h"
 #include "docktypes.h"
 
-#ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE("dockwindow/view/dockstatusbarview.h")
-#endif
 
 namespace mu::ui {
 class NavigationControl;

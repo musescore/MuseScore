@@ -37,9 +37,7 @@
 #include "popupwindow/ipopupwindow.h"
 #include "internal/popupviewclosecontroller.h"
 
-#ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE(< QWindow >)
-#endif
 
 class QQuickCloseEvent;
 
