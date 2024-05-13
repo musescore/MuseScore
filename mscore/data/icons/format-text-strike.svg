@@ -1,12 +1,137 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>format-text-strike</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="format-text-strike" fill="#3B3F45">
-            <path d="M12,17 C15.31,17 18,14.31 18,11 L18,3 L15.5,3 L15.5,11 C15.5,12.93 13.93,14.5 12,14.5 C10.07,14.5 8.5,12.93 8.5,11 L8.5,3 L6,3 L6,11 C6,14.31 8.69,17 12,17 Z M5,19 L5,21 L19,21 L19,19 L5,19 Z" id="Shape"></path>
-        </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24px"
+   height="24px"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg11"
+   sodipodi:docname="format-text-strike-S.svg"
+   inkscape:version="0.92.1 r15371">
+  <metadata
+     id="metadata15">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>format-text-strike</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview13"
+     showgrid="false"
+     inkscape:zoom="1.7475113"
+     inkscape:cx="-168.63632"
+     inkscape:cy="-34.937071"
+     inkscape:current-layer="g4564" />
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">format-text-strike</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6">
+    <linearGradient
+       id="linearGradient4599"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#3b3f45;stop-opacity:1;"
+         offset="0"
+         id="stop4597" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4568"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1;"
+         offset="0"
+         id="stop4566" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4599"
+       id="linearGradient4640"
+       gradientUnits="userSpaceOnUse"
+       x1="5.1892486"
+       y1="11.183489"
+       x2="19.189249"
+       y2="11.183489" />
+  </defs>
+  <g
+     id="Derived-24"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd">
+    <g
+       id="g4564">
+      <rect
+         style="fill:#3b3f45;fill-opacity:0;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4716"
+         width="20.029503"
+         height="21.64805"
+         x="1.9852486"
+         y="1.1759748" />
+      <rect
+         y="-42.011425"
+         x="-40.137016"
+         height="16.753107"
+         width="16.966253"
+         id="rect4557"
+         style="fill:#ffffff;fill-opacity:0;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         y="11"
+         x="3.7860909"
+         height="2"
+         width="16.427818"
+         id="rect4499-5"
+         style="fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:26.68543434px;line-height:100%;font-family:Corbel;-inkscape-font-specification:'Corbel Bold';letter-spacing:0px;word-spacing:0px;fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:1.25087965px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="4.2601814"
+         y="20.717068"
+         id="text4638"><tspan
+           sodipodi:role="line"
+           id="tspan4636"
+           x="4.2601814"
+           y="20.717068"
+           style="fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:1.25087965px;stroke-opacity:1">S</tspan></text>
     </g>
+    <rect
+       style="fill:#00ff00;fill-opacity:0;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0"
+       id="rect4541"
+       width="5.1580815"
+       height="4.1349912"
+       x="-15.218472"
+       y="28.220249" />
+    <rect
+       style="fill:#00ff00;fill-opacity:0;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0"
+       id="rect4543"
+       width="6.1385436"
+       height="8.69627"
+       x="-17.648314"
+       y="15.730018" />
+  </g>
 </svg>
