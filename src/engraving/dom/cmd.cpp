@@ -1781,9 +1781,15 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     Fraction f     = dstF;
     ChordRest* cr1 = cr;
     Chord* oc      = 0;
+    Segment* s     = cr->segment();
 
     bool first = true;
     for (const Fraction& f2 : flist) {
+        if (!cr1) {
+            expandVoice(s, track);
+            cr1 = toChordRest(s->element(track));
+        }
+
         f  -= f2;
         makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
@@ -1850,12 +1856,12 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                 }
             }
         }
-        Measure* m  = cr1->measure();
-        Measure* m1 = m->nextMeasure();
+        const Measure* m  = cr1->measure();
+        const Measure* m1 = m->nextMeasure();
         if (m1 == 0) {
             break;
         }
-        Segment* s = m1->first(SegmentType::ChordRest);
+        s = m1->first(SegmentType::ChordRest);
         cr1 = toChordRest(s->element(track));
     }
     connectTies();
