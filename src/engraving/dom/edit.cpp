@@ -2400,9 +2400,21 @@ void Score::deleteItem(EngravingItem* el)
     if (!el) {
         return;
     }
-    // cannot remove generated elements
-    if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber() || el->isKeySig())) {
-        return;
+
+    if (el->generated()) {
+        switch (el->type()) {
+        // These types can be removed, even if generated
+        case ElementType::BAR_LINE:
+        case ElementType::BRACKET:
+        case ElementType::CLEF:
+        case ElementType::INSTRUMENT_NAME:
+        case ElementType::KEYSIG:
+        case ElementType::MEASURE_NUMBER:
+            break;
+        // All other types cannot be removed if generated
+        default:
+            return;
+        }
     }
 //      LOGD("%s", el->typeName());
 
