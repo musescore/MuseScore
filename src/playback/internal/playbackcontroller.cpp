@@ -588,7 +588,12 @@ msecs_t PlaybackController::playbackStartMsecs() const
 
     const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
     if (loop.visible) {
-        return tickToMsecs(loop.loopInTick);
+        // Convert from raw ticks (visual tick != playback tick due to repeats etc)
+        RetVal<tick_t> startTick = notationPlayback()->playPositionTickByRawTick(loop.loopInTick);
+        if (!startTick.ret) {
+            return 0;
+        }
+        return tickToMsecs(startTick.val);
     }
 
     return 0;
@@ -753,9 +758,16 @@ void PlaybackController::updateLoop()
         return;
     }
 
-    msecs_t fromMsesc = tickToMsecs(boundaries.loopInTick);
-    msecs_t toMsecs = tickToMsecs(boundaries.loopOutTick);
-    playback()->player()->setLoop(m_currentSequenceId, fromMsesc, toMsecs);
+    // Convert from raw ticks (visual tick != playback tick due to repeats etc)
+    RetVal<tick_t> playbackTickFrom = notationPlayback()->playPositionTickByRawTick(boundaries.loopInTick);
+    RetVal<tick_t> playbackTickTo = notationPlayback()->playPositionTickByRawTick(boundaries.loopOutTick);
+    if (!playbackTickFrom.ret || !playbackTickTo.ret) {
+        return;
+    }
+
+    msecs_t fromMsecs = tickToMsecs(playbackTickFrom.val);
+    msecs_t toMsecs = tickToMsecs(playbackTickTo.val);
+    playback()->player()->setLoop(m_currentSequenceId, fromMsecs, toMsecs);
 
     showLoop();
 
