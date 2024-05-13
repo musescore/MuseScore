@@ -112,8 +112,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.cpp
@@ -130,6 +128,15 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
 )
+if (MUE_COMPILE_USE_SYSTEM_TINYXML)
+    pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
+else()
+    set(MODULE_SRC
+        ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.h
+    )
+endif()
 
 if (GLOBAL_NO_INTERNAL)
     set(MODULE_DEF ${MODULE_DEF} -DGLOBAL_NO_INTERNAL)
@@ -218,6 +225,12 @@ list(APPEND MODULE_LINK
     ${FS_LIB}
     ${Z_LIB}
 )
+if (MUE_COMPILE_USE_SYSTEM_TINYXML)
+    list(APPEND MODULE_LINK
+        PkgConfig::tinyxml2
+    )
+    set(MODULE_DEF "SYSTEM_TINYXML")
+endif()
 
 if (MUE_ENABLE_CUSTOM_ALLOCATOR)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_CUSTOM_ALLOCATOR)
