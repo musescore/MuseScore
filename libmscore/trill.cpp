@@ -344,7 +344,7 @@ LineSegment* Trill::createLineSegment()
       {
       TrillSegment* seg = new TrillSegment(this, score());
       seg->setTrack(track());
-      seg->setColor(color());
+      seg->setColor(lineColor());
       seg->initElementStyle(&trillSegmentStyle);
       return seg;
       }
