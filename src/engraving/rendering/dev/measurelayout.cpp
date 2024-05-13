@@ -1731,7 +1731,8 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                 if (isFirstClef && searchMeasure->tick() >= clefTick) {
                     // Need to check previous measure for clef change if one not found in this measure
                     Segment* clefSeg = searchMeasure->findFirstR(SegmentType::Clef | SegmentType::HeaderClef, Fraction(0, 0));
-                    if (Measure* prevMeas = searchMeasure->prevMeasure(); !clefSeg) {
+                    Measure* prevMeas = searchMeasure->prevMeasure();
+                    if (prevMeas && !clefSeg) {
                         clefSeg = prevMeas->findSegment(SegmentType::Clef, m->tick());
                     }
                     if (clefSeg && clefSeg->enabled()) {
