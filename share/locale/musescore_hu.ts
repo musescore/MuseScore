@@ -1377,152 +1377,147 @@
 <context>
     <name>EditStaffType</name>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="37"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="36"/>
         <source>STANDARD STAFF</source>
         <translation>HAGYOMÁNYOS KOTTASOR</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="108"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="107"/>
         <source>Lines:</source>
         <translation>Vonalak:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="143"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="142"/>
         <source>Line distance:</source>
         <translation>Vonalak távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="159"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="505"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="792"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="158"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="504"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="784"/>
         <source>sp</source>
         <translation>vk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="189"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="188"/>
         <source>Show clef</source>
         <translation>Kulcs megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="196"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="195"/>
         <source>Show time signature</source>
         <translation>Ütemmutató megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="203"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="202"/>
         <source>Show barlines</source>
         <translation>Ütemvonalak megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="245"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="361"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="244"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="360"/>
         <source>Show key signature</source>
         <translation>Előjegyzés megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="252"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="375"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="251"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="374"/>
         <source>Show ledger lines</source>
         <translation>Pótvonalak megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="259"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="368"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="258"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="367"/>
         <source>Stemless</source>
         <translation>Szár nélkül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="269"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="268"/>
         <source>Notehead scheme:</source>
         <translation>Kottafej séma:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="293"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1282"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="292"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1274"/>
         <source>Preview</source>
         <translation>Előnézet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="406"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="405"/>
         <source>Upside down</source>
         <translation>Fejjel lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="448"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="728"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="447"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="720"/>
         <source>Font:</source>
         <translation>Betűtípus:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="465"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="744"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="464"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="736"/>
         <source>Size:</source>
         <translation>Méret:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="475"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="760"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="474"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="752"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="495"/>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="776"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="494"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="768"/>
         <source>Vertical offset:</source>
         <translation>Függőleges eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="533"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="532"/>
         <source>Marks are drawn:</source>
         <translation>Jelölések helye:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="549"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="548"/>
         <source>On lines</source>
         <translation>A vonalakon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="571"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="570"/>
         <source>Continuous</source>
         <translation>Folytonos</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="593"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="592"/>
         <source>Lines are:</source>
         <translation>Vonalak stílusa:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="609"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="608"/>
         <source>Numbers</source>
         <translation>Számok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="631"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="630"/>
         <source>Marks are:</source>
         <translation>Jelölés típusa:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="641"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="640"/>
         <source>Letters</source>
         <translation>Betűk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="654"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="653"/>
         <source>Above lines</source>
         <translation>A vonalak felett</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="667"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="666"/>
         <source>Broken</source>
         <translation>Szaggatott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="687"/>
-        <source>Show back-tied fret marks</source>
-        <translation>Visszafelé kötött bundjelzések mutatása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="694"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="686"/>
         <source>Show fingering in tablature</source>
         <translation>Ujjrend megjelenítése a tabulatúrában</translation>
     </message>
@@ -1532,134 +1527,134 @@
         <translation>Kottasor-típus szerkesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="438"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="437"/>
         <source>Fret marks</source>
         <translation>Érintők jelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="717"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="709"/>
         <source>Note values</source>
         <translation>Ritmusértékek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="834"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="826"/>
         <source>Shown as:</source>
         <translation>Megjelenítés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="853"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="845"/>
         <source>None</source>
         <comment>neither note symbols nor stems and beams</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="866"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="858"/>
         <source>Note symbols</source>
         <translation>Hangjegyek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="873"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="865"/>
         <source>Stems and beams</source>
         <translation>Kottaszárak és gerendák</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="923"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="915"/>
         <source>Repeat:</source>
         <translation>Ismétlés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="939"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="931"/>
         <source>Never</source>
         <translation>Soha</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="952"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="944"/>
         <source>At new system</source>
         <translation>Új sorcsoportnál</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="965"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="957"/>
         <source>At new meas.</source>
         <translation>Új ütemnél</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="972"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="964"/>
         <source>Always</source>
         <translation>Mindig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1022"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1014"/>
         <source>Stem style:</source>
         <translation>Kottaszárak stílusa:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1038"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1030"/>
         <source>Beside staff</source>
         <translation>Sorok mellett</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1045"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1037"/>
         <source>Through staff</source>
         <translation>Sorokon keresztül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1095"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1087"/>
         <source>Stem position:</source>
         <translation>Kottaszárak helyzete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1111"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1103"/>
         <source>Above</source>
         <translation>Felül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1118"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1110"/>
         <source>Below</source>
         <translation>Alul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1168"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1160"/>
         <source>Half notes:</source>
         <translation>Fél érték jele:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1187"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1179"/>
         <source>None</source>
         <comment>neither short nor slashed stem</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1203"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1195"/>
         <source>As short stem</source>
         <translation>Rövid szár</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1213"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1205"/>
         <source>As slashed stem</source>
         <translation>Áthúzott szár</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1241"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1233"/>
         <source>Show rests</source>
         <translation>Szünetek megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1322"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1314"/>
         <source>Template:</source>
         <translation>Sablon:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1338"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1330"/>
         <source>&lt; Reset to template</source>
         <translation>&lt; Újrakezdés a sablon alapján</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1364"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1356"/>
         <source>Add to templates</source>
         <translation>Hozzáadás a sablonokhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1361"/>
+        <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1353"/>
         <source>Create a new staff type of current group.</source>
         <translation>Új kottasor-típus létrehozása a jelenlegi csoportból.</translation>
     </message>
@@ -1701,23 +1696,23 @@
     <name>EditStyleBase</name>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="20"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11867"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12243"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12305"/>
         <source>Style</source>
         <translation>Stílus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13436"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13564"/>
         <source>Edit text style</source>
         <translation>Szövegstílus szerkesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13682"/>
         <source>Padding:</source>
         <translation>Töltés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13600"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13728"/>
         <source>Reset &apos;Padding&apos; value</source>
         <translation>„Töltés” alaphelyzetbe</translation>
     </message>
@@ -1730,14 +1725,14 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="54"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="845"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2526"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2842"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2491"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2807"/>
         <source>Page</source>
         <translation>Oldal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="59"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1979"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1944"/>
         <source>Sizes</source>
         <translation>Méretek</translation>
     </message>
@@ -1748,25 +1743,25 @@
         <translation>Sorcsoport</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3717"/>
         <source>Clefs</source>
         <translation>Kulcsok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="84"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3795"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3857"/>
         <source>Accidentals</source>
         <translation>Módosítójelek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4942"/>
         <source>Barlines</source>
         <translation>Ütemvonalak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="99"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5229"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5291"/>
         <source>Notes</source>
         <translation>Hangjegyek</translation>
     </message>
@@ -1777,32 +1772,32 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="114"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6160"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6222"/>
         <source>Beams</source>
         <translation>Gerendák</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="119"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6205"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6267"/>
         <source>Tuplets</source>
         <translation>N-olák</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7032"/>
         <source>Arpeggios</source>
         <translation>Akkordtörések</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7366"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7428"/>
         <source>Hairpins</source>
         <translation>Dinamikai jelek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9866"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13243"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13415"/>
         <source>Fermatas</source>
         <translation>Fermaták</translation>
     </message>
@@ -1813,8 +1808,8 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11172"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11234"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13143"/>
         <source>Dynamics</source>
         <translation>Dinamika</translation>
     </message>
@@ -1822,11 +1817,6 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="290"/>
         <source>Musical symbols font:</source>
         <translation>Zenei szimbólumok betűtípusa:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
-        <source>MuseScore will change the style to suit the font better</source>
-        <translation>A MuseScore úgy változtatja a stílust, hogy jobban illjen a betűkészlethez</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="353"/>
@@ -1847,125 +1837,125 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="436"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="499"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="734"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="922"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="990"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1042"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1153"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1226"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1258"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1341"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1458"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1544"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1576"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1703"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1812"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1872"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1929"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3290"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3328"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3375"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3407"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3532"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3654"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3693"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3850"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4160"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4226"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4275"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4321"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4380"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4406"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4439"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4452"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4498"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4547"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4573"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4586"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4641"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4716"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4768"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4781"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4899"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4971"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4984"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5010"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5056"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5125"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5309"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5328"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5347"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5366"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5385"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5404"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5495"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5617"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5662"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5721"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5766"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5802"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5841"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5922"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6110"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6279"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6327"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6378"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6605"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6656"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6732"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6761"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6882"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6995"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7011"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7027"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7121"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7150"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="905"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1014"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1074"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1131"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1205"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1233"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1363"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1446"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1478"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1561"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1678"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1764"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1911"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3293"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3340"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3372"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3497"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3658"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4196"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4222"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4301"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4337"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4468"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4514"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4778"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4843"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4961"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5072"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5118"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5409"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5428"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5447"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5466"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5557"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5679"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5724"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5828"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5903"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5984"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6341"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6440"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6667"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6718"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6823"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6845"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6944"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7057"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7073"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7089"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7183"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7215"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7254"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7385"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7485"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7498"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7635"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7785"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7824"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8064"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8172"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8340"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8467"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9158"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9885"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10071"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10339"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10454"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10473"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10528"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10570"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10698"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10729"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10795"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11019"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11070"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11125"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11609"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11755"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12360"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12434"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12456"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12469"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12547"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12676"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12724"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7245"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7277"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7316"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7447"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7697"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7847"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8126"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8234"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8402"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8529"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9806"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9947"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10133"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10401"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10535"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10590"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10760"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10791"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11132"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11435"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11671"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11817"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12422"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12474"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12496"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12518"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12531"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12654"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12786"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12855"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -1977,197 +1967,197 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="515"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="766"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="789"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="884"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="955"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="968"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1071"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1084"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1325"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1370"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1393"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1406"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1640"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1722"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1751"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1764"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1790"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2026"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2093"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2147"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2201"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2963"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2986"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3016"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3040"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3121"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3179"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3199"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3235"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3347"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3414"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3437"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3460"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4098"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4118"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4144"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4197"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4210"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4305"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4341"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4364"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4390"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4416"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4508"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4531"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4557"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4651"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4687"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4726"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4824"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4837"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4909"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4922"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4945"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5020"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5040"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5083"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5135"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5178"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5630"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5675"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5695"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5734"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5776"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5815"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5854"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5902"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5945"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6077"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6253"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6311"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6352"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6442"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6461"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6541"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6640"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6681"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6818"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6837"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6914"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7270"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7283"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7309"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7322"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7421"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7440"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7459"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7514"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7557"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="924"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="953"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="966"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="992"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1176"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1266"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1289"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1392"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1545"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1590"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1613"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1626"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1991"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2166"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2951"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2981"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3005"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3086"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3144"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3164"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3312"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3379"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3402"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3425"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4160"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4206"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4272"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4403"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4426"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4452"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4478"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4593"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4713"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4749"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4788"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4899"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4971"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4984"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5082"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5102"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5145"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5197"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5240"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5692"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5737"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5757"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5838"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5877"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5916"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5964"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6139"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6315"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6414"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6523"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6603"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6702"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6743"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6899"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6918"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7345"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7358"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7384"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7483"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7502"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7576"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7619"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7707"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7733"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7759"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7808"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7837"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7954"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7681"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7769"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7795"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7821"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7870"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7899"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8016"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8110"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8188"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8305"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8324"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8392"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8411"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8477"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8490"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8523"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8602"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8615"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8716"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8735"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8250"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8386"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8454"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8473"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8539"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8552"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8585"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8664"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8677"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8778"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8797"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8834"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8857"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8933"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8970"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8993"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9093"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9125"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9177"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9238"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9326"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9339"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9368"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9474"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9487"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9516"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9921"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9941"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9964"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10029"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10087"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10107"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10173"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10265"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10294"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10355"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10489"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10512"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10547"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10586"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10606"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10629"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10745"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10779"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10811"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10857"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10899"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10925"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10938"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11054"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11099"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11148"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11285"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11318"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11344"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11395"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11468"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11541"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11554"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11577"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11625"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12030"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12063"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13477"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13528"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13541"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13574"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13597"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13637"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13666"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8859"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8896"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8995"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9055"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9155"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9388"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9401"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9430"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9536"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9549"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9983"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10003"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10026"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10091"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10149"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10235"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10327"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10356"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10417"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10551"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10574"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10668"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10691"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10714"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10807"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10873"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10961"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10974"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10987"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11161"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11266"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11406"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11457"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11530"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11603"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11616"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11639"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11687"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12092"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13669"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13702"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13715"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13741"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13770"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13800"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13813"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13826"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13905"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13765"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13843"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13898"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14033"/>
         <source>Reset to default</source>
         <translation>Visszaállítás alapértelmezettre</translation>
     </message>
@@ -2233,8 +2223,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="678"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10977"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11243"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -2264,1247 +2254,1288 @@ space unit</extracomment>
         <translation>„Függőleges igazítási tartomány” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="887"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1395"/>
         <source>Reset &apos;Music top margin&apos; value</source>
         <translation>„Zene felső margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="903"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1411"/>
         <source>Music top margin:</source>
         <translation>Zene felső margó:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1344"/>
         <source>Last system fill threshold:</source>
         <translation>Utolsó sorcsoport kitöltési küszöb:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="948"/>
-        <source>Create courtesy time signatures</source>
-        <translation>Figyelmeztető ütemmutató létrehozása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="958"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1269"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
         <translation>„Függőleges keret alsó margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="971"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1179"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
         <translation>„Függőleges keret felső margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1006"/>
-        <source>Create key signature for all systems</source>
-        <translation>Előjegyzés létrehozása minden sorcsoporthoz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1013"/>
-        <source>Create courtesy clefs</source>
-        <translation>Figyelmeztető kulcsok létrehozása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1061"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1256"/>
         <source>Vertical frame top margin:</source>
         <translation>Függőleges keret felső margó:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1074"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1292"/>
         <source>Reset &apos;Last system fill threshold&apos; value</source>
         <translation>„Utolsó sorcsoport kitöltési küszöbe” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1087"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1166"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
         <translation>„Zene alsó margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1097"/>
-        <source>Create courtesy key signatures</source>
-        <translation>Figyelmeztető előjegyzések létrehozása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1104"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1279"/>
         <source>Vertical frame bottom margin:</source>
         <translation>Függőleges keret alsó margó:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1114"/>
-        <source>Create clef for all systems</source>
-        <translation>Kulcs létrehozása minden sorcsoporthoz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1134"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1153"/>
         <source>Music bottom margin:</source>
         <translation>Zene alsó margó:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1214"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1434"/>
         <source>Enable vertical justification of staves</source>
-        <translation>A sorcsoportok függőleges kiegyenlítésének bekapcsolása</translation>
+        <translation>A kottasorok függőleges kiegyenlítésének bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1459"/>
         <source>Max. grand staff distance:</source>
         <translation>Összekapcsolt kottasorok max. távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1277"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1497"/>
         <source>Max. staff distance:</source>
         <translation>Kottasorok max. távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1287"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="956"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1507"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
         <translation>„Sorcsoportok min. távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1328"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1548"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
         <translation>„Klammer fölötti/alatti távolság együtthatója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1593"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
         <translation>„Sorok min. távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1603"/>
         <source>Max. page fill distance:</source>
         <translation>OIdalkitöltés max. távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1616"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
         <translation>„Gömbölyű klammer fölötti/alatti távolság együtthatója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1409"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1629"/>
         <source>Reset &apos;Max. staff distance&apos; value</source>
         <translation>„Kottasorok max. távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1419"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1639"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
         <translation>„Összekapcsolt kottasorok max. távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1429"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1649"/>
         <source>Min. staff distance:</source>
         <translation>Kottasorok min. távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1439"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1837"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1659"/>
         <source>Max. system distance:</source>
         <translation>Sorcsoportok max. távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1505"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1853"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1055"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1725"/>
         <source>Min. system distance:</source>
         <translation>Sorcsoportok min. távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1518"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1738"/>
         <source>Factor for distance above/below brace:</source>
         <translation>Gömbölyű klammer fölötti/alatti távolság együtthatója</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1531"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1751"/>
         <source>Factor for distance above/below bracket:</source>
         <translation>Klammer fölötti/alatti távolság együtthatója</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1767"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1812"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
         <translation>„Sorcsoportok max. távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1602"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1822"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
         <translation>„Oldalkitöltés max. távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1643"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1863"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
         <translation>„Sorcsoportok közötti távolság együttható” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1876"/>
         <source>Factor for distance between systems:</source>
         <translation>Sorcsoportok közötti távolság együttható:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1682"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="884"/>
         <source>Disable vertical justification of staves</source>
         <translation>Kottasorok függőleges kiegyenlítésének kikapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
+        <source>Clefs, key &amp; time signatures</source>
+        <translation>Kulcsok, előjegyzés és ütemmutatók</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
+        <source>MuseScore Studio will change the style to suit the font better</source>
+        <translation>A MuseScore Studio úgy változtatja a stílust, hogy jobban illjen a betűkészlethez</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="927"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
         <translation>„Összekapcsolt kottasorok távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1741"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="943"/>
         <source>Staff distance:</source>
         <translation>Kottasorok távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="995"/>
         <source>Reset &apos;Staff distance&apos; value</source>
         <translation>„Sorok távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1897"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1099"/>
         <source>Grand staff distance:</source>
         <translation>Összekapcsolt kottasorok távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1991"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1956"/>
         <source>Small staff size:</source>
         <translation>Kis kottasor mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2029"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="1994"/>
         <source>Reset &apos;Small staff size&apos; value</source>
         <translation>„Kis kottasor mérete” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2023"/>
         <source>Small note size:</source>
         <translation>Kis hangjegy mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2096"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2061"/>
         <source>Reset &apos;Small note size&apos; value</source>
         <translation>„Kis hangjegy mérete” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2077"/>
         <source>Grace note size:</source>
         <translation>Aprókotta mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2150"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2115"/>
         <source>Reset &apos;Grace note size&apos; value</source>
         <translation>„Aprókotta mérete” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2166"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2131"/>
         <source>Small clef size:</source>
         <translation>Váltókulcs mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2204"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2169"/>
         <source>Reset &apos;Small clef size&apos; value</source>
         <translation>„Váltókulcs mérete” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2275"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2240"/>
         <source>Show header also on first page</source>
         <translation>Fejléc megjelenítése az első oldalon is</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2278"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2581"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2243"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2546"/>
         <source>Show on first page</source>
         <translation>Mutasd az első oldalon.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2298"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2263"/>
         <source>Use odd/even page header</source>
         <translation>Páros/páratlan fejléc használata</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2301"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2604"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2266"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2569"/>
         <source>Different odd/even pages</source>
         <translation>Páros/páratlan oldalak különbözőek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2381"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2751"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3508"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12856"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2716"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3473"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12918"/>
         <source>Left</source>
         <translation>Bal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2447"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2703"/>
         <source>Even</source>
         <translation>Páros</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2485"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2672"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2637"/>
         <source>Middle</source>
         <translation>Közép</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2539"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2634"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2504"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2599"/>
         <source>Odd</source>
         <translation>Páratlan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2552"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2855"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3620"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12849"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2820"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3585"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12911"/>
         <source>Right</source>
         <translation>Jobb</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2543"/>
         <source>Show footer also on first page</source>
         <translation>Lábléc megjelenítése az első oldalon is</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2601"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2566"/>
         <source>Use odd/even page footer</source>
         <translation>Páros/páratlan lábléc használata</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2903"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2868"/>
         <source>Show first</source>
         <translation>Első ütemszám</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2910"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3156"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7405"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8032"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8546"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8774"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8910"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9358"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9506"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9911"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10163"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10284"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11567"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2875"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3121"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7467"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8094"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8608"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8972"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9420"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9568"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9973"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10225"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11279"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11629"/>
         <source>Position above:</source>
         <translation>Elhelyezés felül:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2890"/>
         <source>Interval:</source>
         <translation>Ennyi ütemenként:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2950"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3215"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7570"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8094"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8513"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8847"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8983"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9302"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9954"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10133"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10228"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10840"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11275"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8156"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8909"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9045"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9364"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9512"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10016"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10195"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10290"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11337"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11579"/>
         <source>Position below:</source>
         <translation>Elhelyezés alul:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2966"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7424"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8051"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8480"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8800"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8936"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9371"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9519"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9944"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10032"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10748"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11398"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11580"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2931"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3089"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7486"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8542"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8862"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8998"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9433"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9581"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10006"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10094"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11460"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11642"/>
         <source>Reset &apos;Position above&apos; value</source>
         <translation>„Elhelyezés felül” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2976"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3134"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3099"/>
         <source>Vertical placement:</source>
         <translation>Függőleges elhelyezés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2989"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3238"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7589"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8327"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8618"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8860"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8996"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9342"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9490"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9967"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10090"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10176"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10268"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10915"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11288"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11557"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3203"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7651"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8922"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9404"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9552"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10029"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10152"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10238"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10330"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10977"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11350"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11619"/>
         <source>Reset &apos;Position below&apos; value</source>
         <translation>„Elhelyezés alul” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2999"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3189"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2964"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3154"/>
         <source>Horizontal placement:</source>
         <translation>Vízszintes elhelyezés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2998"/>
         <source>Every system</source>
         <translation>Sorcsoportonként</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3053"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3018"/>
         <source>All staves</source>
         <translation>Minden sorban</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3092"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3057"/>
         <source>Show measure number range at multimeasure rests</source>
         <translation>Több ütemes szüneteknél az ütemszám-tartomány mutatása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3309"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3274"/>
         <source>Bracket distance:</source>
         <comment>System bracket</comment>
         <translation>Klammer távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3382"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3347"/>
         <source>Brace thickness:</source>
         <translation>Gömbölyű klammer vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3427"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3392"/>
         <source>Brace distance:</source>
         <translation>Gömbölyű klammer távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3415"/>
         <source>Bracket thickness:</source>
         <comment>System bracket</comment>
         <translation>Klammer vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3463"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3428"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
         <translation>„Klammer vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3561"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3526"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3597"/>
         <source>Vertical offset:</source>
         <translation>Függőleges eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3571"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3674"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3536"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3639"/>
         <source>Horizontal offset:</source>
         <translation>Vízszintes eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3581"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3664"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3546"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3629"/>
         <source>Symbol:</source>
         <translation>Szimbólumok:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3723"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3790"/>
+        <source>Visibility</source>
+        <translation>Láthatóság</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3730"/>
+        <source>Show all clefs on every system</source>
+        <translation>Az összes kulcs megjelenítése az összes rendszernél</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3737"/>
+        <source>Hide all clefs after the first system where they appear</source>
+        <translation>Az összes kulcs elrejtése az első rendszer után, amelyben szerepel</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3744"/>
+        <source>Hide TAB clefs after the first system where they appear</source>
+        <translation>A TAB kulcsok elrejtése az első rendszer után, amelyben szerepelnek</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3751"/>
+        <source>Show courtesy clefs</source>
+        <translation>Figyelmeztető kulcsok megjelenítése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3764"/>
         <source>Standard TAB clef</source>
         <translation>Standard TAB kulcs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3771"/>
         <source>Serif TAB clef</source>
         <translation>Írott TAB kulcs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3801"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3784"/>
+        <source>Key signatures</source>
+        <translation>Előjegyzések</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3797"/>
+        <source>Show on every system</source>
+        <translation>Megjelenítés az összes rendszernél</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3804"/>
+        <source>Hide after the first system where they appear</source>
+        <translation>Elrejtés az első rendszer után, amelyben szerepel</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3811"/>
+        <source>Show courtesy key signatures</source>
+        <translation>Figyelmeztető előjegyzések megjelenítése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3821"/>
+        <source>Time signatures</source>
+        <translation>Ütemmutatók</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
+        <source>Show courtesy time signatures</source>
+        <translation>Figyelmeztető ütemmutatók megjelenítése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3863"/>
         <source>Reset to align accidentals within octaves to default</source>
         <translation>Módosítójelek oktávon belüli illesztését alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3866"/>
         <source>Reset &apos;Align octaves left&apos; value</source>
         <translation>„Oktávok balra igazítása” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3889"/>
         <source>When a chord has accidentals octave apart, these will be placed in the same columns. However, sometimes one of these accidentals can be larger than another, causing thus moving the others. 
 By default, they will be placed such as that their right end are at the same level. Use this checkbox to override this behaviour.</source>
         <translation>Ha egy akkordban oktávtávolságra lévő módosítójelek vannak, ezek egy oszlopba kerülnek. Néha viszont ezek a módosítójelek eltérő méretük miatt a többi módosítójelet eltolhatják.
 Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a kapcsolóval ezt a működést lehet felülbírálni.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3831"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3893"/>
         <source>Align octaves left</source>
         <translation>Oktávok balra igazítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3844"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3906"/>
         <source>Set value for padding inside parentheses around accidentals</source>
         <translation>A módosítójelek körüli zárójelekben alkalmazott kitöltés beállítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3931"/>
         <source>Reset padding inside parentheses to default</source>
         <translation>Zárójelen belüli kitöltés alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3872"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3934"/>
         <source>Reset &apos;Padding inside parentheses&apos; value</source>
         <translation>„Zárójelen belüli kitöltés” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3888"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3950"/>
         <source>Bracketed accidentals have a margin between the accidental and the brackets.</source>
         <translation>A zárójelbe tett módosítójelek és a zárójelek között távolság van.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3953"/>
         <source>Padding inside parentheses:</source>
         <translation>Kitöltés zárójeleken belül:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3904"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3966"/>
         <source>Tuning</source>
         <translation>Hangolás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3976"/>
         <source>Accidental</source>
         <translation>Módosító</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3981"/>
         <source>Semitones offset</source>
         <translation>Eltolás (félhang)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3924"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3986"/>
         <source>Cents offset</source>
         <translation>Eltolás (cent)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4003"/>
         <source>Only for a change to C Maj / A min</source>
         <translation>Csak C-dúrra / a-mollra váltáskor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4010"/>
         <source>Before key signature if changing to fewer ♯ or ♭</source>
         <translation>Az előjegyzés előtt, ha kevesebb ♯ vagy ♭ következik</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3955"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4017"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
         <translation>Az előjegyzés után, ha kevesebb ♯ vagy ♭ következik. Előtte, ha ♯ és ♭ közötti váltás következik.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4052"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4114"/>
         <source>Padding</source>
         <translation>Kitöltés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4120"/>
         <source>Barline to time signature:</source>
         <translation>Ütemvonal és ütemmutató között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4143"/>
         <source>Key signature to time signature:</source>
         <translation>Előjegyzés és ütemmutató között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6080"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6142"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation>„Ütemmutató–ütemvonal távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4121"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4183"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
         <translation>„Hangjegy–ütemvonal távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4147"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4209"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
         <translation>„Ütemmutató bal margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4239"/>
         <source>Barline to clef:</source>
         <translation>Ütemvonal és kulcs között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4249"/>
         <source>Time signature to barline:</source>
         <translation>Ütemmutató és ütemvonal között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4262"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
         <translation>„Kulcs–ütemmutató távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4213"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4275"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
         <translation>„Kulcs–előjegyzés távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4252"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4314"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
         <translation>„Kulcs–ütemvonal távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4324"/>
         <source>Barline to key signature:</source>
         <translation>Ütemvonal és előjegyzés között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4347"/>
         <source>Barline to grace note:</source>
         <translation>Ütemvonal és aprókotta között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4295"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4357"/>
         <source>Clef to barline:</source>
         <translation>Kulcs és ütemvonal között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4308"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4370"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
         <translation>„Kulcs bal margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4331"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4393"/>
         <source>Note to barline:</source>
         <translation>Hangjegy és ütemvonal között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4406"/>
         <source>Reset &apos;Note left margin&apos; value</source>
         <translation>„Hangjegy bal margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4354"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4416"/>
         <source>Barline to note:</source>
         <translation>Ütemvonal és hangjegy között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4429"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
         <translation>„Előjegyzés bal margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4455"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
         <translation>„Kulcs/előjegyzés jobb margója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4419"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4481"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
         <translation>„Előjegyzés–ütemvonal távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4524"/>
         <source>Clef to note:</source>
         <translation>Kulcs és hangjegy között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4475"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4537"/>
         <source>Clef to key signature:</source>
         <translation>Kulcs és előjegyzés között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4485"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4547"/>
         <source>Key signature to barline:</source>
         <translation>Előjegyzés és ütemvonal között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4573"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
         <translation>„Ütemvonal–módosítójel távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4583"/>
         <source>Barline to accidental:</source>
         <translation>Ütemvonal és módosítójel között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4534"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4596"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
         <translation>„Előjegyzés–ütemmutató távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4622"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
         <translation>„Ütemvonal–aprókotta távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4596"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4658"/>
         <source>Clef to time signature:</source>
         <translation>Kulcs és ütemmutató között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4654"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4716"/>
         <source>Reset &apos;Spacing&apos; value</source>
         <translation>„Térköz” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4664"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4726"/>
         <source>Minimum measure width:</source>
         <translation>Minimális ütemszélesség:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4752"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
         <translation>„Hangjegyek minimális távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4791"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
         <translation>„Ütem minimális szélessége” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4739"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4801"/>
         <source>Spacing ratio:</source>
         <translation>Térköz arányszám:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5603"/>
         <source>Rests (multiple voices)</source>
         <translation>Szünetek (többhangsor)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5609"/>
         <source>Default vertical offset:</source>
         <translation>Alapértelmezett függőleges eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5688"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5750"/>
         <source>Break H-bar if it collides with number</source>
         <translation>Törje a többütemes szünetjelet, ha ütközik a számmal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5698"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5760"/>
         <source>Reset &apos;Break H-bar if it collides with number&apos; value</source>
         <translation>„Hosszú ütemvonal tördelése, ha ütközik a számmal” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5737"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5799"/>
         <source>Reset &apos;H-bar horizontal stroke thickness&apos; value</source>
         <translation>„H-taktvonal vízszintes vonalvastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5779"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5841"/>
         <source>Reset &apos;H-bar margin within barlines&apos; value</source>
         <translation>„H-taktvonalak közötti margó” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5818"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5880"/>
         <source>Reset &apos;H-bar vertical stroke thickness&apos; value</source>
         <translation>„H-taktvonal függőleges vonal vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5919"/>
         <source>Reset &apos;H-bar vertical stroke height&apos; value</source>
         <translation>„H-taktvonal függőleges vonal magassága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6684"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6746"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
         <translation>„Klammer vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7060"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7122"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
         <translation>Ne mutassa az arpeggiót a hagyományos kottán, ha a tabulatúrán látszik</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7338"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7400"/>
         <source>Ties</source>
         <translation>Kötőívek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9102"/>
         <source>Label for full bends</source>
         <translation>Teljes hajlítás felirata</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9073"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9135"/>
         <source>Line thickness on standard staves:</source>
         <translation>Vonalvastagság a szokványos kottasorokon:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9096"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9158"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
         <translation>„Vonalvastagság a szokásos kottasorokon” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9145"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9207"/>
         <source>Arrow height:</source>
         <translation>Nyíl magassága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9332"/>
         <source>Tablature fret numbers</source>
         <translation>Tabulatúra fogószámok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9276"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9338"/>
         <source>Use cue sized numbers for grace note bends</source>
         <translation>Kisméretű számok használata a díszítőhang hajlításokhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11227"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11289"/>
         <source>Override score font</source>
         <translation>Kottázási betűtípus felülbírálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
         <source>Avoid barlines</source>
         <translation>Kerülje a ütővonalakat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11448"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11510"/>
         <source>Snap to dynamics</source>
         <translation>Rögzítés a dinamikai jelzésekhez</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12031"/>
         <source>Playback</source>
         <translation>Lejátszás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12933"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12995"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
         <translation>Válassza ki azokat az elemeket, amelyek megjelenjenek a szokásos és egyszerű tabulatúra sorokon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4749"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4811"/>
         <source>Minimum note distance:</source>
         <translation>Hangjegyek minimális távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3350"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3315"/>
         <source>Reset &apos;Bracket distance&apos; value</source>
         <translation>„Klammer távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3417"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3382"/>
         <source>Reset &apos;Brace thickness&apos; value</source>
         <translation>„Gömbölyű klammer vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3440"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3405"/>
         <source>Reset &apos;Brace distance&apos; value</source>
         <translation>„Gömbölyű klammer távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4759"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4821"/>
         <source>System header</source>
         <translation>Sorcsoport-fejléc</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4791"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4853"/>
         <source>Time signature to first note:</source>
         <translation>Ütemmutató és első hangjegy között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4814"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4876"/>
         <source>Clef/key signature to first note:</source>
         <translation>Kulcs/előjegyzés és első hang között:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4827"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4889"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
         <translation>„Sorcsoportkezdet–ütemmutató távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4902"/>
         <source>Reset &apos;System header distance&apos; value</source>
         <translation>„Sorcsoportkezdet távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4948"/>
         <source>Double barline thickness:</source>
         <translation>Kettős ütemvonal vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4974"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
         <translation>„Keskeny ütemvonal vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4935"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4997"/>
         <source>Thin barline thickness:</source>
         <translation>Keskeny ütemvonal vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5010"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
         <translation>„Ütemvonal többsoros kotta elején” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4958"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5020"/>
         <source>Barline at start of multiple staves</source>
         <translation>Ütemvonal többsoros kotta elején</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5085"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
         <translation>„Ismétlőjel–pontok távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5043"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5105"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
         <translation>„Széles ütemvonal távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5128"/>
         <source>Thick barline distance:</source>
         <translation>Széles ütemvonal távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5076"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5138"/>
         <source>Scale barlines to staff size</source>
         <translation>Ütemvonalak skálázása a kottasor méretéhez</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5086"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5148"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
         <translation>„Kettős ütemvonal távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5161"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
         <translation>„Ütemvonal az egysoros kotta elején” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5174"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
         <translation>„Ütemvonalak skálázása a kottasor méretéhez” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5200"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
         <translation>„Kettős ütemvonal vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5148"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5210"/>
         <source>Thick barline thickness:</source>
         <translation>Széles ütemvonal vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5220"/>
         <source>Repeat barline to dots distance:</source>
         <translation>Ismétlőjel-pontok távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5168"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5230"/>
         <source>Double barline distance:</source>
         <translation>Kettős ütemvonal távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5243"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
         <translation>„Széles ütemvonal vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5191"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5253"/>
         <source>Barline at start of single staff</source>
         <translation>Ütemvonal egysoros kotta elején</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5221"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5283"/>
         <source>Flag style</source>
         <translation>Zászló stílusa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5251"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5313"/>
         <source>Dot size:</source>
         <translation>Pont mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5261"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5323"/>
         <source>Ledger line thickness:</source>
         <translation>Pótvonalak vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5290"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5352"/>
         <source>Ledger line length:</source>
         <translation>Pótvonalak hossza:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5414"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5476"/>
         <source>Note to dot distance:</source>
         <translation>Hangjegy–pont távolság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5486"/>
         <source>Stem thickness:</source>
         <translation>Kottaszárak vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5496"/>
         <source>Dot to dot distance:</source>
         <translation>Pont-pont távolság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5444"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5506"/>
         <source>Accidental distance:</source>
         <translation>Módosítójelek távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5538"/>
         <source>Shorten stems</source>
         <translation>Rövidebb kottaszárak</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5485"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5547"/>
         <source>Shortest stem:</source>
         <translation>Legrövidebb kottaszár:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5573"/>
         <source>Accidental to note distance:</source>
         <translation>Módosítójel–hangjegy távolság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5637"/>
         <source>Minimum number of empty measures:</source>
         <translation>Üres ütemek minimális száma:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5604"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5666"/>
         <source>Minimum width:</source>
         <translation>Minimális szélesség:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5633"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5695"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
         <translation>„Ütem minimális szélessége” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5649"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5711"/>
         <source>Vertical position of number:</source>
         <translation>A szám függőleges pozíciója:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5678"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5740"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
         <translation>„A szám függőleges pozíciója” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5708"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5770"/>
         <source>H-bar horizontal stroke thickness:</source>
         <translation>Többütemes szünetjel vonalvastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5809"/>
         <source>H-bar margin within barlines:</source>
         <translation>Többütemes szünetjel távolsága az ütemvonaltól:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5789"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5851"/>
         <source>H-bar vertical stroke thickness:</source>
         <translation>Többütemes szünetjel függőleges részének vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5828"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5890"/>
         <source>H-bar vertical stroke height:</source>
         <translation>Többütemes szünetjel függőleges részének magassága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5892"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5954"/>
         <source>Maximum number of measures:</source>
         <translation>Ütemek maximális száma:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5935"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5997"/>
         <source>Spacing of symbols:</source>
         <translation>Szimbólumok közti térköz:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5984"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6046"/>
         <source>Show extenders on 4-measure repeats</source>
         <translation>A 4-ütemes ismétleseken legyen kitöltő vonal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6004"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6066"/>
         <source>Number consecutive measure repeats</source>
         <translation>Számozza az egymás utáni ismételt ütemeket</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6013"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6075"/>
         <source>Every</source>
         <translation>Minden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6095"/>
         <source>measures</source>
         <translation>ütemenként</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6067"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6129"/>
         <source>With parentheses</source>
         <translation>Zárójelekkel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6090"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6152"/>
         <source>Number position:</source>
         <translation>Szám helyzete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6256"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6318"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation>„Maximális meredekség” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6266"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6328"/>
         <source>Maximum slope:</source>
         <translation>Maximális meredekség:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6295"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6357"/>
         <source>Vertical distance from stem:</source>
         <translation>Függőleges távolság a kottaszártól:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6376"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation>„Függőleges távolság a kottaszártól” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6355"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6417"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation>„Függőleges távolság a kottafejtől” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6365"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6427"/>
         <source>Vertical distance from notehead:</source>
         <translation>Függőleges távolság a kottafejtől:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6410"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6472"/>
         <source>Avoid staves</source>
         <translation>Kottavonalak elkerülése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6420"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6482"/>
         <source>Properties</source>
         <translation>Tulajdonságok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6426"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6488"/>
         <source>Direction:</source>
         <translation>Elhelyezés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6507"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>„Számtípus” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6464"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6526"/>
         <source>Reset &apos;Direction&apos; value</source>
         <translation>„Irány” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6475"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6537"/>
         <source>Number</source>
         <translation>szám</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6542"/>
         <source>Ratio</source>
         <translation>Arány</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6485"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6547"/>
         <source>None</source>
         <comment>no tuplet number</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6494"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6556"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6627"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6499"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6561"/>
         <source>Up</source>
         <translation>Fent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6566"/>
         <source>Down</source>
         <translation>Lent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6525"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6587"/>
         <source>Number type:</source>
         <translation>Számtípus:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6632"/>
         <source>Bracket</source>
         <translation>Klammer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6637"/>
         <source>None</source>
         <comment>no tuplet bracket</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6648"/>
         <source>Brackets</source>
         <translation>Klammerek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6654"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
         <translation>Klammer vastagsága</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6686"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
         <translation>Klammer vonalka magassága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6643"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6705"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation>„Klammer vonalka magassága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3019"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3202"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2984"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3167"/>
         <source>Reset &apos;Horizontal placement&apos; value</source>
         <translation>„Vízszintes helyzet” alaphelyzetbe</translation>
     </message>
@@ -3515,7 +3546,7 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="89"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3994"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4056"/>
         <source>Measures</source>
         <translation>Ütemek</translation>
     </message>
@@ -3526,49 +3557,49 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7695"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7757"/>
         <source>Voltas</source>
         <translation>Volták</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8009"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8071"/>
         <source>Ottavas</source>
         <translation>Ottavák</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8444"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8506"/>
         <source>Pedal lines</source>
         <translation>Pedálvonalak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8830"/>
         <source>Trill lines</source>
         <translation>Trillavonalak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8904"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8966"/>
         <source>Vibrato lines</source>
         <translation>Vibrato vonalak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9110"/>
         <source>Bends</source>
         <translation>Hajlítások</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9290"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9352"/>
         <source>Text lines</source>
         <translation>Szövegvonalak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9438"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9500"/>
         <source>System text lines</source>
         <translation>Sorcsoport szövegvonalak</translation>
     </message>
@@ -3579,7 +3610,7 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
         <source>Expression text</source>
         <translation>Szöveges előadási jel</translation>
     </message>
@@ -3589,913 +3620,913 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Az első sorcsoportban ne rejtse el az üres sorokat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2229"/>
         <source>Header</source>
         <translation>Fejléc</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2567"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2532"/>
         <source>Footer</source>
         <translation>Lábléc</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3043"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3182"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3008"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3147"/>
         <source>Reset &apos;Vertical placement&apos; value</source>
         <translation>„Függőleges helyzet” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3104"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3069"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for measure number ranges for multi-measure rests</comment>
         <translation>„Klammer típusa” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3169"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3134"/>
         <source>Bracket type:</source>
         <comment>Bracket type for measure number ranges for multi-measure rests</comment>
         <translation>Klammer típusa:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3755"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3758"/>
         <source>Default TAB clef</source>
         <translation>Alapértelmezett TAB kulcs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6544"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6606"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
         <translation>„Klammer típusa” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6616"/>
         <source>Bracket type:</source>
         <comment>Bracket type for tuplets</comment>
         <translation>Klammer típusa:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6810"/>
         <source>Distance after stem of last note:</source>
         <translation>Távolság az utolsó hangjegy szára után:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6864"/>
         <source>Distance after head of last note:</source>
         <translation>Távolság az utolsó hangjegy feje után:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6821"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6883"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation>„Utolsó kottafej utáni távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6902"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation>„Első kottafej előtti távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6859"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6921"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation>„Első kottaszár előtti távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6931"/>
         <source>Distance before stem of first note:</source>
         <translation>Távolság az első hangjegy szára előtt:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6898"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6960"/>
         <source>Distance before head of first note:</source>
         <translation>Távolság az első hangjegy feje előtt:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6917"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6979"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation>„Utolsó kottaszár utáni távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6979"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7041"/>
         <source>Hook length:</source>
         <translation>Függőleges vonalka magassága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7040"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7645"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7886"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8084"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8536"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9076"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9206"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7102"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7707"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8146"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8598"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9268"/>
         <source>Line thickness:</source>
         <translation>Vonalvastagság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7050"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7112"/>
         <source>Distance to note:</source>
         <translation>Távolság a hangjegytől:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7103"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7165"/>
         <source>Slurs &amp;&amp; ties</source>
         <translation>Kötőjel és ívvel összekötött hangok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7131"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7193"/>
         <source>Dotted line thickness:</source>
         <translation>Pontozott ív vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7160"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9872"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10052"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10212"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7222"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9934"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10114"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11256"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11569"/>
         <source>Autoplace min. distance:</source>
         <translation>Min. távolság automatikus elhelyezésnél:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7170"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7232"/>
         <source>Line thickness at end:</source>
         <translation>Vonalvastagság az ív végein:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7225"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7287"/>
         <source>Line thickness middle:</source>
         <translation>Vonalvastagság az ív közepén:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7235"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7297"/>
         <source>Minimum tie length:</source>
         <translation>Átkötés minimális hossza:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7273"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9924"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10358"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11347"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7335"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9986"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10420"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11409"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11690"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation>„Automatikus elhelyezés min. távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7286"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7348"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
         <translation>„Vonalvastagság az ív végein” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7361"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
         <translation>„Vonalvastagság az ív közepén” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7312"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7374"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
         <translation>„Pontozott ív vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7325"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7387"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation>„Átkötés minimális hossza” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7372"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7434"/>
         <source>Height:</source>
         <translation>Magasság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7395"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7457"/>
         <source>Continue height:</source>
         <translation>Sortörés utáni kezdőmagasság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7443"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7505"/>
         <source>Reset &apos;Height&apos; value</source>
         <translation>„Magasság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7524"/>
         <source>Reset &apos;Continue height&apos; value</source>
         <translation>„Sortörés utáni kezdőmagasság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7472"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7534"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>Távolság a dinamikai jeltől automatikus elhelyezésnél:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7579"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation>„Távolság a dinamikai jeltől automatikus elhelyezésnél” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7527"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8824"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9381"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10042"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10307"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11000"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11331"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11590"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7589"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8654"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9443"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9591"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10104"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10369"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11652"/>
         <source>Placement:</source>
         <translation>Elhelyezés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7560"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8526"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8837"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9329"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9477"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10110"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10902"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11321"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11544"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7622"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8588"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8899"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9035"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9391"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9539"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10317"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11606"/>
         <source>Reset &apos;Placement&apos; value</source>
         <translation>„Elhelyezés” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7622"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7811"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8308"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7684"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7873"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8667"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation>„Vonalvastagság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7772"/>
         <source>Reset &apos;Position&apos; value</source>
         <translation>„Pozíció” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7736"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7840"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7957"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8220"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8395"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8414"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8493"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8719"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7798"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8019"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8282"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8457"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8555"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8781"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8800"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation>„Vonalstílus” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7762"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8191"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8175"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8253"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation>„Zászló magassága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7772"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8015"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8651"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7834"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8077"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8713"/>
         <source>Dash size:</source>
         <translation>Kötőjel mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7792"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7854"/>
         <source>Position:</source>
         <translation>Elhelyezés:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7850"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8074"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8503"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8136"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8565"/>
         <source>Line style:</source>
         <translation>Vonalstílus:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7876"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7938"/>
         <source>Hook height:</source>
         <translation>Függőleges vonalka magassága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7910"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8564"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7972"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8186"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8626"/>
         <source>Continuous</source>
         <translation>Folytonos</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7915"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8569"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7977"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8191"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8631"/>
         <source>Dashed</source>
         <translation>Szaggatott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7920"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8574"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7982"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8196"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8636"/>
         <source>Dotted</source>
         <translation>Pontozott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7925"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8579"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7987"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8201"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8641"/>
         <source>Dash-dotted</source>
         <translation>Pontozott-szaggatott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7930"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8144"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8584"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7992"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8206"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8646"/>
         <source>Dash-dot-dotted</source>
         <translation>Kétpont vonal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7938"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8289"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8668"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8730"/>
         <source>Gap size:</source>
         <translation>Hézag mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8152"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8214"/>
         <source>Hook height above:</source>
         <translation>Kampó hossza fölül:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8162"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8224"/>
         <source>Numbers only</source>
         <translation>Csak számok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8201"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8263"/>
         <source>Hook height below:</source>
         <translation>Kampó hossza alul:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8252"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
         <source>Reset &apos;Numbers only&apos; value</source>
         <translation>„Csak számok” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9116"/>
         <source>Standard staff</source>
         <translation>Általános kottasor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9128"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9190"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation>„Nyíl szélessége” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9115"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9177"/>
         <source>Arrow width:</source>
         <translation>Nyíl szélessége:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9242"/>
         <source>Reset &apos;Arrow height&apos; value</source>
         <translation>„Nyíl magassága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9203"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9265"/>
         <source>Line thickness on tablature staves:</source>
         <translation>Tabulatúra vonalvastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9303"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
         <translation>„Vonalvastagság a tabulatúra-íveken” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9589"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9651"/>
         <source>Articulations &amp;&amp; ornaments</source>
         <translation>Artikulációk és díszítések</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9595"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9657"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation>„Artikuláció távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9605"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9638"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9670"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9667"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9732"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>vk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9615"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9677"/>
         <source>Distance from stem:</source>
         <translation>Távolság a szártól:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9687"/>
         <source>Articulation size:</source>
         <translation>Artikuláció mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9742"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation>„Kottaszár távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9687"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9749"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation>„Kottafej távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9694"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9756"/>
         <source>Distance from staff:</source>
         <translation>Távolság a kottasortól:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9717"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9779"/>
         <source>Distance from notehead:</source>
         <translation>Távolság a kottafejtől:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9727"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9789"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation>„Artikuláció mérete” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9796"/>
         <source>Minimum vertical distance:</source>
         <translation>Minimális függőleges távolság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9842"/>
         <source>Articulation alignment when positioned at the stem</source>
         <translation>Artikuláció igazítása, ha a szárhoz van pozicionálva </translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9786"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9848"/>
         <source>Align with stem</source>
         <translation>Szárhoz igazítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9855"/>
         <source>Align with notehead</source>
         <translation>Kottafejhez igazítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9862"/>
         <source>Center between stem and notehead</source>
         <translation>A szár és a kottafej között</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9888"/>
         <source>Combined articulation</source>
         <translation>Kombinált artikuláció</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9832"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9894"/>
         <source>Always keep together</source>
         <translation>Állandó együtt tartás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9839"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9901"/>
         <source>Prefer closeness to notehead (combined articulations may become separated)</source>
         <translation>A kottafej közelségének előnyben részesítése (a kombinált artikulációk elválhatnak)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10492"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10554"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
         <translation>„Kötőjel függőleges pozícióaránya” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10502"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10564"/>
         <source>Dash thickness:</source>
         <translation>Kötőjel vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10515"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10577"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation>„Kötőjelek max. távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10550"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10612"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation>„Mindig legyen kötőjel” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10589"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10651"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation>„Kötőjel min. hossza” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10599"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
         <source>Always force dash</source>
         <translation>Mindig legyen kötőjel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10671"/>
         <source>Reset &apos;Dash pad&apos; value</source>
         <translation>„Kötőjel térköze” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10681"/>
         <source>Max. dash length:</source>
         <translation>Dalszöveg kötőjel max. hossz:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10694"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation>„Kötőjel max. hossz” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10642"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10704"/>
         <source>Max. dash distance:</source>
         <translation>Kötőjelek max. távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10655"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10717"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation>„Kötőjel vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10665"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10727"/>
         <source>Dash pad:</source>
         <translation>Kötőjel térköz:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10737"/>
         <source>Dash Y position ratio:</source>
         <translation>Kötőjel függőleges pozíció arány:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10685"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10747"/>
         <source>Min. dash length:</source>
         <translation>Dalszöveg kötőjel min. hossz:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10758"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10820"/>
         <source>Align verse number</source>
         <translation>Versszak számának igazítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10782"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10844"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation>„Versszak számának igazítása” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10814"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10876"/>
         <source>Reset &apos;Min. distance&apos; value</source>
         <translation>„Min. távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10824"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11774"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
         <source>Line height:</source>
         <translation>Sormagasság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10922"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation>„Min. alsó margó” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10990"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation>„Sormagasság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11003"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation>„Min. felső margó&quot; alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11026"/>
         <source>Min. top margin:</source>
         <translation>Min. felső margó:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11052"/>
         <source>Min. bottom margin:</source>
         <translation>Min. alsó margó:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11035"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11097"/>
         <source>Min. distance:</source>
         <translation>Min. távolság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11057"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11119"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
         <translation>„Melizma vastagsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11089"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
         <source>Melisma thickness:</source>
         <translation>Melizma vastagság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11102"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11164"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
         <translation>„Melizma térköze” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
         <source>Melisma pad:</source>
         <translation>Melizma térköz:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11141"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13839"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11203"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13967"/>
         <source>Align:</source>
         <translation>Igazítás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11213"/>
         <source>Reset &apos;Align&apos; value</source>
         <translation>„Igazítás” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11207"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11269"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
         <translation>„Ütemvonalak elkerülése” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11324"/>
         <source>Reset &apos;Scale&apos; value</source>
         <translation>„Nagyítás” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11471"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11533"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
         <translation>„Dinamikai jelzésekhez igazítás” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11693"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11755"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13997"/>
         <source>Size:</source>
         <translation>Méret:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11709"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13682"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11771"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13810"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
         <source>from top of staff</source>
         <translation>a kottasor tetejétől</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11807"/>
         <source>of font height</source>
         <translation>a betűmérethez képest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11809"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13692"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11298"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11871"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13820"/>
         <source>Font:</source>
         <translation>Betűtípus:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11829"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11891"/>
         <source>Vertical position:</source>
         <translation>Függőleges helyzet:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11844"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11906"/>
         <source>Alignment</source>
         <translation>Igazítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11912"/>
         <source>Top</source>
         <translation>Felül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11919"/>
         <source>Bottom</source>
         <translation>Alul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11873"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11935"/>
         <source>Modern</source>
         <translation>Modern</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11942"/>
         <source>Historic</source>
         <translation>Klasszikus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11949"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12011"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation>Kápó helyzete (érintő):</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11984"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12046"/>
         <source>Appearance</source>
         <translation>Megjelenés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12095"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
         <translation>„Pótvonalak függőleges távolsága” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12043"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12105"/>
         <source>Extension vertical offset:</source>
         <translation>Pótvonalak függőleges távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12053"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12115"/>
         <source>Extension scaling:</source>
         <translation>Pótvonalak távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12128"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
         <translation>„Kiterjesztés méretezése” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12076"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12138"/>
         <source>Modifier scaling:</source>
         <translation>Módosító jel nagyítása:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12086"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12148"/>
         <source>Modifier vertical offset:</source>
         <translation>Módosító jel függőleges eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12161"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
         <translation>„Módosító jel nagyítása” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12174"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
         <translation>„Módosító jel függőleges eltolása” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12131"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12193"/>
         <source>Lower case minor chords</source>
         <translation>Moll akkordok kisbetűvel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
         <source>Lower case bass notes</source>
         <translation>Basszus hangok kisbetűvel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12145"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12207"/>
         <source>All caps note names</source>
         <translation>Hangok csupa nagybetűvel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12168"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12230"/>
         <source>Spelling</source>
         <translation>Írásmód</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12177"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12249"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12311"/>
         <source>Standard</source>
         <translation>Hagyományos</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12190"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12252"/>
         <source>German</source>
         <translation>Német (magyar)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12262"/>
         <source>Full German</source>
         <translation>Hosszú német</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12272"/>
         <source>Solfeggio</source>
         <translation>Szolmizált</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12282"/>
         <source>French</source>
         <translation>Francia</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12321"/>
         <source>Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12266"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12328"/>
         <source>Custom</source>
         <translation>Egyéni</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
         <source>Load XML</source>
         <translation>XML betöltése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12376"/>
         <source>Positioning</source>
         <translation>Pozíció</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12320"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12534"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12382"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12596"/>
         <source>Maximum shift below:</source>
         <translation>Maximális alsó eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12337"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12399"/>
         <source>Distance to fretboard diagram:</source>
         <translation>Távolság az akkordábrától:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12347"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12767"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12409"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12829"/>
         <source>Maximum shift above:</source>
         <translation>Maximális fölső eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12379"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12441"/>
         <source>Minimum chord spacing:</source>
         <translation>Akkordok minimális térköze:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12451"/>
         <source>Maximum barline distance:</source>
         <translation>Ütemvonalak maximális távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12564"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12626"/>
         <source>Fret number font size</source>
         <translation>Kápójelzés betűmérete</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12648"/>
         <source>Fret spacing</source>
         <translation>Érintők távolsága</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12611"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12673"/>
         <source>Relative dot size:</source>
         <translation>Pont relatív mérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11357"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12621"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11419"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12683"/>
         <source>Scale:</source>
         <translation>Méretezés:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="69"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2856"/>
         <source>Measure numbers</source>
         <translation>Ütemszámok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5978"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6040"/>
         <source>Measure repeats</source>
         <translation>Ütem ismétlések</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10010"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10072"/>
         <source>Staff text</source>
         <translation>Kottasor szöveg</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10206"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10268"/>
         <source>Tempo text</source>
         <translation>Tempószöveg</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11563"/>
         <source>Rehearsal marks</source>
         <translation>Cifferek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11685"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11747"/>
         <source>Figured bass</source>
         <translation>Számozott basszus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11975"/>
         <source>Chord symbols</source>
         <translation>Akkordjelzések</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12528"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12590"/>
         <source>Fretboard diagrams</source>
         <translation>Akkordábrák</translation>
     </message>
@@ -4520,341 +4551,381 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Tizenhatod hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3246"/>
         <source>System brackets</source>
         <translation>Klammerek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3502"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3467"/>
         <source>System dividers</source>
         <translation>Sorelválasztók</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3935"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3997"/>
         <source>♮ in key signatures</source>
         <translation>♮ az előjegyzésekben</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4987"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
         <translation>„Ismétlővonalak végénél mutasson mutatójeleket (szárnyas ismétlések)” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5095"/>
         <source>Show repeat barline tips (“winged” repeats)</source>
         <translation>„Fülek” megjelenítése az ismétlőjelek végein</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5557"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5619"/>
         <source>Multimeasure rests</source>
         <translation>Többütemes szünetek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5867"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5929"/>
         <source>Old-style multimeasure rests</source>
         <translation>Régi stílusú többütemes szünetek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6303"/>
         <source>Vertical distance from notes</source>
         <translation>Függőleges távolság a hangjegyektől</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6723"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6785"/>
         <source>Horizontal distance from notes</source>
         <translation>Vízszintes távolság a hangjegyektől</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10507"/>
         <source>Lyrics dash</source>
         <translation>Énekszöveg kötőjel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10720"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10782"/>
         <source>Lyrics text</source>
         <translation>Énekszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11110"/>
         <source>Lyrics melisma</source>
         <translation>Énekszöveg melizma</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12122"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12184"/>
         <source>Automatic capitalization</source>
         <translation>Automatikus nagybetűsítés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12631"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12693"/>
         <source>Scale</source>
         <translation>Méretarány</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12650"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12712"/>
         <source>Fret number font size:</source>
         <translation>Kápójelzés betűmérete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12660"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12722"/>
         <source>Fret spacing:</source>
         <translation>Érintők távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12670"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12732"/>
         <source>Default vertical position</source>
         <translation>Alapértelmezett függőleges pozíció</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12698"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
         <source>Barre line thickness</source>
         <translation>Barrévonal vastagsága</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12701"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12763"/>
         <source>Barre line thickness:</source>
         <translation>Barrévonal vastagsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12711"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
         <source>String spacing:</source>
         <translation>Húrok távolsága:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12822"/>
         <source>Fret number position:</source>
         <translation>Érintő jelölés helyzete:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12777"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12839"/>
         <source>Default vertical position:</source>
         <translation>Alapértelmezett függőleges pozíció:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12787"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12849"/>
         <source>String spacing</source>
         <translation>Húrok távolsága</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12825"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12887"/>
         <source>Relative dot size</source>
         <translation>Pont relatív mérete</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12894"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12956"/>
         <source>Tablature</source>
         <translation>Tabulatúra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12989"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13371"/>
         <source>Staccato</source>
         <translation>staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13013"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13113"/>
         <source>Accent and marcato marks</source>
         <translation>Hangsúly és marcato jelek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13027"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13150"/>
         <source>Harmonic marks</source>
         <translation>Üveghangjelek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13044"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13323"/>
         <source>Turns</source>
         <translation>Kettős ékesítések</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13075"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13288"/>
         <source>Palm mute (P.M.)</source>
         <translation>Tenyérrel tompítás (P.M.)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13082"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13340"/>
         <source>Let ring</source>
         <translation>Kizengetés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13113"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13265"/>
         <source>Slurs</source>
         <translation>Legato-ívek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13120"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13364"/>
         <source>Wah open/close</source>
         <translation>Wah nyitás/zárás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13127"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13157"/>
         <source>Crescendo and diminuendo lines</source>
         <translation>Crescendo és diminuendo vonalak</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13144"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13347"/>
         <source>Simple</source>
         <translation>Egyszerű</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13196"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13222"/>
         <source>Common</source>
         <translation>Szokásos</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13260"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13099"/>
         <source>Golpe</source>
         <translation>Golpe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13304"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13295"/>
         <source>Mordents</source>
         <translation>Mordentek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13388"/>
         <source>Rasgueado</source>
         <translation>Rasgueado</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13367"/>
-        <source>Reset tablature styles to default</source>
-        <translation>Tabulatúra stílusok alaphelyzetbe állítása</translation>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13510"/>
+        <source>Parentheses indicating ties</source>
+        <translation>Kötőívet jelző zárójelek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13523"/>
+        <source>Always show at the start of a measure</source>
+        <translation>Megjelenítés mindig az ütem kezdeténél</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13537"/>
+        <source>Always show parenthesized fret marks when articulation markings are present</source>
+        <translation>Artikulációs jelek esetén mindig mutassa a zárójelezett érintőjeleket.</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14023"/>
         <source>Line spacing:</source>
         <translation>Sorköz:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13975"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14103"/>
         <source>Reset all styles to default</source>
         <translation>Minden stílus alaphelyzetbe állítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13576"/>
         <source>Frame:</source>
         <translation>Keret:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13469"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13480"/>
+        <source>Tied fret marks</source>
+        <translation>Átkötött érintő jelölése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13486"/>
+        <source>Show ties and repeat fret marks</source>
+        <translation>Mutassa a kötőíveket és az ismétléseket az érintőjeleknél</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
+        <source>Show ties only</source>
+        <translation>Csak a kötőíveket mutassa</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13500"/>
+        <source>Show initial fret mark only</source>
+        <translation>Csak a kezdeti érintőjelet mutassa</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13516"/>
+        <source>Only show at the start of a system</source>
+        <translation>Megjelenítés csak a rendszer kezdeténél</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13530"/>
+        <source>Never show</source>
+        <translation>Sose jelenítse meg</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13597"/>
         <source>Circle</source>
         <translation>Kör</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13608"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation>„Keret” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13508"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13636"/>
         <source>Thickness:</source>
         <translation>Vastagság:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13531"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13659"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation>„Háttér” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13544"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13577"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13672"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13705"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation>„Szegély” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13564"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13692"/>
         <source>Corner radius:</source>
         <translation>Sarok sugara:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13617"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13745"/>
         <source>Border:</source>
         <translation>Szegély:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13627"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13755"/>
         <source>Highlight:</source>
         <translation>Kiemelések:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13640"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13768"/>
         <source>Reset &apos;Corner radius&apos; value</source>
         <translation>„Sarok sugara” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13669"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13797"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation>„Betűstílus” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13705"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13833"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation>„Igazítás” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13718"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13846"/>
         <source>Reset &apos;Color&apos; value</source>
         <translation>„Szín” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13728"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13856"/>
         <source>Color:</source>
         <translation>Szín:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13744"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13908"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13872"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14036"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation>„Betűméret” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13757"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13885"/>
         <source>Style:</source>
         <translation>Stílus:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13773"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13901"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
         <translation>„Kottasor méretéhez igazítás” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13911"/>
         <source>Offset:</source>
         <translation>Eltolás:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13921"/>
         <source>Follow staff size</source>
         <translation>Kövesse a kottasor méretét</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13803"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13931"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation>„Név” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13816"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13944"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation>„Betűtípus” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13829"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13957"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation>„Eltolás” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13849"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13977"/>
         <source>Name:</source>
         <translation>Név:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13882"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14010"/>
         <source>li</source>
         <translation>li</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="809"/>
         <source>Show ‘1’ on 1-measure repeats</source>
         <translation>„1” mutatása 1-ütemes ismétléseknél</translation>
     </message>
@@ -6316,622 +6387,622 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Nyomtatás…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="551"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="552"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="553"/>
         <source>Undo</source>
         <translation>Visszavonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="558"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="559"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="560"/>
         <source>Redo</source>
         <translation>Mégis</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1917"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1924"/>
         <source>Note input</source>
         <translation>Hangjegybevitel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="59"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="60"/>
         <source>A</source>
         <extracomment>Note</extracomment>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="61"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="62"/>
         <source>B</source>
         <extracomment>Note</extracomment>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="49"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="50"/>
         <source>C</source>
         <extracomment>Note</extracomment>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="88"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="89"/>
         <source>Put note</source>
         <translation>Jegyzet elhelyezése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="93"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="94"/>
         <source>Remove note</source>
         <translation>Jegyzet eltávolítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="98"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="99"/>
         <source>Next element</source>
         <translation>Következő elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="104"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="105"/>
         <source>Previous element</source>
         <translation>Előző elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="110"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="111"/>
         <source>Next chord / Shift text right</source>
         <translation>Következő akkor / szöveg mozgatása jobbra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="116"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="117"/>
         <source>Previous chord / Shift text left</source>
         <translation>Előző akkor / szöveg mozgatása balra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="122"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="123"/>
         <source>Next measure / Shift text right quickly</source>
         <translation>Következő ütem / szöveg mozgatása gyorsan jobbra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="128"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="129"/>
         <source>Previous measure / Shift text left quickly</source>
         <translation>Előző ütem / szöveg mozgatása gyorsan balra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="134"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="135"/>
         <source>Up note in chord</source>
         <translation>Akkord felső hangja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="140"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="141"/>
         <source>Down note in chord</source>
         <translation>Akkord alsó hangja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="146"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="147"/>
         <source>Top note in chord</source>
         <translation>Akkord legmagasabb hangja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="152"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="153"/>
         <source>Bottom note in chord</source>
         <translation>Akkord legmélyebb hangja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="158"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="159"/>
         <source>First element</source>
         <translation>Első elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="159"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="160"/>
         <source>Go to first element in score</source>
         <translation>Ugrás az első elemhez a kottában</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="164"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="165"/>
         <source>Last element</source>
         <translation>Utolsó elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="165"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="166"/>
         <source>Go to last element in score</source>
         <translation>Ugrás az utolsó elemhez a kottában</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="170"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="171"/>
         <source>Move to staff above</source>
         <translation>Mozgatás a feljebb lévő kottasorba</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="176"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="177"/>
         <source>Move to staff below</source>
         <translation>Mozgatás a lejjebb lévő kottasorba</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="194"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="195"/>
         <source>Next frame</source>
         <translation>Következő keret</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="200"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="201"/>
         <source>Previous frame</source>
         <translation>Előző keret</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="206"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="207"/>
         <source>Next system</source>
         <translation>Következő sorcsoport</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="212"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="213"/>
         <source>Previous system</source>
         <translation>Előző sorcsoport</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="254"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="255"/>
         <source>Down octave</source>
         <translation>Mélyebbre egy oktávval</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="260"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="261"/>
         <source>Up octave</source>
         <translation>Fel egy oktávval</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="272"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="273"/>
         <source>Halve duration</source>
         <translation>Felezett hosszúság</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="278"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="279"/>
         <source>Double selected duration (dotted)</source>
         <translation>A kijelölt ritmusérték kettőzése (pontozott)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="285"/>
         <source>Halve selected duration (dotted)</source>
         <translation>A kijelölt ritmusérték felezése (pontozott)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="290"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="291"/>
         <source>Cu&amp;t</source>
         <translation>Kivágás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="297"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="298"/>
         <source>&amp;Copy</source>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="304"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="305"/>
         <source>Past&amp;e</source>
         <translation>Beillesztés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="311"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="312"/>
         <source>Paste &amp;half duration</source>
         <translation>Felezett hosszúság beillesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="317"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="318"/>
         <source>Paste &amp;double duration</source>
         <translation>Kétszeres hosszúság beillesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="329"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="330"/>
         <source>&amp;Swap with clipboard</source>
         <translation>Csere a vágólappal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="335"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="336"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="337"/>
         <source>Toggle visibility of elements</source>
         <translation>Elemek láthatóságának be-/kikapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="341"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="342"/>
         <source>Select &amp;all</source>
         <translation>Az összes kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="348"/>
         <source>Select sectio&amp;n</source>
         <translation>Szakasz kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="353"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="354"/>
         <source>Similar</source>
         <translation>Hasonlók</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="359"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="360"/>
         <source>Similar on this staff</source>
         <translation>Hasonlók ezen a kottasoron</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="365"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="366"/>
         <source>Similar in this range</source>
         <translation>Hasonlók ebben a tartományban</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="371"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="372"/>
         <source>More…</source>
         <translation>Több…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="470"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="471"/>
         <source>Unroll repeats</source>
         <translation>Ismétlések kibontása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="487"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="488"/>
         <source>Parts</source>
         <translation>Szólamkották</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="494"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="495"/>
         <source>Page view</source>
         <translation>Tördelt nézet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="501"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="502"/>
         <source>Continuous view (horizontal)</source>
         <translation>Folytonos nézet (vízszintes)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="508"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="509"/>
         <source>Continuous view (vertical)</source>
         <translation>Folytonos nézet (függőleges)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="527"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="528"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="529"/>
         <source>Staff text properties…</source>
         <translation>Kottasor szöveg tulajdonságai…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="533"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="534"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="535"/>
         <source>System text properties…</source>
         <translation>Sorcsoport szöveg tulajdonságai...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="539"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="540"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="541"/>
         <source>Measure properties…</source>
         <translation>Ütem tulajdonságai...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="631"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="632"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="633"/>
         <source>Insert one measure before selection</source>
         <translation>Egy ütem beszúrása a kijelölés elé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="638"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="639"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="640"/>
         <source>Insert measures before selection…</source>
         <translation>Ütemek beszúrása a kilelölés elé...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="645"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="646"/>
         <source>Insert measures after selection…</source>
         <translation>Ütemek beszúrása a kijelölés mögé...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="651"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="652"/>
         <source>Insert measures at start of score…</source>
         <translation>Ütemek beszúrása a kotta elejére...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="656"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="658"/>
         <source>Insert one measure at end of score</source>
         <translation>Egy ütem beszúrása a kotta végére</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="662"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="664"/>
         <source>Insert measures at end of score…</source>
         <translation>Ütemek beszúrása a kotta végére...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="742"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="743"/>
         <source>Grace: 8th after</source>
         <translation>Aprókotta: nyolcad utóka</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="777"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="778"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="779"/>
         <source>Break beam left</source>
         <translation>Gerenda törése balra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="784"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="785"/>
         <source>Break inner beams (8th)</source>
         <translation>Belső gerendák törése (nyolcad)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="791"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="792"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="793"/>
         <source>Break inner beams (16th)</source>
         <translation>Belső gerendák törése (tizenhatod)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="798"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="799"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="800"/>
         <source>Join beams</source>
         <translation>Gerendák egyesítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="805"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="806"/>
         <source>Feathered beam, decelerate</source>
         <translation>Tollas gerenda, lassítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="812"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="813"/>
         <source>Feathered beam, accelerate</source>
         <translation>Tollas gerenda, gyorsítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="826"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="827"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="828"/>
         <source>Add braces to element</source>
         <translation>Elem kapcsos zárójelbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="51"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="52"/>
         <source>D</source>
         <extracomment>Note</extracomment>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="53"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="54"/>
         <source>E</source>
         <extracomment>Note</extracomment>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="55"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="56"/>
         <source>F</source>
         <extracomment>Note</extracomment>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="57"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="58"/>
         <source>G</source>
         <extracomment>Note</extracomment>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2272"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2279"/>
         <source>Cross-staff beaming</source>
         <translation>Soron átnyúló gerendák</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2278"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
         <source>Tuplet</source>
         <translation>N-ola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1061"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1067"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2176"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1062"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1068"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2183"/>
         <source>Rest</source>
         <translation>Szünet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1062"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1068"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1063"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1069"/>
         <source>Enter rest</source>
         <translation>Szünet írása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2265"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2272"/>
         <source>Staccato</source>
         <translation>Staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2258"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2265"/>
         <source>Tenuto</source>
         <translation>Tenuto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="63"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="64"/>
         <source>Enter note %1</source>
         <translation>%1 hang írása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="64"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="65"/>
         <source>Add %1 to chord</source>
         <translation>%1 hozzáadása az akkordhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="65"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="66"/>
         <source>Add note %1 to chord</source>
         <translation>%1 hang hozzáadása az akkordhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="66"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="67"/>
         <source>Insert %1</source>
         <translation>%1 beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1391"/>
         <source>Reset all text style overrides to default</source>
         <translation>Minden módosított szövegstílus alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1529"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1536"/>
         <source>Page: Top of first</source>
         <translation>Oldal: Az első teteje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1535"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1542"/>
         <source>Page: Bottom of last</source>
         <translation>Oldal: az utolsó alja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1541"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1548"/>
         <source>Context sensitive help</source>
         <translation>Környezetfüggő súgó</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1552"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1553"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1559"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1560"/>
         <source>Toggle score lock</source>
         <translation>Kotta zárolásának be-/kikapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1579"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1586"/>
         <source>Concert pitch</source>
         <translation>Hangzó magasság</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1593"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1600"/>
         <source>Next text element</source>
         <translation>Következő szöveges elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1599"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1606"/>
         <source>Previous text element</source>
         <translation>Előző szöveges elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1671"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1678"/>
         <source>Next lyric verse</source>
         <translation>Következő versszak</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1677"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1684"/>
         <source>Previous lyric verse</source>
         <translation>Előző versszak</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1689"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1696"/>
         <source>Add melisma</source>
         <translation>Melizma hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1695"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1696"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1702"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1703"/>
         <source>Add lyric verse</source>
         <translation>Versszak hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1755"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1756"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1762"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1763"/>
         <source>Go to top staff</source>
         <translation>Ugrás a legfelső kottasorhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1761"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1762"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1768"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1769"/>
         <source>Go to first empty trailing measure</source>
         <translation>Ugrás az első üres záróütemhez</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1851"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1858"/>
         <source>Diatonic pitch up (keep degree alterations)</source>
         <translation>Diatonikus hangmagasság föl (fok alterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1857"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
         <source>Diatonic pitch down (keep degree alterations)</source>
         <translation>Diatonikus hangmagasság le (fok alterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1931"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1938"/>
         <source>Default (step time)</source>
         <translation>Alapértelmezett (egyenként)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1938"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1945"/>
         <source>Rhythm only (not pitch)</source>
         <translation>Csak ritmus (hangmagasság nélkül)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1945"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1952"/>
         <source>Re-pitch existing notes</source>
         <translation>Meglévő hangoknak új hangmagasság</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1952"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
         <source>Real-time (metronome)</source>
         <translation>Valósidejű (metronóm)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1966"/>
         <source>Real-time (foot pedal)</source>
         <translation>Valósidejű (pedál)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2050"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2127"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2057"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2134"/>
         <source>256th note</source>
         <translation>256-od hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2057"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2134"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2064"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2141"/>
         <source>512th note</source>
         <translation>512-ed hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2064"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2141"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2071"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2148"/>
         <source>1024th note</source>
         <translation>1024-ed hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1773"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1780"/>
         <source>Toggle trill</source>
         <translation>Trilla ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2244"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2251"/>
         <source>Marcato</source>
         <translation>Marcato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1779"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1786"/>
         <source>Toggle up bow</source>
         <translation>Felfelé vonás ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1785"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1792"/>
         <source>Toggle down bow</source>
         <translation>Lefelé vonás ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1572"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1573"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1579"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1580"/>
         <source>Flip direction</source>
         <translation>Kottaszár megfordítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="242"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="243"/>
         <source>Up</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1743"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1750"/>
         <source>Diatonic pitch up</source>
         <translation>Magasabb hang diatonikusan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="248"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="249"/>
         <source>Down</source>
         <translation>Le</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1749"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1756"/>
         <source>Diatonic pitch down</source>
         <translation>Mélyebb hang diatonikusan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2183"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2190"/>
         <source>Accessibility: Next segment element</source>
         <translation>Akadálymentesítés: A szegmens következő eleme</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2189"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2196"/>
         <source>Accessibility: Previous segment element</source>
         <translation>Akadálymentesítés: A szegmens előző eleme</translation>
     </message>
@@ -6979,1473 +7050,1519 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Speciális karakterek beszúrása...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="188"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="189"/>
         <source>Previous staff or voice</source>
         <translation>Előző sor vagy szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="182"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="183"/>
         <source>Next staff or voice</source>
         <translation>Következő sor vagy szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="224"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="225"/>
         <source>Add previous chord to selection</source>
         <translation>Előző akkord kijelöléshez adása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1457"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1464"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1465"/>
         <source>Select to beginning of measure</source>
         <translation>Kijelölés az ütem kezdetéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="218"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="219"/>
         <source>Add next chord to selection</source>
         <translation>következő akkord kijelöléshez adása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="236"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="237"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="238"/>
         <source>Move chord/rest right</source>
         <translation>Akkord/szünet mozgatása jobbra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="230"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="231"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="232"/>
         <source>Move chord/rest left</source>
         <translation>Akkord/szünet mozgatása balra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="68"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="69"/>
         <source>Fret %1 (TAB)</source>
         <translation>%1. érintő (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="69"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="70"/>
         <source>Enter TAB: fret %1</source>
         <translation>Tab megadása: %1. érintő</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="73"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="74"/>
         <source>%1 (TAB)</source>
         <extracomment>Addition to the name of an action to indicate that this action only applies to tablature notation. '%1' is the name of the action.</extracomment>
         <translation>%1 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="99"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="100"/>
         <source>Select next element in score</source>
         <translation>A következő kottaelem kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="111"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="112"/>
         <source>Select next chord / move text right</source>
         <translation>A következő akkord kijelölése / szöveg mozgatása jobbra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="117"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="118"/>
         <source>Select previous chord / move text left</source>
         <translation>Az előző kijelölése / szöveg mozgatása balra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="123"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="124"/>
         <source>Go to next measure / move text right quickly</source>
         <translation>Ugrás a következő ütemre / szöveg mozgatása gyorsan jobbra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="135"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="136"/>
         <source>Select note/rest above</source>
         <translation>Feljebb lévő hangjegy/szünet kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="141"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="142"/>
         <source>Select note/rest below</source>
         <translation>Lejjebb lévő hangjegy/szünet kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="147"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="148"/>
         <source>Select top note in chord</source>
         <translation>Az akkord legmagasabb hangjának a kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="153"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="154"/>
         <source>Select bottom note in chord</source>
         <translation>Az akkord legmélyebb hangjának a kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="171"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="172"/>
         <source>Move selected note/rest to staff above</source>
         <translation>A kijelölt hangjegy/szünet mozgatása a feljebb lévő kottasorba</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="177"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="178"/>
         <source>Move selected note/rest to staff below</source>
         <translation>A kijelölt hangjegy/szünet mozgatása a lejjebb lévő kottasorba</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="183"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="184"/>
         <source>Go to next staff or voice</source>
         <translation>Ugrás a következő kottasorba vagy szólamra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="189"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="190"/>
         <source>Go to previous staff or voice</source>
         <translation>Ugrás az előző kottasorba vagy szólamra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="195"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="196"/>
         <source>Go to next frame</source>
         <translation>Ugrás a következő kerethez</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="201"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="202"/>
         <source>Go to previous frame</source>
         <translation>Ugrás az előző keretre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="207"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="208"/>
         <source>Go to next system</source>
         <translation>Ugrás a következő sorcsoporthoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="213"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="214"/>
         <source>Go to previous system</source>
         <translation>Ugrás az előző sorcsoportra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="219"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="220"/>
         <source>Add to selection: next note/rest</source>
         <translation>Hozzáadás a kijelöléshez: következő hangjegy/szünet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="225"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="226"/>
         <source>Add to selection: previous note/rest</source>
         <translation>Hozzáadás a kijelöléshez: előző hangjegy/szünet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="243"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="244"/>
         <source>Move pitch/selection up</source>
         <translation>Hangmagasság/kijelölés feljebb mozgatása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="249"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="250"/>
         <source>Move pitch/selection down</source>
         <translation>Hangmagasság/kijelölés lejjebb mozgatása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="255"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="256"/>
         <source>Move pitch down an octave</source>
         <translation>Hangmagasság mozgatása egy oktávval lejjebb</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="261"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="262"/>
         <source>Move pitch up an octave</source>
         <translation>Hangmagasság mozgatása egy oktávval feljebb</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="267"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="268"/>
         <source>Double selected duration</source>
         <translation>A kijelölt ritmusérték megkettőzése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="273"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="274"/>
         <source>Halve selected duration</source>
         <translation>A kijelölt ritmusérték megfelezése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="279"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="280"/>
         <source>Double selected duration (includes dotted values)</source>
         <translation>A kijelölt ritmusérték megkettőzése (pontozott értekeket is)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="285"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="286"/>
         <source>Halve selected duration (includes dotted values)</source>
         <translation>A kijelölt ritmusértékek megfelezése (pontozott értékek is)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="291"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="292"/>
         <source>Cut</source>
         <translation>Kivágás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="298"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="299"/>
         <source>Copy</source>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="305"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="306"/>
         <source>Paste</source>
         <translation>Beillesztés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="312"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="313"/>
         <source>Paste half duration</source>
         <translation>Felezett hosszúság beillesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="318"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="319"/>
         <source>Paste double duration</source>
         <translation>Kétszeres hosszúság beillesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="330"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="331"/>
         <source>Copy/paste: swap with clipboard</source>
         <translation>Másolás/beillesztés: csere a vágólappal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="342"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="343"/>
         <source>Select all</source>
         <translation>MIndent kijelöl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="348"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="349"/>
         <source>Select section</source>
         <translation>Szakasz kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="354"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="355"/>
         <source>Select similar elements</source>
         <translation>Hasonló elemek kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="360"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="361"/>
         <source>Select similar elements on the same staff</source>
         <translation>Hasonló elemek kijelölése ugyanazon a kottasoron</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="366"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="367"/>
         <source>Select similar elements in the selected range</source>
         <translation>Hasonló elemek kijelölése a kijelölt tartományban</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="372"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="373"/>
         <source>Select similar elements with more options…</source>
         <translation>Hasonló elemek kijelölése további beállításokkal...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="378"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="379"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="385"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="386"/>
         <source>Format style…</source>
         <translation>Formátum stílus...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="391"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="392"/>
         <source>Page settings…</source>
         <translation>Oldalbeállítás...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="397"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="398"/>
         <source>Load style…</source>
         <translation>Stílus betöltése…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="403"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="404"/>
         <source>Save style…</source>
         <translation>Stílus mentése…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="409"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="410"/>
         <source>Transpose…</source>
         <translation>Transzponálás...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="415"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="416"/>
         <source>Explode</source>
         <translation>Szétbontás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="421"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="422"/>
         <source>Implode</source>
         <translation>Összevonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="427"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="428"/>
         <source>Realize chord symbols</source>
         <translation>Akkordjelzések realizálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="433"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="434"/>
         <source>Delete selected measures</source>
         <translation>Kijelölt ütemek törlése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="452"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="453"/>
         <source>Respell pitches</source>
         <translation>Módosítójelek újragenerálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="458"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="459"/>
         <source>Regroup rhythms</source>
         <translation>Ritmusok újracsoportosítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="464"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="465"/>
         <source>Resequence rehearsal marks</source>
         <translation>Cifferek újragenerálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="476"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="477"/>
         <source>Copy lyrics</source>
         <translation>Énekszöveg másolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="482"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="483"/>
         <source>Remove empty trailing measures</source>
         <translation>Üres záróütemek törlése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="495"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="496"/>
         <source>Display page view</source>
         <translation>Tördelt nézet megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="502"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="503"/>
         <source>Display continuous view (horizontal)</source>
         <translation>Folytonos nézet megjelenítése (vízszintes)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="509"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="510"/>
         <source>Display continuous view (vertical)</source>
         <translation>Folytonos nézet megjelenítése (függőleges)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="515"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="516"/>
         <source>&amp;Find / Go to</source>
         <translation>Keresés / Ugrás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="516"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="517"/>
         <source>Find / Go to</source>
         <translation>Keresés / Ugrás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="521"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="522"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="523"/>
         <source>Staff/Part properties…</source>
         <translation>Kottasor/szólam tulajdonságai...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="546"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="547"/>
         <source>Add/remove system breaks…</source>
         <translation>Sorcsoporttörések hozzáadása/eltávolítása...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="601"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="602"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="603"/>
         <source>Add/remove system break</source>
         <translation>Sorcsoporttörések hozzáadása/eltávolítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="607"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="608"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="609"/>
         <source>Add/remove page break</source>
         <translation>Oldaltörés hozzáadása/eltávolítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="613"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="614"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="615"/>
         <source>Add/remove section break</source>
         <translation>Szakasztörés hozzáadása/eltávolítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="620"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="621"/>
         <source>Split measure before selected note/rest</source>
         <translation>Ütem felosztása a kijelölt hangjegy/szünet előtt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="626"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="627"/>
         <source>Join selected measures</source>
         <translation>Kijelölt ütemek egyesítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="670"/>
         <source>Insert horizontal frame</source>
         <translation>Vízszintes keret beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="676"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="677"/>
         <source>Insert vertical frame</source>
         <translation>Függőleges keret beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="683"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="684"/>
         <source>Insert text frame</source>
         <translation>Szövegkeret beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="690"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="691"/>
         <source>Append horizontal frame</source>
         <translation>Vízszintes keret hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="696"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="697"/>
         <source>Append vertical frame</source>
         <translation>Függőleges keret hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="702"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="703"/>
         <source>Append text frame</source>
         <translation>Szövegkeret hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="708"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="709"/>
         <source>Add grace note: acciaccatura</source>
         <translation>Aprókotta hozzáadása: rövid előke</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="715"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="716"/>
         <source>Add grace note: appoggiatura</source>
         <translation>Aprókotta hozzáadása: hosszú előke
 </translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="722"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="723"/>
         <source>Add grace note: quarter</source>
         <translation>Aprókotta hozzáadása: negyed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="729"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="730"/>
         <source>Add grace note: 16th</source>
         <translation>Aprókotta hozzáadása: 16-od</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="736"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="737"/>
         <source>Add grace note: 32nd</source>
         <translation>Aprókotta hozzáadása: 32-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="743"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="744"/>
         <source>Add grace note: eighth after</source>
         <translation>Aprókotta hozzáadása: nyolcad utóka</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="750"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="751"/>
         <source>Add grace note: 16th after</source>
         <translation>Aprókotta hozzáadása: 16-od utóka</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="757"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="758"/>
         <source>Add grace note: 32nd after</source>
         <translation>Aprókotta hozzáadása: 32-ed utóka</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="785"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="786"/>
         <source>Break inner beams (eighth)</source>
         <translation>Belső gerendák törése (nyolcad)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="806"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="807"/>
         <source>Add feathered beam: decelerate</source>
         <translation>Tollas gerenda hozzáadása: lassítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="813"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="814"/>
         <source>Add feathered beam: accelerate</source>
         <translation>Tollas gerenda hozzáadása: gyorsítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="840"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="841"/>
         <source>&amp;Unison</source>
         <translation>Unisono</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="841"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="842"/>
         <source>Enter interval: unison</source>
         <translation>Hangköz bevitele: unisono</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="847"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="848"/>
         <source>Enter interval: second above</source>
         <translation>Hangköz bevitele: felső szekund</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="853"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="854"/>
         <source>Enter interval: third above</source>
         <translation>Hangköz bevitele: felső terc</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="859"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="860"/>
         <source>Enter interval: fourth above</source>
         <translation>Hangöz bevitele: felső kvart</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="866"/>
         <source>Enter interval: fifth above</source>
         <translation>Hangköz bevitele: felső kvint</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="872"/>
         <source>Enter interval: sixth above</source>
         <translation>Hangköz bevitele: felső szext</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="877"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="878"/>
         <source>Enter interval: seventh above</source>
         <translation>Hangköz bevitele: felső szeptim</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="883"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="884"/>
         <source>Enter interval: octave above</source>
         <translation>Hangköz bevitele: felső oktáv</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="889"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="890"/>
         <source>Enter interval: ninth above</source>
         <translation>Hangköz bevitele: felső nóna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="896"/>
         <source>Enter interval: second below</source>
         <translation>Hangköz bevitele: alsó szekund</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="901"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="902"/>
         <source>Enter interval: third below</source>
         <translation>Hangköz bevitele: alsó terc</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="907"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="908"/>
         <source>Enter interval: fourth below</source>
         <translation>Hangöz bevitele: alsó kvart</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="913"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="914"/>
         <source>Enter interval: fifth below</source>
         <translation>Hangköz bevitele: alsó kvint</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="920"/>
         <source>Enter interval: sixth below</source>
         <translation>Hangöz bevitele: alsó szext</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="926"/>
         <source>Enter interval: seventh below</source>
         <translation>Hangköz bevitele: alsó szeptim</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="931"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="932"/>
         <source>Enter interval: octave below</source>
         <translation>Hangköz bevitele: alsó oktáv</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="937"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="938"/>
         <source>Enter interval: ninth below</source>
         <translation>Hangöz bevitele: alsó nóna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1176"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1177"/>
         <source>Add hairpin: crescendo</source>
         <translation>Vonal hozzáadása: crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1182"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1183"/>
         <source>Add hairpin: decrescendo</source>
         <translation>Vonal hozzáadása: decrescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1198"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1199"/>
         <source>Image</source>
         <translation>Kép</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1204"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1205"/>
         <source>Add text: title</source>
         <translation>Szöveg hozzáadása: cím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1210"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1211"/>
         <source>Add text: subtitle</source>
         <translation>Szöveg hozzáadása: alcím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1216"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1217"/>
         <source>Add text: composer</source>
         <translation>Szöveg hozzáadása: zeneszerző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1222"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1223"/>
         <source>Add text: lyricist</source>
         <translation>Szöveg hozzáadása: szövegíró</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1228"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1229"/>
         <source>Add text: part name</source>
         <translation>Szöveg hozzáadása: szólamkotta neve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1233"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1234"/>
         <source>Text</source>
         <translation>Szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1234"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1235"/>
         <source>Add frame text</source>
         <translation>Keretszöveg hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1240"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1241"/>
         <source>Add text: system text</source>
         <translation>Szöveg hozzáadása: sorcsoportszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1246"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1247"/>
         <source>Add text: staff text</source>
         <translation>Szöveg hozzáadása: kottasorszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1252"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1253"/>
         <source>Add text: expression text</source>
         <translation>Szöveg hozzáadása: előadási jel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1259"/>
         <source>Add text: rehearsal mark</source>
         <translation>Szöveg hozzáadása: ciffer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1265"/>
         <source>Add text: instrument change</source>
         <translation>Szöveg hozzáadása: hangszerváltás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1270"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1271"/>
         <source>Add text: fingering</source>
         <translation>Szöveg hozzáadása: ujjrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1276"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1277"/>
         <source>Add text: sticking</source>
         <translation>Szöveg hozzáadása: kézrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1282"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1283"/>
         <source>Add text: chord symbol</source>
         <translation>Szöveg hozzáadása: akkordjelzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1288"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1289"/>
         <source>Add text: Roman numeral analysis</source>
         <translation>Szöveg hozzáadása: összhangzattani elemzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1294"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1295"/>
         <source>Add text: Nashville number</source>
         <translation>Szöveg hozzáadása: Nashville-szám</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1301"/>
         <source>Add text: lyrics</source>
         <translation>Szöveg hozzáadása: énekszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1306"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1307"/>
         <source>Add text: figured bass</source>
         <translation>Szöveg hozzáadása: számozott basszus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1312"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1313"/>
         <source>Add text: tempo marking</source>
         <translation>Szöveg hozzáadása: tempójelzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1318"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1319"/>
         <source>Enter tuplet: duplet</source>
         <translation>N-ola bevitele: duola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1324"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1325"/>
         <source>Enter tuplet: triplet</source>
         <translation>N-ola bevitele: triola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1330"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1331"/>
         <source>Enter tuplet: quadruplet</source>
         <translation>N-ola bevitele: kvartola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1336"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1337"/>
         <source>Enter tuplet: quintuplet</source>
         <translation>N-ola bevitele: kvintola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1342"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1343"/>
         <source>Enter tuplet: sextuplet</source>
         <translation>N-ola bevitele: szextola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1348"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1349"/>
         <source>Enter tuplet: septuplet</source>
         <translation>N-ola bevitele: szeptola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1354"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1355"/>
         <source>Enter tuplet: octuplet</source>
         <translation>N-ola bevitele: oktola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
+        <source>&amp;Nonuplet</source>
+        <translation>9-ola</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
         <source>Enter tuplet: nonuplet</source>
         <translation>N-ola bevitele: novemola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1372"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1373"/>
         <source>Decrease layout stretch</source>
         <translation>Nyújtás csökkentése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1378"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1379"/>
         <source>Increase layout stretch</source>
         <translation>Nyújtás növelése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1385"/>
         <source>Reset layout stretch</source>
         <translation>Nyújtás alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1396"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1397"/>
         <source>Reset beams to default grouping</source>
         <translation>Gerendák csoportosítása alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1402"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1403"/>
         <source>Reset shapes and positions</source>
         <translation>Alak és pozíció alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1427"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1428"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1409"/>
+        <source>Reset entire score to default layout</source>
+        <translation>Az egész kottát állítsa vissza az alapértelmezett elrendezésre</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1435"/>
         <source>Zoom to page width</source>
         <translation>Nagyítás az oldal szélességére</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1433"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1440"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1441"/>
         <source>Zoom to whole page</source>
         <translation>Egész oldalra nagyítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1439"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1440"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1446"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1447"/>
         <source>Zoom to two pages</source>
         <translation>Két oldalas nézet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1446"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1453"/>
         <source>Accessibility: get location</source>
         <translation>Akadálymentesítés: helyzet lekérése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1463"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1464"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1470"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1471"/>
         <source>Select to end of measure</source>
         <translation>kijelölés az ütem végéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1469"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1470"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1476"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1477"/>
         <source>Select to beginning of line</source>
         <translation>kijelölés a sor kezdetéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1475"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1476"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1482"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1483"/>
         <source>Select to end of line</source>
         <translation>kijelölés a sor végéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1481"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1482"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1488"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1489"/>
         <source>Select to beginning of score</source>
         <translation>kijelölés a kotta kezdetéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1487"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1488"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1494"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1495"/>
         <source>Select to end of score</source>
         <translation>kijelölés a kotta végéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1493"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1500"/>
         <source>Add staff above to selection</source>
         <translation>Kottasor hozzáadása a kijelölés fölé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1494"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1501"/>
         <source>Add to selection: staff above</source>
         <translation>Kijelölés bővítése: előző kottasor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1499"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1506"/>
         <source>Add staff below to selection</source>
         <translation>Kottasor hozzáadása a kijelölés alá</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1500"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1507"/>
         <source>Add to selection: staff below</source>
         <translation>Kijelölés bővítése: következő kottasor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1517"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1524"/>
         <source>Page: Previous</source>
         <translation>Oldal: Előző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1523"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1530"/>
         <source>Page: Next</source>
         <translation>Oldal: Következő</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1530"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1537"/>
         <source>Jump to top of first page</source>
         <translation>Ugrás az első oldal tetejére</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1536"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1543"/>
         <source>Jump to bottom of last page</source>
         <translation>Ugrás az utolsó oldal aljára</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1559"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1566"/>
         <source>Change enharmonic spelling (concert and written pitch)</source>
         <translation>Enharmonikus átírás megváltoztatása (hangzó és írott magasság)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1566"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1573"/>
         <source>Change enharmonic spelling (current mode only)</source>
         <translation>Enharmonikus átírás megváltoztatása (csak a jelenlegi mód)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1580"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1587"/>
         <source>Toggle concert pitch</source>
         <translation>Hangzó magasság ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1606"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1613"/>
         <source>Advance cursor: next beat (chord symbols)</source>
         <translation>Kurzor léptetése: következő ütés (akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1617"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1624"/>
         <source>Advance longa (F.B./Chord symbol)</source>
         <translation>Longa léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1618"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1625"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: longa (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1623"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
         <source>Advance breve (F.B./Chord symbol)</source>
         <translation>Breve léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1624"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1631"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: breve (számozott basszus/akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
         <translation>Egész érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1637"/>
         <source>Advance cursor: whole note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: egész érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
         <source>Advance half note (F.B./Chord symbol)</source>
         <translation>Fél érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1643"/>
         <source>Advance cursor: half note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: fél érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1648"/>
         <source>Advance quarter note (F.B./Chord symbol)</source>
         <translation>Negyed érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1649"/>
         <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: negyed érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1647"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
         <source>Advance eighth note (F.B./Chord symbol)</source>
         <translation>Nyolcad érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1648"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1655"/>
         <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: nyolcad érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1653"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
         <source>Advance 16th note (F.B./Chord symbol)</source>
         <translation>16-od érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1661"/>
         <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: 16-od érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1659"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1666"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
         <translation>32-ed érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1667"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: 32-ed érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1665"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1672"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
         <translation>64-ed érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1666"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1673"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: 64-ed érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1672"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1679"/>
         <source>Move text/go to next lyric verse</source>
         <translation>Szöveg mozgatása/ugrás a következő versszakra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1678"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1685"/>
         <source>Move text/go to previous lyric verse</source>
         <translation>Szöveg mozgatása/ugrás az előző versszakra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1702"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1709"/>
         <source>Format text: bold</source>
         <translation>Szöveg formázása: kövér</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1709"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1716"/>
         <source>Format text: italic</source>
         <translation>Szöveg formázása: dőlt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1716"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
         <source>Format text: underline</source>
         <translation>Szöveg formázása: aláhúzás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1722"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
         <source>Strikethrough</source>
         <translation>Áthúzott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
         <source>Format text: strikethrough</source>
         <translation>Szöveg formázása: áthúzott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
         <source>Subscript</source>
         <translation>Alsó index</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1737"/>
         <source>Format text: subscript</source>
         <translation>Szöveg formázása: alsó index</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1743"/>
         <source>Superscript</source>
         <translation>Felső index</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1737"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1744"/>
         <source>Format text: superscript</source>
         <translation>Szöveg formázása: feljegyzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1744"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1751"/>
         <source>Move pitch up diatonically</source>
         <translation>Hangmagasság emelése diatonikusan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1750"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1757"/>
         <source>Move pitch down diatonically</source>
         <translation>Hangmagasság süllyesztése diatonikusan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1774"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1781"/>
         <source>Add/remove ornament: trill</source>
         <translation>Díszítés hozzáadása/törlése: trilla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1780"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1787"/>
         <source>Add/remove bowing: up bow</source>
         <translation>Vonásjel hozzáadása/törlése: felfelé vonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1786"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1793"/>
         <source>Add/remove bowing: down bow</source>
         <translation>Vonásjel hozzáadása/törlése: lefelé vonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
         <source>Add clef: treble</source>
         <translation>Kulcs hozzáadása: violinkulcs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1811"/>
         <source>Add clef: bass</source>
         <translation>Kulcs hozzáadása: basszuskulcs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1823"/>
         <source>Add accidental: sharp</source>
         <translation>Módosítójel hozzáadása: kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1852"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1859"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
         <translation>Hangmagasság emelése diatonikusan (a fokalterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1858"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1865"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
         <translation>A hangmagasság leszállítása diatonikusan (a fokalterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1871"/>
         <source>Insert full measure rest</source>
         <translation>Egész ütemes szünet beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1876"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1883"/>
         <source>Show/hide empty staves</source>
         <translation>Üres sorok mutatása/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1882"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1889"/>
         <source>Make selected element(s) visible</source>
         <translation>A kijelölt elem(ek) láthatóvá tétele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1895"/>
         <source>Make selected element(s) invisible</source>
         <translation>A kijelölt elem(ek) láthatatlanná tétele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1893"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1900"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1901"/>
         <source>Toggle automatic placement for selected elements</source>
         <translation>A kijelölt elemek automatikus elhelyezése ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1905"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1912"/>
         <source>String above (TAB)</source>
         <translation>Feljebbi húr (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1913"/>
         <source>Go to string above (TAB)</source>
         <translation>Ugrás a feljebbi húrra (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1911"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1918"/>
         <source>String below (TAB)</source>
         <translation>Lejjebbi húr (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1912"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1919"/>
         <source>Go to string below (TAB)</source>
         <translation>Ugrás a lejjebbi húrra (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1988"/>
         <source>Set duration: longa</source>
         <translation>Ritmusérték legyen longa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1988"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
         <source>Set duration: double whole note</source>
         <translation>Ritmusérték legyen kettős egész</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2072"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2002"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2079"/>
         <source>Set duration: whole note</source>
         <translation>Ritmusérték legyen egész érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2002"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2079"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2009"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2086"/>
         <source>Set duration: half note</source>
         <translation>Ritmusérték legyen fél érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2009"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2086"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2093"/>
         <source>Set duration: quarter note</source>
         <translation>Ritmusérték legyen negyed érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2092"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2099"/>
         <source>Eighth note</source>
         <translation>Nyolcad hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2093"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2100"/>
         <source>Set duration: eighth note</source>
         <translation>Ritmusérték legyen nyolcad érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2100"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2030"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2107"/>
         <source>Set duration: 16th note</source>
         <translation>Ritmusérték legyen 16-od</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2030"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2107"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2037"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2114"/>
         <source>Set duration: 32nd note</source>
         <translation>Ritmusérték legyen 32-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2037"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2114"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2044"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2121"/>
         <source>Set duration: 64th note</source>
         <translation>Ritmusérték legyen 64-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2044"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2121"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2051"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2128"/>
         <source>Set duration: 128th note</source>
         <translation>Ritmusérték legyen 128-ad</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2051"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2128"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2058"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2135"/>
         <source>Set duration: 256th note</source>
         <translation>Ritmusérték legyen 256-od</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2058"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2135"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2065"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2142"/>
         <source>Set duration: 512th note</source>
         <translation>Ritmusérték legyen 512-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2065"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2142"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2072"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2149"/>
         <source>Set duration: 1024th note</source>
         <translation>Ritmusérték legyen 1024-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2149"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2156"/>
         <source>Toggle duration dot</source>
         <translation>Ritmusérték pont ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2156"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2163"/>
         <source>Toggle duration dot: double</source>
         <translation>Ritmusérték pont ki/be: két pont</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2163"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2170"/>
         <source>Toggle duration dot: triple</source>
         <translation>Ritmusérték pont ki/be: három pont</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2170"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2177"/>
         <source>Toggle duration dot: quadruple</source>
         <translation>Ritmusérték pont ki/be: négy pont</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2177"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2184"/>
         <source>Toggle rest</source>
         <translation>Szünet ki-/bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2184"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2191"/>
         <source>Select next in-staff element</source>
         <translation>Következő elem kijelölése a soron belül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2190"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2197"/>
         <source>Select previous in-staff element</source>
         <translation>Előző elem kijelölése a soron belül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2196"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2203"/>
         <source>Toggle accidental: flat</source>
         <translation>Módosítójel ki/be: bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2217"/>
         <source>Toggle accidental: natural</source>
         <translation>Módosítójel ki/be: feloldójel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2217"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2224"/>
         <source>Toggle accidental: sharp</source>
         <translation>Módosítójel ki/be: kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2231"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
         <source>Add tied note</source>
         <translation>Kötőíves hang hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2237"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2244"/>
         <source>Slur</source>
         <translation>Kötőív</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2316"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2323"/>
         <source>Staff type change</source>
         <translation>Kottasor módosítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2317"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2324"/>
         <source>Insert staff type change</source>
         <translation>Kottasor típusváltás beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2327"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2328"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2334"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2335"/>
         <source>Standard bend</source>
         <translation>Szokásos bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2334"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2335"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2341"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2342"/>
         <source>Pre-bend</source>
         <translation>Pre-bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2341"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2342"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2348"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2349"/>
         <source>Grace note bend</source>
         <translation>Díszhang húzás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2348"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2349"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2355"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2356"/>
         <source>Slight bend</source>
         <translation>Könnyű húzás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
         <source>Show/hide invisible elements</source>
         <translation>Láthatatlan elemek megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2373"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
         <source>Show/hide frames</source>
         <translation>Keretek megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
         <source>Show/hide page margins</source>
         <translation>Oldalmargók megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1863"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2410"/>
+        <source>Show element bounding rectangles</source>
+        <translation>Show element bounding rectangles</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2416"/>
+        <source>Color element shapes</source>
+        <translation>Color element shapes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
+        <source>Show segment shapes</source>
+        <translation>Show segment shapes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
+        <source>Color segment shapes</source>
+        <translation>Color segment shapes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
+        <source>Show skylines</source>
+        <translation>Show skylines</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
+        <source>Show system bounding rectangles</source>
+        <translation>Show system bounding rectangles</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2446"/>
+        <source>Show corrupted measures</source>
+        <translation>Mutassa a hibás ütemeket</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
         <source>Full measure rest</source>
         <translation>Egész ütemes szünet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1980"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
         <source>Longa</source>
         <translation>Longa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1994"/>
         <source>Double whole note</source>
         <translation>Kétszeres egész hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1994"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2071"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2001"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2078"/>
         <source>Whole note</source>
         <translation>Egész hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2001"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2078"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2008"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2085"/>
         <source>Half note</source>
         <translation>Fél hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2008"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2085"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2092"/>
         <source>Quarter note</source>
         <translation>Negyed hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2099"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2106"/>
         <source>16th note</source>
         <translation>1/16 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2106"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2036"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2113"/>
         <source>32nd note</source>
         <translation>1/32 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2036"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2113"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2043"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2120"/>
         <source>64th note</source>
         <translation>1/64 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2043"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2120"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2050"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2127"/>
         <source>128th note</source>
         <translation>1/128 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2148"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
         <source>Augmentation dot</source>
         <translation>Hangjegy pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
         <source>Double augmentation dot</source>
         <translation>Hangjegy kétszeres pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2169"/>
         <source>Triple augmentation dot</source>
         <translation>Háromszoros pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2169"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2176"/>
         <source>Quadruple augmentation dot</source>
         <translation>Négyszeres pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2230"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2237"/>
         <source>Tie</source>
         <translation>Átkötés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="707"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="708"/>
         <source>Acciaccatura</source>
         <translation>acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="714"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="715"/>
         <source>Appoggiatura</source>
         <translation>appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="721"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="722"/>
         <source>Grace: quarter</source>
         <translation>Előke: negyed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="728"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="729"/>
         <source>Grace: 16th</source>
         <translation>Előke: 1/16</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="735"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="736"/>
         <source>Grace: 32nd</source>
         <translation>Előke: 1/32</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="749"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="750"/>
         <source>Grace: 16th after</source>
         <translation>Utóka: 1/16</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="756"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="757"/>
         <source>Grace: 32nd after</source>
         <translation>Utóka: 1/32</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2245"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2252"/>
         <source>Add articulation: marcato</source>
         <translation>Artikulációs jel hozzáadása: marcato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2252"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2259"/>
         <source>Add articulation: accent</source>
         <translation>Artikulációs jel hozzáadása: hangsúly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2259"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2266"/>
         <source>Add articulation: tenuto</source>
         <translation>Artikulációs jel hozzáadása: tenuto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2266"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2273"/>
         <source>Add articulation: staccato</source>
         <translation>Artikulációs jel hozzáadása: staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2291"/>
         <source>Voice 1</source>
         <translation>1. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
         <source>Use voice 1</source>
         <translation>Használja az első szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2291"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
         <source>Voice 2</source>
         <translation>2. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
         <source>Use voice 2</source>
         <translation>Használja a második szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
         <source>Voice 3</source>
         <translation>3. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
         <source>Use voice 3</source>
         <translation>Használja a harmadik szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2312"/>
         <source>Voice 4</source>
         <translation>4. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2401"/>
         <source>Mark irregular measures</source>
         <translation>Szabálytalan ütemek megjelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1558"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1565"/>
         <source>Change enharmonic spelling (both modes)</source>
         <translation>Enharmonikus átírás megváltoztatása (mindkét mód)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1565"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1572"/>
         <source>Change enharmonic spelling (current mode)</source>
         <translation>Enharmonikus átírás megváltoztatása (jelenlegi mód)</translation>
     </message>
@@ -8455,72 +8572,72 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Kottaösszehasonlító eszköz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="819"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="820"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="821"/>
         <source>Add brackets to accidental</source>
         <translation>Módosítójel szögletes zárójelbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="833"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="834"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="835"/>
         <source>Add parentheses to element</source>
         <translation>Elem zárójelbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="323"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="324"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="325"/>
         <source>Paste special</source>
         <translation>Irányított beillesztés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1966"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1973"/>
         <source>Insert</source>
         <translation>Beszúrás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1193"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1194"/>
         <source>Add tied note to chord</source>
         <translation>Átkötött hang hozzáadása az akkordhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2251"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2258"/>
         <source>Accent</source>
         <translation>Hangsúly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1791"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
         <source>Reset style</source>
         <translation>Stílus alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1792"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1799"/>
         <source>Reset all style values to default</source>
         <translation>Minden stílusérték alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1445"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
         <source>Accessibility: Get location</source>
         <translation>Akadálymentesítés: Helyzet lekérése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1505"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1512"/>
         <source>Screen: Previous</source>
         <translation>Képernyő: Előző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1511"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1518"/>
         <source>Screen: Next</source>
         <translation>Képernyő: Következő</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="770"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="771"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="772"/>
         <source>No beam</source>
         <translation>Nincs gerenda</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="763"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="764"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="765"/>
         <source>Auto beam</source>
         <translation>Automatikus gerenda</translation>
     </message>
@@ -8533,6 +8650,11 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="55"/>
         <source>&amp;Full screen</source>
         <translation>Teljes képernyő</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="62"/>
+        <source>&amp;About MuseScore Studio…</source>
+        <translation>A MuseScore Studio &amp;névjegye…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="67"/>
@@ -8668,11 +8790,6 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="56"/>
         <source>Full screen</source>
         <translation>Teljes képernyő</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="62"/>
-        <source>&amp;About MuseScore…</source>
-        <translation>A MuseScore-ról…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="78"/>
@@ -8812,85 +8929,85 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Ismétlések lejátszása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="408"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="409"/>
         <source>&amp;Transpose…</source>
         <translation>&amp;Transzponálás…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1797"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
         <source>Add treble clef</source>
         <translation>Violinkulcs hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
         <source>Add bass clef</source>
         <translation>Basszuskulcs hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="566"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="567"/>
         <source>Exchange voice 1-2</source>
         <translation>1-2 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="571"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="572"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="573"/>
         <source>Exchange voice 1-3</source>
         <translation>1-3 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="578"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="579"/>
         <source>Exchange voice 1-4</source>
         <translation>1-4 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="584"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="585"/>
         <source>Exchange voice 2-3</source>
         <translation>2-3 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="590"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="591"/>
         <source>Exchange voice 2-4</source>
         <translation>2-4 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="596"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="597"/>
         <source>Exchange voice 3-4</source>
         <translation>3-4 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1451"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1459"/>
         <source>Edit element</source>
         <translation>Elem szerkesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2313"/>
         <source>Use voice 4</source>
         <translation>Használja a 4. szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2358"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2365"/>
         <source>Show &amp;invisible</source>
         <translation>Láthatatlanok megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2365"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2372"/>
         <source>Show f&amp;ormatting</source>
         <translation>Formázás megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2373"/>
         <source>Show/hide formatting</source>
         <translation>Formázás megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2372"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
         <source>Show &amp;frames</source>
         <translation>Keretek megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
         <source>Show page &amp;margins</source>
         <translation>Oldalmargók megjelenítése</translation>
     </message>
@@ -8900,37 +9017,37 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Speciális karakterek beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1407"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1414"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1415"/>
         <source>Zoom in</source>
         <translation>Nagyítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1414"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1415"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1421"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1422"/>
         <source>Zoom out</source>
         <translation>Kicsinyítés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1421"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1422"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1428"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
         <source>Zoom to 100%</source>
         <translation>Nagyítás 100%-ra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1767"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1768"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1774"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1775"/>
         <source>Mirror notehead</source>
         <translation>Kottafej tükrözése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="266"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="267"/>
         <source>Double duration</source>
         <translation>Kétszeres hosszúság</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1546"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1547"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1553"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1554"/>
         <source>Repeat selection</source>
         <translation>Kijelölés ismétlése</translation>
     </message>
@@ -8940,731 +9057,736 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Metronóm</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1839"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1846"/>
         <source>Transpose up</source>
         <translation>Transzponálás felfelé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1845"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1852"/>
         <source>Transpose down</source>
         <translation>Transzponálás lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1683"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1690"/>
         <source>Next syllable</source>
         <translation>Következő szótag</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1881"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
         <source>Set visible</source>
         <translation>Legyen látható</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1887"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
         <source>Set invisible</source>
         <translation>Legyen láthatatlan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="377"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="378"/>
         <source>De&amp;lete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="105"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="106"/>
         <source>Select previous element in score</source>
         <translation>Az előző kottaelem kijelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="129"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="130"/>
         <source>Go to previous measure / move text left quickly</source>
         <translation>Ugrás az előző ütemre / szöveg mozgatása gyorsan balra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="384"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="385"/>
         <source>&amp;Style…</source>
         <translation>Stílus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="390"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="391"/>
         <source>&amp;Page settings…</source>
         <translation>Oldalbeállítás...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="396"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="397"/>
         <source>&amp;Load style…</source>
         <translation>Stílus betöltése…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="402"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="403"/>
         <source>S&amp;ave style…</source>
         <translation>Stílus mentése…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="414"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="415"/>
         <source>&amp;Explode</source>
         <translation>Szétbontás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="420"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="421"/>
         <source>&amp;Implode</source>
         <translation>Összevonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="426"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="427"/>
         <source>Realize &amp;chord symbols</source>
         <translation>Akkordjelzések realizálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="432"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="433"/>
         <source>Remove selected ran&amp;ge</source>
         <translation>Kijelölt tartomány eltávolítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="445"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="446"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
         <translation>Ritmusjelölés vonásokkal ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="446"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="447"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>Ritmusjelölés vonásokkal ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="451"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="452"/>
         <source>Respell &amp;pitches</source>
         <translation>Módosítójelek újragenerálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="457"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="458"/>
         <source>Regroup &amp;rhythms</source>
         <translation>Ritmusok újracsoportosítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="464"/>
         <source>Resequence re&amp;hearsal marks</source>
         <translation>Cifferek újragenerálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="476"/>
         <source>Copy &amp;lyrics to clipboard</source>
         <translation>Énekszöveg másolása a vágólapra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="481"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="482"/>
         <source>Remove empty trailing meas&amp;ures</source>
         <translation>Üres záróütemek törlése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="488"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="489"/>
         <source>Manage parts</source>
-        <translation>Kivonatok kezelése</translation>
+        <translation>Szólamkották kezelése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="546"/>
         <source>Add/remove s&amp;ystem breaks…</source>
         <translation>Sorcsoporttörések hozzáadása/eltávolítása...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="565"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="566"/>
         <source>Exchange voice &amp;1-2</source>
         <translation>&amp;1-2 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="577"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="578"/>
         <source>Exchange voice 1-&amp;4</source>
         <translation>1-&amp;4 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="583"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="584"/>
         <source>Exchange voice &amp;2-3</source>
         <translation>&amp;2-3 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="595"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="596"/>
         <source>Exchange voice &amp;3-4</source>
         <translation>&amp;3-4 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="619"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="620"/>
         <source>&amp;Split measure before selected note/rest</source>
         <translation>Ütem felosztása a kijelölt hangjegy/szünet előtt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="625"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="626"/>
         <source>&amp;Join selected measures</source>
         <translation>Kijelölt ütemek egyesítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="668"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
         <source>Insert &amp;horizontal frame</source>
         <translation>Vízszintes keret beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="675"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="676"/>
         <source>Insert &amp;vertical frame</source>
         <translation>Függőleges keret beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="682"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="683"/>
         <source>Insert &amp;text frame</source>
         <translation>Szövegkeret beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="689"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="690"/>
         <source>Append h&amp;orizontal frame</source>
         <translation>Vízszintes keret hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="695"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="696"/>
         <source>Append v&amp;ertical frame</source>
         <translation>Függőleges keret hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="701"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="702"/>
         <source>Append te&amp;xt frame</source>
         <translation>Szövegkeret hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="846"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="847"/>
         <source>Se&amp;cond above</source>
         <translation>Felső szekund</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="852"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="853"/>
         <source>Thir&amp;d above</source>
         <translation>Felső terc</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="858"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="859"/>
         <source>Fou&amp;rth above</source>
         <translation>Felső kvart</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="864"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
         <source>Fift&amp;h above</source>
         <translation>Felső kvint</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
         <source>Si&amp;xth above</source>
         <translation>Felső szext</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="876"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="877"/>
         <source>Seve&amp;nth above</source>
         <translation>Felső szeptim</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="882"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="883"/>
         <source>Octave &amp;above</source>
         <translation>Felső oktáv</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="888"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="889"/>
         <source>Ninth abov&amp;e</source>
         <translation>Felső nóna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="894"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
         <source>&amp;Second below</source>
         <translation>Alsó szekund</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="900"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="901"/>
         <source>&amp;Third below</source>
         <translation>Alsó terc</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="906"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="907"/>
         <source>F&amp;ourth below</source>
         <translation>Alsó kvart</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="912"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="913"/>
         <source>&amp;Fifth below</source>
         <translation>Alsó kvint</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="918"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
         <source>S&amp;ixth below</source>
         <translation>Alsó szext</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="924"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
         <source>Se&amp;venth below</source>
         <translation>Alsó szeptim</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="930"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="931"/>
         <source>Octave &amp;below</source>
         <translation>Alsó oktáv</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="936"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="937"/>
         <source>Ninth belo&amp;w</source>
         <translation>Alsó nóna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1163"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1164"/>
         <source>Ottava 8va &amp;alta</source>
         <translation>Ottava 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1164"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1165"/>
         <source>Add ottava 8va alta</source>
         <translation>Ottava 8va alta hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1169"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1170"/>
         <source>Ottava 8va &amp;bassa</source>
         <translation>Ottava 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1170"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1171"/>
         <source>Add ottava 8va bassa</source>
         <translation>Ottava 8va bassa hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1175"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1176"/>
         <source>&amp;Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1181"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1182"/>
         <source>&amp;Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1187"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1188"/>
         <source>&amp;Note anchored line</source>
         <translation>Hangjegyhez rögzített vonal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1188"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1189"/>
         <source>Add note anchored line</source>
         <translation>Hangjegyhez rögzített vonal hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1203"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1204"/>
         <source>&amp;Title</source>
         <translation>Cím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1209"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1210"/>
         <source>&amp;Subtitle</source>
         <translation>Alcím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1215"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1216"/>
         <source>&amp;Composer</source>
         <translation>Zeneszerző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1221"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1222"/>
         <source>&amp;Lyricist</source>
         <translation>Szövegíró</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1227"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1228"/>
         <source>&amp;Part name</source>
         <translation>Szólam neve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1239"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1240"/>
         <source>Syst&amp;em text</source>
         <translation>Sorcsoport szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1245"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1246"/>
         <source>St&amp;aff text</source>
         <translation>Kottasor szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1251"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1252"/>
         <source>E&amp;xpression text</source>
         <translation>Szöveges előadási jel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1257"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
         <source>&amp;Rehearsal mark</source>
         <translation>Ciffer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
         <source>&amp;Instrument change</source>
         <translation>Hangszerváltás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1269"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1270"/>
         <source>&amp;Fingering</source>
         <translation>Ujjrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1275"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1276"/>
         <source>Stic&amp;king</source>
         <translation>Kézrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1281"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1282"/>
         <source>Chor&amp;d symbol</source>
         <translation>Akkordjelzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1287"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1288"/>
         <source>R&amp;oman numeral analysis</source>
         <translation>Összhangzattani elemzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1293"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1294"/>
         <source>&amp;Nashville number</source>
         <translation>Nashville szám</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1299"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
         <source>L&amp;yrics</source>
         <translation>Énekszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1306"/>
         <source>Figured &amp;bass</source>
         <translation>Számozott basszus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1311"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1312"/>
         <source>Tempo &amp;marking</source>
         <translation>Tempójelzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1317"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1318"/>
         <source>&amp;Duplet</source>
         <translation>Duola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1323"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1324"/>
         <source>&amp;Triplet</source>
         <translation>Triola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1329"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1330"/>
         <source>&amp;Quadruplet</source>
         <translation>Kvartola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1335"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1336"/>
         <source>Q&amp;uintuplet</source>
         <translation>Kvintola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1341"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1342"/>
         <source>Se&amp;xtuplet</source>
         <translation>Szextola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1347"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1348"/>
         <source>Se&amp;ptuplet</source>
         <translation>Szeptola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1353"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1354"/>
         <source>&amp;Octuplet</source>
         <translation>Oktola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1359"/>
-        <source>&amp;Nontuplet</source>
-        <translation>Novemola</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1365"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1366"/>
         <source>Othe&amp;r…</source>
         <translation>Egyéb...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1366"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1367"/>
         <source>Enter tuplet: create custom…</source>
         <translation>N-ola bevitele: egyéni…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1371"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1372"/>
         <source>&amp;Decrease layout stretch</source>
         <translation>Nyújtás csökkentése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1377"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1378"/>
         <source>&amp;Increase layout stretch</source>
         <translation>Nyújtás növelése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1383"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
         <source>&amp;Reset layout stretch</source>
         <translation>Nyújtás alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1389"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
         <source>Reset &amp;text style overrides</source>
         <translation>A módosított szövegstílusok alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1395"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1396"/>
         <source>Reset &amp;beams</source>
         <translation>Gerendák alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1401"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1402"/>
         <source>Reset shapes and &amp;positions</source>
         <translation>Alak és pozíció alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1506"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1513"/>
         <source>Jump to previous screen</source>
         <translation>Ugrás az előző képernyőre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1512"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1519"/>
         <source>Jump to next screen</source>
         <translation>Ugrás a következő képernyőre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1518"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1525"/>
         <source>Jump to previous page</source>
         <translation>Ugrás az előző oldalra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1524"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1531"/>
         <source>Jump to next page</source>
         <translation>Ugrás a következő oldalra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1587"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1594"/>
         <source>Next word</source>
         <translation>Következő szó</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1588"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1595"/>
         <source>Go to next word</source>
         <translation>Ugrás a következő szóhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1594"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1601"/>
         <source>Go to next text element</source>
         <translation>Ugrás a következő szöveges elemre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1600"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1607"/>
         <source>Go to previous text element</source>
         <translation>Ugrás az előző szöveges elemre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1612"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1619"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
         <translation>Kurzor léptetése: előző ütés (akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1684"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1691"/>
         <source>Lyrics: enter hyphen</source>
         <translation>Énekszöveg: kötőjel beírása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1690"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1697"/>
         <source>Lyrics: enter melisma</source>
         <translation>Énekszöveg: melizma beírása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
         <source>Add double-sharp</source>
         <translation>Kettős kereszt hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1817"/>
         <source>Add accidental: double-sharp</source>
         <translation>Módosítójel hozzáadása: kettős kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1822"/>
         <source>Add sharp</source>
         <translation>Kereszt hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1821"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
         <source>Add natural</source>
         <translation>Feloldójel hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1822"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1829"/>
         <source>Add accidental: natural</source>
         <translation>Módosítójel hozzáadása: feloldójel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1827"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
         <source>Add flat</source>
         <translation>Bé hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1835"/>
         <source>Add accidental: flat</source>
         <translation>Módosítójel hozzáadása: bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1833"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Add double-flat</source>
         <translation>Kettős bé hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1841"/>
         <source>Add accidental: double-flat</source>
         <translation>Módosítójel hozzáadása: kettős bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1847"/>
         <source>Transpose up a semitone</source>
         <translation>Transzponálás felfelé félhanggal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1846"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1853"/>
         <source>Transpose down a semitone</source>
         <translation>Transzponálás félhanggal lejjebb</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1869"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1876"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1877"/>
         <source>Toggle multimeasure rests</source>
         <translation>Többsoros szünetek ki-/bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1875"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1882"/>
         <source>Toggle empty staves</source>
         <translation>Üres kottasorok ki-/bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1899"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1900"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1907"/>
         <source>Toggle automatic placement for entire score</source>
         <translation>Automatikus elhelyezés ki-/bekapcsolása az egész kottához</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1918"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1925"/>
         <source>Toggle note input mode</source>
         <translation>Hangjegybeviteli mód váltása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1925"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
         <source>Insert/overwrite</source>
         <translation>Beszúrás/felülírás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1926"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1933"/>
         <source>Toggle note input mode: insert/overwrite</source>
         <translation>Hangjegybeviteli mód váltása: beszúrás/felülírás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
         <source>Toggle note input mode: default (step-time)</source>
         <translation>Hangjegybeviteli mód váltása: alapértelmezett (lépésenkénti)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1946"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
         <translation>Hangbeviteli mód váltása: csak ritmus (nem magasság)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1946"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
         <translation>Hangbeviteli mód váltása: meglévő hangok átírása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
         <source>Toggle note input mode: real-time (metronome)</source>
         <translation>Hangjegybeviteli mód váltása: valós idő (metronóm)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1967"/>
         <source>Toggle note input mode: real-time (foot pedal)</source>
         <translation>Hangjegybeviteli mód váltása: valós idő (lábpedál)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1967"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
         <translation>Hangjegybeviteli mód váltása: beszúrás (növeli a kottasor hosszát)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1973"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1980"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
         <source>Real-time advance</source>
         <translation>Valósidejű előrehaladás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2195"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2202"/>
         <source>Toggle flat</source>
         <translation>Bé ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2202"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2209"/>
         <source>Toggle double-flat</source>
         <translation>Kettős bé ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2203"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
         <source>Toggle accidental: double-flat</source>
         <translation>Módosítójel ki/be: kettős bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2209"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2216"/>
         <source>Toggle natural</source>
         <translation>Feloldójel ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2216"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2223"/>
         <source>Toggle sharp</source>
         <translation>Kereszt ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2223"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2230"/>
         <source>Toggle double-sharp</source>
         <translation>Kettős kereszt ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2224"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2231"/>
         <source>Toggle accidental: double-sharp</source>
         <translation>Módosítójel ki/be: kettős kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2245"/>
         <source>Add slur</source>
         <translation>Kötőív hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2393"/>
+        <source>Show sound flags</source>
+        <translation>Hangjelzők megjelenítése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
+        <source>Show/hide sound flags</source>
+        <translation>Hangjelzők megjelenítése/elrejtése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
         <source>Mark i&amp;rregular measures</source>
         <translation>Szabálytalan ütemek megjelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1611"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1618"/>
         <source>Previous beat (Chord symbol)</source>
         <translation>Előző ütés (akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1605"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1612"/>
         <source>Next beat (Chord symbol)</source>
         <translation>Következő ütés (akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1701"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1708"/>
         <source>Bold face</source>
         <translation>Félkövér</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1708"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1715"/>
         <source>Italic</source>
         <translation>Kurzív</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1715"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1722"/>
         <source>Underline</source>
         <translation>Aláhúzott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="439"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="440"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="441"/>
         <source>Fill with slashes</source>
         <translation>Kitöltés vonásokkal</translation>
     </message>
@@ -9732,13 +9854,18 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
-        <source>Show &amp;accessible tree…</source>
-        <translation>Akadálymentesítési fa megjelenítése...</translation>
+        <source>Show &amp;accessibility tree…</source>
+        <translation>&amp;Akadálymentesítési fa megjelenítése…</translation>
+    </message>
+    <message>
+        <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
+        <source>&amp;Dump accessibility tree to console</source>
+        <translation>Akadálymentesítési fa &amp;kiírása a konzolra</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="65"/>
-        <source>Engraving &amp;elements</source>
-        <translation>Kottagrafikai elemek</translation>
+        <source>Show engraving &amp;elements</source>
+        <translation>Kottagrafikai &amp;elemek megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/multiinstances/internal/multiinstancesuiactions.cpp" line="35"/>
@@ -9864,12 +9991,6 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <translation>Dobkészlet eszközök</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
-        <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
-        <source>MuseScore 4</source>
-        <translation>MuseScore 4</translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="100"/>
         <source>Undo/redo toolbar</source>
         <translation>Visszavon/mégis eszköztár</translation>
@@ -9890,7 +10011,7 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>Ez a művelet az alkalmazás összes beállítását alaphelyzetbe teszi és minden testre szabott palettát és egyéni gyorsbillentyűt töröl. A legutóbbi kották listája szintén törölve lesz.
+        <translation>Ez a művelet az alkalmazás összes beállítását alaphelyzetbe állítja, és minden testreszabott palettát és egyéni gyorsbillentyűt töröl. A legutóbbi kották listája szintén törölve lesz.
 
 A művelet nem törli egyik kottáját sem.</translation>
     </message>
@@ -9901,13 +10022,13 @@ A művelet nem törli egyik kottáját sem.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="268"/>
-        <source>Would you like to restart MuseScore now?</source>
-        <translation>Szeretné most újraindítani a MuseScore-t?</translation>
+        <source>Would you like to restart MuseScore Studio now?</source>
+        <translation>Újraindítja most a MuseScore Studiót?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
-        <source>MuseScore needs to be restarted for these changes to take effect.</source>
-        <translation>A MuseScore-t a változtatások érvényesítéséhez újra kell indítani.</translation>
+        <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
+        <translation>A változtatások érvényesítéséhez újra kell indítani a MuseScore Studiót.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="274"/>
@@ -9943,11 +10064,6 @@ A művelet nem törli egyik kottáját sem.</translation>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="95"/>
         <source>DevTools</source>
         <translation>Dev eszközök</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
-        <source>MuseScore</source>
-        <translation>MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="79"/>
@@ -9994,13 +10110,20 @@ A művelet nem törli egyik kottáját sem.</translation>
         <source>Loading score…‎</source>
         <translation>Kotta betöltése…</translation>
     </message>
+    <message>
+        <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
+        <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
+        <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
+        <source>MuseScore Studio</source>
+        <translation>MuseScore Studio</translation>
+    </message>
 </context>
 <context>
     <name>appshell/about</name>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="32"/>
-        <source>About MuseScore</source>
-        <translation>A MuseScore névjegye</translation>
+        <source>About MuseScore Studio</source>
+        <translation>A MuseScore Studio névjegye</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="84"/>
@@ -10030,15 +10153,10 @@ A művelet nem törli egyik kottáját sem.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="139"/>
-        <source>Copyright © 1999-2024 MuseScore BVBA and others.
+        <source>Copyright © 1999-2024 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Copyright © 1999-2023 MuseScore BVBA and others.
-Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>Copyright © 1999-2023 MuseScore BVBA és mások.
-A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&gt; alatt közzétéve.</translation>
+        <translation>Copyright © 1999-2024 MuseScore Limited.
+&lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt; licenc alatt közzétéve.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -10113,8 +10231,8 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
-        <source>Welcome to MuseScore 4</source>
-        <translation>Üdvözli a MuseScore 4</translation>
+        <source>Welcome to MuseScore Studio</source>
+        <translation>Üdvözli a MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10137,16 +10255,21 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>Nagy kontraszt bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="31"/>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Video tutorials</source>
         <translation>Oktatóvideók</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
         <translation>A párbeszédablak mögött található a &apos;Tanulás&apos; szekció, ahol oktatóanyagokat találhat az első lépések megtételéhez
 (Az oktatóvideókhoz internetkapcsolatra van szükség)</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
+        <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
+        <translation>Az adatvédelme érdekében a MuseScore Studio semmilyen személyes információt nem tárol. További információkért lásd az &lt;a href=&quot;%1&quot;&gt;adatvédelmi nyilatkozatunkat&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -10210,32 +10333,32 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
 <context>
     <name>appshell/menu/diagnostic</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="354"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="355"/>
         <source>&amp;System</source>
         <translation>Rendszer</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="362"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="363"/>
         <source>&amp;Muse Sampler</source>
         <translation>Muse Sampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="388"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="389"/>
         <source>&amp;Accessibility</source>
         <translation>Akadálymentesítés</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="389"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="390"/>
         <source>&amp;Engraving</source>
         <translation>Kottagrafika</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="390"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="391"/>
         <source>Auto&amp;bot</source>
         <translation>Autobot</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="394"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="395"/>
         <source>&amp;Diagnostic</source>
         <translation>Diagnosztika</translation>
     </message>
@@ -10269,7 +10392,7 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>Nyújtás</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="253"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="254"/>
         <source>F&amp;ormat</source>
         <translation>F&amp;ormátum</translation>
     </message>
@@ -10277,7 +10400,7 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
 <context>
     <name>appshell/menu/help</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="342"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="343"/>
         <source>&amp;Help</source>
         <translation>&amp;Súgó</translation>
     </message>
@@ -10285,7 +10408,7 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
 <context>
     <name>appshell/menu/plugins</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="302"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="303"/>
         <source>&amp;Plugins</source>
         <translation>&amp;Bővítmények</translation>
     </message>
@@ -10293,17 +10416,17 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
 <context>
     <name>appshell/menu/tools</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="278"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="279"/>
         <source>&amp;Voices</source>
         <translation>Szó&amp;lamok</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="279"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="280"/>
         <source>&amp;Measures</source>
         <translation>Ü&amp;temek</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="297"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="298"/>
         <source>&amp;Tools</source>
         <translation>&amp;Eszközök</translation>
     </message>
@@ -10323,7 +10446,7 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
         <source>&amp;Show</source>
-        <translation>Mutatás</translation>
+        <translation>Megjelenítés</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="211"/>
@@ -10403,13 +10526,13 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
-        <source>Check to see if a new version of MuseScore is available</source>
-        <translation>A MuseScore új verzióinak keresése</translation>
+        <source>Check to see if a new version of MuseScore Studio is available</source>
+        <translation>A MuseScore Studi új verzióinak keresése</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
-        <source>Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>A frissítéshez hálózati kapcsolatra van szükség. Adatai védelme végett a MuseScore semmilyen személyes információt nem tárol. Ellenőrizze &lt;a href=&quot;%1&quot;&gt;adatvédelmi nyilatkozatunkat&lt;/a&gt;, ha további információra van szüksége.</translation>
+        <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
+        <translation>A frissítéshez hálózati kapcsolatra van szükség. Az adatvédelme érdekében a MuseScore Studio semmilyen személyes információt nem tárol. További információkért lásd ad &lt;a href=&quot;%1&quot;&gt;adatvédelmi nyilatkozatunkat&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -10534,19 +10657,24 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="43"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="45"/>
         <source>Import layout</source>
         <translation>Elrendezés importálása</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="58"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="60"/>
         <source>Import system and page breaks</source>
         <translation>Vonalrendszer- és oldaltörések importálása</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="73"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="75"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
         <translation>Alkalmazzuk az alapértelmezett betűtípust (Edwin) az importált kottákon</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="90"/>
+        <source>Infer text type based on content where possible</source>
+        <translation>Szöveg típusának kitalálása a tartalma alapján, ha lehetséges</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="44"/>
@@ -11118,8 +11246,8 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
-        <source>Sign in successful! You’re good to go back to the MuseScore desktop app.</source>
-        <translation>Sikeres bejelentkezés! Visszatérhetsz a MuseScore asztali alkalmazáshoz.</translation>
+        <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
+        <translation>Sikeres bejelentkezés! Visszatérhet a MuseScore Studióhoz.</translation>
     </message>
 </context>
 <context>
@@ -11131,8 +11259,8 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
-        <source>This will create a .zip file with information about your MuseScore setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation>Ez egy ZIP-fájlt hoz létre, amely információkat tartalmaz a MuseScore beállításairól, hogy segítsen a fejlesztőknek a tapasztalt problémák diagnosztizálásában. Megvizsgálhatja a fájl tartalmát, mielőtt bárkinek is elküldené.</translation>
+        <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
+        <translation>Ez egy ZIP-fájlt hoz létre, amely információkat tartalmaz a MuseScore Studio beállításairól, hogy segítsen a fejlesztőknek a tapasztalt problémák diagnosztizálásában. Megvizsgálhatja a fájl tartalmát, mielőtt bárkinek is elküldené.</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
@@ -11235,33 +11363,33 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>Pontozott kvartola %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1087"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1095"/>
         <source>Start and end of %1</source>
         <translation>%1 kezdete és vége</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3326"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3504"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Az ütemek jelenlegi tartalma le lesz cserélve</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3327"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3505"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Folytassuk az ütemismétlések beszúrását?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2357"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2374"/>
         <source>Measure: %1</source>
         <translation>Ütem: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2360"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2377"/>
         <source>Beat: %1</source>
         <translation>Ütés: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fingering.cpp" line="118"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1082"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1095"/>
         <source>String number</source>
         <translation>Húr száma</translation>
     </message>
@@ -11350,10 +11478,10 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="543"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="609"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2335"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2359"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="610"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2348"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2372"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2601"/>
         <source>Custom</source>
         <translation>Egyéni</translation>
     </message>
@@ -11364,7 +11492,7 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1733"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1075"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1088"/>
         <source>Nashville number</source>
         <translation>Nashville szám</translation>
     </message>
@@ -11390,103 +11518,103 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>%1 (hangzás mint %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2114"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2181"/>
         <source>Acciaccatura</source>
         <translation>acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2116"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2183"/>
         <source>Appoggiatura</source>
         <translation>appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2120"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2187"/>
         <source>Grace note after</source>
         <translation>Utóka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2124"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2191"/>
         <source>Grace note before</source>
         <translation>Előke</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2126"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="183"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2193"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="184"/>
         <source>Note</source>
         <translation>Hangjegy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3015"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3053"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3082"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3120"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Szólam: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3023"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3090"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(be: %1‰ ki: %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3029"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3058"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3096"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3125"/>
         <source>Beat slash</source>
         <translation>Ütésvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3029"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3058"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3096"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3125"/>
         <source>Rhythm slash</source>
         <translation>Ritmusvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3033"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3062"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3100"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3129"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Húr: %2; Érintő: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3039"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3106"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Hangmagasság: %2; Hossz: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3068"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3135"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 kottafej %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3070"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3137"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>Soron átnyúlás föfelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3072"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3139"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>Soron átnyúlás lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3076"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3143"/>
         <source>too low</source>
         <translation>túl mély</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3078"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3145"/>
         <source>too high</source>
         <translation>túl magas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3080"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
         <source>too low for amateurs</source>
         <translation>túl mély amatőröknek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3082"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3149"/>
         <source>too high for amateurs</source>
         <translation>túl magas amatőröknek</translation>
     </message>
@@ -11501,37 +11629,37 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>Ez az ütem ütemismétlést tartalmaz, amelyek törlődni fognak, ha hangjegyeket ír ide. Folytatja?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1338"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1351"/>
         <source>triple ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>tripla ♭</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1333"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1346"/>
         <source>double ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>duplabé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1328"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1341"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>Bé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1318"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1331"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>Kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1313"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1326"/>
         <source>double ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>Kettőskereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1308"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1321"/>
         <source>triple ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>tripla ♯</translation>
@@ -11542,37 +11670,37 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>%1; Hosszúság: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2239"/>
         <source>Annotations:</source>
         <translation>Jegyzetek:</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1164"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1078"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1089"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3120"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2253"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1086"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3175"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3187"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2265"/>
         <source>Start of %1</source>
         <translation>%1 kezdete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1167"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1081"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1091"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3112"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3128"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2268"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1089"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1099"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3179"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2280"/>
         <source>End of %1</source>
         <translation>%1 vége</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1494"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1510"/>
         <source>Start measure: %1; Start beat: %2</source>
         <translation>Kezdőütem: %1; Kezdőütés: %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1501"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1517"/>
         <source>End measure: %1; End beat: %2</source>
         <translation>Befejező ütem: %1; Befejező ütés: %2</translation>
     </message>
@@ -11719,13 +11847,13 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="163"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1396"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1409"/>
         <source>Invalid</source>
         <translation>érvénytelen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="164"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Bracket</source>
         <translation>Klammer</translation>
     </message>
@@ -11736,7 +11864,7 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="166"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1066"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1079"/>
         <source>Staff</source>
         <translation>Kottasor</translation>
     </message>
@@ -11752,13 +11880,13 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="170"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1055"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1068"/>
         <source>Measure number</source>
         <translation>Ütem száma</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="171"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1056"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1069"/>
         <source>Multimeasure rest range</source>
         <translation>Többütemes szünet tartomány</translation>
     </message>
@@ -11799,7 +11927,7 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1826"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1839"/>
         <source>Arpeggio</source>
         <translation>Arpeggio</translation>
     </message>
@@ -11819,92 +11947,92 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
         <translation>Kottaszár</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="184"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
         <source>Clef</source>
         <translation>Kulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
         <source>Key signature</source>
         <translation>Előjegyzés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Ambitus</source>
         <translation>Hangterjedelem</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="188"/>
         <source>Time signature</source>
         <translation>Ütemmutató</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="188"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
         <source>Rest</source>
         <translation>Szünet</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
         <source>Multimeasure rest</source>
         <translation>Többütemes szünet</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>Dead slapped</source>
         <translation>Néma slap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
         <source>Breath</source>
         <translation>Cezúra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
         <source>Measure repeat</source>
         <translation>Ütem ismétlése</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
         <source>Tie</source>
         <translation>Átkötés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
         <source>Articulation</source>
         <translation>Artikuláció</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="196"/>
         <source>Ornament</source>
         <translation>Díszítés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="196"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
         <source>Fermata</source>
         <translation>Fermata</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
         <source>Chord line</source>
         <translation>Akkordvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="199"/>
         <source>Dynamic</source>
         <translation>Dinamika</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Beam</source>
         <translation>Gerenda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="202"/>
         <source>Beam segment</source>
         <translation>Gerendaszakasz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="202"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="183"/>
         <source>Flag</source>
         <translation>Zászló</translation>
     </message>
@@ -11935,24 +12063,25 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="208"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1079"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1092"/>
         <source>Fingering</source>
         <translation>Ujjrend</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1077"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1090"/>
         <source>Tuplet</source>
         <translation>N-ola</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1058"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1071"/>
         <source>Tempo</source>
         <translation>Tempó</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="211"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="372"/>
         <source>Staff text</source>
         <translation>Kottasor szöveg</translation>
     </message>
@@ -11963,1027 +12092,1032 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
+        <source>Sound flag</source>
+        <translation>Hangjelző</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="214"/>
         <source>Playing technique annotation</source>
         <translation>Játéktechnika annotáció</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="214"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>Capo</source>
         <translation>Kápó</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1083"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1096"/>
         <source>String tunings</source>
         <translation>Húrok hangolása</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
         <source>Triplet feel</source>
         <translation>Triolás érzet</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1063"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1076"/>
         <source>Rehearsal mark</source>
         <translation>Ciffer</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1051"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1064"/>
         <source>Instrument change</source>
         <translation>Hangszerváltás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
         <source>Staff type change</source>
         <translation>Kottasor módosítása</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1072"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1085"/>
         <source>Chord symbol</source>
         <translation>Akkordjelzés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Fretboard diagram</source>
         <translation>Akkordábra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1084"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1097"/>
         <source>Harp pedal diagram</source>
         <translation>Hárfa pedálállások</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1092"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1105"/>
         <source>Bend</source>
         <translation>Hajlítás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="226"/>
         <source>Tremolo bar</source>
         <translation>Tremolo jelölés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="226"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1088"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1101"/>
         <source>Volta</source>
         <translation>Volta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
         <source>Hairpin segment</source>
         <translation>Villa szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="229"/>
         <source>Ottava segment</source>
         <translation>Ottava szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="229"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
         <source>Trill segment</source>
         <translation>Trilla szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="231"/>
         <source>Let ring segment</source>
         <translation>Kizengetés szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="232"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="233"/>
         <source>Gradual tempo change segment</source>
         <translation>Fokozatos tempóváltoztatás szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="233"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="234"/>
         <source>Vibrato segment</source>
         <translation>Vibrato szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="234"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="235"/>
         <source>Palm mute segment</source>
         <translation>Tenyérrel tompítás szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="235"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
         <source>Whammy bar segment</source>
         <translation>Whammy bar szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
         <source>Rasgueado segment</source>
         <translation>Rasgueado szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="238"/>
         <source>Harmonic mark segment</source>
         <translation>Üveghangjel szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="238"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>Pick scrape segment</source>
         <translation>Pengetős kaparás szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Text line segment</source>
         <translation>Szöveg vonalszegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="241"/>
         <source>Volta segment</source>
         <translation>Volta szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="241"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
         <source>Pedal segment</source>
         <translation>Pedál szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
         <source>Melisma line segment</source>
         <translation>Melizmavonal szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="244"/>
         <source>Glissando segment</source>
         <translation>Glissando szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="244"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
         <source>Layout break</source>
         <translation>Töréspont</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
         <source>Spacer</source>
         <translation>Elválasztó</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="247"/>
         <source>Staff state</source>
         <translation>Sor állapot</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="247"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
         <source>Notehead</source>
         <translation>Kottafej</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
         <source>Note dot</source>
         <translation>Pont</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
         <source>Tremolo</source>
         <translation>Tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>Image</source>
         <translation>Kép</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1392"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1405"/>
         <source>Measure</source>
         <translation>Ütem</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="253"/>
         <source>Selection</source>
         <translation>Kijelölés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="253"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>Lasso</source>
         <translation>Lasszó</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
         <source>Shadow note</source>
         <translation>Árnyékhangjegy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
         <source>Tab duration symbol</source>
         <translation>Tab ritmusérték szimbólum</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
         <source>Font symbol</source>
         <translation>Betűtípus szimbólum</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
         <source>Page</source>
         <translation>Oldal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1069"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="259"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1082"/>
         <source>Hairpin</source>
         <translation>Villa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="259"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1089"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1102"/>
         <source>Ottava</source>
         <translation>Ottava</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1091"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="261"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1104"/>
         <source>Pedal</source>
         <translation>Pedál</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="261"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="262"/>
         <source>Trill</source>
         <translation>Trilla</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="262"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1093"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="263"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1106"/>
         <source>Let ring</source>
         <translation>Kizengetés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="263"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1059"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="264"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1072"/>
         <source>Gradual tempo change</source>
         <translation>Fokozatos tempóváltoztatás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="264"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="265"/>
         <source>Vibrato</source>
         <translation>Vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="265"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1094"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1107"/>
         <source>Palm mute</source>
         <translation>Tenyérrel tompítás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
         <source>Whammy bar</source>
         <translation>Whammy bar</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="268"/>
         <source>Rasgueado</source>
         <translation>Rasgueado</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <source>Pick scrape out</source>
         <translation>Pengetős kaparás ki</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1087"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="271"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1100"/>
         <source>Text line</source>
         <translation>Vonal szöveggel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="271"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
         <source>Text line base</source>
         <translation>Szöveges vonal alap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="273"/>
         <source>Note line</source>
         <translation>Hangjegyvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="273"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="274"/>
         <source>Melisma line</source>
         <translation>Melizma vonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="274"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1090"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1103"/>
         <source>Glissando</source>
         <translation>Glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="277"/>
         <source>Segment</source>
         <translation>Szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="277"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1064"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1077"/>
         <source>System</source>
         <translation>Sorcsoport</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
         <source>Compound</source>
         <translation>Összetett</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="280"/>
         <source>Chord</source>
         <translation>Akkord</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="280"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
         <source>Slur</source>
         <translation>Kötőív</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="283"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
         <source>Staff list</source>
         <translation>Kottasorlista</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Measure list</source>
         <translation>Ütemlista</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
         <source>Horizontal frame</source>
         <translation>Vízszintes keret</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <source>Vertical frame</source>
         <translation>Függőleges keret</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
         <source>Text frame</source>
         <translation>Szövegkeret</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="289"/>
         <source>Fretboard diagram frame</source>
         <translation>Akkordábra keret</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Ossia</source>
         <translation>Ossia</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="292"/>
         <source>Bagpipe embellishment</source>
         <translation>Skót duda díszítések</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="292"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1078"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1091"/>
         <source>Sticking</source>
         <translation>Kézrend</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="295"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
         <source>Guitar bend</source>
         <translation>Gitár húzás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="297"/>
         <source>Guitar bend segment</source>
         <translation>Gitár húzás szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="297"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="298"/>
         <source>Guitar bend hold</source>
         <translation>Gitár húzás tartás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="298"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>Guitar bend hold segment</source>
         <translation>Gitár húzás tartás szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="300"/>
         <source>Guitar bend text</source>
         <translation>Gitár húzás szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="448"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
         <source>Vertical</source>
         <translation>Függőleges</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="450"/>
         <source>Horizontal</source>
         <translation>Vízszintes</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="492"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1556"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1592"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="469"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="493"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1569"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1605"/>
         <source>Auto</source>
         <translation>Automatikus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1045"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1058"/>
         <source>Lyricist</source>
         <translation>Szövegíró</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1085"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1098"/>
         <source>Harp pedal text diagram</source>
         <translation>Hárfa pedál szövegdiagram</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1323"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1336"/>
         <source>♮</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>Feloldójel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1391"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1404"/>
         <source>Whole</source>
         <translation>Egész</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1390"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1403"/>
         <source>Half</source>
         <translation>Fél</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1381"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1394"/>
         <source>Quarter</source>
         <translation>Negyed</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1393"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1406"/>
         <source>Breve</source>
         <translation>Dupla egész (breve)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
         <source>Element</source>
         <translation>Elem</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="268"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
         <source>Harmonic mark</source>
         <translation>Üveghangjel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="283"/>
         <source>Element list</source>
         <translation>Elemlista</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1041"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1054"/>
         <source>Default</source>
         <translation>Alapértelmezett</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1042"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1055"/>
         <source>Title</source>
         <translation>Cím</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1043"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1056"/>
         <source>Subtitle</source>
         <translation>Alcím</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1044"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1057"/>
         <source>Composer</source>
         <translation>Zeneszerző</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1046"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1059"/>
         <source>Translator</source>
         <translation>Fordító</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1047"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1060"/>
         <source>Frame</source>
         <translation>Keret</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1052"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1065"/>
         <source>Header</source>
         <translation>Fejléc</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1053"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1066"/>
         <source>Footer</source>
         <translation>Lábléc</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1060"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1073"/>
         <source>Metronome</source>
         <translation>Metronóm</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="199"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1067"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1080"/>
         <source>Expression</source>
         <translation>Előadási jel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1068"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1081"/>
         <source>Dynamics</source>
         <translation>Dinamika</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1048"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1061"/>
         <source>Instrument name (Part)</source>
         <translation>Hangszer neve (szólamkotta)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1049"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1062"/>
         <source>Instrument name (Long)</source>
         <translation>Hangszer neve (hosszú)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1050"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1063"/>
         <source>Instrument name (Short)</source>
         <translation>Hangszer neve (rövid)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1061"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1074"/>
         <source>Repeat text left</source>
         <translation>Bal oldali ismétlésszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1062"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1075"/>
         <source>Repeat text right</source>
         <translation>Jobb oldali ismétlésszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1070"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1083"/>
         <source>Lyrics odd lines</source>
         <translation>Énekszöveg páratlan sorai</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1071"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1084"/>
         <source>Lyrics even lines</source>
         <translation>Énekszöveg páros sorai</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1073"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1086"/>
         <source>Chord symbol (alternate)</source>
         <translation>Akkordjelzés (alternatív)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1074"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1087"/>
         <source>Roman numeral analysis</source>
         <translation>Összhangzattani elemzés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1080"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1093"/>
         <source>LH guitar fingering</source>
         <translation>BK gitár ujjrend</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1081"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1094"/>
         <source>RH guitar fingering</source>
         <translation>JK gitár ujjrend</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1096"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1109"/>
         <source>User-1</source>
         <translation>Felhasználói-1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1097"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1110"/>
         <source>User-2</source>
         <translation>Felhasználói-2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1098"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1111"/>
         <source>User-3</source>
         <translation>Felhasználói-3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1099"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1112"/>
         <source>User-4</source>
         <translation>Felhasználói-4</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1100"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1113"/>
         <source>User-5</source>
         <translation>Felhasználói-5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1101"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1114"/>
         <source>User-6</source>
         <translation>Felhasználói-6</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1102"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1115"/>
         <source>User-7</source>
         <translation>Felhasználói-7</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1103"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1116"/>
         <source>User-8</source>
         <translation>Felhasználói-8</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1104"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1117"/>
         <source>User-9</source>
         <translation>Felhasználói-9</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1105"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1118"/>
         <source>User-10</source>
         <translation>Felhasználói-10</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1106"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1119"/>
         <source>User-11</source>
         <translation>Felhasználói-11</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1107"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1120"/>
         <source>User-12</source>
         <translation>Felhasználói-12</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1310"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1323"/>
         <source>triple sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>Hármas kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1315"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1328"/>
         <source>double sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>kettős kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1320"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1333"/>
         <source>sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1325"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1338"/>
         <source>natural</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>feloldójel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1330"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1343"/>
         <source>flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>bé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1335"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1348"/>
         <source>double flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>duplabé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1340"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1353"/>
         <source>triple flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>Hármas bé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1382"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1395"/>
         <source>Eighth</source>
         <translation>Nyolcad</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1383"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1396"/>
         <source>1024th</source>
         <translation>1/1024</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1384"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1397"/>
         <source>512th</source>
         <translation>1/512</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1385"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1398"/>
         <source>256th</source>
         <translation>1/256</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1386"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1399"/>
         <source>128th</source>
         <translation>1/128</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1387"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1400"/>
         <source>64th</source>
         <translation>1/64</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1388"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1401"/>
         <source>32nd</source>
         <translation>1/32</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1389"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1402"/>
         <source>16th</source>
         <translation>1/16</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1394"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1407"/>
         <source>Longa</source>
         <translation>Longa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1395"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1408"/>
         <source>Zero</source>
         <translation>Nulla</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1557"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1570"/>
         <source>Up</source>
         <translation>Fent</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1558"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1571"/>
         <source>Down</source>
         <translation>Lent</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1593"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1606"/>
         <source>Right</source>
         <translation>Jobb</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1594"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1607"/>
         <source>Left</source>
         <translation>Bal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1827"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1840"/>
         <source>Up arpeggio</source>
         <translation>Arpeggio felfelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1828"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1841"/>
         <source>Down arpeggio</source>
         <translation>Arpeggio lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1829"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1842"/>
         <source>Bracket arpeggio</source>
         <translation>Arpeggio klammer</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1830"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1843"/>
         <source>Up arpeggio straight</source>
         <translation>Arpeggioirány felfelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1831"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1844"/>
         <source>Down arpeggio straight</source>
         <translation>Arpeggioirány lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2176"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2189"/>
         <source>Fall</source>
         <translation>Fall</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2177"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2190"/>
         <source>Doit</source>
         <translation>Doit</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2178"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2191"/>
         <source>Plop</source>
         <translation>Plop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2179"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2192"/>
         <source>Scoop</source>
         <translation>Scoop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2181"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2194"/>
         <source>Slide out down</source>
         <translation>Kicsúszás lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2182"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2195"/>
         <source>Slide out up</source>
         <translation>Kicsúszás felfelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2183"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2196"/>
         <source>Slide in above</source>
         <translation>Becsúszás felülre</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2184"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2197"/>
         <source>Slide in below</source>
         <translation>Becsúszás alulra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2301"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2314"/>
         <source>Straight glissando</source>
         <translation>Egyenes glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2302"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2315"/>
         <source>Wavy glissando</source>
         <translation>Hullámos glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2321"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2334"/>
         <source>Da Capo</source>
         <translation>Da Capo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2322"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2335"/>
         <source>Da Capo al Fine</source>
         <translation>Da Capo al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2323"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2336"/>
         <source>Da Capo al Coda</source>
         <translation>Da Capo al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2324"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2337"/>
         <source>D.S. al Coda</source>
         <translation>D.S. al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2325"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2338"/>
         <source>D.S. al Fine</source>
         <translation>D.S. al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2339"/>
         <source>D.S.</source>
         <translation>D.S</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2357"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2370"/>
         <source>Da Coda</source>
         <translation>Da Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2349"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2362"/>
         <source>Segno</source>
         <translation>Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2350"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2363"/>
         <source>Segno variation</source>
         <translation>Segno variáció</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2351"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2364"/>
         <source>Coda</source>
         <translation>Kóda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2352"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2365"/>
         <source>Varied coda</source>
         <translation>Kóda változat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2354"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2367"/>
         <source>Fine</source>
         <translation>Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2355"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2368"/>
         <source>To coda</source>
         <translation>Ugrás kódára</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2356"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2369"/>
         <source>To coda (symbol)</source>
         <translation>A coda-hoz (szimbólum)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2580"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2593"/>
         <source>G major, E minor</source>
         <translation>G-dúr, e-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2572"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2585"/>
         <source>C♭ major, A♭ minor</source>
         <translation>Cesz-dúr, asz-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2581"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2594"/>
         <source>D major, B minor</source>
         <translation>D-dúr, h-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2573"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2586"/>
         <source>G♭ major, E♭ minor</source>
         <translation>Gesz-dúr, esz-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2582"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
         <source>A major, F♯ minor</source>
         <translation>A-dúr, fisz-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2574"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <source>D♭ major, B♭ minor</source>
         <translation>Desz-dúr, b-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2583"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2596"/>
         <source>E major, C♯ minor</source>
         <translation>E-dúr, cisz-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2575"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
         <source>A♭ major, F minor</source>
         <translation>Asz-dúr, f-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2584"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2597"/>
         <source>B major, G♯ minor</source>
         <translation>H-dúr, gisz-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2576"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2589"/>
         <source>E♭ major, C minor</source>
         <translation>Esz-dúr, c-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2585"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2598"/>
         <source>F♯ major, D♯ minor</source>
         <translation>Fisz-dúr, disz-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2577"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
         <source>B♭ major, G minor</source>
         <translation>B-dúr, g-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2586"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
         <source>C♯ major, A♯ minor</source>
         <translation>Cisz-dúr, aisz-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2578"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2591"/>
         <source>F major, D minor</source>
         <translation>F-dúr, d-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2328"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2341"/>
         <source>Da Capo al Doppia Coda</source>
         <translation>Da Capo al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2329"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2342"/>
         <source>Dal Segno al Doppia Coda</source>
         <translation>Dal Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2330"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2343"/>
         <source>Dal Doppio Segno</source>
         <translation>Dal Doppio Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2331"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2344"/>
         <source>Dal Doppio Segno al Coda</source>
         <translation>Dal Doppio Segno al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2332"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2345"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
         <translation>Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2333"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2346"/>
         <source>Dal Doppio Segno al Fine</source>
         <translation>Dal Doppio Segno al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2353"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2366"/>
         <source>Doppia Coda</source>
         <translation>Doppia coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2358"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2371"/>
         <source>Da Doppia Coda</source>
         <translation>Da Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2579"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2592"/>
         <source>C major, A minor</source>
         <translation>C-dúr, a-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2600"/>
         <source>Open/Atonal</source>
         <translation>Nyitott/Atonális</translation>
     </message>
@@ -13000,12 +13134,12 @@ A &lt;a href=&quot;%1&quot;&gt;GNU General Public License 3-as verziója&lt;/a&g
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="64"/>
         <source>File “%1” not found</source>
-        <translation>&apos;%1&apos; fájl nem található</translation>
+        <translation>A(z) „%1” fájl nem található</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="67"/>
         <source>File open error</source>
-        <translation>Fájl megnyitási hiba</translation>
+        <translation>Fájlmegnyitási hiba</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="70"/>
@@ -13025,8 +13159,8 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
-        <source>This file was saved using a newer version of MuseScore. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Ez a fájl újabb MuseScore verzióval lett mentve. Kérjük, látogasson el a &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; oldalra a legfrissebb verzió letöltéséhez.</translation>
+        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
+        <translation>Ezt a fájlt a MuseScore Studio újabb verziójával mentették. A legfrissebb verzió beszerzéséhez keresse fel a &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; weboldalt.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -13036,12 +13170,12 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="90"/>
         <source>File “%1” is corrupted.</source>
-        <translation>A fájl (&quot;%1&quot;) sérült.</translation>
+        <translation>A(z) „%1” fájl sérült.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
         <source>File “%1” is critically corrupted and cannot be processed.</source>
-        <translation>&quot;%1&quot; sérült és nem feldolgozható.</translation>
+        <translation>A(z) „%1” fájl súlyosan sérült és nem dolgozható fel.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ambitus.cpp" line="553"/>
@@ -13140,856 +13274,856 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/bagpipeembellishment</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1858"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1871"/>
         <source>Single grace low G</source>
         <translation>Single grace low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1859"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1872"/>
         <source>Single grace low A</source>
         <translation>Single grace low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1860"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1873"/>
         <source>Single grace B</source>
         <translation>Single grace B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1861"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1874"/>
         <source>Single grace C</source>
         <translation>Single grace C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1862"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1875"/>
         <source>Single grace D</source>
         <translation>Single grace D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1863"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1876"/>
         <source>Single grace E</source>
         <translation>Single grace E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1864"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1877"/>
         <source>Single grace F</source>
         <translation>Single grace F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1865"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1878"/>
         <source>Single grace high G</source>
         <translation>Single grace high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1866"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1879"/>
         <source>Single grace high A</source>
         <translation>Single grace high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1869"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1870"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1871"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1872"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1873"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1874"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1875"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1876"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1877"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1879"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1880"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1881"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1882"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1883"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1884"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1885"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1886"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1887"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1888"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1889"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1890"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1891"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1892"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1893"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1894"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1895"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1896"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1897"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1898"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1899"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1900"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1901"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1902"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1903"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1904"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1905"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1907"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1908"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1909"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1910"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1911"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1912"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1913"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1914"/>
         <source>Double grace</source>
         <translation>Double grace</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1904"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1917"/>
         <source>Half doubling on low G</source>
         <translation>Half doubling on low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1905"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1918"/>
         <source>Half doubling on low A</source>
         <translation>Half doubling on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1906"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1919"/>
         <source>Half doubling on B</source>
         <translation>Half doubling on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1907"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1920"/>
         <source>Half doubling on C</source>
         <translation>Half doubling on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1908"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1921"/>
         <source>Half doubling on D</source>
         <translation>Half doubling on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1909"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1922"/>
         <source>Half doubling on E</source>
         <translation>Half doubling on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1910"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1923"/>
         <source>Half doubling on F</source>
         <translation>Half doubling on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1915"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1928"/>
         <source>Doubling on high G</source>
         <translation>Doubling on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1916"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1929"/>
         <source>Doubling on high A</source>
         <translation>Doubling on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1919"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1932"/>
         <source>Half strike on low A</source>
         <translation>Half strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1920"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1933"/>
         <source>Half strike on B</source>
         <translation>Half strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1921"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1934"/>
         <source>Half strike on C</source>
         <translation>Half strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1922"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1923"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1935"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1936"/>
         <source>Half strike on D</source>
         <translation>Half strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1924"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1937"/>
         <source>Half strike on E</source>
         <translation>Half strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1925"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1938"/>
         <source>Half strike on F</source>
         <translation>Half strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1926"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1939"/>
         <source>Half strike on high G</source>
         <translation>Half strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1929"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1984"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1985"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1942"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1998"/>
         <source>Grip</source>
         <translation>Grip</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1932"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1945"/>
         <source>Half D throw</source>
         <translation>Half D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1935"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1948"/>
         <source>Doubling on low G</source>
         <translation>Doubling on low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1936"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1949"/>
         <source>Doubling on low A</source>
         <translation>Doubling on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1937"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1950"/>
         <source>Doubling on B</source>
         <translation>Doubling on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1938"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1951"/>
         <source>Doubling on C</source>
         <translation>Doubling on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1939"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1952"/>
         <source>Doubling on D</source>
         <translation>Doubling on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1940"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1953"/>
         <source>Doubling on E</source>
         <translation>Doubling on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1941"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1954"/>
         <source>Doubling on F</source>
         <translation>Doubling on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1944"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1957"/>
         <source>Thumb doubling on low G</source>
         <translation>Thumb doubling on low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1945"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1958"/>
         <source>Thumb doubling on low A</source>
         <translation>Thumb doubling on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1946"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1959"/>
         <source>Thumb doubling on B</source>
         <translation>Thumb doubling on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1947"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1960"/>
         <source>Thumb doubling on C</source>
         <translation>Thumb doubling on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1948"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1961"/>
         <source>Thumb doubling on D</source>
         <translation>Thumb doubling on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1949"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1962"/>
         <source>Thumb doubling on E</source>
         <translation>Thumb doubling on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1950"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1963"/>
         <source>Thumb doubling on F</source>
         <translation>Thumb doubling on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1954"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1967"/>
         <source>G grace note on low A</source>
         <translation>G grace note on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1955"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1968"/>
         <source>G grace note on B</source>
         <translation>G grace note on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1956"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1969"/>
         <source>G grace note on C</source>
         <translation>G grace note on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1957"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1958"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1970"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1971"/>
         <source>G grace note on D</source>
         <translation>G grace note on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1959"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1972"/>
         <source>G grace note on E</source>
         <translation>G grace note on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1960"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1973"/>
         <source>G grace note on F</source>
         <translation>G grace note on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1963"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1976"/>
         <source>Double strike on low A</source>
         <translation>Double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1964"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1977"/>
         <source>Double strike on B</source>
         <translation>Double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1965"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1978"/>
         <source>Double strike on C</source>
         <translation>Double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1966"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1967"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1979"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1980"/>
         <source>Double strike on D</source>
         <translation>Double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1968"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1981"/>
         <source>Double strike on E</source>
         <translation>Double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1969"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1982"/>
         <source>Double strike on F</source>
         <translation>Kettős ütés F-en</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1970"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1983"/>
         <source>Double strike on high G</source>
         <translation>Double strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1971"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1984"/>
         <source>Double strike on high A</source>
         <translation>Double strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1974"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1987"/>
         <source>Thumb strike on low A</source>
         <translation>Thumb strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1975"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1988"/>
         <source>Thumb strike on B</source>
         <translation>Thumb strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1976"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1989"/>
         <source>Thumb strike on C</source>
         <translation>Thumb strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1977"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1978"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1991"/>
         <source>Thumb strike on D</source>
         <translation>Hüvelyk ütés D-n</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1979"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1992"/>
         <source>Thumb strike on E</source>
         <translation>Thumb strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1980"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1993"/>
         <source>Thumb strike on F</source>
         <translation>Thumb strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1981"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1994"/>
         <source>Thumb strike on high G</source>
         <translation>Thumb strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1988"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1994"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2055"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2056"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2001"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
         <source>Birl</source>
         <translation>Birl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1989"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
         <source>D throw</source>
         <translation>D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
         <source>Half heavy D throw</source>
         <translation>Half heavy D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1991"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1998"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2004"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2010"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2011"/>
         <source>Taorluath</source>
         <translation>Taorluath</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1995"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2052"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2008"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
         <source>Bubbly</source>
         <translation>Bubbly</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1996"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2009"/>
         <source>Heavy D throw</source>
         <translation>Heavy D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2001"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2014"/>
         <source>Half double strike on low A</source>
         <translation>Half double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
         <source>Half double strike on B</source>
         <translation>Half double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2016"/>
         <source>Half double strike on C</source>
         <translation>Half double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2004"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2005"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2018"/>
         <source>Half double strike on D</source>
         <translation>Half double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2006"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2019"/>
         <source>Half double strike on E</source>
         <translation>Half double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2020"/>
         <source>Half double strike on F</source>
         <translation>Half double strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2008"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2021"/>
         <source>Half double strike on high G</source>
         <translation>Half double strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2009"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2022"/>
         <source>Half double strike on high A</source>
         <translation>Half double strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2012"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2025"/>
         <source>Half grip on low A</source>
         <translation>Half grip on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2013"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2026"/>
         <source>Half grip on B</source>
         <translation>Half grip on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2014"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2027"/>
         <source>Half grip on C</source>
         <translation>Half grip on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2016"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2028"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2029"/>
         <source>Half grip on D</source>
         <translation>Half grip on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2030"/>
         <source>Half grip on E</source>
         <translation>Half grip on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2018"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2031"/>
         <source>Half grip on F</source>
         <translation>Half grip on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2019"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2032"/>
         <source>Half grip on high G</source>
         <translation>Half grip on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2020"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2033"/>
         <source>Half grip on high A</source>
         <translation>Half grip on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2023"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2036"/>
         <source>Half pele on low A</source>
         <translation>Half pele on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2024"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2037"/>
         <source>Half pele on B</source>
         <translation>Half pele on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2025"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2038"/>
         <source>Half pele on C</source>
         <translation>Half pele on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2026"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2027"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2039"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2040"/>
         <source>Half pele on D</source>
         <translation>Half pele on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2028"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2041"/>
         <source>Half pele on E</source>
         <translation>Half pele on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2029"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2042"/>
         <source>Half pele on F</source>
         <translation>Half pele on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2030"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2043"/>
         <source>Half pele on high G</source>
         <translation>Half pele on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2033"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2046"/>
         <source>G grace note grip on low A</source>
         <translation>G grace note grip on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2034"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2047"/>
         <source>G grace note grip on B</source>
         <translation>G grace note grip on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2035"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2048"/>
         <source>G grace note grip on C</source>
         <translation>G grace note grip on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2036"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2037"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2050"/>
         <source>G grace note grip on D</source>
         <translation>G grace note grip on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2038"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2051"/>
         <source>G grace note grip on E</source>
         <translation>G grace note grip on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2039"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2052"/>
         <source>G grace note grip on F</source>
         <translation>G grace note grip on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2042"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2055"/>
         <source>Thumb grip on low A</source>
         <translation>Thumb grip on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2043"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2056"/>
         <source>Thumb grip on B</source>
         <translation>Thumb grip on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2044"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2057"/>
         <source>Thumb grip on C</source>
         <translation>Thumb grip on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2045"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2046"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2058"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2059"/>
         <source>Thumb grip on D</source>
         <translation>Thumb grip on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2047"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
         <source>Thumb grip on E</source>
         <translation>Thumb grip on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2048"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
         <source>Thumb grip on F</source>
         <translation>Thumb grip on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
         <source>Thumb grip on high G</source>
         <translation>Thumb grip on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2059"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
         <source>Pele on low A</source>
         <translation>Pele on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
         <source>Pele on B</source>
         <translation>Pele on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
         <source>Pele on C</source>
         <translation>Pele on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2076"/>
         <source>Pele on D</source>
         <translation>Pele on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2077"/>
         <source>Pele on E</source>
         <translation>Pele on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
         <source>Pele on F</source>
         <translation>Pele on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2081"/>
         <source>Thumb grace note pele on low A</source>
         <translation>Thumb grace note pele on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2082"/>
         <source>Thumb grace note pele on B</source>
         <translation>Thumb grace note pele on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2070"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2083"/>
         <source>Thumb grace note pele on C</source>
         <translation>Thumb grace note pele on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2084"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2085"/>
         <source>Thumb grace note pele on D</source>
         <translation>Thumb grace note pele on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2086"/>
         <source>Thumb grace note pele on E</source>
         <translation>Thumb grace note pele on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2087"/>
         <source>Thumb grace note pele on F</source>
         <translation>Thumb grace note pele on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2088"/>
         <source>Thumb grace note pele on high G</source>
         <translation>Thumb grace note pele on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2091"/>
         <source>G grace note double strike on low A</source>
         <translation>G grace note double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2079"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>G grace note double strike on B</source>
         <translation>G grace note double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2080"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
         <source>G grace note double strike on C</source>
         <translation>G grace note double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2081"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2082"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2095"/>
         <source>G grace note double strike on D</source>
         <translation>G grace note double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2083"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
         <source>G grace note double strike on E</source>
         <translation>G grace note double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2084"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <source>G grace note double strike on F</source>
         <translation>G grace note double strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2087"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
         <source>Thumb double strike on low A</source>
         <translation>Thumb double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2088"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2101"/>
         <source>Thumb double strike on B</source>
         <translation>Thumb double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2089"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2102"/>
         <source>Thumb double strike on C</source>
         <translation>Thumb double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2091"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2103"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2104"/>
         <source>Thumb double strike on D</source>
         <translation>Thumb double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
         <source>Thumb double strike on E</source>
         <translation>Thumb double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2106"/>
         <source>Thumb double strike on F</source>
         <translation>Thumb double strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2107"/>
         <source>Thumb double strike on high G</source>
         <translation>Thumb double strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
         <source>Triple strike on low A</source>
         <translation>Triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2111"/>
         <source>Triple strike on B</source>
         <translation>Triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
         <source>Triple strike on C</source>
         <translation>Triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2101"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2113"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
         <source>Triple strike on D</source>
         <translation>Triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2102"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
         <source>Triple strike on E</source>
         <translation>Triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2103"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
         <source>Triple strike on F</source>
         <translation>Triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2104"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
         <source>Triple strike on high G</source>
         <translation>Triple strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2118"/>
         <source>Triple strike on high A</source>
         <translation>Triple strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2108"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
         <source>Half triple strike on low A</source>
         <translation>Half triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2109"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
         <source>Half triple strike on B</source>
         <translation>Half triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
         <source>Half triple strike on C</source>
         <translation>Half triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2111"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
         <source>Half triple strike on D</source>
         <translation>Half triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2113"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2126"/>
         <source>Half triple strike on E</source>
         <translation>Half triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2127"/>
         <source>Half triple strike on F</source>
         <translation>Half triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2128"/>
         <source>Half triple strike on high G</source>
         <translation>Half triple strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2129"/>
         <source>Half triple strike on high A</source>
         <translation>Half triple strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2119"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2132"/>
         <source>G grace note triple strike on low A</source>
         <translation>G grace note triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2120"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2133"/>
         <source>G grace note triple strike on B</source>
         <translation>G grace note triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2134"/>
         <source>G grace note triple strike on C</source>
         <translation>G grace note triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2135"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2136"/>
         <source>G grace note triple strike on D</source>
         <translation>G grace note triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2137"/>
         <source>G grace note triple strike on E</source>
         <translation>G grace note triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2138"/>
         <source>G grace note triple strike on F</source>
         <translation>G grace note triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2128"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2141"/>
         <source>Thumb triple strike on low A</source>
         <translation>Thumb triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2129"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2142"/>
         <source>Thumb triple strike on B</source>
         <translation>Thumb triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2130"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2143"/>
         <source>Thumb triple strike on C</source>
         <translation>Thumb triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2131"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2132"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2144"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2145"/>
         <source>Thumb triple strike on D</source>
         <translation>Thumb triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2133"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2146"/>
         <source>Thumb triple strike on E</source>
         <translation>Thumb triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2134"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2147"/>
         <source>Thumb triple strike on F</source>
         <translation>Thumb triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2135"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2148"/>
         <source>Thumb triple strike on high G</source>
         <translation>Thumb triple strike on high G</translation>
     </message>
@@ -13997,182 +14131,182 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/cleftype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="649"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="650"/>
         <source>Treble clef</source>
         <translation>Violinkulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="650"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="651"/>
         <source>Treble clef 15ma bassa</source>
         <translation>Violinkulcs 15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="651"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="652"/>
         <source>Treble clef 8va bassa</source>
         <translation>Violinkulcs 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="652"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="653"/>
         <source>Treble clef 8va alta</source>
         <translation>Violinkulcs 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="653"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="654"/>
         <source>Treble clef 15ma alta</source>
         <translation>Violinkulcs 15ma alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="654"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="655"/>
         <source>Double treble clef 8va bassa on 2nd line</source>
         <translation>Dupla violinkulcs 8va bassa a 2. vonalon</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="655"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="656"/>
         <source>Treble clef optional 8va bassa</source>
         <translation>Violinkulcs opcionáls 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="656"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="657"/>
         <source>French violin clef</source>
         <translation>Francia violinkulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="657"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="658"/>
         <source>Soprano clef</source>
         <translation>Szopránkulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="658"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="659"/>
         <source>Mezzo-soprano clef</source>
         <translation>Mezzoszoprán kulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="659"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="660"/>
         <source>Alto clef</source>
         <translation>Altkulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="660"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="661"/>
         <source>Tenor clef</source>
         <translation>Tenorkulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="661"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="662"/>
         <source>Baritone clef (C clef)</source>
         <translation>Baritonkulcs (C-kulcs)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="662"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="663"/>
         <source>C clef, H shape (19th century)</source>
         <translation>C kulcs, H alakú (19. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="663"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="664"/>
         <source>Soprano clef (French, 18th century)</source>
         <translation>Szopránkulcs (francia, 18. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="664"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="665"/>
         <source>Alto clef (French, 18th century)</source>
         <translation>Altkulcs (francia, 18. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="665"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="666"/>
         <source>Tenor clef (French, 18th century)</source>
         <translation>Tenorkulcs (francia, 18. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="666"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="667"/>
         <source>Soprano clef (French, 20th century)</source>
         <translation>Szopránkulcs (francia, 20. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="667"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="668"/>
         <source>Alto clef (French, 20th century)</source>
         <translation>Altkulcs (francia, 20. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="668"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="669"/>
         <source>Tenor clef (French, 20th century)</source>
         <translation>Tenorkulcs (francia, 20. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="669"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="670"/>
         <source>Bass clef</source>
         <translation>basszuskulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="670"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="671"/>
         <source>Bass clef 15ma bassa</source>
         <translation>Basszuskulcs 15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="671"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="672"/>
         <source>Bass clef 8va bassa</source>
         <translation>Basszuskulcs 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="672"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="673"/>
         <source>Bass clef 8va alta</source>
         <translation>Basszuskulcs 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="673"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="674"/>
         <source>Bass clef 15ma alta</source>
         <translation>Basszuskulcs 15ma alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="674"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="675"/>
         <source>Baritone clef (F clef)</source>
         <translation>Baritonkulcs (F-kulcs)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="675"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="676"/>
         <source>Subbass clef</source>
         <translation>Szubbasszus kulcs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="676"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="677"/>
         <source>F clef (French, 18th century)</source>
         <translation>F kulcs (francia, 18. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="677"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="678"/>
         <source>F clef (19th century)</source>
         <translation>F kulcs (19. század)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="679"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="680"/>
         <source>Percussion</source>
         <translation>Ütős</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="680"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="681"/>
         <source>Percussion 2</source>
         <translation>Ütősök 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="682"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="683"/>
         <source>Tablature</source>
         <translation>Tabulatúra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="683"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="684"/>
         <source>Tablature 4 lines</source>
         <translation>Tabulatúra, 4 sor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="684"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="685"/>
         <source>Tablature Serif</source>
         <translation>Tabulatúra serif</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="685"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="686"/>
         <source>Tablature Serif 4 lines</source>
         <translation>Tabulatúra serif, 4 sor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="687"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="688"/>
         <source>Tenor clef 8va bassa</source>
         <translation>Tenor kulcs 8va bassa</translation>
     </message>
@@ -14180,327 +14314,327 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/drumset</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2209"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2222"/>
         <source>High Q</source>
         <translation>Magas Q</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2223"/>
         <source>Slap</source>
         <translation>Ütés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2224"/>
         <source>Scratch Push</source>
         <translation>Scratch tolás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2213"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2226"/>
         <source>Scratch Pull</source>
         <translation>Scratch húzás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2214"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2227"/>
         <source>Sticks</source>
         <translation>Ütők</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2215"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2228"/>
         <source>Square Click</source>
         <translation>Négyszögjel kattanás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2229"/>
         <source>Metronome Click</source>
         <translation>Metronóm ütés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2217"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2230"/>
         <source>Metronome Bell</source>
         <translation>Metronóm csengő</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2218"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2231"/>
         <source>Acoustic Bass Drum</source>
         <translation>Akusztikus basszusdob</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2219"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
         <source>Bass Drum 1</source>
         <translation>Lábdob 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2220"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2233"/>
         <source>Side Stick</source>
         <translation>Dobverő</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2221"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2234"/>
         <source>Acoustic Snare</source>
         <translation>Akusztikus pergő</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2222"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2235"/>
         <source>Hand Clap</source>
         <translation>Taps</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2224"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2237"/>
         <source>Electric Snare</source>
         <translation>Elektromos pergo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2225"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2238"/>
         <source>Low Floor Tom</source>
         <translation>Álló mély tam</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2226"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2239"/>
         <source>Closed Hi-Hat</source>
         <translation>Zárt lábcin</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2227"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2240"/>
         <source>High Floor Tom</source>
         <translation>Álló magas tam</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2228"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2241"/>
         <source>Pedal Hi-Hat</source>
         <translation>Lábcin</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2229"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2242"/>
         <source>Low Tom</source>
         <translation>Mély tam</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2230"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2243"/>
         <source>Open Hi-Hat</source>
         <translation>Nyitott lábcin</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2231"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2244"/>
         <source>Low-Mid Tom</source>
         <translation>Mélyközép tam</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2245"/>
         <source>Hi-Mid Tom</source>
         <translation>Magasközép tam</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2233"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2246"/>
         <source>Crash Cymbal 1</source>
         <translation>Beütő cintányér 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2235"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2248"/>
         <source>High Tom</source>
         <translation>Magas tam</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2236"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2249"/>
         <source>Ride Cymbal 1</source>
         <translation>Kísérő cintányér</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2237"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2250"/>
         <source>Chinese Cymbal</source>
         <translation>Kínai cintányér</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2238"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2251"/>
         <source>Ride Bell</source>
         <translation>Kísérő kolomp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2239"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2252"/>
         <source>Tambourine</source>
         <translation>Csörgődob</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2240"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2253"/>
         <source>Splash Cymbal</source>
         <translation>Splash cintányér</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2241"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2254"/>
         <source>Cowbell</source>
         <translation>Kolomp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2242"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2255"/>
         <source>Crash Cymbal 2</source>
         <translation>Beütő cintányér 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2243"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2256"/>
         <source>Vibraslap</source>
         <translation>Vibraslap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2244"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2257"/>
         <source>Ride Cymbal 2</source>
         <translation>Kísérő cintányér 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2246"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2259"/>
         <source>Hi Bongo</source>
         <translation>Magas bongó</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2247"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2260"/>
         <source>Low Bongo</source>
         <translation>Mély bongó</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2248"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2261"/>
         <source>Mute Hi Conga</source>
         <translation>Tompított magas konga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2249"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2262"/>
         <source>Open Hi Conga</source>
         <translation>Nyitott magas konga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2250"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2263"/>
         <source>Low Conga</source>
         <translation>Mély konga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2251"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2264"/>
         <source>High Timbale</source>
         <translation>Magas kubai üstdob</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2252"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2265"/>
         <source>Low Timbale</source>
         <translation>Mély kubai üstdob</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2253"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2266"/>
         <source>High Agogo</source>
         <translation>Magas agogo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2254"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2267"/>
         <source>Low Agogo</source>
         <translation>Mély agogo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2255"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2268"/>
         <source>Cabasa</source>
         <translation>Cabasa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2257"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2270"/>
         <source>Maracas</source>
         <translation>Maracas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2258"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2271"/>
         <source>Short Whistle</source>
         <translation>Rövid fütty</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2259"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2272"/>
         <source>Long Whistle</source>
         <translation>Hosszú fütty</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2260"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2273"/>
         <source>Short Güiro</source>
         <translation>Rövid güiro</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2261"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2274"/>
         <source>Long Güiro</source>
         <translation>Hosszú güiro</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2262"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2275"/>
         <source>Claves</source>
         <translation>Tikfa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2263"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2276"/>
         <source>Hi Wood Block</source>
         <translation>Magas woodblock</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2264"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2277"/>
         <source>Low Wood Block</source>
         <translation>Mély woodblock</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2265"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2278"/>
         <source>Mute Cuica</source>
         <translation>Tompított cuica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2266"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2279"/>
         <source>Open Cuica</source>
         <translation>Nyitott cuica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2268"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2281"/>
         <source>Mute Triangle</source>
         <translation>Lefogott triangulum</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2269"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2282"/>
         <source>Open Triangle</source>
         <translation>Nyitott triangulum</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2270"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2283"/>
         <source>Shaker</source>
         <translation>Shaker</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2271"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2284"/>
         <source>Sleigh Bell</source>
         <translation>Száncsengő</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2272"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2285"/>
         <source>Mark Tree</source>
         <translation>Chimes</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2273"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2286"/>
         <source>Castanets</source>
         <translation>Kasztanyetta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2274"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2287"/>
         <source>Mute Surdo</source>
         <translation>Tompított surdo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2275"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2288"/>
         <source>Open Surdo</source>
         <translation>Nyitott surdo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2277"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2290"/>
         <source>Snare (Rim shot)</source>
         <translation>Pergő (kávás játék, rim shot)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2279"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2292"/>
         <source>Ride (Edge)</source>
         <translation>Kísérő (ride, szélen)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2281"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2294"/>
         <source>Cowbell Low</source>
         <translation>Mély kolomp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2283"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2296"/>
         <source>Cowbell High</source>
         <translation>Magas kolomp</translation>
     </message>
@@ -14528,372 +14662,372 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/noteheadgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="521"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="522"/>
         <source>Normal</source>
         <translation>Normál</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="522"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="523"/>
         <source>Cross</source>
         <translation>Kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="523"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
         <source>Plus</source>
         <translation>Plusz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="525"/>
         <source>XCircle</source>
         <translation>Köriksz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="525"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="526"/>
         <source>With X</source>
         <translation>X-szel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="526"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
         <source>Triangle up</source>
         <translation>Triangulum fel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
         <source>Triangle down</source>
         <translation>Triangulum le</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="529"/>
         <source>Slashed (forwards)</source>
         <translation>Áthúzott (előre)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="529"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
         <source>Slashed (backwards)</source>
         <translation>Áthúzott (hátra)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
         <source>Diamond</source>
         <translation>Rombusz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="532"/>
         <source>Diamond (old)</source>
         <translation>Rombusz (régi)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="532"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
         <source>Circled</source>
         <translation>Bekarikázott</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
         <source>Circled large</source>
         <translation>Bekarikázott (nagy)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="535"/>
         <source>Large arrow</source>
         <translation>Nagy nyíl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="535"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
         <source>Alt. brevis</source>
         <translation>Alt. brevis</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="537"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="538"/>
         <source>Slash</source>
         <translation>Ferde vonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="538"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="539"/>
         <source>Large diamond</source>
         <translation>Nagy rombusz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="540"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="541"/>
         <source>Heavy cross</source>
         <translation>Vastag kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="541"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
         <source>Heavy cross hat</source>
         <translation>Vastag kalapos kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="544"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
         <source>Sol</source>
         <translation>Szó</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="546"/>
         <source>La</source>
         <translation>Lá</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="546"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="547"/>
         <source>Fa</source>
         <translation>Fá</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="547"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="548"/>
         <source>Mi</source>
         <translation>Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="548"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="549"/>
         <source>Do</source>
         <translation>Dó</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="549"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="550"/>
         <source>Re</source>
         <translation>Ré</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="550"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="551"/>
         <source>Ti</source>
         <translation>Ti</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="553"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
         <source>Do (Walker)</source>
         <translation>dó (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="555"/>
         <source>Re (Walker)</source>
         <translation>ré (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="555"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="556"/>
         <source>Ti (Walker)</source>
         <translation>ti (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="556"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="557"/>
         <source>Do (Funk)</source>
         <translation>dó (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="557"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="558"/>
         <source>Re (Funk)</source>
         <translation>ré (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="558"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="559"/>
         <source>Ti (Funk)</source>
         <translation>ti (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="561"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="562"/>
         <source>Do (Name)</source>
         <translation>dó (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="562"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="563"/>
         <source>Di (Name)</source>
         <translation>Di (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="563"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="564"/>
         <source>Ra (Name)</source>
         <translation>Ra (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="564"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="565"/>
         <source>Re (Name)</source>
         <translation>ré (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="565"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="566"/>
         <source>Ri (Name)</source>
         <translation>Ri (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="566"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="567"/>
         <source>Me (Name)</source>
         <translation>Me (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="567"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="568"/>
         <source>Mi (Name)</source>
         <translation>mi (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="568"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
         <source>Fa (Name)</source>
         <translation>fá (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Fi (Name)</source>
         <translation>Fi (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="571"/>
         <source>Se (Name)</source>
         <translation>Sze (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="571"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="572"/>
         <source>Sol (Name)</source>
         <translation>szó (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="572"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="573"/>
         <source>Le (Name)</source>
         <translation>Le (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="573"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="574"/>
         <source>La (Name)</source>
         <translation>lá (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="574"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
         <source>Li (Name)</source>
         <translation>Li (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="576"/>
         <source>Te (Name)</source>
         <translation>Te (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="576"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="577"/>
         <source>Ti (Name)</source>
         <translation>ti (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="577"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>Si (Name)</source>
         <translation>szi (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="580"/>
         <source>A♯ (Name)</source>
         <translation>aisz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="580"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="581"/>
         <source>A (Name)</source>
         <translation>a (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="581"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="582"/>
         <source>A♭ (Name)</source>
         <translation>asz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="582"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="583"/>
         <source>B♯ (Name)</source>
         <translation>hisz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="583"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
         <source>B (Name)</source>
         <translation>h (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="585"/>
         <source>B♭ (Name)</source>
         <translation>b (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="585"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="586"/>
         <source>C♯ (Name)</source>
         <translation>cisz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="586"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="587"/>
         <source>C (Name)</source>
         <translation>c (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="587"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="588"/>
         <source>C♭ (Name)</source>
         <translation>cesz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="588"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="589"/>
         <source>D♯ (Name)</source>
         <translation>disz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="589"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
         <source>D (Name)</source>
         <translation>d (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="591"/>
         <source>D♭ (Name)</source>
         <translation>desz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="591"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="592"/>
         <source>E♯ (Name)</source>
         <translation>eisz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="592"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>E (Name)</source>
         <translation>e (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>E♭ (Name)</source>
         <translation>esz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="595"/>
         <source>F♯ (Name)</source>
         <translation>fisz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="595"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
         <source>F (Name)</source>
         <translation>f (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
         <source>F♭ (Name)</source>
         <translation>fesz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="598"/>
         <source>G♯ (Name)</source>
         <translation>gisz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="598"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <source>G (Name)</source>
         <translation>g (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <source>G♭ (Name)</source>
         <translation>gesz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="601"/>
         <source>H (Name)</source>
         <translation>h (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="601"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <source>H♯ (Name)</source>
         <translation>hisz (név)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="604"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
         <source>Swiss Rudiments Flam</source>
         <translation>Svájci rudimentum flam</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="607"/>
         <source>Swiss Rudiments Doublé</source>
         <translation>Swiss Rudiments Doublé</translation>
     </message>
@@ -14901,47 +15035,47 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/noteheadscheme</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="493"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
         <source>Normal</source>
         <translation>Normál</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="495"/>
         <source>Pitch names</source>
         <translation>Hangelnevezések</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="495"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="496"/>
         <source>German pitch names</source>
         <translation>Német (magyar) hangelnevezések</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="496"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>Solfège movable Do</source>
         <translation>Relatív szolmizáció</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>Solfège fixed Do</source>
         <translation>Abszolút szolmizáció</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="499"/>
         <source>4-shape (Walker)</source>
         <translation>4-alakzatos (walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="499"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
         <source>7-shape (Aikin)</source>
         <translation>7-alakzatos (Aikin)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
         <source>7-shape (Funk)</source>
         <translation>7-alakzatos (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="502"/>
         <source>7-shape (Walker)</source>
         <translation>7-alakzatos (Walker)</translation>
     </message>
@@ -14949,22 +15083,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/noteheadtype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="469"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
         <source>Whole</source>
         <translation>Egész</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
         <source>Half</source>
         <translation>Fél</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="472"/>
         <source>Quarter</source>
         <translation>Negyed</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="472"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
         <source>Breve</source>
         <translation>Dupla egész (breve)</translation>
     </message>
@@ -14977,7 +15111,7 @@ Fret %1 on strings %2</source>
         <translation>%1 (testreszabott)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="646"/>
+        <location filename="../../src/notation/notationtypes.h" line="616"/>
         <source>Custom</source>
         <translation>Egyéni</translation>
     </message>
@@ -14985,17 +15119,17 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/staffgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2397"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2410"/>
         <source>Standard</source>
         <translation>Hagyományos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2398"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2411"/>
         <source>Percussion</source>
         <translation>Ütős</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2399"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2412"/>
         <source>Tablature</source>
         <translation>Tabulatúra</translation>
     </message>
@@ -16873,17 +17007,17 @@ Fret %1 on strings %2</source>
         <translation>Rövid ütemvonal 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2496"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2509"/>
         <source>Tap</source>
         <translation>Tapping</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2497"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2510"/>
         <source>Slap</source>
         <translation>Ütés</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2498"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2511"/>
         <source>Pop</source>
         <translation>Pop</translation>
     </message>
@@ -16925,47 +17059,47 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/tremolotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1767"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1780"/>
         <source>Eighth through stem</source>
         <translation>Nyolcad a száron keresztül</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1768"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1781"/>
         <source>16th through stem</source>
         <translation>16-od a száron keresztül</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1769"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1782"/>
         <source>32nd through stem</source>
         <translation>32-ed a száron keresztül</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1770"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1783"/>
         <source>64th through stem</source>
         <translation>64-ed a száron keresztül</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1784"/>
         <source>Buzz roll</source>
         <translation>Nyomott tremolo (Buzz roll)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1772"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1785"/>
         <source>Eighth between notes</source>
         <translation>Nyolcad a hangjegyek között</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1773"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1786"/>
         <source>16th between notes</source>
         <translation>16-od a hangjegyek között</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1774"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1787"/>
         <source>32nd between notes</source>
         <translation>32-ed a hangjegyek között</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1775"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1788"/>
         <source>64th between notes</source>
         <translation>64-ed a hangjegyek között</translation>
     </message>
@@ -16973,22 +17107,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/trilltype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2418"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2431"/>
         <source>Trill line</source>
         <translation>Trilla hullámvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2419"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2432"/>
         <source>Upprall line</source>
         <translation>Paránytrilla alsó előkével vonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2420"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2433"/>
         <source>Downprall line</source>
         <translation>Prall lefelé vonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2421"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2434"/>
         <source>Prallprall line</source>
         <translation>Kettős paránytrilla vonal</translation>
     </message>
@@ -17034,22 +17168,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/vibratotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2461"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2474"/>
         <source>Guitar vibrato</source>
         <translation>Gitár vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2462"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
         <source>Guitar vibrato wide</source>
         <translation>A gitár vibrato széles</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2463"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
         <source>Vibrato sawtooth</source>
         <translation>Vibrato fűrészfogasan</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2464"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
         <source>Tremolo sawtooth wide</source>
         <translation>Fűrészfogas széles tremolo</translation>
     </message>
@@ -17064,7 +17198,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="131"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="233"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="97"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -17086,7 +17220,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="85"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="145"/>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="101"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="341"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="376"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="398"/>
@@ -17149,7 +17283,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="101"/>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="266"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
         <source>Close</source>
         <translation>Bezárás</translation>
     </message>
@@ -17236,7 +17370,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/global/dataformatter.cpp" line="103"/>
         <source>%n byte(s)</source>
         <extracomment>Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n byte</numerusform><numerusform>%n byte</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
@@ -17468,7 +17602,7 @@ Fret %1 on strings %2</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
@@ -17516,7 +17650,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="90"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="98"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="100"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2304"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2552"/>
         <source>sp</source>
         <extracomment>Abbreviation of &quot;spatium&quot;</extracomment>
         <translation>vk</translation>
@@ -17528,7 +17662,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="69"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2304"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2552"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
@@ -17539,77 +17673,77 @@ Fret %1 on strings %2</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
         <source>Save all</source>
         <translation>Az összes mentése</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
         <source>Don’t save</source>
         <translation>Ne mentse</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
         <source>Open</source>
         <translation>Nyitott</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
         <source>Yes</source>
         <translation>Igen</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
         <source>Yes to all</source>
         <translation>Mindenre igen</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
         <source>No</source>
         <translation>Nem</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
         <source>No to all</source>
         <translation>Mindenre nem</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
         <source>Abort</source>
         <translation>Megszakítás</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
         <source>Retry</source>
         <translation>Újra</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
         <source>Ignore</source>
         <translation>Figyelmen kívül hagyás</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
         <source>Discard</source>
         <translation>Elvetés</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
         <source>Help</source>
         <translation>Súgó</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
         <source>Apply</source>
         <translation>Alkalmaz</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="115"/>
         <source>Reset</source>
         <translation>Visszaállítás</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="115"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="116"/>
         <source>Continue</source>
         <translation>Folytatás</translation>
     </message>
@@ -17620,7 +17754,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1271"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1330"/>
         <source>Success!</source>
         <translation>Sikerült!</translation>
     </message>
@@ -17656,13 +17790,15 @@ Fret %1 on strings %2</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="99"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="101"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
         <translation>Be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="101"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="103"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
         <source>Off</source>
         <extracomment>as opposed to On</extracomment>
         <translation>Ki</translation>
@@ -17769,8 +17905,8 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
-        <source>MuseScore instrument</source>
-        <translation>MuseScore hangszer</translation>
+        <source>MuseScore Studio instrument</source>
+        <translation>A MuseScore Studio hangszere</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -18004,6 +18140,12 @@ felismerése</translation>
         <source>File “%1” is not a valid MusicXML file.</source>
         <translation>A(z) „%1” fájl nem érvényes MusicXML fájl.</translation>
     </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="51"/>
+        <source>Limit MusicXML export for compatibility with MuseScore 3</source>
+        <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
+        <translation>Az exportált MusicXML korlátozása a MuseScore 3-mal való kompatibilitás érdekében</translation>
+    </message>
 </context>
 <context>
     <name>inspector</name>
@@ -18084,7 +18226,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
         <source>Reset “%1” to default value</source>
-        <translation>&apos;%1&apos; alaphelyzetbe állítása</translation>
+        <translation>A(z) „%1” alaphelyzetbe állítása</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
@@ -19613,6 +19755,11 @@ felismerése</translation>
         <translation>Oldalmargók</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="106"/>
+        <source>Sound flags</source>
+        <translation>Hangjelzők</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="49"/>
         <source>Font</source>
         <translation>Betűtípus</translation>
@@ -20382,10 +20529,6 @@ felismerése</translation>
         <translation>Kívül</translation>
     </message>
     <message>
-        <source>Synchronise with main score</source>
-        <translation>Szinkronizálás a fő kottával</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
         <source>Synchronize with main score</source>
         <translation>Szinkronizálás a fő kottával</translation>
@@ -20404,10 +20547,6 @@ felismerése</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="111"/>
         <source>Exclude from parts</source>
         <translation>Kivétel a kottarészletekből</translation>
-    </message>
-    <message>
-        <source>Score and part synchronisation</source>
-        <translation>Kotta és partíció szinkronizálása</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml" line="51"/>
@@ -20621,7 +20760,7 @@ felismerése</translation>
         <translation>Megjegyzés: a csatolt kottasorokban egyforma információ van</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="201"/>
+        <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="191"/>
         <source>All instruments</source>
         <translation>Minden hangszer</translation>
     </message>
@@ -20667,29 +20806,34 @@ felismerése</translation>
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="826"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Biztosan törölni szeretné a kijelölt hangszert?</numerusform><numerusform>Biztosan törölni szeretné a kijelölt hangszereket?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="831"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ez eltávolítja a hangszert a partitúrából és a szólamkottákból is.</numerusform><numerusform>Ez eltávolítja a hangszereket a partitúrából és a szólamkottákból is.</numerusform></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>
+        <source>Other</source>
+        <translation>Egyéb</translation>
     </message>
 </context>
 <context>
     <name>languages</name>
     <message>
-        <location filename="../../src/languages/internal/languagesservice.cpp" line="356"/>
+        <location filename="../../src/languages/internal/languagesservice.cpp" line="363"/>
         <source>Checking for updates…</source>
         <translation>Frissítések ellenőrzése...</translation>
     </message>
     <message>
-        <location filename="../../src/languages/internal/languagesservice.cpp" line="410"/>
+        <location filename="../../src/languages/internal/languagesservice.cpp" line="417"/>
         <source>Downloading…</source>
         <translation>Letöltés…</translation>
     </message>
     <message>
-        <location filename="../../src/languages/internal/languagesservice.cpp" line="427"/>
+        <location filename="../../src/languages/internal/languagesservice.cpp" line="434"/>
         <source>Unpacking…</source>
         <translation>Kicsomagolás...</translation>
     </message>
@@ -20711,7 +20855,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/languages/languageserrors.h" line="54"/>
         <source>Error while writing language files</source>
-        <translation>A nyelvi  fájlok írásakor hiba történt</translation>
+        <translation>Hiba történt a nyelvi fájlok írása során</translation>
     </message>
     <message>
         <location filename="../../src/languages/languageserrors.h" line="55"/>
@@ -20785,7 +20929,7 @@ felismerése</translation>
         <translation>A Mastering Musescore alkotója</translation>
     </message>
     <message>
-        <location filename="../../src/learn/view/learnpagemodel.cpp" line="81"/>
+        <location filename="../../src/learn/view/learnpagemodel.cpp" line="83"/>
         <source>Welcome to Mastering MuseScore – the most comprehensive resource for learning the world’s most popular music notation software! My name is Marc Sabatella, and I have been helping develop, support, and promote MuseScore since its initial release over ten years ago.
 
 Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore. 
@@ -20798,7 +20942,7 @@ Akár most ismerkedik a kottaszerkesztő szoftverekkel, akár haladó felhaszná
 A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, ahol beszélgethet, élő közvetítéseket nézhet, és más kapcsolódó kurzusokat és szolgáltatásokat vehet igénybe, hogy a legjobb zenét hozza létre. Használja ki ezt az alkalmat, hogy a MuseScore-t az egyik legismertebb szakértőtől tanulja meg!</translation>
     </message>
     <message>
-        <location filename="../../src/learn/view/learnpagemodel.cpp" line="94"/>
+        <location filename="../../src/learn/view/learnpagemodel.cpp" line="96"/>
         <source>Mastering MuseScore</source>
         <translation>A MuseScore elsajátítása</translation>
     </message>
@@ -21114,104 +21258,104 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="862"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="676"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="673"/>
         <source>Note input mode</source>
         <translation>Hangjegybevitel mód</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="867"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="676"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="673"/>
         <source>Normal mode</source>
         <translation>Normál mód</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="850"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="847"/>
         <source>Cannot create tuplet</source>
         <translation>Nem lehet n-olát létrehozni</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="850"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="847"/>
         <source>Note value is too short</source>
         <translation>A hang értéke túl rövid</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1246"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1243"/>
         <source>All Supported Files</source>
         <translation>Minden támogatott fájl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1247"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1244"/>
         <source>Scalable Vector Graphics</source>
         <translation>Skálázható vektorgrafika (SVG)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1248"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1245"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1249"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1246"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG grafika fájl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1250"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1247"/>
         <source>Bitmap</source>
         <translation>Bitkép</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1251"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1248"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1254"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1251"/>
         <source>Insert Image</source>
         <translation>Kép beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1604"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1601"/>
         <source>MuseScore style files</source>
         <translation>MuseScore stílusfájlok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1605"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1602"/>
         <source>MuseScore style file</source>
         <translation>MuseScore stílusfájl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1608"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1967"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2215"/>
         <source>Load style</source>
         <translation>Stílus betöltése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1609"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1606"/>
         <source>Save style</source>
         <translation>Stílus mentése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1619"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1616"/>
         <source>The style file could not be loaded.</source>
         <translation>A stílusfájlt nem lehetett betölteni.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1624"/>
-        <source>Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</source>
-        <translation>Mivel ez a stílusfájl a MuseScore egy másik verziójából származik, nem biztos, hogy a kotta tökéletesen jelenik meg.</translation>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
+        <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
+        <translation>Mivel ez a stílusfájl a MuseScore Studio egy másik verziójából származik, nem biztos, hogy a kotta tökéletesen jelenik meg.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1626"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1623"/>
         <source>Click OK to load anyway.</source>
         <translation>Nyomja meg az OK gombot, ha mégis szeretné betölteni.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1640"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1637"/>
         <source>The style file could not be saved.</source>
-        <translation>A stílusfájlt nem letetett elmenteni.</translation>
+        <translation>A stílusfájlt nem lehetett elmenteni.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1641"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1638"/>
         <source>An error occurred.</source>
         <translation>Hiba történt.</translation>
     </message>
@@ -21246,22 +21390,22 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Kijelölés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="225"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="231"/>
         <source>After selection…</source>
         <translation>A kijelölés mögött...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="226"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="232"/>
         <source>Before selection…</source>
         <translation>A kijelölés előtt...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="228"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="234"/>
         <source>At start of score…</source>
         <translation>A kotta elején...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="229"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="235"/>
         <source>At end of score…</source>
         <translation>A kotta végén...</translation>
     </message>
@@ -21281,197 +21425,197 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Minden lap bezárása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="257"/>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="270"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="263"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="276"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="40"/>
         <source>Add</source>
         <translation>Hozzáadás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="632"/>
+        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="633"/>
         <source>Notes</source>
         <translation>Hangjegyek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="633"/>
+        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="634"/>
         <source>Intervals</source>
         <translation>Hangközök</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="634"/>
+        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="635"/>
         <source>Measures</source>
         <translation>Ütemek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="635"/>
+        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="636"/>
         <source>Frames</source>
         <translation>Keretek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="88"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
         <source>D flat</source>
         <translation>Desz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="88"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
         <source>D natural</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="88"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
         <source>D sharp</source>
         <translation>D színbővítés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
         <source>C flat</source>
         <translation>Cesz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
         <source>C natural</source>
         <translation>C természetes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
         <source>C sharp</source>
         <translation>Cisz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="91"/>
         <source>B flat</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="91"/>
         <source>B natural</source>
         <translation>B természetes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="91"/>
         <source>B sharp</source>
         <translation>B kettős kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
         <source>E flat</source>
         <translation>Es</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
         <source>E natural</source>
         <translation>E természetes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
         <source>E sharp</source>
         <translation>E kettős kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="93"/>
         <source>F flat</source>
         <translation>Feszített f</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="93"/>
         <source>F natural</source>
         <translation>F természetes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="93"/>
         <source>F sharp</source>
         <translation>Fisz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="93"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="94"/>
         <source>G flat</source>
         <translation>Gesz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="93"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="94"/>
         <source>G natural</source>
         <translation>G természetes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="93"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="94"/>
         <source>G sharp</source>
         <translation>Gisz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="94"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="95"/>
         <source>A flat</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="94"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="95"/>
         <source>A natural</source>
         <translation>A kiküszöbölő</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="94"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="95"/>
         <source>A sharp</source>
         <translation>Kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="125"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="126"/>
         <source>Pedal settings buttons</source>
         <translation>Pedálbeállítás gombok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="145"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="146"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="146"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="147"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="147"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="148"/>
         <source>B</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="148"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="149"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="149"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="150"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="150"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="151"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="151"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="152"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="270"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="271"/>
         <source>Diagram type buttons</source>
         <translation>Diagramtípus gombok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="285"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="290"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="286"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="291"/>
         <source>Diagram</source>
         <translation>Diagram</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="308"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="313"/>
-        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="636"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="309"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="314"/>
+        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="637"/>
         <source>Text</source>
         <translation>Szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="637"/>
+        <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="638"/>
         <source>Lines</source>
         <translation>Vonalak</translation>
     </message>
@@ -21541,7 +21685,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Nézet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1252"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1249"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>Mind</translation>
@@ -21649,22 +21793,22 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Eszköztár testreszabása</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="506"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="507"/>
         <source>Insert &amp;after selection…</source>
         <translation>Beszúrás a kijelölés mögé...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="507"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="508"/>
         <source>Insert &amp;before selection…</source>
         <translation>Beszúrás a kijelölés elé...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="509"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="510"/>
         <source>Insert at &amp;start of score…</source>
         <translation>Beszúrás a kotta elejére...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="510"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="511"/>
         <source>Insert at &amp;end of score…</source>
         <translation>Beszúrás a kotta végére...</translation>
     </message>
@@ -21875,7 +22019,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="146"/>
         <source>Please replace it with a key signature from the palettes instead.</source>
-        <translation>Kérjük, helyettesítse azt a paletták egyikében található kulárámmal.</translation>
+        <translation>Használja a palettákon szereplő előjegyzések valamelyikét.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -21898,69 +22042,69 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Nincs kijelölve semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="295"/>
+        <location filename="../../src/notation/notationtypes.h" line="288"/>
         <source>Percentage</source>
         <translation>Százalékos arány</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="296"/>
+        <location filename="../../src/notation/notationtypes.h" line="289"/>
         <source>Page width</source>
         <translation>Oldalszélesség</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="297"/>
+        <location filename="../../src/notation/notationtypes.h" line="290"/>
         <source>Whole page</source>
         <translation>Egész oldal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="298"/>
+        <location filename="../../src/notation/notationtypes.h" line="291"/>
         <source>Two pages</source>
         <translation>Két oldal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="362"/>
+        <location filename="../../src/notation/notationtypes.h" line="329"/>
         <source>%1 %2</source>
         <comment>Tuned instrument displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;). Example: &quot;D Tin Whistle&quot;</extracomment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="366"/>
+        <location filename="../../src/notation/notationtypes.h" line="333"/>
         <source>%1 in %2</source>
         <comment>Transposing instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
         <translation>%2 %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="370"/>
+        <location filename="../../src/notation/notationtypes.h" line="337"/>
         <source>%1 (%2)</source>
         <comment>String instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;). Example: &quot;Tenor Lute (7-course)&quot;</extracomment>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="391"/>
+        <location filename="../../src/notation/notationtypes.h" line="358"/>
         <source>%1 %2 %3</source>
         <comment>One of several tuned instruments displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;), %3=number (&quot;2&quot;). Example: &quot;D Tin Whistle 2&quot;</extracomment>
         <translation>%1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="395"/>
+        <location filename="../../src/notation/notationtypes.h" line="362"/>
         <source>%1 in %2 %3</source>
         <comment>One of several transposing instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
         <translation>%2 %1 %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="399"/>
+        <location filename="../../src/notation/notationtypes.h" line="366"/>
         <source>%1 (%2) %3</source>
         <comment>One of several string instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;), %3=number (&quot;2&quot;). Example: &quot;Tenor Lute (7-course) 2&quot;</extracomment>
         <translation>%1 (%2) %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="403"/>
+        <location filename="../../src/notation/notationtypes.h" line="370"/>
         <source>%1 %2</source>
         <comment>One of several instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
@@ -22014,7 +22158,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Folytonos nézet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1965"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2213"/>
         <source>MuseScore chord symbol style files</source>
         <translation>MuseScore akkordjelzés stílusfájlok</translation>
     </message>
@@ -22029,43 +22173,43 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>2 szóköz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="74"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="76"/>
         <source>Capo settings</source>
         <translation>Capo beállítások</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="80"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="82"/>
         <source>Capo</source>
         <translation>Kápó</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="112"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="114"/>
         <source>Fret</source>
         <translation>Bund</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="144"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="146"/>
         <source>Apply to</source>
         <translation>Alkalmazás erre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="201"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="179"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="203"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="181"/>
         <source>String %1</source>
         <translation>Húr %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="215"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="217"/>
         <source>Manually specify instruction text</source>
         <translation>Kézi utasítás szövegének megadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="243"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="245"/>
         <source>Position</source>
         <translation>Pozíció</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="254"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="256"/>
         <source>Capo position</source>
         <translation>Capo pozíció</translation>
     </message>
@@ -22085,27 +22229,27 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Simított görgetés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="72"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="74"/>
         <source>String tunings settings</source>
         <translation>Húrok hangolásának beállításai</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="78"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="80"/>
         <source>Presets</source>
         <translation>Előbeállítások</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="114"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="116"/>
         <source>Number of strings:</source>
         <translation>Húrok száma:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="132"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="134"/>
         <source>Strings</source>
         <translation>Húrok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="166"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="168"/>
         <source>Value %1</source>
         <translation>Érték: %1</translation>
     </message>
@@ -22115,9 +22259,9 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Egyéni</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="276"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="264"/>
         <source>%n string(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n húr</numerusform><numerusform>%n húr</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
@@ -22168,322 +22312,322 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
 <context>
     <name>notation/editstyle</name>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="691"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1154"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="724"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1187"/>
         <source>Above</source>
         <translation>Felül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="692"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1155"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1188"/>
         <source>Below</source>
         <translation>Alul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="702"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1159"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="735"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1192"/>
         <source>Left</source>
         <translation>Bal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="703"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1160"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="736"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1193"/>
         <source>Center</source>
         <translation>Közép</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="704"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1161"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="737"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1194"/>
         <source>Right</source>
         <translation>Jobb</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="708"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1164"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="741"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1197"/>
         <source>None</source>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="709"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="742"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1198"/>
         <source>Brackets</source>
         <translation>Klammerek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="710"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1166"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="743"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1199"/>
         <source>Parentheses</source>
         <translation>Zárójelek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="713"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1168"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="746"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1201"/>
         <source>Segment</source>
         <translation>Szegmens</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="714"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1169"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1202"/>
         <source>Measure</source>
         <translation>Ütem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="715"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1170"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1203"/>
         <source>System</source>
         <translation>Sorcsoport</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="718"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1205"/>
         <source>Number</source>
         <translation>szám</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="719"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1173"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="752"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1206"/>
         <source>Ratio</source>
         <translation>Arány</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="720"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="753"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1207"/>
         <source>None</source>
         <comment>no tuplet number type</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="723"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="836"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1176"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1183"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="756"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1209"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1216"/>
         <source>Automatic</source>
         <translation>Automatikus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="724"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="757"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1210"/>
         <source>Bracket</source>
         <translation>Klammer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1178"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="758"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1211"/>
         <source>None</source>
         <comment>no tuplet bracket type</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="832"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="865"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1213"/>
         <source>Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="866"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1214"/>
         <source>Literal</source>
         <translation>Fordítás nélkül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="838"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1185"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="871"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1218"/>
         <source>Close</source>
         <translation>Bezárás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="182"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="187"/>
         <source>Continuous</source>
         <extracomment>line style</extracomment>
         <translation>Folytonos</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="184"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="189"/>
         <source>Dashed</source>
         <extracomment>line style</extracomment>
         <translation>Szaggatott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="186"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="191"/>
         <source>Dotted</source>
         <extracomment>line style</extracomment>
         <translation>Pontozott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="215"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1143"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1176"/>
         <source>Apply to all parts</source>
         <translation>Alkalmazás minden szólamkottára</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="837"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1184"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="870"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1217"/>
         <source>Root only</source>
         <translation>Csak alaphang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="839"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1186"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="872"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1219"/>
         <source>Drop two</source>
         <translation>Drop 2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="840"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="873"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1220"/>
         <source>Six note</source>
         <translation>Hat hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="841"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1188"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="874"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1221"/>
         <source>Four note</source>
         <translation>Négy hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="842"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1189"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="875"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1222"/>
         <source>Three note</source>
         <translation>Három hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="845"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1191"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1224"/>
         <source>Until next chord symbol</source>
         <translation>A következő akkordjelzésig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="847"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1192"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1225"/>
         <source>Until end of measure</source>
         <translation>Az ütem végéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="849"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1193"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="882"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1226"/>
         <source>Chord/rest duration</source>
         <translation>Akkord/szünet értéke</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="951"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1205"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="987"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1238"/>
         <source>None</source>
         <comment>no frame for text</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="952"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1206"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="988"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1239"/>
         <source>Rectangle</source>
         <translation>Téglalap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="953"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1207"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="989"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1240"/>
         <source>Circle</source>
         <translation>Kör</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1253"/>
         <source>Special symbols in header/footer</source>
         <translation>Különleges szimbólumok a fej-/láblécben</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1223"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1256"/>
         <source>Page number, except on first page</source>
         <translation>Oldalszám, kivéve az első oldalon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1225"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1258"/>
         <source>Page number, if there is more than one page</source>
         <translation>Oldalszám, ha több mint egy oldal van</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1227"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1260"/>
         <source>Page number, on all pages</source>
         <translation>Oldalszám, minden oldalon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1229"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1262"/>
         <source>Number of pages</source>
         <translation>Oldalak száma</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1231"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1264"/>
         <source>File name</source>
         <translation>Fájlnév</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1233"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1266"/>
         <source>File path+name</source>
         <translation>Fájl elérési útvonala+neve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1235"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1268"/>
         <source>Part name, except on first page</source>
         <translation>Szólam neve, kivéve az első oldalon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1237"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1270"/>
         <source>Part name, on all pages</source>
         <translation>Szólam neve, minden oldalon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1272"/>
         <source>Current date</source>
         <translation>Aktuális dátum</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1274"/>
         <source>Creation date</source>
         <translation>Létrehozás dátuma</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1243"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1276"/>
         <source>Last modification time</source>
         <translation>Utolsó módosítás időpontja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1245"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1278"/>
         <source>Last modification date</source>
         <translation>Utolsó módosítás dátuma</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1247"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1280"/>
         <source>Copyright, on first page only</source>
         <translation>Copyright, csak az első oldalon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1249"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1282"/>
         <source>Copyright, on all pages</source>
         <translation>Copyright, minden oldalon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1251"/>
-        <source>MuseScore version this score was last saved with</source>
-        <translation>A legutóbbi mentés MuseScore verziója</translation>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1284"/>
+        <source>MuseScore Studio version this score was last saved with</source>
+        <translation>A legutóbbi mentéskor használt MuseScore Studio verziója</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1253"/>
-        <source>MuseScore revision this score was last saved with</source>
-        <translation>A legutóbbi mentés MuseScore revíziója</translation>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1286"/>
+        <source>MuseScore Studio revision this score was last saved with</source>
+        <translation>A legutóbbi mentéskor használt MuseScore Studio revíziója</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1288"/>
         <source>The $ sign itself</source>
         <translation>A $ jel maga</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1257"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1290"/>
         <source>Metadata tag, see below</source>
         <translation>Metaadat-címke, lásd alább</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1292"/>
         <source>Available metadata tags and their current values</source>
         <translation>Elérhető metaadat-címkék és jelenlegi értékük:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1261"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1294"/>
         <source>(in File &gt; Project properties…):</source>
         <translation>(fájl &gt; projekt tulajdonságai...):</translation>
     </message>
@@ -23758,8 +23902,8 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="902"/>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="905"/>
-        <source>MuseScore palette</source>
-        <translation>MuseScore paletta</translation>
+        <source>MuseScore Studio palette</source>
+        <translation>MuseScore Studio paletta</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="904"/>
@@ -23789,8 +23933,8 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="667"/>
-        <source>MuseScore may not be able to load this drumset file.</source>
-        <translation>Lehetséges, hogy a MuseScore nem tudja ezt a dobkészletfájlt betölteni.</translation>
+        <source>MuseScore Studio may not be able to load this drumset file.</source>
+        <translation>Lehetséges, hogy a MuseScore Studio nem tudja betölteni ezt a dobkészletfájlt.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="698"/>
@@ -23895,8 +24039,8 @@ megnyitása sikertelen:
         <source>Writing palette file
 %1
 failed.</source>
-        <translation>%1
-paletta-fájl írása sikertelen:</translation>
+        <translation>A(z) %1
+palettafájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="129"/>
@@ -25488,28 +25632,28 @@ paletta-fájl írása sikertelen:</translation>
         <translation>Lejátszási eszköztár</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="71"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="74"/>
         <source>Reverb</source>
         <translation>Zengetés</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="77"/>
-        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="575"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="80"/>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="587"/>
         <source>Aux %1</source>
         <translation>Segéd %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="766"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="840"/>
         <source>Metronome</source>
         <translation>Metronóm</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="776"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="850"/>
         <source>Chords</source>
         <translation>Akkordok</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1086"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1169"/>
         <source>Loading audio samples</source>
         <translation>Hangminták betöltése</translation>
     </message>
@@ -25544,28 +25688,28 @@ paletta-fájl írása sikertelen:</translation>
         <translation>Master</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="44"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="45"/>
         <source>SoundFonts</source>
         <translation>Hangminták</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="327"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="345"/>
         <source>Bank %1, preset %2</source>
         <translation>Bank %1, előbeállítás %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="381"/>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="438"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="399"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="456"/>
         <source>Choose automatically</source>
         <translation>Automatikus kiválasztás</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="421"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="439"/>
         <source>Preset %1</source>
         <translation>Előre beállított %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="430"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="448"/>
         <source>Bank %1</source>
         <translation>Bank %1</translation>
     </message>
@@ -25573,6 +25717,21 @@ paletta-fájl írása sikertelen:</translation>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="61"/>
         <source>Mixer channel panel %1</source>
         <translation>Keverőpult csatornapanel %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="645"/>
+        <source>Change sound</source>
+        <translation>Hang módosítása</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="648"/>
+        <source>Are you sure you want to change this sound?</source>
+        <translation>Biztos, hogy módosítja ezt a hangot?</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="649"/>
+        <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
+        <translation>A hangszer hangjelzői alaphelyzetbe állíthatók, de a kottaszöveg megmarad. Ez a művelet nem vonható vissza.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -25618,6 +25777,56 @@ paletta-fájl írása sikertelen:</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
         <translation>Aux küldések</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
+        <source>Modify sound</source>
+        <translation>Hang módosítása</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>
+        <source>Playing techniques</source>
+        <translation>Játéktechnikák</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
+        <source>Sound flag options are not available for this sound.</source>
+        <translation>Nem érhetők el hangjelző-beállítások ehhez a hanghoz.</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
+        <source>Sound flag settings</source>
+        <translation>Hangjelző-beállítások</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="132"/>
+        <source>Sound flag menu</source>
+        <translation>Hangjelzőmenü</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
+        <source>Ord. (default)</source>
+        <translation>Szok. (alapértelmezett)</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="282"/>
+        <source>Reset to default sound</source>
+        <translation>Visszaállítás az alapértelmezettre hangra</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="294"/>
+        <source>Allow multiple selection</source>
+        <translation>Többszörös kiválasztás engedélyezése</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="307"/>
+        <source>Apply selection to all staves</source>
+        <translation>Kiválasztás alkalmazása az összes kottasorra</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="391"/>
+        <source>ordinary</source>
+        <translation>szokásos</translation>
     </message>
 </context>
 <context>
@@ -25725,7 +25934,7 @@ paletta-fájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
-        <location filename="../../src/project/internal/notationproject.cpp" line="79"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="80"/>
         <source>Untitled score</source>
         <translation>Névtelen kotta</translation>
     </message>
@@ -25828,106 +26037,106 @@ paletta-fájl írása sikertelen:</translation>
         <translation>Megnyitás máshonnan…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="655"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="714"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation>Menti a következő kotta módosításait bezárás előtt: „%1”?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="658"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="717"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation>A nem mentett változtatások el fognak veszni.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1587"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1609"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1646"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1668"/>
         <source>Open anyway</source>
         <translation>Megnyitás így is</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1606"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1659"/>
+        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
+        <translation>Ezt a fájlt a MuseScore Studio újabb verziójával mentették. A legfrissebb verzió beszerzéséhez keresse fel a &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; weboldalt.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
         <source>File “%1” is corrupted</source>
         <translation>A(z) „%1” fájl sérült</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1607"/>
-        <source>This file contains errors that could cause MuseScore to malfunction.</source>
-        <translation>Ez a fájl hibákat tartalmaz, amelyek a MuseScore helytelen működését okozhatják.</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1621"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1680"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation>A(z) „%1” fájl sérült, és nem nyitható meg</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1681"/>
         <source>Get help for this issue on musescore.org.</source>
         <translation>Segítséget kérhet ezzel a problémával kapcsolatban a musescore.org oldalon.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1477"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1624"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1536"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
         <source>Get help</source>
         <translation>Segítségkérés</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1392"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1474"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1451"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1533"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation>A kotta nem tölthető fel a felhőbe</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1393"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1452"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
-        <translation>Ez a kotta sérült és hibákat tartalmaz. A hibákat javíthatja kézileg, vagy mentse a kottát a számítógépére és kérjen segítséget a musescore.org weboldalon.</translation>
+        <translation>Ez a kotta sérült és hibákat tartalmaz. A hibákat javíthatja kézzel, vagy pedig mentse a kottát a számítógépére és kérjen segítséget a musescore.org weboldalon.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1400"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1459"/>
         <source>Save as…</source>
         <translation>Mentés másként…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1405"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1441"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1464"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1500"/>
         <source>Revert to last saved</source>
         <translation>Visszaállítás a legutóbb mentett állapotra</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1426"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1485"/>
         <source>This score has become corrupted and contains errors</source>
         <translation>A kottafájl megsérült, hibákat tartalmaz</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1427"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1486"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
         <translation>Folytathatja a helyi mentést, bár a fájl használhatatlanná válhat. Megpróbálhatja a hibákat manuálisan javítani, vagy segítséget kérhet a musescore.org oldalon.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1429"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1488"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
-        <translation>Folytathatja a helyi mentést, bár a fájl használhatatlanná válhat. A kottája megőrzése érdekében térjen vissza az utoljára mentett verzióhoz, vagy javítsa ki a hibákat manuálisan. Segítséget is kérhet a musescore.org oldalon.</translation>
+        <translation>Folytathatja a mentést a számítógépére, bár a fájl használhatatlanná válhat. A kottája megőrzése érdekében térjen vissza az utoljára mentett verzióhoz, vagy javítsa ki a hibákat kézzel. Segítséget is kérhet a musescore.org oldalon.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1436"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1495"/>
         <source>Save anyway</source>
         <translation>Mentés mindenképpen</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1473"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1532"/>
         <source>Your score cannot be saved</source>
         <translation>A kottája nem menthető</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1475"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1534"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
         <translation>Ez a kotta sérült. Segítséget kaphat a problémára a musescore.org oldalon.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1508"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1567"/>
         <source>Revert to last saved?</source>
         <translation>Visszaállítás az utolsó mentett állapotra?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1509"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1568"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation>A módosítások elvesznek. Ezt a műveletet nem lehet visszavonni.</translation>
     </message>
@@ -25942,108 +26151,108 @@ paletta-fájl írása sikertelen:</translation>
         <translation>Ez a kotta érvénytelen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1599"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1638"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1658"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1697"/>
         <source>Cannot read file %1</source>
-        <translation>Nem lehet olvasni a %1 fájlt</translation>
+        <translation>A(z) %1 fájl nem olvasható</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1600"/>
-        <source>This file was saved using a newer version of MuseScore. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Ez a fájl újabb MuseScore verzióval lett mentve. Kérjük, látogasson el a &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; oldalra a legfrissebb verzió letöltéséhez.</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1643"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1702"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation>Ez a fájl nem létezik, vagy jelenleg nem érhető el.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1646"/>
-        <source>This file could not be opened. Please make sure that MuseScore has permission to read this file.</source>
-        <translation>Ezt a fájlt nem lehet megnyitni. Győződjön meg róla, hogy a MuseScore-nak van jogosultsága a fájl olvasásához.</translation>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1666"/>
+        <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
+        <translation>Ez a fájl hibákat tartalmaz, amelyek a MuseScore Studio helytelen működését okozhatják.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1652"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
+        <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
+        <translation>Ezt a fájlt nem lehet megnyitni. Győződjön meg arról, hogy a MuseScore Studiónak van jogosultsága a fájl olvasásához.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
         <source>An error occurred while reading this file.</source>
         <translation>Hiba történt a fájl beolvasása közben.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1764"/>
         <source>All supported files</source>
         <translation>Minden támogatott fájl</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1706"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1765"/>
         <source>MuseScore files</source>
         <translation>MuseScore fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1707"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>
         <source>MusicXML files</source>
         <translation>MusicXML fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1708"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1767"/>
         <source>MIDI files</source>
         <translation>MIDI fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1709"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1768"/>
         <source>MuseData files</source>
         <translation>MuseData fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1710"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1769"/>
         <source>Capella files</source>
         <translation>Capella fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1770"/>
         <source>BB files (experimental)</source>
         <translation>BB fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1712"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1771"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Overture / Score Writer fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1713"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1772"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Bagpipe Music Writer fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1714"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1773"/>
         <source>Guitar Pro files</source>
         <translation>Guitar Pro fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1774"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Power Tab Editor fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1716"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1775"/>
         <source>MEI files</source>
         <translation>MEI fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1717"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1776"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>Tömörítetlen MuseScore mappák (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1718"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1777"/>
         <source>MuseScore developer files</source>
         <translation>MuseScore fejlesztői fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1719"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1778"/>
         <source>MuseScore backup files</source>
         <translation>MuseScore biztonsági mentések</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1731"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
@@ -26741,8 +26950,8 @@ paletta-fájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="172"/>
-        <source>Please note: score layouts will be affected by improvements to MuseScore 4</source>
-        <translation>Megjegyzés: a MuseScore 4-ben újdonságai befolyásolni fogják a kotta elrendezését</translation>
+        <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
+        <translation>Megjegyzés: a MuseScore Studio fejlesztései befolyásolni fogják a kotta elrendezését</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="178"/>
@@ -27103,8 +27312,8 @@ paletta-fájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
-        <source>MuseScore version:</source>
-        <translation>MuseScore verzió:</translation>
+        <source>MuseScore Studio version:</source>
+        <translation>A MuseScore Studio verziója:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -27338,26 +27547,26 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation>Minden mentésnél néhány percig eltarthat a kotta méretétől függően. Ezek bármikor megváltoztathatók a Beállításokba.</translation>
+        <translation>Minden mentésnél néhány percig is eltarthat a kotta méretétől függően. Ezek bármikor megváltoztathatók a Beállításokban.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="372"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="458"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="420"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="517"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
         <translation>Jelentkezzen be vagy hozzon létre egy ingyenes fiókot a musescore.com-on, hogy megnyithassa ezt a kottát.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1265"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1324"/>
         <source>View online</source>
         <translation>Megketintés online</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1268"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1327"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
-        <translation>Minden mentett változtatást eltároltunk a felőhben. A fájlt a musescore.com kottakezelőjében kezelheti.</translation>
+        <translation>Minden mentett változtatást eltároltunk a felhőben. A fájlt a musescore.com kottakezelőjében kezelheti.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1493"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation>Ismeretlen hiba történt a fájl mentése közben.</translation>
     </message>
@@ -27368,7 +27577,7 @@ paletta-fájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="887"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="946"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
         <translation>A musescore.com-ra való bejelentkezéshez mentse ezt a kottát a felhőbe.</translation>
     </message>
@@ -27445,12 +27654,12 @@ paletta-fájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="402"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1342"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1401"/>
         <source>Unable to connect to the cloud</source>
         <translation>Nem tudtunk csatlakozni a felhőhöz.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1343"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1402"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation>A változásokat a helyi fájlba mentjük, amíg a kapcsolat helyre nem áll.</translation>
     </message>
@@ -27467,12 +27676,12 @@ paletta-fájl írása sikertelen:</translation>
         <translation>Ellenőrizze az internetkapcsolatot és próbálja később.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1501"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1560"/>
         <source>Your score could not be saved</source>
         <translation>A kottát nem lehetett menteni</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1356"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1415"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation>Legalább egy hangszert meg kell adni, hogy lehessen menteni.</translation>
     </message>
@@ -27573,7 +27782,7 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml" line="45"/>
         <source>Shortcuts bottom panel</source>
-        <translation>Gyorsbillentyűk alsó panel</translation>
+        <translation>Gyorsbillentyűk alsó panele</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml" line="57"/>
@@ -27604,7 +27813,7 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="45"/>
         <source>Shortcuts top panel</source>
-        <translation>Gyorsbillentyűk felső panel</translation>
+        <translation>Gyorsbillentyűk felső panele</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="63"/>
@@ -27653,8 +27862,8 @@ paletta-fájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
-        <source>MuseScore shortcuts file</source>
-        <translation>MuseScore gyorsbillentyű fájl</translation>
+        <source>MuseScore Studio shortcuts file</source>
+        <translation>MuseScore Studio gyorsbillentyűfájl</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
@@ -28065,70 +28274,85 @@ paletta-fájl írása sikertelen:</translation>
 <context>
     <name>update</name>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseInfoBottomPanel.qml" line="51"/>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/AppReleaseInfoBottomPanel.qml" line="51"/>
         <source>Skip this version</source>
         <translation>Verzió átugrása</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseInfoBottomPanel.qml" line="70"/>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/AppReleaseInfoBottomPanel.qml" line="70"/>
         <source>Remind me later</source>
         <translation>Emlékeztessen később</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseInfoBottomPanel.qml" line="86"/>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/AppReleaseInfoBottomPanel.qml" line="86"/>
         <source>Install update</source>
         <translation>Frissítés telepítése</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/ReleaseInfoDialog.qml" line="81"/>
-        <source>A new version of MuseScore is available!</source>
-        <translation>Új verzió érhető el a MuseScore-ből!</translation>
+        <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="82"/>
+        <source>A new version of MuseScore Studio is available!</source>
+        <translation>A MuseScore Studio újabb verziója érhető el!</translation>
     </message>
     <message>
-        <location filename="../../src/update/qml/MuseScore/Update/ReleaseInfoDialog.qml" line="88"/>
+        <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="89"/>
         <source>Release notes</source>
-        <translation>Kiadási tájékozató</translation>
+        <translation>Kiadási tájékoztató</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="159"/>
-        <source>You already have the latest version of MuseScore. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation>Már a legfrissebb MuseScore verziót használja. Kérjük, látogasson el a &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; oldalra a következő verzióval kapcsolatos hírekért.</translation>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="141"/>
+        <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
+        <translation>Már a MuseScore Studio legfrissebb verzióját használja. A várható újdonságok megismeréséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; weboldalt.</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="166"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="148"/>
         <source>You’re up to date!</source>
         <translation>Minden naprakész!</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="195"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="177"/>
         <source>Cannot connect to server</source>
-        <translation>Nem lehet csatlakozni a kiszolgákóhoz</translation>
+        <translation>Nem lehet csatlakozni a kiszolgálóhoz</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="196"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="178"/>
         <source>Sorry - please try again later</source>
         <translation>Elnézést - próbálja újra később</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="212"/>
-        <source>MuseScore needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore closes.</source>
-        <translation>A MuseScore-t újra kell indítani a telepítés befejezéséhez. Ha van nem mentett változtatása, meg fogjuk kérni a mentése, mielőtt bezárjuk a MuseScore-t.</translation>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="194"/>
+        <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
+        <translation>A MuseScore Studiót újra kell indítani a telepítés befejezéséhez. Ha van nem mentett változtatása, a MuseScore Studio bezárása előtt kérni fogjuk a mentés elvégzésére.</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updatescenario.cpp" line="218"/>
+        <location filename="../../src/update/internal/updatescenario.cpp" line="200"/>
         <source>Close</source>
         <translation>Bezárás</translation>
     </message>
     <message>
-        <location filename="../../src/update/view/updatemodel.cpp" line="37"/>
-        <source>Updating MuseScore</source>
-        <translation>MuseScore frissítése</translation>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/ReleaseNotesView.qml" line="80"/>
+        <source>Read the %1 release notes</source>
+        <translation>A %1 kiadási megjegyzéseinek elolvasása</translation>
     </message>
     <message>
-        <location filename="../../src/update/internal/updateservice.cpp" line="121"/>
-        <source>Downloading MuseScore %1</source>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
+        <source>No thanks</source>
+        <translation>Köszönöm nem</translation>
+    </message>
+    <message>
+        <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
+        <source>Take me to Muse Hub</source>
+        <translation>Ugrás a Muse Hubhoz</translation>
+    </message>
+    <message>
+        <location filename="../../src/update/internal/appupdateservice.cpp" line="111"/>
+        <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation>MuseScore %1 letöltése</translation>
+        <translation>A MuseScore Studio %1 letöltése…</translation>
+    </message>
+    <message>
+        <location filename="../../src/update/view/updatemodel.cpp" line="37"/>
+        <source>Updating MuseScore Studio</source>
+        <translation>A MuseScore Studio frissítése…</translation>
     </message>
 </context>
 <context>
@@ -28151,8 +28375,8 @@ paletta-fájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
-        <source>Use workspaces to save different arrangements of the MuseScore interface</source>
-        <translation>A munkaterületek segítségével a MuseScore felhasználói felületének különböző elrendezéseit mentheti el</translation>
+        <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
+        <translation>A munkaterületek segítségével a MuseScore Studio felhasználói felületének különböző elrendezéseit mentheti el</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>
@@ -28197,7 +28421,7 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/workspace/view/newworkspacemodel.cpp" line="105"/>
         <source>“%1” cannot be used as a workspace name. Please choose a different name.</source>
-        <translation>„%1” nem használható munkaterületnévként. Válasszon másik nevet.</translation>
+        <translation>A(z) „%1” nem használható munkaterületnévként. Válasszon másik nevet.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="94"/>
