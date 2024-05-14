@@ -4289,6 +4289,7 @@ void NotationInteraction::addImageToItem(const muse::io::path_t& imagePath, Engr
 
     static std::map<muse::io::path_t, ImageType> suffixToType {
         { "svg", ImageType::SVG },
+        { "svgz", ImageType::SVG },
         { "jpg", ImageType::RASTER },
         { "jpeg", ImageType::RASTER },
         { "png", ImageType::RASTER },

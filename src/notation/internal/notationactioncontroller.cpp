@@ -1241,13 +1241,14 @@ void NotationActionController::addImage()
         return;
     }
 
-    std::vector<std::string> filter = { muse::trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
-                                        muse::trc("notation", "Scalable Vector Graphics") + " (*.svg)",
-                                        muse::trc("notation", "JPEG") + " (*.jpg *.jpeg)",
-                                        muse::trc("notation", "PNG Bitmap Graphic") + " (*.png)",
-                                        muse::trc("notation", "Bitmap") + " (*.bmp)",
-                                        muse::trc("notation", "TIFF") + " (*.tif *.tiff)",
-                                        muse::trc("notation", "All") + " (*)" };
+    std::vector<std::string> filter
+        = { muse::trc("notation", "All Supported Files") + " (*.svg *.svgz *.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
+            muse::trc("notation", "Scalable Vector Graphics") + " (*.svg *.svgz)",
+            muse::trc("notation", "JPEG") + " (*.jpg *.jpeg)",
+            muse::trc("notation", "PNG Bitmap Graphic") + " (*.png)",
+            muse::trc("notation", "Bitmap") + " (*.bmp)",
+            muse::trc("notation", "TIFF") + " (*.tif *.tiff)",
+            muse::trc("notation", "All") + " (*)" };
 
     muse::io::path_t path = interactive()->selectOpeningFile(muse::qtrc("notation", "Insert Image"), "", filter);
     interaction->addImageToItem(path, item);
