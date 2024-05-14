@@ -25,13 +25,11 @@ SKIP_ERR=true
 
 ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
-QT5_COMPAT="OFF"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
-        --qt5_compat) QT5_COMPAT="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -67,7 +65,6 @@ MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
 MUSESCORE_BUILD_VST_MODULE=$BUILD_VST \
 MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
-MUSESCORE_QT5_COMPAT=$QT5_COMPAT \
 bash ./ninja_build.sh -t install
 
 bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $MUSE_APP_BUILD_MODE

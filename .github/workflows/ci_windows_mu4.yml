@@ -22,10 +22,6 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         required: false
         default: ''
-      qt5_compat:
-        description: 'Build with Qt5 '
-        required: false
-        default: 'off'  
 
 env:
   CURRENT_RELEASE_BRANCH: 4.3.1
@@ -129,11 +125,6 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Win${ADD_INFO}")"
 
-        QT5_COMPAT='OFF'
-        if [[ "${{ github.event.inputs.qt5_compat }}" == "on" ]]; then 
-          QT5_COMPAT='ON' 
-        fi
-
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
@@ -155,18 +146,16 @@ jobs:
         echo "SENTRY_URL: $SENTRY_URL"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
-        echo "QT5_COMPAT=$QT5_COMPAT" >> $GITHUB_ENV
-        echo "QT5_COMPAT: $QT5_COMPAT"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
-        buildscripts\ci\windows\setup.bat --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\setup.bat
     - name: Make environment file
       if: env.DO_BUILD == 'true'
       shell: bash
       run: |
-        bash ./buildscripts/ci/windows/make_environment.sh --qt5_compat ${{ env.QT5_COMPAT }}
+        bash ./buildscripts/ci/windows/make_environment.sh
     - name: Generate _en.ts files
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -187,7 +176,7 @@ jobs:
       shell: cmd
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
-        buildscripts\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL%
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -296,11 +285,6 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Win_portable${ADD_INFO}")"
 
-        QT5_COMPAT='OFF'
-        if [[ "${{ github.event.inputs.qt5_compat }}" == "on" ]]; then 
-          QT5_COMPAT='ON' 
-        fi
-
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
@@ -314,18 +298,16 @@ jobs:
         echo "DO_PUBLISH: $DO_PUBLISH"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
-        echo "QT5_COMPAT=$QT5_COMPAT" >> $GITHUB_ENV
-        echo "QT5_COMPAT: $QT5_COMPAT"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
-        buildscripts\ci\windows\setup.bat --portable ON --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\setup.bat --portable ON
     - name: Make environment file
       if: env.DO_BUILD == 'true'
       shell: bash
       run: |
-        bash ./buildscripts/ci/windows/make_environment.sh --qt5_compat ${{ env.QT5_COMPAT }}      
+        bash ./buildscripts/ci/windows/make_environment.sh
     - name: Update .ts files
       if: env.DO_UPDATE_TS == 'true'
       shell: bash
@@ -337,7 +319,7 @@ jobs:
       shell: cmd
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
-        buildscripts\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
+        buildscripts\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL%
     - name: Package
       if: env.DO_BUILD == 'true'
       shell: cmd

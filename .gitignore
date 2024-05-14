@@ -34,7 +34,6 @@ MuseScorePortable
 /share/instruments/tsv
 Doc
 DocLib
-build.qt5
 *.sfd~
 /.project
 mscore/revision.h
