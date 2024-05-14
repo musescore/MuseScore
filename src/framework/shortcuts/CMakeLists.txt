@@ -76,13 +76,8 @@ if (OS_IS_MAC)
 
     set(MODULE_INCLUDE
         ${CARBON_LIBRARY}
+        ${Qt6Gui_PRIVATE_INCLUDE_DIRS}
     )
-
-    if (MUE_COMPILE_QT5_COMPAT)
-        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${Qt5Gui_PRIVATE_INCLUDE_DIRS} )
-    else()
-        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
-    endif()
 endif(OS_IS_MAC)
 
 setup_module()

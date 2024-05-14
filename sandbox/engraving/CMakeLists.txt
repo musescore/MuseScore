@@ -4,10 +4,9 @@ project(engraving_app LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-#set(CMAKE_AUTOUIC ON)
+# set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-#set(CMAKE_AUTORCC ON)
-
+# set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -18,29 +17,28 @@ set(CMAKE_MODULE_PATH
     ${MU_ROOT}/build
     ${MU_ROOT}/build/cmake
     ${CMAKE_MODULE_PATH}
-    )
+)
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-set(QT_MIN_VERSION    "5.15.0")
-find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
-find_package(Qt5Gui ${QT_MIN_VERSION} REQUIRED)
-#find_package(Qt5Svg ${QT_MIN_VERSION} REQUIRED)
-#find_package(Qt5Widgets ${QT_MIN_VERSION} REQUIRED)
-
+set(QT_MIN_VERSION "6.2.4")
+find_package(Qt6Core ${QT_MIN_VERSION} REQUIRED)
+find_package(Qt6Gui ${QT_MIN_VERSION} REQUIRED)
+# find_package(Qt6Svg ${QT_MIN_VERSION} REQUIRED)
+# find_package(Qt6Widgets ${QT_MIN_VERSION} REQUIRED)
 set(QT_LIBRARIES
-    Qt5::Core
-    Qt5::Gui
-#    Qt5::Svg
-#    Qt5::Widgets
+    Qt6::Core
+    Qt6::Gui
+    # Qt6::Svg
+    # Qt6::Widgets
 )
 
 include_directories(
-    ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Gui_INCLUDE_DIRS}
-#    ${Qt5Svg_INCLUDE_DIRS}
-#    ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Gui_INCLUDE_DIRS}
+    # ${Qt6Svg_INCLUDE_DIRS}
+    # ${Qt6Widgets_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}
     ${MU_ROOT}/thirdparty/dtl
 )
@@ -59,12 +57,11 @@ add_subdirectory(${MU_ROOT}/src/engraving engraving)
 set(NO_GLOBAL_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/framework/global global)
 
-#include(${MU_ROOT}/src/framework/global/modularity/modularity.cmake)
-
+# include(${MU_ROOT}/src/framework/global/modularity/modularity.cmake)
 add_executable(engraving_app
-#    ${MODULARITY_SRC}
-#    ${MU_ROOT}/src/framework/global/translation.cpp
-#    ${MU_ROOT}/src/framework/global/translation.h
+    # ${MODULARITY_SRC}
+    # ${MU_ROOT}/src/framework/global/translation.cpp
+    # ${MU_ROOT}/src/framework/global/translation.h
     log.h
     fontproviderstub.cpp
     fontproviderstub.h

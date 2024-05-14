@@ -93,7 +93,6 @@ option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 
 # === Compile ===
-option(MUE_COMPILE_QT5_COMPAT "Build with Qt5" OFF)
 option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
@@ -138,13 +137,9 @@ endif(MUE_COMPILE_USE_CCACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
-if (MUE_COMPILE_QT5_COMPAT)
-    set(QT_MIN_VERSION "5.15.0")
-    include(FindQt5)
-else()
-    set(QT_MIN_VERSION "6.2.4")
-    include(FindQt6)
-endif()
+
+set(QT_MIN_VERSION "6.2.4")
+include(FindQt6)
 
 if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
