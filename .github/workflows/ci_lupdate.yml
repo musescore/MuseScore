@@ -1,92 +1,50 @@
-name: CI_Run_lupdate_to_tx
+name: Update translatable strings
 
 on: 
   workflow_dispatch:
     inputs:
-      publish:
-        description: 'Publish to Transifex (on/off)'
-        required: false
-        default: 'off'
-      create_pr:
-        description: 'Create pull request (on/off)'
-        required: false
-        default: 'off'
       cleanup_obsolete:
-        description: 'Clean up obsolete strings (on/off)'
+        description: 'Clean up obsolete strings'
         required: true
-        default: 'off'
+        type: boolean
+        default: false
   schedule: 
     - cron: "0 12 * * Sun"
 
 jobs:
   lupdate:
-    runs-on: ubuntu-20.04
-    if: (github.event_name == 'schedule' && github.repository == 'musescore/MuseScore') || (github.event_name != 'schedule')    
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'   
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
-    - name: "Configure workflow"
+
+    - name: Configure workflow
       run: |
-        bash ./build/ci/tools/make_build_number.sh
-        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
-
-        DO_PUBLISH='false'
-        if [[ "${{ github.event_name }}" != "schedule" && "${{ github.event.inputs.publish }}" == "on" ]]; then 
-          DO_PUBLISH='true'
-          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
-            echo "warning: not set TRANSIFEX_API_TOKEN, publish disabled" 
-            DO_PUBLISH='false'
-          fi   
-        fi
-
-        DO_CREATE_PR='false'
-        if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event.inputs.create_pr }}" == "on" ]]; then 
-          DO_CREATE_PR='true'
-          if [ -z "${{ secrets.GITHUB_TOKEN }}" ]; then 
-            echo "warning: not set GITHUB_TOKEN, create pull request disabled" 
-            DO_PUBLISH='false'
-          fi   
-        fi
-
         LUPDATE_ARGS=''
         if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event.inputs.cleanup_obsolete }}" == "on" ]]; then
           LUPDATE_ARGS='-no-obsolete'
         fi
 
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_CREATE_PR=$DO_CREATE_PR" >> $GITHUB_ENV
-        echo "DO_CREATE_PR: $DO_CREATE_PR"
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "LUPDATE_ARGS=$LUPDATE_ARGS" >> $GITHUB_ENV
         echo "LUPDATE_ARGS: $LUPDATE_ARGS"
 
     - name: Setup environment
       run: |
         bash ./build/ci/translation/qt_install.sh 
+
     - name: Run lupdate
       run: |
         bash ./build/ci/translation/run_lupdate.sh
-    - name: Publish to Transifex
-      if: env.DO_PUBLISH == 'true'
-      run: |
-        bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-        bash ./build/ci/translation/tx_push.sh
+        
     - name: Create Pull Request
-      if: env.DO_CREATE_PR == 'true'
       uses: peter-evans/create-pull-request@v6
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: "Run lupdate"
-        branch: "${{github.ref_name && format('{0}_', github.ref_name) || ''}}ci_run_lupdate"
+        commit-message: "Run `lupdate` with arguments `${{ env.LUPDATE_ARGS }}`"
+        branch: "ci_lupdate${{github.ref_name && format('_{0}', github.ref_name) || ''}}"
         add-paths: share/locale/*
         title: "Update in-repo translation source files"
         body: "Run `lupdate` with arguments `${{ env.LUPDATE_ARGS }}`"
         labels: strings
         reviewers: cbjeukendrup
-    - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v4
-      with:
-        name: MuseScore_tsfiles_${{ env.BUILD_NUMBER }}
-        path: ./share/locale
