@@ -1925,15 +1925,12 @@ void MusicXMLParserPass2::scorePart()
     }
 }
 
-//---------------------------------------------------------
-//   createSegmentChordRest
-//---------------------------------------------------------
-
-static void createSegmentChordRest(const Score* score, Fraction tick)
+static void createTimeTick(const Score* score, const Fraction& tick, const staff_idx_t staffIdx)
 {
-    // getSegment() creates the segment if it does not yet exist
     Measure* const measure = score->tick2measure(tick);
-    measure->getSegment(SegmentType::ChordRest, tick);
+    if (!measure->findSegment(SegmentType::TimeTick | SegmentType::ChordRest, tick)) {
+        EditTimeTickAnchors::createTimeTickAnchor(measure, tick - measure->tick(), staffIdx);
+    }
 }
 
 //---------------------------------------------------------
@@ -2043,12 +2040,10 @@ void MusicXMLParserPass2::part()
         //       sp->track(), sp->track2(), sp->startElement(), sp->endElement());
         if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
             // complete spanner found
-            // PlaybackContext::handleSpanners() requires hairpins to have a valid start segment
-            // always create start segment to prevent crash in case no note starts at this tick
+            // Create time tick for hairpin
             if (sp->isHairpin()) {
-                createSegmentChordRest(m_score, tick1);
+                createTimeTick(m_score, tick1, track2staff(sp->track()));
             }
-            // add to score
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);
