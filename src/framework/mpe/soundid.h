@@ -725,6 +725,7 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::Pocket, String(u"pocket") },
     { SoundSubCategory::Garklein, String(u"garklein") },
     { SoundSubCategory::Toy, String(u"toy") },
+    { SoundSubCategory::String, String(u"string") },
     { SoundSubCategory::TwelveString, String(u"twelve_string") },
 
     { SoundSubCategory::Grand, String(u"grand") },
@@ -772,9 +773,35 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::Sub_Contra_Bass, String(u"sub_contra_bass") },
     { SoundSubCategory::Double_Contra_Bass, String(u"double_contra_bass") },
     { SoundSubCategory::Bass, String(u"bass") },
+    { SoundSubCategory::Bowed, String(u"bowed") },
     { SoundSubCategory::Great_Bass, String(u"great_bass") },
     { SoundSubCategory::Hyper_Bass, String(u"hyper_bass") },
     { SoundSubCategory::Melody, String(u"melody") },
+
+    { SoundSubCategory::FX_Goblins, String(u"fx_goblins") },
+    { SoundSubCategory::FX_Atmosphere, String(u"fx_atmosphere") },
+    { SoundSubCategory::FX_Brightness, String(u"fx_brightness") },
+    { SoundSubCategory::FX_Crystal, String(u"fx_crystal") },
+    { SoundSubCategory::FX_Echoes, String(u"fx_echoes") },
+    { SoundSubCategory::FX_Rain, String(u"fx_rain") },
+    { SoundSubCategory::FX_SciFi, String(u"fx_scifi") },
+    { SoundSubCategory::FX_SoundTrack, String(u"fx_soundtrack") },
+
+    { SoundSubCategory::Sweep, String(u"sweep") },
+    { SoundSubCategory::Warm, String(u"warm") },
+    { SoundSubCategory::NewAge, String(u"new_age") },
+    { SoundSubCategory::Polysynth, String(u"polysynth") },
+    { SoundSubCategory::Halo, String(u"halo") },
+    { SoundSubCategory::Metallic, String(u"metallic") },
+    { SoundSubCategory::Choir, String(u"choir") },
+
+    { SoundSubCategory::Sine_Wave, String(u"sine_wave") },
+    { SoundSubCategory::Square_Wave, String(u"square_wave") },
+    { SoundSubCategory::Sawtooth_Wave, String(u"sawtooth_wave") },
+
+    { SoundSubCategory::Primary, String(u"primary") },
+    { SoundSubCategory::Secondary, String(u"secondary") },
+    { SoundSubCategory::Section, String(u"section") },
 
     { SoundSubCategory::In_C, String(u"in_c") },
     { SoundSubCategory::In_D, String(u"in_d") },
@@ -789,17 +816,6 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::In_B, String(u"in_b") },
     { SoundSubCategory::In_B_flat, String(u"in_b_flat") },
 
-    { SoundSubCategory::FX_Goblins, String(u"fx_goblins") },
-    { SoundSubCategory::FX_Atmosphere, String(u"fx_atmosphere") },
-    { SoundSubCategory::FX_Brightness, String(u"fx_brightness") },
-    { SoundSubCategory::FX_Crystal, String(u"fx_crystal") },
-    { SoundSubCategory::FX_Echoes, String(u"fx_echoes") },
-    { SoundSubCategory::FX_Rain, String(u"fx_rain") },
-    { SoundSubCategory::FX_SciFi, String(u"fx_scifi") },
-    { SoundSubCategory::FX_SoundTrack, String(u"fx_soundtrack") },
-    { SoundSubCategory::Primary, String(u"primary") },
-    { SoundSubCategory::Secondary, String(u"secondary") },
-    { SoundSubCategory::Section, String(u"section") },
     { SoundSubCategory::Last, String(u"last") }
 };
 
