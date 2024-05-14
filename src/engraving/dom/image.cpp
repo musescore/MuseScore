@@ -235,7 +235,7 @@ bool Image::load()
         path = m_linkPath;
     }
 
-    if (path.withSuffix("svg")) {
+    if (path.withSuffix("svg") || path.withSuffix("svgz")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -277,7 +277,7 @@ bool Image::load(const muse::io::path_t& ss)
     m_linkPath = fi.canonicalFilePath();
     m_storeItem = imageStore.add(m_linkPath, ba);
     m_storeItem->reference(this);
-    if (path.withSuffix("svg")) {
+    if (path.withSuffix("svg") || path.withSuffix("svgz")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -297,7 +297,7 @@ bool Image::loadFromData(const path_t& name, const muse::ByteArray& ba)
     m_linkPath = u"";
     m_storeItem = imageStore.add(name, ba);
     m_storeItem->reference(this);
-    if (name.withSuffix("svg")) {
+    if (name.withSuffix("svg") || name.withSuffix("svgz")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
