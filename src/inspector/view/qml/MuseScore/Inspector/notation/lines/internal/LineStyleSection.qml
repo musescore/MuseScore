@@ -44,7 +44,7 @@ Column {
     property int navigationRowStart: 1
     property int navigationRowEnd: gapSection.navigationRowEnd
     
-    property string propertyPanelTitle: "Line style" 
+    property string lineStyleTitleText: qsTrc("inspector", "Line style") 
 
     width: parent.width
 
@@ -72,7 +72,7 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: styleSection
-        titleText: qsTrc("inspector", root.propertyPanelTitle)
+        titleText: root.lineStyleTitleText
         propertyItem: root.lineStyle
 
         navigationPanel: root.navigationPanel
