@@ -57,7 +57,7 @@ jobs:
             fi
           fi
 
-          if [[ "$DO_CREATE_PR" != "true" && "$DO_PUSH_TO_S#" != "true" ]]; then
+          if [[ "$DO_CREATE_PR" != "true" && "$DO_PUSH_TO_S3" != "true" ]]; then
             echo "::warning::Nothing to do"
             exit 1
           fi
