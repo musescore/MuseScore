@@ -306,8 +306,17 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
         Measure* m = segment->measure()->mmRestFirst();
         segment = m->findSegment(SegmentType::ChordRest, m->tick());
     }
+
+    const Staff* staff = target->staff();
+    const StaffGroup staffGroup = staff->staffType(segment->tick())->group();
+    DirectionV stemDirection = DirectionV::AUTO;
+    if (staffGroup == StaffGroup::PERCUSSION) {
+        const Drumset* ds = staff->part()->instrument(segment->tick())->drumset();
+        stemDirection = ds->stemDirection(with->noteVal().pitch);
+    }
+
     segment = target->score()->setNoteRest(segment, target->track(),
-                                           with->noteVal(), duration, DirectionV::AUTO, false, {}, false, &target->score()->inputState());
+                                           with->noteVal(), duration, stemDirection, false, {}, false, &target->score()->inputState());
     return toChord(segment->nextChordRest(target->track()))->upNote();
 }
 
