@@ -153,6 +153,10 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
 
     if (!m_synth) {
         m_synth = synthResolver()->resolveDefaultSynth(m_trackId);
+        IF_ASSERT_FAILED(m_synth) {
+            LOGE() << "Default synth not found!";
+            return;
+        }
     }
 
     m_synth->paramsChanged().onReceive(this, [this](const AudioInputParams& params) {
