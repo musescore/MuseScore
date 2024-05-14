@@ -1112,6 +1112,9 @@ TEST_F(Musicxml_Tests, timesig1) {
 TEST_F(Musicxml_Tests, timesig3) {
     mxmlIoTest("testTimesig3");
 }
+TEST_F(Musicxml_Tests, timeTick) {
+    mxmlImportTestRef("testTimeTick");
+}
 TEST_F(Musicxml_Tests, trackHandling) {
     mxmlIoTest("testTrackHandling");
 }
