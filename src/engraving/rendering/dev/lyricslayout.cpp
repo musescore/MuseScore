@@ -357,16 +357,18 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     item->setPos(startX, y);
     item->setPos2(PointF(endX - startX, 0.0));
 
+    bool isDashOnFirstSyllable = lyricsLine->tick2() == system->firstMeasure()->tick();
     double curLength = endX - startX;
     double dashMinLength = style.styleMM(Sid::lyricsDashMinLength);
     int dashCount = std::floor(curLength / style.styleMM(Sid::lyricsDashMaxDistance));
-    if (curLength > dashMinLength || style.styleB(Sid::lyricsDashForce)) {
+    bool forceDash = style.styleB(Sid::lyricsDashForce)
+                     || (style.styleB(Sid::lyricsShowDashIfSyllableOnFirstNote) && isDashOnFirstSyllable);
+    if (curLength > dashMinLength || forceDash) {
         dashCount = std::max(dashCount, 1);
     }
 
     if (curLength < dashMinLength && dashCount > 0) {
         double diff = dashMinLength - curLength;
-        bool isDashOnFirstSyllable = lyricsLine->tick2() == system->firstMeasure()->tick();
         if (isDashOnFirstSyllable) {
             startX -= diff;
         } else {
