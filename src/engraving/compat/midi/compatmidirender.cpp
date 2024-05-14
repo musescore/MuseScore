@@ -273,6 +273,10 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
 
 void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& ontime, double tremoloPartOfChord /* = 1.0 */)
 {
+    if (RealIsNull(tremoloPartOfChord)) {
+        return;
+    }
+
     Segment* seg = chord->segment();
     Tremolo* tremolo = chord->tremolo();
     int notes = int(chord->notes().size());
