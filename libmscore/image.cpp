@@ -11,11 +11,11 @@
 //=============================================================================
 
 #include "image.h"
-#include "xml.h"
+#include "imageStore.h"
+#include "mscore.h"
 #include "score.h"
 #include "undo.h"
-#include "mscore.h"
-#include "imageStore.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -291,7 +291,7 @@ void Image::read(XmlReader& e)
             path = _linkPath;
             }
 
-      if (path.endsWith(".svg"))
+      if (path.endsWith(".svg") || path.endsWith(".svgz"))
             setImageType(ImageType::SVG);
       else
             setImageType(ImageType::RASTER);
@@ -327,7 +327,7 @@ bool Image::load(const QString& ss)
       _linkPath = fi.canonicalFilePath();
       _storeItem = imageStore.add(_linkPath, ba);
       _storeItem->reference(this);
-      if (path.endsWith(".svg"))
+      if (path.endsWith(".svg") || path.endsWith(".svgz"))
             setImageType(ImageType::SVG);
       else
             setImageType(ImageType::RASTER);
@@ -348,7 +348,7 @@ bool Image::loadFromData(const QString& ss, const QByteArray& ba)
       _linkPath = "";
       _storeItem = imageStore.add(ss, ba);
       _storeItem->reference(this);
-      if (ss.endsWith(".svg"))
+      if (ss.endsWith(".svg") || ss.endsWith(".svgz"))
             setImageType(ImageType::SVG);
       else
             setImageType(ImageType::RASTER);

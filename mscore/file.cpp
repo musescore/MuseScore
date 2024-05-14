@@ -17,92 +17,80 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-#include "cloud/loginmanager.h"
-
 #include "config.h"
+#include "file.h"
 #include "globals.h"
+#include "instrdialog.h"
 #include "musescore.h"
+#include "newwizard.h"
+#include "palette.h"
+#include "playpanel.h"
+#include "preferences.h"
+#include "scoretab.h"
+#include "scorePreview.h"
 #include "scoreview.h"
+#include "seq.h"
+#include "svggenerator.h"
+#include "symboldialog.h"
+#include "tourhandler.h"
 
 #include "audio/exports/exportmidi.h"
-
-#include "libmscore/xml.h"
-#include "libmscore/element.h"
-#include "libmscore/note.h"
-#include "libmscore/rest.h"
-#include "libmscore/sig.h"
-#include "libmscore/clef.h"
-#include "libmscore/key.h"
-#include "instrdialog.h"
-#include "libmscore/score.h"
-#include "libmscore/page.h"
-#include "libmscore/dynamic.h"
-#include "file.h"
-#include "libmscore/style.h"
-#include "libmscore/tempo.h"
-#include "libmscore/select.h"
-#include "preferences.h"
-#include "playpanel.h"
-#include "libmscore/staff.h"
-#include "libmscore/part.h"
-#include "libmscore/utils.h"
-#include "libmscore/barline.h"
-#include "palette.h"
-#include "symboldialog.h"
-#include "libmscore/slur.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/ottava.h"
-#include "libmscore/textline.h"
-#include "libmscore/pedal.h"
-#include "libmscore/trill.h"
-#include "libmscore/volta.h"
-#include "newwizard.h"
-#include "libmscore/timesig.h"
-#include "libmscore/box.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/system.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/keysig.h"
-#include "zoombox.h"
-#include "libmscore/measure.h"
-#include "libmscore/undo.h"
-#include "libmscore/repeatlist.h"
-#include "scoretab.h"
-#include "libmscore/beam.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/stafftypechange.h"
-#include "seq.h"
-#include "libmscore/revisions.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/segment.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/sym.h"
-#include "libmscore/image.h"
-#include "libmscore/stafflines.h"
 #include "audio/midi/msynthesizer.h"
-#include "svggenerator.h"
-#include "scorePreview.h"
-#include "scorecmp/scorecmp.h"
-#include "extension.h"
-#include "tourhandler.h"
-#include "preferences.h"
+
+#include "cloud/loginmanager.h"
+
+#include "libmscore/barline.h"
+#include "libmscore/beam.h"
+#include "libmscore/box.h"
+#include "libmscore/clef.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/element.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/hairpin.h"
+#include "libmscore/image.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/key.h"
+#include "libmscore/keysig.h"
+#include "libmscore/mscore.h"
+#include "libmscore/measure.h"
+#include "libmscore/note.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
+#include "libmscore/select.h"
+#include "libmscore/segment.h"
+#include "libmscore/sig.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafflines.h"
+#include "libmscore/stafftype.h"
+#include "libmscore/style.h"
+#include "libmscore/system.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/textline.h"
+#include "libmscore/timesig.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/volta.h"
+#include "libmscore/undo.h"
+#include "libmscore/utils.h"
+#include "libmscore/xml.h"
+
+#include "migration/handlers/edwinstylehandler.h"
+#include "migration/handlers/lelandstylehandler.h"
+#include "migration/handlers/resetallelementspositionshandler.h"
+#include "migration/handlers/styledefaultshandler.h"
+#include "migration/scoremigrator_3_6.h"
 
 #ifdef OMR
+#include "omr/importpdf.h"
 #include "omr/omr.h"
 #include "omr/omrpage.h"
-#include "omr/importpdf.h"
 #endif
 
-#include "libmscore/chordlist.h"
-#include "libmscore/mscore.h"
-#include "thirdparty/qzip/qzipreader_p.h"
-#include "migration/scoremigrator_3_6.h"
-#include "migration/handlers/styledefaultshandler.h"
-#include "migration/handlers/lelandstylehandler.h"
-#include "migration/handlers/edwinstylehandler.h"
-#include "migration/handlers/resetallelementspositionshandler.h"
+#include "scorecmp/scorecmp.h"
 
+#include "thirdparty/qzip/qzipreader_p.h"
 
 namespace Ms {
 
@@ -1879,7 +1867,7 @@ void MuseScore::printFile()
             if ((toPage < 0) || (toPage >= pages))
                   toPage = pages - 1;
 
-            for (int copy = 0; copy < printerDev.numCopies(); ++copy) {
+            for (int copy = 0; copy < printerDev.copyCount(); ++copy) {
                   bool firstPage = true;
                   for (int n = fromPage; n <= toPage; ++n) {
                         if (!firstPage)
@@ -1887,7 +1875,7 @@ void MuseScore::printFile()
                         firstPage = false;
 
                         cs->print(&p, n);
-                        if ((copy + 1) < printerDev.numCopies())
+                        if ((copy + 1) < printerDev.copyCount())
                               printerDev.newPage();
                         }
                   }
@@ -2079,7 +2067,8 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
 
       printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(cs_->styleD(Sid::pageWidth), cs_->styleD(Sid::pageHeight));
-      printer.setPaperSize(size, QPrinter::Inch);
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+      printer.setPageSize(ps);
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
 #if defined(Q_OS_MAC)
@@ -2588,8 +2577,8 @@ void MuseScore::addImage(Score* score, Element* e)
          0,
          tr("Insert Image"),
          "",            // lastOpenPath,
-         tr("All Supported Files") + " (*.svg *.jpg *.jpeg *.png *.bmp *.tif *.tiff);;" +
-         tr("Scalable Vector Graphics") + " (*.svg);;" +
+         tr("All Supported Files") + " (*.svg *.svgz *.jpg *.jpeg *.png *.bmp *.tif *.tiff);;" +
+         tr("Scalable Vector Graphics") + " (*.svg *.svgz);;" +
          tr("JPEG") + " (*.jpg *.jpeg);;" +
          tr("PNG Bitmap Graphic") + " (*.png);;" +
          tr("Bitmap") + " (*.bmp);;" +
@@ -2605,7 +2594,7 @@ void MuseScore::addImage(Score* score, Element* e)
       Image* s = new Image(score);
       QString suffix(fi.suffix().toLower());
 
-      if (suffix == "svg")
+      if (suffix == "svg" || suffix == "svgz")
             s->setImageType(ImageType::SVG);
       else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png" || suffix == "bmp"|| suffix == "tif"|| suffix == "tiff")
             s->setImageType(ImageType::RASTER);
