@@ -11,16 +11,22 @@
 //=============================================================================
 
 #include "accidental.h"
+#include "ambitus.h"
 #include "arpeggio.h"
+#include "articulation.h"
 #include "barline.h"
 #include "beam.h"
+#include "bracket.h"
 #include "box.h"
 #include "chord.h"
 #include "clef.h"
 #include "element.h"
+#include "fermata.h"
 #include "fingering.h"
 #include "glissando.h"
+#include "hairpin.h"
 #include "harmony.h"
+#include "hook.h"
 #include "key.h"
 #include "keysig.h"
 #include "layoutbreak.h"
@@ -28,6 +34,7 @@
 #include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
+#include "measurenumber.h"
 #include "mmrestrange.h"
 #include "mscore.h"
 #include "notedot.h"
@@ -38,12 +45,15 @@
 #include "score.h"
 #include "segment.h"
 #include "slur.h"
+#include "spacer.h"
 #include "staff.h"
+#include "stafflines.h"
 #include "stem.h"
 #include "stemslash.h"
 #include "style.h"
 #include "sym.h"
 #include "system.h"
+#include "systemdivider.h"
 #include "tie.h"
 #include "timesig.h"
 #include "tremolo.h"
@@ -51,16 +61,6 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
-#include "systemdivider.h"
-#include "hook.h"
-#include "ambitus.h"
-#include "hairpin.h"
-#include "stafflines.h"
-#include "articulation.h"
-#include "bracket.h"
-#include "spacer.h"
-#include "fermata.h"
-#include "measurenumber.h"
 
 namespace Ms {
 
@@ -2332,7 +2332,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       ElementList newList = lm->el();
 
       for (Element* e : m->el()) {
-            if (e->isMarker())
+            if (e->isMarker() && m != lm)
                   newList.push_back(e);
             }
       for (Element* e : newList) {
