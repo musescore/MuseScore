@@ -10,39 +10,37 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "excerpt.h"
-#include "score.h"
-#include "part.h"
-#include "xml.h"
-#include "staff.h"
-#include "box.h"
-#include "textframe.h"
-#include "style.h"
-#include "page.h"
-#include "text.h"
-#include "slur.h"
-#include "tie.h"
-#include "sig.h"
-#include "tempo.h"
-#include "measure.h"
-#include "rest.h"
-#include "stafftype.h"
-#include "tuplet.h"
-#include "chord.h"
-#include "note.h"
-#include "lyrics.h"
-#include "segment.h"
-#include "textline.h"
-#include "tupletmap.h"
-#include "tiemap.h"
-#include "layoutbreak.h"
-#include "harmony.h"
-#include "beam.h"
-#include "utils.h"
-#include "tremolo.h"
 #include "barline.h"
-#include "undo.h"
+#include "beam.h"
 #include "bracketItem.h"
+#include "box.h"
+#include "chord.h"
+#include "excerpt.h"
+#include "harmony.h"
+#include "layoutbreak.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "note.h"
+#include "page.h"
+#include "part.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "style.h"
+#include "text.h"
+#include "textframe.h"
+#include "textline.h"
+#include "tie.h"
+#include "tiemap.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "tupletmap.h"
+#include "undo.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -1111,6 +1109,20 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
 
       for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
             Measure* nm = score->tick2measure(m->tick());
+
+            for (Element* oldEl : m->el()) {
+                  if (oldEl->isLayoutBreak())
+                        continue;
+                  if (oldEl->systemFlag() && dstStaffIdx != 0)
+                        continue;
+                  Element* newEl = oldEl->linkedClone();
+                  newEl->setParent(nm);
+                  newEl->setTrack(0);
+                  newEl->setScore(score);
+                  newEl->styleChanged();
+                  score->undoAddElement(newEl);
+                  }
+
             for (int srcTrack : map.keys()) {
                   TupletMap tupletMap;    // tuplets cannot cross measure boundaries
                   int dstTrack = map.value(srcTrack);
