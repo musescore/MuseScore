@@ -39,6 +39,7 @@
 #include "dom/guitarbend.h"
 #include "dom/instrumentname.h"
 #include "dom/layoutbreak.h"
+#include "dom/lyrics.h"
 #include "dom/measure.h"
 #include "dom/measurenumber.h"
 #include "dom/mmrestrange.h"
@@ -1144,19 +1145,19 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
     // Lyric
     //-------------------------------------------------------------
-
-    LyricsLayout::layoutLyrics(ctx, system);
-
     // Layout lyrics dashes and melisma
     // NOTE: loop on a *copy* of unmanagedSpanners because in some cases
     // the underlying operation may invalidate some of the iterators.
+    bool dashOnFirstNoteSyllable = ctx.conf().style().styleB(Sid::lyricsShowDashIfSyllableOnFirstNote);
     std::set<Spanner*> unmanagedSpanners = ctx.dom().unmanagedSpanners();
     for (Spanner* sp : unmanagedSpanners) {
-        if (sp->tick() >= etick || sp->tick2() <= stick) {
+        bool dashOnFirst = dashOnFirstNoteSyllable && !toLyricsLine(sp)->isEndMelisma();
+        if (sp->tick() >= etick || sp->tick2() < stick || (sp->tick2() == stick && !dashOnFirst)) {
             continue;
         }
         TLayout::layoutSystem(sp, system, ctx);
     }
+    LyricsLayout::computeVerticalPositions(system, ctx);
 
     //-------------------------------------------------------------
     // Harp pedal diagrams

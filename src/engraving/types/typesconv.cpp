@@ -2588,6 +2588,22 @@ LyricsSyllabic TConv::fromXml(const AsciiStringView& tag, LyricsSyllabic def)
     return findTypeByXmlTag<LyricsSyllabic>(LYRICSSYLLABIC_TYPES, tag, def);
 }
 
+const std::array<Item<LyricsDashSystemStart>, 3> LYRICS_DASH_SYSTEM_START_TYPES = { {
+    { LyricsDashSystemStart::STANDARD,   "standard" },
+    { LyricsDashSystemStart::UNDER_HEADER,   "underHeader" },
+    { LyricsDashSystemStart::UNDER_FIRST_NOTE,   "underFirstNote" },
+} };
+
+AsciiStringView TConv::toXml(LyricsDashSystemStart v)
+{
+    return findXmlTagByType<LyricsDashSystemStart>(LYRICS_DASH_SYSTEM_START_TYPES, v);
+}
+
+LyricsDashSystemStart TConv::fromXml(const AsciiStringView& tag, LyricsDashSystemStart def)
+{
+    return findTypeByXmlTag<LyricsDashSystemStart>(LYRICS_DASH_SYSTEM_START_TYPES, tag, def);
+}
+
 const std::array<const char*, 17> KEY_NAMES = { {
     QT_TRANSLATE_NOOP("engraving", "C♭ major, A♭ minor"),
     QT_TRANSLATE_NOOP("engraving", "G♭ major, E♭ minor"),

@@ -104,6 +104,7 @@ enum class P_TYPE {
     PLAYTECH_TYPE,
     TEMPOCHANGE_TYPE,
     SLUR_STYLE_TYPE,
+    LYRICS_DASH_SYSTEM_START_TYPE,
 
     // Other
     GROUPS,
@@ -276,6 +277,9 @@ public:
 
     PropertyValue(const OrnamentShowAccidental& v)
         : m_type(P_TYPE::ORNAMENT_SHOW_ACCIDENTAL), m_data(make_data<OrnamentShowAccidental>(v)) {}
+
+    PropertyValue(const LyricsDashSystemStart& v)
+        : m_type(P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE), m_data(make_data<LyricsDashSystemStart>(v)) {}
 
     bool isValid() const;
 

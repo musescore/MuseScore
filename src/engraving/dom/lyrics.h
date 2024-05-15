@@ -62,8 +62,6 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
     ChordRest* chordRest() const { return toChordRest(explicitParent()); }
 
-    void layout2(int);
-
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     int subtype() const override { return m_no; }
@@ -104,6 +102,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
     void triggerLayout() const override;
+
+    double yRelativeToStaff() const;
+    void setYRelativeToStaff(double y);
 
 protected:
     int m_no = 0;  // row index
@@ -150,8 +151,6 @@ public:
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
-    PointF linePos(Grip grip, System** system) const override;
-
 protected:
     Lyrics* m_nextLyrics = nullptr;
 
@@ -173,19 +172,20 @@ public:
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
 
-    int numOfDashes() const { return m_numOfDashes; }
-    void setNumOfDashes(int val) { m_numOfDashes = val; }
-
-    double dashLength() const { return m_dashLength; }
-    void setDashLength(double val) { m_dashLength = val; }
-
-    // helper functions
     LyricsLine* lyricsLine() const { return toLyricsLine(spanner()); }
     Lyrics* lyrics() const { return lyricsLine()->lyrics(); }
 
-protected:
-    int m_numOfDashes = 0;
-    double m_dashLength = 0.0;
+    double baseLineShift() const;
+
+    struct LayoutData : public LineSegment::LayoutData {
+    public:
+        const std::vector<LineF>& dashes() const { return m_dashes; }
+        void clearDashes() { m_dashes.clear(); }
+        void addDash(const LineF& dash) { m_dashes.push_back(dash); }
+    private:
+        std::vector<LineF> m_dashes;
+    };
+    DECLARE_LAYOUTDATA_METHODS(LyricsLineSegment)
 };
 } // namespace mu::engraving
 #endif

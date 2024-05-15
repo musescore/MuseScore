@@ -144,6 +144,8 @@ public:
     Shape translated(const PointF&) const;
     Shape& scale(const SizeF&);
     Shape scaled(const SizeF&) const;
+    Shape& adjust(double xp1, double yp1, double xp2, double yp2);
+    Shape adjusted(double xp1, double yp1, double xp2, double yp2) const;
 
     const RectF& bbox() const;
     double minVerticalDistance(const Shape&) const;

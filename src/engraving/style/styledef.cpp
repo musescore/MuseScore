@@ -92,6 +92,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::lyricsDashLineThickness, "lyricsDashLineThickness", Spatium(0.1) },  // in sp. units
     { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.50 },          // the fraction of lyrics font x-height to raise the dashes above text base line
 
+    { Sid::lyricsShowDashIfSyllableOnFirstNote, "lyricsShowDashIfSyllableOnFirstNote", true },
+    { Sid::lyricsMelismaForce,                  "lyricsMelismaForce",                  false },
+    { Sid::lyricsMelismaMinLength,              "lyricsMelismaMinLength",              Spatium(1.0) },
+    { Sid::lyricsDashPosAtStartOfSystem,        "lyricsDashPosAtStartOfSystem",        int(LyricsDashSystemStart::STANDARD) },
+
     { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "Edwin" },
     { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       10.0 },
     { Sid::lyricsOddLineSpacing,    "lyricsOddLineSpacing",    1.0 },

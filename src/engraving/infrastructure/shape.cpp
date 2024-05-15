@@ -125,6 +125,25 @@ Shape Shape::scaled(const SizeF& mag) const
     return s;
 }
 
+Shape& Shape::adjust(double xp1, double yp1, double xp2, double yp2)
+{
+    for (ShapeElement& element : m_elements) {
+        element.adjust(xp1, yp1, xp2, yp2);
+    }
+    return *this;
+}
+
+Shape Shape::adjusted(double xp1, double yp1, double xp2, double yp2) const
+{
+    Shape s;
+    s.m_elements.reserve(m_elements.size());
+    for (const ShapeElement& element : m_elements) {
+        s.add(element.adjusted(xp1, yp1, xp2, yp2));
+    }
+
+    return s;
+}
+
 void Shape::invalidateBBox()
 {
     m_bbox = RectF();

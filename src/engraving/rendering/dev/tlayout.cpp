@@ -6634,8 +6634,9 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
 {
     LAYOUT_CALL_ITEM(line);
     if (!line->lyrics()) {
-        return nullptr; // a lyrics line with no lyrics shouldn't exist
+        return nullptr;
     }
+
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
@@ -6646,75 +6647,25 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
     SpannerSegmentType sst;
     if (line->tick() >= stick) {
         TLayout::layoutLyricsLine(line, ctx);
-        if (line->ticks().isZero() && line->isEndMelisma()) { // only do layout if some time span
-            // dash lines still need to be laid out, though
+        if (line->ticks().isZero() && line->isEndMelisma()) {
             return nullptr;
         }
-
-        TLayout::layoutLine(line, ctx);
-        //
-        // this is the first call to layoutSystem,
-        // processing the first line segment
-        //
         line->computeStartElement();
         line->computeEndElement();
         sst = line->tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
     } else if (line->tick() < stick && line->tick2() > etick) {
         sst = SpannerSegmentType::MIDDLE;
     } else {
-        //
-        // this is the last call to layoutSystem
-        // processing the last line segment
-        //
         sst = SpannerSegmentType::END;
     }
     lineSegm->setSpannerSegmentType(sst);
-
-    switch (sst) {
-    case SpannerSegmentType::SINGLE: {
-        System* s;
-        PointF p1 = line->linePos(Grip::START, &s);
-        PointF p2 = line->linePos(Grip::END,   &s);
-        double len = p2.x() - p1.x();
-        lineSegm->setPos(p1);
-        lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
-    }
-    break;
-    case SpannerSegmentType::BEGIN: {
-        System* s;
-        PointF p1 = line->linePos(Grip::START, &s);
-        lineSegm->setPos(p1);
-        double x2 = system->endingXForOpenEndedLines();
-        lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
-    }
-    break;
-    case SpannerSegmentType::MIDDLE: {
-        bool leading = (line->anchor() == Spanner::Anchor::SEGMENT || line->anchor() == Spanner::Anchor::MEASURE);
-        double x1 = system->firstNoteRestSegmentX(leading);
-        double x2 = system->endingXForOpenEndedLines();
-        System* s;
-        PointF p1 = line->linePos(Grip::START, &s);
-        lineSegm->setPos(PointF(x1, p1.y()));
-        lineSegm->setPos2(PointF(x2 - x1, 0.0));
-    }
-    break;
-    case SpannerSegmentType::END: {
-        System* s;
-        PointF p2 = line->linePos(Grip::END, &s);
-        bool leading = (line->anchor() == Spanner::Anchor::SEGMENT || line->anchor() == Spanner::Anchor::MEASURE);
-        double x1 = system->firstNoteRestSegmentX(leading);
-        double len = p2.x() - x1;
-        lineSegm->setPos(PointF(p2.x() - len, p2.y()));
-        lineSegm->setPos2(PointF(len, 0.0));
-    }
-    break;
-    }
 
     TLayout::layoutLyricsLineSegment(lineSegm, ctx);
     if (!line->lyrics()) {
         // this line could have been removed in the process of laying out surrounding lyrics
         return nullptr;
     }
+
     // if temp melisma extend the first line segment to be
     // after the lyrics syllable (otherwise the melisma segment
     // will be too short).
@@ -6722,10 +6673,12 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
     if (tempMelismaTicks && line->spannerSegments().size() > 0 && line->spannerSegments().front() == lineSegm) {
         lineSegm->rxpos2() += line->lyrics()->width();
     }
+
     // avoid backwards melisma
     if (lineSegm->pos2().x() < 0) {
         lineSegm->rxpos2() = 0;
     }
+
     return lineSegm;
 }
 

@@ -1009,6 +1009,12 @@ enum class LyricsSyllabic : char {
     SINGLE, BEGIN, END, MIDDLE
 };
 
+enum class LyricsDashSystemStart {
+    STANDARD,
+    UNDER_HEADER,
+    UNDER_FIRST_NOTE
+};
+
 enum class SpannerSegmentType {
     SINGLE, BEGIN, MIDDLE, END
 };

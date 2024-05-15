@@ -75,10 +75,6 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
                 || kerningType == KerningType::NON_KERNING) {
                 dist = std::max(dist, r1.right() - r2.left() + padding);
             }
-            if (kerningType == KerningType::KERNING_UNTIL_ORIGIN) { //prepared for future user option, for now always false
-                double origin = r1.left();
-                dist = std::max(dist, origin - r2.left());
-            }
         }
     }
     return dist;

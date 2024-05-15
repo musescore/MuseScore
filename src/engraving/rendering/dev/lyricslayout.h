@@ -30,11 +30,26 @@ class System;
 class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
+class SkylineLine;
 }
 
 namespace mu::engraving::rendering::dev {
 class LyricsLayout
 {
+    struct LyricsVerse {
+    private:
+        std::vector<Lyrics*> m_lyrics;
+        std::vector<LyricsLineSegment*> m_lines;
+    public:
+        void addLyrics(Lyrics* l) { m_lyrics.push_back(l); }
+        void addLine(LyricsLineSegment* lls) { m_lines.push_back(lls); }
+
+        const std::vector<Lyrics*>& lyrics() const { return m_lyrics; }
+        const std::vector<LyricsLineSegment*>& lines() const { return m_lines; }
+    };
+
+    using LyricsVersesMap = std::map<int, LyricsVerse>;
+
 public:
     LyricsLayout() = default;
 
@@ -42,10 +57,30 @@ public:
     static void layout(LyricsLine* item, LayoutContext& ctx);
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
-    static void layoutLyrics(LayoutContext& ctx, System* system);
+    static void computeVerticalPositions(System* system, LayoutContext& ctx);
 
 private:
     static void createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx);
+
+    static void layoutMelismaLine(LyricsLineSegment* item);
+    static void layoutDashes(LyricsLineSegment* item);
+
+    static Lyrics* findNextLyrics(ChordRest* endChordRest, int verseNumber);
+
+    static void computeVerticalPositions(staff_idx_t staffIdx, System* system, LayoutContext& ctx);
+    static void collectLyricsVerses(staff_idx_t staffIdx, System* system, LyricsVersesMap& lyricsVersesAbove,
+                                    LyricsVersesMap& lyricsVersesBelow);
+
+    static void setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesMap& lyricsVersesAbove,
+                                    const LyricsVersesMap& lyricsVersesBelow, LayoutContext& ctx);
+
+    static void checkCollisionsWithStaffElements(System* system, staff_idx_t staffIdx,  LayoutContext& ctx,
+                                                 const LyricsVersesMap& lyricsVersesAbove, const LyricsVersesMap& lyricsVersesBelow);
+    static SkylineLine createSkylineForVerse(int verse, bool north, const LyricsVersesMap& lyricsVerses, System* system);
+    static void moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, const LyricsVersesMap& lyricsVerses);
+
+    static void addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
+                             const LyricsVersesMap& lyricsVersesBelow);
 };
 }
 #endif // MU_ENGRAVING_LYRICSLAYOUT_DEV_H
