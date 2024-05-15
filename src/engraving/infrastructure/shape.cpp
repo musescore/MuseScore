@@ -513,11 +513,19 @@ bool Shape::contains(const PointF& p) const
 //   intersects
 //---------------------------------------------------------
 
-bool Shape::intersects(const RectF& rr) const
+bool Shape::intersects(const RectF& rr, double horClearance, double vertClearance) const
 {
-    for (const RectF& r : m_elements) {
-        if (r.intersects(rr)) {
-            return true;
+    if (RealIsNull(horClearance) && RealIsNull(vertClearance)) {
+        for (const RectF& r : m_elements) {
+            if (r.intersects(rr)) {
+                return true;
+            }
+        }
+    } else {
+        for (const RectF& r : m_elements) {
+            if (r.intersects(rr.adjusted(-horClearance, -vertClearance, horClearance, vertClearance))) {
+                return true;
+            }
         }
     }
     return false;
@@ -527,10 +535,10 @@ bool Shape::intersects(const RectF& rr) const
 //   intersects
 //---------------------------------------------------------
 
-bool Shape::intersects(const Shape& other) const
+bool Shape::intersects(const Shape& other, double horClearance, double vertClearance) const
 {
     for (const RectF& r : other.m_elements) {
-        if (intersects(r)) {
+        if (intersects(r, horClearance, vertClearance)) {
             return true;
         }
     }

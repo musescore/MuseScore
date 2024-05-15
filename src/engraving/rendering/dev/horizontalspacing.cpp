@@ -48,7 +48,6 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
 {
     double dist = -DBL_MAX;        // min real
     double absoluteMinPadding = 0.1 * spatium * squeezeFactor;
-    double verticalClearance = 0.2 * spatium * squeezeFactor;
     for (const ShapeElement& r2 : s.elements()) {
         if (r2.isNull()) {
             continue;
@@ -63,6 +62,7 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
             const EngravingItem* item1 = r1.item();
             double ay1 = r1.top();
             double ay2 = r1.bottom();
+            double verticalClearance = computeVerticalClearance(item1, item2, spatium) * squeezeFactor;
             bool intersection = mu::engraving::intersects(ay1, ay2, by1, by2, verticalClearance);
             double padding = 0;
             KerningType kerningType = KerningType::NON_KERNING;
@@ -505,6 +505,17 @@ KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const 
     return doComputeKerningType(item1, item2);
 }
 
+double HorizontalSpacing::computeVerticalClearance(const EngravingItem* item1, const EngravingItem* item2, double spatium)
+{
+    // To be possibly expanded to more cases
+    UNUSED(item1);
+    if (item2 && item2->isAccidental()) {
+        return 0.1 * spatium;
+    }
+
+    return 0.2 * spatium;
+}
+
 bool HorizontalSpacing::isSameVoiceKerningLimited(const EngravingItem* item)
 {
     ElementType type = item->type();
@@ -580,6 +591,12 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
     if (c->allowKerningAbove() && c->allowKerningBelow()) {
         return KerningType::KERNING;
     }
+
+    if (c->up() && note->ldata()->pos().x() > 0) {
+        // Offset seconds can always be kerned into
+        return KerningType::KERNING;
+    }
+
     bool kerningAbove = item2->canvasPos().y() < note->canvasPos().y();
     if (kerningAbove && !c->allowKerningAbove()) {
         return KerningType::NON_KERNING;

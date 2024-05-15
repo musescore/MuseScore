@@ -3966,187 +3966,190 @@
       <widget class="QWidget" name="PageAccidentals">
        <layout class="QVBoxLayout" name="verticalLayout_30">
         <item>
-         <widget class="QGroupBox" name="groupBox_accidentals">
-          <property name="title">
-           <string>Accidentals</string>
+         <widget class="QScrollArea" name="scrollAreaAccidentals">
+          <property name="widgetResizable">
+           <bool>true</bool>
           </property>
-          <layout class="QGridLayout" name="gridLayout_51">
-           <item row="0" column="3">
-            <widget class="QToolButton" name="resetAccidentalsOctaveColumnsAlignLeft">
-             <property name="toolTip">
-              <string>Reset to align accidentals within octaves to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Align octaves left' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4" rowspan="2">
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="0" colspan="3">
-            <widget class="QCheckBox" name="accidentalsOctaveColumnsAlignLeft">
-             <property name="toolTip">
-              <string>When a chord has accidentals octave apart, these will be placed in the same columns. However, sometimes one of these accidentals can be larger than another, causing thus moving the others. 
-By default, they will be placed such as that their right end are at the same level. Use this checkbox to override this behaviour.</string>
-             </property>
-             <property name="text">
-              <string>Align octaves left</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2" rowspan="2">
-            <widget class="QDoubleSpinBox" name="accidentalsBracketsBadding">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="accessibleName">
-              <string>Set value for padding inside parentheses around accidentals</string>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>3</number>
-             </property>
-             <property name="minimum">
-              <double>-10.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>10.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3" rowspan="2">
-            <widget class="QToolButton" name="resetAccidentalsBracketPadding">
-             <property name="toolTip">
-              <string>Reset padding inside parentheses to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Padding inside parentheses' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" rowspan="2" colspan="2">
-            <widget class="QLabel" name="label_147">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>Bracketed accidentals have a margin between the accidental and the brackets.</string>
-             </property>
-             <property name="text">
-              <string>Padding inside parentheses:</string>
-             </property>
-             <property name="buddy">
-              <cstring>accidentalsBracketsBadding</cstring>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="accidentalsGroup">
-          <property name="title">
-           <string>Tuning</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_31">
-           <item>
-            <widget class="QTableWidget" name="accidentalTable">
-             <attribute name="horizontalHeaderDefaultSectionSize">
-              <number>150</number>
-             </attribute>
-             <column>
-              <property name="text">
-               <string>Accidental</string>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>605</width>
+             <height>471</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_63">
+            <item>
+             <widget class="QGroupBox" name="groupBox_accidentals">
+              <property name="title">
+               <string>Accidentals</string>
               </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Semitones offset</string>
+              <layout class="QGridLayout" name="gridLayout_51">
+               <item row="0" column="3" rowspan="2">
+                <widget class="QToolButton" name="resetAccidentalsBracketPadding">
+                 <property name="toolTip">
+                  <string>Reset padding inside parentheses to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Padding inside parentheses' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2" rowspan="2">
+                <widget class="QDoubleSpinBox" name="accidentalsBracketsBadding">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Set value for padding inside parentheses around accidentals</string>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="decimals">
+                  <number>3</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-10.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>10.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" rowspan="2" colspan="2">
+                <widget class="QLabel" name="label_147">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>Bracketed accidentals have a margin between the accidental and the brackets.</string>
+                 </property>
+                 <property name="text">
+                  <string>Padding inside parentheses:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>accidentalsBracketsBadding</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4" rowspan="2">
+                <spacer name="horizontalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="accidentalsGroup">
+              <property name="title">
+               <string>Tuning</string>
               </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Cents offset</string>
+              <layout class="QVBoxLayout" name="verticalLayout_31">
+               <item>
+                <widget class="QTableWidget" name="accidentalTable">
+                 <attribute name="horizontalHeaderDefaultSectionSize">
+                  <number>150</number>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Accidental</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Semitones offset</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Cents offset</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="keySigNaturalsGroup">
+              <property name="title">
+               <string>♮ in key signatures</string>
               </property>
-             </column>
-            </widget>
-           </item>
-          </layout>
+              <layout class="QVBoxLayout" name="verticalLayout_35">
+               <item>
+                <widget class="QRadioButton" name="radioKeySigNatNone">
+                 <property name="text">
+                  <string>Only for a change to C Maj / A min</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioKeySigNatBefore">
+                 <property name="text">
+                  <string>Before key signature if changing to fewer ♯ or ♭</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioKeySigNatAfter">
+                 <property name="text">
+                  <string>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBoxAccidentalStacking">
+              <property name="title">
+               <string>Multiple accidentals in chords</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_67"/>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
          </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="keySigNaturalsGroup">
-          <property name="title">
-           <string>♮ in key signatures</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_35">
-           <item>
-            <widget class="QRadioButton" name="radioKeySigNatNone">
-             <property name="text">
-              <string>Only for a change to C Maj / A min</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioKeySigNatBefore">
-             <property name="text">
-              <string>Before key signature if changing to fewer ♯ or ♭</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioKeySigNatAfter">
-             <property name="text">
-              <string>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_5">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -10877,8 +10880,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>619</width>
-             <height>485</height>
+             <width>469</width>
+             <height>461</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64">
@@ -14953,8 +14956,6 @@ first note of the system</string>
   <tabstop>radioHideKeys</tabstop>
   <tabstop>genCourtesyKeysig</tabstop>
   <tabstop>genCourtesyTimesig</tabstop>
-  <tabstop>accidentalsOctaveColumnsAlignLeft</tabstop>
-  <tabstop>resetAccidentalsOctaveColumnsAlignLeft</tabstop>
   <tabstop>accidentalsBracketsBadding</tabstop>
   <tabstop>resetAccidentalsBracketPadding</tabstop>
   <tabstop>accidentalTable</tabstop>

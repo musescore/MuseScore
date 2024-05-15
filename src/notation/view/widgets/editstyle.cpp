@@ -422,8 +422,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
         { StyleId::accidentalDistance,      false, accidentalDistance,      0 },
         { StyleId::bracketedAccidentalPadding, false, accidentalsBracketsBadding, resetAccidentalsBracketPadding },
-        { StyleId::alignAccidentalsLeft,    false, accidentalsOctaveColumnsAlignLeft, resetAccidentalsOctaveColumnsAlignLeft },
-
         { StyleId::minNoteDistance,         false, minNoteDistance,         resetMinNoteDistance },
         { StyleId::barNoteDistance,         false, barNoteDistance,         resetBarNoteDistance },
         { StyleId::barAccidentalDistance,   false, barAccidentalDistance,   resetBarAccidentalDistance },
@@ -885,6 +883,19 @@ EditStyle::EditStyle(QWidget* parent)
     tiePlacementSelector->setMinimumSize(224, 120);
     tiePlacementSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_ties->layout()->addWidget(tiePlacementSelector);
+
+    // ====================================================
+    // ACCIDENTAL GROUP PLACEMENT (QML)
+    // ====================================================
+
+    QQuickWidget* accidPlacementSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                            /*parent*/ groupBoxAccidentalStacking);
+    accidPlacementSelector->setObjectName("accidPlacementSelector_QQuickWidget");
+    accidPlacementSelector->setSource(QUrl(QString::fromUtf8(
+                                               "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml")));
+    accidPlacementSelector->setMinimumSize(224, 440);
+    accidPlacementSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBoxAccidentalStacking->layout()->addWidget(accidPlacementSelector);
 
     // ====================================================
     // Figured Bass

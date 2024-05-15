@@ -160,8 +160,8 @@ public:
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
 
     bool contains(const PointF&) const;
-    bool intersects(const RectF& rr) const;
-    bool intersects(const Shape&) const;
+    bool intersects(const RectF& rr, double horClearance = 0.0, double vertClearance = 0.0) const;
+    bool intersects(const Shape& other, double horClearance = 0.0, double vertClearance = 0.0) const;
     bool clearsVertically(const Shape& a) const;
 
     void paint(muse::draw::Painter& painter) const;

@@ -22,6 +22,8 @@
 #include <cfloat>
 
 #include "chordlayout.h"
+#include "accidentalslayout.h"
+#include "horizontalspacing.h"
 
 #include "containers.h"
 
@@ -104,12 +106,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     double chordX           = (item->noteType() == NoteType::NORMAL) ? item->ldata()->pos().x() : 0.0;
 
-    while (item->ledgerLines()) {
-        LedgerLine* l = item->ledgerLines()->next();
-        delete item->ledgerLines();
-        item->setLedgerLine(l);
-    }
-
     double lll    = 0.0;           // space to leave at left of chord
     double rrr    = 0.0;           // space to leave at right of chord
     double lhead  = 0.0;           // amount of notehead to left of chord origin
@@ -132,7 +128,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     for (Note* note : item->notes()) {
         TLayout::layoutNote(note, note->mutldata());
-
         double x1 = note->pos().x() + chordX;
         double x2 = x1 + note->headWidth();
         lll      = std::max(lll, -x1);
@@ -167,12 +162,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             }
         }
     }
-
-    //-----------------------------------------
-    //  create ledger lines
-    //-----------------------------------------
-
-    item->addLedgerLines();
 
     // A chord can have its own arpeggio and also be part of another arpeggio's span.  We need to lay out both of these arpeggios properly
     Arpeggio* oldSpanArp = item->spanArpeggio();
@@ -1990,7 +1979,16 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         layoutChords3(ctx.conf().style(), chords, notes, staff, ctx);
     }
 
+    layoutLedgerLines(chords);
+    AccidentalsLayout::layoutAccidentals(chords, ctx);
+    for (Chord* chord : chords) {
+        for (Chord* grace : chord->graceNotes()) {
+            AccidentalsLayout::layoutAccidentals({ grace }, ctx);
+        }
+    }
+
     layoutSegmentElements(segment, partStartTrack, partEndTrack, staffIdx, ctx);
+
     for (Chord* chord : chords) {
         Ornament* ornament = chord->findOrnament();
         if (ornament && ornament->showCueNote()) {
@@ -2217,7 +2215,6 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
     double stepDistance = sp * staff->lineDistance(tick) * .5;
     int stepOffset     = staff->staffType(tick)->stepOffset();
 
-    double lx           = DBL_MAX;    // leftmost notehead position
     double upDotPosX    = 0.0;
     double downDotPosX  = 0.0;
 
@@ -2357,6 +2354,25 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
             } else {
                 chord->setDotPosX(downDotPosX);
             }
+        }
+    }
+}
+
+void ChordLayout::layoutLedgerLines(const std::vector<Chord*>& chords)
+{
+    auto redoLedgerLines = [] (Chord* item) {
+        while (item->ledgerLines()) {
+            LedgerLine* l = item->ledgerLines()->next();
+            delete item->ledgerLines();
+            item->setLedgerLine(l);
+        }
+        item->addLedgerLines();
+    };
+
+    for (Chord* item : chords) {
+        redoLedgerLines(item);
+        for (Chord* grace : item->graceNotes()) {
+            redoLedgerLines(grace);
         }
     }
 }

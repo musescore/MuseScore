@@ -151,6 +151,7 @@
 
 #include "dom/whammybar.h"
 
+#include "accidentalslayout.h"
 #include "arpeggiolayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
@@ -475,6 +476,8 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
     if (item->accidentalType() == AccidentalType::NONE) {
         return;
     }
+
+    ldata->column = 0;
 
     auto accidentalSingleSym = [](const Accidental* item) -> SymId
     {
@@ -3896,7 +3899,7 @@ static void _layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, 
     if (item->vertical()) {
         ldata->setBbox(-w2, 0, w2, item->len());
     } else {
-        ldata->setBbox(0, -w2, item->len(), w2);
+        ldata->setBbox(0, -w2, item->len(), 2 * w2);
     }
 }
 
@@ -4480,6 +4483,8 @@ void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
     }
 
     ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
+    ChordLayout::layoutLedgerLines({ cueNoteChord });
+    AccidentalsLayout::layoutAccidentals({ cueNoteChord }, ctx);
     layoutChord(cueNoteChord, ctx);
 
     Shape noteShape = cueNoteChord->shape();

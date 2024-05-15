@@ -306,6 +306,11 @@ double Accidental::subtype2centOffset(AccidentalType st)
     return ACC_LIST[int(st)].centOffset;
 }
 
+int Accidental::line() const
+{
+    return note()->line();
+}
+
 //---------------------------------------------------------
 //   name2subtype
 //---------------------------------------------------------
@@ -437,6 +442,7 @@ PropertyValue Accidental::getProperty(Pid propertyId) const
     case Pid::SMALL:              return m_isSmall;
     case Pid::ACCIDENTAL_BRACKET: return int(bracket());
     case Pid::ACCIDENTAL_ROLE:    return role();
+    case Pid::ACCIDENTAL_STACKING_ORDER_OFFSET: return stackingOrderOffset();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -453,6 +459,7 @@ PropertyValue Accidental::propertyDefault(Pid propertyId) const
     case Pid::SMALL:              return false;
     case Pid::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
     case Pid::ACCIDENTAL_ROLE:    return AccidentalRole::AUTO;
+    case Pid::ACCIDENTAL_STACKING_ORDER_OFFSET: return 0;
     default:
         return EngravingItem::propertyDefault(propertyId);
     }
@@ -476,6 +483,9 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::ACCIDENTAL_ROLE:
         m_role = v.value<AccidentalRole>();
+        break;
+    case Pid::ACCIDENTAL_STACKING_ORDER_OFFSET:
+        setStackingOrderOffset(v.toInt());
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);

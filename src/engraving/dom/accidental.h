@@ -61,6 +61,8 @@ class Accidental final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Accidental)
     DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
+    M_PROPERTY2(int, stackingOrderOffset, setStackingOrderOffset, 0)
+
 public:
 
     Accidental* clone() const override { return new Accidental(*this); }
@@ -109,6 +111,10 @@ public:
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);
 
+    int stackingOrder() const { return ldata()->stackingNumber + _stackingOrderOffset; }
+
+    int line() const;
+
     String accessibleInfo() const override;
 
     void computeMag();
@@ -123,6 +129,12 @@ public:
         };
 
         std::vector<Sym> syms;
+
+        ld_field<int> stackingNumber = { "[Accidental] stackingNumber", 0 };
+        ld_field<int> verticalSubgroup = { "[Accidental] verticalSubgroup", 0 };
+        ld_field<int> column = { "[Accidental] column", 0 };
+        ld_field<std::vector<Accidental*> > octaves = { "[Accidental] octaves", std::vector<Accidental*> {} };
+        ld_field<std::vector<Accidental*> > seconds = { "[Accidental] seconds", std::vector<Accidental*> {} };
 
         bool isValid() const override { return EngravingItem::LayoutData::isValid() && !syms.empty(); }
     };
