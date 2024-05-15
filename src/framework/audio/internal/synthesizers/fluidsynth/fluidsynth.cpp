@@ -365,13 +365,11 @@ async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const
 
 void FluidSynth::toggleExpressionController()
 {
-    int volume = DEFAULT_MIDI_VOLUME;
-
     if (isActive()) {
-        volume = m_sequencer.currentExpressionLevel();
+        setExpressionLevel(m_sequencer.currentExpressionLevel());
+    } else {
+        setExpressionLevel(m_sequencer.naturalExpressionLevel());
     }
-
-    setExpressionLevel(volume);
 }
 
 int FluidSynth::setExpressionLevel(int level)
