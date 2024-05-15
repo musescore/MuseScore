@@ -8,7 +8,7 @@ import Muse.UiComponents 1.0
 
 MuseScore {
     version: "1.2" // 21 - June - 2022
-    description: qsTr("Apply lyrics in lilypond format.")
+    description: "Apply lyrics in Lilypond format"
     title: "Lilypond Lyrics"
     categoryCode: "lyrics"
     thumbnailName: "lilyrics.png"
