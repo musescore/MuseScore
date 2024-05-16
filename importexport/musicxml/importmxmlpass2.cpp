@@ -4898,13 +4898,13 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                   if (barStyle != "regular" || barlineColor.isValid() || loc == "middle") {
                         // Add barline to the first voice of every staff in the part,
                         // and span every barline except the last
-                        int nstaves = _pass1.getPart(partId)->nstaves();
+                        const Part* part = _pass1.getPart(partId);
+                        int nstaves = part->nstaves();
                         for (int i = 0; i < nstaves; ++i ) {
-                              Score* score = measure->score();
-                              Staff* staff = score->staff((track / VOICES) + i);
-                              bool spanStaff = staff->barLineSpan();
+                              const Staff* staff = part->staff(i);
+                              bool spanStaff = nstaves > 1 ? i < nstaves - 1 : staff->barLineSpan();
                               int currentTrack = track + (i * VOICES);
-                              auto b = createBarline(score, currentTrack, type, visible, barStyle, spanStaff);
+                              auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
                               if (barlineColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                                     b->setColor(barlineColor);
                               addBarlineToMeasure(measure, tick, std::move(b));

@@ -64,6 +64,7 @@ private slots:
       void articulationCombination() { mxmlIoTestRef("testArticulationCombination"); }
       void backupRoundingError() { mxmlImportTestRef("testBackupRoundingError"); }
       void barlineFermatas() { mxmlIoTest("testBarlineFermatas"); }
+      void barlineSpan() { mxmlIoTest("testBarlineSpan"); }
       void barlinesGrandStaff1() { mxmlImportTestRef("testBarlinesGrandStaff"); }
       void barlinesGrandStaff2() { mxmlIoTest("testBarlinesGrandStaff"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }

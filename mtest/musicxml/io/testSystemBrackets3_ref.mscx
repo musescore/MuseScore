@@ -607,6 +607,7 @@ Gtr.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <span>0</span>
             </BarLine>
           </voice>
         </Measure>
@@ -649,6 +650,7 @@ Gtr.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <span>0</span>
             </BarLine>
           </voice>
         </Measure>
