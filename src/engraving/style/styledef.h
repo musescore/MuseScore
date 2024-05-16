@@ -1711,6 +1711,8 @@ enum class Sid {
     tabParenthesizeTiedFret,
     parenthesizeTiedFretIfArticulation,
 
+    tabFretPadding,
+
     chordlineThickness,
 
     dummyMusicalSymbolsScale,

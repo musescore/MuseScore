@@ -1701,6 +1701,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(tabParenthesizeTiedFret,                    int(ParenthesizeTiedFret::START_OF_SYSTEM)),
     styleDef(parenthesizeTiedFretIfArticulation,         true),
 
+    styleDef(tabFretPadding,                             Spatium(0.1)),
+
     styleDef(chordlineThickness,                         Spatium(0.16)),
 
     styleDef(dummyMusicalSymbolsScale,                   1.0),

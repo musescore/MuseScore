@@ -4321,7 +4321,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
         }
 
-        double w = item->tabHeadWidth(tab);     // !! use _fretString
+        double w = item->tabHeadWidth(tab);
         double mags = item->magS();
 
         const MStyle& style = item->style();
