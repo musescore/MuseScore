@@ -399,6 +399,9 @@ TEST_F(Musicxml_Tests, articulationCombination) {
 TEST_F(Musicxml_Tests, backupRoundingError) {
     mxmlImportTestRef("testBackupRoundingError");
 }
+TEST_F(Musicxml_Tests, barlineSpan) {
+    mxmlIoTest("testBarlineSpan");
+}
 TEST_F(Musicxml_Tests, barlineFermatas) {
     mxmlIoTest("testBarlineFermatas");
 }
