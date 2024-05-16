@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   update-get-started-playlist:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
             --file_name "playlist.json"
 
   update-advanced-playlist:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v4

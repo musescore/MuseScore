@@ -24,7 +24,7 @@ on:
 
 jobs:
   build_armhf:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -153,7 +153,7 @@ jobs:
         path: ./build.artifacts/
 
   build_arm64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1

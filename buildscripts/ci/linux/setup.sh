@@ -78,6 +78,7 @@ apt_packages_standard=(
   libportmidi-dev
   libpulse-dev
   libsndfile1-dev
+  ninja-build
   make
   wget
   )
@@ -152,17 +153,20 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 # COMPILER
 if [ "$COMPILER" == "gcc" ]; then
 
-  gcc_version="10"
-  sudo apt install -y --no-install-recommends "g++-${gcc_version}"
-  sudo update-alternatives \
-    --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
-    --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
-
-  echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
-  echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
-
-  gcc-${gcc_version} --version
-  g++-${gcc_version} --version
+echo using GCC version:
+gcc --version
+g++ --version
+#  gcc_version="13"
+#  sudo apt install -y --no-install-recommends "g++-${gcc_version}"
+#  sudo update-alternatives \
+#    --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
+#    --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
+#
+#  echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
+#  echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
+#
+#  gcc-${gcc_version} --version
+#  g++-${gcc_version} --version
 
 elif [ "$COMPILER" == "clang" ]; then
 
@@ -176,30 +180,6 @@ elif [ "$COMPILER" == "clang" ]; then
 else 
   echo "Unknown compiler: $COMPILER"
 fi
-
-# CMAKE
-# Get newer CMake (only used cached version if it is the same)
-cmake_version="3.16.0"
-cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
-if [[ ! -d "$cmake_dir" ]]; then
-  mkdir -p "$cmake_dir"
-  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-Linux-x86_64.tar.gz"
-  wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
-fi
-echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
-$cmake_dir/bin/cmake --version
-
-# Ninja
-echo "Get Ninja"
-ninja_dir=$BUILD_TOOLS/Ninja
-if [[ ! -d "$ninja_dir" ]]; then
-  mkdir -p $ninja_dir
-  wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
-  chmod +x $ninja_dir/ninja
-fi
-echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
-echo "ninja version"
-$ninja_dir/ninja --version
 
 # Dump syms
 echo "Get Breakpad"
