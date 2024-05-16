@@ -173,6 +173,7 @@ private slots:
       void invalidLayout() { mxmlMscxExportTestRef("testInvalidLayout"); }
       void invalidTimesig() { mxmlIoTestRef("testInvalidTimesig"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
+      void invisibleNote() { mxmlMscxExportTestRef("testInvisibleNote"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
       void keysig2() { mxmlIoTest("testKeysig2"); }
       void layoutCleanup1() { mxmlImportTestRef("testLayoutCleanup1"); }
