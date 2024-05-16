@@ -43,7 +43,7 @@ void NotePlaybackModel::createProperties()
 
 void NotePlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::NOTE);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::NOTEHEAD);
 }
 
 void NotePlaybackModel::loadProperties()
