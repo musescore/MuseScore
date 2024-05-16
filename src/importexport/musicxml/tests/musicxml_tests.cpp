@@ -754,6 +754,9 @@ TEST_F(Musicxml_Tests, invisibleDirection) {
 TEST_F(Musicxml_Tests, invisibleElements) {
     mxmlIoTest("testInvisibleElements");
 }
+TEST_F(Musicxml_Tests, invisibleNote) {
+    mxmlMscxExportTestRef("testInvisibleNote");
+}
 TEST_F(Musicxml_Tests, keysig1) {
     mxmlIoTest("testKeysig1");
 }

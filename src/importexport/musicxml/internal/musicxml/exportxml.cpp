@@ -4266,7 +4266,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         writeTimeModification(m_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
         // no stem for whole notes and beyond
-        if (chord->noStem() || chord->measure()->stemless(chord->staffIdx())) {
+        if (chord->noStem() || chord->measure()->stemless(chord->staffIdx()) || (chord->stem() && !chord->stem()->visible())) {
             m_xml.tag("stem", "none");
         } else if (const Stem* stem = note->chord()->stem()) {
             String stemTag = u"stem";
