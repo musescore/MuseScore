@@ -33,6 +33,8 @@
 #include "internal/musesampleruiactions.h"
 #include "internal/musesampleractioncontroller.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::modularity;
@@ -76,4 +78,10 @@ void MuseSamplerModule::onInit(const IApplication::RunMode& mode)
     m_configuration->init();
     m_actionController->init();
     m_resolver->init();
+
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        pr->reg("musesampler", m_configuration->userLibraryPath());
+        pr->reg("musesampler fallback", m_configuration->fallbackLibraryPath());
+    }
 }
