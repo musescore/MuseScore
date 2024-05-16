@@ -31,6 +31,7 @@
 #include "../../style/style.h"
 #include "../../iengravingfont.h"
 #include "../../dom/mscore.h"
+#include "../../dom/stafftype.h"
 
 #include "../layoutoptions.h"
 
@@ -103,6 +104,7 @@ public:
 
     bool isShowVBox() const { return options().isShowVBox; }
     double noteHeadWidth() const { return options().noteHeadWidth; }
+    double fretWidth(const StaffType* tab) const;
     bool isShowInvisible() const;
     int pageNumberOffset() const;
     bool isVerticalSpreadEnabled() const;

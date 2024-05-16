@@ -73,6 +73,17 @@ bool LayoutConfiguration::isPrintingMode() const
     return score()->printing();
 }
 
+double LayoutConfiguration::fretWidth(const StaffType* tab) const
+{
+    if (!tab || !tab->isTabStaff()) {
+        return 0.0;
+    }
+
+    muse::draw::Font f = tab->fretFont();
+    f.setPointSizeF(tab->fretFontSize());
+    return muse::draw::FontMetrics::width(f, u"0");
+}
+
 std::shared_ptr<const IEngravingFont> LayoutConfiguration::engravingFont() const
 {
     IF_ASSERT_FAILED(score()) {

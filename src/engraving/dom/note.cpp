@@ -1002,6 +1002,10 @@ double Note::bboxRightPos() const
 //---------------------------------------------------------
 double Note::headBodyWidth() const
 {
+    const StaffType* st = staffType();
+    if (st && st->isTabStaff()) {
+        return tabHeadWidth(st);
+    }
     return headWidth() + 2 * bboxXShift();
 }
 
@@ -3805,5 +3809,10 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
 bool Note::negativeFretUsed() const
 {
     return engravingConfiguration()->negativeFretsAllowed() && m_fret < 0;
+}
+
+int Note::stringOrLine() const
+{
+    return staff()->staffType(tick())->isTabStaff() ? string() * 2 : line();
 }
 }
