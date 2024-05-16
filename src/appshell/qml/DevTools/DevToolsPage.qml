@@ -92,7 +92,7 @@ DockPage {
         }
     ]
 
-    central: extensionsComp
+    central: settingsComp
 
     Component {
         id: settingsComp
