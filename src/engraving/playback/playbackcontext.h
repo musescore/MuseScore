@@ -55,12 +55,13 @@ private:
     using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
     using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
     using ParamMap = std::map<int /*nominalPositionTick*/, mpe::PlaybackParamList>;
+    using SoundFlagMap = std::map<staff_idx_t, const SoundFlag*>;
 
     mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const ID partId, const Score* score, const PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlag* flag, const int segmentPositionTick);
+    void updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlagMap& flagsOnSegment, const int segmentPositionTick);
     void applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
                                    const mu::mpe::dynamic_level_t dynamicLevel);
 

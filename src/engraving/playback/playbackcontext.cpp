@@ -42,6 +42,15 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
+static bool soundFlagPlayable(const SoundFlag* flag)
+{
+    if (flag && flag->play()) {
+        return !flag->soundPresets().empty() || !flag->playingTechnique().empty();
+    }
+
+    return false;
+}
+
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const int nominalPositionTick) const
 {
     auto it = findLessOrEqual(m_dynamicsMap, nominalPositionTick);
@@ -64,16 +73,12 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
 
 PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int nominalPositionTick, const staff_idx_t staffIdx) const
 {
-    mu::mpe::PlaybackParamMap result;
-
     auto it = mu::findLessOrEqual(m_playbackParamMap, nominalPositionTick);
     if (it == m_playbackParamMap.end()) {
-        return result;
+        return {};
     }
 
-    auto endIt = m_playbackParamMap.upper_bound(nominalPositionTick);
-
-    for (; it != endIt; ++it) {
+    for (; it->first <= nominalPositionTick; it = std::prev(it)) {
         PlaybackParamList params;
 
         for (const PlaybackParam& param : it->second) {
@@ -83,11 +88,17 @@ PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int
         }
 
         if (!params.empty()) {
+            mpe::PlaybackParamMap result;
             result.insert_or_assign(timestampFromTicks(score, it->first), std::move(params));
+            return result;
+        }
+
+        if (it == m_playbackParamMap.begin()) {
+            return {};
         }
     }
 
-    return result;
+    return {};
 }
 
 PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score) const
@@ -246,16 +257,9 @@ void PlaybackContext::updatePlayTechMap(const ID partId, const Score* score, con
     }
 }
 
-void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlag* flag, const int segmentPositionTick)
+void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlagMap& flagsOnSegment,
+                                             const int segmentPositionTick)
 {
-    if (!flag->play()) {
-        return;
-    }
-
-    if (flag->soundPresets().empty() && flag->playingTechnique().empty()) {
-        return;
-    }
-
     mpe::PlaybackParamList params;
 
     auto addParams = [&params](const SoundFlag* flag, staff_layer_idx_t idx) {
@@ -268,20 +272,37 @@ void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score
         }
     };
 
-    if (flag->applyToAllStaves()) {
-        const Part* part = score->partById(partId);
-        IF_ASSERT_FAILED(part && !part->staves().empty()) {
-            return;
+    bool multipleFlagsOnSegment = flagsOnSegment.size() > 1;
+
+    for (const auto& pair : flagsOnSegment) {
+        const SoundFlag* flag = pair.second;
+        staff_idx_t staffIdx = flag->staffIdx();
+
+        if (flag->applyToAllStaves()) {
+            const Part* part = score->partById(partId);
+            IF_ASSERT_FAILED(part && !part->staves().empty()) {
+                return;
+            }
+
+            staff_idx_t startIdx = part->staves().front()->idx();
+            staff_idx_t endIdx = startIdx + part->nstaves();
+
+            for (staff_idx_t idx = startIdx; idx < endIdx; ++idx) {
+                if (multipleFlagsOnSegment) {
+                    if (idx != staffIdx && mu::contains(flagsOnSegment, idx)) {
+                        continue;
+                    }
+                }
+
+                addParams(flag, static_cast<staff_layer_idx_t>(idx));
+            }
+        } else {
+            addParams(flag, static_cast<staff_layer_idx_t>(staffIdx));
         }
 
-        mpe::staff_layer_idx_t startIdx = part->staves().front()->idx();
-        mpe::staff_layer_idx_t endIdx = startIdx + part->nstaves();
-
-        for (mpe::staff_layer_idx_t idx = startIdx; idx < endIdx; ++idx) {
-            addParams(flag, idx);
+        if (flag->playingTechnique().toStdString() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+            m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
         }
-    } else {
-        addParams(flag, flag->staffIdx());
     }
 
     IF_ASSERT_FAILED(!params.empty()) {
@@ -289,10 +310,6 @@ void PlaybackContext::updatePlaybackParamMap(const ID partId, const Score* score
     }
 
     m_playbackParamMap.emplace(segmentPositionTick, std::move(params));
-
-    if (flag->playingTechnique().toStdString() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
-        m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
-    }
 }
 
 void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
@@ -401,6 +418,8 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
 
 void PlaybackContext::handleAnnotations(const ID partId, const Score* score, const Segment* segment, const int segmentPositionTick)
 {
+    SoundFlagMap soundFlags;
+
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->part()) {
             continue;
@@ -422,10 +441,15 @@ void PlaybackContext::handleAnnotations(const ID partId, const Score* score, con
 
         if (annotation->isStaffText()) {
             if (const SoundFlag* flag = toStaffText(annotation)->soundFlag()) {
-                updatePlaybackParamMap(partId, score, flag, segmentPositionTick);
-                continue;
+                if (soundFlagPlayable(flag)) {
+                    soundFlags.emplace(flag->staffIdx(), flag);
+                }
             }
         }
+    }
+
+    if (!soundFlags.empty()) {
+        updatePlaybackParamMap(partId, score, soundFlags, segmentPositionTick);
     }
 
     if (m_dynamicsMap.empty()) {

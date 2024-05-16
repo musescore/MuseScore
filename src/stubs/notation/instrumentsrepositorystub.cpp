@@ -29,7 +29,7 @@ const InstrumentTemplateList& InstrumentsRepositoryStub::instrumentTemplates() c
     return l;
 }
 
-const InstrumentTemplate& InstrumentsRepositoryStub::instrumentTemplate(const muse::String&) const
+const InstrumentTemplate& InstrumentsRepositoryStub::instrumentTemplate(const mu::String&) const
 {
     static InstrumentTemplate t;
     return t;
@@ -41,7 +41,7 @@ const ScoreOrderList& InstrumentsRepositoryStub::orders() const
     return l;
 }
 
-const ScoreOrder& InstrumentsRepositoryStub::order(const muse::String&) const
+const ScoreOrder& InstrumentsRepositoryStub::order(const mu::String&) const
 {
     static ScoreOrder o;
     return o;
