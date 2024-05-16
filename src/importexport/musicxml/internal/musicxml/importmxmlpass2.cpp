@@ -4887,9 +4887,11 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
             if (barStyle != "regular" || barlineColor.isValid() || loc == "middle") {
                 // Add barline to the first voice of every staff in the part,
                 // and span every barline except the last
-                staff_idx_t nstaves = m_pass1.getPart(partId)->nstaves();
+                const Part* part = m_pass1.getPart(partId);
+                staff_idx_t nstaves = part->nstaves();
                 for (staff_idx_t i = 0; i < nstaves; ++i) {
-                    bool spanStaff = i < nstaves - 1;
+                    const Staff* staff = part->staff(i);
+                    bool spanStaff = nstaves > 1 ? i < nstaves - 1 : staff->barLineSpan();
                     track_idx_t currentTrack = track + (i * VOICES);
                     auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
                     if (barlineColor.isValid()) {
