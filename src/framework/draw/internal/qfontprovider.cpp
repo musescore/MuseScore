@@ -72,7 +72,10 @@ void QFontProvider::insertSubstitution(const String& familyName, const String& s
 
 double QFontProvider::lineSpacing(const Font& f) const
 {
-    return QFontMetricsF(f.toQFont(), &device).lineSpacing();
+    /* QFontMetrics::lineSpacing() is unreliable because lineSpacing() = height() + leading()
+     * and QFontMetrics::leading() seems to read unreliable values from the font data.
+     * We return QFontMetrics::height() instead. */
+    return QFontMetricsF(f.toQFont(), &device).height();
 }
 
 double QFontProvider::xHeight(const Font& f) const
