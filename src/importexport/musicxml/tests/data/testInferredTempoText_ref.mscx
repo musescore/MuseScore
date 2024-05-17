@@ -256,10 +256,9 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Tempo>
-            <tempo>2</tempo>
-            <text><b>Andante</b></text>
-            </Tempo>
+          <StaffText>
+            <text><b>“Andante”</b></text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
