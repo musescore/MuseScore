@@ -33,6 +33,7 @@
 #include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/spanner.h"
+#include "dom/measurerepeat.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
@@ -118,11 +119,18 @@ DynamicLevelMap PlaybackContext::dynamicLevelMap(const Score* score) const
 void PlaybackContext::update(const ID partId, const Score* score)
 {
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        std::vector<const MeasureRepeat*> measureRepeats;
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const Measure* measure : repeatSegment->measureList()) {
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
+
+                for (const EngravingItem* item : segment->elist()) {
+                    if (item && item->isMeasureRepeat()) {
+                        measureRepeats.push_back(toMeasureRepeat(item));
+                    }
+                }
 
                 handleAnnotations(partId, score, segment, segmentStartTick);
             }
@@ -130,6 +138,8 @@ void PlaybackContext::update(const ID partId, const Score* score)
 
         handleSpanners(partId, score, repeatSegment->tick,
                        repeatSegment->tick + repeatSegment->len(), tickPositionOffset);
+
+        handleMeasureRepeats(measureRepeats, tickPositionOffset);
     }
 }
 
@@ -423,22 +433,94 @@ void PlaybackContext::handleAnnotations(const ID partId, const Score* score, con
     }
 }
 
-void PlaybackContext::removeDynamicData(const int from, const int to)
+void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset)
 {
-    auto lowerBound = m_dynamicsMap.lower_bound(from);
-    auto upperBound = m_dynamicsMap.upper_bound(to);
+    for (const MeasureRepeat* mr : measureRepeats) {
+        const Measure* currMeasure = mr->firstMeasureOfGroup();
+        if (!currMeasure) {
+            continue;
+        }
 
-    for (auto it = lowerBound; it != upperBound;) {
-        it = m_dynamicsMap.erase(it);
+        const Measure* referringMeasure = mr->referringMeasure(currMeasure);
+        if (!referringMeasure) {
+            continue;
+        }
+
+        int currentMeasureTick = currMeasure->tick().ticks();
+        int referringMeasureTick = referringMeasure->tick().ticks();
+        int newItemsOffsetTick = currentMeasureTick - referringMeasureTick;
+
+        for (int num = 0; num < mr->numMeasures(); ++num) {
+            int startTick = referringMeasure->tick().ticks() + tickPositionOffset;
+            int endTick = referringMeasure->endTick().ticks() + tickPositionOffset;
+
+            copyDynamicsInRange(startTick, endTick, newItemsOffsetTick);
+            copyPlaybackParamsInRange(startTick, endTick, newItemsOffsetTick);
+            copyPlayTechniquesInRange(startTick, endTick, newItemsOffsetTick);
+
+            currMeasure = currMeasure->nextMeasure();
+            if (!currMeasure) {
+                break;
+            }
+
+            referringMeasure = mr->referringMeasure(currMeasure);
+            if (!referringMeasure) {
+                break;
+            }
+        }
     }
 }
 
-void PlaybackContext::removePlayTechniqueData(const int from, const int to)
+void PlaybackContext::copyDynamicsInRange(const int rangeStartTick, const int rangeEndTick, const int newDynamicsOffsetTick)
 {
-    auto lowerBound = m_playTechniquesMap.lower_bound(from);
-    auto upperBound = m_playTechniquesMap.upper_bound(to);
-
-    for (auto it = lowerBound; it != upperBound;) {
-        it = m_playTechniquesMap.erase(it);
+    auto startIt = m_dynamicsMap.lower_bound(rangeStartTick);
+    if (startIt == m_dynamicsMap.end()) {
+        return;
     }
+
+    auto endIt = m_dynamicsMap.lower_bound(rangeEndTick);
+
+    DynamicMap newDynamics;
+    for (auto it = startIt; it != endIt; ++it) {
+        int tick = it->first + newDynamicsOffsetTick;
+        newDynamics.insert_or_assign(tick, it->second);
+    }
+
+    m_dynamicsMap.merge(std::move(newDynamics));
+}
+
+void PlaybackContext::copyPlaybackParamsInRange(const int rangeStartTick, const int rangeEndTick, const int newParamsOffsetTick)
+{
+    auto startIt = m_playbackParamMap.lower_bound(rangeStartTick);
+    if (startIt == m_playbackParamMap.end()) {
+        return;
+    }
+
+    auto endIt = m_playbackParamMap.lower_bound(rangeEndTick);
+
+    ParamMap newParams;
+    for (auto it = startIt; it != endIt; ++it) {
+        int tick = it->first + newParamsOffsetTick;
+        newParams.insert_or_assign(tick, it->second);
+    }
+
+    m_playbackParamMap.merge(std::move(newParams));
+}
+
+void PlaybackContext::copyPlayTechniquesInRange(const int rangeStartTick, const int rangeEndTick, const int newPlayTechOffsetTick)
+{
+    auto startIt = m_playTechniquesMap.lower_bound(rangeStartTick);
+    if (startIt == m_playTechniquesMap.end()) {
+        return;
+    }
+
+    auto endIt = m_playTechniquesMap.lower_bound(rangeEndTick);
+
+    PlayTechniquesMap newPlayTechniques;
+    for (auto it = startIt; it != endIt; ++it) {
+        int tick = it->first + newPlayTechOffsetTick;
+        newPlayTechniques.insert_or_assign(tick, it->second);
+    }
+
+    m_playTechniquesMap.merge(std::move(newPlayTechniques));
 }

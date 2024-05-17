@@ -44,6 +44,12 @@ int FluidSequencer::currentExpressionLevel() const
     return expressionLevel(dynamicLevel(m_playbackPosition));
 }
 
+int FluidSequencer::naturalExpressionLevel() const
+{
+    static const int NATURAL_EXP_LVL = expressionLevel(dynamicLevelFromType(DynamicType::Natural));
+    return NATURAL_EXP_LVL;
+}
+
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamMap&)
 {
     m_offStreamEvents.clear();

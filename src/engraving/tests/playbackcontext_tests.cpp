@@ -35,6 +35,7 @@
 
 using namespace mu::engraving;
 using namespace mu::mpe;
+using namespace mu;
 
 static const mu::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
 
@@ -57,10 +58,10 @@ protected:
     }
 };
 
-TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
+TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
 {
     // [GIVEN] Score with hairpins and repeats
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "hairpins_and_repeats.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/hairpins_and_repeats.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
@@ -118,7 +119,91 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
     delete score;
 }
 
-TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
+TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
+{
+    // [GIVEN] Score with 5 measures. There is a measure repeat on the last 2 measures
+    // (so the previous 2 measures will be repeated)
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_and_measure_repeats.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing dynamics
+    PlaybackContext ctx;
+
+    // [WHEN] Parse dynamics
+    ctx.update(parts.front()->id(), score);
+
+    // [WHEN] Get the actual dynamics map
+    DynamicLevelMap actualDynamics = ctx.dynamicLevelMap(score);
+
+    // [THEN] The dynamics map matches the expectation
+    DynamicLevelMap expectedDynamics {
+        { timestampFromTicks(score, 0), dynamicLevelFromType(mpe::DynamicType::Natural) },
+
+        // 2nd measure
+        { timestampFromTicks(score, 1920), dynamicLevelFromType(mpe::DynamicType::ppp) }, // 1st quarter note
+        { timestampFromTicks(score, 3360), dynamicLevelFromType(mpe::DynamicType::p) }, // 4th quarter note
+
+        // 3rd measure
+        { timestampFromTicks(score, 4320), dynamicLevelFromType(mpe::DynamicType::mf) }, // 2nd quarter note
+        { timestampFromTicks(score, 5280), dynamicLevelFromType(mpe::DynamicType::fff) }, // 4th quarter note
+
+        // copy of 2nd measure
+        { timestampFromTicks(score, 5760), dynamicLevelFromType(mpe::DynamicType::ppp) },
+        { timestampFromTicks(score, 7200), dynamicLevelFromType(mpe::DynamicType::p) },
+
+        // copy of 3rd measure
+        { timestampFromTicks(score, 8160), dynamicLevelFromType(mpe::DynamicType::mf) },
+        { timestampFromTicks(score, 9120), dynamicLevelFromType(mpe::DynamicType::fff) },
+    };
+
+    EXPECT_EQ(actualDynamics, expectedDynamics);
+}
+
+TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
+{
+    // [GIVEN] Score with 5 measures. The 1st measure is repeated. There also is a measure repeat on the last 2 measures
+    // (so the previous 2 measures will be repeated)
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "play_techniques/play_techniques_measure_repeats.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] the 1st measure is repeated
+    constexpr int repeatOffsetTick = 1920;
+
+    // [GIVEN] Context for parsing playing techniques
+    PlaybackContext ctx;
+
+    // [WHEN] Parse playing techniques
+    ctx.update(parts.front()->id(), score);
+
+    // [THEN] The articulation map matches the expectation
+    std::map<int, mpe::ArticulationType> expectedArticulations {
+        // 1st measure
+        { 0, mpe::ArticulationType::Standard },
+
+        // 2nd measure
+        { 1920 + repeatOffsetTick, mpe::ArticulationType::Mute }, // 1st quarter note
+
+        // 3rd measure
+        { 4320 + repeatOffsetTick, mpe::ArticulationType::Distortion }, // 2nd quarter note
+
+        // copy of 2nd measure
+        { 5760 + repeatOffsetTick, mpe::ArticulationType::Mute },
+
+        // copy of 3rd measure
+        { 8160 + repeatOffsetTick, mpe::ArticulationType::Distortion },
+    };
+
+    for (const auto& pair : expectedArticulations) {
+        mpe::ArticulationType actualArticulation = ctx.persistentArticulationType(pair.first);
+        EXPECT_EQ(actualArticulation, pair.second);
+    }
+}
+
+TEST_F(Engraving_PlaybackContextTests, SoundFlags)
 {
     // [GIVEN] Score (piano with 2 staves) with sound flags
     Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags.mscx");
@@ -180,6 +265,36 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
     }
 
     delete score;
+}
+
+TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
+{
+    // [GIVEN] Score with 5 measures. There is a measure repeat on the last 2 measures
+    // (so the previous 2 measures will be repeated)
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags/sound_flags_measure_repeats.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing sound flags
+    PlaybackContext ctx;
+
+    // [WHEN] Parse sound flags
+    ctx.update(parts.front()->id(), score);
+
+    // [THEN] The actual params match the expectation
+    PlaybackParamList secondMeasureParams { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("Espressivo"), 0 } };
+    PlaybackParamList thirdMeasureParams { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("bartok"), 0 } };
+
+    PlaybackParamMap expectedParams {
+        { timestampFromTicks(score, 1920), secondMeasureParams },
+        { timestampFromTicks(score, 3840), thirdMeasureParams },
+        { timestampFromTicks(score, 5760), secondMeasureParams }, // measure repeat
+        { timestampFromTicks(score, 7680), thirdMeasureParams }, // measure repeat
+    };
+
+    PlaybackParamMap actualParams = ctx.playbackParamMap(score);
+    EXPECT_EQ(actualParams, expectedParams);
 }
 
 /**

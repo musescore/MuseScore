@@ -201,7 +201,18 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());
     if (search == SETUP_DATA_MAP.cend()) {
-        static PlaybackSetupData empty;
+        if (instrument->useDrumset()) {
+            LOGW() << "Unable to resolve setup data for instrument, id: " << instrument->id()
+                   << ", family: " << instrument->family() << "; fallback to drumset";
+
+            static const PlaybackSetupData DRUMSET_FALLBACK {
+                SoundId::Drumset, SoundCategory::Percussions
+            };
+
+            return DRUMSET_FALLBACK;
+        }
+
+        static const PlaybackSetupData empty;
         return empty;
     }
 

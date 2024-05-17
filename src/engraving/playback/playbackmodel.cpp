@@ -698,11 +698,16 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
 {
     TRACEFUNC;
 
-    if (!m_score || !m_score->lastMeasure()) {
+    if (!m_score) {
         return;
     }
 
-    if (tickFrom == 0 && m_score->lastMeasure()->endTick().ticks() == tickTo) {
+    const Measure* lastMeasure = m_score->lastMeasure();
+    if (!lastMeasure) {
+        return;
+    }
+
+    if (tickFrom == 0 && lastMeasure->endTick().ticks() == tickTo) {
         removeEventsFromRange(trackFrom, trackTo);
         return;
     }
@@ -716,10 +721,40 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
             continue;
         }
 
-        timestamp_t timestampFrom = timestampFromTicks(m_score, tickFrom + tickPositionOffset);
-        timestamp_t timestampTo = timestampFromTicks(m_score, tickTo + tickPositionOffset);
+        timestamp_t removeEventsFrom = std::numeric_limits<timestamp_t>::max();
+        timestamp_t removeEventsTo = -std::numeric_limits<timestamp_t>::max();
 
-        removeEventsFromRange(trackFrom, trackTo, timestampFrom, timestampTo);
+        for (const Measure* measure : repeatSegment->measureList()) {
+            int measureStartTick = measure->tick().ticks();
+            int measureEndTick = measure->endTick().ticks();
+
+            if (measureStartTick > tickTo || measureEndTick <= tickFrom) {
+                continue;
+            }
+
+            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+                if (!segment->isChordRestType()) {
+                    continue;
+                }
+
+                int segmentStartTick = segment->tick().ticks();
+                int segmentEndTick = segmentStartTick + segment->ticks().ticks();
+
+                if (segmentStartTick > tickTo || segmentEndTick <= tickFrom) {
+                    continue;
+                }
+
+                //! NOTE: the end tick of the current segment == the start tick of the next segment,
+                //! so subtract 1 to avoid removing events belonging to the next segment
+                timestamp_t segmentStartTime = timestampFromTicks(m_score, segmentStartTick + tickPositionOffset);
+                timestamp_t segmentEndTime = timestampFromTicks(m_score, segmentEndTick - 1 + tickPositionOffset);
+
+                removeEventsFrom = std::min(removeEventsFrom, segmentStartTime);
+                removeEventsTo = std::max(removeEventsTo, segmentEndTime);
+            }
+        }
+
+        removeEventsFromRange(trackFrom, trackTo, removeEventsFrom, removeEventsTo);
     }
 }
 
