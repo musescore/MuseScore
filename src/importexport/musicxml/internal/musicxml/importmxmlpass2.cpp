@@ -3383,16 +3383,18 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
 
 bool MusicXMLParserDirection::isLikelyTempoText(const track_idx_t track) const
 {
-    if (!configuration()->inferTextType() || m_wordsText.contains(u"<i>") || placement() == u"below" || track2staff(track) != 0) {
+    if (!configuration()->inferTextType() || m_wordsText.contains(u"<i>") || m_wordsText.contains(u"“")
+        || m_wordsText.contains(u"”") || placement() == u"below"
+        || track2staff(track) != 0) {
         return false;
     }
 
     const String plainText = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
     static const std::array<String,
-                            25> tempoStrs
-        = { u"a tempo", u"adag", u"alleg", u"andant", u"ballad", u"brisk", u"determination", u"dolce", u"expressive",
-            u"fast", u"free", u"grave", u"larg", u"lento", u"maestoso", u"moderat", u"mosso", u"prest", u"rubato", u"slow", u"straight",
-            u"tempo i", u"tenderly", u"triumphant", u"vivace" };
+                            31> tempoStrs
+        = { u"accel", u"adag", u"alleg", u"andant", u"a tempo", u"ballad", u"brisk", u"determination", u"dolce", u"expressive",
+            u"fast", u"free", u"gently", u"grave", u"larg", u"lento", u"stesso tempo", u"lively", u"maestoso", u"moderat", u"mosso",
+            u"prest", u"rit", u"rubato", u"slow", u"straight", u"tango", u"tempo i", u"tenderly", u"triumphant", u"vivace" };
 
     for (const String& str : tempoStrs) {
         if (plainText.contains(str, CaseSensitivity::CaseInsensitive)) {
