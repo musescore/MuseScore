@@ -1593,6 +1593,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
     _measureStyleSlash = MusicXmlSlash::NONE;
     _extendedLyrics.init();
     _graceNoteLyrics.clear();
+    _inferredHairpins.clear();
 
     _nstaves = _pass1.getPart(partId)->nstaves();
     _measureRepeatNumMeasures.assign(_nstaves, 0);
@@ -3264,7 +3265,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         delayedDirections.push_back(delayedDirection);
     }
 
-    addInferredCrescLine(track, tick, isVocalStaff);
+    addInferredCrescLine(track, tick + _offset, isVocalStaff);
 
     // handle the elems
     foreach (auto elem, _elems) {
