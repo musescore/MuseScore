@@ -311,9 +311,10 @@
               <tpc>11</tpc>
               </Note>
             </Chord>
-          <StaffText>
+          <PlayTechAnnotation>
+            <playTechType>mute</playTechType>
             <text>mute</text>
-            </StaffText>
+            </PlayTechAnnotation>
           <StaffText>
             <text>Staff Text</text>
             </StaffText>
@@ -344,9 +345,10 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <StaffText>
+          <PlayTechAnnotation>
+            <playTechType>open</playTechType>
             <text>open</text>
-            </StaffText>
+            </PlayTechAnnotation>
           <Chord>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>

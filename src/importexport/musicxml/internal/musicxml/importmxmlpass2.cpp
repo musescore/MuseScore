@@ -3132,12 +3132,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 _score->setTempo(tick, _tpoSound);
             }
         } else {
-            if (_wordsText != "" || _metroText != "") {
+            if (!_wordsText.isEmpty() || !_metroText.isEmpty()) {
+                const PlayingTechniqueType technique = getPlayingTechnique();
                 isExpressionText = _wordsText.contains(u"<i>") && _metroText.isEmpty() && placement() == u"below";
                 if (isExpressionText) {
                     t = Factory::createExpression(_score->dummy()->segment());
                 } else if (m_systemDirection) {
                     t = Factory::createSystemText(_score->dummy()->segment());
+                } else if (technique != PlayingTechniqueType::Undefined) {
+                    t = Factory::createPlayTechAnnotation(_score->dummy()->segment(), technique, TextStyleType::STAFF);
                 } else {
                     t = Factory::createStaffText(_score->dummy()->segment());
                 }
@@ -4252,6 +4255,50 @@ bool MusicXMLParserDirection::isLikelySticking()
            && _rehearsalText.isEmpty()
            && _metroText.isEmpty()
            && _tpoSound < 0.1;
+}
+
+PlayingTechniqueType MusicXMLParserDirection::getPlayingTechnique() const
+{
+    if (!configuration()->inferTextType()) {
+        return PlayingTechniqueType::Undefined;
+    }
+
+    const String plainWords = MScoreTextToMXML::toPlainText(_wordsText.simplified());
+    static const std::unordered_map<String, PlayingTechniqueType> textToPlayTechniqueType {
+        { u"natural", PlayingTechniqueType::Natural },
+        { u"normal", PlayingTechniqueType::Natural },
+        { u"ord", PlayingTechniqueType::Natural },
+        { u"arco", PlayingTechniqueType::Natural },
+        { u"pizz", PlayingTechniqueType::Pizzicato },
+        { u"open", PlayingTechniqueType::Open },
+        { u"senza sord", PlayingTechniqueType::Open },
+        { u"unmuted", PlayingTechniqueType::Open },
+        { u"without mute", PlayingTechniqueType::Open },
+        { u"no mute", PlayingTechniqueType::Open },
+        { u"mute", PlayingTechniqueType::Mute },
+        { u"con sord", PlayingTechniqueType::Mute },
+        { u"sord", PlayingTechniqueType::Mute },
+        { u"trem", PlayingTechniqueType::Tremolo },
+        { u"detache", PlayingTechniqueType::Detache },
+        { u"martele", PlayingTechniqueType::Martele },
+        { u"legno", PlayingTechniqueType::ColLegno },
+        { u"sul pont", PlayingTechniqueType::SulPonticello },
+        { u"sul tast", PlayingTechniqueType::SulTasto },
+        { u"vibrato", PlayingTechniqueType::Vibrato },
+        { u"legato", PlayingTechniqueType::Legato },
+        { u"distortion", PlayingTechniqueType::Distortion },
+        { u"overdrive", PlayingTechniqueType::Overdrive },
+        { u"harmonics", PlayingTechniqueType::Harmonics },
+        { u"jazz", PlayingTechniqueType::JazzTone },
+    };
+
+    for (auto& technique : textToPlayTechniqueType) {
+        if (plainWords.contains(technique.first)) {
+            return technique.second;
+        }
+    }
+
+    return PlayingTechniqueType::Undefined;
 }
 
 //---------------------------------------------------------

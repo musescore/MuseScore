@@ -500,6 +500,7 @@ private:
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags);
     bool isLikelyFingering() const;
     bool isLikelySticking();
+    PlayingTechniqueType getPlayingTechnique() const;
 };
 
 //---------------------------------------------------------
