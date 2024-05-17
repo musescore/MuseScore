@@ -195,7 +195,6 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     ldata->setPosX(x);
-    item->setYRelativeToStaff(0.0);
 
     if (item->ticks().isNotZero()) {
         // set melisma end
