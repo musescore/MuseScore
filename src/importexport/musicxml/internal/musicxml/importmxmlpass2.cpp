@@ -1574,6 +1574,7 @@ void MusicXMLParserPass2::initPartState(const String& partId)
     m_measureStyleSlash = MusicXmlSlash::NONE;
     m_extendedLyrics.init();
     m_graceNoteLyrics.clear();
+    m_inferredHairpins.clear();
 
     m_nstaves = m_pass1.getPart(partId)->nstaves();
     m_measureRepeatNumMeasures.assign(m_nstaves, 0);
@@ -3244,7 +3245,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         delayedDirections.push_back(delayedDirection);
     }
 
-    addInferredCrescLine(track, tick, isVocalStaff);
+    addInferredCrescLine(track, tick + m_offset, isVocalStaff);
 
     // handle the elems
     for (EngravingItem* elem : m_elems) {
