@@ -3858,12 +3858,13 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         }
     }
 
-    // compute bbox
+    Shape keySigShape;
     for (const KeySym& ks : ldata->keySymbols) {
         double x = ks.xPos * spatium;
         double y = ks.line * step;
-        ldata->addBbox(item->symBbox(ks.sym).translated(x, y));
+        keySigShape.add(item->symBbox(ks.sym).translated(x, y), item);
     }
+    ldata->setShape(keySigShape);
 }
 
 void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData* ldata)
