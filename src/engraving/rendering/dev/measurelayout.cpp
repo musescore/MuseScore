@@ -288,7 +288,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     ElementList oldList = mmrMeasure->takeElements();
     ElementList newList = lastMeasure->el();
     for (EngravingItem* e : firstMeasure->el()) {
-        if (e->isMarker()) {
+        if (e->isMarker() && firstMeasure != lastMeasure) {
             newList.push_back(e);
         }
     }
