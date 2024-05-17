@@ -91,9 +91,9 @@ installBottleManually libsndfile
 
 # fixing install python 3.9 error (it is a dependency for ninja)
 rm '/usr/local/bin/2to3'
-brew install ninja pkg-config
+brew install ninja pkg-config --quiet
 
-brew install cmake
+brew install cmake --formula --quiet
 
 # Qt
 
