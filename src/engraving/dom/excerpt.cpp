@@ -1469,6 +1469,21 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
 
+        for (EngravingItem* oldEl : m->el()) {
+            if (oldEl->isLayoutBreak()) {
+                continue;
+            }
+            if (oldEl->systemFlag() && dstStaffIdx != 0) {
+                continue;
+            }
+            EngravingItem* newEl = oldEl->linkedClone();
+            newEl->setParent(nm);
+            newEl->setTrack(0);
+            newEl->setScore(score);
+            newEl->styleChanged();
+            addElement(newEl);
+        }
+
         for (track_idx_t srcTrack : muse::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = map.at(srcTrack);
