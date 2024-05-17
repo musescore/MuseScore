@@ -3919,6 +3919,8 @@ bool MusicXMLParserDirection::isLikelyTempoText(const int track) const
       {
       if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE)
           || _wordsText.contains("<i>")
+          || _wordsText.contains("“")
+          || _wordsText.contains("”")
           || placement() == "below"
           || track2staff(track) != 0) {
             return false;
@@ -3926,10 +3928,10 @@ bool MusicXMLParserDirection::isLikelyTempoText(const int track) const
 
       const QString plainText = MScoreTextToMXML::toPlainText(_wordsText.simplified());
       static const std::array<QString,
-                  25> tempoStrs
-                  = { "a tempo", "adag", "alleg", "andant", "ballad", "brisk", "determination", "dolce", "expressive",
-                      "fast", "free", "grave", "larg", "lento", "maestoso", "moderat", "mosso", "prest", "rubato", "slow", "straight",
-                      "tempo i", "tenderly", "triumphant", "vivace" };
+                  31> tempoStrs =
+                  { "accel", "adag", "alleg", "andant", "a tempo", "ballad", "brisk", "determination", "dolce", "expressive",
+                    "fast", "free", "gently", "grave", "larg", "lento", "stesso tempo", "lively", "maestoso", "moderat", "mosso",
+                    "prest", "rit", "rubato", "slow", "straight", "tango", "tempo i", "tenderly", "triumphant", "vivace" };
       for (const QString& str : tempoStrs) {
             if (plainText.contains(str, Qt::CaseInsensitive))
                   return true;
