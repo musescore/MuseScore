@@ -86,7 +86,7 @@
     <timesigLeftMargin>0.5</timesigLeftMargin>
     <timesigScale w="1" h="1"/>
     <clefKeyRightMargin>0.8</clefKeyRightMargin>
-    <clefKeyDistance>1</clefKeyDistance>
+    <clefKeyDistance>0.75</clefKeyDistance>
     <clefTimesigDistance>1</clefTimesigDistance>
     <keyTimesigDistance>1</keyTimesigDistance>
     <keyTimesigDistance>1</keyTimesigDistance>

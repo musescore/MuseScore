@@ -160,7 +160,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::dividerRightX,           "dividerRightX",           0.0 },
     { Sid::dividerRightY,           "dividerRightY",           0.0 },
 
-    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.75) },     // 0.64 (gould: <= 1)
+    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.75) },
     { Sid::keysigLeftMargin,        "keysigLeftMargin",        Spatium(0.5) },
     { Sid::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
 
@@ -168,12 +168,12 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::timesigScale,            "timesigScale",            ScaleF(1.0, 1.0) },
     { Sid::midClefKeyRightMargin,   "midClefKeyRightMargin",   Spatium(1.0) },
     { Sid::clefKeyRightMargin,      "clefKeyRightMargin",      Spatium(0.8) },
-    { Sid::clefKeyDistance,         "clefKeyDistance",         Spatium(1.0) },   // gould: 1 - 1.25
+    { Sid::clefKeyDistance,         "clefKeyDistance",         Spatium(0.75) },
     { Sid::clefTimesigDistance,     "clefTimesigDistance",     Spatium(1.0) },
-    { Sid::keyTimesigDistance,      "keyTimesigDistance",      Spatium(1.0) },    // gould: 1 - 1.5
+    { Sid::keyTimesigDistance,      "keyTimesigDistance",      Spatium(1.0) },
     { Sid::keyBarlineDistance,      "keyBarlineDistance",      Spatium(1.0) },
-    { Sid::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },     // gould: 2.5
-    { Sid::systemHeaderTimeSigDistance, "systemHeaderTimeSigDistance", Spatium(2.0) },  // gould: 2.0
+    { Sid::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },
+    { Sid::systemHeaderTimeSigDistance, "systemHeaderTimeSigDistance", Spatium(2.0) },
     { Sid::systemTrailerRightMargin, "systemTrailerRightMargin", Spatium(0.5) },
 
     { Sid::clefBarlineDistance,     "clefBarlineDistance",     Spatium(0.5) },
