@@ -145,22 +145,22 @@ void VstSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe:
         }
     }
 
-    if (currentType != mpe::ArticulationType::Undefined) {
-        const mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
-        const mpe::ArticulationMeta& articulationMeta = articulationData.meta;
-
-        destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 1 /*on*/));
-        destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
-    } else {
-        destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
+    if (currentType == mpe::ArticulationType::Undefined) {
+        return;
     }
+
+    const mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
+    const mpe::ArticulationMeta& articulationMeta = articulationData.meta;
+
+    destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 1 /*on*/));
+    destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
 }
 
 void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
                                    const mpe::ArticulationTypeSet& appliableTypes)
 {
     auto pitchBendIt = m_mapping.find(PITCH_BEND_IDX);
-    if (pitchBendIt == m_mapping.cend()) {
+    if (pitchBendIt == m_mapping.cend() || noteEvent.pitchCtx().pitchCurve.empty()) {
         return;
     }
 
@@ -173,29 +173,22 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
         }
     }
 
-    mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-
-    PluginParamInfo event;
-    event.id = pitchBendIt->second;
-
-    if (currentType == mpe::ArticulationType::Undefined || noteEvent.pitchCtx().pitchCurve.empty()) {
-        event.defaultNormalizedValue = 0.5f;
-        destination[timestampFrom].emplace(std::move(event));
+    if (currentType == mpe::ArticulationType::Undefined) {
         return;
     }
 
+    mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
     mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    mpe::timestamp_t timestampTo = timestampFrom + duration;
+
+    PluginParamInfo event;
+    event.id = pitchBendIt->second;
+    event.defaultNormalizedValue = 0.5f;
+    destination[timestampTo].insert(event);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
     auto endIt = noteEvent.pitchCtx().pitchCurve.cend();
-
-    if (nextIt == endIt) {
-        mpe::timestamp_t time = timestampFrom + duration * mpe::percentageToFactor(currIt->first);
-        event.defaultNormalizedValue = pitchBendLevel(currIt->second);
-        destination[time].insert(std::move(event));
-        return;
-    }
 
     auto makePoint = [](mpe::timestamp_t time, float value) {
         return Interpolation::Point { static_cast<double>(time), value };
@@ -221,9 +214,11 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
 
         for (const Interpolation::Point& point : points) {
             mpe::timestamp_t time = static_cast<mpe::timestamp_t>(std::round(point.x));
-            float bendValue = static_cast<float>(point.y);
-            event.defaultNormalizedValue = bendValue;
-            destination[time].insert(event);
+            if (time < timestampTo) {
+                float bendValue = static_cast<float>(point.y);
+                event.defaultNormalizedValue = bendValue;
+                destination[time].insert(event);
+            }
         }
     }
 }
