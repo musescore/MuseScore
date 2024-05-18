@@ -6380,6 +6380,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
         }
 
         if (acc) {
+            acc->setVisible(printObject);
             note->add(acc);
             // save alter value for user accidental
             if (acc->accidentalType() != AccidentalType::NONE) {
