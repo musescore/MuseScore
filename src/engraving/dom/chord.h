@@ -272,8 +272,6 @@ public:
     void sortNotes();
 
     Chord* nextTiedChord(bool backwards = false, bool sameSize = true) const;
-    bool containsTieEnd() const;
-    bool containsTieStart() const;
 
     Fraction endTickIncludingTied() const;
 

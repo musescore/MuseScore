@@ -296,9 +296,13 @@ public:
     Tie* tieBack() const { return m_tieBack; }
     void setTieFor(Tie* t) { m_tieFor = t; }
     void setTieBack(Tie* t) { m_tieBack = t; }
-    Note* firstTiedNote() const;
-    const Note* lastTiedNote() const;
-    Note* lastTiedNote() { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
+    Note* firstTiedNote(bool ignorePlayback = true) const;
+    const Note* lastTiedNote(bool ignorePlayback = true) const;
+    Note* lastTiedNote(bool ignorePlayback = true)
+    {
+        return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote(ignorePlayback));
+    }
+
     int unisonIndex() const;
     void disconnectTiedNotes();
     void connectTiedNotes();

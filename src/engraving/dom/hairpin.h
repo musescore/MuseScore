@@ -141,9 +141,6 @@ public:
     ChangeMethod veloChangeMethod() const { return m_veloChangeMethod; }
     void setVeloChangeMethod(ChangeMethod val) { m_veloChangeMethod = val; }
 
-    bool playHairpin() const { return m_playHairpin; }
-    void setPlayHairpin(bool val) { m_playHairpin = val; }
-
     bool isCrescendo() const
     {
         return m_hairpinType == HairpinType::CRESC_HAIRPIN || m_hairpinType == HairpinType::CRESC_LINE;
@@ -192,7 +189,6 @@ private:
     DynamicRange m_dynRange = DynamicRange::STAFF;
     bool m_singleNoteDynamics = false;
     ChangeMethod m_veloChangeMethod = ChangeMethod::NORMAL;
-    bool m_playHairpin = false;
 
     Spatium m_hairpinHeight;
     Spatium m_hairpinContHeight;

@@ -436,7 +436,7 @@ void Score::setUpTempoMap()
     if (isMaster()) {
         for (const auto& pair : spanner()) {
             const Spanner* spannerItem = pair.second;
-            if (!spannerItem || !spannerItem->isGradualTempoChange()) {
+            if (!spannerItem || !spannerItem->isGradualTempoChange() || !spannerItem->playSpanner()) {
                 continue;
             }
 

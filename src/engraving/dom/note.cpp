@@ -3539,12 +3539,12 @@ EngravingItem* Note::prevSegmentElement()
 //   lastTiedNote
 //---------------------------------------------------------
 
-const Note* Note::lastTiedNote() const
+const Note* Note::lastTiedNote(bool ignorePlayback) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
     notes.push_back(note);
-    while (note->tieFor()) {
+    while (note->tieFor() && (ignorePlayback || note->tieFor()->playSpanner())) {
         if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end()) {
             break;
         }
@@ -3563,12 +3563,12 @@ const Note* Note::lastTiedNote() const
 //    - handle recursion in connected notes
 //---------------------------------------------------------
 
-Note* Note::firstTiedNote() const
+Note* Note::firstTiedNote(bool ignorePlayback) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
     notes.push_back(note);
-    while (note->tieBack()) {
+    while (note->tieBack() && (ignorePlayback || note->tieBack()->playSpanner())) {
         if (std::find(notes.begin(), notes.end(), note->tieBack()->startNote()) != notes.end()) {
             break;
         }
