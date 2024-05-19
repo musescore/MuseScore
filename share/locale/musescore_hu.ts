@@ -26599,7 +26599,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="128"/>
         <source>Export settings</source>
-        <translation>Beállítások exportálása</translation>
+        <translation>Exportálási beállítások</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="154"/>

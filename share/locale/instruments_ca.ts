@@ -11774,14 +11774,14 @@
         <source>Tablas</source>
         <comment>tablas trackName</comment>
         <extracomment>trackName for Tablas; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tablas</translation>
+        <translation>Tabla</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3942"/>
         <source>Tablas</source>
         <comment>tablas longName</comment>
         <extracomment>longName for Tablas; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tablas</translation>
+        <translation>Tabla</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3944"/>
