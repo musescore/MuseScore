@@ -1231,22 +1231,22 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="794"/>
         <source>9 - Diminished seventh</source>
-        <translation>9 - Förminskad septim</translation>
+        <translation>9 - Förminskad septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="799"/>
         <source>10 - Minor seventh</source>
-        <translation>10 - Liten septim</translation>
+        <translation>10 - Liten septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="804"/>
         <source>11 - Major seventh</source>
-        <translation>11 - Stor septim</translation>
+        <translation>11 - Stor septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="809"/>
         <source>12 - Augmented seventh</source>
-        <translation>12 - Överstigande septim</translation>
+        <translation>12 - Överstigande septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="814"/>
@@ -5979,22 +5979,22 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="312"/>
         <source>Diminished seventh</source>
-        <translation>Förminskad septim</translation>
+        <translation>Förminskad septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="317"/>
         <source>Minor seventh</source>
-        <translation>Liten septim</translation>
+        <translation>Liten septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="322"/>
         <source>Major seventh</source>
-        <translation>Stor septim</translation>
+        <translation>Stor septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="327"/>
         <source>Augmented seventh</source>
-        <translation>Överstigande septim</translation>
+        <translation>Överstigande septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="332"/>
@@ -6064,7 +6064,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="434"/>
         <source>Seventh</source>
-        <translation>Septim</translation>
+        <translation>Septima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="452"/>
@@ -7530,82 +7530,82 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="848"/>
         <source>Enter interval: second above</source>
-        <translation>Mata in intervall: sekund ovanför</translation>
+        <translation>Mata in intervall: sekund uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="854"/>
         <source>Enter interval: third above</source>
-        <translation>Mata in intervall: ters ovanför</translation>
+        <translation>Mata in intervall: ters uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="860"/>
         <source>Enter interval: fourth above</source>
-        <translation>Mata in intervall: kvart ovanför</translation>
+        <translation>Mata in intervall: kvart uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="866"/>
         <source>Enter interval: fifth above</source>
-        <translation>Mata in intervall: kvint ovanför</translation>
+        <translation>Mata in intervall: kvint uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="872"/>
         <source>Enter interval: sixth above</source>
-        <translation>Mata in intervall: sext ovanför</translation>
+        <translation>Mata in intervall: sext uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="878"/>
         <source>Enter interval: seventh above</source>
-        <translation>Mata in intervall: septim ovanför</translation>
+        <translation>Mata in intervall: septima uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="884"/>
         <source>Enter interval: octave above</source>
-        <translation>Mata in intervall: oktav ovanför</translation>
+        <translation>Mata in intervall: oktav uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="890"/>
         <source>Enter interval: ninth above</source>
-        <translation>Mata in intervall: nona ovanför</translation>
+        <translation>Mata in intervall: nona uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="896"/>
         <source>Enter interval: second below</source>
-        <translation>Mata in intervall: sekund nedanför</translation>
+        <translation>Mata in intervall: sekund nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="902"/>
         <source>Enter interval: third below</source>
-        <translation>Mata in intervall: ters nedanför</translation>
+        <translation>Mata in intervall: ters nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="908"/>
         <source>Enter interval: fourth below</source>
-        <translation>Mata in intervall: kvart nedanför</translation>
+        <translation>Mata in intervall: kvart nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="914"/>
         <source>Enter interval: fifth below</source>
-        <translation>Mata in intervall: kvint nedanför</translation>
+        <translation>Mata in intervall: kvint nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="920"/>
         <source>Enter interval: sixth below</source>
-        <translation>Mata in intervall: sext nedanför</translation>
+        <translation>Mata in intervall: sext nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="926"/>
         <source>Enter interval: seventh below</source>
-        <translation>Mata in intervall: septim nedanför</translation>
+        <translation>Mata in intervall: septima nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="932"/>
         <source>Enter interval: octave below</source>
-        <translation>Mata in intervall: oktav nedanför</translation>
+        <translation>Mata in intervall: oktav nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="938"/>
         <source>Enter interval: ninth below</source>
-        <translation>Mata in intervall: nona nedanför</translation>
+        <translation>Mata in intervall: nona nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1177"/>
@@ -9243,82 +9243,82 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="847"/>
         <source>Se&amp;cond above</source>
-        <translation>Se&amp;kund över</translation>
+        <translation>Se&amp;kund uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="853"/>
         <source>Thir&amp;d above</source>
-        <translation>Te&amp;rs över</translation>
+        <translation>&amp;Ters uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="859"/>
         <source>Fou&amp;rth above</source>
-        <translation>Kva&amp;rt över</translation>
+        <translation>Kv&amp;art uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
         <source>Fift&amp;h above</source>
-        <translation>Kv&amp;int över</translation>
+        <translation>Kv&amp;int uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
         <source>Si&amp;xth above</source>
-        <translation>Sext över</translation>
+        <translation>Se&amp;xt uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="877"/>
         <source>Seve&amp;nth above</source>
-        <translation>Sep&amp;tim över</translation>
+        <translation>&amp;Septima uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="883"/>
         <source>Octave &amp;above</source>
-        <translation>Okt&amp;av över</translation>
+        <translation>&amp;Oktav uppåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="889"/>
         <source>Ninth abov&amp;e</source>
-        <translation>N&amp;ona över</translation>
+        <translation>Nona upp&amp;åt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
         <source>&amp;Second below</source>
-        <translation>&amp;Sekund under</translation>
+        <translation>Sek&amp;und nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="901"/>
         <source>&amp;Third below</source>
-        <translation>&amp;Ters under</translation>
+        <translation>T&amp;ers nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="907"/>
         <source>F&amp;ourth below</source>
-        <translation>Kv&amp;art under</translation>
+        <translation>Kva&amp;rt nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="913"/>
         <source>&amp;Fifth below</source>
-        <translation>K&amp;vint under</translation>
+        <translation>Kvi&amp;nt nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
         <source>S&amp;ixth below</source>
-        <translation>S&amp;ext under</translation>
+        <translation>Sext ne&amp;dåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
         <source>Se&amp;venth below</source>
-        <translation>Septim &amp;under</translation>
+        <translation>Septi&amp;ma nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="931"/>
         <source>Octave &amp;below</source>
-        <translation>O&amp;ktav under</translation>
+        <translation>Okta&amp;v nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="937"/>
         <source>Ninth belo&amp;w</source>
-        <translation>Nona un&amp;der</translation>
+        <translation>Nona nedåt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1164"/>
@@ -20383,7 +20383,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="68"/>
         <source>Interval below</source>
-        <translation>Intervall under</translation>
+        <translation>Intervall nedåt</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="85"/>
@@ -20454,7 +20454,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="162"/>
         <source>Seventh</source>
-        <translation>Septim</translation>
+        <translation>Septima</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="163"/>
@@ -23417,32 +23417,32 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1379"/>
         <source>Half note = 80 BPM</source>
-        <translation>Halvnot = 80 BPM</translation>
+        <translation>Halvnot = 80/minut</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1382"/>
         <source>Quarter note = 80 BPM</source>
-        <translation>Fjärdedel = 80 BPM</translation>
+        <translation>Fjärdedel = 80/minut</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1385"/>
         <source>Eighth note = 80 BPM</source>
-        <translation>Åttondel = 80 BPM</translation>
+        <translation>Åttondel = 80/minut</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1388"/>
         <source>Dotted half note = 80 BPM</source>
-        <translation>Punkterad halvnot = 80 BPM</translation>
+        <translation>Punkterad halvnot = 80/minut</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1391"/>
         <source>Dotted quarter note = 80 BPM</source>
-        <translation>Punkterad fjärdedelsnot = 80 BPM</translation>
+        <translation>Punkterad fjärdedelsnot = 80/minut</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1394"/>
         <source>Dotted eighth note = 80 BPM</source>
-        <translation>Punkterad åttondelsnot = 80 BPM</translation>
+        <translation>Punkterad åttondelsnot = 80/minut</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1412"/>

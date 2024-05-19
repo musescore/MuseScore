@@ -22608,7 +22608,7 @@ Ponadto Mastering MuseScore oferuje wsparcie społeczności muzyków, z przestrz
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1286"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation>Wydanie MuseScore Studio, w której zapisano tę partyturę po raz ostatni</translation>
+        <translation>Wydanie MuseScore Studio, w którym zapisano tę partyturę po raz ostatni</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1288"/>

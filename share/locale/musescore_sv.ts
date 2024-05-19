@@ -216,57 +216,57 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="57"/>
         <source>Octave 9</source>
-        <translation>Oktav 9</translation>
+        <translation>Sexstrukna oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="62"/>
         <source>Octave 8</source>
-        <translation>Oktav 8</translation>
+        <translation>Femstrukna oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="67"/>
         <source>Octave 7</source>
-        <translation>Oktav 7</translation>
+        <translation>Fyrstrukna oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="72"/>
         <source>Octave 6</source>
-        <translation>Oktav 6</translation>
+        <translation>Trestrukna oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="77"/>
         <source>Octave 5</source>
-        <translation>Oktav 5</translation>
+        <translation>Tvåstrukna oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="82"/>
         <source>Octave 4</source>
-        <translation>Oktav 4</translation>
+        <translation>Ettstrukna oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="87"/>
         <source>Octave 3</source>
-        <translation>Oktav 3</translation>
+        <translation>Lilla oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="92"/>
         <source>Octave 2</source>
-        <translation>Oktav 2</translation>
+        <translation>Stora oktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="97"/>
         <source>Octave 1</source>
-        <translation>Oktav 1</translation>
+        <translation>Kontraoktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="102"/>
         <source>Octave 0</source>
-        <translation>Oktav 0</translation>
+        <translation>Subkontraoktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="107"/>
         <source>Octave -1</source>
-        <translation>Oktav -1</translation>
+        <translation>Infraoktaven</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="112"/>
@@ -6318,7 +6318,7 @@ Som standard kommer de att placeras så att deras högersidor är på samma niv�
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="79"/>
         <source>Save to cloud…</source>
-        <translation>Spara till moln…</translation>
+        <translation>Spara till molnet…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="85"/>
@@ -17924,7 +17924,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="316"/>
         <source>16th</source>
-        <translation>Sextondel</translation>
+        <translation>16-del</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="317"/>
@@ -18290,7 +18290,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="82"/>
         <source>Configure grid</source>
-        <translation>Anpassa raster</translation>
+        <translation>Anpassa rutnät</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="64"/>
@@ -18497,7 +18497,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
         <source>Pause time</source>
-        <translation>Pausa tiden</translation>
+        <translation>Paustiden</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="51"/>
@@ -22187,7 +22187,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="146"/>
         <source>Apply to</source>
-        <translation>Verkställ för</translation>
+        <translation>Applicera till</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="203"/>
@@ -22243,7 +22243,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="134"/>
         <source>Strings</source>
-        <translation>Stråkinstrument</translation>
+        <translation>Strängar</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="168"/>
@@ -22318,7 +22318,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="725"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1188"/>
         <source>Below</source>
-        <translation>Under</translation>
+        <translation>Nedanför</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="735"/>
@@ -22454,7 +22454,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="220"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1176"/>
         <source>Apply to all parts</source>
-        <translation>Verkställ för alla stämmor</translation>
+        <translation>Applicera för alla stämmor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="870"/>
@@ -22581,7 +22581,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1276"/>
         <source>Last modification time</source>
-        <translation>Senaste ändring</translation>
+        <translation>Tid för senaste ändring</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1278"/>
@@ -22611,7 +22611,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1288"/>
         <source>The $ sign itself</source>
-        <translation>$-tecknet</translation>
+        <translation>Själva $-tecknet</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1290"/>
@@ -22738,7 +22738,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1275"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2538"/>
         <source>Key signature</source>
-        <translation>Förtecken</translation>
+        <translation>Tonart</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="773"/>
@@ -22751,7 +22751,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1345"/>
         <source>Custom key signature</source>
-        <translation>Anpassade förtecken</translation>
+        <translation>Anpassad tonart</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3053"/>
@@ -23022,7 +23022,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
         <source>Start typing to search all palettes</source>
-        <translation>Börja skriv för att söka bland alla paletter</translation>
+        <translation>Börja skriva för att söka i alla paletter</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="194"/>
@@ -23096,13 +23096,13 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <location filename="../../src/palette/internal/palettecreator.cpp" line="481"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1205"/>
         <source>Seconda volta, open</source>
-        <translation>Seconda volta, öppen</translation>
+        <translation>Secunda volta, öppen</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="490"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1186"/>
         <source>Seconda volta</source>
-        <translation>Seconda volta</translation>
+        <translation>Secunda volta</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="499"/>
@@ -23352,7 +23352,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <location filename="../../src/palette/internal/palettecompat.cpp" line="137"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1860"/>
         <source>String tunings</source>
-        <translation>Stämning</translation>
+        <translation>Stämningar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2042"/>
@@ -23926,7 +23926,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="666"/>
         <source>Drumset file too old</source>
-        <translation>Trumsetfil för gammal</translation>
+        <translation>Trumsetfilen är för gammal</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="667"/>
@@ -24014,7 +24014,7 @@ misslyckades: %2</translation>
         <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="55"/>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="64"/>
         <source>Single-click to open a palette</source>
-        <translation>Enkel-klicka för att öppna en palett</translation>
+        <translation>Enkelklicka för att öppna en palett</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="120"/>
@@ -25594,12 +25594,12 @@ misslyckades.</translation>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="45"/>
         <source>Audio FX</source>
         <extracomment>FX is an abbreviation of &quot;effects&quot;.</extracomment>
-        <translation>Ljudeffekter</translation>
+        <translation>Audio FX</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="60"/>
         <source>Mute</source>
-        <translation>Tyst</translation>
+        <translation>Mute</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="87"/>
@@ -25632,7 +25632,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="74"/>
         <source>Reverb</source>
-        <translation>Efterklang</translation>
+        <translation>Reverb</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="80"/>
@@ -25673,7 +25673,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="49"/>
         <source>Mute and solo</source>
-        <translation>Tysta och solo</translation>
+        <translation>Mute och solo</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="153"/>
@@ -25714,7 +25714,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="61"/>
         <source>Mixer channel panel %1</source>
-        <translation>Mixerkanalpanel %1</translation>
+        <translation>Mixer channel panel %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="645"/>
@@ -26053,7 +26053,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1659"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Den här filen sparades  med en nyare version av MuseScore Studio. Vänligen besök &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; för att få tag i den senaste versionen.</translation>
+        <translation>Den här filen sparades med en nyare version av MuseScore Studio. Besök &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; för att ladda ner den senaste versionen.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
@@ -26167,7 +26167,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation>Denna fil kunde inte öppnas. Vänligen kontrollera att MuseScore Studio har rättigheter att läsa denna fil.</translation>
+        <translation>Denna fil kunde inte öppnas. Kontrollera att MuseScore Studio har rättigheter att läsa denna fil.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
@@ -26484,7 +26484,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresListView.qml" line="99"/>
         <source>Unlisted</source>
-        <translation>Ej listad</translation>
+        <translation>Olistad</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresListView.qml" line="101"/>
@@ -27424,7 +27424,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/cloud/view/cloudsmodel.cpp" line="167"/>
         <source>Unlisted</source>
-        <translation>Ej listad</translation>
+        <translation>Olistad</translation>
     </message>
     <message>
         <location filename="../../src/cloud/view/cloudsmodel.cpp" line="173"/>
@@ -27528,7 +27528,7 @@ misslyckades.</translation>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="134"/>
         <source>Every: %1 saves</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation>Varje: %1 sparåtgärd(er)</translation>
+        <translation>Varje: %1 sparåtgärder</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="165"/>
@@ -27602,7 +27602,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="526"/>
         <source>Your score could not be saved to the cloud</source>
-        <translation>Ditt partitur kunde inte sparas i molnet</translation>
+        <translation>Ditt stycke kunde inte sparas i molnet</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="529"/>
