@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+trap 'code=$?; echo "Error: command \`$BASH_COMMAND\` exited with code $code." >&2; exit 1' ERR
+
 S3_KEY=""
 S3_SECRET=""
 
@@ -34,8 +36,7 @@ done
 if [ -z "$S3_KEY" ]; then echo "error: not set S3_KEY"; exit 1; fi
 if [ -z "$S3_SECRET" ]; then echo "error: not set S3_SECRET"; exit 1; fi
 
-command -v s3cmd >/dev/null 2>&1
-if [[ $? -ne 0 ]]; then
+if ! command -v s3cmd >/dev/null 2>&1; then
     echo "=== Install tools ==="
 
     apt install python3-setuptools
