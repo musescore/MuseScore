@@ -3562,7 +3562,7 @@
         <source>G</source>
         <comment>g-clarinet traitName</comment>
         <extracomment>traitName for Clarinet; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>соль</translation>
+        <translation>Соль</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1350"/>
@@ -10632,7 +10632,7 @@
         <source>Hammered dulcimer.</source>
         <comment>dulcimer description</comment>
         <extracomment>description for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Молоточковые цимбалы</translation>
+        <translation>Молоточковые цимбалы.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3541"/>
@@ -10660,7 +10660,7 @@
         <source>Concert cimbalom.</source>
         <comment>cimbalom description</comment>
         <extracomment>description for Cimbalom; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Концертные (венгерские) цимбалы</translation>
+        <translation>Концертные (венгерские) цимбалы.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3550"/>

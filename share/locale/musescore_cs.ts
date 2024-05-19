@@ -10534,7 +10534,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>Kontrola aktualizací vyžaduje přístup k síti. V zájmu ochrany vašeho soukromí neukládá MuseScore Studio žádné osobní údaje. Další informace naleznete v našich &lt;a href=&quot;%1&quot;&gt;zásadách ochrany osobních údajů&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -11249,7 +11249,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Přihlášení proběhlo úspěšně! Můžete se vrátit zpět do MuseScore Studio.</translation>
     </message>
 </context>
 <context>
@@ -11262,7 +11262,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation type="unfinished"/>
+        <translation>Tím se vytvoří soubor .zip s údaji o nastavení aplikace MuseScore Studio, který vývojářům pomůže diagnostikovat případné problémy. Obsah tohoto souboru můžete zkontrolovat předtím, než jej někomu odešlete.</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
@@ -13161,7 +13161,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Tento soubor byl uložen za použití novější verze MuseScore Studio. Navštivte stránky &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; pro získání poslední verze.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -17907,7 +17907,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
         <source>MuseScore Studio instrument</source>
-        <translation type="unfinished"/>
+        <translation>Nástroj MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -18145,7 +18145,7 @@ předtaktí</translation>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="51"/>
         <source>Limit MusicXML export for compatibility with MuseScore 3</source>
         <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
-        <translation type="unfinished"/>
+        <translation>Omezení vyvedení do MusicXML kvůli kompatibilitě s MuseScore 3</translation>
     </message>
 </context>
 <context>
@@ -21343,7 +21343,7 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>Protože tento stylový soubor pochází z jiné verze MuseScore Studio, není zaručeno, že se váš notový zápis zobrazí správně.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1623"/>
@@ -22605,12 +22605,12 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1284"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>Verze MuseScore Studio, ve které byl naposledy uložen tento notový zápis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1286"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>Revize MuseScore Studio, ve které byl naposledy uložen tento notový zápis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1288"/>
@@ -26057,7 +26057,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1659"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Tento soubor byl uložen za použití novější verze MuseScore Studio. Navštivte stránky &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; pro získání poslední verze.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
@@ -26166,12 +26166,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1666"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
-        <translation type="unfinished"/>
+        <translation>Tento soubor obsahuje chyby, které mohou způsobit nefunkčnost programu MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation type="unfinished"/>
+        <translation>Tento soubor se nepodařilo otevřít. Ujistěte se, že má MuseScore Studio oprávnění ke čtení tohoto souboru.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
@@ -26953,7 +26953,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="172"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Upozornění: rozvržení notového zápisu bude ovlivněno vylepšeními MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="178"/>
@@ -27865,7 +27865,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
         <source>MuseScore Studio shortcuts file</source>
-        <translation type="unfinished"/>
+        <translation>Soubor klávesových zkratek MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
@@ -28293,7 +28293,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="82"/>
         <source>A new version of MuseScore Studio is available!</source>
-        <translation type="unfinished"/>
+        <translation>Je dostupná nová verze MuseScore Studio!</translation>
     </message>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="89"/>
@@ -28303,7 +28303,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/update/internal/updatescenario.cpp" line="141"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished"/>
+        <translation>Již máte nejnovější verzi aplikace MuseScore Studio. Navštivte prosím &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; pro novinky o tom, co se chystá příště.</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/updatescenario.cpp" line="148"/>
@@ -28323,7 +28323,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/update/internal/updatescenario.cpp" line="194"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
-        <translation type="unfinished"/>
+        <translation>Pro dokončení instalace je třeba zavřít MuseScore Studio. Pokud máte nějaké neuložené změny, budete vyzváni k jejich uložení předtím, než se MuseScore Studio zavře.</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/updatescenario.cpp" line="200"/>
@@ -28338,23 +28338,23 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
-        <translation type="unfinished"/>
+        <translation>Ne, děkuji</translation>
     </message>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
-        <translation type="unfinished"/>
+        <translation>Vezměte mě do Muse Hub</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/appupdateservice.cpp" line="111"/>
         <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stahuje se MuseScore Studio %1</translation>
     </message>
     <message>
         <location filename="../../src/update/view/updatemodel.cpp" line="37"/>
         <source>Updating MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Aktualizace MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -28378,7 +28378,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
-        <translation type="unfinished"/>
+        <translation>Používejte pracovní plochy pro uložení různých uspořádání rozhraní MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>

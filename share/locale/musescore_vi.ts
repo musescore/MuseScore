@@ -989,7 +989,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="26"/>
         <source>Staff/Part properties</source>
-        <translation type="unfinished"/>
+        <translation>Thuộc tính Khuông/Bè nhạc</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="44"/>
@@ -1359,7 +1359,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="968"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Không dịch giọng trong TAB được liên kết</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1005"/>
@@ -1669,7 +1669,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="14"/>
         <source>Default strings tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Bộ so dây mặc định:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="51"/>
@@ -1714,7 +1714,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13728"/>
         <source>Reset &apos;Padding&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Trả &apos;Khoảng độn&apos; về m/định</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="49"/>
@@ -2410,7 +2410,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Khóa nhạc, hóa biểu &amp; khóa nhịp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
@@ -19037,7 +19037,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
         <source>Staff/Part properties</source>
-        <translation type="unfinished"/>
+        <translation>Thuộc tính Khuông/Bè nhạc</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="49"/>
