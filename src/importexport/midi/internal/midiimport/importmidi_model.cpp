@@ -1106,8 +1106,7 @@ Qt::ItemFlags TracksModel::editableFlags(int row, int col) const
     const int trackIndex = trackIndexFromRow(row);
 
     if (_columns[col]->isVisible(trackIndex)) {
-        QVariant value0 = _columns[col]->value(0);
-        if (value0.typeId() == QMetaType::Bool) {
+        if (_columns[col]->value(0).typeId() == QMetaType::Bool) {
             flags |= Qt::ItemIsUserCheckable;
         } else if (_columns[col]->isEditable(trackIndex)) {
             if (trackIndex == -1) {
