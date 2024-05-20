@@ -87,14 +87,6 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     muse::ui::WidgetStateStore::restoreGeometry(this);
 }
 
-#ifdef MU_QT5_COMPAT
-StaffTextPropertiesDialog::StaffTextPropertiesDialog(const StaffTextPropertiesDialog& other)
-    : QDialog(other.parentWidget())
-{
-}
-
-#endif
-
 StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
 {
     delete m_staffText;

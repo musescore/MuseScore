@@ -243,14 +243,6 @@ private:
     bool m_updatePropertiesAllowed = false;
 };
 
-#ifdef MU_QT5_COMPAT
-inline uint qHash(AbstractInspectorModel::InspectorModelType t)
-{
-    return ::qHash(int(t));
-}
-
-#endif
-
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;
 using InspectorSectionType = AbstractInspectorModel::InspectorSectionType;
 using InspectorModelTypeSet = std::set<InspectorModelType>;

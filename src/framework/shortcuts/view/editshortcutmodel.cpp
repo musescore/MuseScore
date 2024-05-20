@@ -80,38 +80,6 @@ void EditShortcutModel::clearNewSequence()
 
 void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
 {
-#ifdef MU_QT5_COMPAT
-    std::pair<int, Qt::KeyboardModifiers> correctedKeyInput = correctKeyInput(key, modifiers);
-    int newKey = correctedKeyInput.first;
-    int newModifiers = correctedKeyInput.second;
-
-    if (needIgnoreKey(Qt::Key(newKey))) {
-        return;
-    }
-
-    newKey += newModifiers;
-
-    // remove shift-modifier for keys that don't need it: letters and special keys
-    if ((newKey & Qt::ShiftModifier) && ((key < 0x41) || (key > 0x5a) || (key >= 0x01000000))) {
-        newKey -= Qt::ShiftModifier;
-    }
-
-    for (int i = 0; i < m_newSequence.count(); i++) {
-        if (m_newSequence[i] == key) {
-            return;
-        }
-    }
-
-    QKeySequence newSequence = QKeySequence(newKey);
-    if (m_newSequence == newSequence) {
-        return;
-    }
-
-    m_newSequence = newSequence;
-    checkNewSequenceForConflicts();
-
-    emit newSequenceChanged();
-#else
     std::tie(key, modifiers) = correctKeyInput(key, modifiers);
 
     if (needIgnoreKey(key)) {
@@ -140,7 +108,6 @@ void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
     checkNewSequenceForConflicts();
 
     emit newSequenceChanged();
-#endif
 }
 
 void EditShortcutModel::checkNewSequenceForConflicts()

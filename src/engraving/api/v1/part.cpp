@@ -28,7 +28,7 @@
 using namespace mu::engraving::apiv1;
 
 InstrumentListProperty::InstrumentListProperty(Part* p)
-    : QmlListProperty<Instrument>(p, p, &count, &at) {}
+    : QQmlListProperty<Instrument>(p, p, &count, &at) {}
 
 //---------------------------------------------------------
 //   InstrumentListProperty::count

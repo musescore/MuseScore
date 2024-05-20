@@ -433,7 +433,7 @@ void PaletteWidget::applyCurrentElementToScore()
     applyElementAtIndex(m_currentIdx);
 }
 
-void PaletteWidget::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers)
+void PaletteWidget::applyElementAtPosition(const QPointF& pos, Qt::KeyboardModifiers modifiers)
 {
     applyElementAtIndex(cellIndexForPoint(pos), modifiers);
 }
@@ -500,35 +500,16 @@ int PaletteWidget::rows() const
     return (actualCellCount() + c - 1) / c;
 }
 
-int PaletteWidget::cellIndexForPoint(const QPoint& p) const
+int PaletteWidget::cellIndexForPoint(const QPointF& p) const
 {
-    int hgridM = gridWidthScaled();
-    int vgridM = gridHeightScaled();
-    if (columns() == 0) {
-        return -1;
-    }
-    int rightBorder = width() % hgridM;
-    int hhgrid      = hgridM + (rightBorder / columns());
-
-    int x = p.x();
-    int y = p.y();
-
-    int row = y / vgridM;
-    int col = x / hhgrid;
-
-    int nc = columns();
-    if (col > nc) {
-        return -1;
-    }
-
-    int idx = row * nc + col;
+    int idx = theoreticalCellIndexForPoint(p);
     if (idx < 0 || idx >= actualCellCount()) {
         return -1;
     }
     return idx;
 }
 
-int PaletteWidget::theoreticalCellIndexForPoint(const QPoint& p) const
+int PaletteWidget::theoreticalCellIndexForPoint(const QPointF& p) const
 {
     int hgridM = gridWidthScaled();
     int vgridM = gridHeightScaled();
@@ -538,11 +519,8 @@ int PaletteWidget::theoreticalCellIndexForPoint(const QPoint& p) const
     int rightBorder = width() % hgridM;
     int hhgrid      = hgridM + (rightBorder / columns());
 
-    int x = p.x();
-    int y = p.y();
-
-    int row = y / vgridM;
-    int col = x / hhgrid;
+    int col = p.x() / hhgrid;
+    int row = p.y() / vgridM;
 
     int nc = columns();
     if (col > nc) {
@@ -792,7 +770,7 @@ void PaletteWidget::mouseReleaseEvent(QMouseEvent* event)
     update();
 
     if (!m_useDoubleClickForApplyingElements) {
-        applyElementAtPosition(event->pos(), event->modifiers());
+        applyElementAtPosition(event->position(), event->modifiers());
     }
 }
 
@@ -846,12 +824,7 @@ void PaletteWidget::dragMoveEvent(QDragMoveEvent* event)
 {
     if (event->source() == this) {
         if (m_currentIdx != -1 && event->proposedAction() == Qt::MoveAction) {
-#ifdef MU_QT5_COMPAT
-            QPoint pos = event->pos();
-#else
-            QPoint pos = event->position().toPoint();
-#endif
-            int targetIdx = cellIndexForPoint(pos);
+            int targetIdx = cellIndexForPoint(event->position());
             if (targetIdx != -1 && targetIdx != m_currentIdx) {
                 PaletteCellPtr cell = m_palette->takeCell(m_currentIdx);
                 m_palette->insertCell(targetIdx, cell);
@@ -933,12 +906,8 @@ void PaletteWidget::dropEvent(QDropEvent* event)
     }
 
     element->setSelected(false);
-#ifdef MU_QT5_COMPAT
-    QPoint pos = event->pos();
-#else
-    QPoint pos = event->position().toPoint();
-#endif
-    int i = cellIndexForPoint(pos);
+
+    int i = cellIndexForPoint(event->position());
     if (i == -1 || cells()[i]) {
         appendElement(element, name);
     } else {

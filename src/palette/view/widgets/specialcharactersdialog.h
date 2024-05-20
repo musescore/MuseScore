@@ -47,9 +47,6 @@ class SpecialCharactersDialog : public muse::uicomponents::TopLevelDialog, publi
 
 public:
     SpecialCharactersDialog(QWidget* parent = nullptr);
-#ifdef MU_QT5_COMPAT
-    SpecialCharactersDialog(const SpecialCharactersDialog& other);
-#endif
 
 private slots:
     void populateSmufl();

@@ -110,19 +110,11 @@ void AbstractCloudService::initOAuthIfNecessary()
 
     m_oauth2->setAuthorizationUrl(m_serverConfig.authorizationUrl);
     m_oauth2->setAccessTokenUrl(m_serverConfig.accessTokenUrl);
-#ifdef MU_QT5_COMPAT
-    m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QVariantMap* parameters) {
-        for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
-            parameters->insert(key, m_serverConfig.authorizationParameters.value(key));
-        }
-    });
-#else
     m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QMultiMap<QString, QVariant>* parameters) {
         for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
             parameters->replace(key, m_serverConfig.authorizationParameters.value(key));
         }
     });
-#endif
 
     m_oauth2->setReplyHandler(m_replyHandler);
 

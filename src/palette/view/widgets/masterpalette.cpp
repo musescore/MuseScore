@@ -159,14 +159,6 @@ MasterPalette::MasterPalette(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-#ifdef MU_QT5_COMPAT
-MasterPalette::MasterPalette(const MasterPalette& other)
-    : TopLevelDialog(other.parentWidget())
-{
-}
-
-#endif
-
 //---------------------------------------------------------
 //   retranslate
 //---------------------------------------------------------

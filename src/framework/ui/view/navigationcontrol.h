@@ -27,9 +27,7 @@
 
 #include "abstractnavigation.h"
 
-#ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE("ui/view/navigationpanel.h")
-#endif
 
 namespace muse::ui {
 class NavigationPanel;

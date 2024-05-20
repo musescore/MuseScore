@@ -24,10 +24,9 @@
 #define MU_ENGRAVING_APIV1_EXCERPT_H
 
 #include <QQmlEngine>
+#include <QQmlListProperty>
 
 #include "engraving/dom/excerpt.h"
-
-#include "extensions/api/qmllistproperty.h"
 
 namespace mu::engraving::apiv1 {
 class Score;
@@ -100,11 +99,11 @@ extern Excerpt* excerptWrap(mu::engraving::Excerpt* e);
 //---------------------------------------------------------
 
 template<typename T, class Container>
-class QmlExcerptsListAccess : public muse::extensions::api::QmlListProperty<T>
+class QmlExcerptsListAccess : public QQmlListProperty<T>
 {
 public:
     QmlExcerptsListAccess(QObject* obj, Container& container)
-        : muse::extensions::api::QmlListProperty<T>(obj, &container, &count, &at) {}
+        : QQmlListProperty<T>(obj, &container, &count, &at) {}
 
     static qsizetype count(QQmlListProperty<T>* l)
     {

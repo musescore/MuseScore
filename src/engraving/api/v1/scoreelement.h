@@ -23,10 +23,10 @@
 #ifndef MU_ENGRAVING_APIV1_SCOREELEMENT_H
 #define MU_ENGRAVING_APIV1_SCOREELEMENT_H
 
-#include <QVariant>
 #include <QQmlEngine>
+#include <QQmlListProperty>
+#include <QVariant>
 
-#include "extensions/api/qmllistproperty.h"
 #include "engraving/dom/property.h"
 
 namespace mu::engraving {
@@ -145,15 +145,15 @@ Wrapper* customWrap(T* t, Args... args)
 //---------------------------------------------------------
 
 template<typename T, class Container>
-class QmlListAccess : public muse::extensions::api::QmlListProperty<T>
+class QmlListAccess : public QQmlListProperty<T>
 {
 public:
     /// \cond MS_INTERNAL
     QmlListAccess(QObject* obj, Container& container)
-        : muse::extensions::api::QmlListProperty<T>(obj,
-                                                    const_cast<void*>(static_cast<const void*>(&container)),
-                                                    &count,
-                                                    &at) {}
+        : QQmlListProperty<T>(obj,
+                              const_cast<void*>(static_cast<const void*>(&container)),
+                              &count,
+                              &at) {}
 
     static qsizetype count(QQmlListProperty<T>* l)
     {

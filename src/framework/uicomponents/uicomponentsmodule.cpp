@@ -57,12 +57,7 @@ using namespace muse::modularity;
 static void uicomponents_init_qrc()
 {
     Q_INIT_RESOURCE(uicomponents);
-
-#ifdef MU_QT5_COMPAT
-    Q_INIT_RESOURCE(graphicaleffects_qt5);
-#else
     Q_INIT_RESOURCE(graphicaleffects);
-#endif
 }
 
 std::string UiComponentsModule::moduleName() const

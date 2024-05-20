@@ -41,9 +41,6 @@ class BreaksDialog : public QDialog, public Ui::BreaksDialog
 
 public:
     BreaksDialog(QWidget* parent = nullptr);
-#ifdef MU_QT5_COMPAT
-    BreaksDialog(const BreaksDialog& dialog);
-#endif
 
 private slots:
     void accept() override;

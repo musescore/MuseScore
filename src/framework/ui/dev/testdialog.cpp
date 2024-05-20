@@ -24,15 +24,6 @@
 
 using namespace muse::ui;
 
-#ifdef MU_QT5_COMPAT
-TestDialog::TestDialog(const TestDialog& dialog)
-    : QDialog(dialog.parentWidget()),
-    ui(dialog.ui)
-{
-}
-
-#endif
-
 TestDialog::TestDialog(QWidget* parent)
     : QDialog(parent),
     ui(new Ui::TestDialog)

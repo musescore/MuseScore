@@ -36,11 +36,7 @@ public:
     void setWindowTitleBarMoveArea(const QRect& area);
 
 protected:
-#ifdef MU_QT5_COMPAT
-    bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override;
-#else
     bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override;
-#endif
 
 private:
     QRect m_windowTitleBarMoveArea;

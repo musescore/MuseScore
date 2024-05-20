@@ -34,10 +34,6 @@ class TimeSig;
 }
 
 namespace mu::palette {
-//---------------------------------------------------------
-//   TimeSigProperties
-//---------------------------------------------------------
-
 class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperties
 {
     Q_OBJECT
@@ -47,9 +43,6 @@ class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperti
 
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);
-#ifdef MU_QT5_COMPAT
-    TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other);
-#endif
     ~TimeSignaturePropertiesDialog() override;
 
 private slots:

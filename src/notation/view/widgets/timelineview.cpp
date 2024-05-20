@@ -82,17 +82,12 @@ private:
         bool result = false;
 
         if (QWidget* receiver = m_mouseDownWidget ? m_mouseDownWidget : childAt(pos)) {
-#ifdef MU_QT5_COMPAT
-            event->setLocalPos(receiver->mapFrom(this, pos));
-            result = qApp->notify(receiver, event);
-#else
             QMouseEvent mappedEvent(event->type(), receiver->mapFrom(this, event->position()),
                                     event->scenePosition(), event->globalPosition(),
                                     event->button(), event->buttons(), event->modifiers(),
                                     event->source(), event->pointingDevice());
             result = qApp->notify(receiver, &mappedEvent);
             event->setAccepted(mappedEvent.isAccepted());
-#endif
         }
 
         return result;

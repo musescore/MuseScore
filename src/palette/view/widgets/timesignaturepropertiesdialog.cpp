@@ -158,14 +158,6 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-#ifdef MU_QT5_COMPAT
-TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other)
-    : QDialog(other.parentWidget())
-{
-}
-
-#endif
-
 TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
 {
     delete m_editedTimeSig;

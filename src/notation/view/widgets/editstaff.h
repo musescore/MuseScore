@@ -46,9 +46,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
 
 public:
     EditStaff(QWidget* parent = nullptr);
-#ifdef MU_QT5_COMPAT
-    EditStaff(const EditStaff&);
-#endif
 
 private:
     void hideEvent(QHideEvent*) override;

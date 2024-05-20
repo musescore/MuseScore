@@ -33,10 +33,6 @@ class Note;
 }
 
 namespace mu::notation {
-//---------------------------------------------------------
-//   SelectNoteDialog
-//---------------------------------------------------------
-
 class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog
 {
     Q_OBJECT
@@ -44,10 +40,6 @@ class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog
 
 public:
     SelectNoteDialog(QWidget* parent = nullptr);
-
-#ifdef MU_QT5_COMPAT
-    SelectNoteDialog(const SelectNoteDialog& other);
-#endif
 
     bool doReplace() const;
     bool doAdd() const;

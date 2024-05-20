@@ -42,10 +42,6 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase
 public:
     explicit PageSettings(QWidget* parent = 0);
 
-#ifdef MU_QT5_COMPAT
-    PageSettings(const PageSettings&);
-#endif
-
 public slots:
     void accept();
     void reject();

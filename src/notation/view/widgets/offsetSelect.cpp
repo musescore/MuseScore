@@ -33,8 +33,8 @@ OffsetSelect::OffsetSelect(QWidget* parent)
 
     setFocusProxy(xVal);
 
-    connect(xVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
-    connect(yVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
+    connect(xVal, &QDoubleSpinBox::valueChanged, this, &OffsetSelect::_offsetChanged);
+    connect(yVal, &QDoubleSpinBox::valueChanged, this, &OffsetSelect::_offsetChanged);
 }
 
 void OffsetSelect::setSuffix(const QString& s)

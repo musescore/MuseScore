@@ -75,22 +75,6 @@ void QQuickAbstractStyle1::data_append(QQmlListProperty<QObject> *list, QObject 
         style->m_data.append(object);
 }
 
-#ifdef MU_QT5_COMPAT
-int QQuickAbstractStyle1::data_count(QQmlListProperty<QObject> *list)
-{
-    if (QQuickAbstractStyle1 *style = qobject_cast<QQuickAbstractStyle1 *>(list->object))
-        return style->m_data.count();
-    return 0;
-}
-
-QObject *QQuickAbstractStyle1::data_at(QQmlListProperty<QObject> *list, int index)
-{
-    if (QQuickAbstractStyle1 *style = qobject_cast<QQuickAbstractStyle1 *>(list->object))
-        return style->m_data.at(index);
-    return 0;
-}
-
-#else
 qsizetype QQuickAbstractStyle1::data_count(QQmlListProperty<QObject> *list)
 {
     if (QQuickAbstractStyle1 *style = qobject_cast<QQuickAbstractStyle1 *>(list->object))
@@ -105,7 +89,6 @@ QObject *QQuickAbstractStyle1::data_at(QQmlListProperty<QObject> *list, qsizetyp
     return 0;
 }
 
-#endif
 
 void QQuickAbstractStyle1::data_clear(QQmlListProperty<QObject> *list)
 {

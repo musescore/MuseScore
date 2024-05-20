@@ -127,10 +127,6 @@ void PaletteModule::registerUiTypes()
     qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
     qmlRegisterType<DrumsetPanelView>("MuseScore.Palette", 1, 0, "DrumsetPanelView");
 
-    qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
-    qRegisterMetaType<TimeSignaturePropertiesDialog>("TimeSignaturePropertiesDialog");
-    qRegisterMetaType<EditDrumsetDialog>("EditDrumsetDialog");
-
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 

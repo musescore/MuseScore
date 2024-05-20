@@ -304,41 +304,6 @@ Val Val::fromQVariant(const QVariant& var)
         return Val();
     }
 
-#ifdef MU_QT5_COMPAT
-    switch (var.type()) {
-    case QVariant::Bool: return Val(var.toBool());
-    case QVariant::Int: return Val(var.toInt());
-    case QVariant::UInt: return Val(var.toInt());
-    case QVariant::LongLong: return Val(static_cast<int64_t>(var.toLongLong()));
-    case QVariant::ULongLong: return Val(static_cast<int64_t>(var.toLongLong()));
-    case QVariant::Double: return Val(var.toDouble());
-    case QVariant::String: return Val(var.toString().toStdString());
-    case QVariant::List: {
-        ValList l;
-        QVariantList vl = var.toList();
-        for (const QVariant& v : vl) {
-            l.push_back(fromQVariant(v));
-        }
-        return Val(l);
-    }
-    case QVariant::Map: {
-        ValMap m;
-        QVariantMap vm = var.toMap();
-        QVariantMap::const_iterator i = vm.constBegin();
-        while (i != vm.constEnd()) {
-            m.insert({ i.key().toStdString(), fromQVariant(i.value()) });
-            ++i;
-        }
-        return Val(m);
-    }
-    case QVariant::Color: return Val(var.value<QColor>());
-    default: {
-        LOGE() << "Not supported type: " << var.typeName();
-        //UNREACHABLE;
-        return Val();
-    }
-    }
-#else
     switch (var.typeId()) {
     case QMetaType::Bool: return Val(var.toBool());
     case QMetaType::Int: return Val(var.toInt());
@@ -372,7 +337,6 @@ Val Val::fromQVariant(const QVariant& var)
         return Val();
     }
     }
-#endif
 }
 
 #endif

@@ -47,10 +47,8 @@
 
 #include "playevent.h"
 
-#ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE("engraving/api/v1/part.h")
 Q_MOC_INCLUDE("engraving/api/v1/tie.h")
-#endif
 
 namespace mu::engraving::apiv1 {
 class FractionWrapper;

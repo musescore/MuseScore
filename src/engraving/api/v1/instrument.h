@@ -24,7 +24,8 @@
 #define MU_ENGRAVING_APIV1_INSTRUMENT_H
 
 #include "engraving/dom/instrument.h"
-#include "extensions/api/qmllistproperty.h"
+
+#include <QQmlListProperty>
 
 // api
 #include "scoreelement.h"
@@ -210,7 +211,7 @@ public:
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
-class ChannelListProperty : public muse::extensions::api::QmlListProperty<Channel>
+class ChannelListProperty : public QQmlListProperty<Channel>
 {
 public:
     ChannelListProperty(Instrument* i);

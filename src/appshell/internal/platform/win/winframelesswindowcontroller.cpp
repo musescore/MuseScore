@@ -97,11 +97,7 @@ bool WinFramelessWindowController::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
-#ifdef MU_QT5_COMPAT
-bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
-#else
 bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result)
-#endif
 {
     if (eventType != "windows_generic_MSG") {
         return false;
@@ -136,11 +132,7 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
     return false;
 }
 
-#ifdef MU_QT5_COMPAT
-bool WinFramelessWindowController::removeWindowFrame(MSG* message, long* result)
-#else
 bool WinFramelessWindowController::removeWindowFrame(MSG* message, qintptr* result)
-#endif
 {
     NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(message->lParam);
 
@@ -177,11 +169,7 @@ bool WinFramelessWindowController::removeWindowFrame(MSG* message, qintptr* resu
     return true;
 }
 
-#ifdef MU_QT5_COMPAT
-bool WinFramelessWindowController::calculateWindowSize(MSG* message, long* result)
-#else
 bool WinFramelessWindowController::calculateWindowSize(MSG* message, qintptr* result)
-#endif
 {
     if (!isWindowMaximized(message->hwnd)) {
         return false;
@@ -214,11 +202,7 @@ bool WinFramelessWindowController::calculateWindowSize(MSG* message, qintptr* re
     return true;
 }
 
-#ifdef MU_QT5_COMPAT
-bool WinFramelessWindowController::processMouseMove(MSG* message, long* result) const
-#else
 bool WinFramelessWindowController::processMouseMove(MSG* message, qintptr* result) const
-#endif
 {
     const LONG borderWidth = this->borderWidth();
     RECT windowRect;

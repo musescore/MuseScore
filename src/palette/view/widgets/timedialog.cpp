@@ -54,8 +54,8 @@ TimeDialog::TimeDialog(QWidget* parent)
     sp->setReadOnly(false);
     sp->setSelectable(true);
 
-    connect(zNominal, QOverload<int>::of(&QSpinBox::valueChanged), this, &TimeDialog::zChanged);
-    connect(nNominal, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TimeDialog::nChanged);
+    connect(zNominal, &QSpinBox::valueChanged, this, &TimeDialog::zChanged);
+    connect(nNominal, &QComboBox::currentIndexChanged, this, &TimeDialog::nChanged);
     connect(sp, &PaletteWidget::boxClicked, this, &TimeDialog::paletteChanged);
     connect(sp, &PaletteWidget::changed, this, &TimeDialog::setDirty);
     connect(addButton, &QPushButton::clicked, this, &TimeDialog::addClicked);
@@ -89,14 +89,6 @@ TimeDialog::TimeDialog(QWidget* parent)
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
 }
-
-#ifdef MU_QT5_COMPAT
-TimeDialog::TimeDialog(const TimeDialog& dialog)
-    : TimeDialog(dialog.parentWidget())
-{
-}
-
-#endif
 
 bool TimeDialog::dirty() const
 {

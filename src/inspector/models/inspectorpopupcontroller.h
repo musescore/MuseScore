@@ -28,10 +28,8 @@
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 
-#ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE(< QQuickItem >)
 Q_MOC_INCLUDE("uicomponents/view/popupview.h")
-#endif
 
 class QQuickItem;
 
@@ -79,7 +77,7 @@ private slots:
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void closePopupIfNeed(const QPoint& mouseGlobalPos);
+    void closePopupIfNeed(const QPointF& mouseGlobalPos);
 
     QQuickItem* m_visualControl = nullptr;
     muse::uicomponents::PopupView* m_popup = nullptr;

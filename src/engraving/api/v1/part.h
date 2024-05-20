@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_APIV1_PART_H
 #define MU_ENGRAVING_APIV1_PART_H
 
-#include "extensions/api/qmllistproperty.h"
+#include <QQmlListProperty>
 
 #include "engraving/dom/part.h"
 
@@ -39,7 +39,7 @@ class Part;
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
-class InstrumentListProperty : public muse::extensions::api::QmlListProperty<Instrument>
+class InstrumentListProperty : public QQmlListProperty<Instrument>
 {
 public:
     InstrumentListProperty(Part* p);

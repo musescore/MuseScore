@@ -49,7 +49,7 @@ public:
     void registerWidgetUri(const Uri& uri)
     {
         static_assert(std::is_base_of<QWidget, T>::value, "T must derive from QWidget");
-        registerUri(uri, ContainerMeta(ContainerType::Type::QWidgetDialog, qRegisterMetaType<T>(typeid(T).name())));
+        registerUri(uri, ContainerMeta(ContainerType::Type::QWidgetDialog, qRegisterMetaType<T>()));
     }
 };
 }
