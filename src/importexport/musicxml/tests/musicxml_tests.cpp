@@ -35,8 +35,10 @@
 #include "io/fileinfo.h"
 
 //! NOTE Different platforms have different font metrics, which is why some tests fail
-#ifndef Q_OS_LINUX
-#define DISABLED_SOME_TESTS
+#ifdef Q_OS_LINUX
+#define DISABLED_EXCEPT_ON_LINUX(testName) testName
+#else
+#define DISABLED_EXCEPT_ON_LINUX(testName) DISABLED_##testName
 #endif
 
 using namespace mu;
@@ -702,15 +704,13 @@ TEST_F(Musicxml_Tests, incorrectStaffNumber1) {
 TEST_F(Musicxml_Tests, incorrectStaffNumber2) {
     mxmlIoTestRef("testIncorrectStaffNumber2");
 }
-#ifndef DISABLED_SOME_TESTS
 #ifndef MU_QT5_COMPAT
-TEST_F(Musicxml_Tests, inferredCredits1) {
+TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits1)) {
     mxmlImportTestRef("testInferredCredits1");
 }
-TEST_F(Musicxml_Tests, inferredCredits2) {
+TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits2)) {
     mxmlImportTestRef("testInferredCredits2");
 }
-#endif
 #endif
 TEST_F(Musicxml_Tests, inferCodaII) {
     mxmlImportTestRef("testInferCodaII");
@@ -766,11 +766,9 @@ TEST_F(Musicxml_Tests, keysig1) {
 TEST_F(Musicxml_Tests, keysig2) {
     mxmlIoTest("testKeysig2");
 }
-#ifndef DISABLED_SOME_TESTS
-TEST_F(Musicxml_Tests, layout) {
+TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(layout)) {
     mxmlIoTest("testLayout", true);
 }
-#endif
 TEST_F(Musicxml_Tests, lessWhiteSpace) {
     mxmlIoTestRef("testLessWhiteSpace");
 }
@@ -1029,14 +1027,12 @@ TEST_F(Musicxml_Tests, systemBrackets5) {
 TEST_F(Musicxml_Tests, systemDirection) {
     mxmlIoTest("testSystemDirection");
 }
-#ifndef DISABLED_SOME_TESTS
-TEST_F(Musicxml_Tests, systemDistance) {
+TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDistance)) {
     mxmlMscxExportTestRef("testSystemDistance", true);
 }
-TEST_F(Musicxml_Tests, systemDividers) {
+TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDividers)) {
     mxmlIoTest("testSystemDividers", true);
 }
-#endif
 TEST_F(Musicxml_Tests, tablature1) {
     mxmlIoTest("testTablature1");
 }
