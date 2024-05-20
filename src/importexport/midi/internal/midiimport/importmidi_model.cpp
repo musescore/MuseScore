@@ -1113,7 +1113,7 @@ Qt::ItemFlags TracksModel::editableFlags(int row, int col) const
                 flags |= Qt::ItemIsEditable;
             } else if (editableSingleTrack(trackIndex, col)) {
                 QVariant value = _columns[col]->value(0);
-                if (value.typeId() == QMetaType::Bool) { // not checkboxes
+                if (value.typeId() != QMetaType::Bool) { // not checkboxes
                     flags |= Qt::ItemIsEditable;
                 }
             }
