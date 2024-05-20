@@ -28,11 +28,6 @@
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
 
-#include "engraving/dom/durationelement.h"
-
-//---------------------------------------------------------
-//   TupletDialog
-//---------------------------------------------------------
 namespace mu::notation {
 class TupletDialog : public QDialog, Ui::TupletDialog
 {

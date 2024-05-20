@@ -33,10 +33,6 @@ class Note;
 }
 
 namespace mu::notation {
-//---------------------------------------------------------
-//   SelectNoteDialog
-//---------------------------------------------------------
-
 class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog
 {
     Q_OBJECT

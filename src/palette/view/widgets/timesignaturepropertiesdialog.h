@@ -34,10 +34,6 @@ class TimeSig;
 }
 
 namespace mu::palette {
-//---------------------------------------------------------
-//   TimeSigProperties
-//---------------------------------------------------------
-
 class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperties
 {
     Q_OBJECT

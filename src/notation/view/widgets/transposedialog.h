@@ -31,10 +31,6 @@
 #include "notationtypes.h"
 
 namespace mu::notation {
-//---------------------------------------------------------
-//   TransposeDialog
-//---------------------------------------------------------
-
 class TransposeDialog : public QDialog, Ui::TransposeDialogBase
 {
     Q_OBJECT
