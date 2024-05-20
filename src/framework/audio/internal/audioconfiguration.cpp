@@ -166,7 +166,7 @@ async::Notification AudioConfiguration::sampleRateChanged() const
 size_t AudioConfiguration::minTrackCountForMultithreading() const
 {
     // Start mutlithreading-processing only when there are more or equal number of tracks
-    return 3;
+    return 2;
 }
 
 AudioInputParams AudioConfiguration::defaultAudioInputParams() const

@@ -24,6 +24,7 @@
 
 #include "global/modularity/ioc.h"
 #include "global/async/asyncable.h"
+#include "global/async/notification.h"
 
 #include "ifxresolver.h"
 #include "ifxprocessor.h"
@@ -40,6 +41,12 @@ public:
     explicit MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount);
 
     TrackId trackId() const;
+    IAudioSourcePtr source() const;
+
+    bool muted() const;
+    async::Notification mutedChanged() const;
+
+    void notifyNoAudioSignal();
 
     const AudioOutputParams& outputParams() const override;
     void applyOutputParams(const AudioOutputParams& requiredParams) override;
@@ -70,6 +77,7 @@ private:
 
     dsp::CompressorPtr m_compressor = nullptr;
 
+    async::Notification m_mutedChanged;
     mutable async::Channel<AudioOutputParams> m_paramsChanges;
     mutable AudioSignalsNotifier m_audioSignalNotifier;
 };
