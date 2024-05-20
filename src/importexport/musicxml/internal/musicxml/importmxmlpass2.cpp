@@ -5984,8 +5984,8 @@ static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const QString& part
     pass1.setDrumsetDefault(partId, instrumentId, headGroup, line, overruledStemDir);
 }
 
-static void xmlSetDrumsetPitch(Note* note, const Chord* const chord, const Staff* const staff, int step, int octave,
-                               NoteHeadGroup headGroup, const Instrument* const instrument)
+static void xmlSetDrumsetPitch(Note* note, const Chord* chord, const Staff* staff, int step, int octave,
+                               NoteHeadGroup headGroup, DirectionV& stemDir, const Instrument* instrument)
 {
     const Drumset* ds = instrument->drumset();
     // get line
@@ -6021,6 +6021,10 @@ static void xmlSetDrumsetPitch(Note* note, const Chord* const chord, const Staff
     // If there is no exact match, fall back to correct line but different head
     if (newPitch == pitch) {
         newPitch = lineMatch;
+    }
+
+    if (stemDir == DirectionV::AUTO) {
+        stemDir = ds->stemDirection(newPitch);
     }
 
     note->setPitch(newPitch);
@@ -6281,13 +6285,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         const int octaveShift = _pass1.octaveShift(partId, ottavaStaff, noteStartTime);
         const Staff* st = c->staff();
         if (isSingleDrumset && mnp.unpitched() && instrumentId.isEmpty()) {
-            xmlSetDrumsetPitch(note, c, st, mnp.displayStep(), mnp.displayOctave(), headGroup, instrument);
+            xmlSetDrumsetPitch(note, c, st, mnp.displayStep(), mnp.displayOctave(), headGroup, stemDir, instrument);
         } else {
             setPitch(note, instruments, instrumentId, mnp, octaveShift, instrument);
         }
         c->add(note);
-        //c->setStemDirection(stemDir); // already done in handleBeamAndStemDir()
-        //c->setNoStem(noStem);
         cr = c;
     }
     // end allocation
