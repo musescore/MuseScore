@@ -6960,9 +6960,11 @@ void MusicXMLParserLyric::parse()
     bool hasExtend = false;
     const auto lyricNumber = _e.attributes().value("number").toString();
     const QColor lyricColor { _e.attributes().value("color").toString() };
-    const QString placement = _e.attributes().value("placement").toString();
-    double relX = _e.attributes().value("relative-x").toDouble() / 10 * DPMM;
-    double relY = _e.attributes().value("relative-y").toDouble() / 10 * DPMM;
+    m_placement = _e.attributes().value("placement").toString();
+    double relX = _e.attributes().value("relative-x").toDouble() * 0.1 * DPMM;
+    m_relativeY = _e.attributes().value("relative-y").toDouble() * -0.1 * DPMM;
+    m_defaultY = _e.attributes().value("default-y").toDouble() * -0.1 * DPMM;
+
     QString extendType;
     QString formattedText;
 
@@ -7016,15 +7018,13 @@ void MusicXMLParserLyric::parse()
         lyric->setProperty(Pid::COLOR, mu::draw::Color::fromQColor(lyricColor));
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
-    if (!placement.isEmpty()) {
-        lyric->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
-        lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-    }
 
-    if (relX != 0 || relY != 0) {
+    lyric->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+    lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+
+    if (!RealIsNull(relX)) {
         PointF offset = lyric->offset();
-        offset.setX(relX != 0 ? relX : lyric->offset().x());
-        offset.setY(relY != 0 ? relY : lyric->offset().y());
+        offset.setX(relX);
         lyric->setOffset(offset);
         lyric->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
     }
@@ -7036,6 +7036,15 @@ void MusicXMLParserLyric::parse()
         && (extendType == "" || extendType == "start")
         && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
         _extendedLyrics.insert(l);
+    }
+}
+
+String MusicXMLParserLyric::placement() const
+{
+    if (m_placement == "" && hasTotalY()) {
+        return totalY() < 0 ? u"above" : u"below";
+    } else {
+        return m_placement;
     }
 }
 
