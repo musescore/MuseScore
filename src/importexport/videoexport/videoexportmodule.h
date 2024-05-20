@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::videoexport {
-class VideoExportModule : public modularity::IModuleSetup
+class VideoExportModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
