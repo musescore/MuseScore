@@ -293,18 +293,19 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags)
     staff_layer_idx_t startIdx = 0;
     staff_layer_idx_t endIdx = static_cast<staff_layer_idx_t>(part->nstaves());
 
-    PlaybackParamList studio, pop;
+    PlaybackParamList sulTasto;
     for (staff_layer_idx_t i = startIdx; i < endIdx; ++i) {
-        studio.emplace_back(PlaybackParam { mpe::SOUND_PRESET_PARAM_CODE, Val("Studio"), i });
-        pop.emplace_back(PlaybackParam { mpe::SOUND_PRESET_PARAM_CODE, Val("Pop"), i });
+        sulTasto.emplace_back(PlaybackParam { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("Sul Tasto"), i });
     }
 
-    PlaybackParamList orchestral  { { mpe::SOUND_PRESET_PARAM_CODE, Val("Orchestral"), 1 } }; // "apply to all staves" is off
+    PlaybackParam bartok { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("bartok"), 0 };
+    PlaybackParam pizz { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("pizzicato"), 1 }; // "apply to all staves" is off
+    PlaybackParam espressivo { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("Espressivo"), 1 }; // "apply to all staves" is off
 
     PlaybackParamMap expectedParams {
-        { timestampFromTicks(score, 960), studio },
-        { timestampFromTicks(score, 3840), pop },
-        { timestampFromTicks(score, 5760), orchestral },
+        { timestampFromTicks(score, 1920), sulTasto },
+        { timestampFromTicks(score, 3840), { bartok, pizz } },
+        { timestampFromTicks(score, 7680), { espressivo } },
     };
 
     EXPECT_EQ(params, expectedParams);
@@ -314,21 +315,26 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags)
         params = ctx.playbackParamMap(score, 0, i);
         EXPECT_TRUE(params.empty());
 
-        params = ctx.playbackParamMap(score, 960, i);
+        params = ctx.playbackParamMap(score, 2000, i);
         ASSERT_EQ(params.size(), 1);
-        EXPECT_EQ(params.begin()->second, PlaybackParamList { studio.at(i) });
+        EXPECT_EQ(params.begin()->second, PlaybackParamList { sulTasto.at(i) });
 
         params = ctx.playbackParamMap(score, 4500, i);
         ASSERT_EQ(params.size(), 1);
-        EXPECT_EQ(params.begin()->second, PlaybackParamList { pop.at(i) });
-
-        params = ctx.playbackParamMap(score, 8000, i);
 
         if (i == 1) {
-            ASSERT_EQ(params.size(), 1);
-            EXPECT_EQ(params.begin()->second, orchestral);
+            EXPECT_EQ(params.begin()->second, PlaybackParamList { pizz });
         } else {
-            EXPECT_TRUE(params.empty());
+            EXPECT_EQ(params.begin()->second, PlaybackParamList { bartok });
+        }
+
+        params = ctx.playbackParamMap(score, 7680, i);
+        ASSERT_EQ(params.size(), 1);
+
+        if (i == 1) {
+            EXPECT_EQ(params.begin()->second, PlaybackParamList { espressivo });
+        } else {
+            EXPECT_EQ(params.begin()->second, PlaybackParamList { bartok });
         }
     }
 
