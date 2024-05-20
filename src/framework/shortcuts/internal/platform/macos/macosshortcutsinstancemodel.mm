@@ -204,7 +204,7 @@ quint32 nativeModifiers(UCKeyboardLayout* keyboard, int key, Qt::KeyboardModifie
         result |= kEventKeyModifierNumLockMask;
     }
 
-    if (result == 0) {
+    if (result == 0 && !QChar(key).isLetter()) {
         //! NOTE: Some symbols are available only through modifiers;
         //! if modifiers are not explicitly specified,
         //! we will get them through the native key
@@ -216,14 +216,52 @@ quint32 nativeModifiers(UCKeyboardLayout* keyboard, int key, Qt::KeyboardModifie
 
         UTF16Char keyCodeChar = key;
 
+        int withoutModifiers = 0;
         int alt = (optionKey >> 8) & 0xff;
+        int shift = (shiftKey >> 8) & 0xff;
+        int altShift = ((optionKey | shiftKey) >> 8) & 0xff;
+
         UInt32 deadKeyState = 0;
         UniCharCount count;
         UniChar character;
 
-        if (UCKeyTranslate(keyboard, keyNativeCode, kUCKeyActionDown, alt, 0, 0,
-                           &deadKeyState, 1, &count, &character) == 0 && character == keyCodeChar) {
-            result = optionKey;
+        static UInt8 (* LMGetKbdType)(void);
+
+        CFBundleRef bundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.Carbon"));
+
+        if (bundle) {
+            *(void**)& LMGetKbdType = CFBundleGetFunctionPointerForName(bundle, CFSTR("LMGetKbdType"));
+        }
+
+        UInt8 keyboardType = LMGetKbdType();
+
+        OSStatus err = UCKeyTranslate(keyboard, keyNativeCode, kUCKeyActionDown, withoutModifiers, keyboardType, 0,
+                                      &deadKeyState, 1, &count, &character);
+
+        if (err == noErr && count > 0 && character == keyCodeChar) {
+            //! no need modifiers for key
+            return result;
+        }
+
+        err = UCKeyTranslate(keyboard, keyNativeCode, kUCKeyActionDown, alt, keyboardType, 0,
+                             &deadKeyState, 1, &count, &character);
+
+        if (err == noErr && count > 0 && character == keyCodeChar) {
+            return optionKey;
+        }
+
+        err = UCKeyTranslate(keyboard, keyNativeCode, kUCKeyActionDown, shift, keyboardType, 0,
+                             &deadKeyState, 1, &count, &character);
+
+        if (err == noErr && count > 0 && character == keyCodeChar) {
+            return shiftKey;
+        }
+
+        err = UCKeyTranslate(keyboard, keyNativeCode, kUCKeyActionDown, altShift, keyboardType, 0,
+                             &deadKeyState, 1, &count, &character);
+
+        if (err == noErr && count > 0 && character == keyCodeChar) {
+            return optionKey | shiftKey;
         }
     }
 
