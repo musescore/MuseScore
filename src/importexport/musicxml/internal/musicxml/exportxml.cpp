@@ -7574,7 +7574,7 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             }
             xml.startElement("staff-details", attributes);
 
-            if (st->links() && st->links()->contains(part->staff(i - 1))) {
+            if (i > 0 && st->links() && st->links()->contains(part->staff(i - 1))) {
                 xml.tag("staff-type", "alternate");
             }
 
