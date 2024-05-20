@@ -271,6 +271,4 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(mu::notation::TRowLabels::MouseOverValue);
-
 #endif // MU_NOTATION_TIMELINE_H

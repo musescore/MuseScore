@@ -72,10 +72,6 @@ EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& 
     qApp->installEventFilter(this);
 }
 
-EditStringData::~EditStringData()
-{
-}
-
 std::vector<instrString> EditStringData::strings() const
 {
     return _strings;

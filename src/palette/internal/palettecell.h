@@ -112,7 +112,4 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(mu::palette::PaletteCell*)
-Q_DECLARE_METATYPE(const mu::palette::PaletteCell*)
-
 #endif // MU_PALETTE_PALETTECELL_H

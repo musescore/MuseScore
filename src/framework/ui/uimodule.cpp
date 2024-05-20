@@ -176,7 +176,6 @@ void UiModule::registerUiTypes()
     qmlRegisterType<ProgressDialogModel>("Muse.Ui", 1, 0, "ProgressDialogModel");
 
     qmlRegisterType<InteractiveTestsModel>("Muse.Ui", 1, 0, "InteractiveTestsModel");
-    qRegisterMetaType<TestDialog>("TestDialog");
 
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_ui_QML_IMPORT);
 }

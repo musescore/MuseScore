@@ -188,13 +188,6 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<BendStyleSelector>("MuseScore.NotationScene", 1, 0, "BendStyleSelector");
     qmlRegisterType<TiePlacementSelectorModel>("MuseScore.NotationScene", 1, 0, "TiePlacementSelectorModel");
 
-    qRegisterMetaType<EditStyle>("EditStyle");
-    qRegisterMetaType<EditStaff>("EditStaff");
-    qRegisterMetaType<EditStringData>("EditStringData");
-    qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
-    qRegisterMetaType<SelectDialog>("SelectDialog");
-    qRegisterMetaType<StaffTextPropertiesDialog>("StaffTextPropertiesDialog");
-
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
     auto ui = ioc()->resolve<IUiEngine>(moduleName());
