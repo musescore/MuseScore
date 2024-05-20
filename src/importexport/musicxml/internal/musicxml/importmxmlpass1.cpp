@@ -1546,7 +1546,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
             skipLogCurrElem();
         }
     }
-    if (crwords != "") {
+    if (!crwords.empty()) {
         // as the meaning of multiple credit-types is undocumented,
         // use credit-type only if exactly one was found
         String crtype = (crtypes.size() == 1) ? crtypes.at(0) : String();
@@ -2966,7 +2966,7 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
         if (m_e.name() == "octave-shift") {
             String number = m_e.attribute("number");
             int n = 0;
-            if (number != "") {
+            if (!number.empty()) {
                 n = number.toInt();
                 if (n <= 0) {
                     m_logger->logError(String(u"invalid number %1").arg(number), &m_e);
@@ -3555,7 +3555,7 @@ void MusicXMLParserPass1::note(const String& partId,
     // keep in this order as checkTiming() might change dura
     String errorStr = mnd.checkTiming(type, bRest, grace);
     dura = mnd.duration();
-    if (errorStr != "") {
+    if (!errorStr.empty()) {
         m_logger->logError(errorStr, &m_e);
     }
 

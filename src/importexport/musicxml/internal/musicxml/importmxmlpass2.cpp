@@ -1075,10 +1075,10 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
 
     // when setting anchor, assume type up/down without explicit placement
     // implies placement above/below
-    if (place == "above" || (dir == "up" && place == "")) {
+    if (place == "above" || (dir == "up" && place.empty())) {
         na->setAnchor(ArticulationAnchor::TOP);
         na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
-    } else if (place == "below" || (dir == "down" && place == "")) {
+    } else if (place == "below" || (dir == "down" && place.empty())) {
         na->setAnchor(ArticulationAnchor::BOTTOM);
         na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     }
@@ -1139,27 +1139,27 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
     const String attrDep = notation.attribute(u"departure");
     SymId articSym = SymId::noSym;   // legal but impossible ArticulationType value here indicating "not found"
     if (name == "inverted-mordent") {
-        if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") {
+        if ((attrLong.empty() || attrLong == "no") && attrAppr.empty() && attrDep.empty()) {
             articSym = SymId::ornamentShortTrill;
-        } else if (attrLong == "yes" && attrAppr == "" && attrDep == "") {
+        } else if (attrLong == "yes" && attrAppr.empty() && attrDep.empty()) {
             articSym = SymId::ornamentTremblement;
-        } else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") {
+        } else if (attrLong == "yes" && attrAppr == "below" && attrDep.empty()) {
             articSym = SymId::ornamentUpPrall;
-        } else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") {
+        } else if (attrLong == "yes" && attrAppr == "above" && attrDep.empty()) {
             articSym = SymId::ornamentPrecompMordentUpperPrefix;
-        } else if (attrLong == "yes" && attrAppr == "" && attrDep == "below") {
+        } else if (attrLong == "yes" && attrAppr.empty() && attrDep == "below") {
             articSym = SymId::ornamentPrallDown;
-        } else if (attrLong == "yes" && attrAppr == "" && attrDep == "above") {
+        } else if (attrLong == "yes" && attrAppr.empty() && attrDep == "above") {
             articSym = SymId::ornamentPrallUp;
         }
     } else if (name == "mordent") {
-        if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") {
+        if ((attrLong.empty() || attrLong == "no") && attrAppr.empty() && attrDep.empty()) {
             articSym = SymId::ornamentMordent;
-        } else if (attrLong == "yes" && attrAppr == "" && attrDep == "") {
+        } else if (attrLong == "yes" && attrAppr.empty() && attrDep.empty()) {
             articSym = SymId::ornamentPrallMordent;
-        } else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") {
+        } else if (attrLong == "yes" && attrAppr == "below" && attrDep.empty()) {
             articSym = SymId::ornamentUpMordent;
-        } else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") {
+        } else if (attrLong == "yes" && attrAppr == "above" && attrDep.empty()) {
             articSym = SymId::ornamentDownMordent;
         }
     }
@@ -2740,7 +2740,7 @@ void MusicXMLParserPass2::staffDetails(const String& partId, Measure* measure)
 
     String strNumber = m_e.attribute("number");
     int n = 0;  // default
-    if (strNumber != "") {
+    if (!strNumber.empty()) {
         n = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strNumber.toInt());
         if (n < 0 || n >= int(staves)) {
             m_logger->logError(String(u"invalid staff-details number %1 (may be hidden)").arg(strNumber), &m_e);
@@ -2962,7 +2962,7 @@ void MusicXMLDelayedDirectionElement::addElem()
 
 String MusicXMLParserDirection::placement() const
 {
-    if (m_placement == "" && hasTotalY()) {
+    if (m_placement.empty() && hasTotalY()) {
         return totalY() < 0 ? u"above" : u"below";
     } else {
         return m_placement;
@@ -3096,7 +3096,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         } else {
             addElemOffset(sticking, track, placement(), measure, tick + m_offset);
         }
-    } else if (m_wordsText != "" || m_rehearsalText != "" || m_metroText != "") {
+    } else if (!m_wordsText.empty() || !m_rehearsalText.empty() || !m_metroText.empty()) {
         TextBase* t = 0;
         if (m_tpoSound > 0.1) {
             if (canAddTempoText(m_score->tempomap(), tick.ticks())) {
@@ -3114,7 +3114,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 m_score->setTempo(tick, m_tpoSound);
             }
         } else {
-            if (m_wordsText != "" || m_metroText != "") {
+            if (!m_wordsText.empty() || !m_metroText.empty()) {
                 isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty() && placement() == u"below";
                 if (isExpressionText) {
                     t = Factory::createExpression(m_score->dummy()->segment());
@@ -3483,7 +3483,7 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             m_wordsText += nextPart;
         } else if (m_e.name() == "rehearsal") {
             m_enclosure      = m_e.attribute("enclosure");
-            if (m_enclosure == "") {
+            if (m_enclosure.empty()) {
                 m_enclosure = u"square";          // note different default
             }
             m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e);
@@ -4273,7 +4273,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
                 sline->setSystemFlag(m_systemDirection);
             }
             TextLine* textLine = toTextLine(sline);
-            // if (placement == "") placement = "above";  // TODO ? set default
+            // if (placement.empty()) placement = "above";  // TODO ? set default
 
             textLine->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
             if (lineEnd == "up") {
@@ -4343,7 +4343,7 @@ void MusicXMLParserDirection::dashes(const String& type, const int number,
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == u"start") {
         TextLine* b = spdesc.isStopped ? toTextLine(spdesc.sp) : Factory::createTextLine(m_score->dummy());
-        // if (placement == "") placement = "above";  // TODO ? set default
+        // if (placement.empty()) placement = "above";  // TODO ? set default
 
         // hack: combine with a previous words element
         if (!m_wordsText.empty()) {
@@ -4386,7 +4386,7 @@ void MusicXMLParserDirection::octaveShift(const String& type, const int number,
         } else {
             Ottava* o = spdesc.isStopped ? toOttava(spdesc.sp) : Factory::createOttava(m_score->dummy());
 
-            // if (placement == "") placement = "above";  // TODO ? set default
+            // if (placement.empty()) placement = "above";  // TODO ? set default
 
             if (type == u"down" && ottavasize == 8) {
                 o->setOttavaType(OttavaType::OTTAVA_8VA);
@@ -4724,7 +4724,7 @@ String MusicXMLParserDirection::metronome(double& r)
         tempoText += u" = ";
         tempoText += perMinute;
     }
-    if (dur1.isValid() && !dur2.isValid() && perMinute != "") {
+    if (dur1.isValid() && !dur2.isValid() && !perMinute.empty()) {
         bool ok;
         double d = perMinute.toDouble(&ok);
         if (ok) {
@@ -5118,7 +5118,7 @@ void MusicXMLParserPass2::key(const String& partId, Measure* measure, const Frac
 {
     String strKeyno = m_e.attribute("number");
     int keyno = -1;   // assume no number (see below)
-    if (strKeyno != "") {
+    if (!strKeyno.empty()) {
         keyno = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strKeyno.toInt());
         if (keyno < 0) {
             // conversion error (-1), assume staff 0
@@ -5320,7 +5320,7 @@ void MusicXMLParserPass2::clef(const String& partId, Measure* measure, const Fra
     // - single staff
     // - multi-staff with same clef
     int clefno = 0;   // default
-    if (strClefno != "") {
+    if (!strClefno.empty()) {
         clefno = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strClefno.toInt());
     }
     if (clefno < 0 || clefno >= int(part->nstaves())) {
@@ -6127,7 +6127,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     // keep in this order as checkTiming() might change dura
     String errorStr = mnd.checkTiming(type, rest, grace);
     dura = mnd.duration();
-    if (errorStr != "") {
+    if (!errorStr.empty()) {
         m_logger->logError(errorStr, &m_e);
     }
 
@@ -7129,7 +7129,7 @@ void MusicXMLParserLyric::parse()
     }
 
     // if no lyric read (e.g. only 'extend "type=stop"'), no further action required
-    if (formattedText == "") {
+    if (formattedText.empty()) {
         return;
     }
 
@@ -7167,7 +7167,7 @@ void MusicXMLParserLyric::parse()
     m_numberedLyrics[lyricNo] = l;
 
     if (hasExtend
-        && (extendType == "" || extendType == "start")
+        && (extendType.empty() || extendType == "start")
         && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
         m_extendedLyrics.insert(l);
     }
@@ -7607,7 +7607,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
 void MusicXMLParserNotations::arpeggio()
 {
     m_arpeggioType = m_e.attribute("direction");
-    if (m_arpeggioType == "") {
+    if (m_arpeggioType.empty()) {
         m_arpeggioType = u"none";
     }
     m_arpeggioNo = m_e.intAttribute("number");
@@ -8024,7 +8024,7 @@ MusicXMLParserNotations::MusicXMLParserNotations(XmlStreamReader& e, Score* scor
 
 void MusicXMLParserNotations::addError(const String& error)
 {
-    if (error != "") {
+    if (!error.empty()) {
         m_logger->logError(error, &m_e);
         m_errors += error;
     }

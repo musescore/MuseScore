@@ -968,7 +968,7 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
         tagName += ExportMusicXml::positioningAttributes(gli, start);
     }
     notations.tag(xml, gli);
-    if (start && gli->showText() && gli->text() != "") {
+    if (start && gli->showText() && !gli->text().empty()) {
         xml.tagRaw(tagName, gli->text());
     } else {
         xml.tagRaw(tagName);
@@ -2827,7 +2827,7 @@ static void writeAccidental(XmlWriter& xml, const String& tagName, const Acciden
 {
     if (acc) {
         String s = accidentalType2MxmlString(acc->accidentalType());
-        if (s != "") {
+        if (!s.empty()) {
             XmlWriter::Attributes attrs;
             if (s == "other") {
                 attrs = { { "smufl", accidentalType2SmuflMxmlString(acc->accidentalType()) } };
@@ -3335,7 +3335,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
             default:
                 LOGD("unknown ChordLine subtype %d", int(cl->chordLineType()));
             }
-            if (subtype != "") {
+            if (!subtype.empty()) {
                 notations.tag(xml, e);
                 articulations.tag(xml);
                 xml.tagRaw(subtype);
@@ -3476,7 +3476,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         SymId sid = a->symId();
         String mxmlOrnam = symIdToOrnam(sid);
 
-        if (mxmlOrnam != "") {
+        if (!mxmlOrnam.empty()) {
             String placement;
 
             if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::AUTO) {
@@ -3529,20 +3529,20 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         */
 
         String mxmlTechn = symIdToTechn(sid);
-        if (mxmlTechn != "") {
+        if (!mxmlTechn.empty()) {
             notations.tag(m_xml, a);
             technical.tag(m_xml);
             mxmlTechn += color2xml(a);
             mxmlTechn += ExportMusicXml::positioningAttributes(a);
             if (sid == SymId::stringsHarmonic) {
-                if (placement != "") {
+                if (!placement.empty()) {
                     attr += String(u" placement=\"%1\"").arg(placement);
                 }
                 m_xml.startElementRaw(mxmlTechn + attr);
                 m_xml.tag("natural");
                 m_xml.endElement();
             } else {
-                if (placement != "") {
+                if (!placement.empty()) {
                     attr += String(u" placement=\"%1\"").arg(placement);
                 }
                 m_xml.tagRaw(mxmlTechn + attr);
@@ -5413,7 +5413,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
         }
     }
 
-    if (octaveShiftXml != "") {
+    if (!octaveShiftXml.empty()) {
         directionTag(m_xml, m_attr, ot);
         m_xml.startElement("direction-type");
         octaveShiftXml += color2xml(ot);
@@ -5669,7 +5669,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 
     if (muse::contains(set, dynTypeName) && !hasCustomText) {
         m_xml.tagRaw(dynTypeName);
-    } else if (dynTypeName != "") {
+    } else if (!dynTypeName.empty()) {
         static std::map<ushort, Char> map = {
             { 0xE520, u'p' },
             { 0xE521, u'm' },
@@ -5902,19 +5902,19 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
         }
     }
 
-    if (sound != "") {
+    if (!sound.empty()) {
         xml.startElement("direction", { { "placement", (jp->placement() == PlacementV::BELOW) ? "below" : "above" } });
         xml.startElement("direction-type");
         String attrs = color2xml(jp);
         attrs += ExportMusicXml::positioningAttributes(jp);
-        if (type != "") {
+        if (!type.empty()) {
             xml.tagRaw(type + attrs);
         }
-        if (words != "") {
+        if (!words.empty()) {
             xml.tagRaw(u"words" + attrs, words);
         }
         xml.endElement();
-        if (sound != "") {
+        if (!sound.empty()) {
             xml.tagRaw(u"sound " + sound);
         }
         xml.endElement();
@@ -6020,7 +6020,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
             words = m->xmlText();
         }
         const String codaLabel = findCodaLabel(jumps, m->label());
-        if (codaLabel == "") {
+        if (codaLabel.empty()) {
             sound = u"tocoda=\"1\"";
         } else {
             sound = u"tocoda=\"" + codaLabel + u"\"";
@@ -6443,14 +6443,14 @@ static void writeMusicXML(const FiguredBassItem* item, XmlWriter& xml, bool isOr
     // by the user, rather than automatically by the "duration" extend method.
     if (isOriginalFigure) {
         String strPrefix = Modifier2MusicXML(item->prefix());
-        if (strPrefix != "") {
+        if (!strPrefix.empty()) {
             xml.tag("prefix", strPrefix);
         }
         if (item->digit() != FBIDigitNone) {
             xml.tag("figure-number", item->digit());
         }
         String strSuffix = Modifier2MusicXML(item->suffix());
-        if (strSuffix != "") {
+        if (!strSuffix.empty()) {
             xml.tag("suffix", strSuffix);
         }
 
@@ -6460,7 +6460,7 @@ static void writeMusicXML(const FiguredBassItem* item, XmlWriter& xml, bool isOr
             if (item->contLine() == FiguredBassItem::ContLine::SIMPLE) {
                 xml.tag("extend", { { "type", "stop" } });
             } else if (item->contLine() == FiguredBassItem::ContLine::EXTENDED) {
-                bool hasFigure = (strPrefix != "" || item->digit() != FBIDigitNone || strSuffix != "");
+                bool hasFigure = (!strPrefix.empty() || item->digit() != FBIDigitNone || !strSuffix.empty());
                 if (hasFigure) {
                     xml.tag("extend", { { "type", "start" } });
                 } else {
@@ -7060,7 +7060,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
         }
     }
 
-    bool doBreak = mpc.scoreStart || (newSystemOrPage != "");
+    bool doBreak = mpc.scoreStart || (!newSystemOrPage.empty());
     bool doLayout = configuration()->musicxmlExportLayout();
 
     if (doBreak) {
@@ -7127,7 +7127,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
             }
 
             m_xml.endElement();
-        } else if (newSystemOrPage != "") {
+        } else if (!newSystemOrPage.empty()) {
             m_xml.tagRaw(String(u"print%1").arg(newSystemOrPage));
         }
     }

@@ -72,7 +72,7 @@ String Harmony::harmonyName() const
         r = m_function;
     }
 
-    if (m_textName != "") {
+    if (!m_textName.empty()) {
         e = m_textName;
         if (m_harmonyType != HarmonyType::ROMAN) {
             e.remove(u'=');
@@ -274,7 +274,7 @@ void Harmony::afterRead()
             // and we will generate a new one if necessary
             getDescription(m_textName);
         }
-    } else if (m_textName == "") {
+    } else if (m_textName.empty()) {
         // unrecognized chords prior to 2.0 were stored as text with markup
         // we need to strip away the markup
         // this removes any user-applied formatting,
@@ -397,7 +397,7 @@ static int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseT
         3, 10, 17, 24, 31,      // A
         5, 12, 19, 26, 33,      // B
     };
-    if (s == "") {
+    if (s.empty()) {
         return Tpc::TPC_INVALID;
     }
     noteCase = s.at(0).isLower() ? NoteCaseType::LOWER : NoteCaseType::CAPITAL;
@@ -423,7 +423,7 @@ static int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseT
     int alter = 0;
     size_t n = s.size();
     String acc = s.right(n - acci);
-    if (acc != "") {
+    if (!acc.empty()) {
         if (acc.startsWith(u"bb")) {
             alter = -2;
             idx += 2;
@@ -1161,7 +1161,7 @@ const ChordDescription* Harmony::getDescription()
     const ChordDescription* cd = descr();
     if (cd && !cd->names.empty()) {
         m_textName = cd->names.front();
-    } else if (m_textName != "") {
+    } else if (!m_textName.empty()) {
         cd = generateDescription();
         m_id = cd->id;
     }
@@ -1435,7 +1435,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             if (tpc == Tpc::TPC_B_B && noteSpelling == NoteSpellingType::GERMAN) {
                 context = u"german_B";
             }
-            if (acc != "") {
+            if (!acc.empty()) {
                 TextSegment* ts = new TextSegment(m_fontList[fontIdx], x, y);
                 String lookup = context + acc;
                 ChordSymbol cs = chordList->symbol(lookup);
