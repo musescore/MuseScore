@@ -237,7 +237,7 @@ protected:
     void doFocusOut();
     void windowMoveEvent();
 
-    bool isMouseWithinBoundaries(const QPoint& mousePos) const;
+    bool isMouseWithinBoundaries(const QPointF& mousePos) const;
 
     virtual void beforeOpen();
     void doOpen();

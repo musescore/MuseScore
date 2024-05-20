@@ -178,7 +178,7 @@ void NoteGroupsExampleView::mousePressEvent(QMouseEvent* event)
 {
     ExampleView::mousePressEvent(event);
 
-    PointF position = toLogical(event->pos());
+    PointF position = toLogical(event->position());
 
     foreach (EngravingItem* e, elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {

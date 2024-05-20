@@ -520,7 +520,7 @@ qreal BendGridCanvas::rowHeight(const QRectF& frameRect) const
     return frameRect.height() / (m_rows - 1);
 }
 
-QPointF BendGridCanvas::frameCoord(const QRectF& frameRect, int x, int y) const
+QPointF BendGridCanvas::frameCoord(const QRectF& frameRect, double x, double y) const
 {
     // restrict to clickable area
     if (x > frameRect.right()) {

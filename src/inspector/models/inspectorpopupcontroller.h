@@ -77,7 +77,7 @@ private slots:
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void closePopupIfNeed(const QPoint& mouseGlobalPos);
+    void closePopupIfNeed(const QPointF& mouseGlobalPos);
 
     QQuickItem* m_visualControl = nullptr;
     muse::uicomponents::PopupView* m_popup = nullptr;
