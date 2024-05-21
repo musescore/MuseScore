@@ -4258,6 +4258,13 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         writeType(m_xml, note);
         for (NoteDot* dot : note->dots()) {
             String dotTag = u"dot";
+            if (note->userDotPosition() != engraving::DirectionV::AUTO) {
+                if (note->dotPosition() == engraving::DirectionV::UP) {
+                    dotTag += u" placement=\"above\"";
+                } else {
+                    dotTag += u" placement=\"below\"";
+                }
+            }
             dotTag += color2xml(dot);
             dotTag += elementPosition(this, dot);
             m_xml.tagRaw(dotTag);
