@@ -1708,6 +1708,7 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
             Tuplet::resetNumberProperty(number);
             TRead::read(number, e, ctx);
             number->setVisible(t->visible());         //?? override saved property
+            number->setColor(t->color());
             number->setTrack(t->track());
             // move property flags from _number back to tuplet
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN }) {
