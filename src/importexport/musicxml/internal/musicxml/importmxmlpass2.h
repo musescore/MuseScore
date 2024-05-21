@@ -27,8 +27,10 @@
 
 #include "importmxmlpass1.h"
 #include "importxmlfirstpass.h"
+#include "internal/musicxml/musicxmlsupport.h"
 #include "musicxml.h" // a.o. for Slur
 
+#include "engraving/dom/instrument.h"
 #include "engraving/dom/types.h"
 
 namespace mu::engraving {
@@ -329,6 +331,12 @@ public:
     void addSystemElement(EngravingItem* el, const Fraction& tick) { m_sysElements.insert({ tick.ticks(), el }); }
     const SystemElements systemElements() const { return m_sysElements; }
 
+    InferredPercInstr inferredPercInstr(const Fraction& tick, const track_idx_t trackIdx);
+    void addInferredPercInstr(InferredPercInstr instr)
+    {
+        m_inferredPerc.push_back(instr);
+    }
+
 private:
     void addError(const String& error);      // Add an error to be shown in the GUI
     void initPartState(const String& partId);
@@ -373,6 +381,9 @@ private:
     // multi-measure rest state handling
     void setMultiMeasureRestCount(int count);
     int getAndDecMultiMeasureRestCount();
+
+    void xmlSetDrumsetPitch(Note* note, const Chord* chord, const Staff* staff, int step, int octave, NoteHeadGroup headGroup,
+                            DirectionV& stemDir, Instrument* instrument);
 
     // generic pass 2 data
 
@@ -426,6 +437,7 @@ private:
     std::vector<int> m_measureRepeatCount;
 
     SystemElements m_sysElements;
+    InferredPercList m_inferredPerc;
 };
 
 //---------------------------------------------------------
@@ -482,6 +494,7 @@ private:
     bool isLikelySticking();
     bool isLikelyDynamicRange() const;
     PlayingTechniqueType getPlayingTechnique() const;
+    void handleDrumInstrument(bool isPerc, Fraction tick) const;
 
     // void terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick);
 
