@@ -1349,7 +1349,7 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         this->writeBeamAndTupletEnd(closingBeam, closingTuplet, closingBeamInTuplet);
 
         // Change invisible rests to space by simply adjusting the element name
-        if (!rest->visible()) {
+        if (!rest->visible() || rest->isGap()) {
             restNode.set_name("space");
         }
     }
