@@ -100,6 +100,9 @@ void TempoMap::setPause(int tick, double pause)
 
 void TempoMap::setTempo(int tick, BeatsPerSecond tempo)
 {
+    IF_ASSERT_FAILED(tempo > BeatsPerSecond(0.0)) {
+        tempo = BeatsPerSecond(0.01);
+    }
     auto e = find(tick);
     if (e != end()) {
         e->second.tempo = tempo;
