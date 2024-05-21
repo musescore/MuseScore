@@ -452,11 +452,11 @@
         <bracket type="0" span="4" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trumpet 1</trackName>
+      <trackName>Trumpet in B♭ 1</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 1</longName>
-        <shortName>Tpt. 1</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 1</longName>
+        <shortName>Tpt. in B♭ 1</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -529,11 +529,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trumpet 2</trackName>
+      <trackName>Trumpet in B♭ 2</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 2</longName>
-        <shortName>Tpt. 2</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 2</longName>
+        <shortName>Tpt. in B♭ 2</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -606,11 +606,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trumpet 3</trackName>
+      <trackName>Trumpet in B♭ 3</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 3</longName>
-        <shortName>Tpt. 3</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 3</longName>
+        <shortName>Tpt. in B♭ 3</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -682,11 +682,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Trumpet 4</trackName>
+      <trackName>Trumpet in B♭ 4</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 4</longName>
-        <shortName>Tpt. 4</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 4</longName>
+        <shortName>Tpt. in B♭ 4</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -1238,9 +1238,9 @@
         <defaultConcertClef>F8vb</defaultConcertClef>
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
-      <trackName>Bass</trackName>
+      <trackName>Acoustic Bass</trackName>
       <Instrument id="acoustic-bass">
-        <longName>Bass</longName>
+        <longName>Acoustic Bass</longName>
         <shortName>Bass</shortName>
         <trackName>Acoustic Bass</trackName>
         <minPitchP>28</minPitchP>
@@ -1339,11 +1339,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Drums</trackName>
+      <trackName>Large Drum Kit</trackName>
       <Instrument id="drumset">
-        <longName>Drums</longName>
-        <shortName>Drums</shortName>
-        <trackName>Drumset</trackName>
+        <longName>Drum Kit</longName>
+        <shortName>D. Kit</shortName>
+        <trackName>Large Drum Kit</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">

@@ -55,6 +55,7 @@
       <trackName>Soprano Saxophone</trackName>
       <Instrument id="soprano-saxophone">
         <longName>Soprano Saxophone</longName>
+        <shortName>S. Sax.</shortName>
         <trackName>Soprano Saxophone</trackName>
         <minPitchP>56</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -121,6 +122,7 @@
       <trackName>Alto Saxophone</trackName>
       <Instrument id="alto-saxophone">
         <longName>Alto Saxophone</longName>
+        <shortName>A. Sax.</shortName>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>87</maxPitchP>
@@ -189,6 +191,7 @@
       <trackName>Tenor Saxophone</trackName>
       <Instrument id="tenor-saxophone">
         <longName>Tenor Saxophone</longName>
+        <shortName>T. Sax.</shortName>
         <trackName>Tenor Saxophone</trackName>
         <minPitchP>44</minPitchP>
         <maxPitchP>82</maxPitchP>
@@ -258,6 +261,7 @@
       <trackName>Baritone Saxophone</trackName>
       <Instrument id="baritone-saxophone">
         <longName>Baritone Saxophone</longName>
+        <shortName>Bar. Sax.</shortName>
         <trackName>Baritone Saxophone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>75</maxPitchP>

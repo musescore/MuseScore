@@ -44,6 +44,8 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument id="voice">
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -113,6 +115,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

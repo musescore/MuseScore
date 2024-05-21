@@ -46,6 +46,7 @@
       <trackName>Voice</trackName>
       <Instrument id="voice">
         <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -117,7 +118,8 @@
         </Staff>
       <trackName>Pipe Organ</trackName>
       <Instrument id="pipe-organ">
-        <longName>Organ</longName>
+        <longName>Pipe Organ</longName>
+        <shortName>Org.</shortName>
         <trackName>Pipe Organ</trackName>
         <instrumentId>keyboard.organ.pipe</instrumentId>
         <clef staff="2">F</clef>

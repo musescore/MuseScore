@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>933</width>
-    <height>752</height>
+    <height>824</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -587,10 +587,118 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="hideInstrumentNameIfOneInstrument">
-                 <property name="text">
-                  <string>Hide instrument name if there is only 1 instrument</string>
+                <widget class="QGroupBox" name="instrumentLabel_box">
+                 <property name="title">
+                  <string>Instrument names</string>
                  </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_63">
+                  <item>
+                   <widget class="QCheckBox" name="hideInstrumentNameIfOneInstrument">
+                    <property name="text">
+                     <string>Hide if there is only 1 instrument</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_67">
+                    <item row="1" column="1">
+                     <widget class="QRadioButton" name="subsLongBtn">
+                      <property name="text">
+                       <string>Long name</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="4">
+                     <widget class="QToolButton" name="resetSubsSystemLabel">
+                      <property name="toolTip">
+                       <string>Reset to default</string>
+                      </property>
+                      <property name="accessibleName">
+                       <string>Reset 'Instrument labels on subsequent systems' value</string>
+                      </property>
+                      <property name="text">
+                       <string notr="true"/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="firstLongBtn">
+                      <property name="text">
+                       <string>Long name</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="4">
+                     <widget class="QToolButton" name="resetFirstSystemLabel">
+                      <property name="toolTip">
+                       <string>Reset to default</string>
+                      </property>
+                      <property name="accessibleName">
+                       <string>Reset 'Instrument labels on first system of sections' value</string>
+                      </property>
+                      <property name="text">
+                       <string notr="true"/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QRadioButton" name="subsHideBtn">
+                      <property name="text">
+                       <string>Hide</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="subsSystemLabel_label">
+                      <property name="text">
+                       <string>On subsequent systems:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="firstSystemLabel_label">
+                      <property name="text">
+                       <string>On first system of sections:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QRadioButton" name="subsShortBtn">
+                      <property name="text">
+                       <string>Short name</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="firstShortBtn">
+                      <property name="text">
+                       <string>Short name</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QRadioButton" name="firstHideBtn">
+                      <property name="text">
+                       <string>Hide</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="5">
+                     <spacer name="horizontalSpacer_67">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
                 </widget>
                </item>
                <item>
@@ -14712,7 +14820,14 @@ first note of the system</string>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>alwaysShowBrackets</tabstop>
   <tabstop>crossMeasureValues</tabstop>
-  <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
+  <tabstop>firstLongBtn</tabstop>
+  <tabstop>firstShortBtn</tabstop>
+  <tabstop>firstHideBtn</tabstop>
+  <tabstop>resetFirstSystemLabel</tabstop>
+  <tabstop>subsLongBtn</tabstop>
+  <tabstop>subsShortBtn</tabstop>
+  <tabstop>subsHideBtn</tabstop>
+  <tabstop>resetSubsSystemLabel</tabstop>
   <tabstop>swingOff</tabstop>
   <tabstop>swingEighth</tabstop>
   <tabstop>swingSixteenth</tabstop>
@@ -15267,6 +15382,14 @@ first note of the system</string>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
+  <tabstop>tabShowTiesAndFret</tabstop>
+  <tabstop>tabShowTies</tabstop>
+  <tabstop>tabShowNone</tabstop>
+  <tabstop>tabParenthSystem</tabstop>
+  <tabstop>tabParenthMeasure</tabstop>
+  <tabstop>tabParenthNone</tabstop>
+  <tabstop>tabParenthArticulation</tabstop>
+  <tabstop>resetTupletUseSymbols</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -52,6 +52,7 @@
       <trackName>Women</trackName>
       <Instrument id="women">
         <longName>S A</longName>
+        <shortName>S A</shortName>
         <trackName>Women</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -122,6 +123,7 @@
       <trackName>Men</trackName>
       <Instrument id="men">
         <longName>T B</longName>
+        <shortName>T B</shortName>
         <trackName>Men</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>69</maxPitchP>
@@ -197,7 +199,8 @@
         </Staff>
       <trackName>Pipe Organ</trackName>
       <Instrument id="pipe-organ">
-        <longName>Organ</longName>
+        <longName>Pipe Organ</longName>
+        <shortName>Org.</shortName>
         <trackName>Pipe Organ</trackName>
         <instrumentId>keyboard.organ.pipe</instrumentId>
         <clef staff="2">F</clef>

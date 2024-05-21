@@ -667,6 +667,12 @@ enum class IntervalType {
     DIMINISHED
 };
 
+enum class InstrumentLabelVisibility : char {
+    LONG,
+    SHORT,
+    HIDE
+};
+
 struct OrnamentInterval
 {
     IntervalStep step = IntervalStep::SECOND;

@@ -55,6 +55,7 @@
       <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -119,6 +120,7 @@
       <trackName>Oboe</trackName>
       <Instrument id="oboe">
         <longName>Oboe</longName>
+        <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -180,10 +182,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Clarinet</trackName>
+      <trackName>Clarinet in B♭</trackName>
       <Instrument id="bb-clarinet">
-        <longName>B♭ Clarinet</longName>
-        <trackName>B♭ Clarinet</trackName>
+        <longName>Clarinet in B♭</longName>
+        <shortName>Cl. in B♭</shortName>
+        <trackName>Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>
@@ -249,6 +252,7 @@
       <trackName>Bassoon</trackName>
       <Instrument id="bassoon">
         <longName>Bassoon</longName>
+        <shortName>Bsn.</shortName>
         <trackName>Bassoon</trackName>
         <minPitchP>34</minPitchP>
         <maxPitchP>76</maxPitchP>

@@ -53,6 +53,7 @@
       <trackName>Women</trackName>
       <Instrument id="women">
         <longName>S A</longName>
+        <shortName>S A</shortName>
         <trackName>Women</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -121,6 +122,7 @@
       <trackName>Men</trackName>
       <Instrument id="men">
         <longName>T B</longName>
+        <shortName>T B</shortName>
         <trackName>Men</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>69</maxPitchP>
@@ -195,6 +197,7 @@
       <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

@@ -234,8 +234,8 @@
       <trackName>Clarinets in B♭</trackName>
       <Instrument id="bb-clarinet">
         <longName>Clarinets in B♭</longName>
-        <shortName>B♭ Cl.</shortName>
-        <trackName>B♭ Clarinet</trackName>
+        <shortName>Cl. in B♭</shortName>
+        <trackName>Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>
@@ -379,7 +379,7 @@
       <trackName>Horns in F</trackName>
       <Instrument id="horn">
         <longName>Horns in F</longName>
-        <shortName>F Hn.</shortName>
+        <shortName>Hn. in F</shortName>
         <trackName>Horn in F</trackName>
         <minPitchP>31</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -453,8 +453,8 @@
       <trackName>Trumpets in B♭</trackName>
       <Instrument id="bb-trumpet">
         <longName>Trumpets in B♭</longName>
-        <shortName>B♭ Tpt.</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <shortName>Tpt. in B♭</shortName>
+        <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -592,12 +592,13 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="5" col="0"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violin I</trackName>
+      <trackName>Violins 1</trackName>
       <Instrument id="violins">
-        <longName>Violins I</longName>
-        <shortName>Vln. I</shortName>
-        <trackName>Violins</trackName>
+        <longName>Violins 1</longName>
+        <shortName>Vlns. 1</shortName>
+        <trackName>Violins (section)</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
         <minPitchA>55</minPitchA>
@@ -672,12 +673,13 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+          <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violin II</trackName>
+      <trackName>Violins 2</trackName>
       <Instrument id="violins">
-        <longName>Violins II</longName>
-        <shortName>Vln. II</shortName>
-        <trackName>Violins</trackName>
+        <longName>Violins 2</longName>
+        <shortName>Vlns. 2</shortName>
+        <trackName>Violins (section)</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
         <minPitchA>55</minPitchA>
@@ -753,12 +755,13 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>C3</defaultClef>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Viola</trackName>
+      <trackName>Violas</trackName>
       <Instrument id="violas">
         <longName>Violas</longName>
-        <shortName>Vla.</shortName>
-        <trackName>Violas</trackName>
+        <shortName>Vlas.</shortName>
+        <trackName>Violas (section)</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>93</maxPitchP>
         <minPitchA>48</minPitchA>
@@ -835,12 +838,13 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violoncello</trackName>
+      <trackName>Violoncellos</trackName>
       <Instrument id="violoncellos">
         <longName>Violoncellos</longName>
-        <shortName>Vc.</shortName>
-        <trackName>Violoncellos</trackName>
+        <shortName>Vcs.</shortName>
+        <trackName>Violoncellos (section)</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>
         <minPitchA>36</minPitchA>
@@ -922,8 +926,8 @@
       <trackName>Contrabasses</trackName>
       <Instrument id="contrabasses">
         <longName>Contrabasses</longName>
-        <shortName>Cb.</shortName>
-        <trackName>Contrabasses</trackName>
+        <shortName>Cbs.</shortName>
+        <trackName>Contrabasses (section)</trackName>
         <minPitchP>24</minPitchP>
         <maxPitchP>67</maxPitchP>
         <minPitchA>28</minPitchA>

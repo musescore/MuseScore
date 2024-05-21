@@ -473,6 +473,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
       "alwaysShowSquareBracketsWhenEmptyStavesAreHidden", false },
     { Sid::hideInstrumentNameIfOneInstrument,
       "hideInstrumentNameIfOneInstrument", true },
+    { Sid::firstSystemInstNameVisibility, "firstSystemInsNameVisibility", PropertyValue(int(InstrumentLabelVisibility::LONG)) },
+    { Sid::subsSystemInstNameVisibility, "subsSystemInstNameVisibility", PropertyValue(int(InstrumentLabelVisibility::SHORT)) },
     { Sid::gateTime,                "gateTime",                PropertyValue(100) },
     { Sid::tenutoGateTime,          "tenutoGateTime",          PropertyValue(100) },
     { Sid::staccatoGateTime,        "staccatoGateTime",        PropertyValue(50) },

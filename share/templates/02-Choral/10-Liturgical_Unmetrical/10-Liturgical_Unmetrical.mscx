@@ -43,6 +43,7 @@
       <trackName>Voice</trackName>
       <Instrument id="voice">
         <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>84</maxPitchP>

@@ -93,7 +93,7 @@
       <Instrument id="eb-cornet">
         <longName>Soprano Cornet</longName>
         <shortName>Sop. Cnt.</shortName>
-        <trackName>E♭ Cornet</trackName>
+        <trackName>Cornet</trackName>
         <minPitchP>57</minPitchP>
         <maxPitchP>87</maxPitchP>
         <minPitchA>57</minPitchA>
@@ -170,7 +170,7 @@
       <Instrument id="c-cornet">
         <longName>Solo Cornet</longName>
         <shortName>Solo Cnt.</shortName>
-        <trackName>B♭ Cornet</trackName>
+        <trackName>Cornet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>82</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -247,7 +247,7 @@
       <Instrument id="c-cornet">
         <longName>Repiano</longName>
         <shortName>Rep.</shortName>
-        <trackName>B♭ Cornet</trackName>
+        <trackName>Cornet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>82</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -324,7 +324,7 @@
       <Instrument id="c-cornet">
         <longName>2nd Cornet</longName>
         <shortName>2nd Cnt.</shortName>
-        <trackName>B♭ Cornet</trackName>
+        <trackName>Cornet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>82</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -400,7 +400,7 @@
       <Instrument id="c-cornet">
         <longName>3rd Cornet</longName>
         <shortName>3rd Cnt.</shortName>
-        <trackName>B♭ Cornet</trackName>
+        <trackName>Cornet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>82</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -551,9 +551,9 @@
         </Staff>
       <trackName>Solo Horn</trackName>
       <Instrument id="eb-alto-horn">
-        <longName>Solo Horn</longName>
-        <shortName>Solo Hn.</shortName>
-        <trackName>Horn in E♭</trackName>
+        <longName>Solo Alto Horn</longName>
+        <shortName>Solo A. Hn.</shortName>
+        <trackName>Alto Horn</trackName>
         <minPitchP>45</minPitchP>
         <maxPitchP>75</maxPitchP>
         <minPitchA>45</minPitchA>
@@ -624,11 +624,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>1st Horn</trackName>
+      <trackName>Alto Horn</trackName>
       <Instrument id="eb-alto-horn">
-        <longName>1st Horn</longName>
-        <shortName>1st Hn.</shortName>
-        <trackName>Horn in E♭</trackName>
+        <longName>Alto Horn 1</longName>
+        <shortName>A. Hn. 1</shortName>
+        <trackName>Alto Horn.</trackName>
         <minPitchP>45</minPitchP>
         <maxPitchP>75</maxPitchP>
         <minPitchA>45</minPitchA>
@@ -698,11 +698,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>2nd Horn</trackName>
+      <trackName>Alto Horn</trackName>
       <Instrument id="eb-alto-horn">
-        <longName>2nd Horn</longName>
-        <shortName>2nd Hn.</shortName>
-        <trackName>Horn in E♭</trackName>
+        <longName>Alto Horn 1</longName>
+        <shortName>A. Hn. 1</shortName>
+        <trackName>Alto Horn.</trackName>
         <minPitchP>45</minPitchP>
         <maxPitchP>75</maxPitchP>
         <minPitchA>45</minPitchA>
@@ -776,10 +776,10 @@
         <bracket type="0" span="2" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>1st Baritone</trackName>
+      <trackName>Baritone Horn (Treble Clef)</trackName>
       <Instrument id="baritone-horn">
-        <longName>1st Baritone</longName>
-        <shortName>1st Bar.</shortName>
+        <longName>Baritone Horn 1</longName>
+        <shortName>Bar. Hn. 1</shortName>
         <trackName>Baritone Horn (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>70</maxPitchP>
@@ -848,10 +848,10 @@
         <defaultConcertClef>F</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
-      <trackName>2nd Baritone</trackName>
+      <trackName>Baritone Horn (Treble Clef)</trackName>
       <Instrument id="baritone-horn">
-        <longName>2nd Baritone</longName>
-        <shortName>2nd Bar.</shortName>
+        <longName>Baritone Horn 2</longName>
+        <shortName>Bar. Hn. 2</shortName>
         <trackName>Baritone Horn (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>70</maxPitchP>
@@ -922,11 +922,11 @@
         <bracket type="0" span="3" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>1st Trombone</trackName>
+      <trackName>Trombone</trackName>
       <Instrument id="trombone">
-        <longName>1st Trombone</longName>
-        <shortName>1st Tbn.</shortName>
-        <trackName>Trombone (Treble Clef)</trackName>
+        <longName>Trombone 1</longName>
+        <shortName>Tbn. 1</shortName>
+        <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
         <minPitchA>40</minPitchA>
@@ -1001,11 +1001,11 @@
         <defaultTransposingClef>G</defaultTransposingClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>2nd Trombone</trackName>
+      <trackName>Trombone</trackName>
       <Instrument id="trombone">
-        <longName>2nd Trombone</longName>
-        <shortName>2nd Tbn.</shortName>
-        <trackName>Trombone (Treble Clef)</trackName>
+        <longName>Trombone 2</longName>
+        <shortName>Tbn. 2</shortName>
+        <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
         <minPitchA>40</minPitchA>
@@ -1228,10 +1228,10 @@
         <bracket type="0" span="2" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>E♭ Bass</trackName>
+      <trackName>E♭ Tuba</trackName>
       <Instrument id="tuba">
-        <longName>E♭ Bass</longName>
-        <shortName>E♭ Bs.</shortName>
+        <longName>E♭ Tuba</longName>
+        <shortName>E♭ Bb.</shortName>
         <trackName>E♭ Tuba (Treble Clef)</trackName>
         <minPitchP>24</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -1300,10 +1300,10 @@
         <defaultConcertClef>F</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
-      <trackName>B♭ Bass</trackName>
+      <trackName>B♭ Tuba</trackName>
       <Instrument id="tuba">
-        <longName>B♭ Bass</longName>
-        <shortName>B♭ Bs.</shortName>
+        <longName>B♭ Tuba</longName>
+        <shortName>B♭ Tb.</shortName>
         <trackName>B♭ Tuba (Treble Clef)</trackName>
         <minPitchP>22</minPitchP>
         <maxPitchP>72</maxPitchP>
