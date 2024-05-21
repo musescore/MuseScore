@@ -796,6 +796,7 @@ void PaletteWidget::dragEnterEvent(QDragEnterEvent* event)
             QFileInfo fi(u.path());
             QString suffix(fi.suffix().toLower());
             if (suffix == "svg"
+                || suffix == "svgz"
                 || suffix == "jpg"
                 || suffix == "jpeg"
                 || suffix == "png"
