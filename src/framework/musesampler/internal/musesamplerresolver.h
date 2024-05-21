@@ -54,8 +54,7 @@ public:
     std::vector<Instrument> instruments() const override;
 
 private:
-    bool checkLibrary() const;
-    bool isVersionSupported() const;
+    bool doInit(const io::path_t& libPath);
 
     void loadSoundPresetAttributes(audio::SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const;
 
