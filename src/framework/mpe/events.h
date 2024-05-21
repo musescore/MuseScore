@@ -89,12 +89,14 @@ struct ExpressionContext
     ArticulationMap articulations;
     dynamic_level_t nominalDynamicLevel = MIN_DYNAMIC_LEVEL;
     ExpressionCurve expressionCurve;
+    std::optional<float> velocityOverride;
 
     bool operator==(const ExpressionContext& other) const
     {
         return articulations == other.articulations
                && nominalDynamicLevel == other.nominalDynamicLevel
-               && expressionCurve == other.expressionCurve;
+               && expressionCurve == other.expressionCurve
+               && velocityOverride == velocityOverride;
     }
 };
 
@@ -223,12 +225,10 @@ private:
 
     void calculateExpressionCurve(const ArticulationMap& articulationsApplied, const float requiredVelocityFraction)
     {
-        const ExpressionPattern::DynamicOffsetMap& appliedOffsetMap = articulationsApplied.averageDynamicOffsetMap();
+        m_expressionCtx.expressionCurve = articulationsApplied.averageDynamicOffsetMap();
 
         dynamic_level_t articulationDynamicLevel = articulationsApplied.averageMaxAmplitudeLevel();
         dynamic_level_t nominalDynamicLevel = m_expressionCtx.nominalDynamicLevel;
-
-        m_expressionCtx.expressionCurve = appliedOffsetMap;
 
         constexpr dynamic_level_t naturalDynamicLevel = dynamicLevelFromType(DynamicType::Natural);
 
@@ -250,7 +250,7 @@ private:
         }
 
         if (!RealIsNull(requiredVelocityFraction)) {
-            m_expressionCtx.expressionCurve.amplifyVelocity(requiredVelocityFraction);
+            m_expressionCtx.velocityOverride = requiredVelocityFraction;
         }
     }
 

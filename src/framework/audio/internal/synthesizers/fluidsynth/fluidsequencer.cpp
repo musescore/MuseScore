@@ -281,7 +281,14 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
     static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
 
-    velocity_t result = RealRound(noteEvent.expressionCtx().expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
+    const mpe::ExpressionContext& expressionCtx = noteEvent.expressionCtx();
+
+    if (expressionCtx.velocityOverride.has_value()) {
+        velocity_t velocity = RealRound(expressionCtx.velocityOverride.value() * MAX_SUPPORTED_VELOCITY, 0);
+        return std::clamp<velocity_t>(velocity, 0, MAX_SUPPORTED_VELOCITY);
+    }
+
+    velocity_t result = RealRound(expressionCtx.expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
 
     return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
 }

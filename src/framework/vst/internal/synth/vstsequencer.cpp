@@ -288,7 +288,13 @@ float VstSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int noteId
 
 float VstSequencer::noteVelocityFraction(const mpe::NoteEvent& noteEvent) const
 {
-    return std::clamp(noteEvent.expressionCtx().expressionCurve.velocityFraction(), 0.f, 1.f);
+    const mpe::ExpressionContext& expressionCtx = noteEvent.expressionCtx();
+
+    if (expressionCtx.velocityOverride.has_value()) {
+        return std::clamp(expressionCtx.velocityOverride.value(), 0.f, 1.f);
+    }
+
+    return std::clamp(expressionCtx.expressionCurve.velocityFraction(), 0.f, 1.f);
 }
 
 float VstSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
