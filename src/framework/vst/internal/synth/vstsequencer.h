@@ -57,7 +57,7 @@ namespace muse::vst {
 class VstSequencer : public muse::audio::AbstractEventSequencer<VstEvent, PluginParamInfo, muse::audio::gain_t>
 {
 public:
-    void init(ParamsMapping&& mapping);
+    void init(ParamsMapping&& mapping, bool useDynamicEvents);
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
@@ -84,6 +84,7 @@ private:
     float pitchBendLevel(const mpe::pitch_level_t pitchLevel) const;
 
     bool m_inited = false;
+    bool m_useDynamicEvents = false;
     ParamsMapping m_mapping;
     mpe::PlaybackEventsMap m_playbackEventsMap;
 };

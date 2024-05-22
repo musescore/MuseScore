@@ -84,6 +84,8 @@ private:
     VstSequencer m_sequencer;
 
     muse::audio::TrackId m_trackId = muse::audio::INVALID_TRACK_ID;
+
+    bool m_useDynamicEvents = false;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;

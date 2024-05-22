@@ -34,14 +34,20 @@ static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
 static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
 static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
 
-void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride)
+void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride,
+                          bool useDynamicEvents)
 {
     m_channels.init(setupData, programOverride);
+    m_useDynamicEvents = useDynamicEvents;
 }
 
 int FluidSequencer::currentExpressionLevel() const
 {
-    return expressionLevel(dynamicLevel(m_playbackPosition));
+    if (m_useDynamicEvents) {
+        return expressionLevel(dynamicLevel(m_playbackPosition));
+    }
+
+    return naturalExpressionLevel();
 }
 
 int FluidSequencer::naturalExpressionLevel() const
@@ -77,8 +83,10 @@ void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events
     updatePlaybackEvents(m_mainStreamEvents, events);
     updateMainSequenceIterator();
 
-    updateDynamicEvents(m_dynamicEvents, dynamics);
-    updateDynamicChangesIterator();
+    if (m_useDynamicEvents) {
+        updateDynamicEvents(m_dynamicEvents, dynamics);
+        updateDynamicChangesIterator();
+    }
 }
 
 muse::async::Channel<channel_t, Program> FluidSequencer::channelAdded() const

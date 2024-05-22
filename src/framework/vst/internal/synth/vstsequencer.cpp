@@ -43,9 +43,10 @@ static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
 static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
 static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
 
-void VstSequencer::init(ParamsMapping&& mapping)
+void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
 {
     m_mapping = std::move(mapping);
+    m_useDynamicEvents = useDynamicEvents;
     m_inited = true;
 
     updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelLayers, {});
@@ -85,14 +86,20 @@ void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, 
     updatePlaybackEvents(m_mainStreamEvents, events);
     updateMainSequenceIterator();
 
-    updateDynamicEvents(m_dynamicEvents, dynamics);
-    updateDynamicChangesIterator();
+    if (m_useDynamicEvents) {
+        updateDynamicEvents(m_dynamicEvents, dynamics);
+        updateDynamicChangesIterator();
+    }
 }
 
 muse::audio::gain_t VstSequencer::currentGain() const
 {
-    mpe::dynamic_level_t currentDynamicLevel = dynamicLevel(m_playbackPosition);
-    return expressionLevel(currentDynamicLevel);
+    if (m_useDynamicEvents) {
+        mpe::dynamic_level_t currentDynamicLevel = dynamicLevel(m_playbackPosition);
+        return expressionLevel(currentDynamicLevel);
+    }
+
+    return 0.5f;
 }
 
 void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)

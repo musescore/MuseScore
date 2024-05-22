@@ -35,12 +35,13 @@ struct PlaybackSetupData
     SoundCategory category = SoundCategory::Undefined;
     StringList subCategories;
 
+    bool supportsSingleNoteDynamics = false;
     std::optional<std::string> musicXmlSoundId;
 
     PlaybackSetupData() = default;
 
-    PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& soundSubCategories = {})
-        : id(soundIdToString(id)), category(category)
+    PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& soundSubCategories = {}, bool supportsSND = false)
+        : id(soundIdToString(id)), category(category), supportsSingleNoteDynamics(supportsSND)
     {
         for (SoundSubCategory subCategory : soundSubCategories) {
             subCategories.push_back(soundSubCategoryToString(subCategory));
@@ -100,7 +101,8 @@ struct PlaybackSetupData
     {
         return id == other.id
                && category == other.category
-               && subCategories == other.subCategories;
+               && subCategories == other.subCategories
+               && supportsSingleNoteDynamics == other.supportsSingleNoteDynamics;
     }
 
     bool operator<(const PlaybackSetupData& other) const
