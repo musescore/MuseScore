@@ -66,8 +66,11 @@ static muse::testing::SuiteEnvironment engraving_se(
         = muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingConfiguration>("utests");
     muse::modularity::globalIoc()->unregister<mu::engraving::IEngravingConfiguration>("utests");
 
-    int use_count = mock.use_count();
-    LOGD() << "==~~~~~~~~~~~~~ use_count: " << use_count;
+    //! HACK
+    //! There are still live pointers to the mock
+    //! because of this, the mock generates an error stating that it has not been deleted
+    //! This is a hack to remove it manually to get rid of this error
+    //! The problem itself is deeper, it seems that some score objects are not deleted
     mu::engraving::IEngravingConfiguration* ecptr = mock.get();
     delete ecptr;
 }

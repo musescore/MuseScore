@@ -42,6 +42,11 @@ public:
         m_dispatcher = dispatcher;
     }
 
+    inline bool isDispatcher(const IActionsDispatcher* dispatcher) const
+    {
+        return m_dispatcher == dispatcher;
+    }
+
 private:
 
     IActionsDispatcher* m_dispatcher = nullptr;
