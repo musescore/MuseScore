@@ -110,7 +110,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     score->startCmd();
     EditData dd1(0);
     dd1.dropElement = diagram1;
-    EngravingItem* e1 = s1->firstElement(0);
+    EngravingItem* e1 = s1->firstElementForNavigation(0);
     e1->drop(dd1);
     score->undo(new ChangeHarpPedalState(diagram1, pedalState));
     score->endCmd();
@@ -128,7 +128,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     score->startCmd();
     EditData dd2(0);
     dd2.dropElement = diagram2;
-    EngravingItem* e2 = s2->firstElement(0);
+    EngravingItem* e2 = s2->firstElementForNavigation(0);
     e2->drop(dd2);
     score->undo(new ChangeSingleHarpPedal(diagram2, HarpStringType::C, PedalPosition::SHARP));
     score->undo(new ChangeSingleHarpPedal(diagram2, HarpStringType::F, PedalPosition::SHARP));
@@ -145,7 +145,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     score->startCmd();
     EditData dd3(0);
     dd3.dropElement = diagram3;
-    EngravingItem* e3 = s3->firstElement(0);
+    EngravingItem* e3 = s3->firstElementForNavigation(0);
     e3->drop(dd3);
     score->endCmd();
 
@@ -160,7 +160,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     score->startCmd();
     EditData dd4(0);
     dd4.dropElement = diagram4;
-    EngravingItem* e4 = s4->firstElement(0);
+    EngravingItem* e4 = s4->firstElementForNavigation(0);
     e4->drop(dd4);
     score->undo(new ChangeSingleHarpPedal(diagram4, HarpStringType::G, PedalPosition::SHARP));
     score->endCmd();
@@ -200,7 +200,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     score->startCmd();
     EditData dd(0);
     dd.dropElement = diagram2;
-    EngravingItem* e = s2->firstElement(0);
+    EngravingItem* e = s2->firstElementForNavigation(0);
     e->drop(dd);
     score->undo(new ChangeHarpPedalState(diagram2,
                                          { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,

@@ -994,7 +994,7 @@ EngravingItem* Score::prevElement()
                 staff_idx_t si = cr ? cr->staffIdx() : 0;
                 Segment* s = toMeasure(mb)->last();
                 if (s) {
-                    return s->lastElement(si);
+                    return s->lastElementForNavigation(si);
                 }
             } else {
                 return mb;

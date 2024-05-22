@@ -1774,7 +1774,7 @@ EngravingItem* EngravingItem::nextSegmentElement()
         break;
         case ElementType::SEGMENT: {
             Segment* s = toSegment(p);
-            return s->firstElement(staffIdx());
+            return s->firstElementForNavigation(staffIdx());
         }
         case ElementType::MEASURE: {
             Measure* m = toMeasure(p);
@@ -1822,7 +1822,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
         break;
         case ElementType::SEGMENT: {
             Segment* s = toSegment(p);
-            return s->lastElement(staffIdx());
+            return s->lastElementForNavigation(staffIdx());
         }
         case ElementType::MEASURE: {
             Measure* m = toMeasure(p);

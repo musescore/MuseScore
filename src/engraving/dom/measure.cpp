@@ -3090,7 +3090,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
     if (prevM) {
         Segment* seg = prevM->last();
         if (seg) {
-            return seg->lastElement(staff);
+            return seg->lastElementForNavigation(staff);
         }
     }
     return score()->firstElement();
