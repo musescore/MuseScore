@@ -3892,11 +3892,17 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 
             writeType(_xml, note);
             for (NoteDot* dot : note->dots()) {
-                QString dotTag = "dot";
-                dotTag += color2xml(dot);
-                dotTag += elementPosition(this, dot);
-                _xml.tagE(dotTag);
-            }
+                  QString dotTag = "dot";
+                  if (note->userDotPosition() != Direction::AUTO) {
+                        if (note->dotIsUp())
+                              dotTag += " placement=\"above\"";
+                        else
+                              dotTag += " placement=\"below\"";
+                        }
+                  dotTag += color2xml(dot);
+                  dotTag += elementPosition(this, dot);
+                  _xml.tagE(dotTag);
+                  }
             writeAccidental(_xml, "accidental", note->accidental());
             writeTimeModification(_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
