@@ -1358,7 +1358,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
     }
     measure->setIrregular(measureSt.irregular);
 
-    Fraction measureTicks(0,1);
+    Fraction measureTicks(0, 1);
     success = success & this->readStaves(measureNode, measure, measureTicks);
     // Make sure we correct empty content because this would crash MuseScore
     if (measureTicks.isZero()) {

@@ -110,7 +110,8 @@ private:
     bool readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readMRest(pugi::xml_node mRestNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readMRpt(pugi::xml_node mRptNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
-    bool readNote(pugi::xml_node noteNode, engraving::Measure* measure, int track, engraving::Fraction& ticks, engraving::Chord* chord = nullptr);
+    bool readNote(pugi::xml_node noteNode, engraving::Measure* measure, int track, engraving::Fraction& ticks,
+                  engraving::Chord* chord = nullptr);
     bool readRest(pugi::xml_node restNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readSpace(pugi::xml_node spaceNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readSyl(pugi::xml_node sylNode, engraving::Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision);
