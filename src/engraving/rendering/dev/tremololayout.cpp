@@ -125,6 +125,7 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
         x = item->chord()->centerX();
     }
 
+    double staveOffset = staffType ? staffType->yoffset().val() * spatium : 0.0;
     bool up = item->chord()->up();
     int upValue = up ? -1 : 1;
     double mag = item->chord()->intrinsicMag();
@@ -154,12 +155,13 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
     yOffset -= item->isBuzzRoll() && up ? 0.5 * spatium : 0.0;
     yOffset -= up ? 0.0 : item->minHeight() * spatium / mag;
     yOffset *= upValue;
-
+    yOffset += staveOffset;
     y += yOffset;
 
     if (up) {
         double height = item->isBuzzRoll() ? 0 : item->minHeight();
-        y = std::min(y, ((item->staff()->lines(item->tick()) - 1) - height) * spatium / mag);
+        double staveHeight = (((item->staff()->lines(item->tick()) - 1) - height) * spatium / mag) + staveOffset;
+        y = std::min(y, staveHeight);
     } else {
         y = std::max(y, 0.0);
     }
