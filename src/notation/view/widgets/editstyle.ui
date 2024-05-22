@@ -10902,7 +10902,7 @@ By default, they will be placed such as that their right end are at the same lev
                 </widget>
                </item>
                <item>
-                <layout class="QGridLayout" name="gridLayout_67" columnminimumwidth="0,0,0,0,0,0,0">
+                <layout class="QGridLayout" name="gridLayout_671" columnminimumwidth="0,0,0,0,0,0,0">
                  <item row="3" column="1">
                   <widget class="QDoubleSpinBox" name="yLyricsPosBelow">
                    <property name="suffix">
@@ -11208,7 +11208,7 @@ By default, they will be placed such as that their right end are at the same lev
                   </widget>
                  </item>
                  <item row="3" column="3">
-                  <spacer name="horizontalSpacer_67">
+                  <spacer name="horizontalSpacer_671">
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
@@ -11318,7 +11318,7 @@ By default, they will be placed such as that their right end are at the same lev
                 <property name="title">
                  <string>Dash</string>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_63">
+                <layout class="QVBoxLayout" name="verticalLayout_631">
                  <item>
                   <layout class="QGridLayout" name="gridLayout_23">
                    <property name="topMargin">
