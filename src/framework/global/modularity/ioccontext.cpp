@@ -41,13 +41,18 @@ muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
             return modularity::ContextPtr();
         }
 
-        QmlIoCContext* qmlIoc = engine->property("ioc_context").value<QmlIoCContext*>();
-        IF_ASSERT_FAILED(qmlIoc) {
-            return modularity::ContextPtr();
-        }
-
-        return qmlIoc->ctx;
+        return iocCtxForQmlEngine(engine);
     };
+}
+
+muse::modularity::ContextPtr muse::iocCtxForQmlEngine(const QQmlEngine* e)
+{
+    QmlIoCContext* qmlIoc = e->property("ioc_context").value<QmlIoCContext*>();
+    IF_ASSERT_FAILED(qmlIoc) {
+        return modularity::ContextPtr();
+    }
+
+    return qmlIoc->ctx;
 }
 
 muse::modularity::ContextPtr muse::iocCtxForQWidget(const QWidget*)

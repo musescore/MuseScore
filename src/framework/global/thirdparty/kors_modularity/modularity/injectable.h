@@ -23,6 +23,10 @@ public:
     Injectable(const GetContext& getCtx)
         : m_getCtx(getCtx) {}
 
+    Injectable(const Injectable& i) = default;
+
+    Injectable& operator=(const Injectable& i) = default;
+
     const modularity::ContextPtr& iocContext() const
     {
         if (m_ctx) {
@@ -43,7 +47,7 @@ public:
 private:
     mutable modularity::ContextPtr m_ctx;
     const Injectable* m_inj = nullptr;
-    const GetContext m_getCtx;
+    GetContext m_getCtx;
 };
 }
 

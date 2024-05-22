@@ -106,6 +106,11 @@ QWindow* AccessibleItem::accessibleWindow() const
     return visualItem->window();
 }
 
+muse::modularity::ContextPtr AccessibleItem::iocContext() const
+{
+    return Injectable::iocContext();
+}
+
 QRect AccessibleItem::accessibleRect() const
 {
     QQuickItem* vitem = resolveVisualItem();

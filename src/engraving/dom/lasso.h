@@ -38,8 +38,6 @@ class Lasso : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Lasso)
     DECLARE_CLASSOF(ElementType::LASSO)
 
-    INJECT(IEngravingConfiguration, engravingConfiguration)
-
 public:
     Lasso(Score*);
     virtual Lasso* clone() const override { return new Lasso(*this); }

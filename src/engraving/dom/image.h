@@ -44,15 +44,15 @@ enum class ImageType : char {
 //   @@ Image
 //---------------------------------------------------------
 
-class Image final : public BSymbol
+class Image final : public BSymbol, public muse::Injectable
 {
     OBJECT_ALLOCATOR(engraving, Image)
     DECLARE_CLASSOF(ElementType::IMAGE)
 
-    INJECT(muse::draw::IImageProvider, imageProvider)
+    muse::Inject<muse::draw::IImageProvider> imageProvider = { this };
 
 public:
-    Image(EngravingItem* parent = 0);
+    Image(EngravingItem* parent);
     Image(const Image&);
     ~Image();
 

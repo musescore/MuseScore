@@ -2003,10 +2003,10 @@ void TDraw::draw(const Lasso* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     const Lasso::LayoutData* ldata = item->ldata();
-    painter->setBrush(Brush(item->engravingConfiguration()->lassoColor()));
+    painter->setBrush(Brush(item->configuration()->lassoColor()));
     // always 2 pixel width
-    double w = 2.0 / painter->worldTransform().m11() * item->engravingConfiguration()->guiScaling();
-    painter->setPen(Pen(item->engravingConfiguration()->selectionColor(), w));
+    double w = 2.0 / painter->worldTransform().m11() * item->configuration()->guiScaling();
+    painter->setPen(Pen(item->configuration()->selectionColor(), w));
     painter->drawRect(ldata->bbox());
 }
 

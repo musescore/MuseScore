@@ -1813,7 +1813,7 @@ void ChordList::write(XmlWriter& xml) const
 //    read Chord List, return false on error
 //---------------------------------------------------------
 
-bool ChordList::read(const String& name)
+bool ChordList::read(const muse::io::path_t& appDataPath, const String& name)
 {
 //      LOGD("ChordList::read <%s>", muPrintable(name));
     muse::io::path_t path;
@@ -1821,12 +1821,12 @@ bool ChordList::read(const String& name)
     if (ftest.isAbsolute()) {
         path = name;
     } else {
-        path = configuration()->appDataPath() + "styles/" + name;
+        path = appDataPath + "/styles/" + name;
     }
 
     // default to chords_std.xml
     if (!FileInfo::exists(path)) {
-        path = configuration()->appDataPath() + "styles/chords_std.xml";
+        path = appDataPath + "/styles/chords_std.xml";
     }
 
     if (name.isEmpty()) {
@@ -1933,7 +1933,7 @@ const ChordDescription* ChordList::description(int id) const
     return &it->second;
 }
 
-void ChordList::checkChordList(const MStyle& style)
+void ChordList::checkChordList(const path_t& appDataPath, const MStyle& style)
 {
     // make sure we have a chordlist
     if (!loaded()) {
@@ -1944,10 +1944,10 @@ void ChordList::checkChordList(const MStyle& style)
         configureAutoAdjust(emag, eadjust, mmag, madjust);
 
         if (style.value(Sid::chordsXmlFile).toBool()) {
-            read(u"chords.xml");
+            read(appDataPath, u"chords.xml");
         }
 
-        read(style.value(Sid::chordDescriptionFile).value<String>());
+        read(appDataPath, style.value(Sid::chordDescriptionFile).value<String>());
     }
 }
 

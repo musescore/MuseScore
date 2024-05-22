@@ -23,7 +23,6 @@
 #ifndef MU_ENGRAVING_STAFFTYPE_H
 #define MU_ENGRAVING_STAFFTYPE_H
 
-#include "draw/types/color.h"
 #include "draw/types/font.h"
 
 #include "engravingitem.h"
@@ -200,8 +199,7 @@ enum class ParenthesizeTiedFret {
 
 class StaffType
 {
-    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
-
+    static inline muse::GlobalInject<IEngravingConfiguration> configuration;
 public:
     StaffType();
 
@@ -278,7 +276,7 @@ public:
     int     visualStringToPhys(int line) const;                   // return the string in physical order from visual string
     double   physStringToYOffset(int strg) const;                  // return the string Y offset (in sp, chord-relative)
     String tabBassStringPrefix(int strg, bool* hasFret) const;   // return a string with the prefix, if any, identifying a bass string
-    void    drawInputStringMarks(muse::draw::Painter* p, int string, voice_idx_t voice, const RectF& rect) const;
+    void    drawInputStringMarks(muse::draw::Painter* p, int string, const Color& selectionColor, const RectF& rect) const;
     int     numOfTabLedgerLines(int string) const;
 
     // properties getters (some getters require updated metrics)
@@ -360,7 +358,7 @@ public:
     static std::vector<String> fontNames(bool bDuration);
     static bool fontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pYOff);
 
-    static void initStaffTypes();
+    static void initStaffTypes(const Color& defaultColor);
     static const std::vector<StaffType>& presets() { return m_presets; }
 
 private:
@@ -381,7 +379,7 @@ private:
     Spatium m_yoffset;
     bool m_small = false;
     bool m_invisible = false;
-    Color m_color = engravingConfiguration()->defaultColor();
+    Color m_color;
 
     int m_lines = 5;
     int m_stepOffset = 0;

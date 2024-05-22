@@ -34,7 +34,7 @@ using namespace muse::actions;
 //---------------------------------------------------------
 
 TupletDialog::TupletDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName("TupletDialog");
     setupUi(this);

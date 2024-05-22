@@ -25,7 +25,7 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 StaffSettingsModel::StaffSettingsModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

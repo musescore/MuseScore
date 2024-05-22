@@ -26,7 +26,6 @@
 #include <variant>
 
 #include "draw/fontmetrics.h"
-#include "draw/types/color.h"
 
 #include "modularity/ioc.h"
 #include "../iengravingfontsprovider.h"
@@ -214,17 +213,23 @@ private:
 
 class TextFragment
 {
-    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
+public:
+    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
+
 public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;
 
-    bool operator ==(const TextFragment& f) const;
-
-    TextFragment();
+    TextFragment() = default;
     TextFragment(const String& s);
     TextFragment(TextCursor*, const String&);
+    TextFragment(const TextFragment& f);
+
+    TextFragment& operator =(const TextFragment& f);
+
+    bool operator ==(const TextFragment& f) const;
+
     TextFragment split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
     muse::draw::Font font(const TextBase*) const;
@@ -240,7 +245,8 @@ public:
 class TextBlock
 {
 public:
-    TextBlock() {}
+    TextBlock() = default;
+
     bool operator ==(const TextBlock& x) const { return m_fragments == x.m_fragments; }
     bool operator !=(const TextBlock& x) const { return m_fragments != x.m_fragments; }
     void draw(muse::draw::Painter*, const TextBase*) const;
@@ -287,8 +293,6 @@ private:
 class TextBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TextBase)
-
-    INJECT(IEngravingFontsProvider, engravingFonts)
 
     M_PROPERTY2(bool, isTextLinkedToMaster, setTextLinkedToMaster, true)
 

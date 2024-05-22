@@ -40,7 +40,7 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 SelectDialog::SelectDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName("SelectDialog");
     setupUi(this);

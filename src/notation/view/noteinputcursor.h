@@ -28,13 +28,11 @@
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
 
-#include "draw/types/geometry.h"
-
 namespace mu::notation {
-class NoteInputCursor
+class NoteInputCursor : public muse::Injectable
 {
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(INotationConfiguration, configuration)
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
     void paint(muse::draw::Painter* painter);

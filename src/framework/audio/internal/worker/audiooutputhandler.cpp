@@ -45,8 +45,8 @@ using namespace muse::async;
 using namespace muse::audio::soundtrack;
 #endif
 
-AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence)
-    : m_getSequence(getSequence)
+AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_getSequence(getSequence)
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
@@ -203,7 +203,7 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         s->player()->seek(0);
         msecs_t totalDuration = s->player()->duration();
 
-        SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer());
+        SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer(), iocContext());
         m_saveSoundTracksWritersMap[sequenceId] = writer;
 
         Progress progress = saveSoundTrackProgress(sequenceId);

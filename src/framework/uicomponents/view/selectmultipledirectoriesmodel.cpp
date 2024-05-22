@@ -28,7 +28,7 @@
 using namespace muse::uicomponents;
 
 SelectMultipleDirectoriesModel::SelectMultipleDirectoriesModel(QObject* parent)
-    : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this))
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_selectionModel(new ItemMultiSelectionModel(this))
 {
     connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged, this, &SelectMultipleDirectoriesModel::selectionChanged);
 }

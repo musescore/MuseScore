@@ -33,11 +33,12 @@
 
 namespace mu::engraving {
 class AccessibleRoot;
-class AccessibleItem : public muse::accessibility::IAccessible, public std::enable_shared_from_this<AccessibleItem>
+class AccessibleItem : public muse::accessibility::IAccessible, public muse::Injectable, public std::enable_shared_from_this<AccessibleItem>
 {
     OBJECT_ALLOCATOR(engraving, AccessibleItem)
+
 public:
-    INJECT_STATIC(muse::accessibility::IAccessibilityController, accessibilityController)
+    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     AccessibleItem(EngravingItem* e, Role role = Role::ElementOnScore);
@@ -59,6 +60,7 @@ public:
     size_t accessibleChildCount() const override;
     const IAccessible* accessibleChild(size_t i) const override;
     QWindow* accessibleWindow() const override;
+    muse::modularity::ContextPtr iocContext() const override;
 
     Role accessibleRole() const override;
     QString accessibleName() const override;

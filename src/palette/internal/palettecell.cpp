@@ -292,9 +292,9 @@ void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
     }
 
     if (untranslatedElement) {
-        rw::RWRegister::writer()->writeItem(untranslatedElement.get(), xml);
+        rw::RWRegister::writer(untranslatedElement->iocContext())->writeItem(untranslatedElement.get(), xml);
     } else {
-        rw::RWRegister::writer()->writeItem(element.get(), xml);
+        rw::RWRegister::writer(element->iocContext())->writeItem(element.get(), xml);
     }
     xml.endElement();
 }

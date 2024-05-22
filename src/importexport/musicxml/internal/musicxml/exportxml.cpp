@@ -354,14 +354,15 @@ struct MeasurePrintContext final
 typedef std::unordered_map<const ChordRest*, const Trill*> TrillHash;
 typedef std::map<const Instrument*, int> MxmlInstrumentMap;
 
-class ExportMusicXml
+class ExportMusicXml : public muse::Injectable
 {
 public:
-    INJECT_STATIC(mu::iex::musicxml::IMusicXmlConfiguration, configuration)
-    INJECT_STATIC(muse::IApplication, application)
+    static inline muse::GlobalInject<mu::iex::musicxml::IMusicXmlConfiguration> configuration;
+    muse::Inject<muse::IApplication> application  = { this };
 
 public:
     ExportMusicXml(Score* s)
+        : muse::Injectable(s->iocContext())
     {
         m_score = s;
         m_tick = { 0, 1 };
@@ -437,7 +438,7 @@ private:
 
     static String elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm);
     static String positioningAttributesForTboxText(const PointF position, float spatium);
-    static void identification(XmlWriter& xml, Score const* const score);
+    void identification(XmlWriter& xml, Score const* const score);
 
     Score* m_score = nullptr;
     XmlWriter m_xml;

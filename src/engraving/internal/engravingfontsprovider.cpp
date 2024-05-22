@@ -29,9 +29,14 @@
 using namespace mu;
 using namespace mu::engraving;
 
+EngravingFontsProvider::EngravingFontsProvider(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 void EngravingFontsProvider::addFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath)
 {
-    std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, filePath);
+    std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, filePath, iocContext());
     m_symbolFonts.push_back(f);
     m_fallback.font = nullptr;
 }

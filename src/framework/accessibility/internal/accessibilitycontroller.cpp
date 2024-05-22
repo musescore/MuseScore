@@ -567,6 +567,11 @@ QWindow* AccessibilityController::accessibleWindow() const
     return mainWindow()->qWindow();
 }
 
+muse::modularity::ContextPtr AccessibilityController::iocContext() const
+{
+    return Injectable::iocContext();
+}
+
 IAccessible::Role AccessibilityController::accessibleRole() const
 {
     return IAccessible::Role::Application;

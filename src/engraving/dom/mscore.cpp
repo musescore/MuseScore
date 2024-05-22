@@ -75,32 +75,6 @@ extern void initDrumset();
 
 MsError MScore::_error { MsError::MS_NO_ERROR };
 
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void MScore::init()
-{
-    static bool initDone = false;
-    if (initDone) {
-        return;
-    }
-
-    defaultPlayDuration = 300;        // ms
-    warnPitchRange      = true;
-    warnGuitarBends     = true;
-    pedalEventsMinTicks = 1;
-
-    //
-    //  initialize styles
-    //
-    StaffType::initStaffTypes();
-    initDrumset();
-    FiguredBass::readConfigFile(String());
-
-    initDone = true;
-}
-
 void MScore::registerUiTypes()
 {
 #ifdef SCRIPT_INTERFACE

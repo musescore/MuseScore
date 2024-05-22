@@ -778,8 +778,6 @@ class ChangeStyle : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStyle)
 
-    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
-
     Score* score = nullptr;
     MStyle style;
     bool overlap = false;

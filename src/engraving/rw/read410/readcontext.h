@@ -71,8 +71,6 @@ struct TextStyleMap {
 class ReadContext
 {
 public:
-    INJECT(IEngravingFontsProvider, engravingFonts)
-public:
 
     ReadContext() = default;
     ReadContext(Score* score);
@@ -87,6 +85,7 @@ public:
     const ReadContext* masterCtx() const;
 
     const MStyle& style() const;
+    std::shared_ptr<IEngravingFontsProvider> engravingFonts() const;
 
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }

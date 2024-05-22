@@ -47,7 +47,7 @@ void Playback::init()
 
     m_playerHandlersPtr = std::make_shared<PlayerHandler>(this);
     m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
-    m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
+    m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this, iocContext());
 }
 
 void Playback::deinit()

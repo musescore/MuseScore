@@ -22,11 +22,12 @@
 #ifndef MU_NOTATION_FONTSTYLESELECT_H
 #define MU_NOTATION_FONTSTYLESELECT_H
 
+#include "modularity/ioc.h"
 #include "ui_font_style_select.h"
 #include "engraving/dom/types.h"
 
 namespace mu::notation {
-class FontStyleSelect : public QWidget, public Ui::FontStyleSelect
+class FontStyleSelect : public QWidget, public Ui::FontStyleSelect, public muse::Injectable
 {
     Q_OBJECT
 

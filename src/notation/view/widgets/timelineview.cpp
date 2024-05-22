@@ -101,7 +101,7 @@ private:
 using namespace mu::notation;
 
 TimelineView::TimelineView(QQuickItem* parent)
-    : WidgetView(parent)
+    : WidgetView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

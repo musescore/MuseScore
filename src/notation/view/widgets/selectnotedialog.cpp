@@ -51,7 +51,7 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 SelectNoteDialog::SelectNoteDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName("SelectNoteDialog");
     setupUi(this);

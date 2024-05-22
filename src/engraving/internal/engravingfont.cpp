@@ -43,8 +43,9 @@ using namespace mu::engraving;
 // ScoreFont
 // =============================================
 
-EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath)
-    : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
+EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath,
+                             const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx),  m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
     m_fontPath(filePath)
@@ -52,6 +53,7 @@ EngravingFont::EngravingFont(const std::string& name, const std::string& family,
 }
 
 EngravingFont::EngravingFont(const EngravingFont& other)
+    : muse::Injectable(other.iocContext())
 {
     m_loaded = false;
     m_symbols  = other.m_symbols;

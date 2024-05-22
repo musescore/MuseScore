@@ -55,14 +55,12 @@ static void applyPageSizeToStyle(MStyle* style, const SizeF& pageSize)
     style->set(Sid::pagePrintableWidth, newPrintableWidth);
 }
 
-void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath)
+void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath, const SizeF& defaultPageSize)
 {
     m_baseStyle.precomputeValues();
 
-    SizeF pageSize = engravingConfiguration()->defaultPageSize();
-
     {
-        applyPageSizeToStyle(&m_defaultStyle, pageSize);
+        applyPageSizeToStyle(&m_defaultStyle, defaultPageSize);
 
         if (!defaultStyleFilePath.empty()) {
             bool ok = doLoadStyle(&m_defaultStyle, defaultStyleFilePath);
@@ -77,7 +75,7 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
     if (!partStyleFilePath.empty()) {
         m_defaultStyleForParts = new MStyle();
 
-        applyPageSizeToStyle(m_defaultStyleForParts, pageSize);
+        applyPageSizeToStyle(m_defaultStyleForParts, defaultPageSize);
 
         bool ok = doLoadStyle(m_defaultStyleForParts, partStyleFilePath);
         if (!ok) {

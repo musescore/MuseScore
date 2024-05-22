@@ -29,8 +29,8 @@ using namespace muse::uicomponents;
 
 id<NSObject> minimizeObserverToken = nil;
 
-MacOSPopupViewCloseController::MacOSPopupViewCloseController(QObject* parent)
-    : PopupViewCloseController(parent)
+MacOSPopupViewCloseController::MacOSPopupViewCloseController(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : PopupViewCloseController(iocCtx, parent)
 {
 }
 

@@ -36,8 +36,13 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
+ReadContext::ReadContext(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 ReadContext::ReadContext(Score* score)
-    : m_score(score)
+    : muse::Injectable(score ? score->iocContext() : muse::modularity::globalCtx()), m_score(score)
 {
 }
 

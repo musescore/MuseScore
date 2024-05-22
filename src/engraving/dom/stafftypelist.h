@@ -35,7 +35,6 @@ namespace mu::engraving {
 class StaffTypeList
 {
 public:
-    StaffTypeList() {}
     StaffType& staffType(const Fraction&);
     const StaffType& staffType(const Fraction& f) const;
     StaffType* setStaffType(const Fraction&, const StaffType&);

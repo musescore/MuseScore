@@ -33,7 +33,7 @@ class MacOSPopupViewCloseController : public PopupViewCloseController, public QA
     Q_OBJECT
 
 public:
-    explicit MacOSPopupViewCloseController(QObject* parent = nullptr);
+    explicit MacOSPopupViewCloseController(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
     ~MacOSPopupViewCloseController() override = default;
 
 private:

@@ -110,6 +110,7 @@ public:
     size_t accessibleChildCount() const override;
     const IAccessible* accessibleChild(size_t i) const override;
     QWindow* accessibleWindow() const override;
+    muse::modularity::ContextPtr iocContext() const override;
 
     IAccessible::Role accessibleRole() const override;
     QString accessibleName() const override;

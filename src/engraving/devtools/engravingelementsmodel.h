@@ -30,14 +30,14 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::engraving {
-class EngravingElementsModel : public QAbstractItemModel
+class EngravingElementsModel : public QAbstractItemModel, public muse::Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
-    INJECT(IEngravingElementsProvider, elementsProvider)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    muse::Inject<IEngravingElementsProvider> elementsProvider = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     EngravingElementsModel(QObject* parent = 0);

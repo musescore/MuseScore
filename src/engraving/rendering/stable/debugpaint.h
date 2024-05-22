@@ -24,10 +24,6 @@
 
 #include "draw/painter.h"
 
-#include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
-#include "../devtools/iengravingelementsprovider.h"
-
 namespace mu::engraving {
 class EngravingItem;
 class Page;
@@ -37,9 +33,6 @@ namespace mu::engraving::rendering::stable {
 class PaintDebugger;
 class DebugPaint
 {
-    INJECT_STATIC(IEngravingConfiguration, configuration)
-    INJECT_STATIC(IEngravingElementsProvider, elementsProvider)
-
 public:
     static void paintElementDebug(muse::draw::Painter& painter, const EngravingItem* item);
     static void paintPageDebug(muse::draw::Painter& painter, const Page* page, const std::vector<EngravingItem*>& items);

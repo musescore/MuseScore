@@ -28,15 +28,15 @@
 #include "iinteractive.h"
 
 namespace muse::uicomponents {
-class FilePickerModel : public QObject
+class FilePickerModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged)
     Q_PROPERTY(QStringList filter READ filter WRITE setFilter NOTIFY filterChanged)
+
+    muse::Inject<IInteractive> interactive = { this };
 
 public:
     explicit FilePickerModel(QObject* parent = nullptr);
