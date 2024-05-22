@@ -90,9 +90,7 @@ void AbstractNotationPaintView::load()
     TRACEFUNC;
 
     //! NOTE For diagnostic tools
-    static bool once = false;
-    if (!once) {
-        once = true;
+    if (!dispatcher()->isReg(this)) {
         dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
             scheduleRedraw();
         });
