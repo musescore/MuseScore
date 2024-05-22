@@ -204,7 +204,7 @@ quint32 nativeModifiers(UCKeyboardLayout* keyboard, int key, Qt::KeyboardModifie
         result |= kEventKeyModifierNumLockMask;
     }
 
-    if (result == 0 && !QChar(key).isLetter()) {
+    if (result == 0) {
         //! NOTE: Some symbols are available only through modifiers;
         //! if modifiers are not explicitly specified,
         //! we will get them through the native key
