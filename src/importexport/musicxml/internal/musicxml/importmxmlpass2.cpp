@@ -6071,6 +6071,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     NoteHeadScheme headScheme = NoteHeadScheme::HEAD_AUTO;
     const Color noteColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     Color noteheadColor;
+    Color stemColor;
     bool noteheadParentheses = false;
     String noteheadFilled;
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
@@ -6138,6 +6139,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
                 staff = -1;
             }
         } else if (m_e.name() == "stem") {
+            stemColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             stem(stemDir, noStem);
         } else if (m_e.name() == "tie") {
             tieType = m_e.attribute("type");
@@ -6327,6 +6329,12 @@ Note* MusicXMLParserPass2::note(const String& partId,
         if (!stem) {
             stem = Factory::createStem(c);
             c->add(stem);
+            if (noteColor.isValid()) {
+                stem->setColor(noteColor);
+            }
+            if (stemColor.isValid()) {
+                stem->setColor(stemColor);
+            }
         }
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
         note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
