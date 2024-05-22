@@ -296,9 +296,13 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
         return std::clamp<velocity_t>(velocity, 0, MAX_SUPPORTED_VELOCITY);
     }
 
-    velocity_t result = RealRound(expressionCtx.expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
+    if (m_useDynamicEvents) {
+        velocity_t result = RealRound(expressionCtx.expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
+        return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
+    }
 
-    return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
+    dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
+    return expressionLevel(dynamicLevel);
 }
 
 int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
@@ -322,10 +326,6 @@ int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) con
 
     if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
         stepCount -= 0.5;
-    }
-
-    if (dynamicLevel > mpe::dynamicLevelFromType(DynamicType::Natural)) {
-        stepCount -= 1;
     }
 
     dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
