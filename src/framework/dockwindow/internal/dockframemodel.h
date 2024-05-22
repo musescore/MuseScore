@@ -34,11 +34,9 @@ class DockWidgetBase;
 }
 
 namespace muse::dock {
-class DockFrameModel : public QObject
+class DockFrameModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(QVariantList tabs READ tabs NOTIFY tabsChanged)
@@ -51,6 +49,8 @@ class DockFrameModel : public QObject
 
     Q_PROPERTY(bool highlightingVisible READ highlightingVisible NOTIFY highlightingVisibleChanged)
     Q_PROPERTY(QRect highlightingRect READ highlightingRect NOTIFY highlightingVisibleChanged)
+
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit DockFrameModel(QObject* parent = nullptr);

@@ -28,11 +28,21 @@
 #include "containers.h"
 #include "../linksindexer.h"
 #include "dom/select.h"
+#include "dom/score.h"
 
 namespace mu::engraving::write {
 class WriteContext
 {
 public:
+
+    WriteContext(const Score* s)
+        : m_score(s) {}
+
+    std::shared_ptr<IEngravingConfiguration> configuration() const
+    {
+        return m_score->configuration();
+    }
+
     int assignLocalIndex(const Location& mainElementLocation);
     void setLidLocalIndex(int lid, int localIndex);
     int lidLocalIndex(int lid) const;
@@ -84,6 +94,8 @@ public:
     inline bool operator!=(const WriteContext& c) const { return !this->operator==(c); }
 
 private:
+
+    const Score* m_score = nullptr;
 
     Fraction _curTick    { 0, 1 };           // used to optimize output
     Fraction _tickDiff   { 0, 1 };

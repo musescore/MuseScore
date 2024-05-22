@@ -45,11 +45,9 @@ class DockPanelView;
 class DockCentralView;
 class DockStatusBarView;
 class DockingHolderView;
-class DockPageView : public QQuickItem
+class DockPageView : public QQuickItem, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(ui::INavigationController, navigationController)
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
     Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty)
@@ -59,6 +57,8 @@ class DockPageView : public QQuickItem
     Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> panelsDockingHolders READ panelsDockingHoldersProperty)
     Q_PROPERTY(muse::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
+
+    muse::Inject<ui::INavigationController> navigationController = { this };
 
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);

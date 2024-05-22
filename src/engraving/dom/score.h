@@ -643,7 +643,7 @@ public:
 
     ChordList* chordList() { return &m_chordList; }
     const ChordList* chordList() const { return &m_chordList; }
-    void checkChordList() { m_chordList.checkChordList(style()); }
+    void checkChordList();
 
     MStyle& style() { return m_style; }
     const MStyle& style() const { return m_style; }

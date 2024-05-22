@@ -26,14 +26,17 @@
 #include <vector>
 
 #include "iengravingfontsprovider.h"
+#include "modularity/ioc.h"
 
 #include "engravingfont.h"
 
 namespace mu::engraving {
 class EngravingFont;
-class EngravingFontsProvider : public IEngravingFontsProvider
+class EngravingFontsProvider : public IEngravingFontsProvider, public muse::Injectable
 {
 public:
+
+    EngravingFontsProvider(const muse::modularity::ContextPtr& iocCtx);
 
     void addFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) override;
     IEngravingFontPtr fontByName(const std::string& name) const override;

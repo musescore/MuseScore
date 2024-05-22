@@ -27,8 +27,8 @@
 
 using namespace muse::uicomponents;
 
-PopupWindow_QQuickView::PopupWindow_QQuickView(QObject* parent)
-    : IPopupWindow(parent)
+PopupWindow_QQuickView::PopupWindow_QQuickView(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : IPopupWindow(parent), muse::Injectable(iocCtx)
 {
     setObjectName("PopupWindow");
 }

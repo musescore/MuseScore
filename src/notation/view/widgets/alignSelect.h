@@ -22,11 +22,12 @@
 #ifndef MU_NOTATION_ALIGNSELECT_H
 #define MU_NOTATION_ALIGNSELECT_H
 
+#include "modularity/ioc.h"
 #include "ui_align_select.h"
 #include "engraving/types/types.h"
 
 namespace mu::notation {
-class AlignSelect : public QWidget, public Ui::AlignSelect
+class AlignSelect : public QWidget, public Ui::AlignSelect, public muse::Injectable
 {
     Q_OBJECT
 

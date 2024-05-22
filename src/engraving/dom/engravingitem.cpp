@@ -175,6 +175,11 @@ EngravingItemList EngravingItem::childrenItems(bool all) const
     return list;
 }
 
+const muse::modularity::ContextPtr& EngravingItem::iocContext() const
+{
+    return score()->iocContext();
+}
+
 const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
 {
     return score()->configuration.get();
@@ -1001,7 +1006,7 @@ muse::ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
         xml.tagPoint("dragOffset", dragOffset);
     }
 
-    rw::RWRegister::writer()->writeItem(this, xml);
+    rw::RWRegister::writer(iocContext())->writeItem(this, xml);
 
     xml.endElement();
     buffer.close();

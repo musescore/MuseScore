@@ -132,7 +132,7 @@ void PopupView::init()
         return;
     }
 
-    m_window = new PopupWindow_QQuickView();
+    m_window = new PopupWindow_QQuickView(muse::iocCtxForQmlEngine(engine));
     m_window->init(engine, isDialog(), frameless());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_component, m_contentItem);
@@ -156,11 +156,11 @@ void PopupView::init()
 void PopupView::initCloseController()
 {
 #if defined(Q_OS_MAC)
-    m_closeController = new MacOSPopupViewCloseController();
+    m_closeController = new MacOSPopupViewCloseController(muse::iocCtxForQmlEngine(this->engine()));
 #elif defined(Q_OS_WIN)
-    m_closeController = new WinPopupViewCloseController();
+    m_closeController = new WinPopupViewCloseController(muse::iocCtxForQmlEngine(this->engine()));
 #else
-    m_closeController = new PopupViewCloseController();
+    m_closeController = new PopupViewCloseController(muse::iocCtxForQmlEngine(this->engine()));
 #endif
 
     m_closeController->init();

@@ -35,16 +35,16 @@
 #include "ipopupwindow.h"
 
 namespace muse::uicomponents {
-class PopupWindow_QQuickView : public IPopupWindow, public async::Asyncable
+class PopupWindow_QQuickView : public IPopupWindow, public muse::Injectable, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui::IInteractiveProvider, interactiveProvider)
-    INJECT(ui::IMainWindow, mainWindow)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    muse::Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    muse::Inject<ui::IMainWindow> mainWindow = { this };
+    muse::Inject<ui::IUiConfiguration> uiConfiguration  = { this };
 
 public:
-    explicit PopupWindow_QQuickView(QObject* parent = nullptr);
+    explicit PopupWindow_QQuickView(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
     ~PopupWindow_QQuickView();
 
     void init(QQmlEngine* engine, bool isDialogMode, bool isFrameless) override;

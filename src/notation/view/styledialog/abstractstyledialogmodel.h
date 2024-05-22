@@ -35,11 +35,11 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class AbstractStyleDialogModel : public QObject, public muse::async::Asyncable
+class AbstractStyleDialogModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
+    muse::Inject<context::IGlobalContext> context = { this };
 
 protected:
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);
@@ -48,12 +48,14 @@ protected:
 private:
     INotationStylePtr currentNotationStyle() const;
 
-    StyleItem* buildStyleItem(StyleId id);
+    StyleItem* buildStyleItem(StyleId id) const;
 
     QVariant toUiValue(StyleId id, const PropertyValue& logicalValue) const;
     PropertyValue fromUiValue(StyleId id, const QVariant& uiValue) const;
 
-    std::unordered_map<StyleId, StyleItem*> m_items;
+    mutable bool m_inited = false;
+    std::set<StyleId> m_ids;
+    mutable std::unordered_map<StyleId, StyleItem*> m_items;
 };
 }
 

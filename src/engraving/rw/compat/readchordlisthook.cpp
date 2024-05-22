@@ -82,6 +82,6 @@ void ReadChordListHook::validate()
 
     // make sure we have a chordlist
     if (!m_chordListTag) {
-        chordList->checkChordList(style);
+        chordList->checkChordList(m_score->configuration()->appDataPath(), style);
     }
 }

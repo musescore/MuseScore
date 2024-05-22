@@ -32,7 +32,7 @@ using namespace muse::actions;
 const int AbstractMenuModel::INVALID_ITEM_INDEX = -1;
 
 AbstractMenuModel::AbstractMenuModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

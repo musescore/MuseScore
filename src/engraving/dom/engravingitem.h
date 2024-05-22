@@ -170,6 +170,7 @@ public:
     EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems(bool all = false) const;
 
+    const muse::modularity::ContextPtr& iocContext() const;
     const std::shared_ptr<IEngravingConfiguration>& configuration() const;
     const std::shared_ptr<rendering::IScoreRenderer>& renderer() const;
 

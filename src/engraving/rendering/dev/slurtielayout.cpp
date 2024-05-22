@@ -991,7 +991,8 @@ void SlurTieLayout::adjustEndPoints(SlurSegment* slurSeg)
     double y2sp = p2.y() / lw;
 
     // point 1
-    int lines = slurSeg->staff()->lines(slurSeg->tick());
+    const Staff* staff = slurSeg->staff();
+    int lines = staff ? staff->lines(slurSeg->tick()) : 0;
     auto adjustPoint = [staffLineMargin](bool up, double ysp) {
         double y1offset = ysp - floor(ysp);
         double adjust = 0;

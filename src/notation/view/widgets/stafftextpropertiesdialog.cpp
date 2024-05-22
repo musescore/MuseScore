@@ -36,7 +36,7 @@ using namespace mu::engraving;
 static const QString STAFF_TEXT_PROPERTIES_DIALOG_NAME("StaffTextPropertiesDialog");
 
 StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName(STAFF_TEXT_PROPERTIES_DIALOG_NAME);
     setupUi(this);

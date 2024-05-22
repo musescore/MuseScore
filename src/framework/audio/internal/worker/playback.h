@@ -24,6 +24,7 @@
 
 #include <map>
 
+#include "modularity/ioc.h"
 #include "global/async/asyncable.h"
 
 #include "iplayer.h"
@@ -33,9 +34,12 @@
 #include "iplayback.h"
 
 namespace muse::audio {
-class Playback : public IPlayback, public IGetTrackSequence, public async::Asyncable
+class Playback : public IPlayback, public IGetTrackSequence, public Injectable, public async::Asyncable
 {
 public:
+    Playback(const muse::modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init() override;
     void deinit() override;
     bool isInited() const override;

@@ -59,7 +59,6 @@ class ReadContext;
 namespace mu::engraving::read206 {
 class Read206 : public rw::IReader
 {
-    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
 
     //---------------------------------------------------------

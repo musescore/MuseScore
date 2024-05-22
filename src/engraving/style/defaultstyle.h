@@ -24,20 +24,15 @@
 
 #include "global/io/path.h"
 
-#include "modularity/ioc.h"
-#include "../iengravingconfiguration.h"
-
 #include "style.h"
 
 namespace mu::engraving {
 class DefaultStyle
 {
-    INJECT(IEngravingConfiguration, engravingConfiguration)
-
 public:
     static DefaultStyle* instance();
 
-    void init(const muse::io::path_t& defaultStyleFilePath, const muse::io::path_t& partStyleFilePath);
+    void init(const muse::io::path_t& defaultStyleFilePath, const muse::io::path_t& partStyleFilePath, const SizeF& defaultPageSize);
 
     static const MStyle& baseStyle();
 

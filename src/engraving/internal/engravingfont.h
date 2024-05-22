@@ -49,12 +49,13 @@ class Painter;
 namespace mu::engraving {
 class Shape;
 
-class EngravingFont : public IEngravingFont
+class EngravingFont : public IEngravingFont, public muse::Injectable
 {
-    INJECT_STATIC(muse::draw::IFontProvider, fontProvider)
-    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
+    muse::Inject<muse::draw::IFontProvider> fontProvider = { this };
+    muse::Inject<IEngravingFontsProvider> engravingFonts = { this };
 public:
-    EngravingFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath);
+    EngravingFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
+                  const muse::modularity::ContextPtr& iocCtx);
     EngravingFont(const EngravingFont& other);
 
     const std::string& name() const override;

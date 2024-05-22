@@ -43,6 +43,8 @@
 
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/drumset.h"
+#include "engraving/dom/figuredbass.h"
 
 #include "rendering/dev/scorerenderer.h"
 #include "rendering/stable/scorerenderer.h"
@@ -105,8 +107,8 @@ void EngravingModule::registerExports()
 {
 #ifndef ENGRAVING_NO_INTERNAL
 
-    m_configuration = std::make_shared<EngravingConfiguration>();
-    m_engravingfonts = std::make_shared<EngravingFontsProvider>();
+    m_configuration = std::make_shared<EngravingConfiguration>(iocContext());
+    m_engravingfonts = std::make_shared<EngravingFontsProvider>(iocContext());
 
     ioc()->registerExport<IEngravingConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IEngravingFontsProvider>(moduleName(), m_engravingfonts);
@@ -127,7 +129,7 @@ Versions:
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
-    ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider());
+    ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider(iocContext()));
 #endif
 }
 
@@ -295,10 +297,21 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
     m_configuration->init();
 
     DefaultStyle::instance()->init(m_configuration->defaultStyleFilePath(),
-                                   m_configuration->partStyleFilePath());
+                                   m_configuration->partStyleFilePath(),
+                                   m_configuration->defaultPageSize());
+
+    StaffType::initStaffTypes(m_configuration->defaultColor());
 #endif // ENGRAVING_NO_INTERNAL
 
-    MScore::init();     // initialize dom
+    // initialize dom
+
+    MScore::defaultPlayDuration = 300;            // ms
+    MScore::warnPitchRange      = true;
+    MScore::warnGuitarBends     = true;
+    MScore::pedalEventsMinTicks = 1;
+
+    Drumset::initDrumset();
+    FiguredBass::readConfigFile(String());
 
     MScore::setNudgeStep(0.1);     // cursor key (default 0.1)
     MScore::setNudgeStep10(1.0);     // Ctrl + cursor key (default 1.0)

@@ -25,7 +25,7 @@
 using namespace muse::uicomponents;
 
 ColorPickerModel::ColorPickerModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -152,7 +152,7 @@ bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool cre
 {
     TRACEFUNC;
 
-    MscSaver saver;
+    MscSaver saver(iocContext());
     return saver.writeMscz(m_masterScore, writer, onlySelection, createThumbnail);
 }
 

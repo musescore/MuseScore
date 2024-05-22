@@ -30,7 +30,8 @@
 namespace mu::engraving {
 class LocalFileInfoProvider : public IFileInfoProvider
 {
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+
 public:
     explicit LocalFileInfoProvider(const muse::io::path_t& filePath);
 

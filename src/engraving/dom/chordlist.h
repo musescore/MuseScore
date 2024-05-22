@@ -273,8 +273,6 @@ class ChordList : public std::map<int, ChordDescription>
 {
     OBJECT_ALLOCATOR(engraving, ChordList)
 
-    INJECT(IEngravingConfiguration, configuration)
-
 public:
     std::list<ChordFont> fonts;
     std::list<RenderAction> renderListRoot;
@@ -289,7 +287,8 @@ public:
     void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0);
     double position(const StringList& names, ChordTokenClass ctc) const;
 
-    bool read(const String&);
+    void checkChordList(const muse::io::path_t& appDataPath, const MStyle& style);
+    bool read(const muse::io::path_t& appDataPath, const String& name);
     bool read(muse::io::IODevice* device);
     bool write(const String&) const;
     bool write(muse::io::IODevice* device) const;
@@ -301,8 +300,6 @@ public:
 
     void setCustomChordList(bool t) { m_customChordList = t; }
     bool customChordList() const { return m_customChordList; }
-
-    void checkChordList(const MStyle& style);
 
 private:
 

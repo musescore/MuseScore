@@ -53,7 +53,7 @@ IReaderPtr RWRegister::reader(int version)
     return std::make_shared<read410::Read410>();
 }
 
-IWriterPtr RWRegister::writer()
+IWriterPtr RWRegister::writer(const muse::modularity::ContextPtr& iocCtx)
 {
-    return std::make_shared<write::Writer>();
+    return std::make_shared<write::Writer>(iocCtx);
 }

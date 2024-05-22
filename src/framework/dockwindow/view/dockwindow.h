@@ -49,7 +49,7 @@ namespace muse::dock {
 class DockToolBarView;
 class DockingHolderView;
 class DockPageView;
-class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncable
+class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -60,9 +60,9 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
-    INJECT(ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::workspace::IWorkspaceManager, workspaceManager)
-    INJECT(IDockWindowProvider, dockWindowProvider)
+    muse::Inject<ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::workspace::IWorkspaceManager> workspaceManager = { this };
+    muse::Inject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);

@@ -42,7 +42,7 @@ class Score;
 
 class ImageStoreItem
 {
-    INJECT(muse::ICryptographicHash, cryptographicHash)
+    muse::GlobalInject<muse::ICryptographicHash> cryptographicHash;
 
 public:
     ImageStoreItem(const muse::io::path_t& p);
@@ -76,7 +76,7 @@ private:
 
 class ImageStore
 {
-    INJECT(muse::ICryptographicHash, cryptographicHash)
+    muse::GlobalInject<muse::ICryptographicHash> cryptographicHash;
 
 public:
     ImageStore() = default;

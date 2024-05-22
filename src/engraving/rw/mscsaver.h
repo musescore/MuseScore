@@ -30,11 +30,12 @@
 namespace mu::engraving {
 class MasterScore;
 class Score;
-class MscSaver
+class MscSaver : public muse::Injectable
 {
-    INJECT(muse::draw::IImageProvider, imageProvider)
+    muse::Inject<muse::draw::IImageProvider> imageProvider = { this };
 public:
-    MscSaver() = default;
+    MscSaver(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     bool writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail);
 

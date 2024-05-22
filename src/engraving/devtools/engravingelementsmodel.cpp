@@ -34,7 +34,7 @@ using namespace muse;
 using namespace mu::engraving;
 
 EngravingElementsModel::EngravingElementsModel(QObject* parent)
-    : QAbstractItemModel(parent)
+    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

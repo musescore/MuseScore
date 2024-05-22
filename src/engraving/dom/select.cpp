@@ -955,7 +955,7 @@ muse::ByteArray Selection::staffMimeData() const
         }
         xml.endElement();     // </voiceOffset>
 
-        rw::RWRegister::writer()->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
+        rw::RWRegister::writer(m_score->iocContext())->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
         xml.endElement();
     }
 
@@ -1197,7 +1197,7 @@ muse::ByteArray Selection::symbolListMimeData() const
             }
         }
         xml.tag("segDelta", numSegs);
-        rw::RWRegister::writer()->writeItem(iter->second.e, xml);
+        rw::RWRegister::writer(m_score->iocContext())->writeItem(iter->second.e, xml);
     }
 
     xml.endElement();

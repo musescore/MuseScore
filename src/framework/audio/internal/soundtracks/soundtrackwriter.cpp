@@ -41,9 +41,10 @@ using namespace muse::audio::soundtrack;
 static constexpr int PREPARE_STEP = 0;
 static constexpr int ENCODE_STEP = 1;
 
-SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
-                                   IAudioSourcePtr source)
-    : m_source(std::move(source))
+SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format,
+                                   const msecs_t totalDuration, IAudioSourcePtr source,
+                                   const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_source(std::move(source))
 {
     if (!m_source) {
         return;

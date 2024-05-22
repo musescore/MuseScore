@@ -40,7 +40,7 @@ class Score;
 
 namespace mu::converter {
 class BackendJsonWriter;
-class BackendApi : public muse::Injectable
+class BackendApi
 {
     inline static muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     inline static muse::GlobalInject<muse::IApplication> application;

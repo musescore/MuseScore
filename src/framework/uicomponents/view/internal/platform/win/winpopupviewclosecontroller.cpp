@@ -26,8 +26,8 @@
 
 using namespace muse::uicomponents;
 
-WinPopupViewCloseController::WinPopupViewCloseController(QObject* parent)
-    : PopupViewCloseController(parent)
+WinPopupViewCloseController::WinPopupViewCloseController(const muse::modularity::ContextPtr& iocCtx, QObject* parent)
+    : PopupViewCloseController(iocCtx, parent)
 {
 }
 

@@ -29,11 +29,9 @@
 #include "notation/notationtypes.h"
 
 namespace mu::instrumentsscene {
-class StaffSettingsModel : public QObject
+class StaffSettingsModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
 
     Q_PROPERTY(int staffType READ staffType WRITE setStaffType NOTIFY staffTypeChanged)
     Q_PROPERTY(bool isSmallStaff READ isSmallStaff WRITE setIsSmallStaff NOTIFY isSmallStaffChanged)
@@ -43,6 +41,8 @@ class StaffSettingsModel : public QObject
     Q_PROPERTY(QVariantList allStaffTypes READ allStaffTypes NOTIFY allStaffTypesChanged)
 
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
+
+    muse::Inject<context::IGlobalContext> context = { this };
 
 public:
     explicit StaffSettingsModel(QObject* parent = nullptr);

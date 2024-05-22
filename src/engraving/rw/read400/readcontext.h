@@ -68,14 +68,14 @@ struct TextStyleMap {
     TextStyleType ss;
 };
 
-class ReadContext
+class ReadContext : public muse::Injectable
 {
 public:
-    INJECT(IEngravingFontsProvider, engravingFonts)
+    muse::Inject<IEngravingFontsProvider> engravingFonts = { this };
 
 public:
 
-    ReadContext() = default;
+    ReadContext(const muse::modularity::ContextPtr& iocCtx);
     ReadContext(Score* score);
     ~ReadContext();
 

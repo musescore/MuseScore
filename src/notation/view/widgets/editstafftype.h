@@ -24,7 +24,10 @@
 #define MU_NOTATION_EDITSTAFFTYPE_H
 
 #include "ui_editstafftype.h"
-#include "engraving/dom/mscore.h"
+
+#include "modularity/ioc.h"
+#include "engraving/iengravingconfiguration.h"
+
 #include "engraving/dom/stafftype.h"
 
 #include "notation/notationtypes.h"
@@ -37,6 +40,8 @@ namespace mu::notation {
 class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Injectable
 {
     Q_OBJECT
+
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
     mu::engraving::Staff* staff;
     mu::engraving::StaffType staffType;

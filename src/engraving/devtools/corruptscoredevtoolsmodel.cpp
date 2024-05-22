@@ -25,7 +25,7 @@
 using namespace mu::engraving;
 
 CorruptScoreDevToolsModel::CorruptScoreDevToolsModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

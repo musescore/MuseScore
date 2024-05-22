@@ -740,20 +740,30 @@ int TextCursor::position(int row, int column) const
 //---------------------------------------------------------
 //   TextFragment
 //---------------------------------------------------------
-
-TextFragment::TextFragment()
-{
-}
-
 TextFragment::TextFragment(const String& s)
 {
     text = s;
 }
 
 TextFragment::TextFragment(TextCursor* cursor, const String& s)
+    : TextFragment(s)
 {
     format = *cursor->format();
-    text = s;
+}
+
+TextFragment::TextFragment(const TextFragment& f)
+{
+    text = f.text;
+    format = f.format;
+    pos = f.pos;
+}
+
+TextFragment& TextFragment::operator =(const TextFragment& f)
+{
+    text = f.text;
+    format = f.format;
+    pos = f.pos;
+    return *this;
 }
 
 //---------------------------------------------------------
@@ -1858,7 +1868,8 @@ void TextBase::createBlocks(LayoutData* ldata) const
                         CharFormat fmt = *cursor.format(); // save format
 
                         //char32_t code = score()->scoreFont()->symCode(id);
-                        char32_t code = id == SymId::space ? static_cast<char32_t>(' ') : engravingFonts()->fallbackFont()->symCode(id);
+                        char32_t code = id
+                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code, ldata);
                         cursor.setFormat(fmt); // restore format
@@ -2321,7 +2332,7 @@ void TextBase::computeHighResShape(const FontMetrics& fontMetrics)
         for (const TextFragment& fragment : block.fragments()) {
             x += fragment.pos.x();
             size_t textSize = fragment.text.size();
-            for (int i = 0; i < textSize; ++i) {
+            for (size_t i = 0; i < textSize; ++i) {
                 Char character = fragment.text.at(i);
                 RectF characterBoundingRect = fontMetrics.tightBoundingRect(fragment.text.at(i));
                 characterBoundingRect.translate(x, 0.0);

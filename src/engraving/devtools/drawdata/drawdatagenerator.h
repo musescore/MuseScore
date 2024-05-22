@@ -33,11 +33,11 @@
 
 namespace mu::engraving {
 class MasterScore;
-class DrawDataGenerator
+class DrawDataGenerator : public muse::Injectable
 {
-    INJECT(engraving::rendering::IScoreRenderer, scoreRenderer)
+    muse::Inject<engraving::rendering::IScoreRenderer> scoreRenderer = { this };
 public:
-    DrawDataGenerator() = default;
+    DrawDataGenerator(const muse::modularity::ContextPtr& iocCtx);
 
     muse::Ret processDir(const muse::io::path_t& scoreDir, const muse::io::path_t& outDir, const GenOpt& opt = GenOpt());
     muse::Ret processFile(const muse::io::path_t& scoreFile, const muse::io::path_t& outFile, const GenOpt& opt = GenOpt());

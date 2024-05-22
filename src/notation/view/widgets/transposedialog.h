@@ -31,11 +31,11 @@
 #include "notationtypes.h"
 
 namespace mu::notation {
-class TransposeDialog : public QDialog, Ui::TransposeDialogBase
+class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
+    muse::Inject<context::IGlobalContext> context = { this };
 
 public:
     TransposeDialog(QWidget* parent = 0);

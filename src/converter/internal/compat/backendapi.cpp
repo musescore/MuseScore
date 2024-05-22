@@ -647,7 +647,7 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
     MscWriter mscWriter(params);
     mscWriter.open();
 
-    bool ok = MscSaver().exportPart(score, mscWriter);
+    bool ok = MscSaver(muse::modularity::globalCtx()).exportPart(score, mscWriter);
     if (!ok) {
         LOGW() << "Error save mscz file";
     }

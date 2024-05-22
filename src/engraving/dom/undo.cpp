@@ -1908,15 +1908,15 @@ static void changeChordStyle(Score* score)
     double madjust = style.styleD(Sid::chordModifierAdjust);
     score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
     if (score->style().styleB(Sid::chordsXmlFile)) {
-        score->chordList()->read(u"chords.xml");
+        score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
     }
-    score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
+    score->chordList()->read(score->configuration()->appDataPath(), style.styleSt(Sid::chordDescriptionFile));
     score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
 }
 
 //---------------------------------------------------------
 //   ChangeStyle
-//---------------------------------------------------------
+//----------------------------------------------------------
 
 ChangeStyle::ChangeStyle(Score* s, const MStyle& st, const bool overlapOnly)
     : score(s), style(st), overlap(overlapOnly)
@@ -1935,7 +1935,7 @@ void ChangeStyle::flip(EditData*)
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
     if (score->style().styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
-        score->setEngravingFont(engravingFonts()->fontByName(style.styleSt(Sid::MusicalSymbolFont).toStdString()));
+        score->setEngravingFont(score->engravingFonts()->fontByName(style.styleSt(Sid::MusicalSymbolFont).toStdString()));
     }
 
     score->setStyle(style, overlap);

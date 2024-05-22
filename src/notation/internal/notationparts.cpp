@@ -150,17 +150,17 @@ bool NotationParts::staffExists(const ID& staffId) const
 
 StaffConfig NotationParts::staffConfig(const ID& staffId) const
 {
+    StaffConfig config;
     Staff* staff = staffModifiable(staffId);
     if (!staff) {
-        return StaffConfig();
+        return config;
     }
 
     mu::engraving::StaffType* staffType = staff->staffType(DEFAULT_TICK);
     if (!staffType) {
-        return StaffConfig();
+        return config;
     }
 
-    StaffConfig config;
     config.visible = staff->visible();
     config.userDistance = staff->userDist();
     config.cutaway = staff->cutaway();

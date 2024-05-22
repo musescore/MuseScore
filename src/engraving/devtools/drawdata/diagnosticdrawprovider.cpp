@@ -44,7 +44,7 @@ using namespace mu::engraving;
 Ret DiagnosticDrawProvider::generateDrawData(const muse::io::path_t& dirOrFile, const muse::io::path_t& outDirOrFile, const GenOpt& opt)
 {
     LOGI() << "scoresDir: " << dirOrFile << ", outDir: " << outDirOrFile;
-    DrawDataGenerator g;
+    DrawDataGenerator g(iocContext());
 
     if (io::FileInfo(dirOrFile).entryType() == io::EntryType::File) {
         return g.processFile(dirOrFile, outDirOrFile, opt);

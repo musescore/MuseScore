@@ -57,11 +57,9 @@ extern Selection* selectionWrap(mu::engraving::Selection* select);
 //   Score
 //---------------------------------------------------------
 
-class Score : public apiv1::ScoreElement
+class Score : public apiv1::ScoreElement, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(mu::context::IGlobalContext, context)
 
     /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QString composer READ composer)
@@ -140,10 +138,12 @@ class Score : public apiv1::ScoreElement
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Staff> staves READ staves)
 
+    muse::Inject<mu::context::IGlobalContext> context = { this };
+
 public:
     /// \cond MS_INTERNAL
-    Score(mu::engraving::Score* s = nullptr, Ownership o = Ownership::SCORE)
-        : ScoreElement(s, o) {}
+    Score(mu::engraving::Score* s, Ownership o = Ownership::SCORE)
+        : ScoreElement(s, o), muse::Injectable(s->iocContext()) {}
 
     mu::engraving::Score* score() { return toScore(e); }
     const mu::engraving::Score* score() const { return toScore(e); }
