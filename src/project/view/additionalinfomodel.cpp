@@ -195,11 +195,11 @@ QString AdditionalInfoModel::timeSignatureAccessibleName(int timeSignatureType,
 {
     switch (timeSignatureType) {
     case Fraction:
-        return muse::qtrc("project/newscore", "%1/%2").arg(QString::number(numerator), QString::number(denominator));
+        return QString("%1/%2").arg(QString::number(numerator), QString::number(denominator));
     case Common:
-        return muse::qtrc("project/newscore", "Common time");
+        return muse::qtrc("engraving/timesig", "Common time");
     case Cut:
-        return muse::qtrc("project/newscore", "Cut time");
+        return muse::qtrc("engraving/timesig", "Cut time");
     }
 
     return QString();
