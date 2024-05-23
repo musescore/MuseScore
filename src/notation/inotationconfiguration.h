@@ -158,6 +158,9 @@ public:
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
 
+    virtual bool dynamicsApplyToAllVoices() const = 0;
+    virtual void setDynamicsApplyToAllVoices(bool v) = 0;
+
     virtual void setTemplateModeEnabled(std::optional<bool> enabled) = 0;
     virtual void setTestModeEnabled(std::optional<bool> enabled) = 0;
 

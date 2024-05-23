@@ -272,6 +272,7 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Spanner type="HairPin">
             <prev>
@@ -403,6 +404,7 @@
           <Dynamic>
             <subtype>fff</subtype>
             <velocity>126</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Spanner type="HairPin">
             <prev>
@@ -557,6 +559,7 @@
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Spanner type="HairPin">
             <prev>

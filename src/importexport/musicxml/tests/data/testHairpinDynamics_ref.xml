@@ -49,7 +49,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <dynamics>
             <mf/>
@@ -57,7 +57,7 @@
           </direction-type>
         <sound dynamics="88.89"/>
         </direction>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
@@ -110,14 +110,14 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
         </direction>
       </measure>
     <measure number="2">
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <dynamics>
             <mf/>
@@ -171,7 +171,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
@@ -179,7 +179,7 @@
       </measure>
     <measure number="3">
       <print new-system="yes"/>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <words font-family="FreeSerif" font-size="12" font-style="italic">begin</words>
           </direction-type>
@@ -227,7 +227,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
@@ -237,7 +237,7 @@
         </direction>
       </measure>
     <measure number="4">
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <words font-family="FreeSans" font-size="10" font-style="italic">from </words>
           </direction-type>
@@ -290,7 +290,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
@@ -306,7 +306,7 @@
       </measure>
     <measure number="5">
       <print new-system="yes"/>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <words font-family="FreeSerif" font-size="12" font-style="italic">cresc. from </words>
           </direction-type>
@@ -367,7 +367,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
           <dashes type="stop" number="1"/>
           </direction-type>

@@ -19,28 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSPECTOR_VOICETYPES_H
+#define MU_INSPECTOR_VOICETYPES_H
 
-#ifndef MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
-#define MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
+#include "qobjectdefs.h"
 
-namespace mu::engraving {
-class MasterScore;
-}
-
-namespace mu::engraving::compat {
-class EngravingCompat
+class VoiceTypes
 {
+    Q_GADGET
+
 public:
-    static void doPreLayoutCompatIfNeeded(MasterScore* score);
-    static void doPostLayoutCompatIfNeeded(MasterScore* score);
+    enum class VoiceApplication {
+        VOICE_ALL_IN_INSTRUMENT = -2,
+        VOICE_ALL_IN_STAFF,
+        VOICE_ONE, // = 0
+        VOICE_TWO,
+        VOICE_THREE,
+        VOICE_FOUR
+    };
 
-private:
-    static void correctPedalEndPoints(MasterScore* score);
-    static void undoStaffTextExcludeFromPart(MasterScore* masterScore);
-    static void migrateDynamicPosOnVocalStaves(MasterScore* masterScore);
-
-    static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
+    Q_ENUM(VoiceApplication)
 };
-} // namespace mu::engraving::compat
 
-#endif // MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
+#endif // MU_INSPECTOR_VOICETYPES_H

@@ -48,6 +48,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/commontypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/voicetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/models/iinspectormodelcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.h
@@ -61,6 +62,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/propertyitem.h
     ${CMAKE_CURRENT_LIST_DIR}/models/pointfpropertyitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/pointfpropertyitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelwithvoiceandpositionoptions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelwithvoiceandpositionoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/generalsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/general/generalsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/appearance/appearancesettingsmodel.cpp
@@ -235,3 +238,9 @@ set(MODULE_LINK
 
 set(MODULE_USE_UNITBUILD ON)
 setup_module()
+
+target_sources(inspector
+  PRIVATE
+    types/voicetypes.h
+    models/inspectormodelwithvoiceandpositionoptions.h models/inspectormodelwithvoiceandpositionoptions.cpp
+)

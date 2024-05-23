@@ -325,6 +325,21 @@ enum class Orientation : signed char {
     HORIZONTAL
 };
 
+enum class AutoOnOff : char {
+    AUTO,
+    ON,
+    OFF
+};
+
+enum class VoiceApplication {
+    ALL_VOICE_IN_INSTRUMENT = -2,
+    ALL_VOICE_IN_STAFF,
+    ONE, // = 0
+    TWO,
+    THREE,
+    FOUR
+};
+
 // P_TYPE::BEAM_MODE
 //! Note: for historical reasons, these have strange names
 //!

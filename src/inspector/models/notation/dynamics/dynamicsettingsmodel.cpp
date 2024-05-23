@@ -26,9 +26,10 @@
 #include "types/texttypes.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+    : InspectorModelWithVoiceAndPositionOptions(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_DYNAMIC);
     setTitle(muse::qtrc("inspector ", "Dynamics"));
@@ -38,42 +39,44 @@ DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepository
 
 void DynamicsSettingsModel::createProperties()
 {
-    m_avoidBarLines = buildPropertyItem(mu::engraving::Pid::AVOID_BARLINES);
-    m_dynamicSize = buildPropertyItem(mu::engraving::Pid::DYNAMICS_SIZE,
-                                      [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    InspectorModelWithVoiceAndPositionOptions::createProperties();
+
+    m_avoidBarLines = buildPropertyItem(Pid::AVOID_BARLINES);
+    m_dynamicSize = buildPropertyItem(Pid::DYNAMICS_SIZE,
+                                      [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     },
-                                      [this](const mu::engraving::Sid sid, const QVariant& newValue) {
+                                      [this](const Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, newValue.toDouble() / 100);
         emit requestReloadPropertyItems();
     });
-    m_centerOnNotehead = buildPropertyItem(mu::engraving::Pid::CENTER_ON_NOTEHEAD);
-    m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
+    m_centerOnNotehead = buildPropertyItem(Pid::CENTER_ON_NOTEHEAD);
 
-    m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_frameType = buildPropertyItem(Pid::FRAME_TYPE, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         updateFramePropertiesAvailability();
     });
-    m_frameBorderColor = buildPropertyItem(mu::engraving::Pid::FRAME_FG_COLOR);
-    m_frameFillColor = buildPropertyItem(mu::engraving::Pid::FRAME_BG_COLOR);
-    m_frameThickness = buildPropertyItem(mu::engraving::Pid::FRAME_WIDTH);
-    m_frameMargin = buildPropertyItem(mu::engraving::Pid::FRAME_PADDING);
-    m_frameCornerRadius = buildPropertyItem(mu::engraving::Pid::FRAME_ROUND);
+    m_frameBorderColor = buildPropertyItem(Pid::FRAME_FG_COLOR);
+    m_frameFillColor = buildPropertyItem(Pid::FRAME_BG_COLOR);
+    m_frameThickness = buildPropertyItem(Pid::FRAME_WIDTH);
+    m_frameMargin = buildPropertyItem(Pid::FRAME_PADDING);
+    m_frameCornerRadius = buildPropertyItem(Pid::FRAME_ROUND);
 }
 
 void DynamicsSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::DYNAMIC);
+    m_elementList = m_repository->findElementsByType(ElementType::DYNAMIC);
 }
 
 void DynamicsSettingsModel::loadProperties()
 {
+    InspectorModelWithVoiceAndPositionOptions::loadProperties();
+
     loadPropertyItem(m_avoidBarLines);
     loadPropertyItem(m_dynamicSize, [](const QVariant& elementPropertyValue) -> QVariant {
         return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
     loadPropertyItem(m_centerOnNotehead);
-    loadPropertyItem(m_placement);
 
     loadPropertyItem(m_frameType);
     loadPropertyItem(m_frameBorderColor);
@@ -87,10 +90,11 @@ void DynamicsSettingsModel::loadProperties()
 
 void DynamicsSettingsModel::resetProperties()
 {
+    InspectorModelWithVoiceAndPositionOptions::resetProperties();
+
     m_avoidBarLines->resetToDefault();
     m_dynamicSize->resetToDefault();
     m_centerOnNotehead->resetToDefault();
-    m_placement->resetToDefault();
 
     m_frameType->resetToDefault();
     m_frameBorderColor->resetToDefault();
@@ -113,11 +117,6 @@ PropertyItem* DynamicsSettingsModel::dynamicSize() const
 PropertyItem* DynamicsSettingsModel::centerOnNotehead() const
 {
     return m_centerOnNotehead;
-}
-
-PropertyItem* DynamicsSettingsModel::placement() const
-{
-    return m_placement;
 }
 
 PropertyItem* DynamicsSettingsModel::frameType() const

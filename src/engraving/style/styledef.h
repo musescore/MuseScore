@@ -678,6 +678,10 @@ enum class Sid {
 
     autoplaceHairpinDynamicsDistance,
 
+    dynamicsHairpinVoiceBasedPlacement,
+    dynamicsHairpinsAutoCenterOnGrandStaff,
+    dynamicsHairpinsAboveForVocalStaves,
+
     dynamicsOverrideFont,
     dynamicsFont,
     dynamicsSize,

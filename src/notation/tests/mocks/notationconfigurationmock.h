@@ -148,6 +148,9 @@ public:
     MOCK_METHOD(int, notePlayDurationMilliseconds, (), (const, override));
     MOCK_METHOD(void, setNotePlayDurationMilliseconds, (int), (override));
 
+    MOCK_METHOD(bool, dynamicsApplyToAllVoices, (), (const, override));
+    MOCK_METHOD(void, setDynamicsApplyToAllVoices, (bool), (override));
+
     MOCK_METHOD(void, setTemplateModeEnabled, (std::optional<bool>), (override));
     MOCK_METHOD(void, setTestModeEnabled, (std::optional<bool>), (override));
 

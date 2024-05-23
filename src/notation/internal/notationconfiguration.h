@@ -163,6 +163,9 @@ public:
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
 
+    bool dynamicsApplyToAllVoices() const override;
+    void setDynamicsApplyToAllVoices(bool v) override;
+
     void setTemplateModeEnabled(std::optional<bool> enabled) override;
     void setTestModeEnabled(std::optional<bool> enabled) override;
 

@@ -213,6 +213,8 @@ public:
     static bool warnGuitarBends;
     static int pedalEventsMinTicks;
 
+    static bool dynamicsApplyToAllVoices;
+
     static double nudgeStep;
     static double nudgeStep10;
     static double nudgeStep50;

@@ -71,6 +71,11 @@ bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
     return playbackConfiguration()->playHarmonyWhenEditing();
 }
 
+bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
+{
+    return notationConfiguration()->dynamicsApplyToAllVoices();
+}
+
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
 {
     if (value == advanceToNextNoteOnKeyRelease()) {
@@ -149,4 +154,14 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
 
     playbackConfiguration()->setPlayHarmonyWhenEditing(value);
     emit playChordSymbolWhenEditingChanged(value);
+}
+
+void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
+{
+    if (value == dynamicsApplyToAllVoices()) {
+        return;
+    }
+
+    notationConfiguration()->setDynamicsApplyToAllVoices(value);
+    emit dynamicsApplyToAllVoicesChanged(value);
 }

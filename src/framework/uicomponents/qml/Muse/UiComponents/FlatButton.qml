@@ -56,6 +56,8 @@ FocusScope {
     property real margins: isNarrow ? 12 : 16
     property real minWidth: isNarrow ? 24 : 132
 
+    property real backgroundRadius: 3
+
     property bool drawFocusBorderInsideRect: false
 
     property int orientation: Qt.Vertical
@@ -141,7 +143,7 @@ FocusScope {
             color: root.normalColor
             opacity: ui.theme.buttonOpacityNormal
 
-            radius: 3
+            radius: root.backgroundRadius
             border.width: ui.theme.borderWidth
             border.color: ui.theme.strokeColor
 

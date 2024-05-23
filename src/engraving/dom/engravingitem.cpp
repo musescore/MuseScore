@@ -639,7 +639,14 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        return configuration()->selectionColor(track() == muse::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster());
+        voice_idx_t voiceForColorChoice = track() == muse::nidx ? 0 : voice();
+        if (hasVoiceApplicationProperties()) {
+            VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+            if (voiceApplication == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || voiceApplication == VoiceApplication::ALL_VOICE_IN_STAFF) {
+                voiceForColorChoice = VOICES;
+            }
+        }
+        return configuration()->selectionColor(voiceForColorChoice, isVisible, isUnlinkedFromMaster());
     }
 
     if (!isVisible) {
@@ -1270,6 +1277,77 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+bool EngravingItem::appliesToAllVoicesInInstrument() const
+{
+    return hasVoiceApplicationProperties()
+           && getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>() == VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+}
+
+void EngravingItem::setInitialTrackAndVoiceApplication(track_idx_t track)
+{
+    if (track == muse::nidx) {
+        track = m_track;
+    }
+    if (MScore::dynamicsApplyToAllVoices) {
+        setTrack(trackZeroVoice(track));
+        setProperty(Pid::APPLY_TO_VOICE, VoiceApplication::ALL_VOICE_IN_INSTRUMENT);
+    } else {
+        setTrack(track);
+        setProperty(Pid::APPLY_TO_VOICE, static_cast<VoiceApplication>(track2voice(track)));
+    }
+}
+
+void EngravingItem::checkVoiceApplicationCompatibleWithTrack()
+{
+    voice_idx_t currentVoice = voice();
+    VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+
+    if (voiceApplication == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || voiceApplication == VoiceApplication::ALL_VOICE_IN_STAFF) {
+        if (currentVoice != 0) {
+            setProperty(Pid::TRACK, trackZeroVoice(track()));
+        }
+    } else if (currentVoice != static_cast<voice_idx_t>(voiceApplication)) {
+        setProperty(Pid::APPLY_TO_VOICE, static_cast<VoiceApplication>(currentVoice));
+    }
+}
+
+void EngravingItem::setPlacementBasedOnVoiceApplication(DirectionV styledDirection)
+{
+    PlacementV oldPlacement = placement();
+    bool offsetIsStyled = isStyled(Pid::OFFSET);
+
+    PlacementV newPlacement;
+
+    DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
+    if (internalDirectionProperty != DirectionV::AUTO) {
+        newPlacement = internalDirectionProperty == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
+    } else if (styledDirection != DirectionV::AUTO) {
+        newPlacement = styledDirection == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
+    } else if (part()->nstaves() > 1 && getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON) {
+        bool isOnLastStaffOfInstrument = staffIdx() == part()->staves().back()->idx();
+        newPlacement = isOnLastStaffOfInstrument ? PlacementV::ABOVE : PlacementV::BELOW;
+    } else {
+        VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+        if (voiceApplication == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || voiceApplication == VoiceApplication::ALL_VOICE_IN_STAFF) {
+            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
+                newPlacement = PlacementV::ABOVE;
+            } else {
+                newPlacement = PlacementV::BELOW;
+            }
+        } else {
+            voice_idx_t voice = static_cast<voice_idx_t>(voiceApplication);
+            newPlacement = voice % 2 ? PlacementV::BELOW : PlacementV::ABOVE;
+        }
+    }
+
+    if (newPlacement != oldPlacement) {
+        setPlacement(newPlacement);
+        if (offsetIsStyled) {
+            resetProperty(Pid::OFFSET);
+        }
+    }
+}
+
 void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
 {
     assert(!score()->isMaster());
@@ -1380,6 +1458,9 @@ void EngravingItem::undoChangeProperty(Pid pid, const PropertyValue& val, Proper
         // placement properties to undo stack.
         undoPushProperty(Pid::PLACEMENT);
         undoPushProperty(Pid::OFFSET);
+    } else if (pid == Pid::APPLY_TO_VOICE) {
+        track_idx_t newTrack = trackZeroVoice(track()) + std::max(static_cast<int>(val.value<VoiceApplication>()), 0);
+        EngravingObject::undoChangeProperty(Pid::TRACK, newTrack);
     }
     EngravingObject::undoChangeProperty(pid, val, ps);
 }

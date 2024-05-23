@@ -102,7 +102,6 @@ const std::vector<Dyn> Dynamic::DYN_LIST = {
 //---------------------------------------------------------
 
 static const ElementStyle dynamicsStyle {
-    { Sid::dynamicsPlacement, Pid::PLACEMENT },
     { Sid::dynamicsMinDistance, Pid::MIN_DISTANCE },
     { Sid::avoidBarLines, Pid::AVOID_BARLINES },
     { Sid::dynamicsSize, Pid::DYNAMICS_SIZE },
@@ -664,6 +663,8 @@ void Dynamic::endEdit(EditData& ed)
 
 void Dynamic::reset()
 {
+    undoResetProperty(Pid::DIRECTION);
+    undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
     TextBase::reset();
 }
 
