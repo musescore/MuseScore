@@ -6328,13 +6328,12 @@ Note* MusicXMLParserPass2::note(const String& partId,
         Stem* stem = c->stem();
         if (!stem) {
             stem = Factory::createStem(c);
-            c->add(stem);
-            if (noteColor.isValid()) {
-                stem->setColor(noteColor);
-            }
             if (stemColor.isValid()) {
                 stem->setColor(stemColor);
+            } else if (noteColor.isValid()) {
+                stem->setColor(noteColor);
             }
+            c->add(stem);
         }
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
         note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
