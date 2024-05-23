@@ -10,33 +10,32 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "timeline.h"
-#include "navigator.h"
 #include "musescore.h"
-#include "libmscore/score.h"
-#include "libmscore/page.h"
+#include "navigator.h"
 #include "preferences.h"
-#include "libmscore/mscore.h"
-#include "libmscore/system.h"
-#include "libmscore/measurebase.h"
-#include "libmscore/measure.h"
-#include "libmscore/chord.h"
-#include "libmscore/staff.h"
-#include "libmscore/rest.h"
-#include "libmscore/part.h"
-#include "libmscore/tempo.h"
-#include "libmscore/keysig.h"
-#include "libmscore/timesig.h"
-#include "libmscore/key.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/text.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/barline.h"
-#include "libmscore/jump.h"
-#include "libmscore/marker.h"
 #include "texttools.h"
-#include "mixer/mixer.h"
+#include "timeline.h"
 #include "tourhandler.h"
+
+#include "libmscore/barline.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/jump.h"
+#include "libmscore/key.h"
+#include "libmscore/keysig.h"
+#include "libmscore/marker.h"
+#include "libmscore/measure.h"
+#include "libmscore/measurebase.h"
+#include "libmscore/mscore.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/rehearsalmark.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+#include "libmscore/system.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/timesig.h"
+
+#include "mixer/mixer.h"
 
 namespace Ms {
 
@@ -2190,7 +2189,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                               if (currSeg) {
                                     _score->deselectAll();
                                     for (int j = 0; j < _score->nstaves(); j++) {
-                                          Element* element = currSeg->firstElement(j);
+                                          Element* element = currSeg->firstElementForNavigation(j);
                                           if (element)
                                                 _score->select(element, SelectType::ADD);
                                           }

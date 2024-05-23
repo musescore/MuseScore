@@ -17,7 +17,6 @@
 
 #include "global/log.h"
 
-#include "measure.h"
 #include "accidental.h"
 #include "ambitus.h"
 #include "articulation.h"
@@ -25,6 +24,7 @@
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
+#include "bracketItem.h"
 #include "breath.h"
 #include "chord.h"
 #include "clef.h"
@@ -39,8 +39,11 @@
 #include "icon.h"
 #include "key.h"
 #include "keysig.h"
-#include "layoutbreak.h"
 #include "layout.h"
+#include "layoutbreak.h"
+#include "measure.h"
+#include "measurenumber.h"
+#include "mmrestrange.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -53,14 +56,15 @@
 #include "sig.h"
 #include "spacer.h"
 #include "staff.h"
+#include "stafflines.h"
 #include "stafftext.h"
 #include "stafftype.h"
+#include "stafftypechange.h"
 #include "stem.h"
 #include "stringdata.h"
 #include "style.h"
 #include "system.h"
-#include "measurenumber.h"
-#include "mmrestrange.h"
+#include "systemdivider.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
@@ -72,10 +76,6 @@
 #include "utils.h"
 #include "volta.h"
 #include "xml.h"
-#include "systemdivider.h"
-#include "stafftypechange.h"
-#include "stafflines.h"
-#include "bracketItem.h"
 
 namespace Ms {
 
@@ -3505,7 +3505,7 @@ Element* Measure::prevElementStaff(int staff)
       if (prevM) {
             Segment* seg = prevM->last();
             if (seg)
-                  return seg->lastElement(staff);
+                  return seg->lastElementForNavigation(staff);
             }
       return score()->firstElement();
       }

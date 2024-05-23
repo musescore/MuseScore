@@ -15,35 +15,32 @@
  Implementation of classes SysStaff and System.
 */
 
-#include "system.h"
-#include "measure.h"
-#include "segment.h"
-#include "score.h"
-#include "sig.h"
-#include "key.h"
-#include "xml.h"
-#include "clef.h"
-#include "text.h"
-#include "navigate.h"
-#include "select.h"
-#include "staff.h"
-#include "part.h"
-#include "page.h"
-#include "style.h"
-#include "bracket.h"
-#include "mscore.h"
 #include "barline.h"
-#include "system.h"
+#include "bracket.h"
+#include "bracketItem.h"
 #include "box.h"
 #include "chordrest.h"
+#include "clef.h"
 #include "iname.h"
-#include "spanner.h"
-#include "sym.h"
+#include "key.h"
+#include "measure.h"
+#include "mscore.h"
+#include "navigate.h"
+#include "page.h"
+#include "part.h"
+#include "score.h"
+#include "segment.h"
+#include "select.h"
+#include "sig.h"
 #include "spacer.h"
+#include "spanner.h"
+#include "staff.h"
+#include "style.h"
+#include "system.h"
 #include "systemdivider.h"
 #include "textframe.h"
-#include "stafflines.h"
-#include "bracketItem.h"
+#include "xml.h"
+
 #include "global/log.h"
 
 namespace Ms {
@@ -303,7 +300,6 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
                   _leftMargin += w + bd;
             }
 
-      int nVisible = 0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             SysStaff* s  = _staves[staffIdx];
             Staff* staff = score()->staff(staffIdx);
@@ -311,7 +307,6 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
                   s->setbbox(QRectF());
                   continue;
                   }
-            ++nVisible;
             qreal staffMag = staff->mag(Fraction(0,1));     // ??? TODO
             int staffLines = staff->lines(Fraction(0,1));
             if (staffLines <= 1) {
@@ -1251,13 +1246,11 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
       if (_systemDividerRight)
             func(data, _systemDividerRight);
 
-      int idx = 0;
       for (const SysStaff* st : qAsConst(_staves)) {
             if (all || st->show()) {
                   for (InstrumentName* t : st->instrumentNames)
                         func(data, t);
                   }
-            ++idx;
             }
       for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
             int staffIdx = ss->spanner()->staffIdx();
@@ -1379,7 +1372,7 @@ Element* System::prevSegmentElement()
                   if (seg->segmentType() == SegmentType::EndBarLine)
                         score()->inputState().setTrack((score()->staves().size() - 1) * VOICES); //correction
 
-                  re = seg->lastElement(score()->staves().size() - 1);
+                  re = seg->lastElementForNavigation(score()->staves().size() - 1);
                   }
             }
       return re;

@@ -15,7 +15,6 @@
  Implementation of Element, ElementList
 */
 
-#include "element.h"
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
@@ -32,6 +31,8 @@
 #include "clef.h"
 #include "connector.h"
 #include "dynamic.h"
+#include "element.h"
+#include "fermata.h"
 #include "figuredbass.h"
 #include "fingering.h"
 #include "fret.h"
@@ -46,9 +47,12 @@
 #include "jump.h"
 #include "keysig.h"
 #include "layoutbreak.h"
+#include "letring.h"
 #include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
+#include "measurenumber.h"
+#include "mmrestrange.h"
 #include "mscore.h"
 #include "notedot.h"
 #include "note.h"
@@ -56,17 +60,21 @@
 #include "ossia.h"
 #include "ottava.h"
 #include "page.h"
+#include "palmmute.h"
 #include "pedal.h"
 #include "rehearsalmark.h"
 #include "repeat.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
+#include "shape.h"
 #include "slur.h"
 #include "spacer.h"
 #include "staff.h"
+#include "stafflines.h"
 #include "staffstate.h"
 #include "stafftext.h"
+#include "stafftypechange.h"
 #include "systemtext.h"
 #include "stafftype.h"
 #include "stem.h"
@@ -75,30 +83,21 @@
 #include "symbol.h"
 #include "sym.h"
 #include "system.h"
+#include "systemdivider.h"
 #include "tempotext.h"
-#include "textframe.h"
 #include "text.h"
-#include "measurenumber.h"
-#include "mmrestrange.h"
+#include "textframe.h"
 #include "textline.h"
 #include "tie.h"
 #include "timesig.h"
-#include "tremolobar.h"
 #include "tremolo.h"
+#include "tremolobar.h"
 #include "trill.h"
 #include "undo.h"
 #include "utils.h"
+#include "vibrato.h"
 #include "volta.h"
 #include "xml.h"
-#include "systemdivider.h"
-#include "stafftypechange.h"
-#include "stafflines.h"
-#include "letring.h"
-#include "vibrato.h"
-#include "palmmute.h"
-#include "fermata.h"
-#include "shape.h"
-//#include "musescoreCore.h"
 
 namespace Ms {
 
@@ -1772,7 +1771,7 @@ Element* Element::nextSegmentElement()
                         break;
                   case ElementType::SEGMENT: {
                         Segment* s = toSegment(p);
-                        return s->firstElement(staffIdx());
+                        return s->firstElementForNavigation(staffIdx());
                         }
                   case ElementType::MEASURE: {
                         Measure* m = toMeasure(p);
@@ -1817,7 +1816,7 @@ Element* Element::prevSegmentElement()
                         break;
                   case ElementType::SEGMENT: {
                         Segment* s = toSegment(p);
-                        return s->lastElement(staffIdx());
+                        return s->lastElementForNavigation(staffIdx());
                         }
                   case ElementType::MEASURE: {
                         Measure* m = toMeasure(p);

@@ -10,19 +10,19 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "connector.h"
-#include "score.h"
-#include "spanner.h"
-#include "system.h"
-#include "chordrest.h"
 #include "chord.h"
-#include "segment.h"
-#include "measure.h"
-#include "part.h"
-#include "undo.h"
-#include "staff.h"
+#include "chordrest.h"
+#include "connector.h"
 #include "lyrics.h"
+#include "measure.h"
 #include "musescoreCore.h"
+#include "part.h"
+#include "score.h"
+#include "segment.h"
+#include "spanner.h"
+#include "staff.h"
+#include "system.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -1050,8 +1050,8 @@ Element* Spanner::nextSegmentElement()
       {
       Segment* s = startSegment();
       if (s)
-            return s->firstElement(staffIdx());
       return score()->lastElement();
+            return s->firstElementForNavigation(staffIdx());
       }
 
 //---------------------------------------------------------
@@ -1062,8 +1062,8 @@ Element* Spanner::prevSegmentElement()
       {
       Segment* s = endSegment();
       if (s)
-            return s->lastElement(staffIdx());
       return score()->firstElement();
+            return s->lastElementForNavigation(staffIdx());
       }
 
 //---------------------------------------------------------

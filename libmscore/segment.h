@@ -15,7 +15,6 @@
 
 #include "element.h"
 #include "shape.h"
-#include "mscore.h"
 
 namespace Ms {
 
@@ -198,9 +197,9 @@ class Segment final : public Element {
       virtual QString accessibleExtraInfo() const override;
 
       Element* firstInNextSegments(int activeStaff); //<
-      Element* lastInPrevSegments(int activeStaff);   //<
-      Element* firstElement(int staff);              //<  These methods are used for navigation
-      Element* lastElement(int staff);               //<  for next-element and prev-element
+      Element* lastInPrevSegments(int activeStaff);  //<
+      Element* firstElementForNavigation(int staff); //<  These methods are used for navigation
+      Element* lastElementForNavigation(int staff);  //<  for next-element and prev-element
       Element* firstElementOfSegment(Segment* s, int activeStaff);
       Element* nextElementOfSegment(Segment* s, Element* e, int activeStaff);
       Element* prevElementOfSegment(Segment* s, Element* e, int activeStaff);
@@ -216,6 +215,8 @@ class Segment final : public Element {
       Element* nextElement(int activeStaff);
       using Element::prevElement;
       Element* prevElement(int activeStaff);
+
+      Element* firstElement(int staffIdx) const;
 
       std::vector<Shape> shapes()                     { return _shapes; }
       const std::vector<Shape>& shapes() const        { return _shapes; }

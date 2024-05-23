@@ -10,32 +10,32 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "mscore.h"
-#include "segment.h"
-#include "element.h"
-#include "chord.h"
-#include "note.h"
-#include "score.h"
-#include "beam.h"
-#include "tuplet.h"
-#include "measure.h"
 #include "barline.h"
+#include "beam.h"
+#include "clef.h"
+#include "chord.h"
+#include "element.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "instrchange.h"
+#include "line.h"
+#include "log.h"
+#include "keysig.h"
+#include "mscore.h"
+#include "measure.h"
+#include "note.h"
 #include "part.h"
 #include "repeat.h"
-#include "staff.h"
-#include "line.h"
-#include "hairpin.h"
+#include "score.h"
+#include "segment.h"
 #include "sig.h"
-#include "keysig.h"
+#include "staff.h"
 #include "staffstate.h"
-#include "instrchange.h"
-#include "clef.h"
-#include "timesig.h"
 #include "system.h"
-#include "xml.h"
+#include "tuplet.h"
+#include "timesig.h"
 #include "undo.h"
-#include "harmony.h"
-#include "log.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -1200,12 +1200,12 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
       }
 
 //---------------------------------------------------------
-//   firstElement
+//   firstElementForNavigation
 //   This function returns the first main element from a
 //   segment, or a barline if it spanns in the staff
 //---------------------------------------------------------
 
-Element* Segment::firstElement(int staff)
+Element* Segment::firstElementForNavigation(int staff)
       {
       if (isChordRestType()) {
             int strack = staff * VOICES;
@@ -1223,12 +1223,12 @@ Element* Segment::firstElement(int staff)
       }
 
 //---------------------------------------------------------
-//   lastElement
+//   lastElementForNavigation
 //   This function returns the last main element from a
 //   segment, or a barline if it spanns in the staff
 //---------------------------------------------------------
 
-Element* Segment::lastElement(int staff)
+Element* Segment::lastElementForNavigation(int staff)
       {
       if (segmentType() == SegmentType::ChordRest) {
             for (int voice = staff * VOICES + (VOICES - 1); voice/VOICES == staff; voice--) {
@@ -1253,18 +1253,18 @@ Element* Segment::lastElement(int staff)
 
 //---------------------------------------------------------
 //   getElement
-//   protected because it is used by the firstElement and
-//   lastElement functions when segment types that have
+//   protected because it is used by the firstElementForNavigation and
+//   lastElementForNavigation functions when segment types that have
 //   just one element to avoid duplicated code
 //
-//   Use firstElement, or lastElement instead of this
+//   Use firstElementForNavigation, or lastElementForNavigation instead of this
 //---------------------------------------------------------
 
 Element* Segment::getElement(int staff)
       {
       segmentType();
       if (segmentType() == SegmentType::ChordRest) {
-            return firstElement(staff);
+            return firstElementForNavigation(staff);
       }
       else if (segmentType() & (SegmentType::EndBarLine | SegmentType::BarLine | SegmentType::StartRepeatBarLine)) {
             for (int i = staff; i >= 0; i--) {
@@ -1358,7 +1358,7 @@ Element* Segment::lastAnnotation(Segment* s, int activeStaff)
 //   Searches for the next segment that has elements on the
 //   active staff and returns its first element
 //
-//   Uses firstElement so it also returns a barline if it
+//   Uses firstElementForNavigation so it also returns a barline if it
 //   spans into the active staff
 //--------------------------------------------------------
 
@@ -1371,7 +1371,7 @@ Element* Segment::firstInNextSegments(int activeStaff)
             if (!seg) //end of staff, or score
                   break;
 
-            re = seg->firstElement(activeStaff);
+            re = seg->firstElementForNavigation(activeStaff);
             }
 
       if (re)
@@ -1942,12 +1942,23 @@ Element* Segment::prevElement(int activeStaff)
             }
       }
 
+Element* Segment::firstElement(int staffIdx) const
+      {
+      int startTrack = staffIdx * VOICES;
+      int endTrack = startTrack + VOICES;
+      for (int track =  startTrack; track < endTrack; ++track) {
+            if (Element* item = _elist[track])
+                  return item;
+            }
+      return nullptr;
+      }
+
 //--------------------------------------------------------
 //   lastInPrevSegments
 //   Searches for the previous segment that has elements on
 //   the active staff and returns its last element
 //
-//   Uses lastElement so it also returns a barline if it
+//   Uses lastElementForNavigation so it also returns a barline if it
 //   spans into the active staff
 //--------------------------------------------------------
 
@@ -1977,7 +1988,7 @@ Element* Segment::lastInPrevSegments(int activeStaff)
                   //if (seg->segmentType() == SegmentType::EndBarLine)
                   //      score()->inputState().setTrack((activeStaff - 1) * VOICES ); //correction
 
-                  if ((re = seg->lastElement(activeStaff - 1)) != 0)
+                  if ((re = seg->firstElementForNavigation(activeStaff - 1)) != 0)
                         return re;
 
                   seg = seg->prev1MMenabled();

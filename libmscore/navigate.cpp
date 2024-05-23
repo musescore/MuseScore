@@ -10,24 +10,22 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "navigate.h"
-#include "element.h"
-#include "clef.h"
-#include "score.h"
-#include "note.h"
-#include "rest.h"
-#include "chord.h"
-#include "system.h"
-#include "segment.h"
-#include "harmony.h"
-#include "utils.h"
-#include "input.h"
-#include "measure.h"
-#include "page.h"
-#include "spanner.h"
-#include "system.h"
-#include "staff.h"
 #include "barline.h"
+#include "clef.h"
+#include "chord.h"
+#include "element.h"
+#include "input.h"
+#include "navigate.h"
+#include "measure.h"
+#include "note.h"
+#include "page.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "spanner.h"
+#include "staff.h"
+#include "system.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -773,7 +771,7 @@ Element* Score::prevElement()
                               int si = cr ? cr->staffIdx() : 0;
                               Segment* s = toMeasure(mb)->last();
                               if (s)
-                                    return s->lastElement(si);
+                                    return s->lastElementForNavigation(si);
                               }
                         else {
                               return mb;

@@ -763,8 +763,11 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
 
                   // A text should only be added at the start of the selection
                   // There shouldn't be a text at each element
-                  for (int staff = firstStaffIndex; staff < lastStaffIndex; staff++)
-                        applyDrop(score, viewer, firstSegment->firstElement(staff), element, modifiers);
+                  if (element->systemFlag())
+                        applyDrop(score, viewer, firstSegment->firstElementForNavigation(0), element, modifiers);
+                  else
+                        for (int staff = firstStaffIndex; staff < lastStaffIndex; staff++)
+                              applyDrop(score, viewer, firstSegment->firstElementForNavigation(staff), element, modifiers);
                   }
             else {
                   int track1 = sel.staffStart() * VOICES;

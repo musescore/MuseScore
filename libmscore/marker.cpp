@@ -11,10 +11,9 @@
 //=============================================================================
 
 #include "marker.h"
-#include "score.h"
-#include "sym.h"
-#include "xml.h"
 #include "measure.h"
+#include "score.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -304,12 +303,12 @@ Element* Marker::nextSegmentElement()
       Segment* seg;
       if (markerType() == Marker::Type::FINE) {
             seg = measure()->last();
-            return seg->firstElement(staffIdx());
+            return seg->firstElementForNavigation(staffIdx());
             }
       Measure* prevMeasure = measure()->prevMeasureMM();
       if (prevMeasure) {
             seg = prevMeasure->last();
-            return seg->firstElement(staffIdx());
+            return seg->firstElementForNavigation(staffIdx());
             }
       return Element::nextSegmentElement();
       }
