@@ -1072,7 +1072,7 @@ bool MeiExporter::writeBeam(const Beam* beam, const ChordRest* chordRest, bool& 
         return false;
     }
 
-    // Cross-staff beams are not supported in the export to MEI Basic
+    // Cross-measure beams are not supported in the export to MEI Basic
     if (beam->elements().front()->measure() != beam->elements().back()->measure()) {
         return true;
     }
