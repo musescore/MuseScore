@@ -224,8 +224,8 @@ public:
 
     EngravingItem* firstInNextSegments(staff_idx_t activeStaff);   //<
     EngravingItem* lastInPrevSegments(staff_idx_t activeStaff);     //<
-    EngravingItem* firstElement(staff_idx_t staff);                //<  These methods are used for navigation
-    EngravingItem* lastElement(staff_idx_t staff);                 //<  for next-element and prev-element
+    EngravingItem* firstElementForNavigation(staff_idx_t staff);                //<  These methods are used for navigation
+    EngravingItem* lastElementForNavigation(staff_idx_t staff);                 //<  for next-element and prev-element
     EngravingItem* firstElementOfSegment(Segment* s, staff_idx_t activeStaff);
     EngravingItem* nextElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff);
     EngravingItem* prevElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff);
@@ -241,6 +241,8 @@ public:
     EngravingItem* nextElement(staff_idx_t activeStaff);
     using EngravingItem::prevElement;
     EngravingItem* prevElement(staff_idx_t activeStaff);
+
+    EngravingItem* firstElement(staff_idx_t staffIdx) const;
 
     std::vector<Shape> shapes() { return m_shapes; }
     const std::vector<Shape>& shapes() const { return m_shapes; }

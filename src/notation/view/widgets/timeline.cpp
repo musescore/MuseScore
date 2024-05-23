@@ -2249,7 +2249,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                         std::vector<EngravingItem*> elements;
 
                         for (size_t j = 0; j < score()->nstaves(); j++) {
-                            EngravingItem* element = currSeg->firstElement(j);
+                            EngravingItem* element = currSeg->firstElementForNavigation(j);
                             if (element) {
                                 elements.push_back(element);
                             }

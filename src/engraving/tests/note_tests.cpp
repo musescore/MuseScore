@@ -514,7 +514,7 @@ TEST_F(Engraving_NoteTests, LongNoteAfterShort_183746)
     EXPECT_TRUE(s && s->segmentType() == SegmentType::ChordRest);
     EXPECT_TRUE(s->tick() == Fraction(1, 128));
 
-    EngravingItem* e = s->firstElement(0);
+    EngravingItem* e = s->firstElementForNavigation(0);
     EXPECT_TRUE(e && e->isNote());
 
     std::vector<Note*> nl = toNote(e)->tiedNotes();

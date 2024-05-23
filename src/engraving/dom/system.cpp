@@ -734,7 +734,7 @@ EngravingItem* System::prevSegmentElement()
             if (seg->segmentType() == SegmentType::EndBarLine) {
                 score()->inputState().setTrack((score()->staves().size() - 1) * VOICES);       //correction
             }
-            re = seg->lastElement(score()->staves().size() - 1);
+            re = seg->lastElementForNavigation(score()->staves().size() - 1);
         }
     }
     return re;
