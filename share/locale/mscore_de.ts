@@ -14493,7 +14493,7 @@ Bitte zuerst Takt auswählen und dann nochmal versuchen</translation>
         <location filename="../../mscore/musescore.cpp" line="1018"/>
         <location filename="../../mscore/musescore.cpp" line="2150"/>
         <source>Floating</source>
-        <translation type="unfinished"></translation>
+        <translation>Fließend</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2032"/>
@@ -15215,12 +15215,12 @@ um sie zur Liste auf der rechten Seite hinzuzufügen:</translation>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="123"/>
         <source>Add Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Note hinzufügen</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="127"/>
         <source>Change Playback Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiedergabedauer ändern</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="128"/>
@@ -20127,7 +20127,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3315"/>
         <source>Infer text types based on content where possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Ableiten von Texttypen basierend auf dem Inhalt, wo immer möglich</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3325"/>
@@ -27782,13 +27782,13 @@ fehlgeschlagen</translation>
         <location filename="../../mscore/shortcut.cpp" line="1941"/>
         <location filename="../../mscore/shortcut.cpp" line="1942"/>
         <source>Toggle mouse for note entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus für Noteneingabe umschalten</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1952"/>
         <location filename="../../mscore/shortcut.cpp" line="1953"/>
         <source>Toggle editing sound playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten der Klangwiedergabe umschalten</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2352"/>
@@ -33225,17 +33225,17 @@ Diese Partitur enthält bereits Auszüge. Lokale Taktarten zu ändern, während 
     <message>
         <location filename="../../libmscore/sym.cpp" line="3409"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmonisch interpretiertes Versetzungzeichen fast gleich wie</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3410"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmonisch interpretiertes Versetzungzeichen gleich</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3411"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmonisch interpretiertes Versetzungzeichen Tilde</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3417"/>
