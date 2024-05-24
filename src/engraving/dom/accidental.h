@@ -61,8 +61,6 @@ class Accidental final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Accidental)
     DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
-    M_PROPERTY2(int, stackingOrderOffset, setStackingOrderOffset, 0)
-
 public:
 
     Accidental* clone() const override { return new Accidental(*this); }
@@ -111,7 +109,7 @@ public:
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);
 
-    int stackingOrder() const { return ldata()->stackingNumber + _stackingOrderOffset; }
+    int stackingOrder() const { return ldata()->stackingNumber + m_stackingOrderOffset; }
 
     int line() const;
 
@@ -140,6 +138,9 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(Accidental)
 
+    int stackingOrderOffset() const { return m_stackingOrderOffset; }
+    void setStackingOrderOffset(int v) { m_stackingOrderOffset = v; }
+
 private:
 
     friend class Factory;
@@ -150,6 +151,7 @@ private:
     AccidentalBracket m_bracket = AccidentalBracket::NONE;
     AccidentalRole m_role = AccidentalRole::AUTO;
     bool m_isSmall = false;
+    int m_stackingOrderOffset = 0;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

@@ -308,7 +308,8 @@ double Accidental::subtype2centOffset(AccidentalType st)
 
 int Accidental::line() const
 {
-    return note()->line();
+    Note* n = note();
+    return n ? n->line() : 0;
 }
 
 //---------------------------------------------------------

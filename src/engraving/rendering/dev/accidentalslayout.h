@@ -36,94 +36,47 @@ struct ShapeElement;
 namespace mu::engraving::rendering::dev {
 class LayoutContext;
 
+using AccidentalGroups = std::vector<std::vector<Accidental*> >;
+
 class AccidentalsLayout
 {
 public:
     static void layoutAccidentals(const std::vector<Chord*>& chords, LayoutContext& ctx);
 
 private:
-    static std::vector<Accidental*> collectAccidentals(const std::vector<Chord*> chords);
+    struct AccidentalsLayoutContext {
+        AccidentalsLayoutContext (std::vector<Accidental*> acc, std::vector<Chord*> ch);
 
-    class AccidentalPlacementEngine
-    {
-    public:
-        AccidentalPlacementEngine(const std::vector<Accidental*>& allAccidentals, const std::vector<Chord*>& chords);
-        void doAccidentalPlacement();
+        std::vector<Accidental*> allAccidentals;
+        std::vector<Chord*> chords;
+        AccidentalGroups accidentalSubChords;
+        std::vector<Accidental*> stackedAccidentals;
+        Shape stackedAccidentalsShape;
+        Shape chordsShape;
+        size_t subChordsCountBeforeOctaveMerge = 1;
 
-    private:
-        void findOctaves();
-        void findSeconds();
+        double spatium() const { return m_spatium; }
+        double verticalAccidentalToAccidentalClearance() const { return m_verticalAccidentalToAccidentalClearance; }
+        double verticalSharpToSharpClearance() const { return m_verticalSharpToSharpClearance; }
+        double verticalAccidentalToChordClearance() const { return m_verticalAccidentalToChordClearance; }
+        double accidentalAccidentalDistance() const { return m_accidentalAccidentalDistance; }
+        double additionalPaddingForVerticals() const { return m_additionalPaddingForVerticals; }
+        double xPosSplitThreshold() const { return m_xPosSplitThreshold; }
+        double xVerticalAlignmentThreshold() const { return m_xVerticalAlignmentThreshold; }
+        double sharpAndNaturalLedgerLinePadding() const { return m_sharpAndNaturalLedgerLinePadding; }
+        double reducedFlatToNotePadding() const { return m_reducedFlatToNotePadding; }
+        double flatKerningOfFourth() const { return m_flatKerningOfFourth; }
+        double naturalKerningOfFourth() const { return m_naturalKerningOfFourth; }
 
-        void splitIntoSubChords();
-        void mergeAdjacentSubGroupsIfTooSmall(std::vector<std::vector<Accidental*> >& subGroups);
-        void mergeSubGroupsWithOctavesAcross(std::vector<std::vector<Accidental*> >& subGroups);
-
-        void createChordsShape();
-
-        void layoutSubChord(std::vector<Accidental*>& accidentals);
-        void stackAccidental(Accidental* acc);
-
-        void computeOrdering(std::vector<Accidental*>& accidentals);
-        std::vector<std::vector<Accidental*> > splitIntoPriorityGroups(std::vector<Accidental*>& accidentals);
-
-        std::vector<std::vector<Accidental*> > splitAccordingToAccidDisplacement(std::vector<Accidental*>& accidentals);
-        std::vector<std::vector<Accidental*> > groupAccidentalsByXPos(std::vector<Accidental*>& accidentals);
-        void moveOctavesToSecondGroup(std::vector<std::vector<Accidental*> >& subGroups);
-
-        std::vector<std::vector<Accidental*> > splitAccordingToNoteDisplacement(std::vector<Accidental*>& accidentals);
-        std::vector<std::vector<Accidental*> > groupAccidentalsByNoteXPos(std::vector<Accidental*>& accidentals);
-        void moveSecondsInSameGroup(std::vector<std::vector<Accidental*> >& subGroups);
-
-        void determineStackingOrder(std::vector<Accidental*>& accidentals);
-        void computeStandardOrdering(std::vector<Accidental*>& accidentals);
-        void computeCompactOrdering(std::vector<Accidental*>& accidentals);
-        void computeOrderingWithLeastColumns(std::vector<Accidental*>& accidentals);
-        void findAndInsertSecond(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced, std::list<Accidental*>& accidentalsToPlace);
-        bool findAndInsertOctave(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced, std::list<Accidental*>& accidentalsToPlace,
-                                 bool acceptAbove = true, bool acceptBelow = true);
-
-        void applyOrderingOffsets(std::vector<Accidental*>& accidentals);
-
-        double minAccidentalToChordDistance(Accidental* acc, const Shape& accShape);
-        double kerningLimitationsIntoChord(Accidental* acc, const Shape& accShape, const ShapeElement& chordElement);
-        double computePadding(Accidental* acc, const EngravingItem* chordElement);
-
-        double minAccidentalToAccidentalGroupDistance(Accidental* acc, Shape accShape, const Shape& accidentalsShape);
-        double kerningOfFourth(const Shape& accShape, const ShapeElement& accGroupShapeElement);
-        void checkZeroColumn(Accidental* acc);
-
-        double additionalPaddingForVerticals(const Accidental* acc, const EngravingItem* item);
-
-        void verticallyAlignAccidentals();
-        void collectVerticalSetsOfOffsetOctaves(
-            std::set<Accidental*>& accidentalsAlreadyGrouped, std::map<Accidental*, std::vector<Accidental*> >& verticalSets);
-        void collectVerticalSets(
-            std::set<Accidental*>& accidentalsAlreadyGrouped, std::map<Accidental*, std::vector<Accidental*> >& verticalSets);
-        void alignVerticalSets(std::vector<std::vector<Accidental*> >& vertSets);
-
-        double verticalPadding(const Accidental* acc1, const Accidental* acc2);
-        bool canFitInSameColumn(const Accidental* acc1, const Accidental* acc2);
-
-        double horizontalPadding(const Accidental* acc1, const Accidental* acc2);
-
-        static bool isExceptionOfFourth(const Accidental* acc1, const Accidental* acc2);
-        static bool isExceptionOfNaturalsSixth(const Accidental* acc1, const Accidental* acc2);
-        static bool isOctave(const Accidental* acc1, const Accidental* acc2);
-
-        static void setXposRelativeToSegment(Accidental* accidental, double x);
-        static double xPosRelativeToSegment(const Accidental* accidental);
-
-        static void sortTopDown(std::vector<Accidental*>& accidentals);
+        bool orderFollowNoteDisplacement() const { return m_orderFollowNoteDisplacement; }
+        bool alignOctavesAcrossSubChords() const { return m_alignOctavesAcrossSubChords; }
+        bool keepSecondsTogether() const { return m_keepSecondsTogether; }
+        bool alignOffsetOctaves() const { return m_alignOffsetOctaves; }
+        int largeGroupLimit() const { return m_largeGroupLimit; }
+        int smallGroupLimit() const { return m_smallGroupLimit; }
 
     private:
-        std::vector<Accidental*> m_allAccidentals;
-        std::vector<Chord*> m_chords;
-
-        std::vector<std::vector<Accidental*> > m_accidentalSubChords;
-        std::vector<Accidental*> m_stackedAccidentals;
-
-        Shape m_stackedAccidentalsShape;
-        Shape m_chordsShape;
+        void initConstants();
 
         double m_spatium = 0.0;
         double m_verticalAccidentalToAccidentalClearance = 0.0;
@@ -131,17 +84,94 @@ private:
         double m_verticalAccidentalToChordClearance = 0.0;
         double m_accidentalAccidentalDistance = 0.0;
         double m_additionalPaddingForVerticals = 0.0;
-
+        double m_xPosSplitThreshold = 0.0;
+        double m_xVerticalAlignmentThreshold = 0.0;
+        double m_sharpAndNaturalLedgerLinePadding = 0.0;
+        double m_reducedFlatToNotePadding = 0.0;
+        double m_flatKerningOfFourth = 0.0;
+        double m_naturalKerningOfFourth = 0.0;
         bool m_orderFollowNoteDisplacement = false;
         bool m_alignOctavesAcrossSubChords = false;
         bool m_keepSecondsTogether = false;
         bool m_alignOffsetOctaves = false;
 
-        size_t m_subChordsCountBeforeOctaveMerge = 1;
-
         static constexpr int m_smallGroupLimit = 3;
         static constexpr int m_largeGroupLimit = 6;
     };
+
+    static void collectAccidentals(const std::vector<Chord*> chords, std::vector<Accidental*>& allAccidentals,
+                                   std::vector<Accidental*>& redundantAccidentals);
+    static bool accidentalIsRedundant(const Accidental* acc, const std::vector<Accidental*>& allAccidentals);
+
+    static void doAccidentalPlacement(AccidentalsLayoutContext& ctx);
+
+    static void findOctavesAndSeconds(const AccidentalsLayoutContext& ctx);
+
+    static void splitIntoSubChords(AccidentalsLayoutContext& ctx);
+    static void mergeAdjacentSubGroupsIfTooSmall(AccidentalsLayoutContext& ctx);
+    static void mergeSubGroupsWithOctavesAcross(AccidentalsLayoutContext& ctx);
+
+    static void createChordsShape(AccidentalsLayoutContext& ctx);
+
+    static void layoutSubChord(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
+    static void stackAccidental(Accidental* acc, AccidentalsLayoutContext& ctx);
+
+    static void computeOrdering(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
+    static AccidentalGroups splitIntoPriorityGroups(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
+
+    static AccidentalGroups splitAccordingToAccidDisplacement(std::vector<Accidental*>& accidentals, const AccidentalsLayoutContext& ctx);
+    static AccidentalGroups groupAccidentalsByXPos(std::vector<Accidental*>& accidentals, const AccidentalsLayoutContext& ctx);
+    static void moveOctavesToSecondGroup(AccidentalGroups& subGroups);
+
+    static AccidentalGroups splitAccordingToNoteDisplacement(std::vector<Accidental*>& accidentals, const AccidentalsLayoutContext& ctx);
+    static AccidentalGroups groupAccidentalsByNoteXPos(const std::vector<Accidental*>& accidentals);
+    static void moveSecondsInSameGroup(AccidentalGroups& subGroups);
+
+    static void determineStackingOrder(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
+    static void computeStandardOrdering(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
+    static void computeCompactOrdering(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
+    static void computeOrderingWithLeastColumns(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
+    static void findAndInsertSecond(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced,
+                                    std::list<Accidental*>& accidentalsToPlace, AccidentalsLayoutContext& ctx);
+    static bool findAndInsertOctave(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced,
+                                    std::list<Accidental*>& accidentalsToPlace, AccidentalsLayoutContext& ctx, bool acceptAbove = true,
+                                    bool acceptBelow = true);
+
+    static void applyOrderingOffsets(std::vector<Accidental*>& accidentals);
+
+    static double minAccidentalToChordDistance(Accidental* acc, const Shape& accShape, const AccidentalsLayoutContext& ctx);
+    static double kerningLimitationsIntoChord(Accidental* acc, const Shape& accShape, const ShapeElement& chordElement,
+                                              const AccidentalsLayoutContext& ctx);
+    static double computePadding(Accidental* acc, const EngravingItem* chordElement, const AccidentalsLayoutContext& ctx);
+
+    static double minAccidentalToAccidentalGroupDistance(Accidental* acc, Shape accShape, const Shape& accidentalsShape,
+                                                         const AccidentalsLayoutContext& ctx);
+    static double kerningOfFourth(const Shape& accShape, const ShapeElement& accGroupShapeElement, const AccidentalsLayoutContext& ctx);
+    static void checkZeroColumn(Accidental* acc, const AccidentalsLayoutContext& ctx);
+
+    static double additionalPaddingForVerticals(const Accidental* acc, const EngravingItem* item, const AccidentalsLayoutContext& ctx);
+
+    static void verticallyAlignAccidentals(AccidentalsLayoutContext& ctx);
+    static void collectVerticalSetsOfOffsetOctaves(std::set<Accidental*>& accidentalsAlreadyGrouped, std::map<Accidental*,
+                                                                                                              std::vector<Accidental*> >& verticalSets, AccidentalsLayoutContext& ctx);
+    static void collectVerticalSets(std::set<Accidental*>& accidentalsAlreadyGrouped, std::map<Accidental*,
+                                                                                               std::vector<Accidental*> >& verticalSets,
+                                    AccidentalsLayoutContext& ctx);
+    static void alignVerticalSets(AccidentalGroups& vertSets, AccidentalsLayoutContext& ctx);
+
+    static double verticalPadding(const Accidental* acc1, const Accidental* acc2, const AccidentalsLayoutContext& ctx);
+    static bool canFitInSameColumn(const Accidental* acc1, const Accidental* acc2, AccidentalsLayoutContext& ctx);
+
+    static double horizontalPadding(const Accidental* acc1, const Accidental* acc2, const AccidentalsLayoutContext& ctx);
+
+    static bool isExceptionOfFourth(const Accidental* acc1, const Accidental* acc2);
+    static bool isExceptionOfNaturalsSixth(const Accidental* acc1, const Accidental* acc2);
+    static bool isOctave(const Accidental* acc1, const Accidental* acc2);
+
+    static void setXposRelativeToSegment(Accidental* accidental, double x);
+    static double xPosRelativeToSegment(const Accidental* accidental);
+
+    static void sortTopDown(std::vector<Accidental*>& accidentals);
 };
 }
 
