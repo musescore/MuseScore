@@ -70,4 +70,49 @@ Column {
         navigation.panel: root.navigationPanel
         navigation.row: bracketType.navigation.row + 1
     }
+
+    InspectorPropertyView {
+        id: stackingOrderOffset
+        visible: root.model ? root.model.isStackingOrderAvailable : false
+
+        navigationName: "Stacking order"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: smallAccidentalCheckBox.navigationRowEnd + 1
+        navigationRowEnd: moveRight.navigation.row
+
+        titleText: qsTrc("inspector", "Horizontal order")
+        propertyItem: root.model ? root.model.stackingOrderOffset : null
+
+        Row {
+            spacing: 4
+            width: parent.width
+            enabled: root.model ? root.model.isStackingOrderEnabled : false
+
+            FlatRadioButton {
+                id: moveLeft
+                width: 0.5 * parent.width - 2
+                iconCode: IconCode.ARROW_LEFT
+                checked: root.model ? root.model.stackingOrderOffset.value > 0 : false
+                onClicked: {
+                    root.model.stackingOrderOffset.value += 1
+                }
+
+                navigation.panel: root.navigationPanel
+                navigation.row: stackingOrderOffset.navigationRowStart + 1
+            }
+
+            FlatRadioButton {
+                id: moveRight
+                width: 0.5 * parent.width - 2
+                iconCode: IconCode.ARROW_RIGHT
+                checked: root.model ? root.model.stackingOrderOffset.value < 0 : false
+                onClicked: {
+                    root.model.stackingOrderOffset.value -= 1
+                }
+
+                navigation.panel: root.navigationPanel
+                navigation.row: moveLeft.navigation.row + 1
+            }
+        }
+    }
 }

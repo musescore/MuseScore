@@ -82,6 +82,7 @@
 #include "view/styledialog/beamspagemodel.h"
 #include "view/styledialog/bendstyleselector.h"
 #include "view/styledialog/tieplacementselector.h"
+#include "view/styledialog/accidentalgrouppagemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -187,6 +188,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<BeamsPageModel>("MuseScore.NotationScene", 1, 0, "BeamsPageModel");
     qmlRegisterType<BendStyleSelector>("MuseScore.NotationScene", 1, 0, "BendStyleSelector");
     qmlRegisterType<TiePlacementSelectorModel>("MuseScore.NotationScene", 1, 0, "TiePlacementSelectorModel");
+    qmlRegisterType<AccidentalGroupPageModel>("MuseScore.NotationScene", 1, 0, "AccidentalGroupPageModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 

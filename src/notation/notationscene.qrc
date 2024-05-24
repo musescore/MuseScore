@@ -43,5 +43,16 @@
         <file>qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggleWithImage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/followOffset-OFF.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/followOffset-ON.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/secondsAdjacent-OFF.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/secondsAdjacent-ON.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveSubchord-OFF.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveSubchord-ON.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-OFF.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-ON.png</file>
+
     </qresource>
 </RCC>

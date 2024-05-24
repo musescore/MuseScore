@@ -109,6 +109,10 @@ public:
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);
 
+    int stackingOrder() const { return ldata()->stackingNumber + m_stackingOrderOffset; }
+
+    int line() const;
+
     String accessibleInfo() const override;
 
     void computeMag();
@@ -124,9 +128,18 @@ public:
 
         std::vector<Sym> syms;
 
+        ld_field<int> stackingNumber = { "[Accidental] stackingNumber", 0 };
+        ld_field<int> verticalSubgroup = { "[Accidental] verticalSubgroup", 0 };
+        ld_field<int> column = { "[Accidental] column", 0 };
+        ld_field<std::vector<Accidental*> > octaves = { "[Accidental] octaves", std::vector<Accidental*> {} };
+        ld_field<std::vector<Accidental*> > seconds = { "[Accidental] seconds", std::vector<Accidental*> {} };
+
         bool isValid() const override { return EngravingItem::LayoutData::isValid() && !syms.empty(); }
     };
     DECLARE_LAYOUTDATA_METHODS(Accidental)
+
+    int stackingOrderOffset() const { return m_stackingOrderOffset; }
+    void setStackingOrderOffset(int v) { m_stackingOrderOffset = v; }
 
 private:
 
@@ -138,6 +151,7 @@ private:
     AccidentalBracket m_bracket = AccidentalBracket::NONE;
     AccidentalRole m_role = AccidentalRole::AUTO;
     bool m_isSmall = false;
+    int m_stackingOrderOffset = 0;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

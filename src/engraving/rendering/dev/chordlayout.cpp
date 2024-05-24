@@ -22,6 +22,8 @@
 #include <cfloat>
 
 #include "chordlayout.h"
+#include "accidentalslayout.h"
+#include "horizontalspacing.h"
 
 #include "containers.h"
 
@@ -104,12 +106,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     double chordX           = (item->noteType() == NoteType::NORMAL) ? item->ldata()->pos().x() : 0.0;
 
-    while (item->ledgerLines()) {
-        LedgerLine* l = item->ledgerLines()->next();
-        delete item->ledgerLines();
-        item->setLedgerLine(l);
-    }
-
     double lll    = 0.0;           // space to leave at left of chord
     double rrr    = 0.0;           // space to leave at right of chord
     double lhead  = 0.0;           // amount of notehead to left of chord origin
@@ -132,7 +128,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     for (Note* note : item->notes()) {
         TLayout::layoutNote(note, note->mutldata());
-
         double x1 = note->pos().x() + chordX;
         double x2 = x1 + note->headWidth();
         lll      = std::max(lll, -x1);
@@ -167,12 +162,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             }
         }
     }
-
-    //-----------------------------------------
-    //  create ledger lines
-    //-----------------------------------------
-
-    item->addLedgerLines();
 
     // A chord can have its own arpeggio and also be part of another arpeggio's span.  We need to lay out both of these arpeggios properly
     Arpeggio* oldSpanArp = item->spanArpeggio();
@@ -1990,7 +1979,16 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         layoutChords3(ctx.conf().style(), chords, notes, staff, ctx);
     }
 
+    layoutLedgerLines(chords);
+    AccidentalsLayout::layoutAccidentals(chords, ctx);
+    for (Chord* chord : chords) {
+        for (Chord* grace : chord->graceNotes()) {
+            AccidentalsLayout::layoutAccidentals({ grace }, ctx);
+        }
+    }
+
     layoutSegmentElements(segment, partStartTrack, partEndTrack, staffIdx, ctx);
+
     for (Chord* chord : chords) {
         Ornament* ornament = chord->findOrnament();
         if (ornament && ornament->showCueNote()) {
@@ -2097,182 +2095,6 @@ double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up, LayoutCont
     }
 
     return maxWidth;
-}
-
-//---------------------------------------------------------
-//   AcEl
-//---------------------------------------------------------
-
-struct AcEl {
-    Note* note;
-    double x;            // actual x position of this accidental relative to origin
-    double top;          // top of accidental bbox relative to staff
-    double bottom;       // bottom of accidental bbox relative to staff
-    int line;           // line of note
-    int next;           // index of next accidental of same pitch class (ascending list)
-    double width;        // width of accidental
-    double ascent;       // amount (in sp) vertical strokes extend above body
-    double descent;      // amount (in sp) vertical strokes extend below body
-    double rightClear;   // amount (in sp) to right of last vertical stroke above body
-    double leftClear;    // amount (in sp) to left of last vertical stroke below body
-};
-
-//---------------------------------------------------------
-//   resolveAccidentals
-//    lx = calculated position of rightmost edge of left accidental relative to origin
-//---------------------------------------------------------
-
-static bool resolveAccidentals(AcEl* left, AcEl* right, double& lx, double pd, double sp)
-{
-    AcEl* upper;
-    AcEl* lower;
-    if (left->line >= right->line) {
-        upper = right;
-        lower = left;
-    } else {
-        upper = left;
-        lower = right;
-    }
-
-    double gap = lower->top - upper->bottom;
-
-    // no conflict at all if there is sufficient vertical gap between accidentals
-    // the arrangement of accidentals into columns assumes accidentals an octave apart *do* clear
-    if (gap >= pd || lower->line - upper->line >= 7) {
-        return false;
-    }
-
-    double allowableOverlap = std::max(upper->descent, lower->ascent) - pd;
-
-    // accidentals that are "close" (small gap or even slight overlap)
-    if (std::abs(gap) <= 0.33 * sp) {
-        // acceptable with slight offset
-        // if one of the accidentals can subsume the overlap
-        // and both accidentals allow it
-        if (-gap <= allowableOverlap && std::min(upper->descent, lower->ascent) > 0.0) {
-            double align = std::min(left->width, right->width);
-            lx = std::min(lx, right->x + align - pd);
-            return true;
-        }
-    }
-
-    // amount by which overlapping accidentals will be separated
-    // for example, the vertical stems of two flat signs
-    // these need more space than we would need between non-overlapping accidentals
-    double overlapShift = pd * 1.41;
-
-    // accidentals with more significant overlap
-    // acceptable if one accidental can subsume overlap
-    if (left == lower && -gap <= allowableOverlap) {
-        double offset = std::max(left->rightClear, right->leftClear);
-        offset = std::min(offset, left->width) - overlapShift;
-        lx = std::min(lx, right->x + offset);
-        return true;
-    }
-
-    // accidentals with even more overlap
-    // can work if both accidentals can subsume overlap
-    if (left == lower && -gap <= upper->descent + lower->ascent - pd) {
-        double offset = std::min(left->rightClear, right->leftClear) - overlapShift;
-        if (offset > 0.0) {
-            lx = std::min(lx, right->x + offset);
-            return true;
-        }
-    }
-
-    // otherwise, there is real conflict
-    lx = std::min(lx, right->x - pd);
-    return true;
-}
-
-//---------------------------------------------------------
-//   layoutAccidental
-//---------------------------------------------------------
-
-static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me, AcEl* above, AcEl* below, double colOffset,
-                                                  std::vector<Note*>& leftNotes, double pnd,
-                                                  double pd, double sp)
-{
-    double lx = colOffset;
-    Accidental* acc = me->note->accidental();
-    double mag = acc->mag();
-    pnd *= mag;
-    pd *= mag;
-
-    Chord* chord = me->note->chord();
-    Staff* staff = chord->staff();
-    Fraction tick = chord->tick();
-
-    // extra space for ledger lines
-    double ledgerAdjust = 0.0;
-    double ledgerVerticalClear = 0.0;
-    bool ledgerAbove = chord->upNote()->line() <= -2;
-    bool ledgerBelow = chord->downNote()->line() >= staff->lines(tick) * 2;
-    if (ledgerAbove || ledgerBelow) {
-        // ledger lines are present
-        // check for collision with lines above & below staff
-        // note that on 1-line staff, both collisions are possible at once
-        // TODO: account for cutouts in accidental
-        double lds = staff->lineDistance(tick) * sp;
-        if ((ledgerAbove && me->top + lds <= pnd) || (ledgerBelow && staff->lines(tick) * lds - me->bottom <= pnd)) {
-            ledgerAdjust = -style.styleS(Sid::ledgerLineLength).val() * sp;
-            ledgerVerticalClear = style.styleS(Sid::ledgerLineWidth).val() * 0.5 * sp;
-            lx = std::min(lx, ledgerAdjust);
-        }
-    }
-
-    // clear left notes
-    size_t lns = leftNotes.size();
-    for (size_t i = 0; i < lns; ++i) {
-        Note* ln = leftNotes[i];
-        int lnLine = ln->line();
-        double lnTop = (lnLine - 1) * 0.5 * sp;
-        double lnBottom = lnTop + sp;
-        if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
-            double lnLedgerAdjust = 0.0;
-            if (lnLine <= -2 || lnLine >= staff->lines(tick) * 2) {
-                // left note has a ledger line we probably need to clear horizontally as well
-                // except for accidentals that clear the last extended ledger line vertically
-                // in these cases, the accidental may tuck closer
-                Note* lastLnNote = lnLine < 0 ? leftNotes[0] : leftNotes[lns - 1];
-                int lastLnLine = lastLnNote->line();
-                double ledgerY = (lastLnLine / 2) * sp;
-                if (me->line < 0 && ledgerY - me->bottom < ledgerVerticalClear) {
-                    lnLedgerAdjust = ledgerAdjust;
-                } else if (me->line > 0 && me->top - ledgerY < ledgerVerticalClear) {
-                    lnLedgerAdjust = ledgerAdjust;
-                }
-            }
-            // undercut note above if possible
-            if (lnBottom - me->top <= me->ascent - pnd) {
-                lx = std::min(lx, ln->x() + lnLedgerAdjust + me->rightClear);
-            } else {
-                lx = std::min(lx, ln->x() + lnLedgerAdjust);
-            }
-        } else if (lnTop > me->bottom) {
-            break;
-        }
-    }
-
-    // clear other accidentals
-    bool conflictAbove = false;
-    bool conflictBelow = false;
-
-    if (above) {
-        conflictAbove = resolveAccidentals(me, above, lx, pd, sp);
-    }
-    if (below) {
-        conflictBelow = resolveAccidentals(me, below, lx, pd, sp);
-    }
-    if (conflictAbove || conflictBelow) {
-        me->x = lx - acc->width() - acc->ldata()->bbox().x();
-    } else if (!RealIsNull(colOffset)) {
-        me->x = lx - pd - acc->width() - acc->ldata()->bbox().x();
-    } else {
-        me->x = lx - pnd - acc->width() - acc->ldata()->bbox().x();
-    }
-
-    return std::pair<double, double>(me->x, me->x + me->width);
 }
 
 //---------------------------------------------------------
@@ -2385,84 +2207,21 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
 void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& chords,
                                 const std::vector<Note*>& notes, const Staff* staff, LayoutContext& ctx)
 {
-    //---------------------------------------------------
-    //    layout accidentals
-    //    find column for dots
-    //---------------------------------------------------
-
     std::vector<Note*> leftNotes;   // notes to left of origin
     leftNotes.reserve(8);
-    std::vector<AcEl> aclist;         // accidentals
-    aclist.reserve(8);
-
-    // track columns of octave-separated accidentals
-    int columnBottom[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
     Fraction tick      =  notes.front()->chord()->segment()->tick();
     double sp           = staff->spatium(tick);
     double stepDistance = sp * staff->lineDistance(tick) * .5;
     int stepOffset     = staff->staffType(tick)->stepOffset();
 
-    double lx           = DBL_MAX;    // leftmost notehead position
     double upDotPosX    = 0.0;
     double downDotPosX  = 0.0;
 
     int nNotes = int(notes.size());
-    int nAcc = 0;
-    int prevSubtype = 0;
-    int prevLine = std::numeric_limits<int>::min();
 
     for (int i = nNotes - 1; i >= 0; --i) {
         Note* note     = notes[i];
-        Accidental* ac = note->accidental();
-        if (ac && ac->subtype() == prevSubtype && note->line() == prevLine) {
-            // we shouldn't have two of the same accidental on the same line.
-            // if we find one that is identical to the one before it, don't lay it out
-            ac->setbbox(RectF());
-            ac->setPos(PointF());
-        } else if (ac) {
-            prevLine = note->line();
-            prevSubtype = ac->subtype();
-            ac->computeMag();
-            TLayout::layoutItem(ac, ctx);
-            if (!ac->visible() || note->fixed()) {
-                ac->setPos(ac->ldata()->bbox().x() - ac->width(), 0.0);
-            } else {
-                AcEl acel;
-                acel.note   = note;
-                int line    = note->line();
-                acel.line   = line;
-                acel.x      = 0.0;
-                acel.top    = line * 0.5 * sp + ac->ldata()->bbox().top();
-                acel.bottom = line * 0.5 * sp + ac->ldata()->bbox().bottom();
-                acel.width  = ac->width();
-                PointF bboxNE = ac->symBbox(ac->symId()).topRight();
-                PointF bboxSW = ac->symBbox(ac->symId()).bottomLeft();
-                PointF cutOutNE = ac->symSmuflAnchor(ac->symId(), SmuflAnchorId::cutOutNE);
-                PointF cutOutSW = ac->symSmuflAnchor(ac->symId(), SmuflAnchorId::cutOutSW);
-                if (!cutOutNE.isNull()) {
-                    acel.ascent     = cutOutNE.y() - bboxNE.y();
-                    acel.rightClear = bboxNE.x() - cutOutNE.x();
-                } else {
-                    acel.ascent     = 0.0;
-                    acel.rightClear = 0.0;
-                }
-
-                if (!cutOutSW.isNull()) {
-                    acel.descent   = bboxSW.y() - cutOutSW.y();
-                    acel.leftClear = cutOutSW.x() - bboxSW.x();
-                } else {
-                    acel.descent   = 0.0;
-                    acel.leftClear = 0.0;
-                }
-
-                int pitchClass = (line + 700) % 7;
-                acel.next = columnBottom[pitchClass];
-                columnBottom[pitchClass] = nAcc;
-                aclist.push_back(acel);
-                ++nAcc;
-            }
-        }
 
         Chord* chord = note->chord();
         bool _up     = chord->up();
@@ -2503,16 +2262,6 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
             }
         }
         note->mutldata()->setPosX(x);
-
-        // find leftmost non-mirrored note to set as X origin for accidental layout
-        // a mirrored note that extends to left of segment X origin
-        // will displace accidentals only if there is conflict
-        double sx = x + chord->x();     // segment-relative X position of note
-        if (note->ldata()->mirror() && !chord->up() && sx < -note->headBodyWidth() / 2) {
-            leftNotes.push_back(note);
-        } else if (sx < lx) {
-            lx = sx;
-        }
 
         double xx = x + note->headBodyWidth() + chord->pos().x();
 
@@ -2577,12 +2326,6 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
     // Now, we can resolve note conflicts as a superchord
     placeDots(chords, notes);
 
-    // if there are no non-mirrored notes in a downstem chord,
-    // then use the stem X position as X origin for accidental layout
-    if (nNotes && static_cast<int>(leftNotes.size()) == nNotes) {
-        lx = notes.front()->chord()->stemPosX();
-    }
-
     // Look for conflicts in up-stem and down-stemmed chords. If conflicts, all dots are aligned
     // to the same vertical line. If no conflicts, each chords aligns the dots individually.
     bool conflict = false;
@@ -2613,201 +2356,24 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
             }
         }
     }
+}
 
-    if (nAcc == 0) {
-        return;
-    }
-
-    std::vector<int> umi;
-    double pd  = style.styleMM(Sid::accidentalDistance);
-    double pnd = style.styleMM(Sid::accidentalNoteDistance);
-    double colOffset = 0.0;
-
-    if (nAcc >= 2 && aclist[nAcc - 1].line - aclist[0].line >= 7) {
-        // accidentals spread over an octave or more
-        // set up columns for accidentals with octave matches
-        // these will start at right and work to the left
-        // unmatched accidentals will use zig zag approach (see below)
-        // starting to the left of the octave columns
-
-        int columnTop[7] = { -1, -1, -1, -1, -1, -1, -1 };
-
-        // find columns of octaves
-        for (int pc = 0; pc < 7; ++pc) {
-            if (columnBottom[pc] == -1) {
-                continue;
-            }
-            // calculate column height
-            for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
-                columnTop[pc] = j;
-            }
+void ChordLayout::layoutLedgerLines(const std::vector<Chord*>& chords)
+{
+    auto redoLedgerLines = [] (Chord* item) {
+        while (item->ledgerLines()) {
+            LedgerLine* l = item->ledgerLines()->next();
+            delete item->ledgerLines();
+            item->setLedgerLine(l);
         }
+        item->addLedgerLines();
+    };
 
-        // compute reasonable column order
-        // use zig zag
-        std::vector<int> column;
-        std::vector<int> unmatched;
-        int n = nAcc - 1;
-        for (int i = 0; i <= n; ++i, --n) {
-            int pc = (aclist[i].line + 700) % 7;
-            if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
-                if (!muse::contains(column, pc)) {
-                    column.push_back(pc);
-                }
-            } else {
-                unmatched.push_back(i);
-            }
-            if (i == n) {
-                break;
-            }
-            pc = (aclist[n].line + 700) % 7;
-            if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
-                if (!muse::contains(column, pc)) {
-                    column.push_back(pc);
-                }
-            } else {
-                unmatched.push_back(n);
-            }
+    for (Chord* item : chords) {
+        redoLedgerLines(item);
+        for (Chord* grace : item->graceNotes()) {
+            redoLedgerLines(grace);
         }
-        size_t nColumns = column.size();
-        size_t nUnmatched = unmatched.size();
-
-        // handle unmatched accidentals
-        for (size_t i = 0; i < nUnmatched; ++i) {
-            // first try to slot it into an existing column
-            AcEl* me = &aclist[unmatched[i]];
-            // find column
-            bool found = false;
-            for (size_t j = 0; j < nColumns; ++j) {
-                int pc = column[j];
-                int above = -1;
-                int below = -1;
-                // find slot within column
-                for (int k = columnBottom[pc]; k != -1; k = aclist[k].next) {
-                    if (aclist[k].line < me->line) {
-                        above = k;
-                        break;
-                    }
-                    below = k;
-                }
-                // check to see if accidental can fit in slot
-                double myPd = pd * me->note->accidental()->mag();
-                bool conflict2 = false;
-                if (above != -1 && me->top - aclist[above].bottom < myPd) {
-                    conflict2 = true;
-                } else if (below != -1 && aclist[below].top - me->bottom < myPd) {
-                    conflict2 = true;
-                }
-                if (!conflict2) {
-                    // insert into column
-                    found = true;
-                    me->next = above;
-                    if (above == -1) {
-                        columnTop[pc] = unmatched[i];
-                    }
-                    if (below != -1) {
-                        aclist[below].next = unmatched[i];
-                    } else {
-                        columnBottom[pc] = unmatched[i];
-                    }
-                    break;
-                }
-            }
-            // if no slot found, then add to list of unmatched accidental indices
-            if (!found) {
-                umi.push_back(unmatched[i]);
-            }
-        }
-        nAcc = static_cast<int>(umi.size());
-        if (nAcc > 1) {
-            std::sort(umi.begin(), umi.end());
-        }
-
-        bool alignLeft = style.styleB(Sid::alignAccidentalsLeft);
-
-        // through columns
-        for (size_t i = 0; i < nColumns; ++i) {
-            // column index
-            const int pc = column[i];
-
-            double minX = 0.0;
-            double maxX = 0.0;
-            AcEl* below = 0;
-            // through accidentals in this column
-            for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
-                std::pair<double, double> x = layoutAccidental(style, &aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
-                minX = std::min(minX, x.first);
-                maxX = std::min(maxX, x.second);
-                below = &aclist[j];
-            }
-
-            // align
-            int next = -1;
-            for (int j = columnBottom[pc]; j != -1; j = next) {
-                AcEl* current = &aclist[j];
-                next = current->next;
-                if (next != -1 && current->line == aclist[next].line) {
-                    continue;
-                }
-
-                if (alignLeft) {
-                    current->x = minX;
-                } else {
-                    current->x = maxX - current->width;
-                }
-            }
-            colOffset = minX;
-        }
-    } else {
-        for (int i = 0; i < nAcc; ++i) {
-            umi.push_back(i);
-        }
-    }
-
-    if (nAcc) {
-        // for accidentals with no octave matches, use zig zag approach
-        // layout right to left in pairs, (next) highest then lowest
-
-        AcEl* me = &aclist[umi[0]];
-        AcEl* above = 0;
-        AcEl* below = 0;
-
-        // layout top accidental
-        layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
-
-        // layout bottom accidental
-        int n = nAcc - 1;
-        if (n > 0) {
-            above = me;
-            me = &aclist[umi[n]];
-            layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
-        }
-
-        // layout middle accidentals
-        if (n > 1) {
-            for (int i = 1; i < n; ++i, --n) {
-                // next highest
-                below = me;
-                me = &aclist[umi[i]];
-                layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
-                if (i == n - 1) {
-                    break;
-                }
-                // next lowest
-                above = me;
-                me = &aclist[umi[n - 1]];
-                layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
-            }
-        }
-    }
-
-    for (const AcEl& e : aclist) {
-        // even though we initially calculate accidental position relative to segment
-        // we must record pos for accidental relative to note,
-        // since pos is always interpreted relative to parent
-        Note* note = e.note;
-        double x    = e.x + lx - (note->x() + note->chord()->x());
-        note->accidental()->setPos(x, 0);
     }
 }
 

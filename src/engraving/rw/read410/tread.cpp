@@ -1841,6 +1841,7 @@ void TRead::read(Accidental* a, XmlReader& e, ReadContext& ctx)
             a->setRole(TConv::fromXml(e.readAsciiText(), AccidentalRole::AUTO));
         } else if (tag == "small") {
             a->setSmall(e.readInt());
+        } else if (readProperty(a, tag, e, ctx, Pid::ACCIDENTAL_STACKING_ORDER_OFFSET)) {
         } else if (readItemProperties(a, e, ctx)) {
         } else {
             e.unknown();

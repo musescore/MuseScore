@@ -515,6 +515,7 @@ void TWrite::write(const Accidental* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::ACCIDENTAL_ROLE);
     writeProperty(item, xml, Pid::SMALL);
     writeProperty(item, xml, Pid::ACCIDENTAL_TYPE);
+    writeProperty(item, xml, Pid::ACCIDENTAL_STACKING_ORDER_OFFSET);
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }

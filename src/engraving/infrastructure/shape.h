@@ -161,7 +161,7 @@ public:
 
     bool contains(const PointF&) const;
     bool intersects(const RectF& rr) const;
-    bool intersects(const Shape&) const;
+    bool intersects(const Shape& other) const;
     bool clearsVertically(const Shape& a) const;
 
     void paint(muse::draw::Painter& painter) const;
