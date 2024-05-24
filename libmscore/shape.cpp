@@ -338,7 +338,7 @@ void testShapes()
       b.add(QRectF(0, 0, 10, 10));
       d = a.minHorizontalDistance(b);
       printf("      minHDistance (10.0): %f", d);
-      if (!qFuzzyCompare(d, 10.0)
+      if (!qFuzzyCompare(d, 10.0))
             printf("   =====error");
       printf("\n");
 
