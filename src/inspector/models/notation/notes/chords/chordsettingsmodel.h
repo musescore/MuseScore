@@ -31,6 +31,7 @@ class ChordSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * isStemless READ isStemless CONSTANT)
     Q_PROPERTY(PropertyItem * showStemSlash READ showStemSlash CONSTANT)
+    Q_PROPERTY(PropertyItem * combineVoice READ combineVoice CONSTANT)
 
     Q_PROPERTY(bool showStemSlashVisible READ showStemSlashVisible NOTIFY showStemSlashVisibleChanged)
     Q_PROPERTY(bool showStemSlashEnabled READ showStemSlashEnabled NOTIFY showStemSlashEnabledChanged)
@@ -40,6 +41,7 @@ public:
 
     PropertyItem* isStemless() const;
     PropertyItem* showStemSlash() const;
+    PropertyItem* combineVoice() const;
 
     bool showStemSlashVisible() const;  //  chord is grace
     bool showStemSlashEnabled() const;  //  chord is not stemless
@@ -63,6 +65,7 @@ private:
 
     PropertyItem* m_isStemless = nullptr;
     PropertyItem* m_showStemSlash = nullptr;
+    PropertyItem* m_combineVoice = nullptr;
 
     bool m_showStemSlashVisible = false;
     bool m_showStemSlashEnabled = false;
