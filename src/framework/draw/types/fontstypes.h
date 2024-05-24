@@ -95,6 +95,8 @@ struct FaceKey {
     int pixelSize = 0;
 
     FaceKey() = default;
+    FaceKey(const FontDataKey& dk, Font::Type t, int ps)
+        : dataKey(dk), type(t), pixelSize(ps) {}
 
     inline bool operator==(const FaceKey& o) const
     {
@@ -125,7 +127,7 @@ inline int pixelSizeForFont(const Font& f)
 
 inline FaceKey faceKeyForFont(const Font& f)
 {
-    return FaceKey{ dataKeyForFont(f), f.type(), pixelSizeForFont(f) };
+    return FaceKey(dataKeyForFont(f), f.type(), pixelSizeForFont(f));
 }
 
 struct Sdf {
