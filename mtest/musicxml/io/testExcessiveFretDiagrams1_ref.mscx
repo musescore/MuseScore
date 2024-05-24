@@ -145,6 +145,45 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Harmony>
+            <root>19</root>
+            <name>7</name>
+            </Harmony>
+          <Harmony>
+            <root>14</root>
+            </Harmony>
+          <Harmony>
+            <root>14</root>
+            <name>m</name>
+            </Harmony>
+          <Harmony>
+            <root>18</root>
+            <name>7</name>
+            </Harmony>
+          <Harmony>
+            <root>13</root>
+            <name>7</name>
+            </Harmony>
+          <Harmony>
+            <root>15</root>
+            <name>m</name>
+            </Harmony>
+          <Harmony>
+            <root>17</root>
+            <name>7</name>
+            </Harmony>
+          <Harmony>
+            <root>19</root>
+            <name>7</name>
+            </Harmony>
+          <Harmony>
+            <root>15</root>
+            <name>7</name>
+            </Harmony>
+          <Harmony>
+            <root>17</root>
+            <name>7</name>
+            </Harmony>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
