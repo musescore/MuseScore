@@ -40,11 +40,14 @@ using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
 
+using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
+using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
+
 struct PlaybackParam;
 using PlaybackParamList = std::vector<PlaybackParam>;
 using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
 
-using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelMap, PlaybackParamMap>;
+using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamMap>;
 using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamMap>;
 
 struct ArrangementContext
@@ -306,7 +309,7 @@ static const std::string ORDINARY_PLAYING_TECHNIQUE_CODE("ordinary_technique");
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
-    DynamicLevelMap dynamicLevelMap;
+    DynamicLevelLayers dynamics;
     PlaybackParamMap paramMap;
 
     MainStreamChanges mainStream;
@@ -316,7 +319,7 @@ struct PlaybackData {
     {
         return originEvents == other.originEvents
                && setupData == other.setupData
-               && dynamicLevelMap == other.dynamicLevelMap
+               && dynamics == other.dynamics
                && paramMap == other.paramMap;
     }
 

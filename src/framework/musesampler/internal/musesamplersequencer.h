@@ -67,7 +67,7 @@ public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                 const mpe::PlaybackParamMap& params) override;
 
 private:
@@ -80,7 +80,7 @@ private:
 
     void loadParams(const mpe::PlaybackParamMap& changes);
     void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
-    void loadDynamicEvents(const mpe::DynamicLevelMap& changes);
+    void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
     void addTextArticulation(const std::string& articulationCode, long long startUs, ms_Track track);

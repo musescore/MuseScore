@@ -544,7 +544,9 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
-    const DynamicLevelMap& dynamicLevelMap = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamicLevelMap;
+    const DynamicLevelLayers& dynamics = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamics;
+    ASSERT_FALSE(dynamics.empty());
+    const DynamicLevelMap& dynamicLevelMap = dynamics.begin()->second;
 
     // [THEN] Dynamic level map matches expectations
     EXPECT_EQ(dynamicLevelMap.size(), 51);
@@ -842,7 +844,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelMap&,
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
                                                                    const PlaybackParamMap&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });

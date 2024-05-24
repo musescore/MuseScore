@@ -165,7 +165,7 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
     updateOffSequenceIterator();
 }
 
-void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& events, const DynamicLevelMap& dynamics,
+void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& events, const DynamicLevelLayers& dynamics,
                                                   const PlaybackParamMap& params)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
@@ -305,13 +305,19 @@ void MuseSamplerSequencer::loadNoteEvents(const PlaybackEventsMap& changes)
     }
 }
 
-void MuseSamplerSequencer::loadDynamicEvents(const DynamicLevelMap& changes)
+void MuseSamplerSequencer::loadDynamicEvents(const DynamicLevelLayers& changes)
 {
-    for (ms_Track track : allTracks()) {
-        for (const auto& pair : changes) {
-            m_samplerLib->addDynamicsEvent(m_sampler, track, pair.first, dynamicLevelRatio(pair.second));
+    /* TODO
+    for (const auto& layer : changes) {
+        ms_Track track = findTrack(layer.first);
+        IF_ASSERT_FAILED(track) {
+            continue;
         }
-    }
+
+        for (const auto& dynamic : layer.second) {
+            m_samplerLib->addDynamicsEvent(m_sampler, track, dynamic.first, dynamicLevelRatio(dynamic.second));
+        }
+    }*/
 }
 
 void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)

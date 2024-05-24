@@ -48,7 +48,7 @@ void VstSequencer::init(ParamsMapping&& mapping)
     m_mapping = std::move(mapping);
     m_inited = true;
 
-    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelMap, {});
+    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelLayers, {});
 
     m_playbackEventsMap.clear();
 }
@@ -65,10 +65,10 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, c
     updateOffSequenceIterator();
 }
 
-void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                           const mpe::PlaybackParamMap&)
 {
-    m_dynamicLevelMap = dynamics;
+    m_dynamicLevelLayers = dynamics;
 
     if (!m_inited) {
         m_playbackEventsMap = events;
@@ -121,10 +121,12 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
     }
 }
 
-void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& dynamics)
+void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers)
 {
-    for (const auto& pair : dynamics) {
-        destination[pair.first].emplace(expressionLevel(pair.second));
+    for (const auto& layer : layers) {
+        for (const auto& dynamic : layer.second) {
+            destination[dynamic.first].emplace(expressionLevel(dynamic.second));
+        }
     }
 }
 

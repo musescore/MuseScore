@@ -26,6 +26,7 @@
 #include "utils/scorerw.h"
 
 #include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/repeatlist.h"
 
 #include "playback/playbackcontext.h"
@@ -91,7 +92,7 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
         for (const auto& pair : f_to_fff_curve) {
             mpe::timestamp_t time = timestampFromTicks(score, f_to_fff_startTick + pair.first + tickPositionOffset);
             ASSERT_FALSE(muse::contains(expectedDynamics, time));
-            expectedDynamics.emplace(time, static_cast<int>(f) + pair.second);
+            expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
         }
     }
 
@@ -105,16 +106,21 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
     for (const auto& pair : ppp_to_p_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
         ASSERT_FALSE(muse::contains(expectedDynamics, time));
-        expectedDynamics.emplace(time, static_cast<int>(ppp) + pair.second);
+        expectedDynamics.emplace(time, ppp + static_cast<dynamic_level_t>(pair.second));
     }
 
     ASSERT_FALSE(expectedDynamics.empty());
 
-    // [WHEN] Get the actual dynamics map
-    DynamicLevelMap actualDynamics = ctx.dynamicLevelMap(score);
+    // [WHEN] Get the actual dynamics
+    DynamicLevelLayers layers = ctx.dynamicLevelLayers(score);
 
-    // [THEN] The dynamics map matches the expectation
-    EXPECT_EQ(actualDynamics, expectedDynamics);
+    // [THEN] The dynamics match the expectation
+    EXPECT_FALSE(layers.empty());
+
+    for (const auto& layer : layers) {
+        const DynamicLevelMap& actualDynamics = layer.second;
+        EXPECT_EQ(actualDynamics, expectedDynamics);
+    }
 
     delete score;
 }
@@ -134,13 +140,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     // [WHEN] Parse dynamics for the 1st instrument (with measure repeats)
     ctx.update(parts.at(0)->id(), score);
 
-    // [WHEN] Get the actual dynamics map
-    DynamicLevelMap actualDynamics = ctx.dynamicLevelMap(score);
-
-    // [THEN] The dynamics map matches the expectation
     DynamicLevelMap expectedDynamics {
-        { timestampFromTicks(score, 0), dynamicLevelFromType(mpe::DynamicType::Natural) },
-
         // 2nd measure
         { timestampFromTicks(score, 1920), dynamicLevelFromType(mpe::DynamicType::ppp) }, // 1st quarter note
         { timestampFromTicks(score, 3360), dynamicLevelFromType(mpe::DynamicType::p) }, // 4th quarter note
@@ -158,14 +158,22 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
         { timestampFromTicks(score, 9120), dynamicLevelFromType(mpe::DynamicType::fff) },
     };
 
-    EXPECT_EQ(actualDynamics, expectedDynamics);
+    // [WHEN] Get the actual dynamics
+    DynamicLevelLayers layers = ctx.dynamicLevelLayers(score);
+
+    // [THEN] The dynamics match the expectation
+    EXPECT_FALSE(layers.empty());
+    for (const auto& layer : layers) {
+        const DynamicLevelMap& actualDynamics = layer.second;
+        EXPECT_EQ(actualDynamics, expectedDynamics);
+    }
 
     // [WHEN] Parse dynamics for the 2nd instrument (without measure repeats)
     ctx.clear();
     ctx.update(parts.at(1)->id(), score);
 
-    // [WHEN] Get the actual dynamics map
-    actualDynamics = ctx.dynamicLevelMap(score);
+    // [WHEN] Get the actual dynamics
+    layers = ctx.dynamicLevelLayers(score);
 
     // [THEN] Measure repeat on the 1st instrument doesn't affect other instruments
     expectedDynamics = {
@@ -176,7 +184,77 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
         { timestampFromTicks(score, 3840), dynamicLevelFromType(mpe::DynamicType::ff) },
     };
 
-    EXPECT_EQ(actualDynamics, expectedDynamics);
+    // [THEN] The dynamics match the expectation
+    EXPECT_FALSE(layers.empty());
+    for (const auto& layer : layers) {
+        const DynamicLevelMap& actualDynamics = layer.second;
+        EXPECT_EQ(actualDynamics, expectedDynamics);
+    }
+}
+
+TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
+{
+    // [GIVEN]
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_on_voices.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing dynamics
+    PlaybackContext ctx;
+
+    // [WHEN] Parse dynamics
+    const Part* part = parts.front();
+    ctx.update(part->id(), score);
+
+    // [WHEN] Get the actual dynamics
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(score);
+
+    // [THEN] The dynamics match the expectation
+    DynamicLevelLayers expectedLayers;
+
+    auto addDynToAllStavesAndVoices = [score, part, &expectedLayers](mpe::DynamicType dyn, int tick) {
+        for (track_idx_t trackIdx = part->startTrack(); trackIdx < part->endTrack(); ++trackIdx) {
+            expectedLayers[static_cast<layer_idx_t>(trackIdx)][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
+        }
+    };
+
+    auto addDynToVoice = [score, part, &expectedLayers](mpe::DynamicType dyn, voice_idx_t voiceIdx, int tick) {
+        staff_idx_t firstStaffIdx = part->staves().front()->idx();
+        staff_idx_t lastStaffIdx = firstStaffIdx + part->nstaves();
+
+        for (staff_idx_t staffIdx = firstStaffIdx; staffIdx < lastStaffIdx; ++staffIdx) {
+            layer_idx_t layerIdx = static_cast<layer_idx_t>(staff2track(staffIdx, voiceIdx));
+            expectedLayers[layerIdx][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
+        }
+    };
+
+    auto addDynToStaffAndVoice = [score, &expectedLayers](mpe::DynamicType dyn, staff_idx_t staffIdx, voice_idx_t voiceIdx, int tick) {
+        layer_idx_t layerIdx = static_cast<layer_idx_t>(staff2track(staffIdx, voiceIdx));
+        expectedLayers[layerIdx][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
+    };
+
+    // 1st measure
+    addDynToAllStavesAndVoices(mpe::DynamicType::ppp, 0);
+
+    // 2nd measure
+    addDynToVoice(mpe::DynamicType::pp, 1, 1920); // 2nd voice (all staves)
+
+    // 3rd measure
+    addDynToVoice(mpe::DynamicType::mf, 0, 3840); // 1st voice (all staves)
+    addDynToVoice(mpe::DynamicType::p, 1, 3840); // 2nd voice (all staves)
+
+    // 4th measure
+    for (voice_idx_t voiceIdx = 0; voiceIdx < VOICES; ++voiceIdx) {
+        addDynToStaffAndVoice(mpe::DynamicType::f, 0, voiceIdx, 5760); // 1st staff only
+    }
+
+    // 5th measure
+    addDynToAllStavesAndVoices(mpe::DynamicType::ff, 7680);
+
+    EXPECT_EQ(actualLayers, expectedLayers);
+
+    delete score;
 }
 
 TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
