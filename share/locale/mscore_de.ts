@@ -5242,7 +5242,7 @@ Per Voreinstellung werden sie so platziert, dass ihre rechten Kanten auf gleiche
     <message>
         <location filename="../../mscore/exportdialog.ui" line="264"/>
         <source>Combined into a single file</source>
-        <translation>Combiniert zu einer einnzigen Datei</translation>
+        <translation>Kombiniert zu einer einzigen Datei</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="404"/>
