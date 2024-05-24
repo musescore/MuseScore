@@ -113,7 +113,7 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <ticks>960</ticks>
-              <ticks_f>1/2</ticks_f>
+              <ticks_f>4/8</ticks_f>
               <text>due</text>
               </Lyrics>
             <Note>
@@ -168,7 +168,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <ticks>2400</ticks>
-              <ticks_f>5/4</ticks_f>
+              <ticks_f>20/16</ticks_f>
               <text>ter</text>
               </Lyrics>
             <Note>
