@@ -48,6 +48,7 @@
       </score-part>
     <part-group type="start" number="1">
       <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
       </part-group>
     <score-part id="P3">
       <part-name>Electric Guitar</part-name>
