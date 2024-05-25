@@ -35,6 +35,9 @@ public:
 
     bool meiExportLayout() const override;
     void setMeiExportLayout(bool value) override;
+
+    bool meiUseMscoreIds() const override;
+    void setMeiUseMscoreIds(bool value) override;
 };
 }
 

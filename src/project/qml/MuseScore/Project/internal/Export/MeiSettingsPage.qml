@@ -39,4 +39,18 @@ ExportSettingsPage {
             root.model.meiExportLayout = !checked
         }
     }
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Use MuseScore Ids")
+
+        navigation.name: "MeiUseMscoreIds"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 1
+
+        checked: root.model.meiUseMscoreIds
+        onClicked: {
+            root.model.meiUseMscoreIds = !checked
+        }
+    }
 }

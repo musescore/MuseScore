@@ -94,7 +94,7 @@ using namespace mu::engraving;
 
 bool MeiExporter::write(std::string& meiData)
 {
-    bool useMscoreIds = true; //configuration()->meiUseMscoreIds();
+    bool useMscoreIds = configuration()->meiUseMscoreIds();
 
     m_uids = UIDRegister::instance();
     m_xmlIDCounter = 0;
@@ -2551,7 +2551,7 @@ std::string MeiExporter::generateHashID()
 
 std::string MeiExporter::getXmlIdFor(const EngravingItem* item, const char c)
 {
-    bool useMscoreIds = true; //configuration()->meiUseMscoreIds();
+    bool useMscoreIds = configuration()->meiUseMscoreIds();
 
     if (useMscoreIds) {
         return "mscore-" + item->eid().toStdString();
