@@ -61,7 +61,7 @@
                            <note xml:id="nrmm3ez" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t19ctd6p" type="mscore-infer-from-text" startid="#n1tvv7rf" midi.bpm="80.000000">
+                     <tempo xml:id="t19ctd6p" type="mscore-infer-from-text" tstamp="1.000000" midi.bpm="80.000000">
                         <rend glyph.auth="smufl"></rend> = 80</tempo>
                   </measure>
                   <measure xml:id="m1yzdfof" n="2">
@@ -79,7 +79,7 @@
                            <note xml:id="n1oc3itk" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t1qcdn3j" type="mscore-infer-from-text" startid="#n1bhkdyq" midi.bpm="120.000000">
+                     <tempo xml:id="t1qcdn3j" type="mscore-infer-from-text" tstamp="1.000000" midi.bpm="120.000000">
                         <rend glyph.auth="smufl"></rend> = 120</tempo>
                   </measure>
                   <measure xml:id="m1h89rz0" n="3">
@@ -97,7 +97,7 @@
                            <note xml:id="n1rf6jms" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="td9e89e" type="mscore-infer-from-text" startid="#n1oa6z4q" midi.bpm="160.000000">
+                     <tempo xml:id="td9e89e" type="mscore-infer-from-text" tstamp="1.000000" midi.bpm="160.000000">
                         <rend glyph.auth="smufl"></rend> = 80</tempo>
                   </measure>
                   <measure xml:id="m13fajcg" n="4">
@@ -115,7 +115,7 @@
                            <note xml:id="nt1fnmr" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t1ydvqo1" startid="#n13wfzmo" midi.bpm="172.000000">Vivace</tempo>
+                     <tempo xml:id="t1ydvqo1" tstamp="1.000000" midi.bpm="172.000000">Vivace</tempo>
                   </measure>
                   <measure xml:id="mti300x" n="5">
                      <staff xml:id="m5s1" n="1">
@@ -132,7 +132,7 @@
                            <note xml:id="nk9ewxf" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t13pakdc" startid="#n1jwj581" midi.bpm="187.000000">Presto</tempo>
+                     <tempo xml:id="t13pakdc" tstamp="1.000000" midi.bpm="187.000000">Presto</tempo>
                   </measure>
                   <measure xml:id="m86cvw0" n="6">
                      <staff xml:id="m6s1" n="1">
@@ -149,7 +149,7 @@
                            <note xml:id="nxo2jts" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t1pqrmiv" type="mscore-infer-from-text" startid="#ntyy4dw" midi.bpm="120.000000">
+                     <tempo xml:id="t1pqrmiv" type="mscore-infer-from-text" tstamp="1.000000" midi.bpm="120.000000">
                         <rend glyph.auth="smufl"></rend> = <rend glyph.auth="smufl"></rend>
                      </tempo>
                   </measure>
@@ -168,7 +168,7 @@
                            <note xml:id="nzl59q9" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t1egyk2b" type="mscore-infer-from-text" startid="#n1v3yffv" midi.bpm="120.000000">
+                     <tempo xml:id="t1egyk2b" type="mscore-infer-from-text" tstamp="1.000000" midi.bpm="120.000000">
                         <rend glyph.auth="smufl"></rend> = <rend glyph.auth="smufl"></rend>
                      </tempo>
                   </measure>
@@ -187,7 +187,7 @@
                            <note xml:id="nowkwf8" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t16u6fwq" startid="#n7yeykm" midi.bpm="92.000000">Andante (<rend glyph.auth="smufl"></rend> = 120)</tempo>
+                     <tempo xml:id="t16u6fwq" tstamp="1.000000" midi.bpm="92.000000">Andante (<rend glyph.auth="smufl"></rend> = 120)</tempo>
                   </measure>
                   <measure xml:id="mdoorsi" n="9">
                      <staff xml:id="m9s1" n="1">
@@ -268,7 +268,7 @@
                            <note xml:id="nopyavo" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t4t06bt" startid="#n139bhyx" midi.bpm="144.000000">Allegro<lb />molto</tempo>
+                     <tempo xml:id="t4t06bt" tstamp="1.000000" midi.bpm="144.000000">Allegro<lb />molto</tempo>
                   </measure>
                   <measure xml:id="m1fq65a7" n="14">
                      <staff xml:id="m14s1" n="1">

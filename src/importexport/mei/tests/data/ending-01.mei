@@ -57,7 +57,7 @@
                            <note xml:id="nj5abn7" dur="1" pname="b" oct="2" />
                         </layer>
                      </staff>
-                     <tempo xml:id="t1sz2k2m" type="mscore-infer-from-text" startid="#niroceo" midi.bpm="320.000000">
+                     <tempo xml:id="t1sz2k2m" type="mscore-infer-from-text" tstamp="1.000000" midi.bpm="320.000000">
                         <rend glyph.auth="smufl"></rend> = 160</tempo>
                   </measure>
                   <ending xml:id="e56vjvc" label="1." type="mscore-ending-1">
