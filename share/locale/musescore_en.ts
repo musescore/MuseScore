@@ -25683,17 +25683,17 @@ failed.</translation>
         <translation type="unfinished">Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="840"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="852"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronome</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="850"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="862"/>
         <source>Chords</source>
         <translation type="unfinished">Chords</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1169"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1181"/>
         <source>Loading audio samples</source>
         <translation type="unfinished">Loading audio samples</translation>
     </message>
@@ -27808,22 +27808,22 @@ failed.</translation>
         <translation type="unfinished">Enter shortcut sequence</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="73"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="84"/>
         <source>Define keyboard shortcut</source>
         <translation type="unfinished">Define keyboard shortcut</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="103"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="114"/>
         <source>Old shortcut:</source>
         <translation type="unfinished">Old shortcut:</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="116"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="127"/>
         <source>New shortcut:</source>
         <translation type="unfinished">New shortcut:</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="126"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="140"/>
         <source>Type to set shortcut</source>
         <translation type="unfinished">Type to set shortcut</translation>
     </message>
