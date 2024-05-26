@@ -73,7 +73,7 @@ enum ElisionType {
 #define HARMONY_TYPE "mscore-"
 // The @type attribute prefix for jump type in <repeatMark>
 #define JUMP_TYPE "mscore-jump-"
-// The @type attribute prefix for measure repeat cound in <measure>
+// The @type attribute prefix for measure repeat count in <measure>
 #define MEASURE_REPEAT_TYPE "mscore-repeat-"
 // The @type attribute prefix for marker type in <repeatMark>
 #define MARKER_TYPE "mscore-marker-"
