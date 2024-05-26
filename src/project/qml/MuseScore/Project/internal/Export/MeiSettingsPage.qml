@@ -44,13 +44,13 @@ ExportSettingsPage {
         width: parent.width
         text: qsTrc("project/export", "Use MuseScore element IDs")
 
-        navigation.name: "MeiUseMscoreIds"
+        navigation.name: "MeiUseMuseScoreIds"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationOrder + 1
 
-        checked: root.model.meiUseMscoreIds
+        checked: root.model.meiUseMuseScoreIds
         onClicked: {
-            root.model.meiUseMscoreIds = !checked
+            root.model.meiUseMuseScoreIds = !checked
         }
     }
 }
