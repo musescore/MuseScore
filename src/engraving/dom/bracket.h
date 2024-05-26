@@ -79,8 +79,8 @@ public:
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
 
-    Color color() const override { return m_bi->color(); }
-
+    Color color() const override { return m_bi->bracketColor(); }
+    
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 

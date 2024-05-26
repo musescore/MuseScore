@@ -502,6 +502,10 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
             writeProperty(item, xml, pid);
         }
     }
+    
+    if (item->color() != engravingConfiguration()->defaultColor()) {
+        xml.tagProperty(Pid::COLOR, item->color());
+    }
 
     writeProperty(item, xml, Pid::POSITION_LINKED_TO_MASTER);
     writeProperty(item, xml, Pid::APPEARANCE_LINKED_TO_MASTER);
@@ -2331,7 +2335,7 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("trackName", item->partName());
 
     if (item->color() != Part::DEFAULT_COLOR) {
-        xml.tag("color", item->color());
+        xml.tagProperty(Pid::COLOR, item->color());
     }
 
     if (item->preferSharpFlat() != PreferSharpFlat::AUTO) {
@@ -2594,6 +2598,9 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         bool v = i->visible();
         if (a != BracketType::NO_BRACKET || b > 0) {
             xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c }, { "visible", v } });
+        }
+        if (i->color() != engravingConfiguration()->defaultColor()) {
+            xml.tagProperty(Pid::COLOR, item->color());
         }
     }
 

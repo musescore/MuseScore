@@ -177,7 +177,19 @@ size_t Staff::bracketSpan(size_t idx) const
 }
 
 //---------------------------------------------------------
-//   setBracket
+//   bracketColor
+//---------------------------------------------------------
+
+Color Staff::bracketColor(size_t idx) const
+{
+    if (idx < m_brackets.size()) {
+        return m_brackets[idx]->bracketColor();
+    }
+    return 0x000000;
+}
+
+//---------------------------------------------------------
+//   setBracketType
 //---------------------------------------------------------
 
 void Staff::setBracketType(size_t idx, BracketType val)
@@ -229,6 +241,20 @@ void Staff::setBracketSpan(size_t idx, size_t val)
     fillBrackets(idx);
     m_brackets[idx]->setBracketSpan(val);
 }
+
+//---------------------------------------------------------
+//   setBracketColor
+//---------------------------------------------------------
+
+void Staff::setBracketColor(size_t idx, const Color& color)
+{
+    fillBrackets(idx);
+    m_brackets[idx]->setBracketColor(color);
+}
+
+//---------------------------------------------------------
+//   setBracketVisible
+//---------------------------------------------------------
 
 void Staff::setBracketVisible(size_t idx, bool v)
 {

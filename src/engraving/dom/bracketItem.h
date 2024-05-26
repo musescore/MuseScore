@@ -54,6 +54,9 @@ public:
     size_t column() const { return m_column; }
     void setColumn(size_t v) { m_column = v; }
 
+    Color bracketColor() const { return m_color; }
+    void setBracketColor(Color c) { m_color = c; }
+
 private:
 
     friend class Factory;
@@ -65,6 +68,8 @@ private:
     size_t m_column = 0;
     size_t m_bracketSpan = 0;
     Staff* m_staff = nullptr;
+
+    Color m_color;
 };
 }
 #endif
