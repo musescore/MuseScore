@@ -10,20 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "figuredbass.h"
-#include "score.h"
-#include "note.h"
-#include "measure.h"
-#include "system.h"
-#include "segment.h"
 #include "chord.h"
+#include "figuredbass.h"
+#include "measure.h"
+#include "note.h"
 #include "rest.h"
 #include "score.h"
+#include "segment.h"
 #include "sym.h"
+#include "system.h"
 #include "xml.h"
-
-// trying to do without it
-//#include <QQmlEngine>
 
 namespace Ms {
 
@@ -1312,7 +1308,11 @@ void FiguredBass::endEdit(EditData& ed)
             return;
 
       // split text into lines and create an item for each line
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      QStringList list = txt.split('\n', Qt::SkipEmptyParts);
+#else
       QStringList list = txt.split('\n', QString::SkipEmptyParts);
+#endif
       qDeleteAll(items);
       items.clear();
       QString normalizedText = QString();
@@ -1731,7 +1731,7 @@ bool FiguredBass::hasParentheses() const
 //   Write MusicXML
 //---------------------------------------------------------
 
-void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const
+void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int duration) const
       {
       QString stag = "figured-bass";
       if (hasParentheses())
@@ -1746,7 +1746,7 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
       for(FiguredBassItem* item : items)
             item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
       if (writeDuration)
-            xml.tag("duration", ticks().ticks() / divisions);
+            xml.tag("duration", duration);
       xml.etag();
       }
 

@@ -111,6 +111,7 @@ private slots:
       void displayStepOctave() {  mxmlMscxExportTestRef("testDisplayStepOctave"); }
       void divisionsDefinedTooLate1() { mxmlIoTestRef("testDivsDefinedTooLate1"); }
       void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
+      void divisionsDuration() { mxmlIoTest("testDivisionsDuration"); }
       void doubleClefError() { mxmlIoTestRef("testDoubleClefError"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
       void drumset2() { mxmlIoTest("testDrumset2"); }
@@ -302,6 +303,7 @@ private slots:
       void tuplets7() { mxmlIoTest("testTuplets7"); }
       void tuplets8() { mxmlMscxExportTestRef("testTuplets8"); }
       void tuplets9() { mxmlIoTest("testTuplets9"); }
+      void tuplets10() { mxmlIoTest("testTuplets10"); }
       void twoNoteTremoloTuplet() { mxmlIoTest("testTwoNoteTremoloTuplet"); }
       void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
       void unnecessaryBarlines() { mxmlImportTestRef("testUnnecessaryBarlines"); }
