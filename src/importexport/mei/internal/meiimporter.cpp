@@ -878,7 +878,12 @@ void MeiImporter::readXmlId(engraving::EngravingItem* item, const std::string& m
     // We have a file that has MuseScore EIDs and one on this element
     if (m_hasMscoreIds && xmlIdStr.startsWith(u"mscore-")) {
         String valStr = xmlIdStr.remove(u"mscore-");
-        item->setEID(EID::fromStdString(valStr.toStdString()));
+        EID eid = EID::fromStdString(valStr.toStdString());
+        if (!eid.isValid()) {
+            Convert::logs.push_back(String("A valid MuseScore ID could not be extracted from '%1'").arg(xmlIdStr));
+        } else {
+            item->setEID(eid);
+        }
     } else {
         m_uids->reg(item, meiUID);
     }
