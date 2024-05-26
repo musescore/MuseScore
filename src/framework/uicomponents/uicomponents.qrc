@@ -47,6 +47,7 @@
         <file>qml/Muse/UiComponents/internal/ValueListItem.qml</file>
         <file>qml/Muse/UiComponents/FocusableControl.qml</file>
         <file>qml/Muse/UiComponents/StyledMenuLoader.qml</file>
+        <file>qml/Muse/UiComponents/StyledSearchMenuLoader.qml</file>
         <file>qml/Muse/UiComponents/ContextMenuLoader.qml</file>
         <file>qml/Muse/UiComponents/StyledDropShadow.qml</file>
         <file>qml/Muse/UiComponents/StyledToolTip.qml</file>
@@ -69,6 +70,7 @@
         <file>qml/Muse/UiComponents/internal/StyledDropdownView.qml</file>
         <file>qml/Muse/UiComponents/internal/StyledMenuItem.qml</file>
         <file>qml/Muse/UiComponents/internal/StyledMenu.qml</file>
+        <file>qml/Muse/UiComponents/internal/StyledSearchMenu.qml</file>
         <file>qml/Muse/UiComponents/internal/MenuMetrics.qml</file>
         <file>qml/Muse/UiComponents/StyledBusyIndicator.qml</file>
         <file>qml/Muse/UiComponents/ButtonBox.qml</file>

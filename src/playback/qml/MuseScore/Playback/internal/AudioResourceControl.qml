@@ -324,7 +324,7 @@ Item {
                     }
                 }
 
-                StyledMenuLoader {
+                StyledSearchMenuLoader {
                     id: menuLoader
 
                     onHandleMenuItem: function(itemId) {
