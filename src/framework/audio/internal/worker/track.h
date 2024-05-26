@@ -58,7 +58,7 @@ public:
     virtual void applyOutputParams(const AudioOutputParams& requiredParams) = 0;
     virtual async::Channel<AudioOutputParams> outputParamsChanged() const = 0;
 
-    virtual async::Channel<audioch_t, AudioSignalVal> audioSignalChanges() const = 0;
+    virtual AudioSignalChanges audioSignalChanges() const = 0;
 };
 
 using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;
