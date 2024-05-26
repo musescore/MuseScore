@@ -2707,7 +2707,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3723"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3790"/>
         <source>Visibility</source>
-        <translation type="unfinished"/>
+        <translation>Ikusgarritasuna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3730"/>
@@ -6558,17 +6558,17 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="291"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ebaki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="298"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kopiatu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="305"/>
         <source>Past&amp;e</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Itsatsi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="312"/>
@@ -6594,7 +6594,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="342"/>
         <source>Select &amp;all</source>
-        <translation type="unfinished"/>
+        <translation>Hautatu &amp;guztiak</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="348"/>
@@ -26460,7 +26460,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="195"/>
         <source>Visibility</source>
         <extracomment>visibility of a score on MuseScore.com: private, public or unlisted</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ikusgarritasuna</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresListView.qml" line="97"/>

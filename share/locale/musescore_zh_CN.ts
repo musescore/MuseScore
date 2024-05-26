@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="73"/>
         <source>Do not hide if system is empty</source>
-        <translation>不隐藏空总谱</translation>
+        <translation>不隐藏空白总谱</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="82"/>
@@ -1096,7 +1096,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="292"/>
         <source>Scale:</source>
-        <translation>缩放比例：</translation>
+        <translation>缩放比：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="302"/>
@@ -1445,7 +1445,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="405"/>
         <source>Upside down</source>
-        <translation>上下翻转</translation>
+        <translation>倒置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="447"/>
@@ -1539,7 +1539,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="826"/>
         <source>Shown as:</source>
-        <translation>表示为：</translation>
+        <translation>显示为：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="845"/>
@@ -1816,7 +1816,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="290"/>
         <source>Musical symbols font:</source>
-        <translation>音乐符号字体：</translation>
+        <translation>音乐记号字体：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="353"/>
@@ -2848,7 +2848,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4017"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation>若 ♯ 或 ♭ 减少，置于调号后；若在 ♯ 与 ♭ 之间转变，则置于其前</translation>
+        <translation>若 ♯ 或 ♭ 减少，置于调号后；若在 ♯ 与 ♭ 之间转变，则置其前</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4114"/>
@@ -20809,7 +20809,7 @@ pickup measure</source>
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="831"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>这将从总谱和及所有分谱中删除%n个乐器。</numerusform></translation>
+        <translation><numerusform>这将从总谱和及所有分谱中删除%n个元素。</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>

@@ -4755,7 +4755,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13523"/>
         <source>Always show at the start of a measure</source>
-        <translation type="unfinished"/>
+        <translation>הצג תמיד בתחילת תיבה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13537"/>
@@ -7796,7 +7796,7 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1409"/>
         <source>Reset entire score to default layout</source>
-        <translation type="unfinished"/>
+        <translation>איפוס כל הפרטיטורה לפריסת ברירת המחדל</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
@@ -9746,12 +9746,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2393"/>
         <source>Show sound flags</source>
-        <translation type="unfinished"/>
+        <translation>הצג דגלי שמע</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
         <source>Show/hide sound flags</source>
-        <translation type="unfinished"/>
+        <translation>הצג/הסתר דגלי שמע</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
@@ -10154,7 +10154,8 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="139"/>
         <source>Copyright © 1999-2024 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>כל הזכויות שמורות © 1999-2024 MuseScore בע&quot;מ.
+מפורסם תחת &lt;a href=&quot;%1&quot;&gt;הרישיון הציבורי הכללי של גנו גרסה 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -17367,7 +17368,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/framework/global/dataformatter.cpp" line="103"/>
         <source>%n byte(s)</source>
         <extracomment>Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n בייט(ים)</numerusform><numerusform>%n בייט(ים)</numerusform><numerusform>%n בייט(ים)</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
@@ -26305,7 +26306,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="60"/>
         <source>Audio.com URL</source>
-        <translation>URL של Audio.com</translation>
+        <translation>קישור של Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoresListView.qml" line="77"/>
@@ -27025,7 +27026,7 @@ failed.</source>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="57"/>
         <source>%n measure(s),</source>
-        <translation><numerusform>תיבה %n,</numerusform><numerusform>%n תיבות,</numerusform><numerusform>%n תיבה/ות,</numerusform></translation>
+        <translation><numerusform>תיבה אחת,</numerusform><numerusform>%n תיבות,</numerusform><numerusform>%n תיבות,</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="100"/>
@@ -28332,7 +28333,7 @@ failed.</source>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
-        <translation type="unfinished"/>
+        <translation>לא תודה</translation>
     </message>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
