@@ -391,7 +391,7 @@ Channel<AudioOutputParams> Mixer::masterOutputParamsChanged() const
     return m_masterOutputParamsChanged;
 }
 
-async::Channel<audioch_t, AudioSignalVal> Mixer::masterAudioSignalChanges() const
+AudioSignalChanges Mixer::masterAudioSignalChanges() const
 {
     return m_audioSignalNotifier.audioSignalChanges;
 }
@@ -537,8 +537,10 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
         }
 
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesPerChannel);
-        notifyAboutAudioSignalChanges(audioChNum, rms);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, rms, dsp::dbFromSample(rms));
     }
+
+    m_audioSignalNotifier.notifyAboutChanges();
 
     if (!m_limiter->isActive()) {
         return;
@@ -551,13 +553,10 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
 void Mixer::notifyNoAudioSignal()
 {
     for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
-        notifyAboutAudioSignalChanges(audioChNum, 0);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f, dsp::dbFromSample(0.f));
     }
-}
 
-void Mixer::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
-{
-    m_audioSignalNotifier.updateSignalValues(audioChannelNumber, linearRms, dsp::dbFromSample(linearRms));
+    m_audioSignalNotifier.notifyAboutChanges();
 }
 
 msecs_t Mixer::currentTime() const

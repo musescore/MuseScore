@@ -356,7 +356,8 @@ struct AudioSignalVal {
     volume_dbfs_t pressure = 0.f;
 };
 
-using AudioSignalChanges = async::Channel<audioch_t, AudioSignalVal>;
+using AudioSignalValuesMap = std::map<audioch_t, AudioSignalVal>;
+using AudioSignalChanges = async::Channel<AudioSignalValuesMap>;
 
 struct AudioSignalsNotifier {
     void updateSignalValues(const audioch_t audioChNumber, const float newAmplitude, const volume_dbfs_t newPressure)
@@ -376,7 +377,15 @@ struct AudioSignalsNotifier {
         signalVal.amplitude = newAmplitude;
         signalVal.pressure = validatedPressure;
 
-        audioSignalChanges.send(audioChNumber, signalVal);
+        m_needNotifyAboutChanges = true;
+    }
+
+    void notifyAboutChanges()
+    {
+        if (m_needNotifyAboutChanges) {
+            audioSignalChanges.send(m_signalValuesMap);
+            m_needNotifyAboutChanges = false;
+        }
     }
 
     AudioSignalChanges audioSignalChanges;
@@ -385,7 +394,8 @@ private:
     static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = 2.5f;
     static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = -100.f;
 
-    std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
+    AudioSignalValuesMap m_signalValuesMap;
+    bool m_needNotifyAboutChanges = false;
 };
 
 enum class PlaybackStatus {

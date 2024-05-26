@@ -54,7 +54,7 @@ public:
     void applyOutputParams(const AudioOutputParams& requiredParams) override;
     async::Channel<AudioOutputParams> outputParamsChanged() const override;
 
-    async::Channel<audioch_t, AudioSignalVal> audioSignalChanges() const override;
+    AudioSignalChanges audioSignalChanges() const override;
 
     bool isActive() const override;
     void setIsActive(bool arg) override;
@@ -66,7 +66,6 @@ public:
 
 private:
     void completeOutput(float* buffer, unsigned int samplesCount) const;
-    void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     TrackId m_trackId = -1;
 
