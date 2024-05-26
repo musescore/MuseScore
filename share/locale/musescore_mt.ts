@@ -10383,7 +10383,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="243"/>
         <source>Str&amp;etch</source>
-        <translation type="unfinished"/>
+        <translation>Ġeb&amp;bed</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="254"/>
@@ -11164,7 +11164,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="143"/>
         <source>SoundFont installed</source>
-        <translation type="unfinished"/>
+        <translation>SoundFont installata</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="144"/>

@@ -2767,7 +2767,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
         <source>Show courtesy time signatures</source>
-        <translation>Tonartwechselankündigung anzeigen</translation>
+        <translation>Taktartwechselankündigung anzeigen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3863"/>
