@@ -2410,7 +2410,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Sleutels, toonsoorten en maatsoorten</translation>
+        <translation>Muzieksleutels, toon- &amp; maatsoorten</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>

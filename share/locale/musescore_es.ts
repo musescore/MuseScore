@@ -2762,7 +2762,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3821"/>
         <source>Time signatures</source>
-        <translation>Tiempos de compás</translation>
+        <translation>Indicaciones de compás</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
@@ -23809,7 +23809,7 @@ e intente de nuevo</translation>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="174"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
-        <translation>Tiempos de compás</translation>
+        <translation>Indicaciones de compás</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1733"/>
@@ -25592,7 +25592,7 @@ failed.</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerBalanceSection.qml" line="31"/>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="46"/>
         <source>Pan</source>
-        <translation>Panorama</translation>
+        <translation>Paneo</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerFxSection.qml" line="32"/>
@@ -25779,7 +25779,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation>Envías aux</translation>
+        <translation>Envíos Aux.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>

@@ -3306,7 +3306,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5506"/>
         <source>Accidental distance:</source>
-        <translation>Odległość znaków chromatycznych:</translation>
+        <translation>Odległość znaku chrom. od znaku chrom.:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5538"/>
@@ -4094,7 +4094,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10554"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
-        <translation>Resetuj wartość &quot;Współczynnik Y pozycji łącznika&quot;</translation>
+        <translation>Resetuj wartość &quot;Współczynnik pozycji Y łącznika&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10564"/>
@@ -4154,7 +4154,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10737"/>
         <source>Dash Y position ratio:</source>
-        <translation>Współczynnik Y pozycji łącznika:</translation>
+        <translation>Współczynnik pozycji Y łącznika:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10747"/>
