@@ -38,8 +38,8 @@ public:
     virtual bool meiExportLayout() const = 0;
     virtual void setMeiExportLayout(bool value) = 0;
 
-    virtual bool meiUseMscoreIds() const = 0;
-    virtual void setMeiUseMscoreIds(bool value) = 0;
+    virtual bool meiUseMuseScoreIds() const = 0;
+    virtual void setMeiUseMuseScoreIds(bool value) = 0;
 };
 }
 

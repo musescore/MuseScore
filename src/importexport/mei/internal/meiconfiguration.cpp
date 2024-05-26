@@ -31,13 +31,13 @@ static const std::string module_name("iex_mei");
 
 static const Settings::Key MEI_IMPORT_LAYOUT_KEY(module_name, "import/mei/importMeiLayout");
 static const Settings::Key MEI_EXPORT_LAYOUT_KEY(module_name, "export/mei/exportMeiLayout");
-static const Settings::Key MEI_USE_MSCORE_IDS_KEY(module_name, "export/mei/useMscoreIds");
+static const Settings::Key MEI_USE_MUSESCORE_IDS_KEY(module_name, "export/mei/useMuseScoreIds");
 
 void MeiConfiguration::init()
 {
     settings()->setDefaultValue(MEI_IMPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MEI_EXPORT_LAYOUT_KEY, Val(true));
-    settings()->setDefaultValue(MEI_USE_MSCORE_IDS_KEY, Val(false));
+    settings()->setDefaultValue(MEI_USE_MUSESCORE_IDS_KEY, Val(false));
 }
 
 bool MeiConfiguration::meiImportLayout() const
@@ -60,12 +60,12 @@ void MeiConfiguration::setMeiExportLayout(bool value)
     settings()->setSharedValue(MEI_EXPORT_LAYOUT_KEY, Val(value));
 }
 
-bool MeiConfiguration::meiUseMscoreIds() const
+bool MeiConfiguration::meiUseMuseScoreIds() const
 {
-    return settings()->value(MEI_USE_MSCORE_IDS_KEY).toBool();
+    return settings()->value(MEI_USE_MUSESCORE_IDS_KEY).toBool();
 }
 
-void MeiConfiguration::setMeiUseMscoreIds(bool value)
+void MeiConfiguration::setMeiUseMuseScoreIds(bool value)
 {
-    settings()->setSharedValue(MEI_USE_MSCORE_IDS_KEY, Val(value));
+    settings()->setSharedValue(MEI_USE_MUSESCORE_IDS_KEY, Val(value));
 }
