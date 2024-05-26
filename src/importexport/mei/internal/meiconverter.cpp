@@ -3001,7 +3001,7 @@ void Convert::textToMEI(textWithSmufl& textBlocks, const String& text)
     String smuflBlock;
     String textBlock;
 
-    // Go throught the text char by char and build blocks of plain text / smufl text
+    // Go through the text char by char and build blocks of plain text / smufl text
     for (size_t i = 0; i < text.size(); i++) {
         char16_t c = text.at(i).unicode();
         // Not SMuFL
