@@ -208,7 +208,7 @@ private:
     UIDRegister* m_uids;
 
     /** A flag indicating the file has MuseScore EIDs as xml:ids */
-    bool m_hasMscoreIds;
+    bool m_hasMuseScoreIds;
 
     engraving::Fraction m_ticks;
     int m_lastMeasureN;
