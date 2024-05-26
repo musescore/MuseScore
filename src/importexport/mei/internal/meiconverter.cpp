@@ -623,7 +623,7 @@ void Convert::breathFromMEI(engraving::Breath* breath, const libmei::Breath& mei
 {
     warning = false;
 
-    // @glyhp.name
+    // @glyph.name
     bool smufl = (meiBreath.HasGlyphAuth() && (meiBreath.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::breathMarkComma;
@@ -678,7 +678,7 @@ void Convert::caesuraFromMEI(engraving::Breath* breath, const libmei::Caesura& m
 {
     warning = false;
 
-    // @glyhp.name
+    // @glyph.name
     bool smufl = (meiCeasura.HasGlyphAuth() && (meiCeasura.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::caesura;
@@ -735,7 +735,7 @@ engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warn
 {
     warning = false;
 
-    // @glyhp.name
+    // @glyph.name
     bool smufl = (meiClef.HasGlyphAuth() && (meiClef.GetGlyphAuth() == SMUFL_AUTH));
 
     // We give @glyph.name priority over @shape
@@ -1433,7 +1433,7 @@ libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, Str
 {
     libmei::F meiF;
 
-    // content - to be imporved
+    // content - to be improved
     String plainText = figuredBassItem->normalizedText();
     meiLines = plainText.split(u"\n");
 
@@ -1466,7 +1466,7 @@ void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata&
     // @place
     bool below = (meiFermata.HasPlace() && (meiFermata.GetPlace() == libmei::STAFFREL_below));
 
-    // @glyhp.name
+    // @glyph.name
     bool smufl = (meiFermata.HasGlyphAuth() && (meiFermata.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::fermataAbove;
@@ -1908,7 +1908,7 @@ libmei::RepeatMark Convert::markerToMEI(const engraving::Marker* marker, String&
         break;
     case (engraving::MarkerType::VARCODA):
     case (engraving::MarkerType::VARSEGNO):
-        // Here we could as @glpyh.auth and @glyph.name but there as not in MEI-Basic
+        // Here we could as @glyph.auth and @glyph.name but there as not in MEI-Basic
         break;
     case (engraving::MarkerType::TOCODASYM):
         text = "To 𝄌";
@@ -2046,7 +2046,7 @@ libmei::StaffDef Convert::meterToMEI(const engraving::Fraction& fraction, engrav
 
 Convert::OrnamStruct Convert::mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent, bool& warning)
 {
-    // @glyhp.name
+    // @glyph.name
     bool smufl = (meiMordent.HasGlyphAuth() && (meiMordent.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::ornamentMordent;
@@ -2477,7 +2477,7 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
     PitchStruct pitchSt;
 
     int step = meiNote.HasPname() ? meiNote.GetPname() - 1 : 0;
-    // It should never be necessay, but just in case
+    // It should never be necessary, but just in case
     step = std::clamp(step, 0, 6);
 
     int oct = meiNote.HasOct() ? meiNote.GetOct() : 3;
@@ -3055,7 +3055,7 @@ libmei::Tie Convert::tieToMEI(const engraving::SlurTie* tie)
 
 Convert::OrnamStruct Convert::trillFromMEI(engraving::Ornament* ornament, const libmei::Trill& meiTrill, bool& warning)
 {
-    // @glyhp.name
+    // @glyph.name
     bool smufl = (meiTrill.HasGlyphAuth() && (meiTrill.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::ornamentTrill;
@@ -3177,7 +3177,7 @@ libmei::Tuplet Convert::tupletToMEI(const engraving::Tuplet* tuplet)
 
 Convert::OrnamStruct Convert::turnFromMEI(engraving::Ornament* ornament, const libmei::Turn& meiTurn, bool& warning)
 {
-    // @glyhp.name
+    // @glyph.name
     bool smufl = (meiTurn.HasGlyphAuth() && (meiTurn.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::ornamentTurn;
