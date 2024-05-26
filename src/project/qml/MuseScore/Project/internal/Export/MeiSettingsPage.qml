@@ -42,7 +42,7 @@ ExportSettingsPage {
 
     CheckBox {
         width: parent.width
-        text: qsTrc("project/export", "Use MuseScore Ids")
+        text: qsTrc("project/export", "Use MuseScore element IDs")
 
         navigation.name: "MeiUseMscoreIds"
         navigation.panel: root.navigationPanel
