@@ -13123,7 +13123,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2600"/>
         <source>Open/Atonal</source>
-        <translation>Открытый/Aтональный</translation>
+        <translation>Открытый/Вне тональности</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="193"/>
@@ -19937,7 +19937,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinsettingsmodel.cpp" line="38"/>
         <source>Hairpin</source>
-        <translation>Вилочка</translation>
+        <translation>Вилка</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="73"/>
@@ -23064,7 +23064,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="243"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1148"/>
         <source>Diminuendo hairpin</source>
-        <translation>Вилочка диминуэндо</translation>
+        <translation>Вилка диминуэндо</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="265"/>

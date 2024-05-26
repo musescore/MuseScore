@@ -2415,7 +2415,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation>Studio MuseScore změní styl tak, aby lépe vyhovoval písmu</translation>
+        <translation>MuseScore Studio změní styl tak, aby lépe vyhovoval písmu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="927"/>
@@ -2717,12 +2717,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3737"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation>Skrýt všechny klíče za prvním systémem, kde se objeví</translation>
+        <translation>Skrýt všechny klíče za prvním systémem, kde jsou zobrazeny</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3744"/>
         <source>Hide TAB clefs after the first system where they appear</source>
-        <translation>Skrýt klíče tabulatur za prvním systémem, kde se objeví</translation>
+        <translation>Skrýt klíče tabulatur za prvním systémem, kde jsou zobrazeny</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3751"/>
@@ -2752,7 +2752,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3804"/>
         <source>Hide after the first system where they appear</source>
-        <translation>Skrýt za prvním systémem, kde se objeví</translation>
+        <translation>Skrýt za prvním systémem, kde jsou zobrazeny</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3811"/>
@@ -8346,12 +8346,12 @@ Ve výchozím nastavení jsou umístěny tak, aby jejich pravé okraje byly na s
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2410"/>
         <source>Show element bounding rectangles</source>
-        <translation>Zobrazit ohraničující obdélníky prvků</translation>
+        <translation>Zobrazit ohraničující obdélníky kolem prvků</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2416"/>
         <source>Color element shapes</source>
-        <translation>Barvit tvary prvků</translation>
+        <translation>Obarvit tvary prvků</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
@@ -8361,7 +8361,7 @@ Ve výchozím nastavení jsou umístěny tak, aby jejich pravé okraje byly na s
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
         <source>Color segment shapes</source>
-        <translation>Barvit tvary segmentů</translation>
+        <translation>Obarvit tvary segmentů</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
@@ -8371,7 +8371,7 @@ Ve výchozím nastavení jsou umístěny tak, aby jejich pravé okraje byly na s
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
         <source>Show system bounding rectangles</source>
-        <translation>Zobrazit ohraničující obdélníky systémů</translation>
+        <translation>Zobrazit ohraničující obdélníky kolem systémů</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2446"/>
@@ -8653,7 +8653,7 @@ Ve výchozím nastavení jsou umístěny tak, aby jejich pravé okraje byly na s
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="62"/>
         <source>&amp;About MuseScore Studio…</source>
-        <translation>&amp;O Studiu MuseScore…</translation>
+        <translation>&amp;O MuseScore Studio…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="67"/>
@@ -10023,12 +10023,12 @@ Tento krok neodstraní žádný vašich notových zápisů.
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="268"/>
         <source>Would you like to restart MuseScore Studio now?</source>
-        <translation>Chcete Studio MuseScore restartovat nyní?</translation>
+        <translation>Chcete MuseScore Studio restartovat nyní?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation>Aby se tyto změny projevily, je třeba Studio MuseScore restartovat.</translation>
+        <translation>Aby se tyto změny projevily, je třeba MuseScore Studio restartovat.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="274"/>
@@ -10115,7 +10115,7 @@ Tento krok neodstraní žádný vašich notových zápisů.
         <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
         <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
         <source>MuseScore Studio</source>
-        <translation>Studio MuseScore</translation>
+        <translation>MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -10123,7 +10123,7 @@ Tento krok neodstraní žádný vašich notových zápisů.
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="32"/>
         <source>About MuseScore Studio</source>
-        <translation>O Studiu MuseScore</translation>
+        <translation>O MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="84"/>
@@ -10233,7 +10233,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation>Vítejte ve Studiu MuseScore</translation>
+        <translation>Vítejte v MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10270,7 +10270,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>V zájmu ochrany vašeho soukromí neukládá Studio MuseScore žádné osobní údaje. Další informace naleznete v našich &lt;a href=&quot;%1&quot;&gt;zásadách ochrany osobních údajů&lt;/a&gt;.</translation>
+        <translation>V zájmu ochrany vašeho soukromí neukládá MuseScore Studio žádné osobní údaje. Další informace naleznete v našich &lt;a href=&quot;%1&quot;&gt;zásadách ochrany osobních údajů&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -10529,7 +10529,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation>Ověřit, zda je dostupná nová verze Studia MuseScore</translation>
+        <translation>Ověřit, zda je dostupná nová verze MuseScore Studio </translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
@@ -21343,7 +21343,7 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation>Protože tento stylový soubor pochází z jiné verze MuseScore Studio, není zaručeno, že se váš notový zápis zobrazí správně.</translation>
+        <translation>Protože tento soubor se styly pochází z jiné verze MuseScore Studio, není zaručeno, že se váš notový zápis zobrazí správně.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1623"/>
@@ -23904,7 +23904,7 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="902"/>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="905"/>
         <source>MuseScore Studio palette</source>
-        <translation>Paleta Studia MuseScore</translation>
+        <translation>Paleta MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="904"/>
@@ -23935,7 +23935,7 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="667"/>
         <source>MuseScore Studio may not be able to load this drumset file.</source>
-        <translation>Studiu MuseScore se nemusí podařit nahrát tento soubor s touto bicí soupravou.</translation>
+        <translation>MuseScore Studio se nemusí podařit nahrát tento soubor s bicí soupravou.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="698"/>
@@ -26166,7 +26166,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1666"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
-        <translation>Tento soubor obsahuje chyby, které mohou způsobit nefunkčnost programu MuseScore Studio.</translation>
+        <translation>Tento soubor obsahuje chyby, které mohou způsobit nefunkčnost MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
@@ -27315,7 +27315,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation>Verze Studia MuseScore:</translation>
+        <translation>Verze MuseScore Studio:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
