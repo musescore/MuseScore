@@ -667,6 +667,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
 
+    { Sid::dynamicsHairpinVoiceBasedPlacement, "dynamicsHairpinVoiceBasedPlacement", DirectionV::AUTO },
+    { Sid::dynamicsHairpinsAutoCenterOnGrandStaff, "dynamicsHairpinsAutoCenterOnGrandStaff", true },
+    { Sid::dynamicsHairpinsAboveForVocalStaves, "dynamicsHairpinsAboveForVocalStaves", true },
+
     { Sid::dynamicsOverrideFont,    "dynamicsOverrideFont",    false },
     { Sid::dynamicsFont,            "dynamicsFont",            PropertyValue(String(u"Leland")) },
     { Sid::dynamicsSize,            "dynamicsSize",            1.0 }, // percentage of the standard size

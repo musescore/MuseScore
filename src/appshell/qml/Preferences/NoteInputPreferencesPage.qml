@@ -96,5 +96,41 @@ PreferencesPage {
                 noteInputModel.notePlayDurationMilliseconds = duration
             }
         }
+
+        SeparatorLine {}
+
+        BaseSection {
+            id: dynamicsAllVoicesSection
+
+            width: parent.width
+
+            title: qsTrc("appshell/preferences", "Dynamics & hairpins")
+
+            StyledTextLabel {
+                text: qsTrc("appshell/preferences", "When entered, dynamics and hairpins should affect:")
+            }
+
+            RoundedRadioButton {
+                width: parent.width
+
+                text: qsTrc("appshell/preferences", "All voices on the instrument")
+
+                checked: noteInputModel.dynamicsApplyToAllVoices
+                onToggled: {
+                    noteInputModel.dynamicsApplyToAllVoices = checked
+                }
+            }
+
+            RoundedRadioButton {
+                width: parent.width
+
+                text: qsTrc("appshell/preferences", "Only the voice they are applied to")
+
+                checked: !noteInputModel.dynamicsApplyToAllVoices
+                onToggled: {
+                    noteInputModel.dynamicsApplyToAllVoices = !checked
+                }
+            }
+        }
     }
 }

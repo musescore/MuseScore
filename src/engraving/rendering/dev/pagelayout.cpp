@@ -421,6 +421,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
     }
 
+    for (const System* system : page->systems()) {
+        Fraction systemStartTick = system->measures().front()->tick();
+        Fraction systemEndTick = system->measures().back()->endTick();
+        if (systemEndTick > ctx.state().startTick() && systemStartTick <= ctx.state().endTick()) {
+            SystemLayout::centerElementsBetweenStaves(system);
+        }
+    }
+
     page->invalidateBspTree();
 }
 

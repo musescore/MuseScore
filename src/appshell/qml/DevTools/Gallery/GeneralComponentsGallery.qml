@@ -222,7 +222,7 @@ Rectangle {
         Row {
             spacing: 12
 
-            FlatButton {
+            component SampleMenuButton : FlatButton {
                 text: "Show Menu"
 
                 onClicked: {
@@ -256,6 +256,16 @@ Rectangle {
                         console.log("selected " + itemId)
                     }
                 }
+            }
+
+            SampleMenuButton {}
+
+            SampleMenuButton {
+                text: "With right-click and menu indicator triangle"
+
+                FlatButtonMenuIndicatorTriangle {}
+
+                mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
             }
         }
     }

@@ -78,6 +78,9 @@ public:
     virtual void setScoreInversionEnabled(bool value) = 0;
     virtual muse::async::Notification scoreInversionChanged() const = 0;
 
+    virtual bool dynamicsApplyToAllVoices() const = 0;
+    virtual void setDynamicsApplyToAllVoices(bool v) = 0;
+
     virtual Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {

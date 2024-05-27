@@ -73,6 +73,8 @@ public:
     Dynamic* findStartDynamic() const;
     Dynamic* findEndDynamic() const;
 
+    bool hasVoiceApplicationProperties() const override { return spanner()->hasVoiceApplicationProperties(); }
+
 private:
 
     void startEditDrag(EditData&) override;
@@ -162,6 +164,17 @@ public:
 
     PointF linePos(Grip grip, System** system) const override;
 
+    bool hasVoiceApplicationProperties() const override { return true; }
+
+    void reset() override;
+
+    void setApplyToVoice(VoiceApplication v) { m_applyToVoice = v; }
+    VoiceApplication applyToVoice() const { return m_applyToVoice; }
+    void setDirection(DirectionV v) { m_direction = v; }
+    DirectionV direction() const { return m_direction; }
+    void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
+    AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
@@ -176,6 +189,10 @@ private:
 
     Spatium m_hairpinHeight;
     Spatium m_hairpinContHeight;
+
+    VoiceApplication m_applyToVoice = VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+    DirectionV m_direction = DirectionV::AUTO;
+    AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
 };
 } // namespace mu::engraving
 

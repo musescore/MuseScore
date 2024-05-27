@@ -236,7 +236,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutDeadSlapped(item_cast<const DeadSlapped*>(item), static_cast<DeadSlapped::LayoutData*>(ldata));
         break;
     case ElementType::DYNAMIC:
-        layoutDynamic(item_cast<const Dynamic*>(item), static_cast<Dynamic::LayoutData*>(ldata), ctx.conf());
+        layoutDynamic(item_cast<Dynamic*>(item), static_cast<Dynamic::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::EXPRESSION:
         layoutExpression(item_cast<const Expression*>(item), static_cast<Expression::LayoutData*>(ldata));
@@ -1876,7 +1876,7 @@ void TLayout::layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData
     }
 }
 
-void TLayout::layoutDynamic(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
+void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LAYOUT_CALL_ITEM(item);
     const_cast<Dynamic*>(item)->setSnappedExpression(nullptr); // Here we reset it. It will become known again when we layout expression
@@ -1887,6 +1887,8 @@ void TLayout::layoutDynamic(const Dynamic* item, Dynamic::LayoutData* ldata, con
         return;
     }
     ldata->setIsSkipDraw(false);
+
+    item->setPlacementBasedOnVoiceApplication(conf.styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
 
     TLayout::layoutBaseTextBase(item, ldata);
 
@@ -6392,24 +6394,31 @@ void TLayout::fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata)
     LAYOUT_CALL_ITEM(item);
     Shape s;
     if (item->hasBracket()) {
-        auto tupletRect = [](const PointF& p1, const PointF& p2, double w) {
-            double w2 = w * .5;
-            RectF r;
-            r.setCoords(std::min(p1.x(), p2.x()) - w2,
-                        std::min(p1.y(), p2.y()) - w2,
-                        std::max(p1.x(), p2.x()) + w2,
-                        std::max(p1.y(), p2.y()) + w2);
-            return r;
+        auto tupletRect = [](const PointF& p1, const PointF& p2, double height, const Tuplet* item) {
+            Shape shape;
+            double xLength = p2.x() - p1.x();
+            int nSteps = 2 * std::ceil(xLength / item->spatium());
+            double xStep = xLength / nSteps;
+            double yStep = (p2.y() - p1.y()) / nSteps;
+            double rectHeight = (item->isUp() ? height : -height) - yStep;
+            double xCur = p1.x();
+            double yCur = p1.y() + yStep;
+            for (int i = 0; i < nSteps; ++i) {
+                shape.add(RectF(xCur, yCur, xStep, rectHeight).normalized(), item);
+                xCur += xStep;
+                yCur += yStep;
+            }
+            return shape;
         };
 
-        double w = item->bracketWidth().val() * item->mag();
-        s.add(tupletRect(item->bracketL[0], item->bracketL[1], w));
-        s.add(tupletRect(item->bracketL[1], item->bracketL[2], w));
+        double height = item->style().styleMM(Sid::tupletBracketHookHeight);
+        s.add(tupletRect(item->bracketL[0], item->bracketL[1], height, item));
+        s.add(tupletRect(item->bracketL[1], item->bracketL[2], height, item));
         if (item->number()) {
-            s.add(tupletRect(item->bracketR[0], item->bracketR[1], w));
-            s.add(tupletRect(item->bracketR[1], item->bracketR[2], w));
+            s.add(tupletRect(item->bracketR[0], item->bracketR[1], height, item));
+            s.add(tupletRect(item->bracketR[1], item->bracketR[2], height, item));
         } else {
-            s.add(tupletRect(item->bracketL[2], item->bracketL[3], w));
+            s.add(tupletRect(item->bracketL[2], item->bracketL[3], height, item));
         }
     }
     if (item->number()) {
@@ -6582,6 +6591,9 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
         } else {
             sst = SpannerSegmentType::BEGIN;
         }
+        if (line->hasVoiceApplicationProperties()) {
+            line->setPlacementBasedOnVoiceApplication(ctx.conf().styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
+        }
     } else if (line->tick() < stick && line->tick2() > etick) {
         sst = SpannerSegmentType::MIDDLE;
     } else {
@@ -6592,6 +6604,7 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
         sst = SpannerSegmentType::END;
     }
     lineSegm->setSpannerSegmentType(sst);
+    lineSegm->setPlacement(line->placement());
 
     switch (sst) {
     case SpannerSegmentType::SINGLE: {

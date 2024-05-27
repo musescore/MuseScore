@@ -436,6 +436,38 @@ TiePlacement TConv::fromXml(const AsciiStringView& str, TiePlacement def)
     return findTypeByXmlTag<TiePlacement>(TIE_PLACEMENT, str, def);
 }
 
+static const std::vector<Item<VoiceApplication> > VOICE_APPLICATION = {
+    { VoiceApplication::ALL_VOICE_IN_INSTRUMENT, "allInInstrument" },
+    { VoiceApplication::ALL_VOICE_IN_STAFF,      "allInStaff" },
+    { VoiceApplication::CURRENT_VOICE_ONLY,      "currentVoiceOnly" }
+};
+
+AsciiStringView TConv::toXml(VoiceApplication voiceAppl)
+{
+    return findXmlTagByType<VoiceApplication>(VOICE_APPLICATION, voiceAppl);
+}
+
+VoiceApplication TConv::fromXml(const AsciiStringView& str, VoiceApplication def)
+{
+    return findTypeByXmlTag<VoiceApplication>(VOICE_APPLICATION, str, def);
+}
+
+static const std::vector<Item<AutoOnOff> > AUTO_ON_OFF = {
+    { AutoOnOff::AUTO, "auto" },
+    { AutoOnOff::ON,   "on" },
+    { AutoOnOff::OFF,  "off" },
+};
+
+AsciiStringView TConv::toXml(AutoOnOff autoOnOff)
+{
+    return findXmlTagByType<AutoOnOff>(AUTO_ON_OFF, autoOnOff);
+}
+
+AutoOnOff TConv::fromXml(const AsciiStringView& str, AutoOnOff def)
+{
+    return findTypeByXmlTag<AutoOnOff>(AUTO_ON_OFF, str, def);
+}
+
 String TConv::translatedUserName(SymId v)
 {
     return SymNames::translatedUserNameForSymId(v);

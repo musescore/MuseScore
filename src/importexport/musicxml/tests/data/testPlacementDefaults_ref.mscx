@@ -217,12 +217,12 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
-            <placement>above</placement>
+            <direction>up</direction>
             </Dynamic>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <placement>above</placement>
+              <direction>up</direction>
               </HairPin>
             <next>
               <location>
@@ -408,6 +408,7 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Chord>
             <durationType>quarter</durationType>

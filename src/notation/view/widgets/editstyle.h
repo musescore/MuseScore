@@ -108,6 +108,7 @@ private:
     PropertyValue styleValue(StyleId id) const;
     PropertyValue defaultStyleValue(StyleId id) const;
     bool hasDefaultStyleValue(StyleId id) const;
+    bool dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue() const;
     void setStyleQVariantValue(StyleId id, const QVariant& value);
     void setStyleValue(StyleId id, const PropertyValue& value);
 

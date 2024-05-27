@@ -81,6 +81,7 @@ void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& c
         system_idx_t systemIndex = muse::indexOf(score->systems(), system);
 
         // set current system
+        state.setStartTick(system->measures().front()->tick());
         state.setCurSystem(system);
         state.setSystemList(muse::mid(score->systems(), systemIndex));
 

@@ -42,8 +42,15 @@ public:
         HORIZONTAL_RIGHT
     };
 
+    enum CenterBetweenStaves {
+        CENTER_STAVES_AUTO,
+        CENTER_STAVES_ON,
+        CENTER_STAVES_OFF
+    };
+
     Q_ENUM(VerticalDirection)
     Q_ENUM(HorizontalDirection)
+    Q_ENUM(CenterBetweenStaves)
 };
 }
 

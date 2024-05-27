@@ -22,12 +22,12 @@
 #ifndef MU_INSPECTOR_TEXTLINESETTINGSMODEL_H
 #define MU_INSPECTOR_TEXTLINESETTINGSMODEL_H
 
-#include "models/abstractinspectormodel.h"
+#include "models/inspectormodelwithvoiceandpositionoptions.h"
 
 #include "ui/view/iconcodes.h"
 
 namespace mu::inspector {
-class TextLineSettingsModel : public AbstractInspectorModel
+class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
 {
     Q_OBJECT
 

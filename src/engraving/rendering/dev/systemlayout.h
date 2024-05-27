@@ -59,6 +59,8 @@ public:
 
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
+    static void centerElementsBetweenStaves(const System* system);
+
 private:
     static System* getNextSystem(LayoutContext& lc);
     static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
@@ -79,6 +81,10 @@ private:
     static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
                                   std::vector<Bracket*>& bl, Measure* measure);
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2);
+
+    static bool elementNeedsCenterBetweenStaves(const EngravingItem* element, const System* system);
+    static void centerElementBetweenStaves(EngravingItem* element, const System* system);
+    static double visualVerticalCenter(const EngravingItem* element);
 };
 }
 

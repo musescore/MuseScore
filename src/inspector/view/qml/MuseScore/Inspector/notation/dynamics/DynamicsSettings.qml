@@ -75,12 +75,13 @@ Column {
         propertyItem: root.model ? root.model.avoidBarLines : null
     }
 
-    PlacementSection {
-        id: dynamicsPlacementSection
-        propertyItem: root.model ? root.model.placement : null
+    VoicesAndPositionSection {
+        id: voicesAndPositionSection
 
         navigationPanel: root.navigationPanel
         navigationRowStart: avoidBarLines.navigationRowEnd + 1
+
+        model: root.model
     }
 
     ExpandableBlank {
@@ -91,7 +92,7 @@ Column {
         width: parent.width
 
         navigation.panel: root.navigationPanel
-        navigation.row: dynamicsPlacementSection.navigationRowEnd + 1
+        navigation.row: voicesAndPositionSection.navigationRowEnd + 1
 
         contentItemComponent: Column {
             width: parent.width

@@ -22,17 +22,16 @@
 #ifndef MU_INSPECTOR_DYNAMICSETTINGSMODEL_H
 #define MU_INSPECTOR_DYNAMICSETTINGSMODEL_H
 
-#include "models/abstractinspectormodel.h"
+#include "models/inspectormodelwithvoiceandpositionoptions.h"
 
 namespace mu::inspector {
-class DynamicsSettingsModel : public AbstractInspectorModel
+class DynamicsSettingsModel : public InspectorModelWithVoiceAndPositionOptions
 {
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * avoidBarLines READ avoidBarLines CONSTANT)
     Q_PROPERTY(PropertyItem * dynamicSize READ dynamicSize CONSTANT)
     Q_PROPERTY(PropertyItem * centerOnNotehead READ centerOnNotehead CONSTANT)
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
     // Frame-related settings
     Q_PROPERTY(PropertyItem * frameType READ frameType CONSTANT)
@@ -53,7 +52,6 @@ public:
     PropertyItem* avoidBarLines() const;
     PropertyItem* dynamicSize() const;
     PropertyItem* centerOnNotehead() const;
-    PropertyItem* placement() const;
 
     PropertyItem* frameType() const;
     PropertyItem* frameBorderColor() const;
@@ -63,10 +61,12 @@ public:
     PropertyItem* frameCornerRadius() const;
 
 private:
+    void updateFramePropertiesAvailability();
+
+private:
     PropertyItem* m_avoidBarLines = nullptr;
     PropertyItem* m_dynamicSize = nullptr;
     PropertyItem* m_centerOnNotehead = nullptr;
-    PropertyItem* m_placement = nullptr;
 
     PropertyItem* m_frameType = nullptr;
     PropertyItem* m_frameBorderColor = nullptr;
@@ -74,8 +74,6 @@ private:
     PropertyItem* m_frameThickness = nullptr;
     PropertyItem* m_frameMargin = nullptr;
     PropertyItem* m_frameCornerRadius = nullptr;
-
-    void updateFramePropertiesAvailability();
 };
 }
 

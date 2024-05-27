@@ -76,6 +76,11 @@ bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
     return playbackConfiguration()->playHarmonyWhenEditing();
 }
 
+bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
+{
+    return engravingConfiguration()->dynamicsApplyToAllVoices();
+}
+
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
 {
     if (value == advanceToNextNoteOnKeyRelease()) {
@@ -164,4 +169,14 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
 
     playbackConfiguration()->setPlayHarmonyWhenEditing(value);
     emit playChordSymbolWhenEditingChanged(value);
+}
+
+void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
+{
+    if (value == dynamicsApplyToAllVoices()) {
+        return;
+    }
+
+    engravingConfiguration()->setDynamicsApplyToAllVoices(value);
+    emit dynamicsApplyToAllVoicesChanged(value);
 }
