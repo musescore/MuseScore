@@ -694,7 +694,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                         note->setFret(n.value);
                         note->setString(n.str);
                         const StringData* sd = score->staff(staff)->part()->instrument()->stringData();
-                        int k     = int(curTrack->infos[staff].strings.size()) - n.str - 1;
+                        int k     = std::max(int(curTrack->infos[staff].strings.size()) - n.str - 1, 0);
                         int pitch = sd->stringList().at(k).pitch + n.value; //getPitch(n.str, n.value, 0);
                         note->setPitch(pitch);
                         note->setTpcFromPitch();
