@@ -1366,6 +1366,7 @@ bool MeiExporter::writeMRpt(const MeasureRepeat* measureRepeat)
 
     libmei::MRpt meiMRpt;
     Convert::colorToMEI(measureRepeat, meiMRpt);
+    meiMRpt.SetExpand(libmei::BOOLEAN_false);
     pugi::xml_node mRptNode = m_currentNode.append_child();
     meiMRpt.Write(mRptNode, this->getXmlIdFor(measureRepeat, 'm'));
 
