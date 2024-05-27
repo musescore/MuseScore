@@ -2302,9 +2302,9 @@ void TDraw::draw(const Note* item, Painter* painter)
                     painter->setPen(
                         item->selected() ? config->criticalSelectedColor() : config->criticalColor());
                 } else if (!item->chord()->isImpossibleChord()
-                    && ((item->chord()->notes().size() >= in->maxNotesPerChordsA())
-                    || (item->chord()->withUpNoteDistance(i) > 12)
-                    || (item->chord()->withDownNoteDistance(i) > 12))) {
+                        && ((item->chord()->notes().size() >= in->maxNotesPerChordsA())
+                            || (item->chord()->withUpNoteDistance(i) > 12)
+                            || (item->chord()->withDownNoteDistance(i) > 12))) {
                     item->chord()->setColor(item->selected() ? config->warningSelectedColor() : config->warningColor());
                     painter->setPen(
                         item->selected() ? config->warningSelectedColor() : config->warningColor());
