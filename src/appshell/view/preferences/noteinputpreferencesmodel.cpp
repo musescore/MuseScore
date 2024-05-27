@@ -73,7 +73,7 @@ bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
 
 bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
 {
-    return notationConfiguration()->dynamicsApplyToAllVoices();
+    return engravingConfiguration()->dynamicsApplyToAllVoices();
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
@@ -162,6 +162,6 @@ void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
         return;
     }
 
-    notationConfiguration()->setDynamicsApplyToAllVoices(value);
+    engravingConfiguration()->setDynamicsApplyToAllVoices(value);
     emit dynamicsApplyToAllVoicesChanged(value);
 }

@@ -59,8 +59,6 @@ bool MScore::warnPitchRange;
 bool MScore::warnGuitarBends;
 int MScore::pedalEventsMinTicks;
 
-bool MScore::dynamicsApplyToAllVoices = true;
-
 double MScore::nudgeStep;
 double MScore::nudgeStep10;
 double MScore::nudgeStep50;

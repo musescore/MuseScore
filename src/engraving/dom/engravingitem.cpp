@@ -642,7 +642,7 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
         voice_idx_t voiceForColorChoice = track() == muse::nidx ? 0 : voice();
         if (hasVoiceApplicationProperties()) {
             VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
-            if (voiceApplication == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || voiceApplication == VoiceApplication::ALL_VOICE_IN_STAFF) {
+            if (voiceApplication != VoiceApplication::CURRENT_VOICE_ONLY) {
                 voiceForColorChoice = VOICES;
             }
         }
@@ -1285,15 +1285,16 @@ bool EngravingItem::appliesToAllVoicesInInstrument() const
 
 void EngravingItem::setInitialTrackAndVoiceApplication(track_idx_t track)
 {
-    if (track == muse::nidx) {
-        track = m_track;
+    IF_ASSERT_FAILED(track != muse::nidx) {
+        return;
     }
-    if (MScore::dynamicsApplyToAllVoices) {
+
+    if (configuration()->dynamicsApplyToAllVoices()) {
         setTrack(trackZeroVoice(track));
         setProperty(Pid::APPLY_TO_VOICE, VoiceApplication::ALL_VOICE_IN_INSTRUMENT);
     } else {
         setTrack(track);
-        setProperty(Pid::APPLY_TO_VOICE, static_cast<VoiceApplication>(track2voice(track)));
+        setProperty(Pid::APPLY_TO_VOICE, VoiceApplication::CURRENT_VOICE_ONLY);
     }
 }
 
@@ -1302,12 +1303,8 @@ void EngravingItem::checkVoiceApplicationCompatibleWithTrack()
     voice_idx_t currentVoice = voice();
     VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
 
-    if (voiceApplication == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || voiceApplication == VoiceApplication::ALL_VOICE_IN_STAFF) {
-        if (currentVoice != 0) {
-            setProperty(Pid::TRACK, trackZeroVoice(track()));
-        }
-    } else if (currentVoice != static_cast<voice_idx_t>(voiceApplication)) {
-        setProperty(Pid::APPLY_TO_VOICE, static_cast<VoiceApplication>(currentVoice));
+    if (voiceApplication != VoiceApplication::CURRENT_VOICE_ONLY && currentVoice != 0) {
+        setProperty(Pid::TRACK, trackZeroVoice(track()));
     }
 }
 
@@ -1335,8 +1332,7 @@ void EngravingItem::setPlacementBasedOnVoiceApplication(DirectionV styledDirecti
                 newPlacement = PlacementV::BELOW;
             }
         } else {
-            voice_idx_t voice = static_cast<voice_idx_t>(voiceApplication);
-            newPlacement = voice % 2 ? PlacementV::BELOW : PlacementV::ABOVE;
+            newPlacement = voice() % 2 ? PlacementV::BELOW : PlacementV::ABOVE;
         }
     }
 
@@ -1458,9 +1454,6 @@ void EngravingItem::undoChangeProperty(Pid pid, const PropertyValue& val, Proper
         // placement properties to undo stack.
         undoPushProperty(Pid::PLACEMENT);
         undoPushProperty(Pid::OFFSET);
-    } else if (pid == Pid::APPLY_TO_VOICE) {
-        track_idx_t newTrack = trackZeroVoice(track()) + std::max(static_cast<int>(val.value<VoiceApplication>()), 0);
-        EngravingObject::undoChangeProperty(Pid::TRACK, newTrack);
     }
     EngravingObject::undoChangeProperty(pid, val, ps);
 }

@@ -645,7 +645,7 @@ public:
 
     virtual bool hasVoiceApplicationProperties() const { return false; }
     bool appliesToAllVoicesInInstrument() const;
-    void setInitialTrackAndVoiceApplication(track_idx_t track = muse::nidx);
+    void setInitialTrackAndVoiceApplication(track_idx_t track);
     void checkVoiceApplicationCompatibleWithTrack();
     void setPlacementBasedOnVoiceApplication(DirectionV styledDirection);
 

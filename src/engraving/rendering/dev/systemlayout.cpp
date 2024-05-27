@@ -2760,11 +2760,20 @@ bool SystemLayout::elementNeedsCenterBetweenStaves(const EngravingItem* element,
 
     const Staff* thisStaff = element->staff();
     const std::vector<Staff*>& partStaves = part->staves();
-    if (thisStaff == partStaves.front() && element->placeAbove() || thisStaff == partStaves.back() && element->placeBelow()) {
+    IF_ASSERT_FAILED(partStaves.size() > 0) {
+        return false;
+    }
+
+    if ((thisStaff == partStaves.front() && element->placeAbove()) || (thisStaff == partStaves.back() && element->placeBelow())) {
         return false;
     }
 
     staff_idx_t thisIdx = thisStaff->idx();
+    if (element->placeAbove()) {
+        IF_ASSERT_FAILED(thisIdx > 0) {
+            return false;
+        }
+    }
     staff_idx_t nextIdx = element->placeAbove() ? thisIdx - 1 : thisIdx + 1;
 
     const SysStaff* thisSystemStaff = system->staff(thisIdx);
@@ -2780,10 +2789,19 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
 {
     bool isAbove = element->placeAbove();
     staff_idx_t thisIdx = element->staffIdx();
+    if (isAbove) {
+        IF_ASSERT_FAILED(thisIdx > 0) {
+            return;
+        }
+    }
     staff_idx_t nextIdx = isAbove ? thisIdx - 1 : thisIdx + 1;
 
     SysStaff* thisStaff = system->staff(thisIdx);
     SysStaff* nextStaff = system->staff(nextIdx);
+
+    IF_ASSERT_FAILED(thisStaff && nextStaff) {
+        return;
+    }
 
     double elementXinSystemCoord = element->pageX() - system->pageX();
 

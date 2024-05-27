@@ -47,6 +47,13 @@ Column {
 
         propertyItem: root.model ? root.model.applyToVoice : null
 
+        onRequestResetToDefault: {
+            if (root.model) {
+                propertyItem.resetToDefault()
+                root.model.voice.resetToDefault()
+            }
+        }
+
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
         navigationRowEnd: individualVoicesSection.navigationRowEnd
@@ -84,6 +91,7 @@ Column {
                         allVoicesMenu.toggleOpened(allVoicesMenu.model)
                     } else {
                         applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_INSTRUMENT
+                        root.model.voice.value = 0
                     }
                 }
 
@@ -114,6 +122,8 @@ Column {
                             return
                         }
 
+                        root.model.voice.value = 0
+
                         switch (itemId) {
                         case "VOICE_ALL_IN_INSTRUMENT":
                             applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_INSTRUMENT
@@ -135,20 +145,21 @@ Column {
                 Layout.fillWidth: true
                 height: 30
 
-                currentValue: applyToVoiceSection.propertyItem && !applyToVoiceSection.propertyItem.isUndefined
-                              ? applyToVoiceSection.propertyItem.value
+                currentValue: applyToVoiceSection.propertyItem && !applyToVoiceSection.propertyItem.isUndefined && applyToVoiceSection.propertyItem.value === VoiceTypes.VOICE_CURRENT_ONLY
+                              ? root.model ? root.model.voice.value : undefined
                               : undefined
 
                 model: [
-                    { iconCode: IconCode.VOICE_1, value: VoiceTypes.VOICE_ONE },
-                    { iconCode: IconCode.VOICE_2, value: VoiceTypes.VOICE_TWO },
-                    { iconCode: IconCode.VOICE_3, value: VoiceTypes.VOICE_THREE },
-                    { iconCode: IconCode.VOICE_4, value: VoiceTypes.VOICE_FOUR }
+                    { iconCode: IconCode.VOICE_1, value: 0 },
+                    { iconCode: IconCode.VOICE_2, value: 1 },
+                    { iconCode: IconCode.VOICE_3, value: 2 },
+                    { iconCode: IconCode.VOICE_4, value: 3 }
                 ]
 
                 onToggled: function(newValue) {
-                    if (applyToVoiceSection.propertyItem) {
-                        applyToVoiceSection.propertyItem.value = newValue
+                    if (root.model) {
+                        applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_CURRENT_ONLY
+                        root.model.voice.value = newValue
                     }
                 }
             }

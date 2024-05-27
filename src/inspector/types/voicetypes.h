@@ -30,12 +30,9 @@ class VoiceTypes
 
 public:
     enum class VoiceApplication {
-        VOICE_ALL_IN_INSTRUMENT = -2,
+        VOICE_ALL_IN_INSTRUMENT,
         VOICE_ALL_IN_STAFF,
-        VOICE_ONE, // = 0
-        VOICE_TWO,
-        VOICE_THREE,
-        VOICE_FOUR
+        VOICE_CURRENT_ONLY,
     };
 
     Q_ENUM(VoiceApplication)

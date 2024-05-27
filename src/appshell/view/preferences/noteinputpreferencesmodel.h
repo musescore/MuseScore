@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "engraving/iengravingconfiguration.h"
 #include "shortcuts/ishortcutsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
@@ -37,6 +38,7 @@ class NoteInputPreferencesModel : public QObject
     INJECT(muse::shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
+    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)

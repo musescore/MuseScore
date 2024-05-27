@@ -38,6 +38,7 @@ void InspectorModelWithVoiceAndPositionOptions::createProperties()
         updateIsStaveCenteringAvailable();
     });
     m_applyToVoice = buildPropertyItem(Pid::APPLY_TO_VOICE);
+    m_voice = buildPropertyItem(Pid::VOICE);
     m_centerBetweenStaves = buildPropertyItem(Pid::CENTER_BETWEEN_STAVES);
     updateIsMultiStaffInstrument();
     updateIsStaveCenteringAvailable();
@@ -47,6 +48,7 @@ void InspectorModelWithVoiceAndPositionOptions::loadProperties()
 {
     loadPropertyItem(m_voiceBasedPosition);
     loadPropertyItem(m_applyToVoice);
+    loadPropertyItem(m_voice);
     loadPropertyItem(m_centerBetweenStaves);
     updateIsMultiStaffInstrument();
     updateIsStaveCenteringAvailable();
@@ -56,6 +58,7 @@ void InspectorModelWithVoiceAndPositionOptions::resetProperties()
 {
     m_voiceBasedPosition->resetToDefault();
     m_applyToVoice->resetToDefault();
+    m_voice->setValue(0);
     m_centerBetweenStaves->resetToDefault();
 }
 
@@ -109,6 +112,11 @@ PropertyItem* InspectorModelWithVoiceAndPositionOptions::voiceBasedPosition() co
 PropertyItem* InspectorModelWithVoiceAndPositionOptions::applyToVoice() const
 {
     return m_applyToVoice;
+}
+
+PropertyItem* InspectorModelWithVoiceAndPositionOptions::voice() const
+{
+    return m_voice;
 }
 
 PropertyItem* InspectorModelWithVoiceAndPositionOptions::centerBetweenStaves() const

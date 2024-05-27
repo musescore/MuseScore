@@ -439,10 +439,7 @@ TiePlacement TConv::fromXml(const AsciiStringView& str, TiePlacement def)
 static const std::vector<Item<VoiceApplication> > VOICE_APPLICATION = {
     { VoiceApplication::ALL_VOICE_IN_INSTRUMENT, "allInInstrument" },
     { VoiceApplication::ALL_VOICE_IN_STAFF,      "allInStaff" },
-    { VoiceApplication::ONE,                     "0" },
-    { VoiceApplication::TWO,                     "1" },
-    { VoiceApplication::THREE,                   "2" },
-    { VoiceApplication::FOUR,                    "3" },
+    { VoiceApplication::CURRENT_VOICE_ONLY,      "currentVoiceOnly" }
 };
 
 AsciiStringView TConv::toXml(VoiceApplication voiceAppl)

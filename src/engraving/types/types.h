@@ -332,12 +332,9 @@ enum class AutoOnOff : char {
 };
 
 enum class VoiceApplication {
-    ALL_VOICE_IN_INSTRUMENT = -2,
+    ALL_VOICE_IN_INSTRUMENT,
     ALL_VOICE_IN_STAFF,
-    ONE, // = 0
-    TWO,
-    THREE,
-    FOUR
+    CURRENT_VOICE_ONLY
 };
 
 // P_TYPE::BEAM_MODE

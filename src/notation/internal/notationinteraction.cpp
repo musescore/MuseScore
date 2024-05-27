@@ -1721,9 +1721,6 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         } else {
             for (EngravingItem* e : sel.elements()) {
                 applyDropPaletteElement(score, e, element, modifiers);
-                if (e->hasVoiceApplicationProperties()) {
-                    e->setInitialTrackAndVoiceApplication();
-                }
             }
         }
     } else if (sel.isRange()) {
@@ -1888,9 +1885,6 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             } else {
                 for (staff_idx_t staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
                     applyDropPaletteElement(score, firstSegment->firstElementForNavigation(staff), element, modifiers);
-                    if (element->hasVoiceApplicationProperties()) {
-                        element->setInitialTrackAndVoiceApplication();
-                    }
                 }
             }
         } else if (element->isActionIcon()
@@ -2012,6 +2006,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
                 rollback();
                 return;
             }
+        }
+
+        if (el->hasVoiceApplicationProperties()) {
+            el->setInitialTrackAndVoiceApplication(el->track());
         }
 
         if (el && !score->inputState().noteEntryMode()) {
