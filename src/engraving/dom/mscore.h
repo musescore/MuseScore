@@ -210,6 +210,7 @@ public:
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
 
     static bool warnPitchRange;
+    static bool warnChordsPitchRange;
     static bool warnGuitarBends;
     static int pedalEventsMinTicks;
 

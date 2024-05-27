@@ -68,6 +68,8 @@ Instrument::Instrument(String id)
     m_maxPitchP   = 127;
     m_useDrumset  = false;
     m_drumset     = 0;
+    m_maxNotesPerChordsA = 5;
+    m_maxNotesPerChordsP = 10;
     m_singleNoteDynamics = true;
 }
 
@@ -82,6 +84,8 @@ Instrument::Instrument(const Instrument& i)
     m_maxPitchA    = i.m_maxPitchA;
     m_minPitchP    = i.m_minPitchP;
     m_maxPitchP    = i.m_maxPitchP;
+    m_maxNotesPerChordsA = i.m_maxNotesPerChordsA;
+    m_maxNotesPerChordsP = i.m_maxNotesPerChordsP;
     m_transpose    = i.m_transpose;
     m_musicXmlId   = i.m_musicXmlId;
     m_stringData   = i.m_stringData;
@@ -114,6 +118,8 @@ void Instrument::operator=(const Instrument& i)
     m_maxPitchA    = i.m_maxPitchA;
     m_minPitchP    = i.m_minPitchP;
     m_maxPitchP    = i.m_maxPitchP;
+    m_maxNotesPerChordsA = i.m_maxNotesPerChordsA;
+    m_maxNotesPerChordsP = i.m_maxNotesPerChordsP;
     m_transpose    = i.m_transpose;
     m_musicXmlId   = i.m_musicXmlId;
     m_stringData   = i.m_stringData;
@@ -789,6 +795,8 @@ bool Instrument::operator==(const Instrument& i) const
     equal &= i.m_maxPitchA == m_maxPitchA;
     equal &= i.m_minPitchP == m_minPitchP;
     equal &= i.m_maxPitchP == m_maxPitchP;
+    equal &= i.m_maxNotesPerChordsA == m_maxNotesPerChordsA;
+    equal &= i.m_maxNotesPerChordsP == m_maxNotesPerChordsP;
     equal &= i.m_useDrumset == m_useDrumset;
     equal &= i.m_midiActions == m_midiActions;
     equal &= i.m_articulation == m_articulation;
@@ -991,6 +999,24 @@ int Instrument::minPitchA() const
 int Instrument::maxPitchA() const
 {
     return m_maxPitchA;
+}
+
+//---------------------------------------------------------
+//   maxNotesPerChordsP
+//---------------------------------------------------------
+
+int Instrument::maxNotesPerChordsP() const
+{
+    return m_maxNotesPerChordsP;
+}
+
+//---------------------------------------------------------
+//   maxNotesPerChordsA
+//---------------------------------------------------------
+
+int Instrument::maxNotesPerChordsA() const
+{
+    return m_maxNotesPerChordsA;
 }
 
 //---------------------------------------------------------

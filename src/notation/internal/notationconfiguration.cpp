@@ -71,6 +71,7 @@ static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/c
 static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canvas/scroll/limitScrollArea");
 
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
+static const Settings::Key COLOR_CHORDS_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnChordsPitchRange");
 static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
@@ -186,6 +187,7 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
+    settings()->setDefaultValue(COLOR_CHORDS_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(false));
     settings()->setDefaultValue(WARN_GUITAR_BENDS, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
@@ -219,6 +221,7 @@ void NotationConfiguration::init()
     });
 
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
+    mu::engraving::MScore::warnChordsPitchRange = colorChordsNotesOutsideOfUsablePitchRange();
     mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
     mu::engraving::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
@@ -663,10 +666,21 @@ bool NotationConfiguration::colorNotesOutsideOfUsablePitchRange() const
     return settings()->value(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE).toBool();
 }
 
+bool NotationConfiguration::colorChordsNotesOutsideOfUsablePitchRange() const
+{
+    return settings()->value(COLOR_CHORDS_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE).toBool();
+}
+
 void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
 {
     mu::engraving::MScore::warnPitchRange = value;
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
+}
+
+void NotationConfiguration::setColorChordsNotesOutsideOfUsablePitchRange(bool value)
+{
+    mu::engraving::MScore::warnChordsPitchRange = value;
+    settings()->setSharedValue(COLOR_CHORDS_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
 }
 
 bool NotationConfiguration::warnGuitarBends() const

@@ -159,6 +159,25 @@ Note* Chord::downNote() const
 }
 
 //---------------------------------------------------------
+//   withUpNoteDistance
+//---------------------------------------------------------
+
+int Chord::withUpNoteDistance(int inPitch) const
+{
+    return std::abs(upNote()->ppitch() - inPitch);
+}
+
+//---------------------------------------------------------
+//   withDownNoteDistance
+//---------------------------------------------------------
+
+
+int Chord::withDownNoteDistance(int inPitch) const
+{
+    return std::abs(downNote()->ppitch() - inPitch);
+}
+
+//---------------------------------------------------------
 //   upLine / downLine
 //---------------------------------------------------------
 
@@ -2050,6 +2069,15 @@ void Chord::setColor(const Color& color)
 void Chord::setStemDirection(DirectionV d)
 {
     m_stemDirection = d;
+}
+
+//---------------------------------------------------------
+//   setIsImpossibleChord
+//---------------------------------------------------------
+
+void Chord::setIsImpossibleChord(bool v)
+{
+    m_isImpossibleChord = v;
 }
 
 //---------------------------------------------------------

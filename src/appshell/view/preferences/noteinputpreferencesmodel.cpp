@@ -41,6 +41,11 @@ bool NoteInputPreferencesModel::colorNotesOutsideOfUsablePitchRange() const
     return notationConfiguration()->colorNotesOutsideOfUsablePitchRange();
 }
 
+bool NoteInputPreferencesModel::colorChordsNotesOutsideOfUsablePitchRange() const
+{
+    return notationConfiguration()->colorChordsNotesOutsideOfUsablePitchRange();
+}
+
 bool NoteInputPreferencesModel::warnGuitarBends() const
 {
     return notationConfiguration()->warnGuitarBends();
@@ -89,6 +94,16 @@ void NoteInputPreferencesModel::setColorNotesOutsideOfUsablePitchRange(bool valu
 
     notationConfiguration()->setColorNotesOutsideOfUsablePitchRange(value);
     emit colorNotesOutsideOfUsablePitchRangeChanged(value);
+}
+
+void NoteInputPreferencesModel::setColorChordsNotesOutsideOfUsablePitchRange(bool value)
+{
+    if (value == colorChordsNotesOutsideOfUsablePitchRange()) {
+        return;
+    }
+
+    notationConfiguration()->setColorChordsNotesOutsideOfUsablePitchRange(value);
+    emit colorChordsNotesOutsideOfUsablePitchRangeChanged(value);
 }
 
 void NoteInputPreferencesModel::setWarnGuitarBends(bool value)

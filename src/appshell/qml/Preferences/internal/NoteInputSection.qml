@@ -32,11 +32,13 @@ BaseSection {
 
     property alias advanceToNextNote: advanceToNextNoteBox.checked
     property alias colorNotes: colorNotesBox.checked
+    property alias colorChordsNotes: colorChordsNotesBox.checked
     property alias warnGuitarBends: warnBendsBox.checked
     property alias delayBetweenNotes: delayBetweenNotesControl.currentValue
 
     signal advanceToNextNoteChangeRequested(bool advance)
     signal colorNotesChangeRequested(bool color)
+    signal colorChordsNotesChangeRequested(bool color)
     signal warnGuitarBendsChangeRequested(bool warn)
     signal delayBetweenNotesChangeRequested(int delay)
 
@@ -71,6 +73,21 @@ BaseSection {
     }
 
     CheckBox {
+        id: colorChordsNotesBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Color chord notes outside of usable pitch range")
+
+        navigation.name: "ColorChordsNotesBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
+
+        onClicked: {
+            root.colorChordsNotesChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
         id: warnBendsBox
         width: parent.width
 
@@ -78,7 +95,7 @@ BaseSection {
 
         navigation.name: "WarnBendBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         onClicked: {
             root.warnGuitarBendsChangeRequested(!checked)
@@ -97,7 +114,7 @@ BaseSection {
 
         navigation.name: "DelayBetweenNotesControl"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 4
 
         onValueEdited: function(newValue) {
             root.delayBetweenNotesChangeRequested(newValue)

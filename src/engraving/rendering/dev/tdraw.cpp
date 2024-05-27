@@ -2288,6 +2288,30 @@ void TDraw::draw(const Note* item, Painter* painter)
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
             }
         }
+
+        if (item->chord() && item->chord()->segment() && item->staff()
+            && !item->score()->printing() && MScore::warnChordsPitchRange && !item->staff()->isDrumStaff(item->chord()->tick())) {
+            const Instrument* in = item->part()->instrument(item->chord()->tick());
+            if (in->family() == "keyboards") {
+                int i = item->ppitch();
+                if (item->chord()->notes().size() >= in->maxNotesPerChordsP()
+                    || (item->chord()->withUpNoteDistance(i) > 24)
+                    || (item->chord()->withDownNoteDistance(i) > 24)) {
+                    item->chord()->setIsImpossibleChord(true);
+                    item->chord()->setColor(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
+                    painter->setPen(
+                        item->selected() ? config->criticalSelectedColor() : config->criticalColor());
+                } else if (!item->chord()->isImpossibleChord()
+                    && ((item->chord()->notes().size() >= in->maxNotesPerChordsA())
+                    || (item->chord()->withUpNoteDistance(i) > 12)
+                    || (item->chord()->withDownNoteDistance(i) > 12))) {
+                    item->chord()->setColor(item->selected() ? config->warningSelectedColor() : config->warningColor());
+                    painter->setPen(
+                        item->selected() ? config->warningSelectedColor() : config->warningColor());
+                }
+            }
+        }
+        
         // draw blank notehead to avoid staff and ledger lines
         if (ldata->cachedSymNull.value() != SymId::noSym) {
             painter->save();

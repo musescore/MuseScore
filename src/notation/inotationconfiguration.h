@@ -149,6 +149,9 @@ public:
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
 
+    virtual bool colorChordsNotesOutsideOfUsablePitchRange() const = 0;
+    virtual void setColorChordsNotesOutsideOfUsablePitchRange(bool value) = 0;
+
     virtual bool warnGuitarBends() const = 0;
     virtual void setWarnGuitarBends(bool value) = 0;
 

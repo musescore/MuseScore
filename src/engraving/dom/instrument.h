@@ -331,6 +331,8 @@ public:
     void setMaxPitchP(int v) { m_maxPitchP = v; }
     void setMinPitchA(int v) { m_minPitchA = v; }
     void setMaxPitchA(int v) { m_maxPitchA = v; }
+    void setMaxNotesPerChordsP(int v) { m_maxNotesPerChordsP = v; }
+    void setMaxNotesPerChordsA(int v) { m_maxNotesPerChordsA = v; }
     Interval transpose() const { return m_transpose; }
     void setTranspose(const Interval& v) { m_transpose = v; }
     void setMusicXmlId(const String& musicXmlId) { m_musicXmlId = musicXmlId; }
@@ -377,6 +379,8 @@ public:
     int maxPitchP() const;
     int minPitchA() const;
     int maxPitchA() const;
+    int maxNotesPerChordsP() const;
+    int maxNotesPerChordsA() const;
     String musicXmlId() const;
 
     const StaffNameList& longNames() const;
@@ -420,6 +424,9 @@ private:
     int m_maxPitchA = 0;
     int m_minPitchP = 0;
     int m_maxPitchP = 0;
+    int m_maxNotesPerChordsA = 0;
+    int m_maxNotesPerChordsP = 0;
+
     Interval m_transpose;
     String m_musicXmlId;
 

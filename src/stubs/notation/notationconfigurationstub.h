@@ -136,6 +136,9 @@ public:
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value)  override;
 
+    bool colorChordsNotesOutsideOfUsablePitchRange() const override;
+    void setColorChordsNotesOutsideOfUsablePitchRange(bool value)  override;
+
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)  override;
 

@@ -43,6 +43,8 @@ class NoteInputPreferencesModel : public QObject
     Q_PROPERTY(
         bool colorNotesOutsideOfUsablePitchRange READ colorNotesOutsideOfUsablePitchRange WRITE setColorNotesOutsideOfUsablePitchRange NOTIFY colorNotesOutsideOfUsablePitchRangeChanged)
     Q_PROPERTY(
+        bool colorChordsNotesOutsideOfUsablePitchRange READ colorChordsNotesOutsideOfUsablePitchRange WRITE setColorChordsNotesOutsideOfUsablePitchRange NOTIFY colorChordsNotesOutsideOfUsablePitchRangeChanged)
+    Q_PROPERTY(
         bool warnGuitarBends READ warnGuitarBends WRITE setWarnGuitarBends NOTIFY warnGuitarBendsChanged)
     Q_PROPERTY(
         int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
@@ -59,6 +61,7 @@ public:
 
     bool advanceToNextNoteOnKeyRelease() const;
     bool colorNotesOutsideOfUsablePitchRange() const;
+    bool colorChordsNotesOutsideOfUsablePitchRange() const;
     bool warnGuitarBends() const;
     int delayBetweenNotesInRealTimeModeMilliseconds() const;
 
@@ -70,6 +73,7 @@ public:
 public slots:
     void setAdvanceToNextNoteOnKeyRelease(bool value);
     void setColorNotesOutsideOfUsablePitchRange(bool value);
+    void setColorChordsNotesOutsideOfUsablePitchRange(bool value);
     void setWarnGuitarBends(bool value);
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delay);
     void setPlayNotesWhenEditing(bool value);
@@ -80,6 +84,7 @@ public slots:
 signals:
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
     void colorNotesOutsideOfUsablePitchRangeChanged(bool value);
+    void colorChordsNotesOutsideOfUsablePitchRangeChanged(bool value);
     void warnGuitarBendsChanged(bool value);
     void delayBetweenNotesInRealTimeModeMillisecondsChanged(int delay);
     void playNotesWhenEditingChanged(bool value);

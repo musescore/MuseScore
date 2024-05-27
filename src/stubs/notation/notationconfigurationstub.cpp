@@ -359,6 +359,15 @@ void NotationConfigurationStub::setColorNotesOutsideOfUsablePitchRange(bool)
 {
 }
 
+bool NotationConfigurationStub::colorChordsNotesOutsideOfUsablePitchRange() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setColorChordsNotesOutsideOfUsablePitchRange(bool)
+{
+}
+
 int NotationConfigurationStub::delayBetweenNotesInRealTimeModeMilliseconds() const
 {
     return 100;

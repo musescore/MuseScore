@@ -150,6 +150,8 @@ public:
     Note* downNote() const;
     int upString() const;
     int downString() const;
+    int withUpNoteDistance(int inPitch) const;
+    int withDownNoteDistance(int inPitch) const;
     std::vector<int> noteDistances() const;
 
     double maxHeadWidth() const;
@@ -254,6 +256,9 @@ public:
 
     void updateArticulations(const std::set<SymId>& newArticulationIds,
                              ArticulationsUpdateMode replaceMode = ArticulationsUpdateMode::Insert);
+
+    bool isImpossibleChord() const { return m_isImpossibleChord; }
+    void setIsImpossibleChord(bool v);
 
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
@@ -391,6 +396,8 @@ private:
     bool m_allowKerningBelow = true;
 
     std::vector<Articulation*> m_articulations;
+
+    bool m_isImpossibleChord = false;
 };
 } // namespace mu::engraving
 #endif

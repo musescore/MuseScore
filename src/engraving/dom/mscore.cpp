@@ -56,6 +56,7 @@ double MScore::horizontalPageGapEven = 1.0;
 double MScore::horizontalPageGapOdd = 50.0;
 
 bool MScore::warnPitchRange;
+bool MScore::warnChordsPitchRange;
 bool MScore::warnGuitarBends;
 int MScore::pedalEventsMinTicks;
 
@@ -88,6 +89,7 @@ void MScore::init()
 
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;
+    warnChordsPitchRange = true;
     warnGuitarBends     = true;
     pedalEventsMinTicks = 1;
 

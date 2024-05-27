@@ -139,6 +139,9 @@ public:
     MOCK_METHOD(bool, colorNotesOutsideOfUsablePitchRange, (), (const, override));
     MOCK_METHOD(void, setColorNotesOutsideOfUsablePitchRange, (bool), (override));
 
+    MOCK_METHOD(bool, colorChordsNotesOutsideOfUsablePitchRange, (), (const, override));
+    MOCK_METHOD(void, setColorChordsNotesOutsideOfUsablePitchRange, (bool), (override));
+
     MOCK_METHOD(bool, warnGuitarBends, (), (const, override));
     MOCK_METHOD(void, setWarnGuitarBends, (bool), (override));
 
