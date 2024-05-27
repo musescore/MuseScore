@@ -171,6 +171,9 @@ public:
     ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number)  override;
 
+    ValCh<bool> pianoKeyboardPitchState() const override;
+    void setPianoKeyboardPitchState(bool value)  override;
+
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path)  override;
 };

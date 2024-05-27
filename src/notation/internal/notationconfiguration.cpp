@@ -89,6 +89,8 @@ static const Settings::Key NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY(module
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
+static const Settings::Key PIANO_KEYBOARD_PITCH_STATE(module_name,  "pianoKeyboard/useNotatedPitch");
+
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
@@ -212,6 +214,12 @@ void NotationConfiguration::init()
     m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
     settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
         m_pianoKeyboardNumberOfKeys.set(val.toInt());
+    });
+
+    settings()->setDefaultValue(PIANO_KEYBOARD_PITCH_STATE, Val(true));
+    m_pianoKeyboardPitchState.val = settings()->value(PIANO_KEYBOARD_PITCH_STATE).toBool();
+    settings()->valueChanged(PIANO_KEYBOARD_PITCH_STATE).onReceive(this, [this](const Val& val) {
+        m_pianoKeyboardPitchState.set(val.toBool());
     });
 
     engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
@@ -862,6 +870,16 @@ ValCh<int> NotationConfiguration::pianoKeyboardNumberOfKeys() const
 void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
 {
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
+}
+
+ValCh<bool> NotationConfiguration::pianoKeyboardPitchState() const
+{
+    return m_pianoKeyboardPitchState;
+}
+
+void NotationConfiguration::setPianoKeyboardPitchState(bool useNotatedPitch)
+{
+    settings()->setSharedValue(PIANO_KEYBOARD_PITCH_STATE, Val(useNotatedPitch));
 }
 
 muse::io::path_t NotationConfiguration::firstScoreOrderListPath() const

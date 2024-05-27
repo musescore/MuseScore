@@ -192,6 +192,9 @@ public:
     virtual muse::ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
 
+    virtual muse::ValCh<bool> pianoKeyboardPitchState() const = 0;
+    virtual void setPianoKeyboardPitchState(bool useNotatedPitch) = 0;
+
     virtual muse::io::path_t styleFileImportPath() const = 0;
     virtual void setStyleFileImportPath(const muse::io::path_t& path) = 0;
 

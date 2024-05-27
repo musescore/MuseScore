@@ -22,7 +22,10 @@
 #ifndef MU_NOTATION_PIANOKEYBOARDCONTROLLER_H
 #define MU_NOTATION_PIANOKEYBOARDCONTROLLER_H
 
+#include <QObject>
+
 #include "async/asyncable.h"
+#include "actions/actionable.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -30,8 +33,9 @@
 #include "pianokeyboardtypes.h"
 
 namespace mu::notation {
-class PianoKeyboardController : public muse::async::Asyncable
+class PianoKeyboardController : public muse::async::Asyncable, public muse::actions::Actionable
 {
+    INJECT(INotationConfiguration, configuration)
     INJECT(context::IGlobalContext, context)
 
 public:
@@ -46,6 +50,9 @@ public:
     muse::async::Notification keyStatesChanged() const;
 
     bool isFromMidi() const;
+
+    bool pianoKeyboardPitchState() const;
+    void setPianoKeyboardPitchState(bool useNotatedPitch);
 
 private:
     INotationPtr currentNotation() const;
