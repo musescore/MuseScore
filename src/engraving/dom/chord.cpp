@@ -171,7 +171,6 @@ int Chord::withUpNoteDistance(int inPitch) const
 //   withDownNoteDistance
 //---------------------------------------------------------
 
-
 int Chord::withDownNoteDistance(int inPitch) const
 {
     return std::abs(downNote()->ppitch() - inPitch);

@@ -2311,7 +2311,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                 }
             }
         }
-        
+
         // draw blank notehead to avoid staff and ledger lines
         if (ldata->cachedSymNull.value() != SymId::noSym) {
             painter->save();
