@@ -766,6 +766,18 @@ void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool e
     }
 }
 
+bool Instrument::isVocalInstrument() const
+{
+    String instrumentFamily = family();
+    return instrumentFamily == u"voices" || instrumentFamily == u"voice-groups";
+}
+
+bool Instrument::isNormallyMultiStaveInstrument() const
+{
+    String instrumentFamily = family();
+    return instrumentFamily == u"keyboards" || instrumentFamily == u"organs" || instrumentFamily == "keyboard-percussion";
+}
+
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------

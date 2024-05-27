@@ -167,6 +167,9 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::TIE_PLACEMENT:    return static_cast<int>(value<TiePlacement>());
     case P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE: return static_cast<int>(value<LyricsDashSystemStart>());
 
+    case P_TYPE::VOICE_APPLICATION: return static_cast<int>(value<VoiceApplication>());
+    case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
+
     // Other
     case P_TYPE::GROUPS: {
         NOT_SUPPORTED;

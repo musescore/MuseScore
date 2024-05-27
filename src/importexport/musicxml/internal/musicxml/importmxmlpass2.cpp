@@ -918,8 +918,13 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
     }
 
     if (!placement.empty()) {
-        el->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
-        el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        if (el->hasVoiceApplicationProperties()) {
+            el->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
+            el->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+        } else {
+            el->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
+            el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        }
     }
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
@@ -1394,8 +1399,13 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
 static void setSLinePlacement(SLine* sli, const String& placement)
 {
     if (placement == u"above" || placement == u"below") {
-        sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
-        sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        if (sli->hasVoiceApplicationProperties()) {
+            sli->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
+            sli->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+        } else {
+            sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
+            sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        }
     }
 }
 

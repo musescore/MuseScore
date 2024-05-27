@@ -127,6 +127,8 @@ public:
     bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
 
+    bool hasVoiceApplicationProperties() const override { return true; }
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)

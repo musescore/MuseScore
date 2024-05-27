@@ -109,5 +109,7 @@
         <file>qml/MuseScore/Inspector/common/PropertyToggle.qml</file>
         <file>qml/MuseScore/Inspector/parts/PartsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml</file>
+        <file>qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/CrescDimLineStyleSettings.qml</file>
     </qresource>
 </RCC>

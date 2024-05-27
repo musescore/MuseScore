@@ -672,6 +672,7 @@
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Chord>
             <durationType>quarter</durationType>
@@ -1293,6 +1294,7 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Chord>
             <durationType>eighth</durationType>
@@ -1816,6 +1818,7 @@
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Spanner type="HairPin">
             <prev>

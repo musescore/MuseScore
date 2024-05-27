@@ -355,6 +355,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SNAP_TO_DYNAMICS,         false, "snapToDynamics",       P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "snap expression") },
     { Pid::ANCHOR_TO_END_OF_PREVIOUS, true, "anchorToEndOfPrevious", P_TYPE::BOOL,              PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "anchor to end of previous") },
 
+    { Pid::APPLY_TO_VOICE,          true,  "applyToVoice",          P_TYPE::VOICE_APPLICATION,  PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "apply to voice") },
+    { Pid::CENTER_BETWEEN_STAVES,   false, "centerBetweenStaves",   P_TYPE::AUTO_ON_OFF,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "center between staves") },
+
     { Pid::POS_ABOVE,               false, "posAbove",              P_TYPE::MILLIMETRE,         PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position above") },
 
     { Pid::LOCATION_STAVES,         false, "staves",                P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "staves distance") },

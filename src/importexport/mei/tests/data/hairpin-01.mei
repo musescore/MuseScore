@@ -228,7 +228,7 @@
                            <note xml:id="n3ccbzy" dur="4" pname="g" oct="2" />
                         </layer>
                      </staff>
-                     <dir xml:id="d1h5zlat" type="mscore-hairpin mscore-decresc" startid="#n13xf9ul" extender="true" lform="dotted" place="above" endid="#nfbqb4p">diminuendo</dir>
+                     <dir xml:id="d1h5zlat" type="mscore-hairpin mscore-decresc" startid="#n13xf9ul" extender="true" lform="dotted" endid="#nfbqb4p">diminuendo</dir>
                   </measure>
                   <measure xml:id="m15y798u" n="13">
                      <staff xml:id="m13s1" n="1">

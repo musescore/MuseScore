@@ -64,6 +64,9 @@ public:
     MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, Color), (override));
     MOCK_METHOD((muse::async::Channel<engraving::voice_idx_t, Color>), selectionColorChanged, (), (const, override));
 
+    MOCK_METHOD(bool, dynamicsApplyToAllVoices, (), (const, override));
+    MOCK_METHOD(void, setDynamicsApplyToAllVoices, (bool), (override));
+
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));

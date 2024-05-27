@@ -350,6 +350,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>
@@ -459,6 +460,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>
@@ -790,6 +792,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>
@@ -1011,6 +1014,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>

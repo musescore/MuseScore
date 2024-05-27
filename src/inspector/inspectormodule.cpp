@@ -56,6 +56,7 @@
 #include "types/bendtypes.h"
 #include "types/tremolobartypes.h"
 #include "types/tremolotypes.h"
+#include "types/voicetypes.h"
 #include "types/linetypes.h"
 
 using namespace mu::inspector;
@@ -116,6 +117,7 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<TremoloBarTypes>("MuseScore.Inspector", 1, 0, "TremoloBarTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloTypes>("MuseScore.Inspector", 1, 0, "TremoloTypes", "Not creatable as it is an enum type");
     qmlRegisterType<InspectorPopupController>("MuseScore.Inspector", 1, 0, "InspectorPopupController");
+    qmlRegisterUncreatableType<VoiceTypes>("MuseScore.Inspector", 1, 0, "VoiceTypes", "Not creatable as it is an enum type");
 
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
 }

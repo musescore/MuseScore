@@ -439,6 +439,10 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), GradualTempoChangeType::Undefined));
     case P_TYPE::TIE_PLACEMENT:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
+    case P_TYPE::VOICE_APPLICATION:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), VoiceApplication::ALL_VOICE_IN_INSTRUMENT));
+    case P_TYPE::AUTO_ON_OFF:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -472,6 +476,12 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
         break;
     default:
         break;
+    }
+
+    // Pre-4.4 compatibility: these items now use DIRECTION property
+    if (pid == Pid::PLACEMENT && item->hasVoiceApplicationProperties()) {
+        pid = Pid::DIRECTION;
+        v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
     item->setProperty(pid, v);
@@ -775,6 +785,9 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
         } else if (readProperty(d, tag, e, ctx, Pid::ANCHOR_TO_END_OF_PREVIOUS)) {
+        } else if (readProperty(d, tag, e, ctx, Pid::APPLY_TO_VOICE)) {
+        } else if (readProperty(d, tag, e, ctx, Pid::DIRECTION)) {
+        } else if (readProperty(d, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
         } else if (!readProperties(static_cast<TextBase*>(d), e, ctx)) {
             e.unknown();
         }
@@ -3061,6 +3074,9 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             h->setVeloChangeMethod(TConv::fromXml(e.readAsciiText(), ChangeMethod::NORMAL));
         } else if (tag == "play") {
             h->setPlayHairpin(e.readBool());
+        } else if (readProperty(h, tag, e, ctx, Pid::APPLY_TO_VOICE)) {
+        } else if (readProperty(h, tag, e, ctx, Pid::DIRECTION)) {
+        } else if (readProperty(h, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
         } else if (!readProperties(static_cast<TextLineBase*>(h), e, ctx)) {
             e.unknown();
         }

@@ -679,6 +679,7 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -700,6 +701,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>
@@ -1045,6 +1047,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>
@@ -1172,6 +1175,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>

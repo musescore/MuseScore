@@ -408,6 +408,9 @@ public:
     bool getSingleNoteDynamicsFromTemplate() const;
     void switchExpressive(MasterScore* score, Synthesizer* synth, bool expressive, bool force = false);
 
+    bool isVocalInstrument() const;
+    bool isNormallyMultiStaveInstrument() const;
+
 private:
 
     StaffNameList m_longNames;

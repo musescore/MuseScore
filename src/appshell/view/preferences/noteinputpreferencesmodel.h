@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "engraving/iengravingconfiguration.h"
 #include "shortcuts/ishortcutsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
@@ -37,6 +38,7 @@ class NoteInputPreferencesModel : public QObject
     INJECT(muse::shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
+    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
@@ -53,6 +55,8 @@ class NoteInputPreferencesModel : public QObject
     Q_PROPERTY(bool playChordWhenEditing READ playChordWhenEditing WRITE setPlayChordWhenEditing NOTIFY playChordWhenEditingChanged)
     Q_PROPERTY(
         bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
+    Q_PROPERTY(
+        bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged FINAL)
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);
@@ -67,6 +71,8 @@ public:
     bool playChordWhenEditing() const;
     bool playChordSymbolWhenEditing() const;
 
+    bool dynamicsApplyToAllVoices() const;
+
 public slots:
     void setAdvanceToNextNoteOnKeyRelease(bool value);
     void setColorNotesOutsideOfUsablePitchRange(bool value);
@@ -76,6 +82,7 @@ public slots:
     void setNotePlayDurationMilliseconds(int duration);
     void setPlayChordWhenEditing(bool value);
     void setPlayChordSymbolWhenEditing(bool value);
+    void setDynamicsApplyToAllVoices(bool value);
 
 signals:
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
@@ -86,6 +93,7 @@ signals:
     void notePlayDurationMillisecondsChanged(int duration);
     void playChordWhenEditingChanged(bool value);
     void playChordSymbolWhenEditingChanged(bool value);
+    void dynamicsApplyToAllVoicesChanged(bool value);
 };
 }
 

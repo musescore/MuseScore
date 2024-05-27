@@ -65,10 +65,8 @@
             <linked>
               <indexDiff>-3</indexDiff>
               </linked>
-            <placement>above</placement>
             <positionLinkedToMaster>0</positionLinkedToMaster>
             <appearanceLinkedToMaster>0</appearanceLinkedToMaster>
-            <placement>above</placement>
             <dynamicsSize>1.2</dynamicsSize>
             </Dynamic>
           <Chord>
