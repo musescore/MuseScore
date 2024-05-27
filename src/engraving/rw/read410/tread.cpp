@@ -2357,6 +2357,7 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
             b->add(lb);
             b->cleanupLayoutBreaks(false);
         } else {
+            ctx.removeLink(lb->staffIdx(), lb);
             delete lb;
         }
     } else if (tag == "StaffTypeChange") {
