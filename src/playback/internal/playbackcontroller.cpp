@@ -226,7 +226,7 @@ void PlaybackController::seek(const audio::msecs_t msecs)
         return;
     }
 
-    playback()->player()->seek(m_currentSequenceId, msecs);
+    playback()->playerHandler()->seek(m_currentSequenceId, msecs);
 }
 
 Notification PlaybackController::playbackPositionChanged() const
@@ -543,7 +543,7 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    playback()->player()->resetLoop(m_currentSequenceId);
+    playback()->playerHandler()->resetLoop(m_currentSequenceId);
 
     seekRangeSelection();
     updateSoloMuteStates();
@@ -585,7 +585,7 @@ void PlaybackController::play()
         seek(startMsecs);
     }
 
-    playback()->player()->play(m_currentSequenceId);
+    playback()->playerHandler()->play(m_currentSequenceId);
     setCurrentPlaybackStatus(PlaybackStatus::Running);
 }
 
@@ -605,7 +605,7 @@ void PlaybackController::pause()
         return;
     }
 
-    playback()->player()->pause(m_currentSequenceId);
+    playback()->playerHandler()->pause(m_currentSequenceId);
     setCurrentPlaybackStatus(PlaybackStatus::Paused);
 }
 
@@ -615,7 +615,7 @@ void PlaybackController::stop()
         return;
     }
 
-    playback()->player()->stop(m_currentSequenceId);
+    playback()->playerHandler()->stop(m_currentSequenceId);
     setCurrentPlaybackStatus(PlaybackStatus::Stopped);
 }
 
@@ -625,7 +625,7 @@ void PlaybackController::resume()
         return;
     }
 
-    playback()->player()->resume(m_currentSequenceId);
+    playback()->playerHandler()->resume(m_currentSequenceId);
     setCurrentPlaybackStatus(PlaybackStatus::Running);
 }
 
@@ -816,7 +816,7 @@ void PlaybackController::updateLoop()
 
     msecs_t fromMsecs = tickToMsecs(playbackTickFrom.val);
     msecs_t toMsecs = tickToMsecs(playbackTickTo.val);
-    playback()->player()->setLoop(m_currentSequenceId, fromMsecs, toMsecs);
+    playback()->playerHandler()->setLoop(m_currentSequenceId, fromMsecs, toMsecs);
 
     enableLoop();
 
@@ -836,7 +836,7 @@ void PlaybackController::disableLoop()
         return;
     }
 
-    playback()->player()->resetLoop(m_currentSequenceId);
+    playback()->playerHandler()->resetLoop(m_currentSequenceId);
     notationPlayback()->setLoopBoundariesEnabled(false);
 
     notifyActionCheckedChanged(LOOP_CODE);
@@ -858,8 +858,8 @@ mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
 
 void PlaybackController::resetCurrentSequence()
 {
-    playback()->player()->playbackPositionMsecs().resetOnReceive(this);
-    playback()->player()->playbackStatusChanged().resetOnReceive(this);
+    playback()->playerHandler()->playbackPositionMsecs().resetOnReceive(this);
+    playback()->playerHandler()->playbackStatusChanged().resetOnReceive(this);
 
     playback()->tracks()->clearSources();
     playback()->tracks()->inputParamsChanged().resetOnReceive(this);
@@ -1283,7 +1283,7 @@ void PlaybackController::setupSequenceTracks()
 
 void PlaybackController::setupSequencePlayer()
 {
-    playback()->player()->playbackPositionMsecs().onReceive(
+    playback()->playerHandler()->playbackPositionMsecs().onReceive(
         this, [this](const TrackSequenceId id, const audio::msecs_t& msecs) {
         if (m_currentSequenceId != id) {
             return;
@@ -1293,14 +1293,14 @@ void PlaybackController::setupSequencePlayer()
         m_tickPlayed.send(m_currentTick);
     });
 
-    playback()->player()->setDuration(m_currentSequenceId, notationPlayback()->totalPlayTime());
+    playback()->playerHandler()->setDuration(m_currentSequenceId, notationPlayback()->totalPlayTime());
 
     notationPlayback()->totalPlayTimeChanged().onReceive(this, [this](const audio::msecs_t totalPlaybackTime) {
-        playback()->player()->setDuration(m_currentSequenceId, totalPlaybackTime);
+        playback()->playerHandler()->setDuration(m_currentSequenceId, totalPlaybackTime);
         m_totalPlayTimeChanged.notify();
     });
 
-    playback()->player()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
+    playback()->playerHandler()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
         if (m_currentSequenceId == id) {
             setCurrentPlaybackStatus(status);
         }

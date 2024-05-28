@@ -27,6 +27,7 @@
 #include <set>
 #include <string>
 
+#include "global/types/number.h"
 #include "global/realfn.h"
 #include "global/types/string.h"
 #include "global/async/channel.h"
@@ -37,7 +38,7 @@
 
 namespace muse::audio {
 using msecs_t = int64_t;
-using secs_t = int64_t;
+using secs_t = number_t<double>;
 using samples_t = uint64_t;
 using sample_rate_t = uint64_t;
 using audioch_t = uint8_t;
