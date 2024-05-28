@@ -41,10 +41,11 @@ AudioThread::~AudioThread()
     }
 }
 
-void AudioThread::run(const Runnable& onStart, const Runnable& loopBody)
+void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const uint64_t intervalMsecs)
 {
     m_onStart = onStart;
     m_mainLoopBody = loopBody;
+    m_intervalMsecs = intervalMsecs;
 
 #ifndef Q_OS_WASM
     m_running = true;
@@ -90,7 +91,7 @@ void AudioThread::main()
             m_mainLoopBody();
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        std::this_thread::sleep_for(std::chrono::milliseconds(m_intervalMsecs));
     }
 
     if (m_onFinished) {

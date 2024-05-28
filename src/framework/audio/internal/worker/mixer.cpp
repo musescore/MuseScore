@@ -104,13 +104,14 @@ RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate,
-                                                             configuration()->audioChannelsCount(),
-                                                             iocContext());
+    const samples_t samplesToPreallocate = configuration()->samplesToPreallocate();
+    const audioch_t audioChannelsCount = configuration()->audioChannelsCount();
+
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate, audioChannelsCount, iocContext());
 
     AuxChannelInfo aux;
     aux.channel = channel;
-    aux.buffer = std::vector<float>(DEFAULT_AUX_BUFFER_SIZE, 0.f);
+    aux.buffer = std::vector<float>(samplesToPreallocate * audioChannelsCount, 0.f);
 
     m_auxChannelInfoList.emplace_back(std::move(aux));
 
@@ -181,10 +182,6 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     size_t outBufferSize = samplesPerChannel * m_audioChannelsCount;
     std::fill(outBuffer, outBuffer + outBufferSize, 0.f);
 
-    if (m_writeCacheBuff.size() != outBufferSize) {
-        m_writeCacheBuff.resize(outBufferSize, 0.f);
-    }
-
     if (m_isIdle && m_tracksToProcessWhenIdle.empty() && m_isSilence) {
         notifyNoAudioSignal();
         return 0;
@@ -236,6 +233,11 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
     auto processChannel = [outBufferSize, samplesPerChannel](MixerChannelPtr channel) -> std::vector<float> {
         thread_local std::vector<float> buffer(outBufferSize, 0.f);
         thread_local std::vector<float> silent_buffer(outBufferSize, 0.f);
+
+        if (buffer.size() < outBufferSize) {
+            buffer.resize(outBufferSize, 0.f);
+            silent_buffer.resize(outBufferSize, 0.f);
+        }
 
         buffer = silent_buffer;
 

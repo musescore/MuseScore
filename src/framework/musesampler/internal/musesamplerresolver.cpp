@@ -113,9 +113,10 @@ bool MuseSamplerResolver::doInit(const io::path_t& libPath)
     if (!ok) {
         LOGE() << "Incompatible MuseSampler library; ignoring";
         m_libHandler.reset();
+    } else {
+        LOGI() << "MuseSampler successfully inited: " << libPath;
     }
 
-    LOGI() << "MuseSampler successfully inited: " << libPath;
     return ok;
 }
 

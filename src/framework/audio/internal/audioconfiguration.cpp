@@ -148,9 +148,29 @@ async::Notification AudioConfiguration::driverBufferSizeChanged() const
     return m_driverBufferSizeChanged;
 }
 
-samples_t AudioConfiguration::renderStep() const
+msecs_t AudioConfiguration::audioWorkerInterval() const
 {
-    return 512;
+    return 2;
+}
+
+samples_t AudioConfiguration::minSamplesToReserve(RenderMode mode) const
+{
+    // Idle: render as little as possible for lower latency (assuming the audio thread sleeps for ~2 ms)
+    if (mode == RenderMode::IdleMode) {
+#ifdef Q_OS_MAC
+        return 128;
+#else
+        return 256;
+#endif
+    }
+
+    // Active: render more for better quality (rendering is usually much heavier in this scenario)
+    return 1024;
+}
+
+samples_t AudioConfiguration::samplesToPreallocate() const
+{
+    return minSamplesToReserve(RenderMode::RealTimeMode);
 }
 
 unsigned int AudioConfiguration::sampleRate() const

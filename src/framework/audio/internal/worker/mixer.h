@@ -94,8 +94,6 @@ private:
     size_t m_minTrackCountForMultithreading = 0;
     size_t m_nonMutedTrackCount = 0;
 
-    std::vector<float> m_writeCacheBuff;
-
     AudioOutputParams m_masterParams;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};

@@ -50,25 +50,6 @@ inline size_t reservedFrames(const size_t writeIdx, const size_t readIdx)
     return result;
 }
 
-inline size_t incrementWriteIndex(const size_t writeIdx, const size_t increment)
-{
-    size_t result = writeIdx;
-    size_t from = writeIdx;
-
-    auto to = writeIdx + increment;
-    if (to > DEFAULT_SIZE) {
-        to = DEFAULT_SIZE - 1;
-    }
-    auto count = to - from;
-    result += count;
-
-    if (result >= DEFAULT_SIZE) {
-        result -= DEFAULT_SIZE;
-    }
-
-    return result;
-}
-
 struct BaseBufferProfiler {
     size_t reservedFramesMax = 0;
     size_t reservedFramesMin = 0;
@@ -138,12 +119,12 @@ struct BaseBufferProfiler {
 static BaseBufferProfiler READ_PROFILE("READ_PROFILE", 3000);
 static BaseBufferProfiler WRITE_PROFILE("WRITE_PROFILE", 0);
 
-void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t renderStep)
+void AudioBuffer::init(const audioch_t audioChannelsCount)
 {
-    m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
     m_audioChannelsCount = audioChannelsCount;
-    m_renderStep = renderStep;
+    m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
     m_minSamplesToReserve = DEFAULT_SIZE_PER_CHANNEL / 2;
+    m_renderStep = m_minSamplesToReserve;
 
     m_data.resize(m_samplesPerChannel * m_audioChannelsCount, 0.f);
 }
@@ -170,6 +151,15 @@ void AudioBuffer::setMinSamplesPerChannelToReserve(const samples_t samplesPerCha
     m_minSamplesToReserve = samplesPerChannel * m_audioChannelsCount;
 }
 
+void AudioBuffer::setRenderStep(const samples_t renderStep)
+{
+    IF_ASSERT_FAILED(renderStep > 0 && renderStep < DEFAULT_SIZE_PER_CHANNEL) {
+        return;
+    }
+
+    m_renderStep = renderStep;
+}
+
 void AudioBuffer::forward()
 {
     if (!m_source) {
@@ -181,9 +171,23 @@ void AudioBuffer::forward()
     size_t nextWriteIdx = currentWriteIdx;
 
     while (reservedFrames(nextWriteIdx, currentReadIdx) < m_minSamplesToReserve) {
-        m_source->process(m_data.data() + nextWriteIdx, m_renderStep);
+        samples_t renderStep = m_renderStep;
+        samples_t samplesToRender = renderStep * m_audioChannelsCount;
 
-        nextWriteIdx = incrementWriteIndex(nextWriteIdx, m_renderStep * m_audioChannelsCount);
+        if (nextWriteIdx + samplesToRender > DEFAULT_SIZE) {
+            renderStep = (DEFAULT_SIZE - nextWriteIdx) / m_audioChannelsCount;
+            samplesToRender = renderStep * m_audioChannelsCount;
+            IF_ASSERT_FAILED(renderStep > 0) {
+                break;
+            }
+        }
+
+        m_source->process(m_data.data() + nextWriteIdx, renderStep);
+
+        nextWriteIdx += samplesToRender;
+        if (nextWriteIdx >= DEFAULT_SIZE) {
+            nextWriteIdx = 0;
+        }
     }
 
     m_writeIndex.store(nextWriteIdx, std::memory_order_release);

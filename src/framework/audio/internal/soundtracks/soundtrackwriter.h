@@ -28,7 +28,6 @@
 #include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
 
-#include "iaudioconfiguration.h"
 #include "audiotypes.h"
 #include "iaudiosource.h"
 #include "../worker/iaudioengine.h"
@@ -37,7 +36,6 @@
 namespace muse::audio::soundtrack {
 class SoundTrackWriter : public muse::Injectable, public async::Asyncable
 {
-    muse::Inject<IAudioConfiguration> config = { this };
     muse::Inject<IAudioEngine> audioEngine = { this };
 
 public:
@@ -51,7 +49,6 @@ public:
     Progress progress();
 
 private:
-    encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType& type) const;
     Ret generateAudioData();
 
     void sendStepProgress(int step, int64_t current, int64_t total);
@@ -60,6 +57,7 @@ private:
 
     std::vector<float> m_inputBuffer;
     std::vector<float> m_intermBuffer;
+    samples_t m_renderStep = 0;
 
     encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
 
