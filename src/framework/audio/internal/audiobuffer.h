@@ -48,10 +48,11 @@ class AudioBuffer
 public:
     AudioBuffer() = default;
 
-    void init(const audioch_t audioChannelsCount, const samples_t renderStep);
+    void init(const audioch_t audioChannelsCount);
 
     void setSource(IAudioSourcePtr source);
     void setMinSamplesPerChannelToReserve(const samples_t samplesPerChannel);
+    void setRenderStep(const samples_t renderStep);
 
     void forward();
     void pop(float* dest, size_t sampleCount);

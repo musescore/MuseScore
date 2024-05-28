@@ -82,6 +82,7 @@ enum class SoundTrackType {
 struct SoundTrackFormat {
     SoundTrackType type = SoundTrackType::Undefined;
     sample_rate_t sampleRate = 0;
+    samples_t samplesPerChannel = 0;
     audioch_t audioChannelsNumber = 0;
     int bitRate = 0;
 
@@ -90,6 +91,7 @@ struct SoundTrackFormat {
         return type == other.type
                && sampleRate == other.sampleRate
                && audioChannelsNumber == other.audioChannelsNumber
+               && samplesPerChannel == other.samplesPerChannel
                && bitRate == other.bitRate;
     }
 
@@ -97,6 +99,7 @@ struct SoundTrackFormat {
     {
         return type != SoundTrackType::Undefined
                && sampleRate != 0
+               && samplesPerChannel != 0
                && audioChannelsNumber != 0;
     }
 };

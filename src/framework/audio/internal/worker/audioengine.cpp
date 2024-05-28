@@ -48,7 +48,7 @@ AudioEngine::~AudioEngine()
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 }
 
-Ret AudioEngine::init(AudioBufferPtr bufferPtr)
+Ret AudioEngine::init(AudioBufferPtr bufferPtr, const RenderConstraints& consts)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -60,9 +60,15 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr)
         return make_ret(Ret::Code::InternalError);
     }
 
-    m_mixer = std::make_shared<Mixer>();
+    IF_ASSERT_FAILED(consts.minSamplesToReserveWhenIdle != 0
+                     && consts.minSamplesToReserveInRealtime != 0) {
+        return make_ret(Ret::Code::InternalError);
+    }
 
+    m_mixer = std::make_shared<Mixer>();
     m_buffer = std::move(bufferPtr);
+    m_renderConsts = consts;
+
     setMode(RenderMode::IdleMode);
 
     m_inited = true;
@@ -108,13 +114,12 @@ void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_buffer) {
+    if (m_readBufferSize == readBufferSize) {
         return;
     }
 
-    //! NOTE: Found experimentally. Smaller value leads to distorted audio
-    samples_t minSamplesToReserve = std::max(readBufferSize, uint16_t(512));
-    m_buffer->setMinSamplesPerChannelToReserve(minSamplesToReserve);
+    m_readBufferSize = readBufferSize;
+    updateBufferConstraints();
 }
 
 void AudioEngine::setAudioChannelsCount(const audioch_t count)
@@ -137,6 +142,8 @@ RenderMode AudioEngine::mode() const
 
 void AudioEngine::setMode(const RenderMode newMode)
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     if (newMode == m_currentMode) {
         return;
     }
@@ -161,6 +168,8 @@ void AudioEngine::setMode(const RenderMode newMode)
         break;
     }
 
+    updateBufferConstraints();
+
     m_modeChanges.notify();
 }
 
@@ -175,4 +184,26 @@ MixerPtr AudioEngine::mixer() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_mixer;
+}
+
+void AudioEngine::updateBufferConstraints()
+{
+    IF_ASSERT_FAILED(m_buffer) {
+        return;
+    }
+
+    if (m_readBufferSize == 0) {
+        return;
+    }
+
+    samples_t minSamplesToReserve = 0;
+
+    if (m_currentMode == RenderMode::IdleMode) {
+        minSamplesToReserve = std::max(m_readBufferSize, m_renderConsts.minSamplesToReserveWhenIdle);
+    } else {
+        minSamplesToReserve = std::max(m_readBufferSize, m_renderConsts.minSamplesToReserveInRealtime);
+    }
+
+    m_buffer->setMinSamplesPerChannelToReserve(minSamplesToReserve);
+    m_buffer->setRenderStep(minSamplesToReserve);
 }

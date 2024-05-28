@@ -70,6 +70,7 @@ private:
     InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
+    void prepareOutputBuffer(const muse::audio::samples_t samples);
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const muse::audio::samples_t samples);
     void extractOutputSamples(muse::audio::samples_t samples, float* output);

@@ -222,8 +222,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_soundFontRepository->init();
 
-    m_audioBuffer->init(m_configuration->audioChannelsCount(),
-                        m_configuration->renderStep());
+    m_audioBuffer->init(m_configuration->audioChannelsCount());
 
     m_audioOutputController->init();
 
@@ -305,12 +304,16 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 {
-    auto workerSetup = [this, activeSpec]() {
+    AudioEngine::RenderConstraints consts;
+    consts.minSamplesToReserveWhenIdle = m_configuration->minSamplesToReserve(RenderMode::IdleMode);
+    consts.minSamplesToReserveInRealtime = m_configuration->minSamplesToReserve(RenderMode::RealTimeMode);
+
+    auto workerSetup = [this, activeSpec, consts]() {
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
         // Setup audio engine
-        AudioEngine::instance()->init(m_audioBuffer);
+        AudioEngine::instance()->init(m_audioBuffer, consts);
         AudioEngine::instance()->setAudioChannelsCount(activeSpec.channels);
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
@@ -328,5 +331,5 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_audioBuffer->forward();
     };
 
-    m_audioWorker->run(workerSetup, workerLoopBody);
+    m_audioWorker->run(workerSetup, workerLoopBody, m_configuration->audioWorkerInterval());
 }

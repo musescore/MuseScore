@@ -203,7 +203,7 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         s->player()->seek(0);
         msecs_t totalDuration = s->player()->duration();
 
-        SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer(), iocContext());
+        SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer());
         m_saveSoundTracksWritersMap[sequenceId] = writer;
 
         Progress progress = saveSoundTrackProgress(sequenceId);
