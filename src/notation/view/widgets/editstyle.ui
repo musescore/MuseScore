@@ -7812,7 +7812,7 @@
       <widget class="QWidget" name="PageDynamicsAndHairpins">
        <layout class="QVBoxLayout" name="verticalLayout_19">
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_dynamic_hairpin">
           <property name="title">
            <string>Default positions of dynamics and hairpins</string>
           </property>
