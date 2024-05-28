@@ -7886,7 +7886,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_dynamics_2">
+         <widget class="QGroupBox" name="groupBox_dynamics">
           <property name="title">
            <string>Dynamics</string>
           </property>
@@ -14016,7 +14016,7 @@ first note of the system</string>
                 </layout>
                </item>
                <item>
-                <widget class="QGroupBox" name="groupBox_1">
+                <widget class="QGroupBox" name="groupBox_tied_fret_marks">
                  <property name="title">
                   <string>Tied fret marks</string>
                  </property>
@@ -14046,7 +14046,7 @@ first note of the system</string>
                 </widget>
                </item>
                <item>
-                <widget class="QGroupBox" name="groupBox_2">
+                <widget class="QGroupBox" name="tieParen">
                  <property name="title">
                   <string>Parentheses indicating ties</string>
                  </property>

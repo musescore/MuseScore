@@ -2800,7 +2800,7 @@ void EditStyle::resetUserStyleName()
 
 void EditStyle::updateParenthesisIndicatingTiesGroupState()
 {
-    groupBox_2->setEnabled(tabShowTies->isChecked() || tabShowNone->isChecked());
+    tieParen->setEnabled(tabShowTies->isChecked() || tabShowNone->isChecked());
 }
 
 void EditStyle::clefVisibilityChanged(bool checked)
