@@ -31,27 +31,6 @@
 #include "audiotypes.h"
 
 namespace muse::audio {
-class IPlayerHandler
-{
-public:
-    virtual ~IPlayerHandler() = default;
-
-    virtual void play(const TrackSequenceId sequenceId) = 0;
-    virtual void seek(const TrackSequenceId sequenceId, const msecs_t newPositionMsecs) = 0;
-    virtual void stop(const TrackSequenceId sequenceId) = 0;
-    virtual void pause(const TrackSequenceId sequenceId) = 0;
-    virtual void resume(const TrackSequenceId sequenceId) = 0;
-
-    virtual void setDuration(const TrackSequenceId sequenceId, const msecs_t durationMsec) = 0;
-    virtual async::Promise<bool> setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) = 0;
-    virtual void resetLoop(const TrackSequenceId sequenceId) = 0;
-
-    virtual async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const = 0;
-    virtual async::Channel<TrackSequenceId, PlaybackStatus> playbackStatusChanged() const = 0;
-};
-
-using IPlayerHandlerPtr = std::shared_ptr<IPlayerHandler>;
-
 class IPlayer
 {
 public:

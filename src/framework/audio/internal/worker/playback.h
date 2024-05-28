@@ -48,7 +48,6 @@ public:
     async::Channel<TrackSequenceId> sequenceAdded() const override;
     async::Channel<TrackSequenceId> sequenceRemoved() const override;
 
-    IPlayerHandlerPtr playerHandler() const override;
     IPlayerPtr player(const TrackSequenceId id) const override;
     ITracksPtr tracks() const override;
     IAudioOutputPtr audioOutput() const override;
@@ -58,7 +57,6 @@ protected:
     ITrackSequencePtr sequence(const TrackSequenceId id) const override;
 
 private:
-    IPlayerHandlerPtr m_playerHandlersPtr = nullptr;
     ITracksPtr m_trackHandlersPtr = nullptr;
     IAudioOutputPtr m_audioOutputPtr = nullptr;
 

@@ -68,9 +68,6 @@ public:
 
     void reset() override;
 
-    void seek(const muse::midi::tick_t tick) override;
-    void seek(const muse::audio::msecs_t msecs) override;
-
     muse::async::Notification playbackPositionChanged() const override;
     muse::async::Channel<uint32_t> midiTickPlayed() const override;
     float playbackPositionInSeconds() const override;
@@ -132,6 +129,9 @@ private:
     uint64_t notationPlaybackKey() const;
 
     void updateCurrentTempo();
+
+    void seek(const muse::midi::tick_t tick);
+    void seek(const muse::audio::msecs_t msecs);
 
     bool isPaused() const;
     bool isLoaded() const;
@@ -225,6 +225,8 @@ private:
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
     muse::audio::TrackSequenceId m_currentSequenceId = -1;
+    muse::audio::IPlayerPtr m_currentPlayer;
+
     muse::async::Notification m_currentSequenceIdChanged;
     muse::audio::PlaybackStatus m_currentPlaybackStatus = muse::audio::PlaybackStatus::Stopped;
     muse::audio::msecs_t m_currentPlaybackTimeMsecs = 0;
