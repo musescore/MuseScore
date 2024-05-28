@@ -3974,7 +3974,7 @@
              <height>471</height>
             </rect>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_63">
+           <layout class="QVBoxLayout" name="verticalLayout_631">
             <item>
              <widget class="QGroupBox" name="groupBox_accidentals">
               <property name="title">
@@ -4126,7 +4126,7 @@
               <property name="title">
                <string>Multiple accidentals in chords</string>
               </property>
-              <layout class="QGridLayout" name="gridLayout_67"/>
+              <layout class="QGridLayout" name="gridLayout_671"/>
              </widget>
             </item>
             <item>
@@ -7890,7 +7890,7 @@
           <property name="title">
            <string>Dynamics</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_67">
+          <layout class="QGridLayout" name="gridLayout_672">
            <item row="5" column="0">
             <widget class="QLabel" name="label_220">
              <property name="text">
@@ -8051,7 +8051,7 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_14">
               <item>
-               <widget class="QLabel" name="label_222">
+               <widget class="QLabel" name="label_224">
                 <property name="text">
                  <string>Font:</string>
                 </property>
@@ -8333,7 +8333,7 @@
             </widget>
            </item>
            <item row="0" column="3">
-            <spacer name="horizontalSpacer_67">
+            <spacer name="horizontalSpacer_671">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -11125,7 +11125,7 @@
                 </widget>
                </item>
                <item>
-                <layout class="QGridLayout" name="gridLayout_671" columnminimumwidth="0,0,0,0,0,0,0">
+                <layout class="QGridLayout" name="gridLayout_673" columnminimumwidth="0,0,0,0,0,0,0">
                  <item row="3" column="1">
                   <widget class="QDoubleSpinBox" name="yLyricsPosBelow">
                    <property name="suffix">
@@ -11431,7 +11431,7 @@
                   </widget>
                  </item>
                  <item row="3" column="3">
-                  <spacer name="horizontalSpacer_671">
+                  <spacer name="horizontalSpacer_672">
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
@@ -11541,7 +11541,7 @@
                 <property name="title">
                  <string>Dash</string>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_631">
+                <layout class="QVBoxLayout" name="verticalLayout_632">
                  <item>
                   <layout class="QGridLayout" name="gridLayout_23">
                    <property name="topMargin">
@@ -11922,7 +11922,7 @@ first note of the system</string>
                     </widget>
                    </item>
                    <item row="0" column="0">
-                    <widget class="QLabel" name="label_220">
+                    <widget class="QLabel" name="label_222">
                      <property name="text">
                       <string>Min. underscore length:</string>
                      </property>
