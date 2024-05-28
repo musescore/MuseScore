@@ -71,12 +71,58 @@ void ApplicationActionController::init()
     });
 }
 
-void ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
+bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 {
-    onDragMoveEvent(event);
+    if ((event->type() == QEvent::Close && watched == mainWindow()->qWindow())
+        || event->type() == QEvent::Quit) {
+        bool accepted = quit(false);
+        event->setAccepted(accepted);
+
+        return true;
+    }
+
+    if (watched == qApp) {
+        if (event->type() == QEvent::FileOpen) {
+            const QFileOpenEvent* openEvent = static_cast<const QFileOpenEvent*>(event);
+            const QUrl url = openEvent->url();
+
+            if (projectFilesController()->isUrlSupported(url)) {
+                if (startupScenario()->startupCompleted()) {
+                    dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(url));
+                } else {
+                    startupScenario()->setStartupScoreFile(project::ProjectFile { url });
+                }
+
+                return true;
+            }
+        }
+    }
+
+    if (watched == mainWindow()->qWindow()) {
+        if (event->type() == QEvent::DragEnter) {
+            if (onDragEnterEvent(static_cast<QDragEnterEvent*>(event))) {
+                return true;
+            }
+        } else if (event->type() == QEvent::DragMove) {
+            if (onDragMoveEvent(static_cast<QDragMoveEvent*>(event))) {
+                return true;
+            }
+        } else if (event->type() == QEvent::Drop) {
+            if (onDropEvent(static_cast<QDropEvent*>(event))) {
+                return true;
+            }
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
-void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
+bool ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
+{
+    return onDragMoveEvent(event);
+}
+
+bool ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
 {
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
@@ -86,11 +132,14 @@ void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
             || (url.isLocalFile() && muse::audio::synth::isSoundFont(muse::io::path_t(url)))) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
+            return true;
         }
     }
+
+    return false;
 }
 
-void ApplicationActionController::onDropEvent(QDropEvent* event)
+bool ApplicationActionController::onDropEvent(QDropEvent* event)
 {
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
@@ -127,35 +176,11 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
         } else {
             event->ignore();
         }
-    }
-}
 
-bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
-{
-    if ((event->type() == QEvent::Close && watched == mainWindow()->qWindow())
-        || event->type() == QEvent::Quit) {
-        bool accepted = quit(false);
-        event->setAccepted(accepted);
-
-        return true;
+        return shouldBeHandled;
     }
 
-    if (event->type() == QEvent::FileOpen && watched == qApp) {
-        const QFileOpenEvent* openEvent = static_cast<const QFileOpenEvent*>(event);
-        const QUrl url = openEvent->url();
-
-        if (projectFilesController()->isUrlSupported(url)) {
-            if (startupScenario()->startupCompleted()) {
-                dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(url));
-            } else {
-                startupScenario()->setStartupScoreFile(project::ProjectFile { url });
-            }
-
-            return true;
-        }
-    }
-
-    return QObject::eventFilter(watched, event);
+    return false;
 }
 
 bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
