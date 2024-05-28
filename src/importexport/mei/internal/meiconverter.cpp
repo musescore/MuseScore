@@ -2630,7 +2630,7 @@ void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur,
 {
     warning = false;
 
-    // @place
+    // @curvedir
     if (meiSlur.HasCurvedir()) {
         slur->setSlurDirection(Convert::curvedirFromMEI(meiSlur.GetCurvedir(), warning));
         //slur->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
