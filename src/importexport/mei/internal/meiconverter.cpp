@@ -302,7 +302,7 @@ libmei::Arpeg Convert::arpegToMEI(const engraving::Arpeggio* arpeggio)
 
 void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning)
 {
-    engraving::SymId symId = engraving::SymId::articAccentAbove;
+    engraving::SymId symId = engraving::SymId::noSym;
 
     // @artic
     if (meiArtic.HasArtic() && (meiArtic.GetArtic().size() == 1)) {
@@ -1713,6 +1713,54 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     }
 
     return meiHarm;
+}
+
+void Convert::lvFromMEI(engraving::Articulation* lv, const libmei::Lv& meiLv, bool& warning)
+{
+    warning = false;
+
+    lv->setSymId(engraving::SymId::articLaissezVibrerAbove);
+
+    // @curvedir
+    switch (meiLv.GetCurvedir()) {
+    case (libmei::curvature_CURVEDIR_above):
+        lv->setAnchor(engraving::ArticulationAnchor::TOP);
+        break;
+    case (libmei::curvature_CURVEDIR_below):
+        lv->setAnchor(engraving::ArticulationAnchor::BOTTOM);
+        break;
+    default:
+        lv->setAnchor(engraving::ArticulationAnchor::AUTO);
+        break;
+    }
+    lv->setPropertyFlags(engraving::Pid::ARTICULATION_ANCHOR, engraving::PropertyFlags::UNSTYLED);
+
+    // @color
+    Convert::colorFromMEI(lv, meiLv);
+
+    return;
+}
+
+libmei::Lv Convert::lvToMEI(const engraving::Articulation* lv)
+{
+    libmei::Lv meiLv;
+
+    // @curvedir
+    switch (lv->anchor()) {
+    case (engraving::ArticulationAnchor::TOP):
+        meiLv.SetCurvedir(libmei::curvature_CURVEDIR_above);
+        break;
+    case (engraving::ArticulationAnchor::BOTTOM):
+        meiLv.SetCurvedir(libmei::curvature_CURVEDIR_below);
+        break;
+    default:
+        break;
+    }
+
+    // @color
+    Convert::colorToMEI(lv, meiLv);
+
+    return meiLv;
 }
 
 void Convert::jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning)

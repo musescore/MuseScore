@@ -132,6 +132,7 @@ private:
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
     bool writeHairpin(const engraving::Hairpin* hairpin, const std::string& startid);
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
+    bool writeLv(const engraving::Articulation* articulation, const std::string& startid);
     bool writeOctave(const engraving::Ottava* ottava, const std::string& startid);
     bool writeOrnament(const engraving::Ornament* ornament, const std::string& startid);
     bool writePedal(const engraving::Pedal* pedal, const std::string& startid);
@@ -164,6 +165,7 @@ private:
     pugi::xml_node getLastChordRest(pugi::xml_node node);
     void addNodeToOpenControlEvents(pugi::xml_node node, const engraving::Spanner* spanner, const std::string& startid);
     void addEndidToControlEvents();
+    bool isLaissezVibrer(const engraving::SymId id);
 
     /**
      * Methods for generating @xml:ids

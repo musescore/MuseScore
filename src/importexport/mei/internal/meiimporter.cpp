@@ -536,7 +536,7 @@ EngravingItem* MeiImporter::addToChordRest(const libmei::Element& meiElement, Me
         if (chordRest->isChord()) {
             item = Factory::createArpeggio(toChord(chordRest));
         }
-    } else if (meiElement.m_name == "artic") {
+    } else if (meiElement.m_name == "artic" || meiElement.m_name == "lv") {
         item = Factory::createArticulation(chordRest);
     } else {
         return nullptr;
@@ -2191,6 +2191,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             } else {
                 success = success && this->readHarm(xpathNode.node(), measure);
             }
+        } else if (elementName == "lv") {
+            success = success && this->readLv(xpathNode.node(), measure);
         } else if (elementName == "mordent") {
             success = success && this->readMordent(xpathNode.node(), measure);
         } else if (elementName == "octave") {
@@ -2529,6 +2531,31 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
     this->readLines(harmNode, meiLines, meiLine);
 
     Convert::harmFromMEI(harmony, meiLines, meiHarm, warning);
+
+    return true;
+}
+
+/**
+ * Read a lv.
+ */
+
+bool MeiImporter::readLv(pugi::xml_node lvNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Lv meiLv;
+    meiLv.Read(lvNode);
+
+    Articulation* lv = static_cast<Articulation*>(this->addToChordRest(meiLv, measure));
+    if (!lv) {
+        // Warning message given in MeiImporter::addToChordRest
+        return true;
+    }
+
+    Convert::lvFromMEI(lv, meiLv, warning);
 
     return true;
 }
