@@ -1356,10 +1356,11 @@ void Harmony::layout1()
             createLayout();
       if (textBlockList().empty())
             textBlockList().append(TextBlock());
-      calculateBoundingRect();    // for normal symbols this is called in layout: computeMinWidth()
+      auto positionPoint = calculateBoundingRect();    // for normal symbols this is called in layout: computeMinWidth()
       if (hasFrame())
             layoutFrame();
       score()->addRefresh(canvasBoundingRect());
+      setPos(positionPoint);
       }
 
 //---------------------------------------------------------
