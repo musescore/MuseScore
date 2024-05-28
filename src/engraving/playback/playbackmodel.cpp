@@ -591,6 +591,7 @@ bool PlaybackModel::hasToReloadScore(const ScoreChangesRange& changesRange) cons
         ElementType::SYSTEM_TEXT,
         ElementType::JUMP,
         ElementType::MARKER,
+        ElementType::BREATH,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
