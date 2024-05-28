@@ -251,6 +251,10 @@ TEST_F(Mei_Tests, mei_pedal_01) {
     meiReadTest("pedal-01");
 }
 
+TEST_F(Mei_Tests, mei_reh_01) {
+    meiReadTest("reh-01");
+}
+
 TEST_F(Mei_Tests, mei_roman_numeral_01) {
     meiReadTest("roman-numeral-01");
 }
