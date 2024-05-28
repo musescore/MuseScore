@@ -269,6 +269,8 @@ void Convert::arpegFromMEI(engraving::Arpeggio* arpeggio, const libmei::Arpeg& m
 
     // @color
     Convert::colorFromMEI(arpeggio, meiArpeg);
+
+    return;
 }
 
 libmei::Arpeg Convert::arpegToMEI(const engraving::Arpeggio* arpeggio)
@@ -372,6 +374,8 @@ void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::
 
     // @color
     Convert::colorFromMEI(articulation, meiArtic);
+
+    return;
 }
 
 libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
@@ -646,6 +650,8 @@ void Convert::breathFromMEI(engraving::Breath* breath, const libmei::Breath& mei
     Convert::colorFromMEI(breath, meiBreath);
 
     breath->setSymId(symId);
+
+    return;
 }
 
 libmei::Breath Convert::breathToMEI(const engraving::Breath* breath)
@@ -701,6 +707,8 @@ void Convert::caesuraFromMEI(engraving::Breath* breath, const libmei::Caesura& m
     Convert::colorFromMEI(breath, meiCeasura);
 
     breath->setSymId(symId);
+
+    return;
 }
 
 libmei::Caesura Convert::caesuraToMEI(const engraving::Breath* breath)
@@ -1427,6 +1435,8 @@ void Convert::fFromMEI(engraving::FiguredBassItem* figuredBassItem, const String
     figuredBassItem->parse(text);
 
     UNUSED(meiF);
+
+    return;
 }
 
 libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, StringList& meiLines)
@@ -1447,6 +1457,8 @@ void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm&
     UNUSED(figuredBass);
     UNUSED(meiHarm);
     UNUSED(meiFb);
+
+    return;
 }
 
 std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBass* figuredBass)
@@ -1502,6 +1514,8 @@ void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata&
 
     // @color
     Convert::colorFromMEI(fermata, meiFermata);
+
+    return;
 }
 
 libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
@@ -1613,6 +1627,8 @@ void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin&
 
     // @color
     Convert::colorlineFromMEI(hairpin, meiHairpin);
+
+    return;
 }
 
 libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
@@ -2210,6 +2226,8 @@ void Convert::octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& mei
 
     // @color
     Convert::colorlineFromMEI(ottava, meiOctave);
+
+    return;
 }
 
 libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
@@ -2351,6 +2369,8 @@ void Convert::ornamToMEI(const engraving::Ornament* ornament, libmei::Element& m
 
     // @color
     Convert::colorToMEI(ornament, meiElement);
+
+    return;
 }
 
 void Convert::ornamintervaleFromMEI(engraving::Ornament* ornament, const std::string& meiType)
@@ -2432,6 +2452,8 @@ void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPeda
 
     // @color
     Convert::colorlineFromMEI(pedal, meiPedal);
+
+    return;
 }
 
 libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
@@ -2623,6 +2645,8 @@ void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur,
 
     // @color
     Convert::colorFromMEI(slur, meiSlur);
+
+    return;
 }
 
 libmei::Slur Convert::slurToMEI(const engraving::SlurTie* slur)
@@ -2807,6 +2831,8 @@ void Convert::sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, E
         default: break;
         }
     }
+
+    return;
 }
 
 libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision)
@@ -3061,6 +3087,7 @@ void Convert::tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, boo
     meiSlur.SetLform(meiTie.GetLform());
     meiSlur.SetColor(meiTie.GetColor());
     Convert::slurFromMEI(tie, meiSlur, warning);
+    return;
 }
 
 libmei::Tie Convert::tieToMEI(const engraving::SlurTie* tie)
