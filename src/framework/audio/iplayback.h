@@ -30,7 +30,6 @@
 
 namespace muse::audio {
 class ITracks;
-class IPlayerHandler;
 class IPlayer;
 class IAudioOutput;
 
@@ -59,7 +58,6 @@ public:
     virtual std::shared_ptr<ITracks> tracks() const = 0;
 
     // 3. Play Sequence
-    virtual std::shared_ptr<IPlayerHandler> playerHandler() const = 0;
     virtual std::shared_ptr<IPlayer> player(const TrackSequenceId id) const = 0;
 
     // 4. Adjust a Sequence output
