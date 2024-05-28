@@ -50,6 +50,8 @@ public:
 
     virtual void seek(const muse::midi::tick_t tick) = 0;
     virtual void seek(const muse::audio::msecs_t msecs) = 0;
+    virtual void remoteSeek(const muse::audio::msecs_t msecs) = 0;
+    virtual void remotePlayOrStop(const bool playOrStop) = 0;
     virtual void reset() = 0;
 
     virtual muse::async::Notification playbackPositionChanged() const = 0;

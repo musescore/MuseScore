@@ -57,6 +57,9 @@ public:
     virtual void setSampleRate(unsigned int sampleRate) = 0;
     virtual async::Notification sampleRateChanged() const = 0;
 
+    virtual int audioDelayCompensate() const = 0;
+    virtual void setAudioDelayCompensate(const int frames) = 0;
+
     virtual size_t minTrackCountForMultithreading() const = 0;
 
     // synthesizers

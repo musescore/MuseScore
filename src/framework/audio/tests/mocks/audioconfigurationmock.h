@@ -48,6 +48,9 @@ public:
 
     MOCK_METHOD(unsigned int, sampleRate, (), (const, override));
     MOCK_METHOD(void, setSampleRate, (unsigned int), (override));
+    MOCK_METHOD(int, audioDelayCompensate, (), (const, override));
+    MOCK_METHOD(void, setAudioDelayCompensate, (const int), (override));
+
     MOCK_METHOD(async::Notification, sampleRateChanged, (), (const, override));
 
     MOCK_METHOD(size_t, minTrackCountForMultithreading, (), (const, override));

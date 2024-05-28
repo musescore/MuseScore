@@ -192,10 +192,10 @@ endif()
 set(QT_SUPPORT ON)
 
 if (MUSE_MODULE_AUDIO_JACK)
-    if (OS_IS_LIN OR MINGW)
-        add_definitions(-DJACK_AUDIO)
-    else()
+    if (OS_IS_WIN AND (NOT MINGW))
         set(MUSE_MODULE_AUDIO_JACK OFF)
+    else()
+        add_definitions(-DJACK_AUDIO)
     endif()
 endif()
 

@@ -70,6 +70,8 @@ public:
 
     void seek(const muse::midi::tick_t tick) override;
     void seek(const muse::audio::msecs_t msecs) override;
+    void remoteSeek(const muse::audio::msecs_t msecs) override;
+    void remotePlayOrStop(const bool playOrStop) override;
 
     muse::async::Notification playbackPositionChanged() const override;
     muse::async::Channel<uint32_t> midiTickPlayed() const override;
@@ -223,6 +225,8 @@ private:
     muse::async::Notification m_currentTempoChanged;
     muse::async::Channel<uint32_t> m_tickPlayed;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
+    muse::async::Channel<muse::audio::msecs_t> m_remoteSeek;
+    muse::async::Channel<bool> m_remotePlayOrStop;
 
     muse::audio::TrackSequenceId m_currentSequenceId = -1;
     muse::async::Notification m_currentSequenceIdChanged;

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,55 +25,49 @@
 
 #include <jack/jack.h>
 
-#include "async/asyncable.h"
+#include "framework/midi/miditypes.h"
 #include "iaudiodriver.h"
-#include "audiodeviceslistener.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
-int jack_process_callback(jack_nframes_t nframes, void* jackParam);
-void jack_cleanup_callback(void* args);
-
-class JackAudioDriver : public IAudioDriver, public async::Asyncable
+class JackDriverState : public AudioDriverState, public async::Asyncable
 {
 public:
-    JackAudioDriver();
-    ~JackAudioDriver();
-
-    void init() override;
+    JackDriverState(IAudioDriver* amm, bool transportEnable);
+    ~JackDriverState();
 
     std::string name() const override;
-    bool open(const Spec& spec, Spec* activeSpec) override;
+    bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    bool pushMidiEvent(muse::midi::Event& e) override;
+    void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event>) override;
+    void setAudioDelayCompensate(const int frames) override;
 
-    AudioDeviceID outputDevice() const override;
-    bool selectOutputDevice(const AudioDeviceID& deviceId) override;
-    bool resetToDefaultOutputDevice() override;
-    async::Notification outputDeviceChanged() const override;
+    std::string deviceName() const;
+    void deviceName(const std::string newDeviceName);
+    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const;
 
-    AudioDeviceList availableOutputDevices() const override;
-    async::Notification availableOutputDevicesChanged() const override;
+    void changedPlaying() const override;
+    void changedPosition() const override;
 
-    unsigned int outputDeviceBufferSize() const override;
-    bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
-    async::Notification outputDeviceBufferSizeChanged() const override;
+    bool isPlaying() const;
+    float playbackPositionInSeconds() const;
+    void remotePlayOrStop(bool) const;
+    void remoteSeek(msecs_t) const;
 
-    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
-
-    void resume() override;
-    void suspend() override;
+    void* jackDeviceHandle = nullptr;
+    float* buffer = nullptr;
+    std::vector<jack_port_t*> outputPorts;
+    std::vector<jack_port_t*> midiInputPorts;
+    std::vector<jack_port_t*> midiOutputPorts;
+    ThreadSafeQueue<muse::midi::Event> midiQueue;
+    async::Channel<muse::midi::tick_t, muse::midi::Event> eventReceived;
+    mu::playback::IPlaybackController* playbackController;
 
 private:
-    async::Notification m_outputDeviceChanged;
-
-    mutable std::mutex m_devicesMutex;
-    AudioDevicesListener m_devicesListener;
-    async::Notification m_availableOutputDevicesChanged;
-
-    std::string m_deviceId;
-
-    async::Notification m_bufferSizeChanged;
-    async::Notification m_sampleRateChanged;
+    IAudioDriver* m_audiomidiManager;
+    std::string m_deviceName;
 };
 }
 

@@ -48,6 +48,9 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     async::Notification sampleRateChanged() const override;
 
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+
     size_t minTrackCountForMultithreading() const override;
 
     // synthesizers

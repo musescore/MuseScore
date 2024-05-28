@@ -45,7 +45,6 @@ struct OSXAudioDriver::Data {
 };
 
 OSXAudioDriver::OSXAudioDriver()
-    : m_data(nullptr)
 {
     m_data = std::make_shared<Data>();
     m_data->audioQueue = nullptr;
@@ -334,6 +333,21 @@ async::Notification OSXAudioDriver::outputDeviceBufferSizeChanged() const
     return m_bufferSizeChanged;
 }
 
+unsigned int OSXAudioDriver::sampleRate() const
+{
+    return 0;
+}
+
+bool OSXAudioDriver::setSampleRate(unsigned int sampleRate)
+{
+    return true;
+}
+
+async::Notification OSXAudioDriver::sampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
 std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() const
 {
     OSXAudioDeviceID osxDeviceId = this->osxDeviceId();
@@ -362,6 +376,33 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
     std::sort(result.begin(), result.end());
 
     return result;
+}
+
+int OSXAudioDriver::audioDelayCompensate() const
+{
+    return 0;
+}
+
+void OSXAudioDriver::setAudioDelayCompensate(const int frames)
+{
+}
+
+bool OSXAudioDriver::isPlaying() const
+{
+    return false;
+}
+
+float OSXAudioDriver::playbackPositionInSeconds() const
+{
+    return 0;
+}
+
+void OSXAudioDriver::remotePlayOrStop([[maybe_unused]] bool ps) const
+{
+}
+
+void OSXAudioDriver::remoteSeek([[maybe_unused]] msecs_t millis) const
+{
 }
 
 bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
@@ -526,4 +567,15 @@ void OSXAudioDriver::OnFillBuffer(void* context, AudioQueueRef, AudioQueueBuffer
     Data* pData = (Data*)context;
     pData->callback(pData->mUserData, (uint8_t*)buffer->mAudioData, buffer->mAudioDataByteSize);
     AudioQueueEnqueueBuffer(pData->audioQueue, buffer, 0, NULL);
+}
+
+bool OSXAudioDriver::pushMidiEvent(muse::midi::Event&)
+{
+    return true; // dummy
+}
+
+std::vector<muse::midi::MidiDevice> OSXAudioDriver::availableMidiDevices(muse::midi::MidiPortDirection dir) const
+{
+    std::vector<muse::midi::MidiDevice> x;
+    return x; // dummy
 }

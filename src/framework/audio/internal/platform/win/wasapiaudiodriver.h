@@ -47,10 +47,22 @@ public:
     async::Notification outputDeviceChanged() const override;
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
+    unsigned int sampleRate() const override;
+    bool setSampleRate(unsigned int sampleRate) override;
+    async::Notification sampleRateChanged() const override;
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    int audioDelayCompensate(void) const override;
+    void setAudioDelayCompensate(const int frames) override;
+    bool isPlaying() const override;
+    float playbackPositionInSeconds() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
+    bool pushMidiEvent(muse::midi::Event& e) override;
+    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const override;
+
     void resume() override;
     void suspend() override;
 
@@ -67,6 +79,7 @@ private:
     std::unique_ptr<AudioDevicesListener> m_devicesListener;
 
     async::Notification m_outputDeviceChanged;
+    async::Notification m_sampleRateChanged;
     async::Notification m_availableOutputDevicesChanged;
     async::Notification m_outputDeviceBufferSizeChanged;
 

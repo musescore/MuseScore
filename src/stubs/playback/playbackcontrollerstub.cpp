@@ -52,6 +52,14 @@ void PlaybackControllerStub::seek(const muse::audio::msecs_t)
 {
 }
 
+void PlaybackControllerStub::remoteSeek(const muse::audio::msecs_t msecs)
+{
+}
+
+void PlaybackControllerStub::remotePlayOrStop(const bool playOrStop)
+{
+}
+
 void PlaybackControllerStub::reset()
 {
 }
