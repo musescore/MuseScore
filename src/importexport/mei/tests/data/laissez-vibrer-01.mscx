@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.40">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.74978</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Klaus Rettinghaus</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title type=&quot;main&quot;&gt;Laissez vibrer test&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;Klaus Rettinghaus&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2024-05-21T12:00:00&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Laissez vibrer test</metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <Instrument id="oboe">
+        <longName>Oboe</longName>
+        <shortName>Ob.</shortName>
+        <trackName></trackName>
+        <instrumentId>wind.reed.oboe</instrumentId>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>title</style>
+          <text>Laissez vibrer test</text>
+          </Text>
+        <Text>
+          <style>composer</style>
+          <text>Klaus Rettinghaus</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>noSym</subtype>
+              </Articulation>
+            <Articulation>
+              <subtype>articLaissezVibrerAbove</subtype>
+              <anchor>0</anchor>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>noSym</subtype>
+              <anchor>1</anchor>
+              </Articulation>
+            <Articulation>
+              <subtype>articLaissezVibrerBelow</subtype>
+              <anchor>1</anchor>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>noSym</subtype>
+              </Articulation>
+            <Articulation>
+              <subtype>articLaissezVibrerAbove</subtype>
+              <anchor>0</anchor>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>noSym</subtype>
+              <color r="255" g="38" b="0" a="255"/>
+              </Articulation>
+            <Articulation>
+              <subtype>articLaissezVibrerAbove</subtype>
+              <anchor>0</anchor>
+              <color r="255" g="38" b="0" a="255"/>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
