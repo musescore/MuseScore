@@ -29,7 +29,7 @@
 #include "igettracksequence.h"
 
 namespace muse::audio {
-class PlayerHandler : public IPlayer, public async::Asyncable
+class PlayerHandler : public IPlayerHandler, public async::Asyncable
 {
 public:
     explicit PlayerHandler(IGetTrackSequence* getSequence);

@@ -29,6 +29,7 @@
 #include "internal/audiosanitizer.h"
 
 #include "internal/worker/playerhandler.h"
+#include "internal/worker/player.h"
 #include "internal/worker/trackshandler.h"
 #include "internal/worker/audiooutputhandler.h"
 #include "internal/worker/tracksequence.h"
@@ -126,11 +127,16 @@ Channel<TrackSequenceId> Playback::sequenceRemoved() const
     return m_sequenceRemoved;
 }
 
-IPlayerPtr Playback::player() const
+IPlayerHandlerPtr Playback::playerHandler() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
     return m_playerHandlersPtr;
+}
+
+IPlayerPtr Playback::player(const TrackSequenceId id) const
+{
+    return std::make_shared<Player>(this, id);
 }
 
 ITracksPtr Playback::tracks() const
