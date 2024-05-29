@@ -34,7 +34,7 @@ AudioEngine* AudioEngine::instance()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    static AudioEngine e;
+    static AudioEngine e(nullptr);
     return &e;
 }
 
@@ -60,7 +60,7 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr)
         return make_ret(Ret::Code::InternalError);
     }
 
-    m_mixer = std::make_shared<Mixer>();
+    m_mixer = std::make_shared<Mixer>(iocContext());
 
     m_buffer = std::move(bufferPtr);
     setMode(RenderMode::IdleMode);

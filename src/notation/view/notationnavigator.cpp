@@ -21,15 +21,13 @@
  */
 #include "notationnavigator.h"
 
-#include "engraving/dom/system.h"
-
 #include "log.h"
 
 using namespace muse;
 using namespace mu::notation;
 
 NotationNavigatorCursorView::NotationNavigatorCursorView(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : QQuickPaintedItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

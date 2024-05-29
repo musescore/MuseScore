@@ -83,17 +83,17 @@ public:
     virtual QQuickItem* asItem() = 0;
 };
 
-class NotationViewInputController : public muse::actions::Actionable, public muse::async::Asyncable
+class NotationViewInputController : public muse::actions::Actionable, public muse::Injectable, public muse::async::Asyncable
 {
 public:
-    INJECT(INotationConfiguration, configuration)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
-    NotationViewInputController(IControlledView* view);
+    NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx);
 
     void init();
 

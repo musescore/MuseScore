@@ -29,7 +29,7 @@
 using namespace mu::notation;
 
 SelectionFilterModel::SelectionFilterModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

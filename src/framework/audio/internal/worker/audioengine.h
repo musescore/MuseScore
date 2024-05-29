@@ -32,9 +32,11 @@
 
 namespace muse::audio {
 class AudioBuffer;
-class AudioEngine : public async::Asyncable
+class AudioEngine : public Injectable, public async::Asyncable
 {
 public:
+    AudioEngine(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
     ~AudioEngine();
 
     static AudioEngine* instance();

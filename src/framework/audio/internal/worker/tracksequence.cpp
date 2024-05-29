@@ -36,8 +36,8 @@ using namespace muse;
 using namespace muse::async;
 using namespace muse::audio;
 
-TrackSequence::TrackSequence(const TrackSequenceId id)
-    : m_id(id)
+TrackSequence::TrackSequence(const TrackSequenceId id, const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_id(id)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -99,7 +99,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
     };
 
     EventTrackPtr trackPtr = std::make_shared<EventTrack>();
-    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(newId, playbackData, onOffStreamReceived);
+    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(newId, playbackData, onOffStreamReceived, iocContext());
 
     trackPtr->id = newId;
     trackPtr->name = trackName;

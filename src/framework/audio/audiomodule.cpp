@@ -295,7 +295,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
 
-        auto fluidResolver = std::make_shared<FluidResolver>();
+        auto fluidResolver = std::make_shared<FluidResolver>(iocContext());
         m_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
         m_synthResolver->init(m_configuration->defaultAudioInputParams());
 

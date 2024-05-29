@@ -45,7 +45,7 @@ void Playback::init()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
+    m_trackHandlersPtr = std::make_shared<TracksHandler>(this, iocContext());
     m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this, iocContext());
 }
 
@@ -73,7 +73,7 @@ Promise<TrackSequenceId> Playback::addSequence()
 
         TrackSequenceId newId = static_cast<TrackSequenceId>(m_sequences.size());
 
-        m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId));
+        m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId, iocContext()));
         m_sequenceAdded.send(newId);
 
         return resolve(std::move(newId));
