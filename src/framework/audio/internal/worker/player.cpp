@@ -56,7 +56,7 @@ ITrackSequencePtr Player::seq() const
     }
 
     m_seq->player()->playbackPositionMSecs().onReceive(this, [this](const msecs_t newPosMsecs) {
-        m_playbackPositionMsecsChanged.send(newPosMsecs);
+        m_playbackPositionChanged.send(secs_t(newPosMsecs / 1000.0));
     });
 
     m_seq->player()->playbackStatusChanged().onReceive(this, [this](const PlaybackStatus newStatus) {
@@ -168,10 +168,10 @@ void Player::resetLoop()
     }, AudioThread::ID);
 }
 
-async::Channel<msecs_t> Player::playbackPositionMsecs() const
+async::Channel<secs_t> Player::playbackPositionMsecs() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-    return m_playbackPositionMsecsChanged;
+    return m_playbackPositionChanged;
 }
 
 async::Channel<PlaybackStatus> Player::playbackStatusChanged() const

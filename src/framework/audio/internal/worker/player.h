@@ -46,7 +46,7 @@ public:
     async::Promise<bool> setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetLoop() override;
 
-    async::Channel<msecs_t> playbackPositionMsecs() const override;
+    async::Channel<secs_t> playbackPositionMsecs() const override;
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;
 
 private:
@@ -56,7 +56,7 @@ private:
     const IGetTrackSequence* m_getSequence = nullptr;
     TrackSequenceId m_sequenceId = -1;
     mutable ITrackSequencePtr m_seq;
-    mutable async::Channel<msecs_t> m_playbackPositionMsecsChanged;
+    mutable async::Channel<secs_t> m_playbackPositionChanged;
     mutable async::Channel<PlaybackStatus> m_playbackStatusChanged;
 };
 }

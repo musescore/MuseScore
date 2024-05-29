@@ -1323,7 +1323,7 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_enableAutoScrollTimer.stop();
 
     if (isPlaying) {
-        float playPosSec = playbackController()->playbackPositionInSeconds();
+        float playPosSec = playbackController()->playbackPosition();
         muse::midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
         movePlaybackCursor(tick);
     } else {

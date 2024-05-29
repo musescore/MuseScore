@@ -97,7 +97,7 @@ private:
 
     muse::ui::UiAction playAction() const;
 
-    void updatePlayPosition();
+    void updatePlayPosition(muse::audio::secs_t secs);
     void doSetPlayTime(const QTime& time);
 
     void rewind(muse::audio::msecs_t milliseconds);

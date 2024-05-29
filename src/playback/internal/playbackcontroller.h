@@ -68,9 +68,9 @@ public:
 
     void reset() override;
 
-    muse::async::Notification playbackPositionChanged() const override;
+    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
     muse::async::Channel<uint32_t> midiTickPlayed() const override;
-    float playbackPositionInSeconds() const override;
 
     muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     muse::async::Notification currentTrackSequenceIdChanged() const override;
@@ -197,7 +197,7 @@ private:
     void updateSoloMuteStates();
     void updateAuxMuteStates();
 
-    void setCurrentPlaybackTime(muse::audio::msecs_t msecs);
+    void setCurrentPlaybackTime(muse::audio::secs_t secs);
 
     using TrackAddFinished = std::function<void ()>;
 
@@ -218,7 +218,7 @@ private:
 
     muse::async::Notification m_isPlayAllowedChanged;
     muse::async::Notification m_isPlayingChanged;
-    muse::async::Notification m_playbackPositionChanged;
+    muse::async::Channel<muse::audio::secs_t> m_playbackPositionChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
     muse::async::Channel<uint32_t> m_tickPlayed;
@@ -229,7 +229,7 @@ private:
 
     muse::async::Notification m_currentSequenceIdChanged;
     muse::audio::PlaybackStatus m_currentPlaybackStatus = muse::audio::PlaybackStatus::Stopped;
-    muse::audio::msecs_t m_currentPlaybackTimeMsecs = 0;
+    muse::audio::secs_t m_currentPlaybackPosition = 0;
     muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 

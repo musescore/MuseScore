@@ -43,13 +43,13 @@ public:
     virtual void stop() = 0;
     virtual void pause() = 0;
     virtual void resume() = 0;
+    virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
 
     virtual void setDuration(const msecs_t durationMsec) = 0;
     virtual async::Promise<bool> setLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
     virtual void resetLoop() = 0;
 
-    virtual async::Channel<msecs_t> playbackPositionMsecs() const = 0;
-    virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
+    virtual async::Channel<secs_t> playbackPositionMsecs() const = 0;
 };
 
 using IPlayerPtr = std::shared_ptr<IPlayer>;
