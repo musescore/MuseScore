@@ -75,10 +75,6 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
-    WindowDropArea {
-        anchors.fill: parent
-    }
-
     function showMinimizedWithSavePreviousState() {
         bridge.showMinimizedWithSavePreviousState()
     }
