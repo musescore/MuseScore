@@ -1926,7 +1926,12 @@ bool MeiExporter::writeTempo(const TempoText* tempoText, const std::string& star
 
     pugi::xml_node tempoNode = m_currentNode.append_child();
     libmei::Tempo meiTempo = Convert::tempoToMEI(tempoText, meiLines);
-    meiTempo.SetStartid(startid);
+    if (tempoText->tick() == tempoText->measure()->tick()) {
+        double tstamp = Convert::tstampFromFraction(tempoText->tick() - tempoText->measure()->tick(), tempoText->measure()->timesig());
+        meiTempo.SetTstamp(tstamp);
+    } else {
+        meiTempo.SetStartid(startid);
+    }
     meiTempo.Write(tempoNode, this->getXmlIdFor(tempoText, 't'));
 
     this->writeLinesWithSMuFL(tempoNode, meiLines);
