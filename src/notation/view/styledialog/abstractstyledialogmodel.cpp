@@ -34,8 +34,8 @@ AbstractStyleDialogModel::AbstractStyleDialogModel(QObject* parent, std::set<Sty
 StyleItem* AbstractStyleDialogModel::styleItem(StyleId id) const
 {
     if (!m_inited) {
-        for (StyleId id : m_ids) {
-            m_items.insert_or_assign(id, buildStyleItem(id));
+        for (StyleId mid : m_ids) {
+            m_items.insert_or_assign(mid, buildStyleItem(mid));
         }
 
         currentNotationStyle()->styleChanged().onNotify(this, [this]() {
