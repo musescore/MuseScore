@@ -6414,7 +6414,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
             c->add(stem);
         }
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
-        note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
+        note->setVisible(hasHead && printObject);
         stem->setVisible(printObject);
 
         if (!grace) {
