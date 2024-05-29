@@ -38,8 +38,6 @@ public:
 
     MOCK_METHOD(void, reset, (), (override));
 
-    MOCK_METHOD(muse::async::Promise<muse::audio::secs_t>, playbackPosition, (), (const, override));
-    MOCK_METHOD(muse::async::Channel<muse::audio::secs_t>, playbackPositionChanged, (), (const, override));
     MOCK_METHOD(muse::async::Channel<uint32_t>, midiTickPlayed, (), (const, override));
 
     MOCK_METHOD(muse::audio::TrackSequenceId, currentTrackSequenceId, (), (const, override));

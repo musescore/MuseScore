@@ -40,14 +40,15 @@ public:
     void stop() override;
     void pause() override;
     void resume() override;
+    async::Channel<PlaybackStatus> playbackStatusChanged() const override;
 
     msecs_t duration() const override;
     void setDuration(const msecs_t duration) override;
     Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetLoop() override;
 
-    async::Channel<msecs_t> playbackPositionMSecs() const override;
-    async::Channel<PlaybackStatus> playbackStatusChanged() const override;
+    secs_t playbackPosition() const override;
+    async::Channel<secs_t> playbackPositionChanged() const override;
 
 private:
     void setAllTracksActive(bool active);

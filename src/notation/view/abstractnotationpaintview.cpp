@@ -1323,7 +1323,10 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_enableAutoScrollTimer.stop();
 
     if (isPlaying) {
-        playbackController()->playbackPosition().onResolve(this, [this](audio::secs_t pos) {
+        IF_ASSERT_FAILED(globalContext()->currentPlayer()) {
+            return;
+        }
+        globalContext()->currentPlayer()->playbackPosition().onResolve(this, [this](audio::secs_t pos) {
             muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
             movePlaybackCursor(tick);
         });

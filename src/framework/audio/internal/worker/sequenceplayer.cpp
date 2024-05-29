@@ -120,7 +120,14 @@ void SequencePlayer::resetLoop()
     m_clock->resetTimeLoop();
 }
 
-Channel<msecs_t> SequencePlayer::playbackPositionMSecs() const
+secs_t SequencePlayer::playbackPosition() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return microsecsToSecs(m_clock->currentTime());
+}
+
+Channel<secs_t> SequencePlayer::playbackPositionChanged() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 

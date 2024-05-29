@@ -68,7 +68,7 @@ void Clock::setCurrentTime(msecs_t time)
     }
 
     m_currentTime = time;
-    m_timeChangedInMilliSecs.send(m_currentTime / 1000);
+    m_timeChangedInSecs.send(microsecsToSecs(m_currentTime));
 }
 
 void Clock::start()
@@ -142,9 +142,9 @@ bool Clock::isRunning() const
     return m_status.val == PlaybackStatus::Running;
 }
 
-async::Channel<msecs_t> Clock::timeChanged() const
+async::Channel<secs_t> Clock::timeChanged() const
 {
-    return m_timeChangedInMilliSecs;
+    return m_timeChangedInSecs;
 }
 
 async::Notification Clock::seekOccurred() const

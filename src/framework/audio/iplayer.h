@@ -49,7 +49,8 @@ public:
     virtual async::Promise<bool> setLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
     virtual void resetLoop() = 0;
 
-    virtual async::Channel<secs_t> playbackPositionMsecs() const = 0;
+    virtual async::Promise<secs_t> playbackPosition() const = 0;
+    virtual async::Channel<secs_t> playbackPositionChanged() const = 0;
 };
 
 using IPlayerPtr = std::shared_ptr<IPlayer>;
