@@ -88,6 +88,7 @@ void PlaybackToolBarModel::setupConnections()
 
     playbackController()->totalPlayTimeChanged().onNotify(this, [this, player]() {
         emit maxPlayTimeChanged();
+
         globalContext()->currentPlayer()->playbackPosition().onResolve(this, [this](secs_t pos) {
             updatePlayPosition(pos);
         });
