@@ -40,6 +40,10 @@ public:
     notation::INotationPtr currentNotation() const override;
     muse::async::Notification currentNotationChanged() const override;
 
+    void setCurrentPlayer(const muse::audio::IPlayerPtr& player) override;
+    muse::audio::IPlayerPtr currentPlayer() const override;
+    muse::async::Notification currentPlayerChanged() const override;
+
 private:
     void doSetCurrentNotation(const notation::INotationPtr& notation);
 
@@ -48,6 +52,9 @@ private:
 
     notation::INotationPtr m_currentNotation;
     muse::async::Notification m_currentNotationChanged;
+
+    muse::audio::IPlayerPtr m_currentPlayer;
+    muse::async::Notification m_currentPlayerChanged;
 };
 }
 

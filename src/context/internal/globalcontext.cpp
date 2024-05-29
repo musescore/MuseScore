@@ -96,3 +96,23 @@ void GlobalContext::doSetCurrentNotation(const INotationPtr& notation)
         m_currentNotation->setIsOpen(true);
     }
 }
+
+void GlobalContext::setCurrentPlayer(const muse::audio::IPlayerPtr& player)
+{
+    if (m_currentPlayer == player) {
+        return;
+    }
+
+    m_currentPlayer = player;
+    m_currentPlayerChanged.notify();
+}
+
+muse::audio::IPlayerPtr GlobalContext::currentPlayer() const
+{
+    return m_currentPlayer;
+}
+
+muse::async::Notification GlobalContext::currentPlayerChanged() const
+{
+    return m_currentPlayerChanged;
+}
