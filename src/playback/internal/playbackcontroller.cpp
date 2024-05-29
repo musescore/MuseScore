@@ -203,16 +203,16 @@ void PlaybackController::seek(const midi::tick_t tick)
         return;
     }
 
-    seek(tickToMsecs(tick));
+    seek(tickToSecs(tick));
 }
 
-void PlaybackController::seek(const audio::msecs_t msecs)
+void PlaybackController::seek(const audio::secs_t secs)
 {
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
 
-    currentPlayer()->seek(msecs);
+    currentPlayer()->seek(secs);
 }
 
 Channel<uint32_t> PlaybackController::midiTickPlayed() const
@@ -546,8 +546,8 @@ void PlaybackController::togglePlay()
             currentPlayer()->playbackPosition().onResolve(this, [this](secs_t pos) {
                 secs_t endSecs = milisecsToSecs(playbackEndMsecs());
                 if (pos == endSecs) {
-                    msecs_t startMsecs = playbackStartMsecs();
-                    seek(startMsecs);
+                    secs_t startSecs = milisecsToSecs(playbackStartMsecs());
+                    seek(startSecs);
                 }
 
                 resume();
@@ -565,8 +565,8 @@ void PlaybackController::play()
     }
 
     if (isLoopEnabled()) {
-        msecs_t startMsecs = playbackStartMsecs();
-        seek(startMsecs);
+        secs_t startSecs = milisecsToSecs(playbackStartMsecs());
+        seek(startSecs);
     }
 
     currentPlayer()->play();
@@ -1581,4 +1581,9 @@ msecs_t PlaybackController::tickToMsecs(int tick) const
 {
     float sec = notationPlayback()->playedTickToSec(tick);
     return secondsToMilliseconds(sec);
+}
+
+muse::audio::secs_t PlaybackController::tickToSecs(int tick) const
+{
+    return secs_t(notationPlayback()->playedTickToSec(tick));
 }
