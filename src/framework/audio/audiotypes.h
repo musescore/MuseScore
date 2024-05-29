@@ -39,6 +39,13 @@
 namespace muse::audio {
 using msecs_t = int64_t;
 using secs_t = number_t<double>;
+
+inline secs_t milisecsToSecs(msecs_t ms) { return secs_t(ms / 1000.0); }
+inline secs_t microsecsToSecs(msecs_t us) { return secs_t(us / 1000000.0); }
+
+inline msecs_t secsToMilisecs(secs_t s) { return msecs_t(s * 1000.0); }
+inline msecs_t secsToMicrosecs(secs_t s) { return msecs_t(s * 1000000.0); }
+
 using samples_t = uint64_t;
 using sample_rate_t = uint64_t;
 using audioch_t = uint8_t;
