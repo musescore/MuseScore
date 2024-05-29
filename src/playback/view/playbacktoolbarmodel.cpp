@@ -80,7 +80,9 @@ void PlaybackToolBarModel::setupConnections()
 
     playbackController()->totalPlayTimeChanged().onNotify(this, [this]() {
         emit maxPlayTimeChanged();
-        updatePlayPosition(playbackController()->playbackPosition());
+        playbackController()->playbackPosition().onResolve(this, [this](secs_t pos) {
+            updatePlayPosition(pos);
+        });
     });
 
     playbackController()->currentTempoChanged().onNotify(this, [this]() {

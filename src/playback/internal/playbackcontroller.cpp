@@ -228,6 +228,13 @@ void PlaybackController::seek(const audio::msecs_t msecs)
     m_currentPlayer->seek(msecs);
 }
 
+Promise<muse::audio::secs_t> PlaybackController::playbackPosition() const
+{
+    return Promise<muse::audio::secs_t>([this](auto resolve, auto) {
+        return resolve(m_currentPlaybackPosition);
+    });
+}
+
 Channel<muse::audio::secs_t> PlaybackController::playbackPositionChanged() const
 {
     return m_playbackPositionChanged;
@@ -236,11 +243,6 @@ Channel<muse::audio::secs_t> PlaybackController::playbackPositionChanged() const
 Channel<uint32_t> PlaybackController::midiTickPlayed() const
 {
     return m_tickPlayed;
-}
-
-secs_t PlaybackController::playbackPosition() const
-{
-    return m_currentPlaybackPosition;
 }
 
 TrackSequenceId PlaybackController::currentTrackSequenceId() const

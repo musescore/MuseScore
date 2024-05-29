@@ -68,7 +68,7 @@ public:
 
     void reset() override;
 
-    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Promise<muse::audio::secs_t> playbackPosition() const override;
     muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
     muse::async::Channel<uint32_t> midiTickPlayed() const override;
 
