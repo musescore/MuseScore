@@ -48,7 +48,7 @@ public:
 
     IAudioSourcePtr mixedSource();
 
-    RetVal<MixerChannelPtr> addChannel(const TrackId trackId, IAudioSourcePtr source);
+    RetVal<MixerChannelPtr> addChannel(const TrackId trackId, ITrackAudioInputPtr source);
     RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId);
     Ret removeChannel(const TrackId trackId);
 
@@ -88,7 +88,10 @@ private:
     void notifyNoAudioSignal();
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
+    msecs_t currentTime() const;
+
     size_t m_minTrackCountForMultithreading = 0;
+    size_t m_nonMutedTrackCount = 0;
 
     std::vector<float> m_writeCacheBuff;
 

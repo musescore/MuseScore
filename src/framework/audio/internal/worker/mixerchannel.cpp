@@ -56,6 +56,21 @@ TrackId MixerChannel::trackId() const
     return m_trackId;
 }
 
+IAudioSourcePtr MixerChannel::source() const
+{
+    return m_audioSource;
+}
+
+bool MixerChannel::muted() const
+{
+    return m_params.muted;
+}
+
+async::Notification MixerChannel::mutedChanged() const
+{
+    return m_mutedChanged;
+}
+
 const AudioOutputParams& MixerChannel::outputParams() const
 {
     return m_params;
@@ -106,8 +121,14 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
         }
     }
 
+    bool mutedChanged = m_params.muted != resultParams.muted;
+
     m_params = resultParams;
     m_paramsChanges.send(std::move(resultParams));
+
+    if (mutedChanged) {
+        m_mutedChanged.notify();
+    }
 }
 
 async::Channel<AudioOutputParams> MixerChannel::outputParamsChanged() const
@@ -169,17 +190,13 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     samples_t processedSamplesCount = samplesPerChannel;
 
-    if (m_audioSource) {
+    if (m_audioSource && !m_params.muted) {
         processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
     }
 
     if (processedSamplesCount == 0 || m_params.muted) {
-        unsigned int channelsCount = audioChannelsCount();
-        std::fill(buffer, buffer + samplesPerChannel * channelsCount, 0.f);
-
-        for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
-            notifyAboutAudioSignalChanges(audioChNum, 0.f);
-        }
+        std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
+        notifyNoAudioSignal();
 
         return processedSamplesCount;
     }
@@ -229,6 +246,15 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
 
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * channelsCount);
     m_compressor->process(totalRms, buffer, channelsCount, samplesCount);
+}
+
+void MixerChannel::notifyNoAudioSignal()
+{
+    unsigned int channelsCount = audioChannelsCount();
+
+    for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
+        notifyAboutAudioSignalChanges(audioChNum, 0.f);
+    }
 }
 
 void MixerChannel::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
