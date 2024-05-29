@@ -60,14 +60,14 @@
                   <measure xml:id="m5j6f22" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <mRpt xml:id="m1arid13" />
+                           <mRpt xml:id="m1arid13" expand="false" />
                         </layer>
                      </staff>
                   </measure>
                   <measure xml:id="m182l9m2" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
-                           <mRpt xml:id="ms3niss" color="#FF2600" />
+                           <mRpt xml:id="ms3niss" color="#FF2600" expand="false" />
                         </layer>
                      </staff>
                   </measure>

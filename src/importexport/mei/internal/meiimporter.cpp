@@ -1840,6 +1840,10 @@ bool MeiImporter::readMRpt(pugi::xml_node mRptNode, Measure* measure, int track,
     libmei::MRpt meiMRpt;
     meiMRpt.Read(mRptNode);
 
+    if (meiMRpt.GetExpand() == libmei::BOOLEAN_true) {
+        LOGD() << "MeiImporter::readMRpt cannot expand measure repeats";
+    }
+
     Segment* segment = measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
     MeasureRepeat* measureRepeat = Factory::createMeasureRepeat(segment);
     Convert::colorFromMEI(measureRepeat, meiMRpt);
