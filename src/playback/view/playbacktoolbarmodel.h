@@ -26,13 +26,12 @@
 
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::playback {
 class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
-
-    INJECT(IPlaybackController, playbackController)
 
     Q_PROPERTY(bool isToolbarFloating READ isToolbarFloating WRITE setIsToolbarFloating NOTIFY isToolbarFloatingChanged)
     Q_PROPERTY(bool isPlayAllowed READ isPlayAllowed NOTIFY isPlayAllowedChanged)
@@ -48,6 +47,9 @@ class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
 
     Q_PROPERTY(QVariant tempo READ tempo NOTIFY tempoChanged)
     Q_PROPERTY(qreal tempoMultiplier READ tempoMultiplier WRITE setTempoMultiplier NOTIFY tempoChanged)
+
+    muse::Inject<IPlaybackController> playbackController;
+    muse::Inject<context::IGlobalContext> globalContext;
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
