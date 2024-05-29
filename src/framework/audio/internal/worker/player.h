@@ -37,7 +37,7 @@ public:
     TrackSequenceId sequenceId() const override;
 
     void play() override;
-    void seek(const msecs_t newPositionMsecs) override;
+    void seek(const secs_t newPosition) override;
     void stop() override;
     void pause() override;
     void resume() override;

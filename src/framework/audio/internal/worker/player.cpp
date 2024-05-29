@@ -82,13 +82,13 @@ void Player::play()
     }, AudioThread::ID);
 }
 
-void Player::seek(const msecs_t newPositionMsecs)
+void Player::seek(const secs_t newPosition)
 {
-    Async::call(this, [this, newPositionMsecs]() {
+    Async::call(this, [this, newPosition]() {
         ONLY_AUDIO_WORKER_THREAD;
         ITrackSequencePtr s = seq();
         if (s) {
-            s->player()->seek(newPositionMsecs);
+            s->player()->seek(newPosition);
         }
     }, AudioThread::ID);
 }

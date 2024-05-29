@@ -131,7 +131,7 @@ private:
     void updateCurrentTempo();
 
     void seek(const muse::midi::tick_t tick);
-    void seek(const muse::audio::msecs_t msecs);
+    void seek(const muse::audio::secs_t secs);
 
     bool isPaused() const;
     bool isLoaded() const;
@@ -210,6 +210,7 @@ private:
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
     muse::audio::msecs_t tickToMsecs(int tick) const;
+    muse::audio::secs_t tickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;

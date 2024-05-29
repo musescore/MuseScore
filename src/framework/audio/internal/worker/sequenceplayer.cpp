@@ -52,11 +52,11 @@ void SequencePlayer::play()
     setAllTracksActive(true);
 }
 
-void SequencePlayer::seek(const msecs_t newPositionMsecs)
+void SequencePlayer::seek(const secs_t newPosition)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    msecs_t newPos = newPositionMsecs * 1000;
+    msecs_t newPos = secsToMicrosecs(newPosition);
     m_clock->seek(newPos);
     seekAllTracks(newPos);
 }
