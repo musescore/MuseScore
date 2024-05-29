@@ -4852,16 +4852,18 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
     if (item->ledgerLinesVisible()) {
         double extraLen = ctx.conf().styleMM(Sid::ledgerLineLength) * mag;
         double step = 0.5 * _spatium * item->staffType()->lineDistance().val();
+        double yOffset = item->staffType() ? item->staffType()->yoffset().val() * _spatium : 0.0;
         double x = noteheadBbox.x() - extraLen;
         double w = noteheadBbox.width() + 2 * extraLen;
 
         double lw = ctx.conf().styleMM(Sid::ledgerLineWidth);
 
         RectF r(x, -lw * .5, w, lw);
-        for (int i = -2; i >= lineIdx; i -= 2) {
+        const int topLine = -2 + yOffset / step;
+        for (int i = topLine; i >= lineIdx; i -= 2) {
             newBbox |= r.translated(PointF(0, step * (i - lineIdx)));
         }
-        int l = item->staffType()->lines() * 2; // first ledger line below staff
+        int l = item->staffType()->lines() * 2 + yOffset / step; // first ledger line below staff
         for (int i = l; i <= lineIdx; i += 2) {
             newBbox |= r.translated(PointF(0, step * (i - lineIdx)));
         }

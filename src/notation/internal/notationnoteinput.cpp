@@ -538,7 +538,10 @@ muse::RectF NotationNoteInput::cursorRect() const
     double spatium = score()->style().spatium();
     double lineDist = staffType->lineDistance().val() * spatium;
     int lines = staffType->lines();
+    double yOffset = staffType ? staffType->yoffset().val() * spatium : 0.0;
     int inputStateStringsCount = inputState.string();
+
+    y += yOffset;
 
     int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
     if (staff->isTabStaff(inputState.tick()) && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
