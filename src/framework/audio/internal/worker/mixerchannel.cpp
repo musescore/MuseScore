@@ -32,8 +32,9 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate)
-    : m_trackId(trackId),
+MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,
+                           const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_trackId(trackId),
     m_sampleRate(sampleRate),
     m_audioSource(std::move(source)),
     m_compressor(std::make_unique<dsp::Compressor>(sampleRate))
@@ -43,8 +44,9 @@ MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const 
     setSampleRate(sampleRate);
 }
 
-MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount)
-    : MixerChannel(trackId, nullptr, sampleRate)
+MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount,
+                           const modularity::ContextPtr& iocCtx)
+    : MixerChannel(trackId, nullptr, sampleRate, iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 

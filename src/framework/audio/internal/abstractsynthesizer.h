@@ -36,7 +36,7 @@ namespace muse::audio::synth {
 class AbstractSynthesizer : public ISynthesizer, public async::Asyncable
 {
 public:
-    static inline Inject<IAudioConfiguration> config;
+    static inline GlobalInject<IAudioConfiguration> config;
 
 public:
     AbstractSynthesizer(const audio::AudioInputParams& params);

@@ -28,13 +28,15 @@
 #include "inotationconfiguration.h"
 
 namespace mu::notation {
-class MScoreErrorsController
+class MScoreErrorsController : public muse::Injectable
 {
-    INJECT_STATIC(INotationConfiguration, configuration)
-    INJECT_STATIC(muse::IInteractive, interactive)
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
-    static void checkAndShowMScoreError();
+    MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx);
+
+    void checkAndShowMScoreError();
 };
 }
 

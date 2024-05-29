@@ -56,8 +56,8 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
     return muse::contains(playableTypes, element->type());
 }
 
-NotationViewInputController::NotationViewInputController(IControlledView* view)
-    : m_view(view)
+NotationViewInputController::NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_view(view)
 {
 }
 

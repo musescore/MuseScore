@@ -23,6 +23,8 @@
 
 #include <QPainter>
 
+#include "global/async/async.h"
+
 #include "pianokeyboardcontroller.h"
 
 #include "log.h"
@@ -53,12 +55,24 @@ static QColor mixedColors(QColor background, QColor foreground, qreal opacity)
 }
 
 PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
-    : muse::uicomponents::QuickPaintedView(parent), m_controller(new PianoKeyboardController())
+    : muse::uicomponents::QuickPaintedView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+{
+    setAcceptedMouseButtons(Qt::LeftButton);
+}
+
+PianoKeyboardView::~PianoKeyboardView()
+{
+    delete m_controller;
+}
+
+void PianoKeyboardView::init()
 {
     calculateKeyRects();
 
     connect(this, &QQuickItem::widthChanged, this, &PianoKeyboardView::calculateKeyRects);
     connect(this, &QQuickItem::heightChanged, this, &PianoKeyboardView::calculateKeyRects);
+
+    m_controller = new PianoKeyboardController(iocContext());
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
         determineOctaveLabelsFont();
@@ -78,12 +92,7 @@ PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
         update();
     });
 
-    setAcceptedMouseButtons(Qt::LeftButton);
-}
-
-PianoKeyboardView::~PianoKeyboardView()
-{
-    delete m_controller;
+    update();
 }
 
 void PianoKeyboardView::calculateKeyRects()

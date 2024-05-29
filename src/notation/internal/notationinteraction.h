@@ -48,12 +48,12 @@ class QDrag;
 namespace mu::notation {
 class Notation;
 class NotationSelection;
-class NotationInteraction : public INotationInteraction, public muse::async::Asyncable
+class NotationInteraction : public INotationInteraction, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(INotationConfiguration, configuration)
-    INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);

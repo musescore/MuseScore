@@ -34,11 +34,11 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
+
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);

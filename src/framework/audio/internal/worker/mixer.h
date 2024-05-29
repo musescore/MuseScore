@@ -37,13 +37,13 @@
 #include "iclock.h"
 
 namespace muse::audio {
-class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
+class Mixer : public AbstractAudioSource, public Injectable, public async::Asyncable, public std::enable_shared_from_this<Mixer>
 {
-    Inject<fx::IFxResolver> fxResolver;
-    Inject<IAudioConfiguration> configuration;
+    Inject<fx::IFxResolver> fxResolver = { this };
+    Inject<IAudioConfiguration> configuration = { this };
 
 public:
-    Mixer();
+    Mixer(const modularity::ContextPtr& iocCtx);
     ~Mixer();
 
     IAudioSourcePtr mixedSource();

@@ -66,7 +66,7 @@ public:
         ON_CALL(m_view, currentScaling())
         .WillByDefault(Return(1));
 
-        m_controller = new NotationViewInputController(&m_view);
+        m_controller = new NotationViewInputController(&m_view, muse::modularity::globalCtx());
 
         m_configuration = std::make_shared<NotationConfigurationMock>();
         m_controller->configuration.set(m_configuration);
