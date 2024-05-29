@@ -3267,14 +3267,16 @@ void GraceNotesGroup::setPos(double x, double y)
 void GraceNotesGroup::addToShape()
 {
     for (Chord* grace : *this) {
+        const StaffType* st = grace->staffType();
+        const PointF yOffset = PointF(0.0, st ? st->yoffset().val() * grace->spatium() : 0.0);
         staff_idx_t staffIdx = grace->staffIdx();
         staff_idx_t vStaffIdx = grace->vStaffIdx();
         Shape& s = _appendedSegment->staffShape(staffIdx);
-        s.add(grace->shape(LD_ACCESS::PASS).translate(grace->pos()));
+        s.add(grace->shape(LD_ACCESS::PASS).translate(grace->pos() + yOffset));
         if (vStaffIdx != staffIdx) {
             // Cross-staff grace notes add their shape to both the origin and the destination staff
             Shape& s2 = _appendedSegment->staffShape(vStaffIdx);
-            s2.add(grace->shape().translate(grace->pos()));
+            s2.add(grace->shape().translate(grace->pos() + yOffset));
         }
     }
 }
