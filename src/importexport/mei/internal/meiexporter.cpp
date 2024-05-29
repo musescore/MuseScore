@@ -51,6 +51,7 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -823,6 +824,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeOctave(dynamic_cast<const Ottava*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isPedal()) {
             success = success && this->writePedal(dynamic_cast<const Pedal*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isRehearsalMark()) {
+            success = success && this->writeRehearsalMark(dynamic_cast<const RehearsalMark*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isSlur()) {
             success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTempoText()) {
@@ -1859,6 +1862,33 @@ bool MeiExporter::writeRepeatMark(const Jump* jump, const Measure* measure)
 
     // Currently not used - builds a post-processing list to be processing in MeiExporter::addJumpToRepeatMarks
     // this->addToRepeatMarkList(static_cast<const TextBase*>(jump), repeatMarkNode, xmlId);
+
+    return true;
+}
+
+/**
+ * Write a reh from a RehearsalMark.
+ */
+
+bool MeiExporter::writeRehearsalMark(const RehearsalMark* mark, const std::string& startid)
+{
+    IF_ASSERT_FAILED(mark) {
+        return false;
+    }
+
+    pugi::xml_node rehNode = m_currentNode.append_child();
+    String text = mark->plainText();
+    libmei::Reh meiReh;
+    Convert::colorToMEI(mark, meiReh);
+
+    if (text.size() > 0) {
+        rehNode.text().set(text.toStdString().c_str());
+    }
+
+    meiReh.SetStartid(startid);
+
+    std::string xmlId = this->getXmlIdFor(mark, 'r');
+    meiReh.Write(rehNode, xmlId);
 
     return true;
 }

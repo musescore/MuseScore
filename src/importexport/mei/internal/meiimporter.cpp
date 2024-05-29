@@ -50,6 +50,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/playtechannotation.h"
+#include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -444,6 +445,8 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         } else {
             item = Factory::createHarmony(chordRest->segment());
         }
+    } else if (meiElement.m_name == "reh") {
+        item = Factory::createRehearsalMark(chordRest->segment());
     } else if (meiElement.m_name == "tempo") {
         item = Factory::createTempoText(chordRest->segment());
     } else {
@@ -2196,6 +2199,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readOrnam(xpathNode.node(), measure);
         } else if (elementName == "pedal") {
             success = success && this->readPedal(xpathNode.node(), measure);
+        } else if (elementName == "reh") {
+            success = success && this->readReh(xpathNode.node(), measure);
         } else if (elementName == "repeatMark") {
             success = success && this->readRepeatMark(xpathNode.node(), measure);
         } else if (elementName == "slur") {
@@ -2626,6 +2631,35 @@ bool MeiImporter::readPedal(pugi::xml_node pedalNode, Measure* measure)
     }
 
     Convert::pedalFromMEI(pedal, meiPedal, warning);
+
+    return true;
+}
+
+/**
+ * Read a reh.
+ */
+
+bool MeiImporter::readReh(pugi::xml_node rehNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    libmei::Reh meiReh;
+    meiReh.Read(rehNode);
+
+    RehearsalMark* rehearsalMark = static_cast<RehearsalMark*>(this->addAnnotation(meiReh, measure));
+    if (!rehearsalMark) {
+        // Warning message given in MeiImporter::addAnnotation
+        return true;
+    }
+    Convert::colorFromMEI(rehearsalMark, meiReh);
+
+    StringList meiLines;
+    this->readLinesWithSmufl(rehNode, meiLines);
+
+    // text
+    rehearsalMark->setXmlText(meiLines.join(u"\n"));
 
     return true;
 }

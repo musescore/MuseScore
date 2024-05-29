@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Rehearsal</title>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2024-05-27T09:30:00" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Rehearsal</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m15amo87" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="nx9ob8k" dur="4" pname="a" oct="4" />
+                           <note xml:id="nzab2ju" dur="4" pname="f" oct="4" />
+                           <note xml:id="ni713gs" dur="4" pname="e" oct="4" />
+                           <note xml:id="nd750e3" dur="4" pname="g" oct="4" />
+                        </layer>
+                     </staff>
+                     <reh xml:id="r1o46ev9" startid="#nx9ob8k">A</reh>
+                     <reh xml:id="r11lxtmt" startid="#nd750e3">C</reh>
+                  </measure>
+                  <measure xml:id="m1u1yvxt" right="end" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="niq4lzv" dur="4" pname="g" oct="4">
+                              <accid accid="s" />
+                           </note>
+                           <note xml:id="nccjqrh" dur="4" pname="a" oct="4" />
+                           <note xml:id="n1xd4o8v" dur="4" pname="d" oct="4" />
+                           <note xml:id="n1jretlh" dur="4" pname="d" oct="5" />
+                        </layer>
+                     </staff>
+                     <reh xml:id="r1t94gl5" startid="#n1xd4o8v" color="#33CC33">33</reh>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
