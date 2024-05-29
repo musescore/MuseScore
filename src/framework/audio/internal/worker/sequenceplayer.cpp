@@ -134,6 +134,13 @@ Channel<secs_t> SequencePlayer::playbackPositionChanged() const
     return m_clock->timeChanged();
 }
 
+PlaybackStatus SequencePlayer::playbackStatus() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_clock->status();
+}
+
 Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const
 {
     ONLY_AUDIO_WORKER_THREAD;

@@ -43,6 +43,8 @@ public:
     void seek(const msecs_t msecs) override;
     async::Notification seekOccurred() const override;
     bool isRunning() const override;
+
+    PlaybackStatus status() const override;
     async::Channel<PlaybackStatus> statusChanged() const override;
 
     msecs_t timeDuration() const override;

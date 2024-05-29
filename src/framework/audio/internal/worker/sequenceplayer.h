@@ -40,6 +40,8 @@ public:
     void stop() override;
     void pause() override;
     void resume() override;
+
+    PlaybackStatus playbackStatus() const override;
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;
 
     msecs_t duration() const override;

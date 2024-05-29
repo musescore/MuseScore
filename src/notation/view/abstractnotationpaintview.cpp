@@ -1326,10 +1326,9 @@ void AbstractNotationPaintView::onPlayingChanged()
         IF_ASSERT_FAILED(globalContext()->currentPlayer()) {
             return;
         }
-        globalContext()->currentPlayer()->playbackPosition().onResolve(this, [this](audio::secs_t pos) {
-            muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
-            movePlaybackCursor(tick);
-        });
+        audio::secs_t pos = globalContext()->currentPlayer()->playbackPosition();
+        muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
+        movePlaybackCursor(tick);
     } else {
         scheduleRedraw();
     }

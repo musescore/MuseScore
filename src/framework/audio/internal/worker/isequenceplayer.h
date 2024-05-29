@@ -39,6 +39,8 @@ public:
     virtual void stop() = 0;
     virtual void pause() = 0;
     virtual void resume() = 0;
+
+    virtual PlaybackStatus playbackStatus() const = 0;
     virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
 
     virtual msecs_t duration() const = 0;
