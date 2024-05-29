@@ -2067,8 +2067,13 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
 
       printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(cs_->styleD(Sid::pageWidth), cs_->styleD(Sid::pageHeight));
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+#if 1
+      printer.setPaperSize(size, QPrinter::Inch); // deprecated, but the suggested setPageSize() doesn't work properly here
+#else  // the following is used in several other places
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
       printer.setPageSize(ps);
+      printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+#endif
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
 #if defined(Q_OS_MAC)
