@@ -152,6 +152,11 @@ async::Notification Clock::seekOccurred() const
     return m_seekOccurred;
 }
 
+PlaybackStatus Clock::status() const
+{
+    return m_status.val;
+}
+
 async::Channel<PlaybackStatus> Clock::statusChanged() const
 {
     return m_status.ch;

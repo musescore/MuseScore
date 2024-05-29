@@ -126,7 +126,9 @@ Channel<TrackSequenceId> Playback::sequenceRemoved() const
 
 IPlayerPtr Playback::player(const TrackSequenceId id) const
 {
-    return std::make_shared<Player>(this, id);
+    std::shared_ptr<Player> p = std::make_shared<Player>(this, id);
+    p->init();
+    return p;
 }
 
 ITracksPtr Playback::tracks() const

@@ -49,6 +49,8 @@ public:
     virtual void seek(const msecs_t msecs) = 0;
     virtual async::Notification seekOccurred() const = 0;
     virtual bool isRunning() const = 0;
+
+    virtual PlaybackStatus status() const = 0;
     virtual async::Channel<PlaybackStatus> statusChanged() const = 0;
 
     virtual msecs_t timeDuration() const = 0;

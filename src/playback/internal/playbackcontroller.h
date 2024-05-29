@@ -163,8 +163,6 @@ private:
 
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
-    void setCurrentPlaybackStatus(muse::audio::PlaybackStatus status);
-
     void togglePlayRepeats();
     void togglePlayChordSymbols();
     void toggleAutomaticallyPan();
@@ -225,7 +223,6 @@ private:
     muse::audio::TrackSequenceId m_currentSequenceId = -1;
 
     muse::async::Notification m_currentSequenceIdChanged;
-    muse::audio::PlaybackStatus m_currentPlaybackStatus = muse::audio::PlaybackStatus::Stopped;
     muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 
