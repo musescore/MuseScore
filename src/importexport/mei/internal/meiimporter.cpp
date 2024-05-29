@@ -2641,7 +2641,6 @@ bool MeiImporter::readReh(pugi::xml_node rehNode, Measure* measure)
         return false;
     }
 
-    bool warning;
     libmei::Reh meiReh;
     meiReh.Read(rehNode);
 
