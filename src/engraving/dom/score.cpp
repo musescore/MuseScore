@@ -4395,7 +4395,7 @@ void Score::removeSpanner(Spanner* s)
 bool Score::isSpannerStartEnd(const Fraction& tick, track_idx_t track) const
 {
     for (auto i : m_spanner.map()) {
-        if (i.second->track() != track) {
+        if (i.second->track() != track && !i.second->isGradualTempoChange()) {
             continue;
         }
         if (i.second->tick() == tick || i.second->tick2() == tick) {

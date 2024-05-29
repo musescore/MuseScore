@@ -26,6 +26,7 @@
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
+#include "anchors.h"
 #include "articulation.h"
 #include "barline.h"
 #include "beam.h"
@@ -3950,7 +3951,15 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
     }
     for (Segment* s : segments) {
         if (s->empty()) {
+            auto needAnchor = isSpannerStartEnd(s->tick(), cr->track());
             doUndoRemoveElement(s);
+            if (needAnchor) {
+                TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(s->measure(),
+                                                                                   s->tick() - s->measure()->tick(),
+                                                                                   track2staff(cr->track()));
+                doUndoAddElement(anchor->parentItem());
+                doUndoAddElement(anchor);
+            }
         }
     }
     if (cr->beam()) {
@@ -6519,7 +6528,15 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             if (s->header() || s->trailer()) {        // probably more segment types (system header)
                 s->setEnabled(false);
             } else {
+                auto needAnchor = isSpannerStartEnd(s->tick(), element->track());
                 doUndoRemoveElement(s);
+                if (needAnchor) {
+                    TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(s->measure(),
+                                                                                       s->tick() - s->measure()->tick(),
+                                                                                       track2staff(element->track()));
+                    doUndoAddElement(anchor->parentItem());
+                    doUndoAddElement(anchor);
+                }
             }
         }
     }
