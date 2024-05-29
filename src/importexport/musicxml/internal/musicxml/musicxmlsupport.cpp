@@ -704,6 +704,31 @@ AccidentalType mxmlString2accidentalType(const String mxmlName, const String smu
 }
 
 //---------------------------------------------------------
+//   mxmlAccidentalTextToChar
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML accidental text to a accidental character.
+ */
+
+String mxmlAccidentalTextToChar(const String mxmlName)
+{
+    static std::map<String, String> map;   // map MusicXML accidental name to MuseScore enum AccidentalType
+    if (map.empty()) {
+        map[u"sharp"] = u"♯";
+        map[u"natural"] = u"♮";
+        map[u"flat"] = u"♭";
+    }
+
+    if (muse::contains(map, mxmlName)) {
+        return map.at(mxmlName);
+    } else {
+        LOGD("mxmlAccidentalTextToChar: unsupported accidental '%s'", muPrintable(mxmlName));
+    }
+    return u"";
+}
+
+//---------------------------------------------------------
 //   isAppr
 //---------------------------------------------------------
 

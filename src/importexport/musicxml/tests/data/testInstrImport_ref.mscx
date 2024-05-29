@@ -237,7 +237,7 @@
         </Staff>
       <trackName>Bb Clarinet</trackName>
       <Instrument id="bb-clarinet">
-        <longName>B♭ Clarinet</longName>
+        <longName>Bb Clarinet</longName>
         <shortName>B¯ Clarinet B¯ Bass Clar.</shortName>
         <trackName>Bb Clarinet</trackName>
         <minPitchP>50</minPitchP>
@@ -302,7 +302,7 @@
         </Staff>
       <trackName>Eb Alto Clarinet</trackName>
       <Instrument id="alto-clarinet">
-        <longName>E♭ Alto Clarinet</longName>
+        <longName>Eb Alto Clarinet</longName>
         <shortName>Alto Cl.</shortName>
         <trackName>Eb Alto Clarinet</trackName>
         <minPitchP>43</minPitchP>
@@ -367,7 +367,7 @@
         </Staff>
       <trackName>Bb Bass Clarinet</trackName>
       <Instrument id="bb-bass-clarinet">
-        <longName>B♭ Bass Clarinet</longName>
+        <longName>Bb Bass Clarinet</longName>
         <shortName>B. Cl.</shortName>
         <trackName>Bb Bass Clarinet</trackName>
         <minPitchP>34</minPitchP>
@@ -434,7 +434,7 @@
         </Staff>
       <trackName>Eb Alto Sax.</trackName>
       <Instrument id="alto-saxophone">
-        <longName>E♭ Alto Sax.</longName>
+        <longName>Eb Alto Sax.</longName>
         <shortName>E¯ Alto Sax. E¯ Bar. Sax.</shortName>
         <trackName>Eb Alto Sax.</trackName>
         <minPitchP>49</minPitchP>
@@ -499,7 +499,7 @@
         </Staff>
       <trackName> Bb Tenor Sax.</trackName>
       <Instrument id="tenor-saxophone">
-        <longName> B♭ Tenor Sax.</longName>
+        <longName> Bb Tenor Sax.</longName>
         <shortName>Ten. Sax.</shortName>
         <trackName> Bb Tenor Sax.</trackName>
         <minPitchP>44</minPitchP>
@@ -566,7 +566,7 @@
         </Staff>
       <trackName>Eb Baritone Sax.</trackName>
       <Instrument id="baritone-saxophone">
-        <longName>E♭ Baritone Sax.</longName>
+        <longName>Eb Baritone Sax.</longName>
         <shortName>Bari. Sax.</shortName>
         <trackName>Eb Baritone Sax.</trackName>
         <minPitchP>36</minPitchP>
@@ -633,7 +633,7 @@
         </Staff>
       <trackName>Bb Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet</longName>
+        <longName>Bb Trumpet</longName>
         <shortName>Tpt.</shortName>
         <trackName>Bb Trumpet</trackName>
         <minPitchP>52</minPitchP>
