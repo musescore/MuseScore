@@ -1323,9 +1323,10 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_enableAutoScrollTimer.stop();
 
     if (isPlaying) {
-        float playPosSec = playbackController()->playbackPosition();
-        muse::midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
-        movePlaybackCursor(tick);
+        playbackController()->playbackPosition().onResolve(this, [this](audio::secs_t pos) {
+            muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
+            movePlaybackCursor(tick);
+        });
     } else {
         scheduleRedraw();
     }
