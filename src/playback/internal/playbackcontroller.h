@@ -120,6 +120,8 @@ public:
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
 private:
+    muse::audio::IPlayerPtr currentPlayer() const;
+
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
@@ -225,7 +227,6 @@ private:
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
     muse::audio::TrackSequenceId m_currentSequenceId = -1;
-    muse::audio::IPlayerPtr m_currentPlayer;
 
     muse::async::Notification m_currentSequenceIdChanged;
     muse::audio::PlaybackStatus m_currentPlaybackStatus = muse::audio::PlaybackStatus::Stopped;
