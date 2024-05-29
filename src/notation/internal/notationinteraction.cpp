@@ -2008,7 +2008,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
             }
         }
 
-        if (el->hasVoiceApplicationProperties()) {
+        if (el && el->hasVoiceApplicationProperties()) {
             el->setInitialTrackAndVoiceApplication(el->track());
         }
 
