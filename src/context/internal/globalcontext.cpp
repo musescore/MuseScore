@@ -28,6 +28,11 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace muse::async;
 
+GlobalContext::GlobalContext()
+{
+    m_playbackState = std::make_shared<PlaybackState>();
+}
+
 void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
 {
     if (m_currentProject == project) {
@@ -99,20 +104,10 @@ void GlobalContext::doSetCurrentNotation(const INotationPtr& notation)
 
 void GlobalContext::setCurrentPlayer(const muse::audio::IPlayerPtr& player)
 {
-    if (m_currentPlayer == player) {
-        return;
-    }
-
-    m_currentPlayer = player;
-    m_currentPlayerChanged.notify();
+    m_playbackState->setPlayer(player);
 }
 
-muse::audio::IPlayerPtr GlobalContext::currentPlayer() const
+IPlaybackStatePtr GlobalContext::playbackState() const
 {
-    return m_currentPlayer;
-}
-
-muse::async::Notification GlobalContext::currentPlayerChanged() const
-{
-    return m_currentPlayerChanged;
+    return m_playbackState;
 }
