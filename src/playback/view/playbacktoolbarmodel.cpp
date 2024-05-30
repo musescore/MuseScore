@@ -62,17 +62,12 @@ void PlaybackToolBarModel::load()
 
     connect(this, &PlaybackToolBarModel::isToolbarFloatingChanged, this, &PlaybackToolBarModel::updateActions);
 
-    globalContext()->currentPlayerChanged().onNotify(this, [this]() {
-        setupConnections();
-    });
+    setupConnections();
 }
 
 void PlaybackToolBarModel::setupConnections()
 {
-    IPlayerPtr player = globalContext()->currentPlayer();
-    if (!player) {
-        return;
-    }
+    context::IPlaybackStatePtr playbackState = globalContext()->playbackState();
 
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         emit isPlayAllowedChanged();
@@ -82,16 +77,14 @@ void PlaybackToolBarModel::setupConnections()
         onActionsStateChanges({ PLAY_ACTION_CODE });
     });
 
-    player->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
+    playbackState->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
         updatePlayPosition(secs);
     });
 
     playbackController()->totalPlayTimeChanged().onNotify(this, [this]() {
         emit maxPlayTimeChanged();
-        if (globalContext()->currentPlayer()) {
-            secs_t pos = globalContext()->currentPlayer()->playbackPosition();
-            updatePlayPosition(pos);
-        }
+        secs_t pos = globalContext()->playbackState()->playbackPosition();
+        updatePlayPosition(pos);
     });
 
     playbackController()->currentTempoChanged().onNotify(this, [this]() {

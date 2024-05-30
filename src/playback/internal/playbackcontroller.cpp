@@ -431,7 +431,7 @@ void PlaybackController::addSoundFlagsIfNeed(const std::vector<EngravingItem*>& 
 
 muse::audio::IPlayerPtr PlaybackController::currentPlayer() const
 {
-    return globalContext()->currentPlayer();
+    return m_player;
 }
 
 INotationPlaybackPtr PlaybackController::notationPlayback() const
@@ -858,6 +858,7 @@ void PlaybackController::resetCurrentSequence()
     m_currentSequenceId = -1;
     m_currentSequenceIdChanged.notify();
 
+    m_player = nullptr;
     globalContext()->setCurrentPlayer(nullptr);
 }
 
@@ -1106,8 +1107,8 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
     playback()->tracks()->removeAllTracks(m_currentSequenceId);
 
     m_currentSequenceId = sequenceId;
-    IPlayerPtr player = playback()->player(sequenceId);
-    globalContext()->setCurrentPlayer(player);
+    m_player = playback()->player(sequenceId);
+    globalContext()->setCurrentPlayer(m_player);
 
     if (!notationPlayback()) {
         return;

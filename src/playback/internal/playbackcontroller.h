@@ -212,6 +212,7 @@ private:
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
+    muse::audio::IPlayerPtr m_player;
 
     muse::async::Notification m_isPlayAllowedChanged;
     muse::async::Notification m_isPlayingChanged;

@@ -26,6 +26,7 @@
 #include "modularity/imoduleinterface.h"
 #include "project/inotationproject.h"
 #include "audio/iplayer.h"
+#include "iplaybackstate.h"
 
 namespace mu::context {
 class IGlobalContext : MODULE_EXPORT_INTERFACE
@@ -47,8 +48,7 @@ public:
     virtual muse::async::Notification currentNotationChanged() const = 0;
 
     virtual void setCurrentPlayer(const muse::audio::IPlayerPtr& player) = 0;
-    virtual muse::audio::IPlayerPtr currentPlayer() const = 0;
-    virtual muse::async::Notification currentPlayerChanged() const = 0;
+    virtual IPlaybackStatePtr playbackState() const = 0;
 };
 }
 

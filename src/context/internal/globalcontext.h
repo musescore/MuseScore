@@ -24,10 +24,14 @@
 
 #include "../iglobalcontext.h"
 
+#include "playbackstate.h"
+
 namespace mu::context {
 class GlobalContext : public IGlobalContext
 {
 public:
+
+    GlobalContext();
 
     void setCurrentProject(const project::INotationProjectPtr& project) override;
     project::INotationProjectPtr currentProject() const override;
@@ -41,8 +45,7 @@ public:
     muse::async::Notification currentNotationChanged() const override;
 
     void setCurrentPlayer(const muse::audio::IPlayerPtr& player) override;
-    muse::audio::IPlayerPtr currentPlayer() const override;
-    muse::async::Notification currentPlayerChanged() const override;
+    IPlaybackStatePtr playbackState() const override;
 
 private:
     void doSetCurrentNotation(const notation::INotationPtr& notation);
@@ -53,8 +56,7 @@ private:
     notation::INotationPtr m_currentNotation;
     muse::async::Notification m_currentNotationChanged;
 
-    muse::audio::IPlayerPtr m_currentPlayer;
-    muse::async::Notification m_currentPlayerChanged;
+    std::shared_ptr<PlaybackState> m_playbackState;
 };
 }
 
