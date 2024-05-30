@@ -809,13 +809,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 continue;
             }
             if (mno && mno->addToSkyline()) {
-                ss->skyline().add(mno->ldata()->bbox().translated(m->pos() + mno->pos()));
+                ss->skyline().add(mno->ldata()->bbox().translated(m->pos() + mno->pos()), mno);
             }
             if (mmrr && mmrr->addToSkyline()) {
-                ss->skyline().add(mmrr->ldata()->bbox().translated(m->pos() + mmrr->pos()));
+                ss->skyline().add(mmrr->ldata()->bbox().translated(m->pos() + mmrr->pos()), mmrr);
             }
             if (m->staffLines(staffIdx)->addToSkyline()) {
-                ss->skyline().add(m->staffLines(staffIdx)->ldata()->bbox().translated(m->pos()));
+                ss->skyline().add(m->staffLines(staffIdx)->ldata()->bbox().translated(m->pos()), m->staffLines(staffIdx));
             }
             for (Segment& s : m->segments()) {
                 if (!s.enabled()) {
@@ -827,7 +827,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                     if (bl && bl->addToSkyline()) {
                         RectF r = TLayout::layoutRect(bl, ctx);
-                        skyline.add(r.translated(bl->pos() + p));
+                        skyline.add(r.translated(bl->pos() + p), bl);
                     }
                 } else if (s.segmentType() & SegmentType::TimeSig) {
                     TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
@@ -2804,30 +2804,23 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     }
 
     double elementXinSystemCoord = element->pageX() - system->pageX();
-
-    double yDefaultOffset = element->propertyDefault(Pid::OFFSET).value<PointF>().y();
-    double yDefaultPos = isAbove ? yDefaultOffset : thisStaff->bbox().height() + yDefaultOffset;
-    double elementIsAtDefaultPos = muse::RealIsEqual(yDefaultPos, element->y());
-    double elementMinDist = element->minDistance().toMM(element->spatium());
     RectF elementBbox = element->ldata()->bbox().translated(PointF(elementXinSystemCoord, element->y()));
-    // SEMI-HACK: we can't use the skyline of thisStaff because it also includes element itself.
-    // Can have a better solution when we get rid of skylines.
-    double edgeOfThisStaff = elementIsAtDefaultPos
-                             ? isAbove ? 0.0 : thisStaff->bbox().height()
-                             : isAbove ? elementBbox.bottom() + elementMinDist : elementBbox.top() - elementMinDist;
-
     const double horizontalMargin = 0.25 * element->spatium();
     double startX = elementBbox.left() - horizontalMargin;
     double endX = elementBbox.right() + horizontalMargin;
-    double yStaffDiff = nextStaff->y() - thisStaff->y();
+
+    // Take a *copy* of the skyline of this staff
+    SkylineLine thisSkyline = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
+    thisSkyline.remove_if([element](ShapeElement& shEl) {
+        const EngravingItem* shapeItem = shEl.item();
+        return shapeItem && (shapeItem == element || shapeItem->isAccidental());
+    });
+    double edgeOfThisStaff = isAbove ? thisSkyline.top(startX, endX) : thisSkyline.bottom(startX, endX);
+
     SkylineLine& nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
-    double yMax = 0.0;
-    for (const SkylineSegment& skylineSeg : nextSkyline) {
-        if (skylineSeg.x < endX && skylineSeg.x + skylineSeg.w > startX) {
-            yMax = isAbove ? std::max(yMax, skylineSeg.y) : std::min(yMax, skylineSeg.y);
-        }
-    }
-    double edgeOfNextStaff = yMax + yStaffDiff;
+    double edgeOfNextStaff = isAbove ? nextSkyline.bottom(startX, endX) : nextSkyline.top(startX, endX);
+    double yStaffDiff = nextStaff->y() - thisStaff->y();
+    edgeOfNextStaff += yStaffDiff;
 
     double yCenter = 0.5 * (edgeOfThisStaff + edgeOfNextStaff) + visualVerticalCenter(element);
 

@@ -711,39 +711,9 @@ void Beam::addSkyline(Skyline& sk)
     if (m_beamSegments.empty() || !addToSkyline()) {
         return;
     }
-    double lw2 = point(style().styleS(Sid::beamWidth)) * .5 * mag();
-    const LineF bs = m_beamSegments.front()->line;
-    double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
-    if (m_beamSegments.size() > 1 && d > M_PI / 6.0) {
-        d = M_PI / 6.0;
-    }
-    double ww      = lw2 / sin(M_PI_2 - atan(d));
-    double _spatium = spatium();
 
-    for (const BeamSegment* beamSegment : m_beamSegments) {
-        double x = beamSegment->line.x1();
-        double y = beamSegment->line.y1();
-        double w = beamSegment->line.x2() - x;
-        int n   = (d < 0.01) ? 1 : int(ceil(w / _spatium));
-
-        double s = (beamSegment->line.y2() - y) / w;
-        w /= n;
-        for (int i = 1; i <= n; ++i) {
-            double y2 = y + w * s;
-            double yn, ys;
-            if (y2 > y) {
-                yn = y;
-                ys = y2;
-            } else {
-                yn = y2;
-                ys = y;
-            }
-            sk.north().add(x, yn - ww, w);
-            sk.south().add(x, ys + ww, w);
-            x += w;
-            y = y2;
-        }
-    }
+    // Only add the outer segment, no need to add the inner one
+    sk.add(m_beamSegments.front()->shape());
 }
 
 //---------------------------------------------------------

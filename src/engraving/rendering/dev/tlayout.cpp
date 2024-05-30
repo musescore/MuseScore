@@ -2433,7 +2433,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                 } else {
                     RectF r = ldata->bbox().translated(measure->pos() + segment->pos() + chord->pos() + note->pos() + item->pos());
                     SkylineLine sk(false);
-                    sk.add(r.x(), r.bottom(), r.width());
+                    sk.add(r, const_cast<Fingering*>(item));
                     double d = sk.minDistance(ss->skyline().north());
                     double yd = 0.0;
                     if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
@@ -2469,7 +2469,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                 } else {
                     RectF r = ldata->bbox().translated(measure->pos() + segment->pos() + chord->pos() + note->pos() + item->pos());
                     SkylineLine sk(true);
-                    sk.add(r.x(), r.top(), r.width());
+                    sk.add(r, const_cast<Fingering*>(item));
                     double d = ss->skyline().south().minDistance(sk);
                     double yd = 0.0;
                     if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
@@ -2615,7 +2615,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 
         double minDistance = harmony->minDistance().val() * item->spatium();
         SkylineLine sk(false);
-        sk.add(r.x(), r.bottom(), r.width());
+        sk.add(r, harmony);
         double d = sk.minDistance(ss->skyline().north());
         if (d > -minDistance) {
             double yd = d + minDistance;
@@ -2624,7 +2624,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
             r.translate(PointF(0.0, yd));
         }
         if (harmony->addToSkyline()) {
-            ss->skyline().add(r);
+            ss->skyline().add(r, harmony);
         }
     }
 }
@@ -3267,7 +3267,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                         RectF r = sd->ldata()->bbox().translated(sd->pos());
                         s->staffShape(sd->staffIdx()).add(r);
                         r = sd->ldata()->bbox().translated(sd->pos() + s->pos() + m->pos());
-                        m->system()->staff(sd->staffIdx())->skyline().add(r);
+                        m->system()->staff(sd->staffIdx())->skyline().add(r, sd);
                     }
                 }
             }
@@ -3292,7 +3292,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                         RectF r = ed->ldata()->bbox().translated(ed->pos());
                         s->staffShape(ed->staffIdx()).add(r);
                         r = ed->ldata()->bbox().translated(ed->pos() + s->pos() + m->pos());
-                        m->system()->staff(ed->staffIdx())->skyline().add(r);
+                        m->system()->staff(ed->staffIdx())->skyline().add(r, ed);
                     }
                 }
             }
@@ -3315,7 +3315,7 @@ void TLayout::fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment
     switch (item->hairpin()->hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
     case HairpinType::DECRESC_HAIRPIN:
-        sh = Shape(item->ldata()->bbox());
+        sh = Shape(item->ldata()->bbox(), item);
         break;
     case HairpinType::DECRESC_LINE:
     case HairpinType::CRESC_LINE:
