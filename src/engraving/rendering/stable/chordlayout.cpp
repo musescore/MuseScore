@@ -3354,7 +3354,7 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
             Note* n = f->note();
             RectF r
                 = f->ldata()->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
-            system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
+            system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r, f);
         }
         shapesToRecreate.insert(f->staffIdx());
     }

@@ -76,10 +76,10 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         SkylineLine sk(!above);
         double d;
         if (above) {
-            sk.add(r.x(), r.bottom(), r.width());
+            sk.add(ShapeElement(r, item));
             d = sk.minDistance(ss->skyline().north());
         } else {
-            sk.add(r.x(), r.top(), r.width());
+            sk.add(ShapeElement(r, item));
             d = ss->skyline().south().minDistance(sk);
         }
 
@@ -100,7 +100,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             r.translate(PointF(0.0, yd));
         }
         if (add && item->addToSkyline()) {
-            ss->skyline().add(r);
+            ss->skyline().add(r, const_cast<EngravingItem*>(item));
         }
     }
     setOffsetChanged(item, ldata, false);
@@ -379,10 +379,10 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
             bool above = item->up();
             SkylineLine sk(!above);
             if (above) {
-                sk.add(r.x(), r.bottom(), r.width());
+                sk.add(shapeEl);
                 d = sk.minDistance(ss->skyline().north());
             } else {
-                sk.add(r.x(), r.top(), r.width());
+                sk.add(shapeEl);
                 d = ss->skyline().south().minDistance(sk);
             }
 

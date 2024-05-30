@@ -48,10 +48,6 @@ static const double MINIMUM_Y = -1000000.0;
 #define DP(...)
 #endif
 
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
 void Skyline::add(const ShapeElement& r)
 {
     if (r.ignoreForLayout()) {
@@ -99,76 +95,34 @@ void Skyline::add(const ShapeElement& r)
         }
     }
     if (!crossNorth) {
-        _north.add(r.x(), r.top(), r.width());
+        _north.add(r);
     }
     if (!crossSouth) {
-        _south.add(r.x(), r.bottom(), r.width());
+        _south.add(r);
     }
 }
-
-//---------------------------------------------------------
-//   insert
-//---------------------------------------------------------
-
-SkylineLine::SegIter SkylineLine::insert(SegIter i, double x, double y, double w)
-{
-    const double xr = x + w;
-    // Only x coordinate change is handled here as width change gets handled
-    // in SkylineLine::add().
-    if (i != seg.end() && xr > i->x) {
-        i->x = xr;
-    }
-    return seg.emplace(i, x, y, w);
-}
-
-//---------------------------------------------------------
-//   append
-//---------------------------------------------------------
-
-void SkylineLine::append(double x, double y, double w)
-{
-    seg.emplace_back(x, y, w);
-}
-
-//---------------------------------------------------------
-//   getApproxPosition
-//---------------------------------------------------------
-
-SkylineLine::SegIter SkylineLine::find(double x)
-{
-    auto it = std::upper_bound(seg.begin(), seg.end(), x, [](double x, const SkylineSegment& s) { return x < s.x; });
-    if (it == seg.begin()) {
-        return it;
-    }
-    return --it;
-}
-
-SkylineLine::SegConstIter SkylineLine::find(double x) const
-{
-    return const_cast<SkylineLine*>(this)->find(x);
-}
-
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
 
 void SkylineLine::add(const Shape& s)
 {
-    for (const auto& r : s.elements()) {
-        add(r);
+    for (const ShapeElement& se : s.elements()) {
+        add(se);
     }
 }
 
 void SkylineLine::add(const ShapeElement& r)
 {
-    if (r.ignoreForLayout()) {
-        return;
+    if (r.item() && r.item()->isStaffLines()) {
+        m_staffLinesTop = std::min(m_staffLinesTop, r.top());
+        m_staffLinesBottom = std::max(m_staffLinesBottom, r.bottom());
+    } else if (hasValidStaffLineEdges()) {
+        if (m_isNorth && muse::RealIsEqualOrMore(r.top(), m_staffLinesTop)) {
+            return; // Only add if it pokes above the staff
+        }
+        if (!m_isNorth && muse::RealIsEqualOrLess(r.bottom(), m_staffLinesBottom)) {
+            return; // Only add if it pokes below the staff
+        }
     }
-    if (north) {
-        add(r.x(), r.top(), r.width());
-    } else {
-        add(r.x(), r.bottom(), r.width());
-    }
+    m_shape.add(r);
 }
 
 void Skyline::add(const Shape& s)
@@ -178,98 +132,17 @@ void Skyline::add(const Shape& s)
     }
 }
 
-void SkylineLine::add(double x, double y, double w)
-{
-//      assert(w >= 0.0);
-    if (x < 0.0) {
-        w -= -x;
-        x = 0.0;
-        if (w <= 0.0) {
-            return;
-        }
-    }
-
-    DP("===add  %f %f %f\n", x, y, w);
-
-    SegIter i = find(x);
-    double cx = seg.empty() ? 0.0 : i->x;
-    for (; i != seg.end(); ++i) {
-        double cy = i->y;
-        if ((x + w) <= cx) {                                            // A
-            return;       // break;
-        }
-        if (x > (cx + i->w)) {                                          // B
-            cx += i->w;
-            continue;
-        }
-        if ((north && (cy <= y)) || (!north && (cy >= y))) {
-            cx += i->w;
-            continue;
-        }
-        if ((x >= cx) && ((x + w) < (cx + i->w))) {                     // (E) insert segment
-            DP("    insert at %f %f   x:%f w:%f\n", cx, i->w, x, w);
-            double w1 = x - cx;
-            double w2 = w;
-            double w3 = i->w - (w1 + w2);
-            if (w1 > 0.0000001) {
-                i->w = w1;
-                ++i;
-                i = insert(i, x, y, w2);
-                DP("       A w1 %f w2 %f\n", w1, w2);
-            } else {
-                i->w = w2;
-                i->y = y;
-                DP("       B w2 %f\n", w2);
-            }
-            if (w3 > 0.0000001) {
-                ++i;
-                DP("       C w3 %f\n", w3);
-                insert(i, x + w2, cy, w3);
-            }
-            return;
-        } else if ((x <= cx) && ((x + w) >= (cx + i->w))) {                 // F
-            DP("    change(F) cx %f y %f\n", cx, y);
-            i->y = y;
-        } else if (x < cx) {                                            // C
-            double w1 = x + w - cx;
-            i->w    -= w1;
-            DP("    add(C) cx %f y %f w %f w1 %f\n", cx, y, w1, i->w);
-            insert(i, cx, y, w1);
-            return;
-        } else {                                                        // D
-            double w1 = x - cx;
-            double w2 = i->w - w1;
-            if (w2 > 0.0000001) {
-                i->w = w1;
-                cx  += w1;
-                DP("    add(D) %f %f\n", y, w2);
-                ++i;
-                i = insert(i, cx, y, w2);
-            }
-        }
-        cx += i->w;
-    }
-    if (x >= cx) {
-        if (x > cx) {
-            double cy = north ? MAXIMUM_Y : MINIMUM_Y;
-            DP("    append1 %f %f\n", cy, x - cx);
-            append(cx, cy, x - cx);
-        }
-        DP("    append2 %f %f\n", y, w);
-        append(x, y, w);
-    } else if (x + w > cx) {
-        append(cx, y, x + w - cx);
-    }
-}
-
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
 void Skyline::clear()
 {
     _north.clear();
     _south.clear();
+}
+
+void SkylineLine::clear()
+{
+    m_staffLinesTop = 0.0;
+    m_staffLinesBottom = 0.0;
+    m_shape.clear();
 }
 
 //-------------------------------------------------------------------
@@ -285,39 +158,7 @@ double Skyline::minDistance(const Skyline& s) const
 
 double SkylineLine::minDistance(const SkylineLine& sl) const
 {
-    double dist = MINIMUM_Y;
-
-    double x1 = 0.0;
-    double x2 = 0.0;
-    auto k   = sl.begin();
-    for (auto i = begin(); i != end(); ++i) {
-        while (k != sl.end() && (x2 + k->w) < x1) {
-            x2 += k->w;
-            ++k;
-        }
-        if (k == sl.end()) {
-            break;
-        }
-        for (;;) {
-            if ((x1 + i->w > x2) && (x1 < x2 + k->w)) {
-                dist = std::max(dist, i->y - k->y);
-            }
-            if (x2 + k->w < x1 + i->w) {
-                x2 += k->w;
-                ++k;
-                if (k == sl.end()) {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-        if (k == sl.end()) {
-            break;
-        }
-        x1 += i->w;
-    }
-    return dist;
+    return m_shape.minVerticalDistance(sl.m_shape);
 }
 
 void Skyline::paint(Painter& painter, double lineWidth) const
@@ -325,9 +166,9 @@ void Skyline::paint(Painter& painter, double lineWidth) const
     painter.save();
 
     painter.setBrush(BrushStyle::NoBrush);
-    painter.setPen(Pen(Color(144, 238, 144), lineWidth));
+    painter.setPen(Pen(Color(144, 238, 144, 150), lineWidth));
     _north.paint(painter);
-    painter.setPen(Pen(Color(144, 144, 238), lineWidth));
+    painter.setPen(Pen(Color(144, 144, 238, 150), lineWidth));
     _south.paint(painter);
 
     painter.restore();
@@ -335,80 +176,33 @@ void Skyline::paint(Painter& painter, double lineWidth) const
 
 void SkylineLine::paint(Painter& painter) const
 {
-    double x1 = 0.0;
-    double x2;
-    double y = 0.0;
-
-    bool pvalid = false;
-    for (const SkylineSegment& s : *this) {
-        x2 = x1 + s.w;
-        if (valid(s)) {
-            if (pvalid && !muse::RealIsEqual(y, s.y)) {
-                painter.drawLine(LineF(x1, y, x1, s.y));
-            }
-            y = s.y;
-            if (!muse::RealIsEqual(x1, x2)) {
-                painter.drawLine(LineF(x1, y, x2, y));
-            }
-            pvalid = true;
-        } else {
-            pvalid = false;
-        }
-        x1 = x2;
-    }
+    m_shape.paint(painter);
 }
 
 bool SkylineLine::valid() const
 {
-    return !seg.empty();
+    return !m_shape.empty();
 }
-
-bool SkylineLine::valid(const SkylineSegment& s) const
-{
-    return north ? (s.y != MAXIMUM_Y) : (s.y != MINIMUM_Y);
-}
-
-//---------------------------------------------------------
-//   dump
-//---------------------------------------------------------
-
-void Skyline::dump(const char* p, bool n) const
-{
-    printf("Skyline dump: %p %s\n", this, p);
-    if (n) {
-        _north.dump();
-    } else {
-        _south.dump();
-    }
-}
-
-void SkylineLine::dump() const
-{
-    double x = 0.0;
-    for (const SkylineSegment& s : *this) {
-        printf("   x %f y %f w %f\n", x, s.y, s.w);
-        x += s.w;
-    }
-}
-
-//---------------------------------------------------------
-//   max
-//---------------------------------------------------------
 
 double SkylineLine::max() const
 {
-    double val;
-    if (north) {
-        val = MAXIMUM_Y;
-        for (const SkylineSegment& s : *this) {
-            val = std::min(val, s.y);
-        }
-    } else {
-        val = MINIMUM_Y;
-        for (const SkylineSegment& s : *this) {
-            val = std::max(val, s.y);
-        }
-    }
-    return val;
+    return m_isNorth ? m_shape.top() : m_shape.bottom();
 }
 } // namespace mu::engraving
+
+std::string mu::engraving::dump(const Skyline& skyline)
+{
+    std::stringstream ss;
+    ss << "Skyline dump.\n";
+    dump(skyline.north(), ss);
+    dump(skyline.south(), ss);
+    return ss.str();
+}
+
+void mu::engraving::dump(const SkylineLine& skylineLine, std::stringstream& ss)
+{
+    ss << "North: " << skylineLine.isNorth();
+    for (const ShapeElement& se : skylineLine.elements()) {
+        dump(se, ss);
+    }
+}

@@ -2588,18 +2588,18 @@ double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
 
     SkylineLine north = staffSystem->skyline().north();
     int topOffset = INT_MAX;
-    for (SkylineSegment segment: north) {
+    for (const ShapeElement& element : north.elements()) {
         Segment* seg = prev1enabled();
         if (!seg) {
             continue;
         }
-        bool ok = seg->pagePos().x() <= segment.x && segment.x <= pagePos().x();
+        bool ok = seg->pagePos().x() <= element.left() && element.left() <= pagePos().x();
         if (!ok) {
             continue;
         }
 
-        if (segment.y < topOffset) {
-            topOffset = segment.y;
+        if (element.top() < topOffset) {
+            topOffset = element.top();
         }
     }
 
@@ -2621,18 +2621,18 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
     SkylineLine south = staffSystem->skyline().south();
     int bottomOffset = INT_MIN;
-    for (SkylineSegment segment: south) {
+    for (const ShapeElement& element : south.elements()) {
         Segment* seg = prev1enabled();
         if (!seg) {
             continue;
         }
-        bool ok = seg->pagePos().x() <= segment.x && segment.x <= pagePos().x();
+        bool ok = seg->pagePos().x() <= element.left() && element.left() <= pagePos().x();
         if (!ok) {
             continue;
         }
 
-        if (segment.y > bottomOffset) {
-            bottomOffset = segment.y;
+        if (element.bottom() > bottomOffset) {
+            bottomOffset = element.bottom();
         }
     }
 
