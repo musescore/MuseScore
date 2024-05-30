@@ -4369,6 +4369,9 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
     shape.add(noteBBox, item);
 
     for (const NoteDot* dot : item->dots()) {
+        if (!dot->addToSkyline()) {
+            continue;
+        }
         shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
     }
 
@@ -4389,7 +4392,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
     Part* part = item->part();
     if (part && part->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
         GuitarBend* bend = item->bendFor();
-        if (bend && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
+        if (bend && bend->addToSkyline() && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
             GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
             // Semi-hack: the relative position of note and bend
             // isn't fully known yet, so we use an approximation
@@ -4774,14 +4777,21 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
     auto layoutRestDots = [](const Rest* item, const LayoutConfiguration& conf, Rest::LayoutData* ldata)
     {
         const_cast<Rest*>(item)->checkDots();
-        double x = item->symWidthNoLedgerLines(ldata) + conf.styleMM(Sid::dotNoteDistance) * item->mag();
-        double dx = conf.styleMM(Sid::dotDotDistance) * item->mag();
+        double visibleX = item->symWidthNoLedgerLines(ldata) + conf.styleMM(Sid::dotNoteDistance) * item->mag();
+        double visibleDX = conf.styleMM(Sid::dotDotDistance) * item->mag();
+        double invisibleX = item->symWidthNoLedgerLines(ldata);
         double y = item->dotLine() * item->spatium() * .5;
         for (NoteDot* dot : item->dotList()) {
             NoteDot::LayoutData* dotldata = dot->mutldata();
             TLayout::layoutNoteDot(dot, dotldata);
-            dotldata->setPos(x, y);
-            x += dx;
+            if (dot->visible()) {
+                dotldata->setPos(visibleX, y);
+                visibleX += visibleDX;
+            } else {
+                invisibleX +=  0.1 * item->spatium();
+                dotldata->setPos(invisibleX, y);
+                invisibleX += item->symWidth(SymId::augmentationDot) * dot->mag();
+            }
         }
     };
 
