@@ -3315,7 +3315,7 @@ void TLayout::fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment
     switch (item->hairpin()->hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
     case HairpinType::DECRESC_HAIRPIN:
-        sh = Shape(item->ldata()->bbox());
+        sh = Shape(item->ldata()->bbox(), item);
         break;
     case HairpinType::DECRESC_LINE:
     case HairpinType::CRESC_LINE:

@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_SKYLINE_H
 #define MU_ENGRAVING_SKYLINE_H
 
+#include <cfloat>
 #include <vector>
 
 #include "draw/types/geometry.h"
@@ -49,10 +50,16 @@ public:
     void add(const RectF& r, EngravingItem* item) { add(ShapeElement(r, item)); }
     void add(const Shape& s);
 
+    template<typename Predicate>
+    inline bool remove_if(Predicate p) { return m_shape.remove_if(p); }
+
     void clear();
     double minDistance(const SkylineLine&) const;
     double max() const;
     bool valid() const;
+
+    double top(double startX = -DBL_MAX, double endX = DBL_MAX);
+    double bottom(double startX = -DBL_MAX, double endX = DBL_MAX);
 
     bool isNorth() const { return m_isNorth; }
 

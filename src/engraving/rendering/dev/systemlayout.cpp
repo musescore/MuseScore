@@ -2804,30 +2804,23 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     }
 
     double elementXinSystemCoord = element->pageX() - system->pageX();
-
-    double yDefaultOffset = element->propertyDefault(Pid::OFFSET).value<PointF>().y();
-    double yDefaultPos = isAbove ? yDefaultOffset : thisStaff->bbox().height() + yDefaultOffset;
-    double elementIsAtDefaultPos = muse::RealIsEqual(yDefaultPos, element->y());
-    double elementMinDist = element->minDistance().toMM(element->spatium());
     RectF elementBbox = element->ldata()->bbox().translated(PointF(elementXinSystemCoord, element->y()));
-    // SEMI-HACK: we can't use the skyline of thisStaff because it also includes element itself.
-    // Can have a better solution when we get rid of skylines.
-    double edgeOfThisStaff = elementIsAtDefaultPos
-                             ? isAbove ? 0.0 : thisStaff->bbox().height()
-                             : isAbove ? elementBbox.bottom() + elementMinDist : elementBbox.top() - elementMinDist;
-
     const double horizontalMargin = 0.25 * element->spatium();
     double startX = elementBbox.left() - horizontalMargin;
     double endX = elementBbox.right() + horizontalMargin;
-    double yStaffDiff = nextStaff->y() - thisStaff->y();
+
+    // Take a *copy* of the skyline of this staff
+    SkylineLine thisSkyline = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
+    thisSkyline.remove_if([element](ShapeElement& shEl) {
+        const EngravingItem* shapeItem = shEl.item();
+        return shapeItem && (shapeItem == element || shapeItem->isAccidental());
+    });
+    double edgeOfThisStaff = isAbove ? thisSkyline.top(startX, endX) : thisSkyline.bottom(startX, endX);
+
     SkylineLine& nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
-    double yMax = 0.0;
-    for (const ShapeElement& skylineElement : nextSkyline.elements()) {
-        if (skylineElement.left() < endX && skylineElement.right() > startX) {
-            yMax = isAbove ? std::max(yMax, skylineElement.top()) : std::min(yMax, skylineElement.bottom());
-        }
-    }
-    double edgeOfNextStaff = yMax + yStaffDiff;
+    double edgeOfNextStaff = isAbove ? nextSkyline.bottom(startX, endX) : nextSkyline.top(startX, endX);
+    double yStaffDiff = nextStaff->y() - thisStaff->y();
+    edgeOfNextStaff += yStaffDiff;
 
     double yCenter = 0.5 * (edgeOfThisStaff + edgeOfNextStaff) + visualVerticalCenter(element);
 

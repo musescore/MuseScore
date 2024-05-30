@@ -201,6 +201,38 @@ bool SkylineLine::valid() const
     return !m_shape.empty();
 }
 
+double SkylineLine::top(double startX, double endX)
+{
+    double top = DBL_MAX;
+    for (const ShapeElement& element : m_shape.elements()) {
+        if (element.right() > startX && element.left() < endX) {
+            top = std::min(top, element.top());
+        }
+    }
+
+    if (top == DBL_MAX) {
+        top = 0.0;
+    }
+
+    return top;
+}
+
+double SkylineLine::bottom(double startX, double endX)
+{
+    double bottom = -DBL_MAX;
+    for (const ShapeElement& element : m_shape.elements()) {
+        if (element.right() > startX && element.left() < endX) {
+            bottom = std::max(bottom, element.bottom());
+        }
+    }
+
+    if (bottom == -DBL_MAX) {
+        bottom = 0.0;
+    }
+
+    return bottom;
+}
+
 double SkylineLine::max() const
 {
     return m_isNorth ? m_shape.top() : m_shape.bottom();
