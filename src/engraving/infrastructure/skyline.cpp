@@ -161,22 +161,39 @@ double SkylineLine::minDistance(const SkylineLine& sl) const
     return m_shape.minVerticalDistance(sl.m_shape);
 }
 
-void Skyline::paint(Painter& painter, double lineWidth) const
+void Skyline::paint(Painter& painter, double lineWidth) const // DEBUG only
 {
     painter.save();
 
     painter.setBrush(BrushStyle::NoBrush);
-    painter.setPen(Pen(Color(144, 238, 144, 150), lineWidth));
-    _north.paint(painter);
-    painter.setPen(Pen(Color(144, 144, 238, 150), lineWidth));
-    _south.paint(painter);
+
+    for (const ShapeElement& northShapeEl : _north.elements()) {
+        painter.setPen(Pen(Color(144, 238, 144), lineWidth));
+        for (const ShapeElement& southShapeEl : _south.elements()) {
+            if (northShapeEl.item() == southShapeEl.item()) {
+                // Paint in different color items that belong to both north and south skyline
+                painter.setPen(Pen(Color(144, 191, 191), lineWidth));
+                break;
+            }
+        }
+        painter.drawRect(northShapeEl);
+    }
+
+    painter.setPen(Pen(Color(144, 144, 238), lineWidth));
+    for (const ShapeElement& southShapeEl : _south.elements()) {
+        bool alreadyPainted = false;
+        for (const ShapeElement& northShapeEl : _north.elements()) {
+            if (northShapeEl.item() == southShapeEl.item()) {
+                alreadyPainted = true;
+                break;
+            }
+        }
+        if (!alreadyPainted) {
+            painter.drawRect(southShapeEl);
+        }
+    }
 
     painter.restore();
-}
-
-void SkylineLine::paint(Painter& painter) const
-{
-    m_shape.paint(painter);
 }
 
 bool SkylineLine::valid() const

@@ -50,7 +50,6 @@ public:
     void add(const Shape& s);
 
     void clear();
-    void paint(muse::draw::Painter& painter) const;
     double minDistance(const SkylineLine&) const;
     double max() const;
     bool valid() const;
@@ -94,7 +93,7 @@ public:
     const SkylineLine& north() const { return _north; }
     const SkylineLine& south() const { return _south; }
 
-    void paint(muse::draw::Painter& painter, double lineWidth) const;
+    void paint(muse::draw::Painter& painter, double lineWidth) const; // DEBUG only
 };
 
 void dump(const SkylineLine& slylineline, std::stringstream& ss);
