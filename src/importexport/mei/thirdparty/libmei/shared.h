@@ -35,7 +35,7 @@
 namespace libmei {
 
 /** Records a temporary alteration to the pitch of a note. **/
-class Accid : public Element, public AttLabelled, public AttTyped, public AttAccidLog, public AttAccidental, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttAccidentalGes {
+class Accid : public Element, public AttLabelled, public AttTyped, public AttAccidentalGes, public AttAccidLog, public AttAccidental, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Accid();
         virtual ~Accid();
@@ -63,7 +63,7 @@ public:
 };
 
 /** An indication of how to play a note or chord. **/
-class Artic : public Element, public AttLabelled, public AttTyped, public AttArticulation, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelEvent, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Artic : public Element, public AttLabelled, public AttTyped, public AttArticulation, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelEvent, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Artic();
         virtual ~Artic();
@@ -105,7 +105,7 @@ public:
  * A simultaneous sounding of two or more notes in the same layer *with the same
  * duration*.
  **/
-class Chord : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttGraced, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttChordVis, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttVisualOffsetHo, public AttBeamSecondary, public AttInstrumentIdent {
+class Chord : public Element, public AttLabelled, public AttTyped, public AttInstrumentIdent, public AttAugmentDots, public AttGraced, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttChordVis, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttVisualOffsetHo, public AttBeamSecondary {
     public:
         Chord();
         virtual ~Chord();
@@ -120,7 +120,7 @@ public:
  * Indication of the exact location of a particular note on the staff and,
  * therefore, the other notes as well.
  **/
-class Clef : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttClefLog, public AttClefShape, public AttLineLoc, public AttOctave, public AttOctaveDisplacement, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Clef : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttClefLog, public AttClefShape, public AttLineLoc, public AttOctave, public AttOctaveDisplacement, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Clef();
         virtual ~Clef();
@@ -172,7 +172,7 @@ public:
  * below, or between staves, but not on the staff — that is not encoded elsewhere
  * in more specific elements, like tempo, dynam or repeatMark.
  **/
-class Dir : public Element, public AttLabelled, public AttTyped, public AttLang, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class Dir : public Element, public AttLabelled, public AttTyped, public AttLang, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Dir();
         virtual ~Dir();
@@ -184,7 +184,7 @@ public:
 };
 
 /** Indication of the volume of a note, phrase, or section of music. **/
-class Dynam : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttLang {
+class Dynam : public Element, public AttLabelled, public AttTyped, public AttLang, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Dynam();
         virtual ~Dynam();
@@ -317,7 +317,7 @@ public:
 };
 
 /** A single pitched event. **/
-class Note : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttGraced, public AttPitch, public AttOctave, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttTypography, public AttVisualOffsetHo, public AttBeamSecondary, public AttNoteGes, public AttInstrumentIdent, public AttMidiVelocity, public AttStringtab {
+class Note : public Element, public AttLabelled, public AttTyped, public AttNoteGes, public AttInstrumentIdent, public AttMidiVelocity, public AttStringtab, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttGraced, public AttPitch, public AttOctave, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttTypography, public AttVisualOffsetHo, public AttBeamSecondary {
     public:
         Note();
         virtual ~Note();
@@ -329,7 +329,7 @@ public:
 };
 
 /** An element indicating an ornament that is not a mordent, turn, or trill. **/
-class Ornam : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class Ornam : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttEnclosingChars, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Ornam();
         virtual ~Ornam();
@@ -420,7 +420,7 @@ public:
 };
 
 /** A non-sounding event found in the source being transcribed. **/
-class Rest : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttColor, public AttBeamSecondary, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttInstrumentIdent {
+class Rest : public Element, public AttLabelled, public AttTyped, public AttInstrumentIdent, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttColor, public AttEnclosingChars, public AttBeamSecondary, public AttStaffLocPitched, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Rest();
         virtual ~Rest();
@@ -514,7 +514,7 @@ public:
 };
 
 /** Container for staff meta-information. **/
-class StaffDef : public Element, public AttLabelled, public AttNInteger, public AttTyped, public AttStaffDefLog, public AttCleffingLog, public AttKeySigDefaultLog, public AttMeterSigDefaultLog, public AttTransposition, public AttInstrumentIdent, public AttStringtabTuning, public AttTimeBase, public AttTuning {
+class StaffDef : public Element, public AttLabelled, public AttNInteger, public AttTyped, public AttInstrumentIdent, public AttStringtabTuning, public AttTimeBase, public AttTuning, public AttStaffDefLog, public AttCleffingLog, public AttKeySigDefaultLog, public AttMeterSigDefaultLog, public AttTransposition, public AttStaffDefVis, public AttScalable {
     public:
         StaffDef();
         virtual ~StaffDef();
@@ -565,7 +565,7 @@ public:
  * Text and symbols descriptive of tempo, mood, or style, e.g., "allarg.", "a
  * tempo", "cantabile", "Moderato", "♩=60", "Moderato ♩ =60").
  **/
-class Tempo : public Element, public AttLabelled, public AttTyped, public AttLang, public AttTempoLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttMmTempo, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttMidiTempo {
+class Tempo : public Element, public AttLabelled, public AttTyped, public AttLang, public AttMidiTempo, public AttTempoLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttMmTempo, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Tempo();
         virtual ~Tempo();

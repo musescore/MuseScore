@@ -709,6 +709,61 @@ public:
 };
 
 //----------------------------------------------------------------------------
+// AttStaffDefVis
+//----------------------------------------------------------------------------
+
+class AttStaffDefVis : public Att {
+protected:
+    AttStaffDefVis();
+    ~AttStaffDefVis() = default;
+
+public:
+    /** Reset the default values for the attribute class **/
+    void ResetStaffDefVis();
+
+    /** Read the values for the attribute class **/
+    bool ReadStaffDefVis(pugi::xml_node element, bool removeAttr = true);
+
+    /** Write the values for the attribute class **/
+    bool WriteStaffDefVis(pugi::xml_node element);
+
+    /**
+     * @name Setters, getters and presence checker for class members.
+     * The checker returns true if the attribute class is set (e.g., not equal
+     * to the default value)
+     **/
+    ///@{
+    void SetLinesColor(std::string linesColor_) { m_linesColor = linesColor_; }
+    std::string GetLinesColor() const { return m_linesColor; }
+    bool HasLinesColor() const;
+    //
+    void SetLinesVisible(data_BOOLEAN linesVisible_) { m_linesVisible = linesVisible_; }
+    data_BOOLEAN GetLinesVisible() const { return m_linesVisible; }
+    bool HasLinesVisible() const;
+    ///@}
+
+private:
+    /** Captures the colors of the staff lines. **/
+    std::string m_linesColor;
+    /** Records whether all staff lines are visible. **/
+    data_BOOLEAN m_linesVisible;
+};
+
+//----------------------------------------------------------------------------
+// InstStaffDefVis
+//----------------------------------------------------------------------------
+
+/**
+ * Instantiable version of AttStaffDefVis
+ */
+
+class InstStaffDefVis : public AttStaffDefVis {
+public:
+    InstStaffDefVis() = default;
+    virtual ~InstStaffDefVis() = default;
+};
+
+//----------------------------------------------------------------------------
 // AttStaffGrpVis
 //----------------------------------------------------------------------------
 

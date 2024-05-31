@@ -35,7 +35,9 @@ void AttStringtab::ResetStringtab()
 {
     m_tabFing = "";
     m_tabFret = "";
+    m_tabLine = 0;
     m_tabString = "";
+    m_tabCourse = MEI_UNSET;
 }
 
 bool AttStringtab::ReadStringtab(pugi::xml_node element, bool removeAttr)
@@ -51,9 +53,19 @@ bool AttStringtab::ReadStringtab(pugi::xml_node element, bool removeAttr)
         if (removeAttr) element.remove_attribute("tab.fret");
         hasAttribute = true;
     }
+    if (element.attribute("tab.line")) {
+        this->SetTabLine(StrToInt(element.attribute("tab.line").value()));
+        if (removeAttr) element.remove_attribute("tab.line");
+        hasAttribute = true;
+    }
     if (element.attribute("tab.string")) {
         this->SetTabString(StrToStr(element.attribute("tab.string").value()));
         if (removeAttr) element.remove_attribute("tab.string");
+        hasAttribute = true;
+    }
+    if (element.attribute("tab.course")) {
+        this->SetTabCourse(StrToInt(element.attribute("tab.course").value()));
+        if (removeAttr) element.remove_attribute("tab.course");
         hasAttribute = true;
     }
     return hasAttribute;
@@ -70,8 +82,16 @@ bool AttStringtab::WriteStringtab(pugi::xml_node element)
         element.append_attribute("tab.fret") = StrToStr(this->GetTabFret()).c_str();
         wroteAttribute = true;
     }
+    if (this->HasTabLine()) {
+        element.append_attribute("tab.line") = IntToStr(this->GetTabLine()).c_str();
+        wroteAttribute = true;
+    }
     if (this->HasTabString()) {
         element.append_attribute("tab.string") = StrToStr(this->GetTabString()).c_str();
+        wroteAttribute = true;
+    }
+    if (this->HasTabCourse()) {
+        element.append_attribute("tab.course") = IntToStr(this->GetTabCourse()).c_str();
         wroteAttribute = true;
     }
     return wroteAttribute;
@@ -87,9 +107,19 @@ bool AttStringtab::HasTabFret() const
     return (m_tabFret != "");
 }
 
+bool AttStringtab::HasTabLine() const
+{
+    return (m_tabLine != 0);
+}
+
 bool AttStringtab::HasTabString() const
 {
     return (m_tabString != "");
+}
+
+bool AttStringtab::HasTabCourse() const
+{
+    return (m_tabCourse != MEI_UNSET);
 }
 
 //----------------------------------------------------------------------------
@@ -144,6 +174,7 @@ AttStringtabTuning::AttStringtabTuning() : Att()
 void AttStringtabTuning::ResetStringtabTuning()
 {
     m_tabStrings = "";
+    m_tabCourses = "";
 }
 
 bool AttStringtabTuning::ReadStringtabTuning(pugi::xml_node element, bool removeAttr)
@@ -152,6 +183,11 @@ bool AttStringtabTuning::ReadStringtabTuning(pugi::xml_node element, bool remove
     if (element.attribute("tab.strings")) {
         this->SetTabStrings(StrToStr(element.attribute("tab.strings").value()));
         if (removeAttr) element.remove_attribute("tab.strings");
+        hasAttribute = true;
+    }
+    if (element.attribute("tab.courses")) {
+        this->SetTabCourses(StrToStr(element.attribute("tab.courses").value()));
+        if (removeAttr) element.remove_attribute("tab.courses");
         hasAttribute = true;
     }
     return hasAttribute;
@@ -164,12 +200,21 @@ bool AttStringtabTuning::WriteStringtabTuning(pugi::xml_node element)
         element.append_attribute("tab.strings") = StrToStr(this->GetTabStrings()).c_str();
         wroteAttribute = true;
     }
+    if (this->HasTabCourses()) {
+        element.append_attribute("tab.courses") = StrToStr(this->GetTabCourses()).c_str();
+        wroteAttribute = true;
+    }
     return wroteAttribute;
 }
 
 bool AttStringtabTuning::HasTabStrings() const
 {
     return (m_tabStrings != "");
+}
+
+bool AttStringtabTuning::HasTabCourses() const
+{
+    return (m_tabCourses != "");
 }
 
 } // namespace libmei

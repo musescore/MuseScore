@@ -153,7 +153,7 @@ bool MeiExporter::write(std::string& meiData)
         }
 
         libmei::AttConverter converter;
-        libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_0plusbasic;
+        libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_1plusbasic;
         m_mei.append_attribute("meiversion") = (converter.MeiVersionMeiversionToStr(meiVersion)).c_str();
 
         this->writeHeader();
