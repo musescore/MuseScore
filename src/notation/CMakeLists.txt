@@ -154,6 +154,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/stringtuningssettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/stringtuningssettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/dynamicpopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/dynamicpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
