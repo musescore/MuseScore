@@ -427,11 +427,12 @@ void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsign
         return;
     }
 
-    for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
-        for (samples_t s = 0; s < samplesCount; ++s) {
-            int idx = s * m_audioChannelsCount + audioChNum;
-            float sample = inBuffer[idx];
+    for (samples_t s = 0; s < samplesCount; ++s) {
+        size_t samplePos = s * m_audioChannelsCount;
 
+        for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
+            size_t idx = samplePos + audioChNum;
+            float sample = inBuffer[idx];
             outBuffer[idx] += sample;
 
             if (outBufferIsSilent && !RealIsNull(sample)) {
@@ -478,10 +479,11 @@ void Mixer::writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParam
         float* auxBuffer = aux.buffer.data();
         float signalAmount = auxSend.signalAmount;
 
-        for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
-            for (samples_t s = 0; s < samplesPerChannel; ++s) {
-                int idx = s * m_audioChannelsCount + audioChNum;
+        for (samples_t s = 0; s < samplesPerChannel; ++s) {
+            size_t samplePos = s * m_audioChannelsCount;
 
+            for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
+                size_t idx = samplePos + audioChNum;
                 auxBuffer[idx] += trackBuffer[idx] * signalAmount;
             }
         }
