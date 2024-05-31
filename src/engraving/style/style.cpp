@@ -113,6 +113,16 @@ int MStyle::defaultStyleVersion() const
     return styleI(Sid::defaultsVersion);
 }
 
+void MStyle::setPreset(ScoreStylePreset preset)
+{
+    m_preset = preset;
+}
+
+void MStyle::setPresetEdited(bool isEdited)
+{
+    m_presetedited = isEdited;
+}
+
 bool MStyle::readProperties(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
