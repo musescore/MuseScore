@@ -202,6 +202,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/style.h
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/scorestylepreset.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/scorestylepreset.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerenderer.h
