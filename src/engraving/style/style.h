@@ -74,6 +74,11 @@ public:
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
 
+    ScoreStylePreset preset() const { return m_preset; }
+    void setPreset(ScoreStylePreset preset) { m_preset = preset; }
+    bool presetEdited() const { return m_presetEdited; }
+    void setPresetEdited(bool isEdited) { m_presetEdited = isEdited; }
+
     bool read(muse::io::IODevice* device, bool ign = false);
     bool write(muse::io::IODevice* device);
     void save(XmlWriter& xml, bool optimize);
@@ -100,6 +105,8 @@ private:
 
     void readVersion(String versionTag);
     int m_version = 0;
+    ScoreStylePreset m_preset = ScoreStylePreset::DEFAULT;
+    bool m_presetEdited = false;
 };
 } // namespace mu::engraving
 
