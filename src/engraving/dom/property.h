@@ -447,6 +447,7 @@ enum class Pid {
     SCORE_FONT,
     SYMBOLS_SIZE,
     SYMBOL_ANGLE,
+    SCORE_STYLE_PRESET,
 
     APPLY_TO_ALL_STAVES,
 
