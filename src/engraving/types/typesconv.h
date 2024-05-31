@@ -246,5 +246,11 @@ public:
 
     static AsciiStringView toXml(PartialSpannerDirection v);
     static PartialSpannerDirection fromXml(const AsciiStringView& str, PartialSpannerDirection def);
+
+    static AsciiStringView toXml(ScoreStylePreset preset);
+    static ScoreStylePreset fromXml(const AsciiStringView& tag, ScoreStylePreset def);
+
+    static const TranslatableString& userName(ScoreStylePreset v);
+    static String translatedUserName(ScoreStylePreset v);
 };
 }
