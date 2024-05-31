@@ -785,9 +785,6 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
         } else if (readProperty(d, tag, e, ctx, Pid::ANCHOR_TO_END_OF_PREVIOUS)) {
-        } else if (readProperty(d, tag, e, ctx, Pid::APPLY_TO_VOICE)) {
-        } else if (readProperty(d, tag, e, ctx, Pid::DIRECTION)) {
-        } else if (readProperty(d, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
         } else if (!readProperties(static_cast<TextBase*>(d), e, ctx)) {
             e.unknown();
         }
@@ -3079,6 +3076,8 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
         } else if (readProperty(h, tag, e, ctx, Pid::APPLY_TO_VOICE)) {
         } else if (readProperty(h, tag, e, ctx, Pid::DIRECTION)) {
         } else if (readProperty(h, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
+        } else if (readProperty(h, tag, e, ctx, Pid::SNAP_BEFORE)) {
+        } else if (readProperty(h, tag, e, ctx, Pid::SNAP_AFTER)) {
         } else if (!readProperties(static_cast<TextLineBase*>(h), e, ctx)) {
             e.unknown();
         }
@@ -4606,6 +4605,9 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
             t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
         }
     } else if (TRead::readProperty(t, tag, e, ctx, Pid::TEXT_LINKED_TO_MASTER)) {
+    } else if (readProperty(t, tag, e, ctx, Pid::APPLY_TO_VOICE)) {
+    } else if (readProperty(t, tag, e, ctx, Pid::DIRECTION)) {
+    } else if (readProperty(t, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
     } else if (!readItemProperties(t, e, ctx)) {
         return false;
     }

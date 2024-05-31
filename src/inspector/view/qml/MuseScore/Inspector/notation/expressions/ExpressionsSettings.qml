@@ -79,10 +79,18 @@ Column {
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart
 
-                text: qsTrc("inspector", "Snap to dynamic")
+                text: qsTrc("inspector", "Align with preceding dynamic")
                 propertyItem: root.model ? root.model.snapExpression : null
             }
         }
+    }
 
+    VoicesAndPositionSection {
+        id: voicesAndPositionSection
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: layoutSection.navigationRowEnd + 1
+
+        model: root.model
     }
 }

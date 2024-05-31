@@ -1349,6 +1349,51 @@ void EngravingItem::setPlacementBasedOnVoiceApplication(DirectionV styledDirecti
     }
 }
 
+bool EngravingItem::shouldBeCenteredBetweenStaves(const System* system) const
+{
+    if (!isStyled(Pid::OFFSET)) {
+        // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
+        return false;
+    }
+
+    const Part* itemPart = part();
+    bool centerStyle = style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
+    AutoOnOff centerProperty = getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
+    if (itemPart->nstaves() <= 1 || centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
+        return false;
+    }
+
+    if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
+        return false;
+    }
+
+    const Staff* thisStaff = staff();
+    const std::vector<Staff*>& partStaves = itemPart->staves();
+    IF_ASSERT_FAILED(partStaves.size() > 0) {
+        return false;
+    }
+
+    if ((thisStaff == partStaves.front() && placeAbove()) || (thisStaff == partStaves.back() && placeBelow())) {
+        return false;
+    }
+
+    staff_idx_t thisIdx = thisStaff->idx();
+    if (placeAbove()) {
+        IF_ASSERT_FAILED(thisIdx > 0) {
+            return false;
+        }
+    }
+    staff_idx_t nextIdx = placeAbove() ? thisIdx - 1 : thisIdx + 1;
+
+    const SysStaff* thisSystemStaff = system->staff(thisIdx);
+    const SysStaff* nextSystemStaff = system->staff(nextIdx);
+    if (!thisSystemStaff->show() || !nextSystemStaff->show()) {
+        return false;
+    }
+
+    return centerProperty == AutoOnOff::ON || appliesToAllVoicesInInstrument();
+}
+
 void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
 {
     assert(!score()->isMaster());
@@ -2555,6 +2600,42 @@ void EngravingItem::LayoutData::setBbox(const RectF& r)
 
     //DO_ASSERT(!isShapeComposite());
     m_shape.set_value(Shape(r, m_item, Shape::Type::Fixed));
+}
+
+void EngravingItem::LayoutData::connectItemSnappedBefore(EngravingItem* itemBefore)
+{
+    IF_ASSERT_FAILED(itemBefore) {
+        return;
+    }
+    m_itemSnappedBefore = itemBefore;
+    itemBefore->mutldata()->m_itemSnappedAfter = const_cast<EngravingItem*>(m_item);
+}
+
+void EngravingItem::LayoutData::disconnectItemSnappedBefore()
+{
+    if (!m_itemSnappedBefore) {
+        return;
+    }
+    m_itemSnappedBefore->mutldata()->m_itemSnappedAfter = nullptr;
+    m_itemSnappedBefore = nullptr;
+}
+
+void EngravingItem::LayoutData::connectItemSnappedAfter(EngravingItem* itemAfter)
+{
+    IF_ASSERT_FAILED(itemAfter) {
+        return;
+    }
+    m_itemSnappedAfter = itemAfter;
+    itemAfter->mutldata()->m_itemSnappedBefore = const_cast<EngravingItem*>(m_item);
+}
+
+void EngravingItem::LayoutData::disconnectItemSnappedAfter()
+{
+    if (!m_itemSnappedAfter) {
+        return;
+    }
+    m_itemSnappedAfter->mutldata()->m_itemSnappedBefore = nullptr;
+    m_itemSnappedAfter = nullptr;
 }
 
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const

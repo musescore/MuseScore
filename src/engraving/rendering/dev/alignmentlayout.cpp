@@ -1,0 +1,163 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2023 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "alignmentlayout.h"
+#include "systemlayout.h"
+
+#include "dom/dynamic.h"
+#include "dom/expression.h"
+#include "dom/hairpin.h"
+#include "dom/system.h"
+#include "dom/text.h"
+
+namespace mu::engraving::rendering::dev {
+void AlignmentLayout::alignItems(const std::vector<EngravingItem*>& elements, const System* system)
+{
+    std::set<EngravingItem*> alignedItems;
+
+    double outermostY = 0.0;
+    bool firstItem = true;
+    auto computeOutermostY = [&outermostY, &firstItem, &alignedItems](EngravingItem* item) {
+        double curY = yOpticalCenter(item);
+        if (firstItem) {
+            outermostY = curY;
+            firstItem = false;
+        } else {
+            outermostY = item->placeAbove() ? std::min(outermostY, curY) : std::max(outermostY, curY);
+        }
+    };
+
+    auto moveElementsToOutermostY = [&outermostY, &alignedItems, system](EngravingItem* item) {
+        moveItemToY(item, outermostY, system, alignedItems);
+    };
+
+    for (EngravingItem* item : elements) {
+        if (muse::contains(alignedItems, item)) {
+            continue;
+        }
+        firstItem = true;
+        scanConnectedItems(item, computeOutermostY);
+        scanConnectedItems(item, moveElementsToOutermostY);
+    }
+}
+
+void AlignmentLayout::alignStaffCenteredItems(const std::vector<EngravingItem*>& elements, const System* system)
+{
+    std::vector<double> vecOfCurrentY;
+
+    auto collectCurrentYandComputeEdges = [&vecOfCurrentY](EngravingItem* item) {
+        vecOfCurrentY.push_back(yOpticalCenter(item));
+    };
+
+    double averageY = 0.0;
+    auto limitAverageYInsideAvailableSpace = [&averageY](EngravingItem* item) {
+        double yCur = yOpticalCenter(item);
+        double intendedMove = averageY - yCur;
+        const EngravingItem::LayoutData::StaffCenteringInfo& staffCenteringInfo = item->ldata()->staffCenteringInfo();
+        double availSpaceAbove = staffCenteringInfo.availableVertSpaceAbove;
+        double availSpaceBelow = staffCenteringInfo.availableVertSpaceBelow;
+        double maxAllowedMove = std::clamp(intendedMove, availSpaceAbove, availSpaceBelow);
+        if (!muse::RealIsEqual(maxAllowedMove, intendedMove)) {
+            averageY += -intendedMove + maxAllowedMove;
+        }
+    };
+
+    std::set<EngravingItem*> alignedItems;
+    auto moveElementsToAverageY = [&averageY, &alignedItems, system](EngravingItem* item) {
+        moveItemToY(item, averageY, system, alignedItems);
+    };
+
+    for (EngravingItem* item : elements) {
+        if (muse::contains(alignedItems, item)) {
+            continue;
+        }
+        vecOfCurrentY.clear();
+        scanConnectedItems(item, collectCurrentYandComputeEdges);
+        averageY = computeAverageY(vecOfCurrentY);
+        scanConnectedItems(item, limitAverageYInsideAvailableSpace);
+        scanConnectedItems(item, moveElementsToAverageY);
+    }
+}
+
+void AlignmentLayout::moveItemToY(EngravingItem* item, double y, const System* system, std::set<EngravingItem*>& alignedItems)
+{
+    double curY = yOpticalCenter(item);
+    double yDiff = y - curY;
+    item->mutldata()->moveY(yDiff);
+    alignedItems.insert(item);
+    SystemLayout::updateSkylineForElement(item, system, yDiff);
+}
+
+double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
+{
+    double curY = item->pos().y();
+    switch (item->type()) {
+    case ElementType::DYNAMIC:
+        curY -= 0.46 * item->spatium() * toDynamic(item)->dynamicsSize(); // approximated half x-height of dynamic
+        break;
+    case ElementType::EXPRESSION:
+        curY -= 0.5 * toExpression(item)->fontMetrics().xHeight();
+        break;
+    case ElementType::HAIRPIN_SEGMENT:
+    {
+        const HairpinSegment* hairpinSeg = toHairpinSegment(item);
+        if (hairpinSeg->hairpin()->isLineType()) {
+            Text* text = hairpinSeg->text();
+            if (!text) {
+                text = hairpinSeg->endText();
+            }
+            if (text) {
+                curY -= 0.5 * text->fontMetrics().xHeight();
+            } else {
+                curY -= 0.5 * item->spatium();
+            }
+        }
+    }
+    default:
+        break;
+    }
+    return curY;
+}
+
+void AlignmentLayout::scanConnectedItems(EngravingItem* item, std::function<void(EngravingItem*)> func)
+{
+    func(item);
+
+    EngravingItem* snappedBefore = item->ldata()->itemSnappedBefore();
+    while (snappedBefore) {
+        func(snappedBefore);
+        snappedBefore = snappedBefore->ldata()->itemSnappedBefore();
+    }
+
+    EngravingItem* snappedAfter = item->ldata()->itemSnappedAfter();
+    while (snappedAfter) {
+        func(snappedAfter);
+        snappedAfter = snappedAfter->ldata()->itemSnappedAfter();
+    }
+}
+
+double AlignmentLayout::computeAverageY(const std::vector<double> vecOfY)
+{
+    double sum = std::accumulate(vecOfY.begin(), vecOfY.end(), 0.0);
+    return sum / static_cast<double>(vecOfY.size());
+}
+} // namespace mu::engraving::rendering::dev

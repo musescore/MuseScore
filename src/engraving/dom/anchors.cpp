@@ -27,6 +27,7 @@
 #include "score.h"
 #include "spanner.h"
 #include "system.h"
+#include "page.h"
 
 #include "rendering/dev/measurelayout.h"
 
@@ -79,6 +80,7 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
     for (const Fraction& anchorTick : anchorTicks) {
         createTimeTickAnchor(measure, anchorTick, staffIdx);
     }
+    measure->computeTicks();
 
     Score* score = measure->score();
 
@@ -100,6 +102,11 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
         anchor->setParent(segment);
         anchor->setTrack(track);
         segment->add(anchor);
+        if (System* system = measure->system()) {
+            if (Page* page = system->page()) {
+                page->invalidateBspTree();
+            }
+        }
     }
 
     return anchor;

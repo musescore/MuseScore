@@ -61,6 +61,8 @@ public:
 
     static void centerElementsBetweenStaves(const System* system);
 
+    static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
+
 private:
     static System* getNextSystem(LayoutContext& lc);
     static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
@@ -82,7 +84,6 @@ private:
                                   std::vector<Bracket*>& bl, Measure* measure);
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2);
 
-    static bool elementNeedsCenterBetweenStaves(const EngravingItem* element, const System* system);
     static void centerElementBetweenStaves(EngravingItem* element, const System* system);
     static double visualVerticalCenter(const EngravingItem* element);
 };
