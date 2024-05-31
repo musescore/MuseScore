@@ -819,6 +819,7 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
         } else if (controlEvent.first->isHarmony()) {
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isArticulation() && !controlEvent.first->isOrnament()) {
+            // laissez vibrer is the only non-ornamental articulation we find in the list, see MeiExporter::writeArtics
             success = success && this->writeLv(dynamic_cast<const Articulation*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOrnament()) {
             success = success && this->writeOrnament(dynamic_cast<const Ornament*>(controlEvent.first), controlEvent.second);
@@ -971,6 +972,7 @@ bool MeiExporter::writeArtics(const Chord* chord)
 
     for (const Articulation* articulation : chord->articulations()) {
         if (articulation->isArticulation() && !this->isLaissezVibrer(articulation->symId())) {
+            // laissez vibrer is handled as control element
             this->writeArtic(articulation);
         }
     }
