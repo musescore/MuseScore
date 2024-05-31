@@ -1161,6 +1161,16 @@ struct std::hash<mu::engraving::InstrumentTrackId>
     }
 };
 
+enum class ScoreStylePreset {
+    DEFAULT = 0,
+    MSN_16MM,
+    MSN_18MM,
+    MSN_20MM,
+    MSN_22MM,
+    MSN_25MM,
+    MAX_PRESET
+};
+
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::BeamMode)
 Q_DECLARE_METATYPE(mu::engraving::JumpType)
