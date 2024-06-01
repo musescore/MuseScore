@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "global/modularity/ioc.h"
-#include "midi/imidioutport.h"
 
 #include "../../abstractsynthesizer.h"
 #include "fluidsequencer.h"
@@ -37,8 +36,6 @@ namespace muse::audio::synth {
 struct Fluid;
 class FluidSynth : public AbstractSynthesizer
 {
-    Inject<midi::IMidiOutPort> midiOutPort;
-
 public:
     FluidSynth(const audio::AudioSourceParams& params);
 

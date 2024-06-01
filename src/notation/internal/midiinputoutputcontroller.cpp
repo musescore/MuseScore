@@ -69,6 +69,10 @@ void MidiInputOutputController::init()
 
         onMidiEventReceived(tick, event);
     });
+
+    playback()->midiEvent().onReceive(this, [this](muse::audio::TrackId /*trackId*/, const muse::midi::Event& event) {
+        midiOutPort()->sendEvent(event);
+    });
 }
 
 void MidiInputOutputController::checkInputConnection()

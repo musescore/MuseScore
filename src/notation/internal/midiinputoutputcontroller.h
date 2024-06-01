@@ -26,6 +26,7 @@
 #include "midi/imidiinport.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiconfiguration.h"
+#include "audio/iplayback.h"
 #include "context/iglobalcontext.h"
 #include "shortcuts/imidiremote.h"
 #include "inotationconfiguration.h"
@@ -37,6 +38,7 @@ class MidiInputOutputController : public muse::async::Asyncable
     INJECT(muse::midi::IMidiInPort, midiInPort)
     INJECT(muse::midi::IMidiOutPort, midiOutPort)
     INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
+    INJECT(muse::audio::IPlayback, playback)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(INotationConfiguration, configuration)
     INJECT(muse::shortcuts::IMidiRemote, midiRemote)

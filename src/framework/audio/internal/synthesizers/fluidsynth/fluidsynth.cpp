@@ -178,8 +178,6 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     }
     }
 
-    midiOutPort()->sendEvent(event);
-
     return ret == FLUID_OK;
 }
 
