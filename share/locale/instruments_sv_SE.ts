@@ -3275,7 +3275,7 @@
         <source>Sopranino clarinet in A♭.</source>
         <comment>piccolo-clarinet description</comment>
         <extracomment>description for Piccolo Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopranklarinett i Ass.</translation>
+        <translation>Sopraninoklarinett i Ass.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1259"/>
@@ -3499,7 +3499,7 @@
         <source>Soprano clarinet in A. One of the standard orchestral clarinets.</source>
         <comment>a-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopranklarinett i Ess. En av de vanliga orkesterklarinetterna.</translation>
+        <translation>Sopranklarinett i A. En av de vanliga orkesterklarinetterna.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1330"/>
@@ -3534,7 +3534,7 @@
         <source>Soprano clarinet in G.</source>
         <comment>g-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopranklarinett i G.</translation>
+        <translation>Sopraninoklarinett i G.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1341"/>
@@ -3653,7 +3653,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet.</source>
         <comment>bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten.</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1379"/>
@@ -3681,7 +3681,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the treble clef (‘French notation’).</source>
         <comment>bb-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten. Noterad i diskantklav (&quot;Fransk notation&quot;).</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i diskantklav (&quot;Fransk notation&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1388"/>
@@ -3716,7 +3716,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the bass clef (‘German notation’).</source>
         <comment>bb-bass-clarinet-bass-clef description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten. Noterad i basklav (&quot;Tysk notation&quot;).</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i basklav (&quot;Tysk notation&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1399"/>

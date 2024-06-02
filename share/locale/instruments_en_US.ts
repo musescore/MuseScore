@@ -10023,7 +10023,7 @@
         <source>Helicon</source>
         <comment>helicon shortName</comment>
         <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hel.</translation>
+        <translation>Helicon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3343"/>
@@ -10863,21 +10863,21 @@
         <source>Chimes</source>
         <comment>tubular-bells trackName</comment>
         <extracomment>trackName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tubular bells</translation>
+        <translation>Chimes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3615"/>
         <source>Chimes</source>
         <comment>tubular-bells longName</comment>
         <extracomment>longName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tubular bells</translation>
+        <translation>Chimes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3617"/>
         <source>Cme.</source>
         <comment>tubular-bells shortName</comment>
         <extracomment>shortName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>T.b..</translation>
+        <translation>Cme.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3620"/>
@@ -18654,7 +18654,7 @@
         <source>Viola da gamba (staff notation).</source>
         <comment>viola-da-gamba description</comment>
         <extracomment>description for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola da gamba, also Bass Viol (staff notation).</translation>
+        <translation>Viola da gamba (staff notation).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>

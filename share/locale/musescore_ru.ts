@@ -8369,7 +8369,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
         <source>Show skylines</source>
-        <translation type="unfinished"/>
+        <translation>Показать горизонтальные направляющие</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
