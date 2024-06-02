@@ -3024,7 +3024,7 @@ std::tuple<libmei::Rend, TextCell, String> Convert::textToMEI(const engraving::T
 
     meiRend.SetFontsize(fontsize);
 
-    // @label (@lang because not available in MEI basic
+    // @label (@lang because not available in MEI Basic
     // This is what allows for reading pgHead back as VBox
     AsciiStringView rendType = engraving::TConv::toXml(text->textStyleType());
     meiRend.SetType(rendType.ascii());
