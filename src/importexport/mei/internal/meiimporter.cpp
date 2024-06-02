@@ -1994,7 +1994,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     Convert::colorFromMEI(accid, meiAccid);
     this->readXmlId(accid, meiAccid.m_xmlId);
     accid->setAccidentalType(pitchSt.accidType);
-    //accid->setBracket(AccidentalBracket::BRACKET); // Not supported in MEI-Basic
+    accid->setBracket(pitchSt.accidBracket);
     accid->setRole(pitchSt.accidRole);
     note->add(accid);
 

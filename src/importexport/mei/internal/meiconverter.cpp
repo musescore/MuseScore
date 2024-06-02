@@ -2544,11 +2544,19 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
     }
     int alterInt = static_cast<int>(alter);
 
-    /* This is currently not available in MEI Basic
     if (meiAccid.HasEnclose()) {
-        pitch.accidBracket = (accid.GetEnclose() == paren) ? engraving::AccidentalBracket::PARENTHESIS : engraving::AccidentalBracket::BRACKET;
+        switch (meiAccid.GetEnclose()) {
+        case libmei::ENCLOSURE_brack:
+            pitchSt.accidBracket = engraving::AccidentalBracket::BRACKET;
+            break;
+        case libmei::ENCLOSURE_paren:
+            pitchSt.accidBracket = engraving::AccidentalBracket::PARENTHESIS;
+            break;
+        default:
+            pitchSt.accidBracket = engraving::AccidentalBracket::NONE;
+            break;
+        }
     }
-    */
 
     bool accidWarning = false;
     if (meiAccid.HasAccid()) {
@@ -2579,8 +2587,7 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     pitch.tpc2 = note->tpc2();
     if (accid) {
         pitch.accidType = accid->accidentalType();
-        // Not available in MEI Basic
-        // pitch.accidBracket = accid->bracket();
+        pitch.accidBracket = accid->bracket();
         // Not needed because relying on accidType
         // pitch.accidRole = accid->role();
     }
@@ -2605,6 +2612,11 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     // @accid
     if (pitch.accidType != engraving::AccidentalType::NONE) {
         meiAccid.SetAccid(Convert::accidToMEI(pitch.accidType));
+        if (pitch.accidBracket == engraving::AccidentalBracket::BRACKET) {
+            meiAccid.SetEnclose(libmei::ENCLOSURE_brack);
+        } else if (pitch.accidBracket == engraving::AccidentalBracket::PARENTHESIS) {
+            meiAccid.SetEnclose(libmei::ENCLOSURE_paren);
+        }
     }
 
     // @accid.ges
