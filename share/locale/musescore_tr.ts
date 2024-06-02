@@ -2757,7 +2757,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3811"/>
         <source>Show courtesy key signatures</source>
-        <translation>Donanım değişikliği uyarılarını göster</translation>
+        <translation>Donanım değişikliği uyarısını göster</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3821"/>
@@ -2767,7 +2767,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
         <source>Show courtesy time signatures</source>
-        <translation>Ölçü göstergesi uyarılarnı göster</translation>
+        <translation>Ölçü göstergesi uyarısını göster</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3863"/>
@@ -2849,7 +2849,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4017"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation> Donanımdan sonra değişebiliyorsa daha az ♯ veya ♭. Öncesinde değişebiliyorsa ♯ ve ♭ arasında</translation>
+        <translation>Donanımdan sonra değişebiliyorsa daha az ♯ veya ♭. Öncesinde değişebiliyorsa ♯ ve ♭ arasında</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4114"/>
@@ -3956,7 +3956,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8224"/>
         <source>Numbers only</source>
-        <translation>Sadece rakamlar</translation>
+        <translation>Yalnız rakamlar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8263"/>
@@ -4568,12 +4568,12 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4987"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation>&apos;Tekrarlanan ölçü çizgisi ipuçlarını göster (&quot;kanatlı&quot; tekrarlar)&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Tekrarlama ölçü çizgisi ipucunu göster (&quot;kanatlı&quot; tekrarlar)&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5095"/>
         <source>Show repeat barline tips (“winged” repeats)</source>
-        <translation>Tekrarlanan öçlü çizgileri ipuçlarını göster (&quot;kanatlı&quot; tekrarları)</translation>
+        <translation>Tekrarlama ölçü çizgisi ipucunu göster (&quot;kanatlı&quot; tekrarları)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5619"/>
@@ -6014,7 +6014,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Single ♯ and ♭ only</source>
-        <translation>Sadece tek ♯ ve ♭</translation>
+        <translation>Yalnız tek ♯ ve ♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="499"/>
@@ -6182,7 +6182,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="88"/>
         <source>Root only</source>
-        <translation>Yanlızca kök</translation>
+        <translation>Yalnızca kök</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="98"/>
@@ -6915,7 +6915,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1945"/>
         <source>Rhythm only (not pitch)</source>
-        <translation>Sadece ritimi (perdeyi değil)</translation>
+        <translation>Yalnız tartımı (perdeyi değil)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1952"/>
@@ -7351,7 +7351,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="459"/>
         <source>Regroup rhythms</source>
-        <translation>Ritimleri yeniden gurupla</translation>
+        <translation>Tartımı yeniden gurupla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="465"/>
@@ -8381,7 +8381,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
         <source>Full measure rest</source>
-        <translation>Tam Ölçü sus</translation>
+        <translation>Tam ölçü sus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
@@ -9138,12 +9138,12 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="446"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>Ritmik eğik çizgi notasyonunu aç/kapat</translation>
+        <translation>Eğik tartım çizgi notasyonunu aç/kapat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="447"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation>Ritmik eğik çizgi notasyonu aç/kapat</translation>
+        <translation>Eğik tartım çizgi notasyonunu aç/kapat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="452"/>
@@ -9153,7 +9153,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="458"/>
         <source>Regroup &amp;rhythms</source>
-        <translation>Ritimleri yeniden gurupla</translation>
+        <translation>Tartımı yeniden gurupla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="464"/>
@@ -9675,7 +9675,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1946"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
-        <translation>Nota giriş kipini aç/kapat: sadece ritm (perdeler değil)</translation>
+        <translation>Nota giriş kipini aç/kapat: yalnız tartımı (perdeler değil)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
@@ -11566,7 +11566,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/note.cpp" line="3096"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3125"/>
         <source>Rhythm slash</source>
-        <translation>Eğik ritim çizgi</translation>
+        <translation>Eğik tartım çizgisi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3100"/>
@@ -12440,7 +12440,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Measure list</source>
-        <translation>Ölçü Listesi</translation>
+        <translation>Ölçü listesi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
@@ -16737,7 +16737,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5619"/>
         <source>Repeat last bar</source>
-        <translation>Son ölçüyü tekrara et</translation>
+        <translation>Son ölçüyü tekrarla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5620"/>
@@ -18331,7 +18331,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="74"/>
         <source>Measure width</source>
-        <translation>Ölçü Genişliğini</translation>
+        <translation>Ölçü genişliğini</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml" line="40"/>
@@ -18787,7 +18787,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="71"/>
         <source>Root only</source>
-        <translation>Yanlızca kök</translation>
+        <translation>Yalnızca kök</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="72"/>
@@ -19240,7 +19240,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="61"/>
         <source>Show numbers only</source>
-        <translation>Sadece rakamları göster</translation>
+        <translation>Yalnız rakamları göster</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml" line="53"/>
@@ -19608,7 +19608,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="254"/>
         <source>Generate key signatures</source>
-        <translation>Donanımlar oluşturun</translation>
+        <translation>Donanım oluşturun</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="48"/>
@@ -22461,7 +22461,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="870"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1217"/>
         <source>Root only</source>
-        <translation>Yanlızca kök</translation>
+        <translation>Yalnızca kök</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="872"/>
@@ -22752,7 +22752,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1345"/>
         <source>Custom key signature</source>
-        <translation>Özel donanımlar</translation>
+        <translation>Özel donanım</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3053"/>
