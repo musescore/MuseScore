@@ -223,6 +223,9 @@ public:
     static void harmFromMEI(engraving::Harmony* harmony, const muse::StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
     static libmei::Harm harmToMEI(const engraving::Harmony* harmony, muse::StringList& meiLines);
 
+    static void lvFromMEI(engraving::Articulation* lv, const libmei::Lv& meiLv, bool& warning);
+    static libmei::Lv lvToMEI(const engraving::Articulation* lv);
+
     static void jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning);
     static libmei::RepeatMark jumpToMEI(const engraving::Jump* jump, muse::String& text);
 

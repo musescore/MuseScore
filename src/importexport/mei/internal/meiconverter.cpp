@@ -300,7 +300,7 @@ libmei::Arpeg Convert::arpegToMEI(const engraving::Arpeggio* arpeggio)
 
 void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning)
 {
-    engraving::SymId symId = engraving::SymId::articAccentAbove;
+    engraving::SymId symId = engraving::SymId::noSym;
 
     // @artic
     if (meiArtic.HasArtic() && (meiArtic.GetArtic().size() == 1)) {
@@ -1073,8 +1073,6 @@ void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLin
 
     // text
     textBase->setXmlText(meiLines.join(u"\n"));
-
-    return;
 }
 
 void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning)
@@ -1113,8 +1111,6 @@ void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList
     // text
     textLineBase->setBeginText(meiLines.join(u"\n"));
     textLineBase->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
-
-    return;
 }
 
 libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& meiLines)
@@ -1289,8 +1285,6 @@ void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLin
         lines.push_back(line);
     }
     dynamic->setXmlText(lines.join(u"\n"));
-
-    return;
 }
 
 libmei::Dynam Convert::dynamToMEI(const engraving::Dynamic* dynamic, StringList& meiLines)
@@ -1387,8 +1381,6 @@ void Convert::endingFromMEI(engraving::Volta* volta, const libmei::Ending& meiEn
     } else {
         volta->setVoltaType(engraving::Volta::Type::CLOSED);
     }
-
-    return;
 }
 
 libmei::Ending Convert::endingToMEI(const engraving::Volta* volta)
@@ -1666,8 +1658,6 @@ void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLine
         harmony->setPlacement(meiHarm.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
         harmony->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
-
-    return;
 }
 
 libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& meiLines)
@@ -1697,6 +1687,52 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     }
 
     return meiHarm;
+}
+
+void Convert::lvFromMEI(engraving::Articulation* lv, const libmei::Lv& meiLv, bool& warning)
+{
+    warning = false;
+
+    lv->setSymId(engraving::SymId::articLaissezVibrerAbove);
+
+    // @curvedir
+    switch (meiLv.GetCurvedir()) {
+    case (libmei::curvature_CURVEDIR_above):
+        lv->setAnchor(engraving::ArticulationAnchor::TOP);
+        break;
+    case (libmei::curvature_CURVEDIR_below):
+        lv->setAnchor(engraving::ArticulationAnchor::BOTTOM);
+        break;
+    default:
+        lv->setAnchor(engraving::ArticulationAnchor::AUTO);
+        break;
+    }
+    lv->setPropertyFlags(engraving::Pid::ARTICULATION_ANCHOR, engraving::PropertyFlags::UNSTYLED);
+
+    // @color
+    Convert::colorFromMEI(lv, meiLv);
+}
+
+libmei::Lv Convert::lvToMEI(const engraving::Articulation* lv)
+{
+    libmei::Lv meiLv;
+
+    // @curvedir
+    switch (lv->anchor()) {
+    case (engraving::ArticulationAnchor::TOP):
+        meiLv.SetCurvedir(libmei::curvature_CURVEDIR_above);
+        break;
+    case (engraving::ArticulationAnchor::BOTTOM):
+        meiLv.SetCurvedir(libmei::curvature_CURVEDIR_below);
+        break;
+    default:
+        break;
+    }
+
+    // @color
+    Convert::colorToMEI(lv, meiLv);
+
+    return meiLv;
 }
 
 void Convert::jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning)
@@ -1732,8 +1768,6 @@ void Convert::jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRe
     }
 
     jump->setJumpType(jumpType);
-
-    return;
 }
 
 libmei::RepeatMark Convert::jumpToMEI(const engraving::Jump* jump, String& text)
@@ -1865,8 +1899,6 @@ void Convert::markerFromMEI(engraving::Marker* marker, const libmei::RepeatMark&
     }
 
     marker->setMarkerType(markerType);
-
-    return;
 }
 
 libmei::RepeatMark Convert::markerToMEI(const engraving::Marker* marker, String& text)
@@ -2608,7 +2640,7 @@ void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur,
 {
     warning = false;
 
-    // @place
+    // @curvedir
     if (meiSlur.HasCurvedir()) {
         slur->setSlurDirection(Convert::curvedirFromMEI(meiSlur.GetCurvedir(), warning));
         //slur->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
@@ -2890,8 +2922,6 @@ void Convert::tempoFromMEI(engraving::TempoText* tempoText, const StringList& me
 
     // text
     tempoText->setXmlText(meiLines.join(u"\n"));
-
-    return;
 }
 
 libmei::Tempo Convert::tempoToMEI(const engraving::TempoText* tempoText, StringList& meiLines)
@@ -3158,8 +3188,6 @@ void Convert::tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& mei
 
     // @color
     Convert::colorFromMEI(tuplet, meiTuplet);
-
-    return;
 }
 
 libmei::Tuplet Convert::tupletToMEI(const engraving::Tuplet* tuplet)
