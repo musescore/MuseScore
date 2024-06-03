@@ -673,6 +673,9 @@ TEST_F(Musicxml_Tests, harmony6) {
 TEST_F(Musicxml_Tests, harmony8) {
     mxmlIoTest("testHarmony8");
 }
+TEST_F(Musicxml_Tests, harmony9) {
+    mxmlIoTest("testHarmony9");
+}                                                                      // chordnames without chordrest
 TEST_F(Musicxml_Tests, hello) {
     mxmlIoTest("testHello");
 }
