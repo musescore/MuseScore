@@ -2773,7 +2773,7 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     SkylineLine thisSkyline = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
     thisSkyline.remove_if([element](ShapeElement& shEl) {
         const EngravingItem* shapeItem = shEl.item();
-        return shapeItem && (shapeItem == element || shapeItem->isAccidental()
+        return shapeItem && (shapeItem == element || shapeItem->parentItem(true) == element || shapeItem->isAccidental()
                              || shapeItem == element->ldata()->itemSnappedBefore() || shapeItem == element->ldata()->itemSnappedAfter());
     });
     double edgeOfThisStaff = isAbove ? thisSkyline.top(startX, endX) : thisSkyline.bottom(startX, endX);
