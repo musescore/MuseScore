@@ -3251,16 +3251,18 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                     ny = std::max(ny, sd->ldata()->pos().y());
                 }
                 if (sd->ldata()->pos().y() != ny) {
-                    sd->mutldata()->setPosY(ny);
+                    const double yOff = stType ? stType->yoffset().val() * _spatium : 0.0;
+                    sd->mutldata()->setPosY(ny - yOff);
                     if (sd->snappedExpression()) {
                         sd->snappedExpression()->mutldata()->setPosY(ny);
                     }
                     if (sd->addToSkyline()) {
                         Segment* s = sd->segment();
                         Measure* m = s->measure();
-                        RectF r = sd->ldata()->bbox().translated(sd->pos());
+                        const PointF offset = PointF(0.0, yOff);
+                        RectF r = sd->ldata()->bbox().translated(sd->pos() + offset);
                         s->staffShape(sd->staffIdx()).add(r);
-                        r = sd->ldata()->bbox().translated(sd->pos() + s->pos() + m->pos());
+                        r = sd->ldata()->bbox().translated(sd->pos() + s->pos() + m->pos() + offset);
                         m->system()->staff(sd->staffIdx())->skyline().add(r, sd);
                     }
                 }
@@ -3274,7 +3276,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                     ny = std::max(ny, ed->ldata()->pos().y());
                 }
                 if (ed->ldata()->pos().y() != ny) {
-                    ed->mutldata()->setPosY(ny);
+                    const double yOff = stType ? stType->yoffset().val() * _spatium : 0.0;
+                    ed->mutldata()->setPosY(ny - yOff);
                     Expression* snappedExpression = ed->snappedExpression();
                     if (snappedExpression) {
                         double yOffsetDiff = snappedExpression->offset().y() - ed->offset().y();
@@ -3283,9 +3286,10 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                     if (ed->addToSkyline()) {
                         Segment* s = ed->segment();
                         Measure* m = s->measure();
-                        RectF r = ed->ldata()->bbox().translated(ed->pos());
+                        const PointF offset = PointF(0.0, yOff);
+                        RectF r = ed->ldata()->bbox().translated(ed->pos() + offset);
                         s->staffShape(ed->staffIdx()).add(r);
-                        r = ed->ldata()->bbox().translated(ed->pos() + s->pos() + m->pos());
+                        r = ed->ldata()->bbox().translated(ed->pos() + s->pos() + m->pos() + offset);
                         m->system()->staff(ed->staffIdx())->skyline().add(r, ed);
                     }
                 }
