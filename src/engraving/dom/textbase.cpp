@@ -986,7 +986,7 @@ void TextBlock::draw(Painter* p, const TextBase* t) const
 
 void TextBlock::layout(const TextBase* t)
 {
-    m_bbox        = RectF();
+    m_shape.clear();
     double x      = 0.0;
     m_lineSpacing = 0.0;
     double lm     = 0.0;
@@ -1024,7 +1024,7 @@ void TextBlock::layout(const TextBase* t)
 
     if (m_fragments.empty()) {
         FontMetrics fm = t->fontMetrics();
-        m_bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
+        m_shape.add(RectF(0.0, -fm.ascent(), 1.0, fm.descent()), t);
         m_lineSpacing = fm.lineSpacing();
     } else if (m_fragments.size() == 1 && m_fragments.front().text.isEmpty()) {
         auto fi = m_fragments.begin();
@@ -1045,7 +1045,7 @@ void TextBlock::layout(const TextBase* t)
         }
 
         RectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
-        m_bbox |= temp;
+        m_shape.add(temp, t);
         m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
     } else {
         const auto fiLast = --m_fragments.end();
@@ -1072,12 +1072,13 @@ void TextBlock::layout(const TextBase* t)
                 x += w;
             }
 
-            m_bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
+            m_shape.add(fm.tightBoundingRect(f.text).translated(f.pos), t);
             Font font = f.font(t);
             if (font.type() == Font::Type::MusicSymbol || font.type() == Font::Type::MusicSymbolText) {
                 // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
                 // font linespacing value we just use the height of the individual fragment with some added margin
-                m_lineSpacing = std::max(m_lineSpacing, 1.25 * m_bbox.height());
+
+                m_lineSpacing = std::max(m_lineSpacing, 1.25 * m_shape.bbox().height());
             } else {
                 m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
             }
@@ -1091,12 +1092,13 @@ void TextBlock::layout(const TextBase* t)
     AlignH alignH = t->align().horizontal;
     bool dynamicAlwaysCentered = t->isDynamic() && t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
 
+    RectF bbox = m_shape.bbox();
     if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
-        rx = (layoutWidth - (m_bbox.left() + m_bbox.right())) * .5;
+        rx = (layoutWidth - (bbox.left() + bbox.right())) * .5;
     } else if (alignH == AlignH::LEFT) {
-        rx = -m_bbox.left();
+        rx = -bbox.left();
     } else if (alignH == AlignH::RIGHT) {
-        rx = layoutWidth - m_bbox.right();
+        rx = layoutWidth - bbox.right();
     }
 
     rx += lm;
@@ -1104,7 +1106,7 @@ void TextBlock::layout(const TextBase* t)
     for (TextFragment& f : m_fragments) {
         f.pos.rx() += rx;
     }
-    m_bbox.translate(rx, 0.0);
+    m_shape.translate(PointF(rx, 0.0));
 }
 
 //---------------------------------------------------------
@@ -1147,7 +1149,7 @@ double TextBlock::xpos(size_t column, const TextBase* t) const
             }
         }
     }
-    return m_bbox.x();
+    return m_shape.bbox().x();
 }
 
 //---------------------------------------------------------
@@ -1199,7 +1201,8 @@ RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
 {
     double x1 = xpos(col1, t);
     double x2 = xpos(col2, t);
-    return RectF(x1, m_bbox.y(), x2 - x1, m_bbox.height());
+    const RectF& bbox = m_shape.bbox();
+    return RectF(x1, bbox.y(), x2 - x1, bbox.height());
 }
 
 //---------------------------------------------------------

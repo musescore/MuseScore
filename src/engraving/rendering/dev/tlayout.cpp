@@ -5663,22 +5663,20 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
         item->createBlocks(ldata);
     }
 
-    RectF bb;
+    Shape shape;
     double y = 0.0;
 
     // adjust the bounding box for the text item
     for (size_t i = 0; i < ldata->blocks.size(); ++i) {
         TextBlock& t = ldata->blocks[i];
         t.layout(item);
-        const RectF* r = &t.boundingRect();
-
-        if (r->height() == 0) {
-            r = &ldata->blocks.at(0).boundingRect();
-        }
         y += t.lineSpacing();
         t.setY(y);
-        bb |= r->translated(0.0, y);
+        shape.add(t.shape().translated(PointF(0.0, y)));
     }
+
+    RectF bb = shape.bbox();
+
     double yoff = 0;
     double h    = 0;
     if (item->explicitParent()) {
@@ -5723,9 +5721,9 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
         t.setY(t.y() + yoff);
     }
 
-    bb.translate(0.0, yoff);
+    shape.translateY(yoff);
+    ldata->setShape(shape);
 
-    ldata->setBbox(bb);
     if (item->hasFrame()) {
         item->layoutFrame(ldata);
     }
