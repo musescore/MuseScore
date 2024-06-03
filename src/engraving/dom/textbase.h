@@ -254,7 +254,8 @@ public:
     const std::list<TextFragment>& fragments() const { return m_fragments; }
     std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
-    const RectF& boundingRect() const { return m_bbox; }
+    const Shape& shape() const { return m_shape; }
+    const RectF& boundingRect() const { return m_shape.bbox(); }
     RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
     void insert(TextCursor*, const String&);
@@ -282,7 +283,7 @@ private:
     std::list<TextFragment> m_fragments;
     double m_y = 0.0;
     double m_lineSpacing = 0.0;
-    RectF m_bbox;
+    Shape m_shape;
     bool m_eol = false;
 };
 
