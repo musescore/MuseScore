@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "extensionsmodel.h"
+#include "extensionslistmodel.h"
 
 #include "translation.h"
 #include "shortcuts/shortcutstypes.h"

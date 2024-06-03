@@ -17596,7 +17596,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Run plugin %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/framework/extensions/view/extensionsmodel.cpp" line="103"/>
+        <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="103"/>
         <source>Not defined</source>
         <extracomment>No keyboard shortcut is assigned to this plugin.</extracomment>
         <translation type="unfinished">Not defined</translation>

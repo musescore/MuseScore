@@ -33,7 +33,7 @@
 
 #include "view/extensionbuilder.h"
 #include "view/extensionsuiengine.h"
-#include "view/extensionsmodel.h"
+#include "view/extensionslistmodel.h"
 
 #include "api/v1/extapiv1.h"
 

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSMODEL_H
-#define MUSE_EXTENSIONS_EXTENSIONSMODEL_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
+#define MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QList>
@@ -78,4 +78,4 @@ private:
 };
 }
 
-#endif // MUSE_EXTENSIONS_EXTENSIONSMODEL_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
