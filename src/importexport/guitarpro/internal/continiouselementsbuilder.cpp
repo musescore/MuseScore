@@ -222,6 +222,9 @@ void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementTyp
 
                     elem = prevElem;
                     setEndCR(elem, cr);
+                } else {
+                    // Simile mark case
+                    setEndCR(elem, cr);
                 }
             }
         } else {
