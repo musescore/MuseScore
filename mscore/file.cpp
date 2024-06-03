@@ -2067,13 +2067,9 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
 
       printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(cs_->styleD(Sid::pageWidth), cs_->styleD(Sid::pageHeight));
-#if 1
-      printer.setPaperSize(size, QPrinter::Inch); // deprecated, but the suggested setPageSize() doesn't work properly here
-#else  // the following is used in several other places
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
+      QPageSize ps(size, QPageSize::Inch);
       printer.setPageSize(ps);
       printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
-#endif
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
 #if defined(Q_OS_MAC)
@@ -2158,7 +2154,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       printer.setOutputFileName(saveName);
       printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
+      QPageSize ps(size, QPageSize::Inch);
       printer.setPageSize(ps);
       printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
       printer.setFullPage(true);
@@ -2188,7 +2184,6 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       double pr = MScore::pixelRatio;
 
       bool firstPage = true;
-      const QRect fillRect(0.0, 0.0, size.width() * DPI, size.height() * DPI);
       int exportBgStyle = preferences.getInt(PREF_EXPORT_BG_STYLE);
       bool useFgColor = preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR);
       const QColor fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
@@ -2205,9 +2200,9 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             // done in Score::print() also, but do it here as well to be safe
             s->setPrinting(true);
             MScore::pdfPrinting = true;
-
             QSizeF size1(s->styleD(Sid::pageWidth), s->styleD(Sid::pageHeight));
-            QPageSize ps1(QPageSize::id(size1, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
+            QPageSize ps1(size1, QPageSize::Inch);
+            const QRect fillRect(0.0, 0.0, size1.width() * DPI, size1.height() * DPI);
             printer.setPageSize(ps1);
             printer.setPageOrientation(size1.width() > size1.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
             p.setViewport(QRect(0.0, 0.0, size1.width() * printer.logicalDpiX(),
@@ -2221,26 +2216,25 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
                   if (!firstPage)
                         printer.newPage();
                   firstPage = false;
+                  switch (exportBgStyle) {
+                        case 1:
+                            if (useFgColor)
+                                p.fillRect(fillRect, fgColor);
+                            else
+                                p.drawTiledPixmap(fillRect, fgPixMap, fillRect.topLeft());
+                            break;
+                        case 2:
+                            p.fillRect(fillRect, customColor);
+                            break;
+                        default:
+                            break;
+                        }
                   s->print(&p, n);
                   }
             MScore::pixelRatio = pr;
 
             //reset score
             s->setPrinting(false);
-
-            switch (exportBgStyle) {
-                  case 1:
-                      if (useFgColor)
-                          p.fillRect(fillRect, fgColor);
-                      else
-                          p.drawTiledPixmap(fillRect, fgPixMap, fillRect.topLeft());
-                      break;
-                  case 2:
-                      p.fillRect(fillRect, customColor);
-                      break;
-                  default:
-                      break;
-                  }
 
             MScore::pdfPrinting = false;
 
