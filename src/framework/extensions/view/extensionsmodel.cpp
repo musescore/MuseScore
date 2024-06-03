@@ -43,6 +43,10 @@ ExtensionsListModel::ExtensionsListModel(QObject* parent)
     m_roles.insert(rCategory, "category");
     m_roles.insert(rVersion, "version");
     m_roles.insert(rShortcuts, "shortcuts");
+
+    provider()->manifestListChanged().onNotify(this, [this]() {
+        load();
+    });
 }
 
 void ExtensionsListModel::load()
