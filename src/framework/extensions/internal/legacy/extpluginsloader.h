@@ -31,13 +31,13 @@ class ExtPluginsLoader
 public:
     ExtPluginsLoader() = default;
 
-    ManifestList loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const;
+    ManifestList loadManifestList(const io::path_t& defPath, const io::path_t& extPath) const;
 
 private:
 
-    ManifestList manifesList(const io::path_t& rootPath) const;
+    ManifestList manifestList(const io::path_t& rootPath) const;
     io::paths_t qmlsPaths(const io::path_t& rootPath) const;
-    Manifest parseManifest(const io::path_t& path) const;
+    Manifest parseManifest(const io::path_t& rootPath, const io::path_t& path) const;
     void resolvePaths(Manifest& m, const io::path_t& rootDirPath) const;
 };
 }

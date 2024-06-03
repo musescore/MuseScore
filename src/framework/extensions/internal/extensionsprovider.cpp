@@ -50,12 +50,12 @@ KnownCategories ExtensionsProvider::knownCategories() const
 void ExtensionsProvider::reloadPlugins()
 {
     ExtensionsLoader loader;
-    m_manifests = loader.loadManifesList(configuration()->defaultPath(),
-                                         configuration()->userPath());
+    m_manifests = loader.loadManifestList(configuration()->defaultPath(),
+                                          configuration()->userPath());
 
     legacy::ExtPluginsLoader pluginsLoader;
-    ManifestList plugins = pluginsLoader.loadManifesList(configuration()->pluginsDefaultPath(),
-                                                         configuration()->pluginsUserPath());
+    ManifestList plugins = pluginsLoader.loadManifestList(configuration()->pluginsDefaultPath(),
+                                                          configuration()->pluginsUserPath());
 
     muse::join(m_manifests, plugins);
 
