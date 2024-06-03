@@ -83,7 +83,7 @@ MenuView {
         root.contentWidth = root.menuMetrics.itemWidth
         root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
                                       prv.viewVerticalMargin * 2 + searchField.height, 
-                                      anchorItemHeight - padding * 2 + searchField.height)
+                                      anchorItemHeight - padding * 2 - searchField.height)
     
         x = 0
         y = parent.height
