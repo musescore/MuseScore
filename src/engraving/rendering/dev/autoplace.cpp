@@ -65,21 +65,22 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         double minDistance = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = item->ldata()->bbox().translated(m->pos() + s->pos() + item->pos());
+        Shape shape = item->ldata()->shape().translate(m->pos() + s->pos() + item->pos());
+        RectF r = shape.bbox();
 
         // Adjust bbox Y pos for staffType offset
         if (item->staffType()) {
             double stYOffset = item->staffType()->yoffset().val() * sp;
-            r.translate(0.0, stYOffset);
+            shape.translate(PointF(0.0, stYOffset));
         }
 
         SkylineLine sk(!above);
         double d;
         if (above) {
-            sk.add(ShapeElement(r, item));
+            sk.add(shape);
             d = sk.minDistance(ss->skyline().north());
         } else {
-            sk.add(ShapeElement(r, item));
+            sk.add(shape);
             d = ss->skyline().south().minDistance(sk);
         }
 
@@ -93,14 +94,14 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
                 // we may need to adjust minDistance, yd, and/or offset
                 bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight();
                 if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
-                    r.translate(0.0, rebase);
+                    shape.translate(PointF(0.0, rebase));
                 }
             }
             ldata->moveY(yd);
-            r.translate(PointF(0.0, yd));
+            shape.translate(PointF(0.0, yd));
         }
         if (add && item->addToSkyline()) {
-            ss->skyline().add(r, const_cast<EngravingItem*>(item));
+            ss->skyline().add(shape);
         }
     }
     setOffsetChanged(item, ldata, false);
