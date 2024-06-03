@@ -39,6 +39,7 @@ struct Shortcut
     std::vector<std::string> sequences;
     std::string context;
     QKeySequence::StandardKey standardKey = QKeySequence::UnknownKey;
+    bool autoRepeat = true;
 
     Shortcut() = default;
     Shortcut(const std::string& a)
@@ -51,7 +52,10 @@ struct Shortcut
 
     bool operator ==(const Shortcut& sc) const
     {
-        return action == sc.action && sequences == sc.sequences && standardKey == sc.standardKey;
+        return action == sc.action
+               && sequences == sc.sequences
+               && standardKey == sc.standardKey
+               && autoRepeat == sc.autoRepeat;
     }
 
     std::string sequencesAsString() const { return sequencesToString(sequences); }

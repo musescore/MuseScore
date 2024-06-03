@@ -38,6 +38,7 @@ static constexpr std::string_view SHORTCUT_TAG("SC");
 static constexpr std::string_view ACTION_CODE_TAG("key");
 static constexpr std::string_view STANDARD_KEY_TAG("std");
 static constexpr std::string_view SEQUENCE_TAG("seq");
+static constexpr std::string_view AUTOREPEAT_TAG("autorepeat");
 
 static const std::string SHORTCUTS_RESOURCE_NAME("SHORTCUTS");
 
@@ -114,9 +115,10 @@ void ShortcutsRegister::mergeShortcuts(ShortcutList& shortcuts, const ShortcutLi
         bool found = false;
 
         for (Shortcut& sc : shortcuts) {
-            //! NOTE If user shortcut is found, set context (context should always as default)
+            //! NOTE If a user shortcut is found, set context & auto repeat (always use default values)
             if (sc.action == defSc.action) {
                 sc.context = defSc.context;
+                sc.autoRepeat = defSc.autoRepeat;
                 found = true;
             } else if (sc.context == defSc.context) {
                 for (const std::string& seq : sc.sequences) {
@@ -282,6 +284,8 @@ Shortcut ShortcutsRegister::readShortcut(deprecated::XmlReader& reader) const
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
         } else if (tag == SEQUENCE_TAG) {
             shortcut.sequences.push_back(reader.readString());
+        } else if (tag == AUTOREPEAT_TAG) {
+            shortcut.autoRepeat = reader.readInt();
         } else {
             reader.skipCurrentElement();
         }

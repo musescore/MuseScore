@@ -37,7 +37,7 @@ class ShortcutsInstanceModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList shortcuts READ shortcuts NOTIFY shortcutsChanged)
+    Q_PROPERTY(QVariantMap shortcuts READ shortcuts NOTIFY shortcutsChanged)
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
@@ -47,11 +47,11 @@ public:
 public:
     explicit ShortcutsInstanceModel(QObject* parent = nullptr);
 
-    QStringList shortcuts() const;
+    QVariantMap shortcuts() const;
     bool active() const;
 
     Q_INVOKABLE void init();
-    Q_INVOKABLE void activate(const QString& key);
+    Q_INVOKABLE void activate(const QString& seq);
 
 signals:
     void shortcutsChanged();
@@ -59,9 +59,10 @@ signals:
 
 protected:
     virtual void doLoadShortcuts();
-    virtual void doActivate(const QString& key);
+    virtual void doActivate(const QString& seq);
 
-    QStringList m_shortcuts;
+    // Key = sequence (QString), value = autoRepeat (QVariant/bool)
+    QVariantMap m_shortcuts;
 };
 }
 
