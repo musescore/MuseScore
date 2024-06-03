@@ -31,13 +31,13 @@ class TremoloRenderer : public RenderBase<TremoloRenderer>
 public:
     static const muse::mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
+    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& ctx,
                          muse::mpe::PlaybackEventList& result);
 
 private:
     static int stepDurationTicks(const Chord* chord, int tremoloLines);
     static void buildAndAppendEvents(const Chord* chord, const muse::mpe::ArticulationType type, const int stepDurationTicks,
-                                     const int startTick, const RenderingContext& context, muse::mpe::PlaybackEventList& result);
+                                     const int startTick, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 };
 }
 

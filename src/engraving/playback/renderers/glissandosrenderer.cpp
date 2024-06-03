@@ -56,6 +56,11 @@ void GlissandosRenderer::doRender(const EngravingItem* item, const mpe::Articula
 
 void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
+    const Score* score = note->score();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
     const Glissando* glissando = nullptr;
     for (const Spanner* spanner : note->spannerFor()) {
         if (spanner->type() == ElementType::GLISSANDO) {
@@ -86,6 +91,9 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const Renderi
         noteCtx.duration = durationStep;
         noteCtx.timestamp += i * durationStep;
         noteCtx.pitchLevel += pitchSteps.at(i) * mpe::PITCH_LEVEL_STEP;
+
+        int utick = timestampToTick(score, noteCtx.timestamp);
+        noteCtx.dynamicLevel = context.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
         updateArticulationBoundaries(ArticulationType::DiscreteGlissando,
                                      noteCtx.timestamp,

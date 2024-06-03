@@ -170,17 +170,6 @@ bool PlaybackModel::isChordSymbolsTrack(const InstrumentTrackId& trackId) const
     return trackId == chordSymbolsTrackId(trackId.partId);
 }
 
-bool PlaybackModel::hasSoundFlags() const
-{
-    for (auto& it: m_playbackCtxMap) {
-        if (it.second.hasSoundFlags()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool PlaybackModel::hasSoundFlags(const InstrumentTrackId& trackId) const
 {
     auto search = m_playbackCtxMap.find(trackId);
@@ -189,7 +178,7 @@ bool PlaybackModel::hasSoundFlags(const InstrumentTrackId& trackId) const
         return false;
     }
 
-    return search->second.hasSoundFlags();
+    return search->second->hasSoundFlags();
 }
 
 const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
@@ -249,7 +238,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural);
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
-    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+    const PlaybackContextPtr ctx = playbackCtx(trackId);
 
     int minTick = std::numeric_limits<int>::max();
 
@@ -262,11 +251,11 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
         int utick = repeats.tick2utick(item->tick().ticks());
         minTick = std::min(utick, minTick);
 
-        m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx.persistentArticulationType(utick), profile,
+        m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx->persistentArticulationType(utick), profile,
                           result);
     }
 
-    PlaybackParamList params = ctx.playbackParams(playableItems.front()->track(), minTick);
+    PlaybackParamList params = ctx->playbackParams(playableItems.front()->track(), minTick);
     trackPlaybackData.offStream.send(std::move(result), std::move(params));
 }
 
@@ -352,20 +341,17 @@ void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t
 
 void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
 {
-    PlaybackContext& ctx = m_playbackCtxMap[trackId];
-    ctx.update(trackId.partId, m_score);
+    PlaybackContextPtr ctx = playbackCtx(trackId);
+    ctx->update(trackId.partId, m_score);
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
-    trackData.dynamics = ctx.dynamicLevelLayers(m_score);
-    trackData.params = ctx.playbackParamLayers(m_score);
+    trackData.dynamics = ctx->dynamicLevelLayers(m_score);
+    trackData.params = ctx->playbackParamLayers(m_score);
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
                                    bool isFirstSegmentOfMeasure, ChangedTrackIdSet* trackChanges)
 {
-    const int segmentStartTick = segment->tick().ticks();
-    const int segmentStartTickWithOffset = segmentStartTick + tickPositionOffset;
-
     for (const EngravingItem* item : segment->annotations()) {
         if (!item || !item->part()) {
             continue;
@@ -433,17 +419,14 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             }
         }
 
-        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
-
         ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);
         if (!profile) {
             LOGE() << "unsupported instrument family: " << item->part()->id();
             continue;
         }
 
-        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(item->track(), segmentStartTickWithOffset),
-                          ctx.persistentArticulationType(segmentStartTickWithOffset), std::move(profile),
-                          m_playbackDataMap[trackId].originEvents);
+        const PlaybackContextPtr ctx = playbackCtx(trackId);
+        m_renderer.render(item, tickPositionOffset, std::move(profile), ctx, m_playbackDataMap[trackId].originEvents);
 
         collectChangesTracks(trackId, trackChanges);
     }
@@ -666,14 +649,14 @@ void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const trac
         }
 
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-            PlaybackContext& ctx = m_playbackCtxMap[trackId];
-            ctx.clear();
+            PlaybackContextPtr ctx = playbackCtx(trackId);
+            ctx->clear();
         }
 
         if (part->hasChordSymbol()) {
             InstrumentTrackId trackId = chordSymbolsTrackId(part->id());
-            PlaybackContext& ctx = m_playbackCtxMap[trackId];
-            ctx.clear();
+            PlaybackContextPtr ctx = playbackCtx(trackId);
+            ctx->clear();
         }
     }
 }
@@ -947,4 +930,16 @@ muse::mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(con
     }
 
     return profilesRepository()->defaultProfile(it->second.setupData.category);
+}
+
+PlaybackContextPtr PlaybackModel::playbackCtx(const InstrumentTrackId& trackId)
+{
+    auto it = m_playbackCtxMap.find(trackId);
+    if (it == m_playbackCtxMap.end()) {
+        PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+        m_playbackCtxMap.emplace(trackId, ctx);
+        return ctx;
+    }
+
+    return it->second;
 }
