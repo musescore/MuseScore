@@ -288,6 +288,11 @@ EngravingItem* HairpinSegment::findElementToSnapBefore() const
 
     Hairpin* hairp = hairpin();
     Fraction startTick = hairpin()->tick();
+    System* sys = system();
+    if (sys && !sys->measures().empty() && startTick == sys->measures().front()->tick()) {
+        return nullptr;
+    }
+
     auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
     for (auto interval : intervals) {
         Spanner* spanner = interval.value;
