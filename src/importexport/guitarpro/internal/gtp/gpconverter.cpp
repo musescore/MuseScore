@@ -582,7 +582,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
             setBeamMode(beat, cr, lastMeasure, ctx.curTick);
         }
 
-        if (!graceChords.empty()) {
+        if (cr->isChord() && !graceChords.empty()) {
             int grIndex = 0;
 
             for (auto [pGrChord, pBeat] : graceChords) {
@@ -597,8 +597,8 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
                 cr->add(pGrChord);
                 addLegato(pBeat, pGrChord);
             }
+            graceChords.clear();
         }
-        graceChords.clear();
 
         convertNotes(beat->notes(), cr);
 
