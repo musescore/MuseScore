@@ -2764,10 +2764,12 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     }
 
     double elementXinSystemCoord = element->pageX() - system->pageX();
-    RectF elementBbox = element->ldata()->bbox().translated(PointF(elementXinSystemCoord, element->y()));
     const double horizontalMargin = 0.25 * element->spatium();
-    double startX = elementBbox.left() - horizontalMargin;
-    double endX = elementBbox.right() + horizontalMargin;
+
+    Shape elementShape = element->ldata()->shape()
+                         .translated(PointF(elementXinSystemCoord, element->y()))
+                         .adjust(-horizontalMargin, 0.0, horizontalMargin, 0.0);
+    elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
 
     // Take a *copy* of the skyline of this staff
     SkylineLine thisSkyline = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
@@ -2776,30 +2778,24 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
         return shapeItem && (shapeItem == element || shapeItem->parentItem(true) == element || shapeItem->isAccidental()
                              || shapeItem == element->ldata()->itemSnappedBefore() || shapeItem == element->ldata()->itemSnappedAfter());
     });
-    double edgeOfThisStaff = isAbove ? thisSkyline.top(startX, endX) : thisSkyline.bottom(startX, endX);
 
-    SkylineLine& nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
-    double edgeOfNextStaff = isAbove ? nextSkyline.bottom(startX, endX) : nextSkyline.top(startX, endX);
     double yStaffDiff = nextStaff->y() - thisStaff->y();
-    edgeOfNextStaff += yStaffDiff;
+    SkylineLine nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
+    nextSkyline.translateY(yStaffDiff);
 
-    double yCenter = 0.5 * (edgeOfThisStaff + edgeOfNextStaff) + visualVerticalCenter(element);
-    double curY = element->pos().y();
-    double yDiff = yCenter - curY;
-
-    element->mutldata()->moveY(yDiff);
-
-    elementBbox.translate(0.0, yDiff);
     double elementMinDist = element->minDistance().toMM(element->spatium());
-    double availSpaceAbove = (isAbove ? edgeOfNextStaff : edgeOfThisStaff) - (elementBbox.top() - elementMinDist);
-    double availSpaceBelow = (isAbove ? edgeOfThisStaff : edgeOfNextStaff) - (elementBbox.bottom() + elementMinDist);
-    element->mutldata()->setStaffCenteringInfo(availSpaceAbove, availSpaceBelow);
+    double availSpaceAbove = (isAbove ? nextSkyline.verticalClaranceBelow(elementShape) : thisSkyline.verticalClaranceBelow(elementShape))
+                             - elementMinDist;
+    double availSpaceBelow = (isAbove ? thisSkyline.verticalClearanceAbove(elementShape) : nextSkyline.verticalClearanceAbove(elementShape))
+                             - elementMinDist;
 
-    updateSkylineForElement(element, system, yDiff);
-}
+    double yMove = 0.5 * (availSpaceBelow - availSpaceAbove);
 
-double SystemLayout::visualVerticalCenter(const EngravingItem* element)
-{
-    RectF elementBbox = element->ldata()->bbox();
-    return -0.5 * (elementBbox.top() + elementBbox.bottom());
+    element->mutldata()->moveY(yMove);
+
+    availSpaceAbove += yMove;
+    availSpaceBelow -= yMove;
+    element->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
+
+    updateSkylineForElement(element, system, yMove);
 }

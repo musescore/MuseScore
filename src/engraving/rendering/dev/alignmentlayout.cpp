@@ -73,9 +73,9 @@ void AlignmentLayout::alignStaffCenteredItems(const std::vector<EngravingItem*>&
         double yCur = yOpticalCenter(item);
         double intendedMove = averageY - yCur;
         const EngravingItem::LayoutData::StaffCenteringInfo& staffCenteringInfo = item->ldata()->staffCenteringInfo();
-        double availSpaceAbove = staffCenteringInfo.availableVertSpaceAbove;
-        double availSpaceBelow = staffCenteringInfo.availableVertSpaceBelow;
-        double maxAllowedMove = std::clamp(intendedMove, availSpaceAbove, availSpaceBelow);
+        double maxMoveAbove = -staffCenteringInfo.availableVertSpaceAbove;
+        double maxMoveBelow = staffCenteringInfo.availableVertSpaceBelow;
+        double maxAllowedMove = std::clamp(intendedMove, maxMoveAbove, maxMoveBelow);
         if (!muse::RealIsEqual(maxAllowedMove, intendedMove)) {
             averageY += -intendedMove + maxAllowedMove;
         }

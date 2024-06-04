@@ -85,7 +85,6 @@ private:
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2);
 
     static void centerElementBetweenStaves(EngravingItem* element, const System* system);
-    static double visualVerticalCenter(const EngravingItem* element);
 };
 }
 
