@@ -6693,19 +6693,6 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
         return nullptr;
     }
 
-    // if temp melisma extend the first line segment to be
-    // after the lyrics syllable (otherwise the melisma segment
-    // will be too short).
-    const bool tempMelismaTicks = (line->lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
-    if (tempMelismaTicks && line->spannerSegments().size() > 0 && line->spannerSegments().front() == lineSegm) {
-        lineSegm->rxpos2() += line->lyrics()->width();
-    }
-
-    // avoid backwards melisma
-    if (lineSegm->pos2().x() < 0) {
-        lineSegm->rxpos2() = 0;
-    }
-
     return lineSegm;
 }
 
