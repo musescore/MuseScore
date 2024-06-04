@@ -101,7 +101,7 @@
             <durationType>quarter</durationType>
             <Note>
               <Fingering>
-                <text>1</text>
+                <text><font size="8"/>1</text>
                 </Fingering>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -112,7 +112,7 @@
             <Note>
               <Fingering>
                 <style>string_number</style>
-                <text>2</text>
+                <text><font size="8"/>2</text>
                 </Fingering>
               <pitch>55</pitch>
               <tpc>15</tpc>

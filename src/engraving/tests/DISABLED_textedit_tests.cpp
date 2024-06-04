@@ -357,7 +357,7 @@ void TestText::testCompatibility()
         "p, li { white-space: pre-wrap; }"
         "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">bold</span></p></body></html>");
-    QCOMPARE(text->convertFromHtml(sb), QString("<font face=\"Times New Roman\"/><b>bold</b>"));
+    QCOMPARE(text->HtmlParser::parse(sb), QString("<font face=\"Times New Roman\"/><b>bold</b>"));
 
     //italic
     const QString si(
@@ -365,7 +365,7 @@ void TestText::testCompatibility()
         "p, li { white-space: pre-wrap; }"
         "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">italic</span></p></body></html>");
-    QCOMPARE(text->convertFromHtml(si), QString("<font face=\"Times New Roman\"/><i>italic</i>"));
+    QCOMPARE(text->HtmlParser::parse(si), QString("<font face=\"Times New Roman\"/><i>italic</i>"));
 
     //underline
     const QString su(
@@ -373,7 +373,7 @@ void TestText::testCompatibility()
         "p, li { white-space: pre-wrap; }"
         "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">underline</span></p></body></html>");
-    QCOMPARE(text->convertFromHtml(su), QString("<font face=\"Times New Roman\"/><u>underline</u>"));
+    QCOMPARE(text->HtmlParser::parse(su), QString("<font face=\"Times New Roman\"/><u>underline</u>"));
 
     //bold italic underline
     const QString sbiu(
@@ -381,7 +381,7 @@ void TestText::testCompatibility()
         "p, li { white-space: pre-wrap; }"
         "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic; text-decoration: underline;\">bolditalicunderline</span></p></body></html>");
-    QCOMPARE(text->convertFromHtml(sbiu),
+    QCOMPARE(text->HtmlParser::parse(sbiu),
              QString("<font face=\"Times New Roman\"/><b><i><u>bolditalicunderline</u></i></b>"));
 
     const QString sbiu2(
@@ -389,7 +389,7 @@ void TestText::testCompatibility()
         "p, li { white-space: pre-wrap; }"
         "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">bold</span><span style=\" font-style:italic;\">italic</span><span style=\" text-decoration: underline;\">underline</span></p></body></html>");
-    QCOMPARE(text->convertFromHtml(sbiu2),
+    QCOMPARE(text->HtmlParser::parse(sbiu2),
              QString("<font face=\"Times New Roman\"/><b>bold</b><i>italic</i><u>underline</u>"));
 
     const QString sbi(
@@ -397,7 +397,7 @@ void TestText::testCompatibility()
         "p, li { white-space: pre-wrap; }"
         "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">bo</span><span style=\" font-weight:600; font-style:italic; text-decoration: underline;\">ldit</span>alic</p></body></html>");
-    QCOMPARE(text->convertFromHtml(sbi),
+    QCOMPARE(text->HtmlParser::parse(sbi),
              QString("<font face=\"Times New Roman\"/><b>bo</b><b><i><u>ldit</u></i></b>alic"));
 
     const QString sescape(
@@ -405,7 +405,7 @@ void TestText::testCompatibility()
         "p, li { white-space: pre-wrap; }"
         "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">test&amp;&lt;&gt;&quot;'</p></body></html>");
-    QCOMPARE(text->convertFromHtml(sescape), QString("<font face=\"Times New Roman\"/>test&amp;&lt;&gt;&quot;'"));
+    QCOMPARE(text->HtmlParser::parse(sescape), QString("<font face=\"Times New Roman\"/>test&amp;&lt;&gt;&quot;'"));
 }
 
 //---------------------------------------------------------
