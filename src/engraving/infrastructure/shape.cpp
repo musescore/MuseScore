@@ -101,7 +101,7 @@ Shape Shape::translated(const PointF& pt) const
     Shape s;
     s.m_elements.reserve(m_elements.size());
     for (const ShapeElement& r : m_elements) {
-        s.add(r.translated(pt), r.item());
+        s.add(r.translated(pt), r.item(), r.ignoreForLayout());
     }
     return s;
 }
@@ -120,7 +120,7 @@ Shape Shape::scaled(const SizeF& mag) const
     Shape s;
     s.m_elements.reserve(m_elements.size());
     for (const ShapeElement& r : m_elements) {
-        s.add(r.scaled(mag), r.item());
+        s.add(r.scaled(mag), r.item(), r.ignoreForLayout());
     }
     return s;
 }
