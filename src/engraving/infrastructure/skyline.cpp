@@ -100,6 +100,10 @@ void SkylineLine::add(const Shape& s)
 
 void SkylineLine::add(const ShapeElement& r)
 {
+    if (r.ignoreForLayout()) {
+        return;
+    }
+
     double x = r.x();
     double top = r.top();
     double bottom = r.bottom();
@@ -185,6 +189,16 @@ double SkylineLine::minDistance(const SkylineLine& sl) const
     return m_shape.minVerticalDistance(sl.m_shape);
 }
 
+double SkylineLine::verticalClearanceAbove(const Shape& shapeAbove) const
+{
+    return shapeAbove.verticalClearance(m_shape);
+}
+
+double SkylineLine::verticalClaranceBelow(const Shape& shapeBelow) const
+{
+    return m_shape.verticalClearance(shapeBelow);
+}
+
 void Skyline::paint(Painter& painter, double lineWidth) const // DEBUG only
 {
     painter.save();
@@ -223,6 +237,12 @@ void Skyline::paint(Painter& painter, double lineWidth) const // DEBUG only
 bool SkylineLine::valid() const
 {
     return !m_shape.empty();
+}
+
+SkylineLine& SkylineLine::translateY(double y)
+{
+    m_shape.translateY(y);
+    return *this;
 }
 
 double SkylineLine::top(double startX, double endX)

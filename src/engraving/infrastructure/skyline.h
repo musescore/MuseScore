@@ -56,8 +56,12 @@ public:
 
     void clear();
     double minDistance(const SkylineLine&) const;
+    double verticalClearanceAbove(const Shape& shapeAbove) const;
+    double verticalClaranceBelow(const Shape& shapeBelow) const;
     double max() const;
     bool valid() const;
+
+    SkylineLine& translateY(double y);
 
     double top(double startX = -DBL_MAX, double endX = DBL_MAX);
     double bottom(double startX = -DBL_MAX, double endX = DBL_MAX);
