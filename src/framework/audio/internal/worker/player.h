@@ -60,8 +60,6 @@ private:
 
     const IGetTrackSequence* m_getSequence = nullptr;
     TrackSequenceId m_sequenceId = -1;
-    mutable ITrackSequencePtr m_seq;
-
     PlaybackStatus m_playbackStatus = PlaybackStatus::Stopped;
     async::Channel<PlaybackStatus> m_playbackStatusChanged;
 
