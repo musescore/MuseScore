@@ -154,6 +154,7 @@ public:
     void setBarLineFrom(int val) { m_barLineFrom = val; }
     void setBarLineTo(int val) { m_barLineTo = val; }
     double staffHeight() const;
+    double staffHeight(const Fraction& tick) const;
 
     int channel(const Fraction&, voice_idx_t voice) const;
 

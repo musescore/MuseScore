@@ -371,7 +371,9 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
 
         SysStaff* ss = m->system()->staff(si);
 
-        Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos());
+        // Adjust bbox Y pos for staffType offset
+        const double stYOffset = item->staffType() ? item->staffType()->yoffset().val() * sp : 0.0;
+        Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos() + PointF(0.0, stYOffset));
 
         for (const ShapeElement& shapeEl : thisShape.elements()) {
             RectF r = shapeEl;
