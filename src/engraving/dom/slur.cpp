@@ -83,7 +83,7 @@ static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t
 
 bool SlurSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_Home && !ed.modifiers) {
+    if (SlurTieSegment::isEditAllowed(ed)) {
         return true;
     }
 
@@ -116,16 +116,11 @@ bool SlurSegment::edit(EditData& ed)
         return false;
     }
 
-    Slur* sl = slur();
-
-    if (ed.key == Key_Home && !ed.modifiers) {
-        if (ed.hasCurrentGrip()) {
-            ups(ed.curGrip).off = PointF();
-            renderer()->layoutItem(sl);
-            triggerLayout();
-        }
+    if (SlurTieSegment::edit(ed)) {
         return true;
     }
+
+    Slur* sl = slur();
 
     ChordRest* cr = 0;
     ChordRest* e;
