@@ -75,16 +75,11 @@ ITrackSequencePtr Player::seq() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    if (m_seq) {
-        return m_seq;
-    }
-
     IF_ASSERT_FAILED(m_getSequence) {
         return nullptr;
     }
 
-    m_seq = m_getSequence->sequence(m_sequenceId);
-    return m_seq;
+    return m_getSequence->sequence(m_sequenceId);
 }
 
 TrackSequenceId Player::sequenceId() const
