@@ -677,6 +677,9 @@ TEST_F(GuitarPro_Tests, gpOttava5) {
 TEST_F(GuitarPro_Tests, gpxOttava5) {
     gpReadTest("ottava5", "gpx");
 }
+TEST_F(GuitarPro_Tests, gpOttavaSimile) {
+    gpReadTest("ottava-simile", "gp");
+}
 TEST_F(GuitarPro_Tests, gpChornamesKeyboard) {
     gpReadTest("chordnames_keyboard", "gp");
 }
