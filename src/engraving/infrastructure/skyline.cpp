@@ -111,18 +111,54 @@ void SkylineLine::add(const Shape& s)
 
 void SkylineLine::add(const ShapeElement& r)
 {
+    double x = r.x();
+    double top = r.top();
+    double bottom = r.bottom();
+    double staffLinesTop = staffLinesTopAtX(x);
+    double staffLinesBottom = staffLinesBottomAtX(x);
+
     if (r.item() && r.item()->isStaffLines()) {
-        m_staffLinesTop = std::min(m_staffLinesTop, r.top());
-        m_staffLinesBottom = std::max(m_staffLinesBottom, r.bottom());
+        if (!(muse::RealIsEqual(top, staffLinesTop) && muse::RealIsEqual(bottom, staffLinesBottom))) {
+            m_staffLineEdges.emplace(round(x), StaffLineEdge(top, bottom));
+        }
     } else if (hasValidStaffLineEdges()) {
-        if (m_isNorth && muse::RealIsEqualOrMore(r.top(), m_staffLinesTop)) {
+        if (m_isNorth && muse::RealIsEqualOrMore(top, staffLinesTop)) {
             return; // Only add if it pokes above the staff
         }
-        if (!m_isNorth && muse::RealIsEqualOrLess(r.bottom(), m_staffLinesBottom)) {
+        if (!m_isNorth && muse::RealIsEqualOrLess(bottom, staffLinesBottom)) {
             return; // Only add if it pokes below the staff
         }
     }
+
     m_shape.add(r);
+}
+
+double SkylineLine::staffLinesTopAtX(double x) const
+{
+    if (m_staffLineEdges.empty()) {
+        return 0.0;
+    }
+
+    auto upperBound = m_staffLineEdges.upper_bound(std::round(x)); // iterator to first element in map with key larger than x
+    if (upperBound != m_staffLineEdges.begin()) {
+        --upperBound; // back by one (i.e. get last element with key smaller than x)
+    }
+
+    return (*upperBound).second.top;
+}
+
+double SkylineLine::staffLinesBottomAtX(double x) const
+{
+    if (m_staffLineEdges.empty()) {
+        return 0.0;
+    }
+
+    auto upperBound = m_staffLineEdges.upper_bound(std::round(x)); // iterator to first element in map with key larger than x
+    if (upperBound != m_staffLineEdges.begin()) {
+        --upperBound; // back by one (i.e. get last element with key smaller than x)
+    }
+
+    return (*upperBound).second.bottom;
 }
 
 void Skyline::add(const Shape& s)
@@ -140,8 +176,7 @@ void Skyline::clear()
 
 void SkylineLine::clear()
 {
-    m_staffLinesTop = 0.0;
-    m_staffLinesBottom = 0.0;
+    m_staffLineEdges.clear();
     m_shape.clear();
 }
 
