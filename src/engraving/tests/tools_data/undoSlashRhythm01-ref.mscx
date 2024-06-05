@@ -310,6 +310,7 @@
             </TimeSig>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
@@ -328,6 +329,7 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
@@ -342,6 +344,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
@@ -369,6 +372,7 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -387,6 +391,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
@@ -401,6 +406,7 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
@@ -425,6 +431,7 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -440,6 +447,7 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -451,6 +459,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <Tie>
@@ -475,6 +484,7 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -493,6 +503,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -504,6 +515,7 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -535,6 +547,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -547,6 +560,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <Tie>
@@ -572,6 +586,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -591,6 +606,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -603,6 +619,7 @@
           <Chord>
             <small>1</small>
             <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -634,6 +651,7 @@
           <Chord>
             <small>1</small>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -650,6 +668,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -662,6 +681,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <Tie>
@@ -687,6 +707,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -706,6 +727,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -718,6 +740,7 @@
           <Chord>
             <small>1</small>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -739,6 +762,7 @@
             </TimeSig>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -749,11 +773,12 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
-            <l2>-10</l2>
+            <l1>42</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -765,6 +790,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <Tie>
@@ -784,11 +810,12 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
-            <l2>-10</l2>
+            <l1>42</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -807,6 +834,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -818,6 +846,7 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -839,6 +868,7 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -849,11 +879,12 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
-            <l2>-10</l2>
+            <l1>42</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -865,6 +896,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <Tie>
@@ -884,11 +916,12 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
-            <l2>-10</l2>
+            <l1>42</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -907,6 +940,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -918,6 +952,7 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -949,6 +984,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -960,6 +996,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <Tie>
@@ -984,6 +1021,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -1002,6 +1040,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -1013,6 +1052,7 @@
           <Chord>
             <small>1</small>
             <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -1040,6 +1080,7 @@
           <Chord>
             <small>1</small>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -1049,12 +1090,13 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>18</l1>
-            <l2>18</l2>
+            <l1>50</l1>
+            <l2>50</l2>
             </Beam>
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -1066,6 +1108,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <Tie>
@@ -1084,12 +1127,13 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>18</l1>
-            <l2>18</l2>
+            <l1>50</l1>
+            <l2>50</l2>
             </Beam>
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <Spanner type="Tie">
                 <prev>
@@ -1108,6 +1152,7 @@
           <Chord>
             <small>1</small>
             <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -1119,6 +1164,7 @@
           <Chord>
             <small>1</small>
             <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
