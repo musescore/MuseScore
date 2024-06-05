@@ -360,7 +360,7 @@ MacOSShortcutsInstanceModel::MacOSShortcutsInstanceModel(QObject* parent)
 void MacOSShortcutsInstanceModel::doLoadShortcuts()
 {
     m_shortcuts.clear();
-    m_shortcutMap.clear();
+    m_macSequenceMap.clear();
 
     ShortcutList shortcuts = shortcutsRegister()->shortcuts();
 
@@ -370,11 +370,17 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
 
             QString seqStr = translateToCurrentKeyboardLayout(QKeySequence::fromString(sequence, QKeySequence::PortableText));
 
-            //! NOTE There may be several identical shortcuts for different contexts.
-            //! We only need a list of unique ones.
-            if (!m_shortcuts.contains(seqStr)) {
-                m_shortcuts << seqStr;
-                m_shortcutMap.insert(seqStr, sequence);
+            // RULE: If a sequence is used for several shortcuts but the values for autoRepeat vary depending on
+            // the context, then we should force autoRepeat to false for all shortcuts sharing the sequence in
+            // question. This prevents the creation of ambiguous shortcuts (see QShortcutEvent::isAmbiguous)
+            auto search = m_shortcuts.find(seqStr);
+            if (search == m_shortcuts.end()) {
+                // Sequence not found, add it...
+                m_shortcuts.insert(seqStr, QVariant(sc.autoRepeat));
+                m_macSequenceMap.insert(seqStr, sequence);
+            } else if (search.value().toBool() && !sc.autoRepeat) {
+                // Sequence already exists, but we need to enforce the above rule...
+                search.value() = false;
             }
         }
     }
@@ -382,7 +388,7 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
     emit shortcutsChanged();
 }
 
-void MacOSShortcutsInstanceModel::doActivate(const QString& key)
+void MacOSShortcutsInstanceModel::doActivate(const QString& seq)
 {
-    ShortcutsInstanceModel::doActivate(m_shortcutMap.value(key));
+    ShortcutsInstanceModel::doActivate(m_macSequenceMap.value(seq));
 }
