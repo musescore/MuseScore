@@ -284,8 +284,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>601</width>
-                <height>515</height>
+                <width>673</width>
+                <height>712</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -985,8 +985,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>406</width>
-                <height>374</height>
+                <width>623</width>
+                <height>559</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2327,8 +2327,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>685</width>
-             <height>298</height>
+             <width>737</width>
+             <height>733</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3970,8 +3970,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>605</width>
-             <height>471</height>
+             <width>677</width>
+             <height>722</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -4190,8 +4190,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>239</width>
-                <height>593</height>
+                <width>658</width>
+                <height>882</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -5744,6 +5744,35 @@
          </widget>
         </item>
         <item>
+         <widget class="QGroupBox" name="groupBox_alignment">
+          <property name="title">
+           <string>Alignment in chords</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <item>
+            <widget class="QCheckBox" name="combineVoices">
+             <property name="text">
+              <string>Combine voices that share the same stem direction</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="resetCombineVoices">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position above' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_6">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -6449,8 +6478,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>363</width>
-                <height>386</height>
+                <width>578</width>
+                <height>527</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -11100,8 +11129,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>469</width>
-             <height>461</height>
+             <width>703</width>
+             <height>748</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64">
@@ -12541,8 +12570,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>384</width>
-                <height>422</height>
+                <width>673</width>
+                <height>712</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -13519,8 +13548,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>404</width>
-                <height>572</height>
+                <width>533</width>
+                <height>654</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">

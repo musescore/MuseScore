@@ -30,7 +30,8 @@ import "internal"
 FocusableItem {
     id: root
 
-    property QtObject model: null
+    property QtObject headModel: null
+    property QtObject chordModel: null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -49,7 +50,7 @@ FocusableItem {
             id: noteHeadParenthesesView
 
             titleText: qsTrc("inspector", "Notehead parentheses")
-            propertyItem: root.model ? root.model.hasHeadParentheses : null
+            propertyItem: root.headModel ? root.headModel.hasHeadParentheses : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
@@ -63,7 +64,7 @@ FocusableItem {
         NoteheadGroupSelector {
             id: noteHeadSection
 
-            propertyItem: root.model ? root.model.headGroup : null
+            propertyItem: root.headModel ? root.headModel.headGroup : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: noteHeadParenthesesView.navigationRowEnd + 1
@@ -71,10 +72,10 @@ FocusableItem {
 
         PropertyCheckBox {
             id: hideNoteheadCheckBox
-            visible: root.model ? !root.model.isTrillCueNote : true
+            visible: root.headModel ? !root.headModel.isTrillCueNote : true
 
             text: qsTrc("inspector", "Hide notehead")
-            propertyItem: root.model ? root.model.isHeadHidden : null
+            propertyItem: root.headModel ? root.headModel.isHeadHidden : null
 
             navigation.name: "HideNoteHeadBox"
             navigation.panel: root.navigationPanel
@@ -85,7 +86,7 @@ FocusableItem {
             id: smallNoteheadCheckBox
 
             text: qsTrc("inspector", "Small notehead")
-            propertyItem: root.model ? root.model.isHeadSmall : null
+            propertyItem: root.headModel ? root.headModel.isHeadSmall : null
 
             navigation.name: "SmallNoteHeadBox"
             navigation.panel: root.navigationPanel
@@ -94,10 +95,10 @@ FocusableItem {
 
         FlatRadioButtonGroupPropertyView {
             id: durationDotPosition
-            visible: root.model ? !root.model.isTrillCueNote : true
+            visible: root.headModel ? !root.headModel.isTrillCueNote : true
 
             titleText: qsTrc("inspector", "Duration dot position")
-            propertyItem: root.model ? root.model.dotPosition : null
+            propertyItem: root.headModel ? root.headModel.dotPosition : null
 
             navigationName: "DottedNote"
             navigationPanel: root.navigationPanel
@@ -112,7 +113,7 @@ FocusableItem {
 
         ExpandableBlank {
             id: showItem
-            visible: root.model ? !root.model.isTrillCueNote : true
+            visible: root.headModel ? !root.headModel.isTrillCueNote : true
 
             isExpanded: false
 
@@ -133,9 +134,9 @@ FocusableItem {
                     id: noteHeadSystemSection
 
                     titleText: qsTrc("inspector", "Notehead scheme")
-                    propertyItem: root.model ? root.model.headSystem : null
+                    propertyItem: root.headModel ? root.headModel.headSystem : null
 
-                    model: root.model.possibleHeadSystemTypes()
+                    model: root.headModel.possibleHeadSystemTypes()
 
                     navigationName: "NoteHeadSystemSection"
                     navigationPanel: root.navigationPanel
@@ -145,7 +146,7 @@ FocusableItem {
                 NoteheadTypeSelector {
                     id: noteHeadTypeSection
                     titleText: qsTrc("inspector", "Override visual duration")
-                    propertyItem: root.model ? root.model.headType : null
+                    propertyItem: root.headModel ? root.headModel.headType : null
 
                     navigationName: "NoteHeadTypeSection"
                     navigationPanel: root.navigationPanel
@@ -156,7 +157,7 @@ FocusableItem {
                     id: noteDirectionSection
 
                     titleText: qsTrc("inspector", "Note direction")
-                    propertyItem: root.model ? root.model.headDirection : null
+                    propertyItem: root.headModel ? root.headModel.headDirection : null
 
                     orientation: Qt.Horizontal
 
@@ -165,12 +166,34 @@ FocusableItem {
                 }
 
                 OffsetSection {
+                    id: noteOffsetSection
                     titleText: qsTrc("inspector", "Notehead offset")
-                    propertyItem: root.model ? root.model.offset : null
+                    propertyItem: root.headModel ? root.headModel.offset : null
 
                     navigationName: "NoteHeadOffsetSection"
                     navigationPanel: root.navigationPanel
                     navigationRowStart: noteDirectionSection.navigationRowEnd + 1
+                }
+
+                StyledTextLabel {
+                    width: parent.width
+
+                    text: qsTrc("inspector", "Alignment in chords")
+                    horizontalAlignment: Text.AlignLeft
+                }
+
+                PropertyToggle {
+                    id: combineVoiceToggle
+
+                    navigation.name: "Combine with voices that share the same stem direction"
+                    navigation.panel: root.navigationPanel
+                    navigation.row: noteOffsetSection.navigationRowEnd + 1
+
+                    label.elide: Text.ElideNone
+                    label.wrapMode: Text.Wrap
+
+                    propertyItem: root.chordModel ? root.chordModel.combineVoice : null
+                    text: qsTrc("inspector", "Combine with voices that share the same stem direction")
                 }
             }
         }

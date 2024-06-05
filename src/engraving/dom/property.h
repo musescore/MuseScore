@@ -101,6 +101,7 @@ enum class Pid {
     MIRROR_HEAD,
     HEAD_HAS_PARENTHESES,
     DOT_POSITION,
+    COMBINE_VOICE,
     TUNING,
     PAUSE,
 

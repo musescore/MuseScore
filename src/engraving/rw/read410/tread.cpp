@@ -2664,6 +2664,8 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         ChordLine* cl = Factory::createChordLine(ch);
         TRead::read(cl, e, ctx);
         ch->add(cl);
+    } else if (tag == "combineVoice") {
+        ch->setCombineVoice(e.readBool());
     } else {
         return false;
     }

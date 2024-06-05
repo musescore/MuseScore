@@ -31,6 +31,7 @@ RowLayout {
     width: parent.width
 
     required property PropertyItem propertyItem
+    property alias label: label
     property alias text: label.text
     property alias navigation: toggle.navigation
 

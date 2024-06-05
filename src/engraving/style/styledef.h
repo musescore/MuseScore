@@ -202,6 +202,7 @@ enum class Sid {
     stemLengthSmall,
     shortStemStartLocation,
     shortestStem,
+    combineVoice,
     beginRepeatLeftMargin,
     minNoteDistance,
     barNoteDistance,
