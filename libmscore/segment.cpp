@@ -2119,7 +2119,9 @@ void Segment::createShape(int staffIdx)
 
             if (e->isHarmony()) {
                   // use same spacing calculation as for chordrest
-                  toHarmony(e)->layout1();
+                  auto h = toHarmony(e);
+                  if (h->bbox().isEmpty())
+                        h->layout1();
                   const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
                   qreal x1 = e->bbox().x() - margin + e->pos().x();
                   qreal x2 = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
