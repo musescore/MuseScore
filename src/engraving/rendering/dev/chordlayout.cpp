@@ -2270,7 +2270,7 @@ void ChordLayout::setDotX(const std::vector<Chord*>& chords, const std::array<do
             continue;
         }
         const bool combineVoices = chord->combineVoice();
-        const int idx = (VOICES * (chord->staffIdx() - staff->idx() + 1)) + chord->voice();
+        const size_t idx = (VOICES * (chord->staffIdx() - staff->idx() + 1)) + chord->voice();
         if (!combineChordConflicts.empty()) {
             // There are conflicts
             if (muse::contains(combineChordConflicts, chord->track())) {
@@ -2430,7 +2430,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
 
             const double dotX = noteX + note->headBodyWidth() + chord->pos().x();
             if (chord->dots()) {
-                const int idx = (VOICES * (chord->staffIdx() - staff->idx() + 1)) + chord->voice();
+                const size_t idx = (VOICES * (chord->staffIdx() - staff->idx() + 1)) + chord->voice();
                 dotPos.at(idx) = std::max(dotPos.at(idx), dotX);
             }
 
