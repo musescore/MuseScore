@@ -46,21 +46,6 @@ FocusableItem {
 
         spacing: 12
 
-
-        PropertyCheckBox {
-            text: qsTrc("inspector", "Align with preceding hairpin or dynamics")
-            propertyItem: root.model ? root.model.snapBefore : null
-
-            // TODO: navigation
-        }
-
-        PropertyCheckBox {
-            text: qsTrc("inspector", "Align with following hairpin or dynamics")
-            propertyItem: root.model ? root.model.snapAfter : null
-
-            // TODO: navigation
-        }
-
         Item {
             height: childrenRect.height
             width: parent.width
@@ -165,17 +150,6 @@ FocusableItem {
                 navigationPanel: root.navigationPanel
                 navigationRowStart: heightSection.navigationRowEnd + 1
             }
-        }
-
-        SeparatorLine { anchors.margins: -12 }
-
-        VoicesAndPositionSection {
-            id: voicesAndPositionSection
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: continuousHeightSection.navigationRowEnd + 1
-
-            model: root.model
         }
     }
 }

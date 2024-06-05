@@ -40,20 +40,6 @@ Column {
 
     spacing: 12
 
-    PropertyCheckBox {
-        text: qsTrc("inspector", "Align with preceding hairpin or dynamics")
-        propertyItem: root.model ? root.model.snapBefore : null
-
-        // TODO: navigation
-    }
-
-    PropertyCheckBox {
-        text: qsTrc("inspector", "Align with following hairpin or dynamics")
-        propertyItem: root.model ? root.model.snapAfter : null
-
-        // TODO: navigation
-    }
-
     Column {
         width: parent.width
 
@@ -106,11 +92,5 @@ Column {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: hooksSection.navigationRowEnd + 1
-    }
-
-    SeparatorLine { anchors.margins: -12; visible: placementSection.visible }
-
-    VoicesAndPositionSection {
-        model: root.model
     }
 }
