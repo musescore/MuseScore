@@ -1011,7 +1011,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     bool createTitleField
         = std::any_of(fieldNames.begin(), fieldNames.end(), [](const String& fieldName) { return !fieldName.isEmpty(); });
 
-    if (!createTitleField) {
+    if (!createTitleField && !engravingConfiguration()->guitarProImportExperimental()) {
         return;
     }
 
@@ -1061,7 +1061,8 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         s->setPlainText(mu::mtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
         m->add(s);
     }
-    if (!gpscore->poet().isEmpty()) {
+
+    if (!gpscore->poet().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
         s->setPlainText(mu::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
         m->add(s);
