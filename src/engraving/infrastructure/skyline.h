@@ -25,6 +25,7 @@
 
 #include <cfloat>
 #include <vector>
+#include <map>
 
 #include "draw/types/geometry.h"
 #include "shape.h"
@@ -67,12 +68,22 @@ public:
     std::vector<ShapeElement>& elements() { return m_shape.elements(); }
 
 private:
+    double staffLinesTopAtX(double x) const;
+    double staffLinesBottomAtX(double x) const;
+
+private:
     const bool m_isNorth;
     Shape m_shape;
 
-    double m_staffLinesTop = 0.0;
-    double m_staffLinesBottom = 0.0;
-    bool hasValidStaffLineEdges() const { return !(muse::RealIsNull(m_staffLinesBottom) && muse::RealIsNull(m_staffLinesTop)); }
+    struct StaffLineEdge {
+        double top = 0.0;
+        double bottom = 0.0;
+        StaffLineEdge(double t, double b)
+            : top(t), bottom(b) {}
+    };
+
+    std::map<double, StaffLineEdge> m_staffLineEdges;
+    bool hasValidStaffLineEdges() const { return !m_staffLineEdges.empty(); }
 };
 
 //---------------------------------------------------------
