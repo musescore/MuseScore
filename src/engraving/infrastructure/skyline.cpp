@@ -179,14 +179,14 @@ void SkylineLine::clear()
 //    Calculates the minimum distance between two skylines
 //-------------------------------------------------------------------
 
-double Skyline::minDistance(const Skyline& s) const
+double Skyline::minDistance(const Skyline& s, double minHorizontalClearance) const
 {
-    return south().minDistance(s.north());
+    return south().minDistance(s.north(), minHorizontalClearance);
 }
 
-double SkylineLine::minDistance(const SkylineLine& sl) const
+double SkylineLine::minDistance(const SkylineLine& sl, double minHorizontalClearance) const
 {
-    return m_shape.minVerticalDistance(sl.m_shape);
+    return m_shape.minVerticalDistance(sl.m_shape, minHorizontalClearance);
 }
 
 double SkylineLine::verticalClearanceAbove(const Shape& shapeAbove) const

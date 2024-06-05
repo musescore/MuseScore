@@ -663,6 +663,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::scaleBarlines,           "scaleBarlines",           false },
     { Sid::barGraceDistance,        "barGraceDistance",        Spatium(1.0) },
     { Sid::minVerticalDistance,     "minVerticalDistance",     Spatium(0.5) },
+    { Sid::skylineMinHorizontalClearance, "minVerticalDistance", Spatium(0.25) },
     { Sid::ornamentStyle,           "ornamentStyle",           int(OrnamentStyle::DEFAULT) },
     { Sid::spatium,                 "Spatium",                 24.8 },
 

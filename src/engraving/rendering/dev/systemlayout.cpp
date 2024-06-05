@@ -2317,7 +2317,8 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             // the result is space is good to start and grows as needed
             // it does not, however, shrink when possible - only by trigger a full layout
             // (such as by toggling to page view and back)
-            double d = ss->skyline().minDistance(system->System::staff(si2)->skyline());
+            const double minHorizontalClearance = ctx.conf().styleMM(Sid::skylineMinHorizontalClearance);
+            double d = ss->skyline().minDistance(system->System::staff(si2)->skyline(), minHorizontalClearance);
             if (ctx.conf().isLineMode()) {
                 double previousDist = ss->continuousDist();
                 if (d > previousDist) {
@@ -2668,7 +2669,8 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     top->setFixedDownDistance(false);
 
     const SysStaff* sysStaff = top->staff(lastStaff);
-    double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline()) : 0;
+    const double minHorizontalClearance = conf.styleMM(Sid::skylineMinHorizontalClearance);
+    double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline(), minHorizontalClearance) : 0;
     sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
 
     if (conf.isFloatMode()) {
@@ -2764,11 +2766,11 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     }
 
     double elementXinSystemCoord = element->pageX() - system->pageX();
-    const double horizontalMargin = 0.25 * element->spatium();
+    const double minHorizontalClearance = system->style().styleMM(Sid::skylineMinHorizontalClearance);
 
     Shape elementShape = element->ldata()->shape()
                          .translated(PointF(elementXinSystemCoord, element->y()))
-                         .adjust(-horizontalMargin, 0.0, horizontalMargin, 0.0);
+                         .adjust(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
     elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
 
     // Take a *copy* of the skyline of this staff

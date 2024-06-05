@@ -55,7 +55,9 @@ public:
     inline bool remove_if(Predicate p) { return m_shape.remove_if(p); }
 
     void clear();
-    double minDistance(const SkylineLine&) const;
+    // TODO: avoid passing down minHorizontalClearance (in future it must be done
+    // item-by-item similar to what we do for horizontal spacing)
+    double minDistance(const SkylineLine&, double minHorizontalClearance = 0.0) const;
     double verticalClearanceAbove(const Shape& shapeAbove) const;
     double verticalClaranceBelow(const Shape& shapeBelow) const;
     double max() const;
@@ -108,7 +110,9 @@ public:
     void add(const ShapeElement& r);
     void add(const RectF& r, EngravingItem* item) { add(ShapeElement(r, item)); }
 
-    double minDistance(const Skyline&) const;
+    // TODO: avoid passing down minHorizontalClearance (in future it must be done
+    // item-by-item similar to what we do for horizontal spacing)
+    double minDistance(const Skyline&, double minHorizontalClearance = 0.0) const;
 
     SkylineLine& north() { return _north; }
     SkylineLine& south() { return _south; }
