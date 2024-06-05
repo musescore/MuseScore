@@ -200,7 +200,7 @@ std::optional<ShapeElement> Shape::get_first() const
 //    Calculates the minimum distance between two shapes.
 //-------------------------------------------------------------------
 
-double Shape::minVerticalDistance(const Shape& a) const
+double Shape::minVerticalDistance(const Shape& a, double minHorizontalClearance) const
 {
     if (empty() || a.empty()) {
         return 0.0;
@@ -219,7 +219,7 @@ double Shape::minVerticalDistance(const Shape& a) const
             }
             double ax1 = r1.left();
             double ax2 = r1.right();
-            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
+            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, minHorizontalClearance)) {
                 dist = std::max(dist, r1.bottom() - r2.top());
             }
         }
@@ -246,15 +246,15 @@ double Shape::verticalClearance(const Shape& a, double minHorizontalDistance) co
         if (r2.height() <= 0.0) {
             continue;
         }
-        double bx1 = r2.left() - minHorizontalDistance;
-        double bx2 = r2.right() + minHorizontalDistance;
+        double bx1 = r2.left();
+        double bx2 = r2.right();
         for (const RectF& r1 : m_elements) {
             if (r1.height() <= 0.0) {
                 continue;
             }
             double ax1 = r1.left();
             double ax2 = r1.right();
-            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
+            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, minHorizontalDistance)) {
                 dist = std::min(dist, r2.top() - r1.bottom());
             }
         }
@@ -272,7 +272,7 @@ bool Shape::clearsVertically(const Shape& a) const
 {
     for (const RectF& r1 : a.m_elements) {
         for (const RectF& r2 : m_elements) {
-            if (mu::engraving::intersects(r1.left(), r1.right(), r2.left(), r2.right(), 0.0)) {
+            if (mu::engraving::intersects(r1.left(), r1.right(), r2.left(), r2.right())) {
                 if (std::min(r1.top(), r1.bottom()) <= std::max(r2.top(), r2.bottom())) {
                     return false;
                 }
