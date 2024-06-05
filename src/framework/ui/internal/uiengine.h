@@ -66,6 +66,10 @@ public:
     Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const;
     Q_INVOKABLE Qt::LayoutDirection currentLanguageLayoutDirection() const;
 
+    Q_INVOKABLE QColor colorWithAlphaF(const QColor& src, float alpha /* 0 - 1 */) const;
+    Q_INVOKABLE QColor blendColors(const QColor& c1, const QColor& c2) const;
+    Q_INVOKABLE QColor blendColors(const QColor& c1, const QColor& c2, float alpha) const;
+
     // IUiEngine
     void updateTheme() override;
     QQmlApplicationEngine* qmlAppEngine() const override;

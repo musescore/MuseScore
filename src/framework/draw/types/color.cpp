@@ -9,8 +9,6 @@ static int hex2int(const char* s, int n);
 static bool getHexRgb(const char* name, size_t len, Rgba* rgba);
 static std::string rgb2hex(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
 static std::string rgb2hex(Rgba rgba);
-static constexpr bool isValidComp(int num);
-static constexpr bool isRgbaValid(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
 static void insertHexComponent(int num, std::stringstream& ss);
 
 Color::Color()
@@ -20,11 +18,6 @@ Color::Color()
 
 Color::Color(const Color& other)
     : m_rgba(other.m_rgba), m_isValid(other.m_isValid)
-{
-}
-
-Color::Color(int r, int g, int b, int a)
-    : m_rgba(rgba(r, g, b, a)), m_isValid(isRgbaValid(r, g, b, a))
 {
 }
 
@@ -272,19 +265,6 @@ static bool getHexRgb(const char* name, size_t len, Rgba* rgba)
 
     *rgba = muse::draw::rgba(r, g, b, a);
     return true;
-}
-
-static constexpr bool isValidComp(int num)
-{
-    return (num >= 0) && (num < 256);
-}
-
-static constexpr bool isRgbaValid(int r, int g, int b, int a)
-{
-    return isValidComp(r)
-           && isValidComp(g)
-           && isValidComp(b)
-           && isValidComp(a);
 }
 
 static void insertHexComponent(int num, std::stringstream& ss)

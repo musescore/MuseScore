@@ -28,6 +28,8 @@
 #include <QDir>
 #include <QQmlContext>
 
+#include "draw/types/color.h"
+
 #include "log.h"
 
 using namespace muse::ui;
@@ -199,6 +201,23 @@ Qt::KeyboardModifiers UiEngine::keyboardModifiers() const
 Qt::LayoutDirection UiEngine::currentLanguageLayoutDirection() const
 {
     return languagesService()->currentLanguage().direction;
+}
+
+QColor UiEngine::blendColors(const QColor& c1, const QColor& c2) const
+{
+    return draw::blendQColors(c1, c2);
+}
+
+QColor UiEngine::blendColors(const QColor& c1, const QColor& c2, float alpha) const
+{
+    return draw::blendQColors(c1, c2, alpha);
+}
+
+QColor UiEngine::colorWithAlphaF(const QColor& src, float alpha) const
+{
+    QColor c = src;
+    c.setAlphaF(alpha);
+    return c;
 }
 
 QQmlApplicationEngine* UiEngine::qmlAppEngine() const
