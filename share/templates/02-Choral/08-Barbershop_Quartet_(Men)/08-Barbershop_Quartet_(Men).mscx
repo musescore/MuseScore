@@ -48,7 +48,7 @@
       <Instrument id="tenor">
         <longName>TENOR
 LEAD</longName>
-        <shortName>T/L<shortName>
+        <shortName>T/L</shortName>
         <trackName>Tenor/Lead</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>
