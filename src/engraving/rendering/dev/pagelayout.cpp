@@ -366,7 +366,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                                     = fingering->ldata()->bbox().translated(
                                                           fingering->pos() + n->pos() + n->chord()->pos() + segment->pos()
                                                           + segment->measure()->pos());
-                                                s->staff(fingering->note()->chord()->vStaffIdx())->skyline().add(r);
+                                                s->staff(fingering->note()->chord()->vStaffIdx())->skyline().add(r, fingering);
                                             }
                                         }
                                     }
