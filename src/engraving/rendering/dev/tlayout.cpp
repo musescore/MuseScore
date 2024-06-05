@@ -6303,8 +6303,10 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
         ldata->setMag(item->staff()->staffMag(item->tick()));
     }
     if (item->spanner()->placeBelow()) {
-        ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
+        ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
     }
+    const double yOff = st ? st->yoffset().val() * sp : 0.0;
+    ldata->moveY(yOff);
 
     bool accidentalGoesBelow = trill->trillType() == TrillType::DOWNPRALL_LINE;
     Ornament* ornament = trill->ornament();
@@ -6350,7 +6352,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
             double minVertDist = accidentalGoesBelow
                                  ? Shape(box).minVerticalDistance(a->shape())
                                  : a->shape().minVerticalDistance(Shape(box));
-            y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
+            y = (accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin) + yOff;
             a->setPos(x, y);
             a->setParent(item);
         }
@@ -6448,6 +6450,8 @@ void TLayout::fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata)
 void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
+    const StaffType* st = item->staffType();
+    const double sp = item->spatium();
     VibratoSegment::LayoutData* ldata = item->mutldata();
     if (item->staff()) {
         ldata->setMag(item->staff()->staffMag(item->tick()));
@@ -6455,6 +6459,9 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
     if (item->spanner()->placeBelow()) {
         ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
     }
+
+    const double yOff = st ? st->yoffset().val() * sp : 0.0;
+    ldata->moveY(yOff);
 
     switch (item->vibrato()->vibratoType()) {
     case VibratoType::GUITAR_VIBRATO:
