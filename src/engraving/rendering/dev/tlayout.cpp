@@ -6229,9 +6229,16 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
 void TLayout::layoutTimeTickAnchor(TimeTickAnchor* item, LayoutContext&)
 {
     TimeTickAnchor::LayoutData* ldata = item->mutldata();
+    const StaffType* st = item->staffType();
     ldata->setPos(0.0, 0.0);
     double width = item->segment()->width();
     double height = item->staff()->staffHeight();
+    if (st && st->lines() == 1) {
+        // Special case for single line staves
+        const double lineDist = st->lineDistance().val() * item->spatium();
+        ldata->setPosY(-lineDist);
+        height = lineDist * 2;
+    }
     ldata->setBbox(0.0, 0.0, width, height);
 }
 
