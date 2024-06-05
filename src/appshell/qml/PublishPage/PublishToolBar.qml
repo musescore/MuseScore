@@ -23,67 +23,14 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+
 import MuseScore.AppShell 1.0
 
-Rectangle {
-    id: root
+StyledToolBarView {
+    navigationPanel.name: "PublishToolBar"
+    navigationPanel.accessible.name: qsTrc("publish", "Publish toolbar")
 
-    property alias navigation: navPanel
+    spacing: 8
 
-    width: view.width
-    height: view.height
-
-    color: ui.theme.backgroundPrimaryColor
-
-    NavigationPanel {
-        id: navPanel
-        name: "PublishToolBar"
-        enabled: root.enabled && root.visible
-    }
-
-    PublishToolBarModel {
-        id: toolBarModel
-    }
-
-    Component.onCompleted: {
-        toolBarModel.load()
-    }
-
-    ListView {
-        id: view
-
-        height: contentItem.childrenRect.height
-        width: contentItem.childrenRect.width
-
-        orientation: Qt.Horizontal
-        interactive: false
-
-        spacing: 8
-
-        model: toolBarModel
-
-        delegate: FlatButton {
-            property var item: Boolean(model) ? model.itemRole : null
-
-            text: Boolean(item) ? item.title : ""
-            icon: Boolean(item) ? item.icon : IconCode.NONE
-            enabled: Boolean(item) ? item.enabled : false
-            toolTipTitle: Boolean(item) ? item.title : ""
-            toolTipDescription: Boolean(item) ? item.description : ""
-            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
-
-            orientation: Qt.Horizontal
-            transparent: true
-
-            navigation.panel: navPanel
-            navigation.order: model.index
-
-            iconFont: ui.theme.toolbarIconsFont
-            height: 36
-
-            onClicked: {
-                toolBarModel.handleMenuItem(item.id)
-            }
-        }
-    }
+    model: PublishToolBarModel { }
 }

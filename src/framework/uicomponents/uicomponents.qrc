@@ -89,5 +89,7 @@
         <file>qml/Muse/UiComponents/treeview/TreeViewItemDelegateLoader.qml</file>
         <file>qml/Muse/UiComponents/treeview/TreeViewStyle.qml</file>
         <file>qml/Muse/UiComponents/treeview/images/header.png</file>
+        <file>qml/Muse/UiComponents/StyledToolBarView.qml</file>
+        <file>qml/Muse/UiComponents/StyledToolBarItem.qml</file>
     </qresource>
 </RCC>
