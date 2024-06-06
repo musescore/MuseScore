@@ -48,6 +48,7 @@ FocusScope {
     property real textSidePadding: 12
     property real accessoriesPadding: 4
 
+    readonly property alias inputField: valueInput
     readonly property alias background: background
 
     readonly property alias mouseArea: clickableArea
