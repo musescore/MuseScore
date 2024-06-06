@@ -1288,15 +1288,17 @@ int Chord::stemLengthBeamAddition() const
 int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams, bool isFullSize)
 {
     int beamOverlap = 8;
-    if (isFullSize) {
-        if (beamCount == 3 && !hasHook) {
+    if (!hasHook) {
+        if ((isFullSize && beamCount == 3) || (!isFullSize && beamCount >= 4)) {
             beamOverlap = 12;
-        } else if (beamCount >= 4 && !hasHook) {
+        } else if (isFullSize && beamCount >= 4) {
             beamOverlap = (beamCount - 4) * beamSpacing + (useWideBeams ? 16 : 14);
         }
     }
 
-    int staffOverlap = std::min(beamOverlap, (staffLines - 1) * 4);
+    // small note stems should end at the 2nd outermost line
+    int smallNoteAdj = isFullSize ? 0 : 1;
+    int staffOverlap = std::min(beamOverlap, (staffLines - 1) * 4) - smallNoteAdj * 4;
     if (!up) {
         return staffOverlap;
     }
@@ -1437,7 +1439,7 @@ double Chord::calcDefaultStemLength()
     int shortStemStart = style().styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
     bool useWideBeams = style().styleB(Sid::useWideBeams);
     int beamCount = (tremoloTwoChord() ? tremoloTwoChord()->lines() : 0) + (m_beam ? beams() : 0);
-    int middleLine = minStaffOverlap(ldata()->up, staffLineCount,
+    int targetLine = minStaffOverlap(ldata()->up, staffLineCount,
                                      beamCount, !!m_hook, useWideBeams ? 4 : 3,
                                      useWideBeams, !(isGrace() || isSmall()));
     if (up()) {
@@ -1448,7 +1450,7 @@ double Chord::calcDefaultStemLength()
         if (stemEndPositionMag <= -shortStemStart) {
             int reduction = maxReduction(std::abs((int)floor(stemEndPositionMag) + shortStemStart));
             idealStemLength = std::max(idealStemLength - reduction, shortestStem);
-        } else if (stemEndPosition > middleLine) {
+        } else if (stemEndPosition > targetLine) {
             // this case will be taken care of below; even if we were to adjust here we'd have
             // to adjust again later if the line spacing != 1.0 or if _relativeMag != 1.0
         } else {
@@ -1465,7 +1467,7 @@ double Chord::calcDefaultStemLength()
         if (stemEndPositionMag >= downShortStemStart) {
             int reduction = maxReduction(std::abs((int)ceil(stemEndPositionMag) - downShortStemStart));
             idealStemLength = std::max(idealStemLength - reduction, shortestStem);
-        } else if (stemEndPosition < middleLine) {
+        } else if (stemEndPosition < targetLine) {
             // this case will be taken care of below; even if we were to adjust here we'd have
             // to adjust again later if the line spacing != 1.0 or if _relativeMag != 1.0
         } else {
@@ -1492,14 +1494,14 @@ double Chord::calcDefaultStemLength()
         lineDistance *= _spatium;
         double bottomLine = lineDistance * (staffLineCount - 1.0);
         double target = 0.0;
-        double midLine = middleLine / 4.0 * lineDistance;
+        double targetLineDist = targetLine / 4.0 * lineDistance;
         if (muse::RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
             // need to extend to middle line, or to opposite line if staff is < 2sp tall
             if (bottomLine < 2 * _spatium) {
                 target = ldata()->up ? topLine : bottomLine;
             } else {
                 double twoSpIn = ldata()->up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
-                target = muse::RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
+                target = muse::RealIsEqual(lineDistance / _spatium, 1.0) ? targetLineDist : twoSpIn;
             }
         } else {
             // need to extend to second line in staff, or to opposite line if staff has < 3 lines
