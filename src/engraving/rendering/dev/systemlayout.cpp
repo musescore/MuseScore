@@ -2336,29 +2336,6 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     //---------------------------------------------------
 
     SystemLayout::layoutInstrumentNames(system, ctx);
-
-    //---------------------------------------------------
-    //  layout cross-staff slurs and ties
-    //---------------------------------------------------
-
-    Fraction stick = system->measures().front()->tick();
-    Fraction etick = system->measures().back()->endTick();
-    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
-
-    std::vector<Spanner*> spanner;
-    for (auto interval : spanners) {
-        Spanner* sp = interval.value;
-        if (sp->tick() < etick && sp->tick2() >= stick) {
-            if (sp->isSlur()) {
-                ChordRest* scr = sp->startCR();
-                ChordRest* ecr = sp->endCR();
-                staff_idx_t idx = sp->vStaffIdx();
-                if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
-                    TLayout::layoutSystem(sp, system, ctx);
-                }
-            }
-        }
-    }
 }
 
 double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2)

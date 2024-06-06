@@ -5015,8 +5015,8 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 
 void TLayout::layoutSlur(Slur* item, LayoutContext& ctx)
 {
-    LAYOUT_CALL_ITEM(item);
-    SlurTieLayout::layout(item, ctx);
+    UNUSED(item)
+    UNUSED(ctx)
 }
 
 void TLayout::layoutSpacer(Spacer* item, LayoutContext&)

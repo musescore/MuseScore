@@ -47,7 +47,6 @@ namespace mu::engraving::rendering::dev {
 class SlurTieLayout
 {
 public:
-    static void layout(Slur* item, LayoutContext& ctx);
     static SpannerSegment* layoutSystem(Slur* item, System* system, LayoutContext& ctx);
 
     static TieSegment* tieLayoutFor(Tie* item, System* system);
