@@ -60,12 +60,12 @@ FocusableItem {
         }
 
         StyledTextLabel {
-            text: qsTrc("inspector", "Alignment with adjacent objects")
+            text: qsTrc("inspector", "Alignment with adjacent dynamics")
         }
 
         PropertyToggle {
             id: snapBefore
-            text: qsTrc("inspector", "Snap to beginning dynamic")
+            text: qsTrc("inspector", "Snap to previous")
             propertyItem: root.model ? root.model.snapBefore : null
 
             navigation.panel: root.navigationPanel
@@ -74,7 +74,7 @@ FocusableItem {
 
         PropertyToggle {
             id: snapAfter
-            text: qsTrc("inspector", "Snap to end dynamic")
+            text: qsTrc("inspector", "Snap to next")
             propertyItem: root.model ? root.model.snapAfter : null
 
             navigation.panel: root.navigationPanel

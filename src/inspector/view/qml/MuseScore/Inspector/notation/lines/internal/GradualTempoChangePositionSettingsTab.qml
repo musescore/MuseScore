@@ -65,7 +65,7 @@ FocusableItem {
 
         PropertyToggle {
             id: snapAfter
-            text: qsTrc("inspector", "Snap to end tempo")
+            text: qsTrc("inspector", "Snap to next")
             propertyItem: root.model ? root.model.snapAfter : null
 
             navigation.panel: root.navigationPanel
