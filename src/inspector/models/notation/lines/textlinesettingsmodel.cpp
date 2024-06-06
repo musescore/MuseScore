@@ -92,13 +92,13 @@ void TextLineSettingsModel::createProperties()
 
     m_placement = buildPropertyItem(Pid::PLACEMENT);
 
-    m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
+    m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT, applyPropertyValueAndUpdateAvailability);
     m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
 
-    m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
+    m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT, applyPropertyValueAndUpdateAvailability);
     m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
 
-    m_endText = buildPropertyItem(Pid::END_TEXT);
+    m_endText = buildPropertyItem(Pid::END_TEXT, applyPropertyValueAndUpdateAvailability);
     m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
 }
 
@@ -302,6 +302,15 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
 
     m_dashLineLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
+
+    bool hasBeginText = !m_beginningText->value().toString().isEmpty();
+    bool hasContinueText = !m_continuousText->value().toString().isEmpty();
+    bool hasEndText = !m_endText->value().toString().isEmpty();
+
+    m_beginningTextOffset->setIsEnabled(hasBeginText);
+    m_continuousTextOffset->setIsEnabled(hasContinueText);
+    m_endTextOffset->setIsEnabled(hasEndText);
+    m_gapBetweenTextAndLine->setIsEnabled(isLineAvailable && (hasBeginText || hasContinueText || hasEndText));
 }
 
 void TextLineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>& types)
