@@ -25,6 +25,8 @@
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
+#include "system.h"
+#include "tempotext.h"
 
 #include "log.h"
 
@@ -305,6 +307,75 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
         }
     }
     return TextLineBaseSegment::getPropertyStyle(id);
+}
+
+GradualTempoChangeSegment* GradualTempoChangeSegment::findElementToSnapBefore() const
+{
+    const System* sys = system();
+    IF_ASSERT_FAILED(sys) {
+        return nullptr;
+    }
+
+    GradualTempoChange* gradTempoChange = tempoChange();
+    Fraction startTick = gradTempoChange->tick();
+    if (!sys->measures().empty() && startTick == sys->measures().front()->tick()) {
+        return nullptr;
+    }
+
+    auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
+    for (auto interval : intervals) {
+        Spanner* spanner = interval.value;
+        if (!spanner->isGradualTempoChange() || spanner->track() != gradTempoChange->track() || spanner->tick2() != startTick
+            || !spanner->visible()) {
+            continue;
+        }
+        GradualTempoChange* precedingTempoChange = toGradualTempoChange(spanner);
+        bool canSnap = precedingTempoChange->snapToItemAfter() && precedingTempoChange->placeAbove() == gradTempoChange->placeAbove();
+        if (canSnap && !precedingTempoChange->segmentsEmpty()) {
+            return toGradualTempoChangeSegment(precedingTempoChange->backSegment());
+        }
+    }
+
+    return nullptr;
+}
+
+TempoText* GradualTempoChangeSegment::findElementToSnapAfter() const
+{
+    if (!tempoChange()->snapToItemAfter()) {
+        return nullptr;
+    }
+
+    System* sys = system();
+    IF_ASSERT_FAILED(sys) {
+        return nullptr;
+    }
+
+    // Note: we don't need to look for a tempoChange after.
+    // It is the next tempoChange which looks for a tempoChange before.
+    Fraction refTick = tempoChange()->tick2();
+    Measure* measure = score()->tick2measure(refTick);
+    if (!measure) {
+        return nullptr;
+    }
+
+    for (Segment* segment = measure->last(); segment; segment = segment->prev1()) {
+        if (segment->system() != sys) {
+            continue;
+        }
+        Fraction segmentTick = segment->tick();
+        if (segmentTick > refTick) {
+            continue;
+        }
+        if (segmentTick < refTick) {
+            break;
+        }
+        EngravingItem* tempoText = segment->findAnnotation(ElementType::TEMPO_TEXT, track(), track());
+        if (tempoText && tempoText->placeAbove() == placeAbove() && tempoText->visible()) {
+            return toTempoText(tempoText);
+        }
+    }
+
+    return nullptr;
 }
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)

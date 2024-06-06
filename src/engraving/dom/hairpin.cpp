@@ -312,6 +312,8 @@ EngravingItem* HairpinSegment::findElementToSnapBefore() const
 
 EngravingItem* HairpinSegment::findElementToSnapAfter() const
 {
+    // Note: we don't need to look for a hairpin after.
+    // It is the next hairpin which looks for a hairpin before.
     return findEndDynamicOrExpression();
 }
 

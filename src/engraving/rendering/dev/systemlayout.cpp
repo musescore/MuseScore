@@ -1034,7 +1034,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
-    std::vector<EngravingItem*> possibleElementsToAlign;
+    std::vector<EngravingItem*> dynamicsExprAndHairpinsToAlign;
 
     //-------------------------------------------------------------
     // Dynamics and figured bass
@@ -1048,7 +1048,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 if (e->autoplace()) {
                     if (e->isDynamic()) {
                         toDynamic(e)->manageBarlineCollisions();
-                        possibleElementsToAlign.push_back(e);
+                        dynamicsExprAndHairpinsToAlign.push_back(e);
                     }
                     Autoplace::autoplaceSegmentElement(e, e->mutldata(), false);
                     dynamicsAndFigBass.push_back(e);
@@ -1083,7 +1083,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             if (e->isExpression()) {
                 TLayout::layoutItem(e, ctx);
                 if (e->addToSkyline()) {
-                    possibleElementsToAlign.push_back(e);
+                    dynamicsExprAndHairpinsToAlign.push_back(e);
                     system->staff(e->staffIdx())->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
                 }
             }
@@ -1136,11 +1136,11 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     for (SpannerSegment* spannerSegment : system->spannerSegments()) {
         if (spannerSegment->isHairpinSegment()) {
-            possibleElementsToAlign.push_back(spannerSegment);
+            dynamicsExprAndHairpinsToAlign.push_back(spannerSegment);
         }
     }
 
-    AlignmentLayout::alignItems(possibleElementsToAlign, system);
+    AlignmentLayout::alignItems(dynamicsExprAndHairpinsToAlign, system);
 
     processLines(system, ctx, spanner, false);
     processLines(system, ctx, ottavas, false);
@@ -1315,14 +1315,25 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     // TempoText, tempo change lines
     //-------------------------------------------------------------
 
+    std::vector<EngravingItem*> tempoElementsToAlign;
+
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isTempoText()) {
                 TLayout::layoutItem(e, ctx);
+                tempoElementsToAlign.push_back(e);
             }
         }
     }
+
     processLines(system, ctx, tempoChangeLines, false);
+    for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+        if (spannerSeg->isGradualTempoChangeSegment()) {
+            tempoElementsToAlign.push_back(spannerSeg);
+        }
+    }
+
+    AlignmentLayout::alignItems(tempoElementsToAlign, system);
 
     //-------------------------------------------------------------
     // Marker and Jump

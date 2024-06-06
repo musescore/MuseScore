@@ -89,6 +89,9 @@ public:
     void removed() override;
     Sid getPropertyStyle(Pid id) const override;
 
+    GradualTempoChangeSegment* findElementToSnapBefore() const;
+    TempoText* findElementToSnapAfter() const;
+
     friend class GradualTempoChange;
 };
 }

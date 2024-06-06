@@ -2932,8 +2932,23 @@ void TLayout::layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGrou
 void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
+
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
+
+    ldata->disconnectItemSnappedBefore();
+    ldata->disconnectItemSnappedAfter();
+
     layoutTextLineBaseSegment(item, ctx);
+
+    GradualTempoChangeSegment* tempoChangeSegmentSnappedBefore = item->findElementToSnapBefore();
+    if (tempoChangeSegmentSnappedBefore) {
+        ldata->connectItemSnappedBefore(tempoChangeSegmentSnappedBefore);
+    }
+
+    TempoText* tempoTextSnappedAfter = item->findElementToSnapAfter();
+    if (tempoTextSnappedAfter) {
+        ldata->connectItemSnappedAfter(tempoTextSnappedAfter);
+    }
 
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
@@ -5503,6 +5518,9 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
+
+    ldata->disconnectItemSnappedBefore();
+    ldata->disconnectItemSnappedAfter();
 
     layoutBaseTextBase(item, ldata);
 
