@@ -98,6 +98,22 @@ void SkylineLine::add(const Shape& s)
     }
 }
 
+SkylineLine SkylineLine::getFilteredCopy(std::function<bool(const ShapeElement&)> filterOut) const
+{
+    SkylineLine newSkylineLine(*this);
+
+    newSkylineLine.m_shape.clear();
+
+    for (const ShapeElement& shapeEl : m_shape.elements()) {
+        if (filterOut(shapeEl)) {
+            continue;
+        }
+        newSkylineLine.m_shape.add(shapeEl);
+    }
+
+    return newSkylineLine;
+}
+
 void SkylineLine::add(const ShapeElement& r)
 {
     if (r.ignoreForLayout()) {
@@ -187,6 +203,16 @@ double Skyline::minDistance(const Skyline& s, double minHorizontalClearance) con
 double SkylineLine::minDistance(const SkylineLine& sl, double minHorizontalClearance) const
 {
     return m_shape.minVerticalDistance(sl.m_shape, minHorizontalClearance);
+}
+
+double SkylineLine::minDistanceToShapeAbove(const Shape& shapeAbove, double minHorizontalClearance) const
+{
+    return shapeAbove.minVerticalDistance(m_shape, minHorizontalClearance);
+}
+
+double SkylineLine::minDistanceToShapeBelow(const Shape& shapeBelow, double minHorizontalClearance) const
+{
+    return m_shape.minVerticalDistance(shapeBelow, minHorizontalClearance);
 }
 
 double SkylineLine::verticalClearanceAbove(const Shape& shapeAbove) const

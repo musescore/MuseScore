@@ -42,6 +42,8 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         rebase = rebaseOffset(item, ldata);
     }
 
+    const double minSkylineHorizontalClearance = item->style().styleMM(Sid::skylineMinHorizontalClearance) * item->mag();
+
     if (item->autoplace() && item->explicitParent()) {
         const Segment* s = toSegment(item->explicitParent());
         const Measure* m = s->measure();
@@ -71,15 +73,17 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         // Adjust bbox Y pos for staffType offset
         shape.translate(item->staffOffset());
 
-        SkylineLine sk(!above);
-        double d;
-        if (above) {
-            sk.add(shape);
-            d = sk.minDistance(ss->skyline().north());
-        } else {
-            sk.add(shape);
-            d = ss->skyline().south().minDistance(sk);
-        }
+        SkylineLine& staffSkyline = above ? ss->skyline().north() : ss->skyline().south();
+
+        SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
+            const EngravingItem* shapeItem = shapeEl.item();
+            return shapeItem && shapeItem->parent() == item->parent()
+                   && (item->isDynamic() || item->isExpression())
+                   && (shapeItem->isDynamic() || shapeItem->isExpression());
+        });
+
+        double d = above ? filteredSkyline.minDistanceToShapeAbove(shape, minSkylineHorizontalClearance)
+                   : filteredSkyline.minDistanceToShapeBelow(shape, minSkylineHorizontalClearance);
 
         if (d > -minDistance) {
             double yd = d + minDistance;
@@ -97,8 +101,9 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             ldata->moveY(yd);
             shape.translate(PointF(0.0, yd));
         }
+
         if (add && item->addToSkyline()) {
-            ss->skyline().add(shape);
+            staffSkyline.add(shape);
         }
     }
     setOffsetChanged(item, ldata, false);

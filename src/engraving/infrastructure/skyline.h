@@ -53,11 +53,14 @@ public:
 
     template<typename Predicate>
     inline bool remove_if(Predicate p) { return m_shape.remove_if(p); }
+    SkylineLine getFilteredCopy(std::function<bool(const ShapeElement&)> filterOut) const;
 
     void clear();
     // TODO: avoid passing down minHorizontalClearance (in future it must be done
     // item-by-item similar to what we do for horizontal spacing)
     double minDistance(const SkylineLine&, double minHorizontalClearance = 0.0) const;
+    double minDistanceToShapeAbove(const Shape&, double minHorizontalClearance = 0.0) const;
+    double minDistanceToShapeBelow(const Shape&, double minHorizontalClearance = 0.0) const;
     double verticalClearanceAbove(const Shape& shapeAbove) const;
     double verticalClaranceBelow(const Shape& shapeBelow) const;
     double max() const;

@@ -2784,12 +2784,16 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
                          .adjust(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
     elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
 
-    // Take a *copy* of the skyline of this staff
-    SkylineLine thisSkyline = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
-    thisSkyline.remove_if([element](ShapeElement& shEl) {
+    const SkylineLine& skylineOfThisStaff = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
+
+    SkylineLine thisSkyline = skylineOfThisStaff.getFilteredCopy([element](const ShapeElement& shEl) {
         const EngravingItem* shapeItem = shEl.item();
-        return shapeItem && (shapeItem == element || shapeItem->parentItem(true) == element || shapeItem->isAccidental()
-                             || shapeItem == element->ldata()->itemSnappedBefore() || shapeItem == element->ldata()->itemSnappedAfter());
+        if (!shapeItem) {
+            return false;
+        }
+        return shapeItem == element || shapeItem->parentItem(true) == element || shapeItem->type() == element->type()
+               || shapeItem->isAccidental() || shapeItem == element->ldata()->itemSnappedBefore()
+               || shapeItem == element->ldata()->itemSnappedAfter();
     });
 
     double yStaffDiff = nextStaff->y() - thisStaff->y();
