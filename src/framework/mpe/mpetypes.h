@@ -399,6 +399,8 @@ inline bool isRangedArticulation(const ArticulationType type)
            || type == ArticulationType::Multibend;
 }
 
+static const String ORDINARY_PLAYING_TECHNIQUE_CODE(u"ordinary_technique");
+
 using dynamic_level_t = percentage_t;
 constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENT;
 constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;

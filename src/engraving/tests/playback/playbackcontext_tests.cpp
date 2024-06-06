@@ -57,6 +57,14 @@ protected:
     {
         MScore::useRead302InTestMode = true;
     }
+
+    static void addParamToStaff(const PlaybackParam& param, staff_idx_t staffIdx, timestamp_t timestamp, PlaybackParamLayers& dest)
+    {
+        for (voice_idx_t voiceIdx = 0; voiceIdx < VOICES; ++voiceIdx) {
+            layer_idx_t layerIdx = static_cast<layer_idx_t>(staff2track(staffIdx, voiceIdx));
+            dest[layerIdx][timestamp].push_back(param);
+        }
+    }
 };
 
 TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
@@ -383,54 +391,50 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags)
     ctx.update(part->id(), score);
 
     // [WHEN] Get the actual params
-    PlaybackParamMap params = ctx.playbackParamMap(score);
+    PlaybackParamLayers actualParams = ctx.playbackParamLayers(score);
 
     // [THEN] Expected params
-    staff_layer_idx_t startIdx = 0;
-    staff_layer_idx_t endIdx = static_cast<staff_layer_idx_t>(part->nstaves());
+    PlaybackParam sulTasto(PlaybackParam::PlayingTechnique, u"Sul Tasto");
+    PlaybackParam bartok(PlaybackParam::PlayingTechnique, u"bartok");
+    PlaybackParam pizz(PlaybackParam::PlayingTechnique, u"pizzicato");
+    PlaybackParam espressivo(PlaybackParam::PlayingTechnique, u"Espressivo");
 
-    PlaybackParamList sulTasto;
-    for (staff_layer_idx_t i = startIdx; i < endIdx; ++i) {
-        sulTasto.emplace_back(PlaybackParam { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("Sul Tasto"), i });
+    PlaybackParamLayers expectedParams;
+
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        addParamToStaff(sulTasto, staffIdx, timestampFromTicks(score, 1920), expectedParams);
     }
 
-    PlaybackParam bartok { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("bartok"), 0 };
-    PlaybackParam pizz { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("pizzicato"), 1 }; // "apply to all staves" is off
-    PlaybackParam espressivo { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("Espressivo"), 1 }; // "apply to all staves" is off
+    addParamToStaff(bartok, 0, timestampFromTicks(score, 3840), expectedParams);
+    addParamToStaff(pizz, 1, timestampFromTicks(score, 3840), expectedParams); // "apply to all staves" is off (apply to 1st staff)
+    addParamToStaff(espressivo, 1, timestampFromTicks(score, 7680), expectedParams); // "apply to all staves" is off (apply to 1st staff)
 
-    PlaybackParamMap expectedParams {
-        { timestampFromTicks(score, 1920), sulTasto },
-        { timestampFromTicks(score, 3840), { bartok, pizz } },
-        { timestampFromTicks(score, 7680), { espressivo } },
-    };
+    EXPECT_EQ(actualParams, expectedParams);
 
-    EXPECT_EQ(params, expectedParams);
-
-    // [THEN] We can get the params for a specific tick & staff
-    for (staff_layer_idx_t i = startIdx; i < endIdx; ++i) {
-        params = ctx.playbackParamMap(score, 0, i);
+    // [THEN] We can get the params for a specific track & tick
+    for (track_idx_t trackIdx = part->startTrack(); trackIdx < part->endTrack(); ++trackIdx) {
+        PlaybackParamList params = ctx.playbackParams(trackIdx, 0);
         EXPECT_TRUE(params.empty());
 
-        params = ctx.playbackParamMap(score, 2000, i);
-        ASSERT_EQ(params.size(), 1);
-        EXPECT_EQ(params.begin()->second, PlaybackParamList { sulTasto.at(i) });
+        params = ctx.playbackParams(trackIdx, 2000);
+        EXPECT_EQ(params, PlaybackParamList { sulTasto });
 
-        params = ctx.playbackParamMap(score, 4500, i);
-        ASSERT_EQ(params.size(), 1);
+        params = ctx.playbackParams(trackIdx, 4500);
 
-        if (i == 1) {
-            EXPECT_EQ(params.begin()->second, PlaybackParamList { pizz });
+        staff_idx_t staffIdx = track2staff(trackIdx);
+
+        if (staffIdx == 1) {
+            EXPECT_EQ(params, PlaybackParamList { pizz });
         } else {
-            EXPECT_EQ(params.begin()->second, PlaybackParamList { bartok });
+            EXPECT_EQ(params, PlaybackParamList { bartok });
         }
 
-        params = ctx.playbackParamMap(score, 7680, i);
-        ASSERT_EQ(params.size(), 1);
+        params = ctx.playbackParams(trackIdx, 7680);
 
-        if (i == 1) {
-            EXPECT_EQ(params.begin()->second, PlaybackParamList { espressivo });
+        if (staffIdx == 1) {
+            EXPECT_EQ(params, PlaybackParamList { espressivo });
         } else {
-            EXPECT_EQ(params.begin()->second, PlaybackParamList { bartok });
+            EXPECT_EQ(params, PlaybackParamList { bartok });
         }
     }
 
@@ -453,8 +457,8 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
     ctx.update(parts.front()->id(), score);
 
     // [THEN] The actual params match the expectation
-    PlaybackParamList secondMeasureParams { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("Espressivo"), 0 } };
-    PlaybackParamList thirdMeasureParams { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("bartok"), 0 } };
+    PlaybackParamList secondMeasureParams { { PlaybackParam::PlayingTechnique, u"Espressivo" } };
+    PlaybackParamList thirdMeasureParams { { PlaybackParam::PlayingTechnique, u"bartok" } };
 
     PlaybackParamMap expectedParams {
         { timestampFromTicks(score, 1920), secondMeasureParams },
@@ -463,8 +467,13 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
         { timestampFromTicks(score, 7680), thirdMeasureParams }, // measure repeat
     };
 
-    PlaybackParamMap actualParams = ctx.playbackParamMap(score);
-    EXPECT_EQ(actualParams, expectedParams);
+    PlaybackParamLayers layers = ctx.playbackParamLayers(score);
+    EXPECT_FALSE(layers.empty());
+
+    for (const auto& layer : layers) {
+        const PlaybackParamMap& actualParams = layer.second;
+        EXPECT_EQ(actualParams, expectedParams);
+    }
 }
 
 /**
@@ -501,17 +510,22 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
     }
 
     // [THEN] The actual params match the expectation
-    PlaybackParamList ordinary { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(mpe::ORDINARY_PLAYING_TECHNIQUE_CODE), 0 } };
-    PlaybackParamList bartok { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("bartok"), 0 } };
+    PlaybackParam ordinary(PlaybackParam::PlayingTechnique, mpe::ORDINARY_PLAYING_TECHNIQUE_CODE);
+    PlaybackParam bartok(PlaybackParam::PlayingTechnique, u"bartok");
 
     PlaybackParamMap expectedParams {
-        { timestampFromTicks(score, 1920), ordinary }, // 2nd measure (cancels Pizz.)
-        { timestampFromTicks(score, 3840), bartok }, // 3rd measure
-        { timestampFromTicks(score, 5760), ordinary }, // 4th (canceled by Arco)
+        { timestampFromTicks(score, 1920), { ordinary } }, // 2nd measure (cancels Pizz.)
+        { timestampFromTicks(score, 3840), { bartok } }, // 3rd measure
+        { timestampFromTicks(score, 5760), { ordinary } }, // 4th (canceled by Arco)
     };
 
-    PlaybackParamMap params = ctx.playbackParamMap(score);
-    EXPECT_EQ(params, expectedParams);
+    PlaybackParamLayers layers = ctx.playbackParamLayers(score);
+    EXPECT_FALSE(layers.empty());
+
+    for (const auto& layer : layers) {
+        const PlaybackParamMap& actualParams = layer.second;
+        EXPECT_EQ(actualParams, expectedParams);
+    }
 
     // [WHEN] Parse the brass part
     const Part* brassPart = parts.at(1);
@@ -531,15 +545,20 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
     }
 
     // [THEN] The actual params match the expectation
-    PlaybackParamList mute { { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val("mute"), 0 } };
+    PlaybackParam mute(PlaybackParam::PlayingTechnique, u"mute");
 
     expectedParams = {
-        { timestampFromTicks(score, 0), mute }, // 1st measure
-        { timestampFromTicks(score, 1920), ordinary }, // 2nd measure (canceled by Open)
+        { timestampFromTicks(score, 0), { mute } }, // 1st measure
+        { timestampFromTicks(score, 1920), { ordinary } }, // 2nd measure (canceled by Open)
     };
 
-    params = ctx.playbackParamMap(score);
-    EXPECT_EQ(params, expectedParams);
+    layers = ctx.playbackParamLayers(score);
+    EXPECT_FALSE(layers.empty());
+
+    for (const auto& layer : layers) {
+        const PlaybackParamMap& actualParams = layer.second;
+        EXPECT_EQ(actualParams, expectedParams);
+    }
 
     delete score;
 }

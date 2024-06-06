@@ -124,7 +124,7 @@ void PlaybackModel::reload()
     update(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
-        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamics, pair.second.paramMap);
+        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamics, pair.second.params);
     }
 
     m_dataChanged.notify();
@@ -266,7 +266,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
                           result);
     }
 
-    PlaybackParamMap params = ctx.playbackParamMap(m_score, minTick, playableItems.front()->staffIdx());
+    PlaybackParamList params = ctx.playbackParams(playableItems.front()->track(), minTick);
     trackPlaybackData.offStream.send(std::move(result), std::move(params));
 }
 
@@ -357,7 +357,7 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
     trackData.dynamics = ctx.dynamicLevelLayers(m_score);
-    trackData.paramMap = ctx.playbackParamMap(m_score);
+    trackData.params = ctx.playbackParamLayers(m_score);
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
@@ -751,7 +751,7 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
             continue;
         }
 
-        search->second.mainStream.send(search->second.originEvents, search->second.dynamics, search->second.paramMap);
+        search->second.mainStream.send(search->second.originEvents, search->second.dynamics, search->second.params);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {

@@ -845,7 +845,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
 
     // [THEN] Updated events map will match our expectations
     result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
-                                                                   const PlaybackParamMap&) {
+                                                                   const PlaybackParamLayers&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
@@ -1099,7 +1099,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
-                                                                         const PlaybackParamMap&) {
+                                                                         const PlaybackParamList&) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
@@ -1163,7 +1163,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamMap&) {
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamList&) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);
