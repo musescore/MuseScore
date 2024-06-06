@@ -42,6 +42,7 @@ FocusScope {
     property string toolTipShortcut: ""
 
     property font iconFont: ui.theme.iconsFont
+    property color iconColor: ui.theme.fontPrimaryColor
     property font textFont: ui.theme.bodyFont
 
     property bool transparent: false
@@ -202,6 +203,7 @@ FocusScope {
                 Layout.alignment: Qt.AlignHCenter
                 iconCode: root.icon
                 font: root.iconFont
+                color: root.iconColor
                 visible: !isEmpty
             }
 
@@ -228,6 +230,7 @@ FocusScope {
                 Layout.alignment: Qt.AlignVCenter
                 iconCode: root.icon
                 font: root.iconFont
+                color: root.iconColor
                 visible: !isEmpty
             }
 
