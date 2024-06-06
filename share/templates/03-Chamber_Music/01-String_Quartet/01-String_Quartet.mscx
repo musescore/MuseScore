@@ -47,7 +47,7 @@
       <trackName>Violin I</trackName>
       <Instrument id="violin">
         <longName>Violin I</longName>
-        <shortName>Vln. I</longName>
+        <shortName>Vln. I</shortName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -129,7 +129,7 @@
       <trackName>Violin II</trackName>
       <Instrument id="violin">
         <longName>Violin II</longName>
-        <shortName>Vln. II</longName>
+        <shortName>Vln. II</shortName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -212,7 +212,7 @@
       <trackName>Viola</trackName>
       <Instrument id="viola">
         <longName>Viola</longName>
-        <shortName>Vla.</longName>
+        <shortName>Vla.</shortName>
         <trackName>Viola</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -295,7 +295,7 @@
       <trackName>Violoncello</trackName>
       <Instrument id="violoncello">
         <longName>Violoncello</longName>
-        <shortName>Vc.</longName>
+        <shortName>Vc.</shortName>
         <trackName>Violoncello</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>
