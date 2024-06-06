@@ -3357,10 +3357,9 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                 if (!s->isChordRestType()) {
                     // do not delete TimeSig/KeySig,
                     // it doesn't make sense to do it, except on full system
-                    if (s->segmentType() != SegmentType::TimeSig && s->segmentType() != SegmentType::KeySig) {
-                        if (!(e->isBarLine())) {
-                            undoRemoveElement(e);
-                        }
+                    if (!s->isTimeTickType() && !s->isTimeSigType() && !s->isKeySigType()
+                        && !s->isType(SegmentType::BarLineType) /*covers all barLine types*/) {
+                        undoRemoveElement(e);
                     }
                     continue;
                 }
