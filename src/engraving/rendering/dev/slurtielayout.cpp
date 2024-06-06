@@ -1086,13 +1086,13 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
     double slurLength = std::abs(p2.x() / spatium);
     double clearance;
     if (slurLength < 4) {
-        clearance = 0.15 * spatium;
+        clearance = 0.35 * spatium;
     } else if (slurLength < 8) {
-        clearance = 0.4 * spatium;
+        clearance = 0.65 * spatium;
     } else if (slurLength < 12) {
-        clearance = 0.6 * spatium;
+        clearance = 1.00 * spatium;
     } else {
-        clearance = 0.75 * spatium;
+        clearance = 1.25 * spatium;
     }
     // balance: determines how much endpoint adjustment VS shape adjustment we will do.
     // 0 = end point is fixed, only the shape can be adjusted,
