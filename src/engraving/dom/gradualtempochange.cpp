@@ -143,6 +143,8 @@ PropertyValue GradualTempoChange::getProperty(Pid id) const
         return m_tempoEasingMethod;
     case Pid::TEMPO_CHANGE_FACTOR:
         return tempoChangeFactor();
+    case Pid::SNAP_AFTER:
+        return snapToItemAfter();
     default:
         return TextLineBase::getProperty(id);
     }
@@ -159,6 +161,9 @@ bool GradualTempoChange::setProperty(Pid id, const PropertyValue& val)
         break;
     case Pid::TEMPO_CHANGE_FACTOR:
         m_tempoChangeFactor = val.toReal();
+        break;
+    case Pid::SNAP_AFTER:
+        setSnapToItemAfter(val.toBool());
         break;
     default:
         if (!TextLineBase::setProperty(id, val)) {
@@ -210,6 +215,9 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
         return ChangeMethod::NORMAL;
     case Pid::TEMPO_CHANGE_FACTOR:
         return muse::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
+
+    case Pid::SNAP_AFTER:
+        return true;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

@@ -2972,6 +2972,10 @@ void TRead::read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx)
             continue;
         }
 
+        if (TRead::readProperty(c, tag, xml, ctx, Pid::SNAP_AFTER)) {
+            continue;
+        }
+
         if (!readProperties(static_cast<TextLineBase*>(c), xml, ctx)) {
             xml.unknown();
         }

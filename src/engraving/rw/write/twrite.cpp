@@ -1561,6 +1561,7 @@ void TWrite::write(const GradualTempoChange* item, XmlWriter& xml, WriteContext&
     writeProperty(item, xml, Pid::TEMPO_EASING_METHOD);
     writeProperty(item, xml, Pid::TEMPO_CHANGE_FACTOR);
     writeProperty(item, xml, Pid::PLACEMENT);
+    writeProperty(item, xml, Pid::SNAP_AFTER);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
