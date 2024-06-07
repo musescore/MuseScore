@@ -3394,6 +3394,19 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             }
         }
 
+        // write spanners whose end tick lies outside the clip region
+        if (clip) {
+            for (Spanner* s : spanners) {
+                if ((s->tick2() == endTick)
+                    && !s->isSlur()
+                    && (s->track2() == track || (s->track2() == muse::nidx && s->track() == track))
+                    && (!clip || s->tick() >= sseg->tick())
+                    ) {
+                    writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
+                }
+            }
+        }
+
         if (voiceTagWritten) {
             xml.endElement();       // </voice>
         }
