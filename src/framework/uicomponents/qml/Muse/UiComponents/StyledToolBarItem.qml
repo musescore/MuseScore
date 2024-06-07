@@ -28,33 +28,33 @@ import Muse.UiComponents 1.0
 FlatButton {
     id: root
 
-    property var item: null
+    property var itemData: null
 
-    property bool hasMenu: item.menuItems.length !== 0
-    property bool isMenuSecondary: item.isMenuSecondary
+    property bool hasMenu: Boolean(itemData) ? itemData.menuItems.length !== 0 : false
+    property bool isMenuSecondary: Boolean(itemData) ? itemData.isMenuSecondary : false
 
-    width: item.showTitle ? implicitWidth : 32
-    height: item.showTitle ? implicitHeight : 32
+    width: (Boolean(itemData) && Boolean(itemData.showTitle)) ? implicitWidth : 32
+    height: (Boolean(itemData) && Boolean(itemData.showTitle)) ? implicitHeight : 32
 
-    accentButton: item.checked || menuLoader.isMenuOpened
+    accentButton: Boolean(itemData) && (itemData.checked || menuLoader.isMenuOpened)
 
-    text: item.showTitle ? item.title : ""
+    text: Boolean(itemData) && itemData.showTitle ? itemData.title : ""
 
-    icon: item.icon
+    icon: Boolean(itemData) ? itemData.icon : IconCode.NONE
     iconFont: ui.theme.toolbarIconsFont
 
-    toolTipTitle: item.title
-    toolTipDescription: item.description
-    toolTipShortcut: item.shortcuts
+    toolTipTitle: Boolean(itemData) ? itemData.title : ""
+    toolTipDescription: Boolean(itemData) ? itemData.description : ""
+    toolTipShortcut: Boolean(itemData) ? itemData.shortcuts : ""
 
     orientation: Qt.Horizontal
-    transparent: true
+    transparent: Boolean(itemData) ? itemData.isTransparent : false
 
-    enabled: item.enabled
+    enabled: Boolean(itemData) ? itemData.enabled : false
 
     drawFocusBorderInsideRect: true
 
-    navigation.name: item.id
+    navigation.name: Boolean(itemData) ? itemData.id : ""
     isClickOnKeyNavTriggered: false
     navigation.onTriggered: {
         if (menuLoader.isMenuOpened || hasMenu) {
@@ -69,11 +69,11 @@ FlatButton {
                                : Qt.LeftButton
 
     function toggleMenuOpened() {
-        menuLoader.toggleOpened(item.menuItems)
+        menuLoader.toggleOpened(itemData.menuItems)
     }
 
     function activateToolBarItem() {
-        Qt.callLater(root.item.activate)
+        Qt.callLater(root.itemData.activate)
     }
 
     onClicked: function(mouse) {
@@ -134,7 +134,7 @@ FlatButton {
         id: menuLoader
 
         onHandleMenuItem: function(itemId) {
-            root.item.handleMenuItem(itemId)
+            root.itemData.handleMenuItem(itemId)
         }
     }
 }

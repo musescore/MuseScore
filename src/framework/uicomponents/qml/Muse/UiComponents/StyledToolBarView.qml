@@ -31,6 +31,7 @@ Rectangle {
     property alias model: repeater.model
 
     property alias spacing: content.spacing
+    property int rowHeight: 32
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
@@ -41,7 +42,7 @@ Rectangle {
         accessible.visualItem: root
     }
 
-    signal sourceComponentRequested(var type)
+    property var sourceComponentCallback
 
     width: content.width + prv.padding * 2
     height: content.height + prv.padding * 2
@@ -54,6 +55,10 @@ Rectangle {
         property int padding: 4
     }
 
+    Component.onCompleted: {
+        root.model.load()
+    }
+
     Flow {
         id: content
 
@@ -61,10 +66,6 @@ Rectangle {
 
         clip: true
         spacing: 4
-
-        Component.onCompleted: {
-            model.load()
-        }
 
         Repeater {
             id: repeater
@@ -74,17 +75,15 @@ Rectangle {
 
                 property var itemData: Boolean(model) ? model.itemRole : null
 
-                width: Boolean(item) ? item.implicitWidth : 0
-                height: Boolean(item) ? item.implicitHeight : 0
-
                 sourceComponent: {
                     if (!Boolean(loader.itemData)) {
                         return null
                     }
 
                     var type = loader.itemData.type
-                    var comp = root.sourceComponentRequested(type)
-                    if (comp) {
+
+                    var comp = Boolean(root.sourceComponentCallback) ? root.sourceComponentCallback(type) : null
+                    if (Boolean(comp)) {
                         return comp
                     }
 
@@ -96,10 +95,19 @@ Rectangle {
                     return null
                 }
 
+                onLoaded: {
+                    loader.item.itemData = loader.itemData
+                }
+
                 Component {
                     id: separatorComp
 
                     SeparatorLine {
+                        property var itemData: loader.itemData
+
+                        width: 1
+                        height: root.rowHeight
+
                         orientation: Qt.Vertical
                     }
                 }
@@ -110,7 +118,7 @@ Rectangle {
                     StyledToolBarItem {
                         id: btn
 
-                        item: loader.itemData
+                        itemData: loader.itemData
 
                         navigation.panel: root.navigationPanel
                         navigation.order: model.index
