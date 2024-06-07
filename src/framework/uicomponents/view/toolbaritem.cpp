@@ -240,3 +240,18 @@ void ToolBarItem::setShowTitle(bool show)
     m_showTitle = show;
     emit showTitleChanged();
 }
+
+bool ToolBarItem::isTransparent() const
+{
+    return m_isTransparent;
+}
+
+void ToolBarItem::setIsTransparent(bool isTransparent)
+{
+    if (m_isTransparent == isTransparent) {
+        return;
+    }
+
+    m_isTransparent = isTransparent;
+    emit isTransparentChanged();
+}
