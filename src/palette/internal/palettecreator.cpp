@@ -234,7 +234,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     for (const char* dynamicType : defaultPalette ? defaultDynamics : masterDynamics) {
         auto dynamic = makeElement<Dynamic>(mu::engraving::gpaletteScore);
         dynamic->setDynamicType(String::fromAscii(dynamicType));
-        sp->appendElement(dynamic, dynamicType);
+        sp->appendElement(dynamic, TConv::userName(dynamic->dynamicType()));
     }
 
     std::pair<HairpinType, const char*> hairpins[] = {
