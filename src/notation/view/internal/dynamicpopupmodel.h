@@ -21,7 +21,7 @@ class DynamicPopupModel : public AbstractElementPopupModel
     Q_PROPERTY(QVariantList pages READ pages NOTIFY pagesChanged)
 
 public:
-    explicit DynamicPopupModel(QObject *parent = nullptr);
+    explicit DynamicPopupModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init() override;
 
