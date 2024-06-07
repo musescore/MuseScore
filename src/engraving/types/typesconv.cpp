@@ -958,7 +958,8 @@ const muse::TranslatableString& TConv::userName(DynamicType v)
     });
 
     IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
-        return TranslatableString();
+        static TranslatableString dummy;
+        return dummy;
     }
     return it->userName;
 }
