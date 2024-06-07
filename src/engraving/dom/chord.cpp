@@ -2347,9 +2347,6 @@ void Chord::setSlash(bool flag, bool stemless)
         return;
     }
 
-    // set stem to auto (mostly important for rhythmic notation on drum staves)
-    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
-
     // make stemless if asked
     if (stemless) {
         undoChangeProperty(Pid::NO_STEM, true);
@@ -2362,6 +2359,7 @@ void Chord::setSlash(bool flag, bool stemless)
     if (track() % VOICES < 2) {
         // use middle line
         line = staffType->middleLine();
+        undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::DOWN));
     } else {
         // set small
         undoChangeProperty(Pid::SMALL, true);
@@ -2370,11 +2368,13 @@ void Chord::setSlash(bool flag, bool stemless)
         if (track() % 2) {
             line = staffType->bottomLine() + 1;
             y    = 0.5 * spatium();
+            undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::DOWN));
         } else {
             line = -1;
             if (!staffType->isDrumStaff()) {
                 y = -0.5 * spatium();
             }
+            undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::UP));
         }
         // for non-drum staves, add an additional offset
         // for drum staves, no offset, but use normal head

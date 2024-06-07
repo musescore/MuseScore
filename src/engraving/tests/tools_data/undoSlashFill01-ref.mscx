@@ -318,6 +318,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -330,6 +331,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -365,6 +367,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -377,6 +380,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -389,6 +393,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -401,6 +406,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -446,6 +452,7 @@
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -459,6 +466,7 @@
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -472,6 +480,7 @@
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -485,6 +494,7 @@
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>up</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -504,6 +514,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -516,6 +527,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -528,6 +540,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -540,6 +553,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -569,6 +583,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -581,58 +596,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -649,6 +613,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -661,6 +626,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -673,6 +639,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -685,6 +652,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -701,6 +669,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -713,6 +682,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -725,6 +695,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
@@ -737,6 +708,63 @@
           <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <StemDirection>down</StemDirection>
             <Note>
               <pitch>0</pitch>
               <tpc>14</tpc>
