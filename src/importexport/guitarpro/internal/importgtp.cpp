@@ -3119,12 +3119,12 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
             m = mb;
         }
     }
-    if (!gp->title.isEmpty()) {
+    if (!gp->title.isEmpty() || experimental) {
         Text* s = Factory::createText(m, TextStyleType::TITLE);
         s->setPlainText(gp->title);
         m->add(s);
     }
-    if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty()) {
+    if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty() || experimental) {
         Text* s = Factory::createText(m, TextStyleType::SUBTITLE);
         String str;
         if (!gp->subtitle.isEmpty()) {
