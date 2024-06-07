@@ -804,9 +804,9 @@ static const std::vector<DynamicItem> DYNAMIC_TYPES = {
                                                                                                             "ffffff (Fortissississississimo)") },
 
     { DynamicType::FP,      "fp",               SymId::dynamicFortePiano,          muse::TranslatableString("engraving/dynamictype",
-                                                                                                            "fp (Pianoforte)") },
-    { DynamicType::PF,      "pf",               SymId::noSym,                      muse::TranslatableString("engraving/dynamictype",
                                                                                                             "fp (Fortepiano)") },
+    { DynamicType::PF,      "pf",               SymId::noSym,                      muse::TranslatableString("engraving/dynamictype",
+                                                                                                            "pf (Pianoforte)") },
 
     { DynamicType::SF,      "sf",               SymId::dynamicSforzando1,          muse::TranslatableString("engraving/dynamictype",
                                                                                                             "sf (Sforzando)") },
