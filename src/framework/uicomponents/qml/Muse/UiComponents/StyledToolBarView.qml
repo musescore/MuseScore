@@ -96,10 +96,16 @@ Rectangle {
                     return null
                 }
 
+                onLoaded: {
+                    loader.item.itemData = loader.itemData
+                }
+
                 Component {
                     id: separatorComp
 
                     SeparatorLine {
+                        property var itemData: loader.itemData
+
                         orientation: Qt.Vertical
                     }
                 }
@@ -110,7 +116,7 @@ Rectangle {
                     StyledToolBarItem {
                         id: btn
 
-                        item: loader.itemData
+                        itemData: loader.itemData
 
                         navigation.panel: root.navigationPanel
                         navigation.order: model.index
