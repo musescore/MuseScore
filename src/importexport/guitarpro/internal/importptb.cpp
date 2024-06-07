@@ -782,8 +782,15 @@ void PowerTab::addToScore(ptSection& sec)
             Staff* s = Factory::createStaff(part);
             auto info = &curTrack->infos[i];
             std::string ss = info->name;
-            part->setPartName(String::fromStdString(ss));
-            part->setPlainLongName(String::fromStdString(ss));
+            String staffName;
+            if (UtfCodec::isValidUtf8(ss)) {
+                staffName = String::fromStdString(ss);
+            } else {
+                // invalid utf most likely windows-125x used
+                staffName = String("part ") + String::number(i + 1);
+            }
+            part->setPartName(staffName);
+            part->setPlainLongName(staffName);
 
             std::vector<int> reverseStr;
             for (auto it = info->strings.rbegin(); it != info->strings.rend(); ++it) {
