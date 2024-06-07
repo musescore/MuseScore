@@ -796,6 +796,9 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
             }
             firstMeasure->setMMRestCount(0);
             ctx.mutState().setMeasureNo(mno);
+            if (lastMeasure->endTick() > ctx.state().endTick()) {
+                ctx.mutState().setEndTick(lastMeasure->endTick());
+            }
         }
     } else if (firstMeasure->isMMRest()) {
         LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
