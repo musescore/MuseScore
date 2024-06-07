@@ -3226,7 +3226,7 @@ void Chord::computeKerningExceptions()
     }
 }
 
-Ornament* Chord::findOrnament() const
+Ornament* Chord::findOrnament(bool forPlayback) const
 {
     for (Articulation* art : m_articulations) {
         if (art->isOrnament()) {
@@ -3236,6 +3236,13 @@ Ornament* Chord::findOrnament() const
     for (Spanner* spanner : m_startingSpanners) {
         if (spanner->isTrill()) {
             return toTrill(spanner)->ornament();
+        }
+    }
+    if (forPlayback) {
+        for (Spanner* spanner : m_endingSpanners) {
+            if (spanner->isTrill()) {
+                return toTrill(spanner)->ornament();
+            }
         }
     }
     return nullptr;

@@ -296,7 +296,7 @@ public:
     bool allowKerningBelow() const { return m_allowKerningBelow; }
     void computeKerningExceptions();
 
-    Ornament* findOrnament() const;
+    Ornament* findOrnament(bool forPlayback = false) const;
 
     const std::set<Spanner*>& startingSpanners() const { return m_startingSpanners; }
     const std::set<Spanner*>& endingSpanners() const { return m_endingSpanners; }
