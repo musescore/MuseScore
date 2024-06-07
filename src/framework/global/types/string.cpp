@@ -842,6 +842,28 @@ StringList String::split(const std::regex& re, SplitBehavior behavior) const
     return out;
 }
 
+StringList String::search(const std::regex& re, std::initializer_list<int> matches, SplitBehavior behavior) const
+{
+    std::string originU8;
+    UtfCodec::utf16to8(std::u16string_view(constStr()), originU8);
+    std::sregex_token_iterator iter(originU8.begin(), originU8.end(), re, matches);
+    std::sregex_token_iterator end;
+    std::vector<std::string> vec = { iter, end };
+
+    StringList out;
+    for (const std::string& s : vec) {
+        if (behavior == SplitBehavior::SkipEmptyParts && s.empty()) {
+            // skip
+            continue;
+        }
+        String sub;
+        UtfCodec::utf8to16(s, sub.mutStr());
+        out.push_back(std::move(sub));
+    }
+
+    return out;
+}
+
 String& String::replace(const String& before, const String& after)
 {
     if (before == after) {

@@ -308,9 +308,9 @@
         </Measure>
       <Measure>
         <voice>
-          <Expression>
+          <StaffText>
             <text><i>increasingly grave in spirit</i></text>
-            </Expression>
+            </StaffText>
           <Spanner type="HairPin">
             <prev>
               <location>
@@ -552,9 +552,9 @@
         </Measure>
       <Measure>
         <voice>
-          <Expression>
+          <StaffText>
             <text><i>with care</i></text>
-            </Expression>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>

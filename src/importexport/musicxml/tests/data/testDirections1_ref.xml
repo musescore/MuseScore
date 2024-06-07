@@ -220,7 +220,7 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <rehearsal font-weight="bold" font-size="14">A</rehearsal>
           </direction-type>

@@ -2,17 +2,13 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
   <work>
-    <work-title>Title title title title title title title title title title title title title title title title title title title title title title title</work-title>
+    <work-title>Untitled score</work-title>
     </work>
   <identification>
     <creator type="composer">Composer / arranger</creator>
-    <rights>Copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright 
-copyright copyright copyright copyright copyright copyright copyright copyright 
-copyright copyright copyright copyright 
-copyright copyright</rights>
     <encoding>
-      <software>MuseScore 4.3.0</software>
-      <encoding-date>2024-02-16</encoding-date>
+      <software>MuseScore 4.4.0</software>
+      <encoding-date>2024-05-01</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="yes" value="yes"/>
@@ -22,23 +18,23 @@ copyright copyright</rights>
     </identification>
   <defaults>
     <scaling>
-      <millimeters>6.99912</millimeters>
+      <millimeters>6.99911</millimeters>
       <tenths>40</tenths>
       </scaling>
     <page-layout>
-      <page-height>422.419</page-height>
-      <page-width>297.58</page-width>
+      <page-height>1696.94</page-height>
+      <page-width>1200.48</page-width>
       <page-margins type="even">
-        <left-margin>28.575</left-margin>
-        <right-margin>28.575</right-margin>
-        <top-margin>85.725</top-margin>
-        <bottom-margin>85.725</bottom-margin>
+        <left-margin>85.7252</left-margin>
+        <right-margin>85.7252</right-margin>
+        <top-margin>85.7252</top-margin>
+        <bottom-margin>85.7252</bottom-margin>
         </page-margins>
       <page-margins type="odd">
-        <left-margin>28.575</left-margin>
-        <right-margin>28.575</right-margin>
-        <top-margin>28.575</top-margin>
-        <bottom-margin>28.575</bottom-margin>
+        <left-margin>85.7252</left-margin>
+        <right-margin>85.7252</right-margin>
+        <top-margin>85.7252</top-margin>
+        <bottom-margin>85.7252</bottom-margin>
         </page-margins>
       </page-layout>
     <appearance>
@@ -69,17 +65,6 @@ copyright copyright</rights>
     <word-font font-family="Edwin" font-size="10"/>
     <lyric-font font-family="Edwin" font-size="10"/>
     </defaults>
-    <credit page="1">
-        <credit-type>title</credit-type>
-        <credit-words default-x="1020" default-y="3250" font-size="24" justify="right" valign="top">Title title title title title title title title title title title title title title title title title title title title title title title</credit-words>
-    </credit>
-  <credit page="1">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="148.790134" default-y="28.574964" justify="center" valign="bottom" font-size="9">Copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright 
-copyright copyright copyright copyright copyright copyright copyright copyright 
-copyright copyright copyright copyright 
-copyright copyright</credit-words>
-    </credit>
   <part-list>
     <score-part id="P1">
       <part-name>Flute</part-name>
@@ -96,14 +81,29 @@ copyright copyright</credit-words>
         <pan>0</pan>
         </midi-instrument>
       </score-part>
+    <score-part id="P2">
+      <part-name>Timpani</part-name>
+      <part-abbreviation>Timp.</part-abbreviation>
+      <score-instrument id="P2-I1">
+        <instrument-name>Timpani</instrument-name>
+        <instrument-sound>drum.timpani</instrument-sound>
+        </score-instrument>
+      <midi-device id="P2-I1" port="1"></midi-device>
+      <midi-instrument id="P2-I1">
+        <midi-channel>2</midi-channel>
+        <midi-program>48</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="240.43">
+    <measure number="1" width="940.78">
       <print>
         <system-layout>
           <system-margins>
-            <left-margin>0</left-margin>
-            <right-margin>0</right-margin>
+            <left-margin>88.25</left-margin>
+            <right-margin>-0</right-margin>
             </system-margins>
           <top-system-distance>70</top-system-distance>
           </system-layout>
@@ -122,7 +122,76 @@ copyright copyright</credit-words>
           <line>2</line>
           </clef>
         </attributes>
-      <note default-x="138.32" default-y="-10">
+      <direction placement="above">
+        <direction-type>
+          <words relative-y="10">Slow</words>
+          </direction-type>
+        </direction>
+      <note default-x="494.48" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="2" width="127.86">
+      <print new-system="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>62.91</left-margin>
+            <right-margin>838.26</right-margin>
+            </system-margins>
+          <system-distance>220.83</system-distance>
+          </system-layout>
+        </print>
+      <note default-x="69.86" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+    </part>
+  <part id="P2">
+    <measure number="1" width="940.78">
+      <print>
+        <staff-layout number="1">
+          <staff-distance>88.33</staff-distance>
+          </staff-layout>
+        </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+          </clef>
+        </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words relative-y="10">Use a slow stroke</words>
+          </direction-type>
+        </direction>
+      <note default-x="494.48" default-y="-138.33">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="2" width="127.86">
+      <print new-system="yes">
+        <staff-layout number="1">
+          <staff-distance>88.33</staff-distance>
+          </staff-layout>
+        </print>
+      <note default-x="69.86" default-y="-138.33">
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>

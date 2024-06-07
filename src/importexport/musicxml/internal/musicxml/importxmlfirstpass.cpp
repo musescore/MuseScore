@@ -37,6 +37,25 @@ static const std::vector<QString> vocalInstrumentNames({ "Voice",
                                                          "Women",
                                                          "Men" });
 
+static const std::vector<String> percussionInstrumentNames = { u"Percussion",
+                                                               u"Timpani",
+                                                               u"Glockenspiel",
+                                                               u"Xylophone",
+                                                               u"Vibraphone",
+                                                               u"Marimba",
+                                                               u"Bell",
+                                                               u"Drum"
+                                                               u"Cymbal",
+                                                               u"Triangle",
+                                                               u"Claves",
+                                                               u"Wood Blocks",
+                                                               u"Tambourine",
+                                                               u"Finger Snap",
+                                                               u"Hand Clap",
+                                                               u"Slap",
+                                                               u"Stamp"
+};
+
 MusicXmlPart::MusicXmlPart(QString id, QString name)
     : id(id), name(name)
 {
@@ -149,6 +168,16 @@ bool MusicXmlPart::isVocalStaff() const
 {
     return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), name) != vocalInstrumentNames.end()
            || _hasLyrics;
+}
+
+bool MusicXmlPart::isPercussionStaff() const
+{
+    for (const String& n : percussionInstrumentNames) {
+        if (name.contains(n)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //---------------------------------------------------------

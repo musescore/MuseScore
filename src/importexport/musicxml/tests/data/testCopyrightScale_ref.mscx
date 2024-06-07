@@ -50,7 +50,7 @@ copyright copyright</metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Untitled score</metaTag>
+    <metaTag name="workTitle">Title title title title title title title title title title title title title title title title title title title title title title title</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -59,18 +59,18 @@ copyright copyright</metaTag>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument id="treble-flute">
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
-        <minPitchP>67</minPitchP>
-        <maxPitchP>103</maxPitchP>
-        <minPitchA>67</minPitchA>
-        <maxPitchA>100</maxPitchA>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
         <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>100</gateTime>
+          <gateTime>95</gateTime>
           </Articulation>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>
@@ -115,6 +115,15 @@ copyright copyright</metaTag>
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>3.5</height>
+        <Text>
+          <style>title</style>
+          <size>2.3</size>
+          <align>right,top</align>
+          <text><font size="2.3"/>Title title title title title title title title title title title title title title title title title title title title title title title</text>
+          </Text>
+        </VBox>
       <Measure>
         <voice>
           <Clef>

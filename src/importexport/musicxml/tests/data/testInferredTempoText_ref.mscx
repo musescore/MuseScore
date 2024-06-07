@@ -89,18 +89,18 @@
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument id="treble-flute">
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
-        <minPitchP>67</minPitchP>
-        <maxPitchP>103</maxPitchP>
-        <minPitchA>67</minPitchA>
-        <maxPitchA>100</maxPitchA>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
         <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>100</gateTime>
+          <gateTime>95</gateTime>
           </Articulation>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>
@@ -139,7 +139,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="72"/>
+          <program value="73"/>
           <controller ctrl="7" value="95"/>
           <controller ctrl="10" value="69"/>
           </Channel>
@@ -256,10 +256,9 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Tempo>
-            <tempo>2</tempo>
-            <text><b>Andante</b></text>
-            </Tempo>
+          <StaffText>
+            <text><b>“Andante”</b></text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 2.0 Partwise//EN"
+  "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="2.0">
+  <work>
+    <work-title>drums</work-title>
+  </work>
+  <identification>
+    <creator type="composer"/>
+    <creator type="lyricist"/>
+    <rights/>
+    <encoding>
+      <software>Noteflight version 0.4</software>
+      <encoding-date>2024-05-08</encoding-date>
+      <supports attribute="new-system" element="print" type="no" value="no"/>
+      <supports attribute="new-page" element="print" type="no" value="no"/>
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>2.1166666679999997</millimeters>
+      <tenths>10</tenths>
+    </scaling>
+    <page-layout>
+      <page-height>1320</page-height>
+      <page-width>1020</page-width>
+      <page-margins type="both">
+        <left-margin>59.583333333333336</left-margin>
+        <right-margin>56.66666666666667</right-margin>
+        <top-margin>96.66666666666667</top-margin>
+        <bottom-margin>80</bottom-margin>
+      </page-margins>
+    </page-layout>
+    <system-layout>
+      <system-margins>
+        <left-margin>59.583333333333336</left-margin>
+        <right-margin>26.666666666666668</right-margin>
+      </system-margins>
+      <system-distance>92.5</system-distance>
+      <top-system-distance>145.83333333333334</top-system-distance>
+    </system-layout>
+    <staff-layout>
+      <staff-distance>55</staff-distance>
+    </staff-layout>
+  </defaults>
+  <credit page="1">
+    <credit-type>title</credit-type>
+    <credit-words font-size="24" default-x="510" default-y="1210" justify="right" valign="top">drums</credit-words>
+  </credit>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Drums</part-name>
+      <part-abbreviation>Dr.</part-abbreviation>
+      <score-instrument id="P1I1">
+        <instrument-name>Drums</instrument-name>
+        <instrument-sound>drum.group.set</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P1I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+      </midi-instrument>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <time print-object="yes">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>percussion</sign>
+        </clef>
+      </attributes>
+      <direction placement="above">
+        <direction-type>
+          <metronome>
+            <beat-unit>quarter</beat-unit>
+            <per-minute>120</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="120"/>
+      </direction>
+      <direction placement="above">
+        <direction-type>
+          <metronome>
+            <beat-unit>quarter</beat-unit>
+            <per-minute>120</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="120"/>
+      </direction>
+      <note>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>4</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <unpitched>
+          <display-step>C</display-step>
+          <display-octave>5</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notehead>x</notehead>
+      </note>
+      <note>
+        <unpitched>
+          <display-step>G</display-step>
+          <display-octave>5</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notehead>x</notehead>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes/>
+      <note>
+        <unpitched>
+          <display-step>D</display-step>
+          <display-octave>5</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <unpitched>
+          <display-step>B</display-step>
+          <display-octave>4</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <unpitched>
+          <display-step>G</display-step>
+          <display-octave>4</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <unpitched>
+          <display-step>A</display-step>
+          <display-octave>5</display-octave>
+        </unpitched>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <measure number="3">
+      <attributes/>
+      <note>
+        <rest/>
+        <duration>256</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+    <measure number="4">
+      <attributes/>
+      <note>
+        <rest/>
+        <duration>256</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+</score-partwise>

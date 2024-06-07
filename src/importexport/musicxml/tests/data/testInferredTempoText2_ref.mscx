@@ -3,9 +3,9 @@
   <Score>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.26998</pageWidth>
+      <pageWidth>8.26997</pageWidth>
       <pageHeight>11.69</pageHeight>
-      <pagePrintableWidth>7.08888</pagePrintableWidth>
+      <pagePrintableWidth>7.08887</pagePrintableWidth>
       <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
       <pageOddLeftMargin>0.590551</pageOddLeftMargin>
       <pageEvenTopMargin>0.590551</pageEvenTopMargin>
@@ -39,7 +39,7 @@
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer">James Mizen</metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
@@ -47,7 +47,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Lyric elision</metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -111,19 +111,86 @@
           </Channel>
         </Instrument>
       </Part>
+    <Part id="2">
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Timpani</trackName>
+      <Instrument id="timpani">
+        <longName>Timpani</longName>
+        <shortName>Timp.</shortName>
+        <trackName>Timpani</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>62</maxPitchP>
+        <minPitchA>38</minPitchA>
+        <maxPitchA>60</maxPitchA>
+        <instrumentId>drum.timpani</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="47"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
         <Text>
           <style>title</style>
-          <text>Lyric elision</text>
+          <text>Untitled score</text>
           </Text>
         <Text>
           <style>composer</style>
-          <text>James Mizen</text>
+          <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -134,50 +201,55 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Lyrics>
-              <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
-              </Lyrics>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Lyrics>
-              <text>ce‿e in</text>
-              </Lyrics>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Lyrics>
-              <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
-              </Lyrics>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Lyrics>
-              <text>ce<sym>lyricsElision</sym>e‿in</text>
-              </Lyrics>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
+          <Tempo>
+            <tempo>2</tempo>
+            <text>Slow</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <text>Use a slow stroke</text>
+            </StaffText>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

@@ -35,13 +35,13 @@
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument id="grand-piano">
+      <Instrument id="piano">
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
-        <instrumentId>keyboard.piano.grand</instrumentId>
+        <instrumentId>keyboard.piano</instrumentId>
         <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
@@ -616,9 +616,10 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <StaffText>
+          <Tempo>
+            <tempo>2</tempo>
             <text><b>rit.</b></text>
-            </StaffText>
+            </Tempo>
           <Chord>
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
@@ -1156,9 +1157,10 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <StaffText>
+          <Tempo>
+            <tempo>2</tempo>
             <text><b>rit.</b></text>
-            </StaffText>
+            </Tempo>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>

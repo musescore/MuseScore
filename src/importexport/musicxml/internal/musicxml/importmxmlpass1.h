@@ -112,6 +112,7 @@ void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& f
 Fraction missingTupletDuration(const Fraction duration);
 bool isLikelyCreditText(const QString& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const QString& text, const bool caseInsensitive);
+static void scaleTitle(Score* score, Text* t);
 
 //---------------------------------------------------------
 //   MusicXMLParserPass1
@@ -180,6 +181,7 @@ public:
     const CreditWordsList& credits() const { return _credits; }
     bool hasBeamingInfo() const { return _hasBeamingInfo; }
     bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
+    bool isPercussionStaff(const String& id) const { return _parts[id].isPercussionStaff(); }
     static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
     static void reformatHeaderVBox(MeasureBase* mb);
     void createDefaultHeader(Score* const score);

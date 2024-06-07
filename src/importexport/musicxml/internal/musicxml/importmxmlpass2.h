@@ -249,8 +249,10 @@ public:
                     DelayedArpMap& delayedArps);
     QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
+    bool hasTremolo() const { return m_hasTremolo; }
     QString tremoloType() const { return _tremoloType; }
     int tremoloNr() const { return _tremoloNr; }
+    String tremoloSmufl() const { return m_tremoloSmufl; }
     bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
 private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
@@ -267,6 +269,7 @@ private:
     void slur();
     void skipLogCurrElem();
     void technical();
+    void otherTechnical();
     void tied();
     void tuplet();
     void otherNotation();
@@ -282,6 +285,8 @@ private:
     SymId _breath { SymId::noSym };
     QString _tremoloType;
     int _tremoloNr { 0 };
+    String m_tremoloSmufl;
+    bool m_hasTremolo = false;
     QString _wavyLineType;
     int _wavyLineNo { 0 };
     QString _arpeggioType;
@@ -453,13 +458,16 @@ private:
     String _placement;
     bool _hasDefaultY;
     qreal _defaultY;
-    bool _hasRelativeY;
     qreal _relativeY;
+    bool _hasRelativeY;
     bool hasTotalY() const { return _hasRelativeY || _hasDefaultY; }
+    double m_relativeX = 0.0;
     double _tpoMetro;                   // tempo according to metronome
     double _tpoSound;                   // tempo according to sound
     QList<EngravingItem*> _elems;
     Fraction _offset;
+    bool m_visible = true;
+    bool m_systemDirection = false;
 
     void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
     void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
@@ -487,10 +495,12 @@ private:
     bool isLyricBracket() const;
     bool isLikelySubtitle(const Fraction& tick) const;
     bool isLikelyLegallyDownloaded(const Fraction& tick) const;
-    bool isLikelyTempoText() const;
+    bool isLikelyTempoText(const track_idx_t track) const;
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags);
     bool isLikelyFingering() const;
+    bool isLikelySticking();
+    PlayingTechniqueType getPlayingTechnique() const;
 };
 
 //---------------------------------------------------------

@@ -399,6 +399,9 @@ TEST_F(Musicxml_Tests, articulationCombination) {
 TEST_F(Musicxml_Tests, backupRoundingError) {
     mxmlImportTestRef("testBackupRoundingError");
 }
+TEST_F(Musicxml_Tests, barlineSpan) {
+    mxmlIoTest("testBarlineSpan");
+}
 TEST_F(Musicxml_Tests, barlineFermatas) {
     mxmlIoTest("testBarlineFermatas");
 }
@@ -449,6 +452,12 @@ TEST_F(Musicxml_Tests, breaksSystem) {
 }
 TEST_F(Musicxml_Tests, breathMarks) {
     mxmlIoTest("testBreathMarks");
+}
+TEST_F(Musicxml_Tests, buzzRoll) {
+    mxmlImportTestRef("testBuzzRoll");
+}
+TEST_F(Musicxml_Tests, buzzRoll2) {
+    mxmlIoTest("testBuzzRoll2");
 }
 TEST_F(Musicxml_Tests, changeTranspose) {
     mxmlIoTest("testChangeTranspose");
@@ -663,6 +672,12 @@ TEST_F(Musicxml_Tests, helloReadWriteCompr) {
 TEST_F(Musicxml_Tests, implicitMeasure1) {
     mxmlIoTest("testImplicitMeasure1");
 }
+TEST_F(Musicxml_Tests, importDrums) {
+    mxmlImportTestRef("testImportDrums");
+}
+TEST_F(Musicxml_Tests, importDrums2) {
+    mxmlImportTestRef("testImportDrums2");
+}
 TEST_F(Musicxml_Tests, incompleteTuplet) {
     mxmlIoTestRef("testIncompleteTuplet");
 }
@@ -696,8 +711,14 @@ TEST_F(Musicxml_Tests, inferredCrescLines) {
 TEST_F(Musicxml_Tests, inferredDynamicsExpression) {
     mxmlImportTestRef("testInferredDynamicsExpression");
 }
+TEST_F(Musicxml_Tests, inferredTechnique) {
+    mxmlImportTestRef("testInferredTechnique");
+}
 TEST_F(Musicxml_Tests, inferredTempoText) {
     mxmlImportTestRef("testInferredTempoText");
+}
+TEST_F(Musicxml_Tests, inferredTempoText2) {
+    mxmlImportTestRef("testInferredTempoText2");
 }
 TEST_F(Musicxml_Tests, inferredCrescLines2) {
     mxmlImportTestRef("testInferredCrescLines2");
@@ -708,11 +729,17 @@ TEST_F(Musicxml_Tests, instrumentChangeMIDIportExport) {
 TEST_F(Musicxml_Tests, instrumentSound) {
     mxmlIoTestRef("testInstrumentSound");
 }
+TEST_F(Musicxml_Tests, instrImport) {
+    mxmlImportTestRef("testInstrImport");
+}
 TEST_F(Musicxml_Tests, invalidLayout) {
     mxmlMscxExportTestRef("testInvalidLayout");
 }
 TEST_F(Musicxml_Tests, invalidTimesig) {
     mxmlIoTestRef("testInvalidTimesig");
+}
+TEST_F(Musicxml_Tests, invisibleDirection) {
+    mxmlIoTest("testInvisibleDirection");
 }
 TEST_F(Musicxml_Tests, invisibleElements) {
     mxmlIoTest("testInvisibleElements");
@@ -815,6 +842,9 @@ TEST_F(Musicxml_Tests, multiMeasureRest4) {
 }
 TEST_F(Musicxml_Tests, multipleNotations) {
     mxmlIoTestRef("testMultipleNotations");
+}
+TEST_F(Musicxml_Tests, namedNoteheads) {
+    mxmlImportTestRef("testNamedNoteheads");
 }
 TEST_F(Musicxml_Tests, negativeOffset) {
     mxmlImportTestRef("testNegativeOffset");
@@ -945,6 +975,9 @@ TEST_F(Musicxml_Tests, staffSize) {
 TEST_F(Musicxml_Tests, staffTwoKeySigs) {
     mxmlIoTest("testStaffTwoKeySigs");
 }
+TEST_F(Musicxml_Tests, sticking) {
+    mxmlImportTestRef("testSticking");
+}
 TEST_F(Musicxml_Tests, stringData) {
     mxmlIoTest("testStringData");
 }
@@ -968,6 +1001,9 @@ TEST_F(Musicxml_Tests, systemBrackets4) {
 }
 TEST_F(Musicxml_Tests, systemBrackets5) {
     mxmlIoTest("testSystemBrackets1");
+}
+TEST_F(Musicxml_Tests, systemDirection) {
+    mxmlIoTest("testSystemDirection");
 }
 TEST_F(Musicxml_Tests, systemDistance) {
     mxmlMscxExportTestRef("testSystemDistance", true);
