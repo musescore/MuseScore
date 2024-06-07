@@ -143,8 +143,8 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    // Allocate 3 audio buffers. At the same time one used for writing, one for reading and one for reserve
-    for (unsigned int i = 0; i < 3; ++i) {
+    // Allocate 2 audio buffers. At the same time one used for writing, one for reading
+    for (unsigned int i = 0; i < 2; ++i) {
         AudioQueueBufferRef buffer;
         result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.samples * audioFormat.mBytesPerFrame, &buffer);
         if (result != noErr) {
