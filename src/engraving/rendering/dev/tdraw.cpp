@@ -3044,12 +3044,10 @@ void TDraw::draw(const TimeTickAnchor* item, Painter* painter)
                   ? item->ldata()->darker() ? TINT_MAIN_DARKER : TINT_MAIN_LIGHTER
                   : item->ldata()->darker() ? TINT_EXTENDED_DARKER : TINT_EXTENDED_LIGHTER;
 
-    int red = std::round(voiceColor.red() * (1 - tint) + 255 * tint);
-    int green = std::round(voiceColor.green() * (1 - tint) + 255 * tint);
-    int blue = std::round(voiceColor.blue() * (1 - tint) + 255 * tint);
+    voiceColor.applyTint(tint);
 
     Brush brush;
-    brush.setColor(Color(red, green, blue));
+    brush.setColor(voiceColor);
     brush.setStyle(BrushStyle::SolidPattern);
     painter->setBrush(brush);
     painter->setNoPen();
