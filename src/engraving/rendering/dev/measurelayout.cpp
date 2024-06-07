@@ -2164,7 +2164,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
 void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
 {
-    bool darker = false;
+    bool darker = true;
     for (Segment& segment : m->segments()) {
         if (!segment.isTimeTickType()) {
             continue;
