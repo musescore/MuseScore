@@ -459,7 +459,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
     { SoundId::Erhu, String(u"erhu") },
     { SoundId::Contrabass, String(u"contrabass") },
     { SoundId::Octobass, String(u"octobass") },
-    { SoundId::TimpleCanario, String(u"timple") },
+    { SoundId::TimpleCanario, String(u"timple_canario") },
 
     { SoundId::WindsGroup, String(u"winds_group") },
     { SoundId::Piccolo, String(u"piccolo") },
