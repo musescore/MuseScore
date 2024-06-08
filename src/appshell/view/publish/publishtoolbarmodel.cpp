@@ -38,7 +38,8 @@ void PublishToolBarModel::load()
         makeItem("print", true /*showTitle*/),
         makeItem("file-publish", true /*showTitle*/),
         makeItem("file-share-audio", true /*showTitle*/),
-        makeItem("file-export", true /*showTitle*/)
+        makeItem("file-export", true /*showTitle*/),
+        makeItem("file-save", true /*showTitle*/)
     };
 
     setItems(items);
