@@ -12,14 +12,10 @@ StyledPopupView {
     property int navigationOrderStart: 0
     property int navigationOrderEnd: dynamicsNavPanel.order
 
-    property color normalColor: "transparent"
-    property color hoverHitColor: ui.theme.buttonColor
-    property color accentColor: ui.theme.accentColor
-
-    property int rectHeight: 30
-    property real rectRadius: 3
+    property int buttonHeight: 30
 
     property int currentPage: 0
+    property bool isHairpinPage: currentPage == 6
 
     property var widthOffsetList: [
         // [Width, Offset] of each dynamic in that Page
@@ -29,7 +25,7 @@ StyledPopupView {
         [[37, 0.5], [33, 0,5], [30, 0.5], [26, 0.5], [26, 2.5]           ], // Page 4
         [[74, 2.0], [60, 2.5]                                            ], // Page 5
         [[64, 2.0], [52, 2.0], [44, 2.0]                                 ], // Page 6
-        [[62, 0.0], [62, 0.0]                                            ]  // Page 7
+        [[62, 0.0], [62, 0.0]                                            ]  // Page 7 - Hairpins
     ]
 
     margins: 4
@@ -45,28 +41,6 @@ StyledPopupView {
         var h = root.contentHeight
         root.x = root.parent.width / 2 - root.contentWidth / 2
         root.y = root.parent.height / 2 + root.margins * 2
-    }
-
-    // Child components are inheriting "opacity" from Parent components.
-    // StyledIconLabel and StyledTextLabel inheriting opacity from Rectangle.
-    // Instead use "color" with Qt.rgba()
-    function hexToRgba(hex, opacity) {
-        if (hex === "#00000000") {
-            return Qt.rgba(0, 0, 0, 0)
-        }
-
-        hex = hex.slice(1); // Remove '#'
-
-        var bigint = parseInt(hex, 16);
-        var r = (bigint >> 16) & 255;
-        var g = (bigint >> 8) & 255;
-        var b = bigint & 255;
-
-        r /= 255;
-        g /= 255;
-        b /= 255;
-
-        return Qt.rgba(r, g, b, opacity);
     }
 
     RowLayout {
@@ -96,60 +70,23 @@ StyledPopupView {
             accessible.name: qsTrc("notation", "Dynamics Popup")
         }
 
-        // -------------------------------- Custom Rects Approach --------------------------------
-        Rectangle {
-            id: leftArrowRect
+        FlatButton {
+            id: leftButton
 
-            width: leftArrowLabel.contentWidth
-            height: root.rectHeight
-            radius: root.rectRadius
+            implicitWidth: 16
+            transparent: true
 
-            border.width: ui.theme.borderWidth
-            border.color: ui.theme.strokeColor
-
-            color: hexToRgba(root.normalColor.toString(), ui.theme.buttonOpacityNormal)
-
-            StyledIconLabel {
+            contentItem: StyledIconLabel {
                 id: leftArrowLabel
                 iconCode: IconCode.CHEVRON_LEFT
                 font.pixelSize: 16
-                anchors.centerIn: parent
             }
 
-            states: [
-                State {
-                    name: "PRESSED"
-                    when: mouseAreaLeft.pressed
-
-                    PropertyChanges {
-                        target: leftArrowRect
-                        color: hexToRgba(root.hoverHitColor.toString(), ui.theme.buttonOpacityHit)
-                    }
-                },
-
-                State {
-                    name: "HOVERED"
-                    when: mouseAreaLeft.containsMouse && !mouseAreaLeft.pressed
-
-                    PropertyChanges {
-                        target: leftArrowRect
-                        color: hexToRgba(root.hoverHitColor.toString(), ui.theme.buttonOpacityHover)
-                    }
-                }
-            ]
-
-            MouseArea {
-                id: mouseAreaLeft
-                anchors.fill: parent
-
-                hoverEnabled: true
-
-                onClicked: {
-                    if (currentPage > 0) {
-                        currentPage--
-                    } else {
-                        currentPage = dynamicModel.pages.length - 1
-                    }
+            onClicked: {
+                if (currentPage > 0) {
+                    currentPage--
+                } else {
+                    currentPage = dynamicModel.pages.length - 1
                 }
             }
         }
@@ -159,69 +96,90 @@ StyledPopupView {
         }
 
         Repeater {
+            id: dynamicRepeater
             model: dynamicModel.pages[currentPage]
 
-            delegate: Rectangle {
-                id: dynamicRect
+            delegate: FlatButton {
+                id: dynamicButton
 
-                width: widthOffsetList[currentPage][index][0]
-                height: root.rectHeight
-                radius: root.rectRadius
+                implicitWidth: widthOffsetList[currentPage][index][0]
+                implicitHeight: root.buttonHeight
+                transparent: true
 
-                border.width: ui.theme.borderWidth
-                border.color: ui.theme.strokeColor
+                contentItem: isHairpinPage ? index == 0 ? crescHairpinComp : dimHairpinComp : dynamicComp
 
-                color: hexToRgba(root.normalColor.toString(), ui.theme.buttonOpacityNormal)
+                Component {
+                    id: dynamicComp
 
-                StyledTextLabel {
-                    id: dynamicLabel
-                    text: modelData
-                    font.pixelSize: 30
+                    StyledTextLabel {
+                        id: dynamicLabel
+                        text: modelData
+                        font.pixelSize: 30
 
-                    anchors.centerIn: parent
-                    anchors.horizontalCenterOffset: widthOffsetList[currentPage][index][1]
-                    anchors.verticalCenterOffset: (currentPage === 6) ? 7 : 5 // More offset for Hairpins
-
-                    transform: Scale {
-                        origin.x: dynamicLabel.width / 2
-                        origin.y: dynamicLabel.height / 2
-                        xScale: (currentPage === 6) ? (dynamicRect.width - 8) / dynamicLabel.width : 1
-                        yScale: 1
+                        anchors.centerIn: parent
+                        anchors.horizontalCenterOffset: widthOffsetList[currentPage][index][1]
+                        anchors.verticalCenterOffset: 5
                     }
                 }
 
-                states: [
-                    State {
-                        name: "PRESSED"
-                        when: mouseAreaDynamic.pressed
+                Component {
+                    id: crescHairpinComp
 
-                        PropertyChanges {
-                            target: dynamicRect
-                            color: hexToRgba(root.hoverHitColor.toString(), ui.theme.buttonOpacityHit)
-                        }
-                    },
+                    Canvas {
+                        width: widthOffsetList[currentPage][index][0]
+                        height: root.buttonHeight
 
-                    State {
-                        name: "HOVERED"
-                        when: mouseAreaDynamic.containsMouse && !mouseAreaDynamic.pressed
+                        onPaint: {
+                            var ctx = getContext("2d");
+                            ctx.clearRect(0, 0, width, height);
 
-                        PropertyChanges {
-                            target: dynamicRect
-                            color: hexToRgba(root.hoverHitColor.toString(), ui.theme.buttonOpacityHover)
+                            ctx.beginPath();
+                            ctx.moveTo(4, root.buttonHeight / 2);
+                            ctx.lineTo(width - 4, root.buttonHeight / 2 - 4);
+                            ctx.strokeStyle = ui.theme.fontPrimaryColor;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+
+                            ctx.beginPath();
+                            ctx.moveTo(4, root.buttonHeight / 2);
+                            ctx.lineTo(width - 4, root.buttonHeight / 2 + 4);
+                            ctx.strokeStyle = ui.theme.fontPrimary;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
                         }
                     }
-                ]
+                }
 
-                MouseArea {
-                    id: mouseAreaDynamic
-                    anchors.fill: parent
+                Component {
+                    id: dimHairpinComp
 
-                    hoverEnabled: true
+                    Canvas {
+                        width: widthOffsetList[currentPage][index][0]
+                        height: root.buttonHeight
 
-                    onClicked: {
-                        console.log(content.width)
-                        // TO-DO
+                        onPaint: {
+                            var ctx = getContext("2d");
+                            ctx.clearRect(0, 0, width, height);
+
+                            ctx.beginPath();
+                            ctx.moveTo(width - 4, root.buttonHeight / 2);
+                            ctx.lineTo(4, root.buttonHeight / 2 - 4);
+                            ctx.strokeStyle = ui.theme.fontPrimaryColor;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+
+                            ctx.beginPath();
+                            ctx.moveTo(width - 4, root.buttonHeight / 2);
+                            ctx.lineTo(4, root.buttonHeight / 2 + 4);
+                            ctx.strokeStyle = ui.theme.fontPrimary;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
                     }
+                }
+
+                onClicked: {
+                    // TO-DO
                 }
             }
         }
@@ -230,158 +188,26 @@ StyledPopupView {
             Layout.fillWidth: true
         }
 
-        Rectangle {
-            id: rightArrowRect
+        FlatButton {
+            id: rightButton
 
-            width: rightArrowLabel.contentWidth
-            height: root.rectHeight
-            radius: root.rectRadius
+            implicitWidth: 16
+            transparent: true
 
-            border.width: ui.theme.borderWidth
-            border.color: ui.theme.strokeColor
-
-            color: hexToRgba(root.normalColor.toString(), ui.theme.buttonOpacityNormal)
-
-            StyledIconLabel {
+            contentItem: StyledIconLabel {
                 id: rightArrowLabel
                 iconCode: IconCode.CHEVRON_RIGHT
                 font.pixelSize: 16
-                anchors.centerIn: parent
             }
 
-            states: [
-                State {
-                    name: "PRESSED"
-                    when: mouseAreaRight.pressed
-
-                    PropertyChanges {
-                        target: rightArrowRect
-                        color: hexToRgba(root.hoverHitColor.toString(), ui.theme.buttonOpacityHit)
-                    }
-                },
-
-                State {
-                    name: "HOVERED"
-                    when: mouseAreaRight.containsMouse && !mouseAreaRight.pressed
-
-                    PropertyChanges {
-                        target: rightArrowRect
-                        color: hexToRgba(root.hoverHitColor.toString(), ui.theme.buttonOpacityHover)
-                    }
-                }
-            ]
-
-            MouseArea {
-                id: mouseAreaRight
-                anchors.fill: parent
-
-                hoverEnabled: true
-
-                onClicked: {
-                    if (currentPage < dynamicModel.pages.length - 1) {
-                        currentPage++
-                    } else {
-                        currentPage = 0
-                    }
+            onClicked: {
+                if (currentPage < dynamicModel.pages.length - 1) {
+                    currentPage++
+                } else {
+                    currentPage = 0
                 }
             }
         }
-
-
-        // -------------------------------- FlatButtons Approach --------------------------------
-        // FlatButton {
-        //     implicitWidth: 16
-        //     isNarrow: true
-        //     transparent: true
-
-        //     contentItem: Rectangle {
-        //         id: leftArrowRect
-
-        //         width: leftArrowLabel.contentWidth
-        //         height: 24
-        //         color: "transparent"
-
-        //         StyledIconLabel {
-        //             id: leftArrowLabel
-        //             iconCode: IconCode.CHEVRON_LEFT
-        //             font.pixelSize: 12
-        //             anchors.centerIn: parent
-        //         }
-        //     }
-
-        //     onClicked: {
-        //         if (currentPage > 0) {
-        //             currentPage--
-        //         } else {
-        //             currentPage = dynamicModel.pages.length - 1
-        //         }
-        //     }
-        // }
-
-        // Item {
-        //     Layout.fillWidth: true
-        // }
-
-        // Repeater {
-        //     model: dynamicModel.pages[currentPage]
-
-        //     delegate: FlatButton {
-        //         isNarrow: true
-        //         transparent: true
-
-        //         contentItem: Rectangle {
-        //             id: dynamicRect
-
-        //             width: dynamicLabel.contentWidth
-        //             height: 24
-        //             color: "transparent"
-
-        //             StyledTextLabel {
-        //                 id: dynamicLabel
-        //                 text: modelData
-        //                 font.pixelSize: 24
-        //                 anchors.centerIn: parent
-        //                 anchors.verticalCenterOffset: 4
-        //             }
-        //         }
-
-        //         onClicked: {
-        //             // TO-DO
-        //         }
-        //     }
-        // }
-
-        // Item {
-        //     Layout.fillWidth: true
-        // }
-
-        // FlatButton {
-        //     implicitWidth: 16
-        //     isNarrow: true
-        //     transparent: true
-
-        //     contentItem: Rectangle {
-        //         id: rightArrowRect
-
-        //         width: rightArrowLabel.contentWidth
-        //         height: 24
-        //         color: "transparent"
-
-        //         StyledIconLabel {
-        //             id: rightArrowLabel
-        //             iconCode: IconCode.CHEVRON_RIGHT
-        //             font.pixelSize: 12
-        //             anchors.centerIn: parent
-        //         }
-        //     }
-        //     onClicked: {
-        //         if (currentPage < dynamicModel.pages.length - 1) {
-        //             currentPage++
-        //         } else {
-        //             currentPage = 0
-        //         }
-        //     }
-        // }
     }
 }
 
