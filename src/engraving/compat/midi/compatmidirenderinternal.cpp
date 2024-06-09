@@ -223,7 +223,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
     if (params.callAllSoundOff && params.onTime != 0) {
         NPlayEvent ev1(ME_CONTROLLER, params.channel, CTRL_ALL_NOTES_OFF, 0);
         ev1.setEffect(params.effect);
-        events[params.channel].insert(std::pair<int, NPlayEvent>(params.onTime - 1, ev1));
+        events[params.channel].emplace(params.onTime - 1, ev1);
     }
 
     NPlayEvent ev(ME_NOTEON, params.channel, params.pitch, params.velo);
@@ -235,7 +235,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
         return;
     }
 
-    events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
+    events[params.channel].emplace(std::max(0, params.onTime - params.offset), ev);
     Accidental* acc = note->accidental();
     if (acc) {
         AccidentalType type = acc->accidentalType();
@@ -271,7 +271,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
 
     ev.setVelo(0);
     if (params.offTime != -1) {
-        events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.offTime - params.offset), ev));
+        events[params.channel].emplace(std::max(0, params.offTime - params.offset), ev);
     }
 }
 
@@ -608,12 +608,10 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventsH
     }
 
     event.setChannel(static_cast<uint8_t>(channel));
-    events[channel].insert(std::pair<int, NPlayEvent>(tick, event));
+    events[channel].emplace(tick, event);
 
     event.setValue(k);
-    events[channel].insert(std::pair<int, NPlayEvent>(tick, event));
-//      event.setValue(0x40 + i);
-//      events->insert(std::pair<int,NPlayEvent>(tick, event));
+    events[channel].emplace(tick, event);
 }
 
 //---------------------------------------------------------
@@ -650,9 +648,9 @@ static void collectProgramChanges(EventsHolder& events, Measure const* m, const 
                         NPlayEvent e1(event);
                         e1.setOriginatingStaff(firstStaffIdx);
                         if (e1.dataA() == CTRL_PROGRAM) {
-                            events[channel].insert(std::pair<int, NPlayEvent>(tick.ticks() - 1, e1));
+                            events[channel].emplace(tick.ticks() - 1, e1);
                         } else {
-                            events[channel].insert(std::pair<int, NPlayEvent>(tick.ticks(), e1));
+                            events[channel].emplace(tick.ticks(), e1);
                         }
                     }
                 }
@@ -727,9 +725,9 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
     for (int p : pitches) {
         ev.setPitch(p);
         ev.setVelo(velocity);
-        events[channel].insert(std::pair<int, NPlayEvent>(onTime, ev));
+        events[channel].emplace(onTime, ev);
         ev.setVelo(0);
-        events[channel].insert(std::pair<int, NPlayEvent>(offTime, ev));
+        events[channel].emplace(offTime, ev);
     }
 }
 
@@ -1083,37 +1081,46 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
                                                   PitchWheelRenderer& pitchWheelRenderer,
                                                   MidiInstrumentEffect effect)
 {
-    std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList;
+    struct PedalEvent {
+        int tick = 0;
+        bool on = true;
+        int staffIdx = 0;
 
-    int staff = static_cast<int>(s->staffIdx());
+        PedalEvent() = default;
+        PedalEvent(int tick, bool on, int staffIdx)
+            : tick(tick), on(on), staffIdx(staffIdx)
+        {
+        }
+    };
+
+    std::vector<PedalEvent> pedalEventList;
+
+    int staffIdx = static_cast<int>(s->staffIdx());
 
     if (s->isPedal()) {
-        std::pair<int, std::pair<bool, int> > lastEvent;
+        PedalEvent lastEvent;
 
         if (!pedalEventList.empty()) {
             lastEvent = pedalEventList.back();
         } else {
-            lastEvent = std::pair<int, std::pair<bool, int> >(0, std::pair<bool, int>(true, staff));
+            lastEvent = { 0, true, staffIdx };
         }
 
         int st = s->tick().ticks();
 
-        if (lastEvent.second.first == false && lastEvent.first >= (st + 2)) {
-            pedalEventList.pop_back();
-            pedalEventList.push_back(std::pair<int,
-                                               std::pair<bool,
-                                                         int> >(st + (2 - MScore::pedalEventsMinTicks),
-                                                                std::pair<bool, int>(false, staff)));
+        if (!lastEvent.on && lastEvent.tick >= (st + 2)) {
+            pedalEventList.emplace(pedalEventList.cend() - 1,
+                                   st + (2 - MScore::pedalEventsMinTicks), false, staffIdx);
         }
         int a = st + 2;
-        pedalEventList.push_back(std::pair<int, std::pair<bool, int> >(a, std::pair<bool, int>(true, staff)));
+        pedalEventList.emplace_back(a, true, staffIdx);
 
         int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
         const RepeatSegment& lastRepeat = *score->repeatList().back();
         if (t > lastRepeat.utick + lastRepeat.len()) {
             t = lastRepeat.utick + lastRepeat.len();
         }
-        pedalEventList.push_back(std::pair<int, std::pair<bool, int> >(t, std::pair<bool, int>(false, staff)));
+        pedalEventList.emplace_back(a, false, staffIdx);
     } else if (s->isVibrato()) {
         int stick = s->tick().ticks();
         int etick = s->tick2().ticks();
@@ -1131,14 +1138,14 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
 
     for (const auto& pe : pedalEventList) {
         NPlayEvent event;
-        if (pe.second.first == true) {
+        if (pe.on) {
             event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 127);
         } else {
             event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 0);
         }
-        event.setOriginatingStaff(pe.second.second);
+        event.setOriginatingStaff(pe.staffIdx);
         event.setEffect(effect);
-        events[channel].insert(std::pair<int, NPlayEvent>(pe.first, event));
+        events[channel].emplace(pe.tick, event);
     }
 }
 
