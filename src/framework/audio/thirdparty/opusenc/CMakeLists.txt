@@ -9,7 +9,7 @@ set(OPUSENC_VERSION 0.2.1)
 set(OPUSENC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libopusenc-${OPUSENC_VERSION})
 
 # libopusenc dependent on libopus
-include(cmake/SetupOpusLibrary.cmake)
+include(cmake/SetupOpus.cmake)
 
 aux_source_directory(${OPUSENC_DIR}/src SOURCE_LIB)
 
