@@ -72,8 +72,8 @@ private:
         bool alignOctavesAcrossSubChords() const { return m_alignOctavesAcrossSubChords; }
         bool keepSecondsTogether() const { return m_keepSecondsTogether; }
         bool alignOffsetOctaves() const { return m_alignOffsetOctaves; }
-        int largeGroupLimit() const { return m_largeGroupLimit; }
-        int smallGroupLimit() const { return m_smallGroupLimit; }
+        size_t largeGroupLimit() const { return m_largeGroupLimit; }
+        size_t smallGroupLimit() const { return m_smallGroupLimit; }
 
     private:
         void initConstants();
@@ -95,8 +95,8 @@ private:
         bool m_keepSecondsTogether = false;
         bool m_alignOffsetOctaves = false;
 
-        static constexpr int m_smallGroupLimit = 3;
-        static constexpr int m_largeGroupLimit = 6;
+        static constexpr size_t m_smallGroupLimit = 3;
+        static constexpr size_t m_largeGroupLimit = 6;
     };
 
     static void collectAccidentals(const std::vector<Chord*> chords, std::vector<Accidental*>& allAccidentals,
