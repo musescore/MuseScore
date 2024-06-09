@@ -819,7 +819,7 @@ void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mu
 
     auto upperBound = trackPlaybackData.originEvents.upper_bound(timestampTo);
 
-    for (auto it = lowerBound; it != upperBound;) {
+    for (auto it = lowerBound; it != upperBound && it != trackPlaybackData.originEvents.end();) {
         it = trackPlaybackData.originEvents.erase(it);
     }
 }
