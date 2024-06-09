@@ -33,6 +33,10 @@ StyleDialogPage {
         id: beamsPageModel
     }
 
+    Component.onCompleted: {
+        beamsPageModel.load()
+    }
+
     ItemWithTitle {
         title: qsTrc("notation", "Beam distance")
 
