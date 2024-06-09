@@ -56,6 +56,7 @@ void ExtensionsListModel::load()
     m_plugins = provider()->manifestList();
     if (m_plugins.empty()) {
         LOGE() << "Not found plugins";
+        endResetModel();
         return;
     }
 
