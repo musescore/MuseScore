@@ -2677,13 +2677,13 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3415"/>
         <source>Bracket thickness:</source>
         <comment>System bracket</comment>
-        <translation>Balkklammertjocklek:</translation>
+        <translation>Balkklammers tjocklek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3428"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
-        <translation>Återställ &apos;Balkklammertjocklek&apos;</translation>
+        <translation>Återställ &apos;Balkklammers tjocklek&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3526"/>
@@ -3186,12 +3186,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4974"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation>Återställ &apos;Tjocklek för tunt taktstreck&apos;</translation>
+        <translation>Återställ &apos;Tjocklek för taktstreck&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4997"/>
         <source>Thin barline thickness:</source>
-        <translation>Tjocklek för tunt taktstreck:</translation>
+        <translation>Tjocklek för taktstreck:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5010"/>
@@ -3772,12 +3772,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7348"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>Återställ &apos;Linjens tjocklek vid slutet&apos;</translation>
+        <translation>Återställ &apos;Linjens tjocklek i ändarna&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7361"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>Återställ &apos;Linjens tjocklek vid mitten&apos;</translation>
+        <translation>Återställ &apos;Linjens tjocklek i mitten&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7374"/>
@@ -4144,7 +4144,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10717"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation>Återställ &apos;Tjocklek på bindestreck&apos;</translation>
+        <translation>Återställ &apos;Tjocklek för bindestreck&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10727"/>
@@ -4215,12 +4215,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11119"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
-        <translation>Återställ &apos;Melismlinjetjocklek&apos;</translation>
+        <translation>Återställ &apos;Melismlinjes tjocklek&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
         <source>Melisma thickness:</source>
-        <translation>Melismlinjetjocklek:</translation>
+        <translation>Melismlinjes tjocklek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11164"/>
@@ -4638,12 +4638,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
         <source>Barre line thickness</source>
-        <translation>Barrélinjens tjocklek</translation>
+        <translation>Barrélinjes tjocklek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12763"/>
         <source>Barre line thickness:</source>
-        <translation>Barrélinjens tjocklek:</translation>
+        <translation>Barrélinjes tjocklek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
@@ -6716,13 +6716,13 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="785"/>
         <source>Break inner beams (8th)</source>
-        <translation>Bryt sextondelsbalk</translation>
+        <translation>Bryt till åttondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="792"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="793"/>
         <source>Break inner beams (16th)</source>
-        <translation>Bryt trettioandradelsbalk</translation>
+        <translation>Bryt till sextondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="799"/>
@@ -7505,7 +7505,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="786"/>
         <source>Break inner beams (eighth)</source>
-        <translation>Bryt sextondelsbalk</translation>
+        <translation>Bryt till åttondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="807"/>
@@ -8818,7 +8818,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="197"/>
         <source>&amp;Preferences</source>
-        <translation>&amp;Inställningar</translation>
+        <translation>&amp;Inställningar …</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/updateuiactions.cpp" line="34"/>
@@ -9874,7 +9874,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="45"/>
         <source>&amp;Manage plugins…</source>
-        <translation>&amp;Hantera insticksprogram …</translation>
+        <translation>&amp;Hantera insticksprogram</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="46"/>
@@ -19406,12 +19406,12 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation>Bryt sextondelsbalk</translation>
+        <translation>Bryt till åttondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation>Bryt trettioandradelsbalk</translation>
+        <translation>Bryt till sextondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
@@ -23256,7 +23256,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1135"/>
         <source>Lines</source>
-        <translation>Linjer</translation>
+        <translation>Diverse</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1211"/>

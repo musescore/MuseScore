@@ -1136,7 +1136,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="699"/>
         <source>1 - Augmented unison</source>
-        <translation>1 -Unisono aumentato</translation>
+        <translation>1 - Unisono aumentato</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="704"/>
@@ -2415,7 +2415,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation>MuseScore Studio modificherà lo stile per adattarlo meglio al tipo di carattere</translation>
+        <translation>MuseScore Studio cambierà lo stile per adattarlo meglio al tipo di carattere</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="927"/>
@@ -2727,7 +2727,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3751"/>
         <source>Show courtesy clefs</source>
-        <translation>Mostra chiavi di cortesia</translation>
+        <translation>Mostra le chiavi di cortesia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3764"/>
@@ -2742,7 +2742,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3784"/>
         <source>Key signatures</source>
-        <translation>Armatura di chiave</translation>
+        <translation>Armature di chiave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3797"/>
@@ -2767,7 +2767,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
         <source>Show courtesy time signatures</source>
-        <translation>Mostra indicazioni metriche di cortesia</translation>
+        <translation>Mostra le indicazioni metriche di cortesia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3863"/>
@@ -4760,7 +4760,7 @@ Per impostazione predefinita, saranno posizionate in modo tale che la loro estre
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13537"/>
         <source>Always show parenthesized fret marks when articulation markings are present</source>
-        <translation>Mostrare sempre i segni dei tasti tra parentesi quando sono presenti i simboli di articolazione</translation>
+        <translation>Mostra sempre i segni dei tasti tra parentesi quando sono presenti i segni di articolazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14023"/>
@@ -7760,7 +7760,7 @@ Per impostazione predefinita, saranno posizionate in modo tale che la loro estre
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
         <source>&amp;Nonuplet</source>
-        <translation>&amp;Nonuplina</translation>
+        <translation>&amp;Gruppo di nove</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
@@ -7796,7 +7796,7 @@ Per impostazione predefinita, saranno posizionate in modo tale che la loro estre
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1409"/>
         <source>Reset entire score to default layout</source>
-        <translation>Ripristina l&apos;intera partitura all&apos;impaginazione predefinita</translation>
+        <translation>Ripristina l&apos;intera partitura al layout predefinito</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
@@ -10027,7 +10027,7 @@ Questa azione non cancellerà nessuna delle tue partiture.</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation>Per rendere effettive queste modifiche, MuseScore Studio deve essere riavviato.</translation>
+        <translation>Per rendere effettive queste modifiche MuseScore Studio deve essere riavviato.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="274"/>
@@ -22260,7 +22260,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message numerus="yes">
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="264"/>
         <source>%n string(s)</source>
-        <translation><numerusform>%n corda</numerusform><numerusform>%n corde</numerusform><numerusform>%n corda(e)</numerusform></translation>
+        <translation><numerusform>%n corda</numerusform><numerusform>%n corde</numerusform><numerusform>%n stringa(e)</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
@@ -25781,7 +25781,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
         <source>Modify sound</source>
-        <translation>Modifica del suono</translation>
+        <translation>Modifica il suono</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>
@@ -28341,7 +28341,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
-        <translation>Portami a Muse Hub</translation>
+        <translation>Portami al Muse Hub</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/appupdateservice.cpp" line="111"/>

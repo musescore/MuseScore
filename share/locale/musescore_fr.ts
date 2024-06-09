@@ -6711,18 +6711,18 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="778"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="779"/>
         <source>Break beam left</source>
-        <translation>Interrompre la ligature gauche</translation>
+        <translation>Interrompre la ligature à gauche de la note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="785"/>
         <source>Break inner beams (8th)</source>
-        <translation>Interrompre les ligatures intérieures (croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Croches)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="792"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="793"/>
         <source>Break inner beams (16th)</source>
-        <translation>Interrompre les ligatures intérieures (double-croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Doubles-croches)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="799"/>
@@ -6733,12 +6733,12 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="806"/>
         <source>Feathered beam, decelerate</source>
-        <translation>Ligature en ralentissant</translation>
+        <translation>Ligature progressive, ralentir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="813"/>
         <source>Feathered beam, accelerate</source>
-        <translation>Ligature en accélérant</translation>
+        <translation>Ligature progressive, accélérer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="827"/>
@@ -7505,12 +7505,12 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="786"/>
         <source>Break inner beams (eighth)</source>
-        <translation>Interrompre les ligatures intérieures (croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Croches)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="807"/>
         <source>Add feathered beam: decelerate</source>
-        <translation>Ajouter une ligature progressive : Décélérer</translation>
+        <translation>Ajouter une ligature progressive : Ralentir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="814"/>
@@ -8632,7 +8632,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="771"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="772"/>
         <source>No beam</source>
-        <translation>Note seule</translation>
+        <translation>Note seule sans ligature</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="764"/>
@@ -19317,7 +19317,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="87"/>
         <source>Feathered beams</source>
-        <translation>Ligature avec changement de tempo</translation>
+        <translation>Ligature progressive</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="102"/>
@@ -19332,12 +19332,12 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="136"/>
         <source>Feathering left</source>
-        <translation>Ligature avec changement de tempo à gauche</translation>
+        <translation>Progress. à gauche</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="156"/>
         <source>Feathering right</source>
-        <translation>Ligature avec changement de tempo à droite</translation>
+        <translation>Progress. à droite</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="182"/>
@@ -19397,22 +19397,22 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
         <source>No beam</source>
-        <translation>Note seule</translation>
+        <translation>Note seule sans ligature</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
         <source>Break beam left</source>
-        <translation>Interrompre la ligature gauche</translation>
+        <translation>Interrompre la ligature à gauche de la note</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation>Interrompre les ligatures intérieures (croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Croches)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation>Interrompre les ligatures intérieures (double-croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Doubles-croches)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>

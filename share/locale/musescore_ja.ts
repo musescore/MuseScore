@@ -25805,7 +25805,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
         <source>Ord. (default)</source>
-        <translation type="unfinished"/>
+        <translation>Ord. (デフォルト)</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="282"/>
@@ -25825,7 +25825,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="391"/>
         <source>ordinary</source>
-        <translation type="unfinished"/>
+        <translation>普通の</translation>
     </message>
 </context>
 <context>

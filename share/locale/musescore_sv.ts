@@ -26516,7 +26516,7 @@ misslyckades.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="598"/>
         <source>Please try again later, or get help for this problem on musescore.org.</source>
-        <translation>Vänligen försök igen senare eller få hjälp med det här felet på musescore.org.</translation>
+        <translation>Försök igen senare eller få hjälp med det här problemet på musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>

@@ -4791,22 +4791,22 @@ Forsett er, at teknini verða stillaði soleiðis, at tey eru eins høgrumegin. 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
         <source>Show ties only</source>
-        <translation type="unfinished"/>
+        <translation>Vìs bert bindibogar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13500"/>
         <source>Show initial fret mark only</source>
-        <translation type="unfinished"/>
+        <translation>Vís bert fyrsta bandamerki</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13516"/>
         <source>Only show at the start of a system</source>
-        <translation type="unfinished"/>
+        <translation>Vís bert við byrjan av skipan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13530"/>
         <source>Never show</source>
-        <translation type="unfinished"/>
+        <translation>Vís aldrin</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13597"/>
@@ -7761,7 +7761,7 @@ Forsett er, at teknini verða stillaði soleiðis, at tey eru eins høgrumegin. 
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
         <source>&amp;Nonuplet</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nonól</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
@@ -7797,7 +7797,7 @@ Forsett er, at teknini verða stillaði soleiðis, at tey eru eins høgrumegin. 
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1409"/>
         <source>Reset entire score to default layout</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla alt nótablaðið til forsett snið</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
@@ -8347,37 +8347,37 @@ Forsett er, at teknini verða stillaði soleiðis, at tey eru eins høgrumegin. 
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2410"/>
         <source>Show element bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Vís rætthyrningar í lutinum</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2416"/>
         <source>Color element shapes</source>
-        <translation type="unfinished"/>
+        <translation>Lita luta skap</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
         <source>Show segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>Vís petta skap</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
         <source>Color segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>Lita luta skap</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
         <source>Show skylines</source>
-        <translation type="unfinished"/>
+        <translation>Vís umhvarv</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
         <source>Show system bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Vís rætthyrningar í skipan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2446"/>
         <source>Show corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>Vís spiltar taktir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
@@ -9747,12 +9747,12 @@ Forsett er, at teknini verða stillaði soleiðis, at tey eru eins høgrumegin. 
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2393"/>
         <source>Show sound flags</source>
-        <translation type="unfinished"/>
+        <translation>Vís ljóð merki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
         <source>Show/hide sound flags</source>
-        <translation type="unfinished"/>
+        <translation>Vís/goym ljóð merki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
@@ -9855,7 +9855,7 @@ Forsett er, at teknini verða stillaði soleiðis, at tey eru eins høgrumegin. 
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation type="unfinished"/>
+        <translation>Vís &amp;atkomutræ</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
