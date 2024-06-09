@@ -37,20 +37,8 @@ template<typename ... T>
 class Promise
 {
 public:
-    // Dummy struct, with the purpose to enforce that the body
-    // of a Promise resolves OR rejects exactly once
-    struct Result {
-        static Result unchecked()
-        {
-            return {};
-        }
+    struct Result;
 
-    private:
-        Result() = default;
-
-        friend struct Resolve;
-        friend struct Reject;
-    };
 
     struct Resolve
     {
@@ -81,6 +69,22 @@ public:
     private:
         mutable Promise<T...> p;
     };
+
+    // Dummy struct, with the purpose to enforce that the body
+    // of a Promise resolves OR rejects exactly once
+    struct Result {
+        static Result unchecked()
+        {
+            return {};
+        }
+
+    private:
+        Result() = default;
+
+        friend struct Resolve;
+        friend struct Reject;
+    };
+
 
     enum class AsynchronyType {
         ProvidedByPromise,
