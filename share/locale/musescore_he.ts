@@ -206,7 +206,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="14"/>
         <source>Note selection</source>
-        <translation>בחירת תווים:</translation>
+        <translation>בחירת תווים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="20"/>
@@ -999,12 +999,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="52"/>
         <source>Show barlines</source>
-        <translation>הצג קווי תיבה</translation>
+        <translation>הצגת קווי תיבה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="59"/>
         <source>Show clef</source>
-        <translation>הצג מפתח</translation>
+        <translation>הצגת מפתח</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="66"/>
@@ -1226,7 +1226,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="789"/>
         <source>10 - Augmented sixth</source>
-        <translation>10 - סקסטה גדולה</translation>
+        <translation>10 - סקסטה מוגדלת</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="794"/>
@@ -1401,12 +1401,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="188"/>
         <source>Show clef</source>
-        <translation>הצג מפתח</translation>
+        <translation>הצגת מפתח</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="195"/>
         <source>Show time signature</source>
-        <translation>הצג סימן משקל</translation>
+        <translation>הצגת סימן משקל</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="202"/>
@@ -1417,13 +1417,13 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="244"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="360"/>
         <source>Show key signature</source>
-        <translation>הצג סימני סולם</translation>
+        <translation>הצגת סימני סולם</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="251"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="374"/>
         <source>Show ledger lines</source>
-        <translation>הצג קווי עזר</translation>
+        <translation>הצגת קווי עזר</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="258"/>
@@ -1469,7 +1469,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="494"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="768"/>
         <source>Vertical offset:</source>
-        <translation>אופסט אנכי:</translation>
+        <translation>היסט אנכי:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="532"/>
@@ -1519,7 +1519,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="686"/>
         <source>Show fingering in tablature</source>
-        <translation>הצג אצבוע בטבלטורה</translation>
+        <translation>הצגת אצבוע בטבלטורה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="20"/>
@@ -1709,7 +1709,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13682"/>
         <source>Padding:</source>
-        <translation>ריווח</translation>
+        <translation>ריווח:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13728"/>
@@ -1826,7 +1826,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="376"/>
         <source>Musical text font:</source>
-        <translation>גופן טקסט מוזיקלי:</translation>
+        <translation>גופן מלל מוזיקלי:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="420"/>
@@ -2194,12 +2194,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="563"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>הצג סוגריים המשתרעים על פני חמשה אחת</translation>
+        <translation>הצגת סוגריים המשתרעים על פני חמשה אחת</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="573"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>הצג ערכי תווים מעבר לגבולות תיבות (ניסיוני, מוזיקה קדומה בלבד!)</translation>
+        <translation>הצגת ערכי תווים מעבר לגבולות תיבות (ניסיוני, מוזיקה קדומה בלבד!)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="580"/>
@@ -2415,7 +2415,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio תשנה את הסגנון כך שיתאים יותר טוב לגופן</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="927"/>
@@ -2689,13 +2689,13 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3526"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3597"/>
         <source>Vertical offset:</source>
-        <translation>אופסט אנכי:</translation>
+        <translation>היסט אנכי:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3536"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3639"/>
         <source>Horizontal offset:</source>
-        <translation>אופסט אופקי:</translation>
+        <translation>היסט אופקי:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3546"/>
@@ -2819,7 +2819,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3966"/>
         <source>Tuning</source>
-        <translation>Tuning</translation>
+        <translation>כיוון</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3976"/>
@@ -3595,13 +3595,13 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9352"/>
         <source>Text lines</source>
-        <translation>שורות טקסט</translation>
+        <translation>שורות מלל</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9500"/>
         <source>System text lines</source>
-        <translation>שורות טקסט סיסטמה</translation>
+        <translation>שורות מלל סיסטמה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
@@ -3627,7 +3627,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2532"/>
         <source>Footer</source>
-        <translation>תחתית</translation>
+        <translation>כותרת תחתונה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3008"/>
@@ -4805,7 +4805,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13530"/>
         <source>Never show</source>
-        <translation type="unfinished"/>
+        <translation>לא להציג לעולם</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13597"/>
@@ -4892,7 +4892,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13911"/>
         <source>Offset:</source>
-        <translation>הזחה</translation>
+        <translation>היסט:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13921"/>
@@ -4912,7 +4912,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13957"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation>איפוס ערכי &quot;הזחה&quot;</translation>
+        <translation>איפוס ערכי &quot;היסט&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13977"/>
@@ -5135,7 +5135,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="431"/>
         <source>Always show</source>
-        <translation>הצג תמיד</translation>
+        <translation>להציג תמיד</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="436"/>
@@ -5211,7 +5211,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="37"/>
         <source>Horizontal offset</source>
-        <translation>הזחה אופקית</translation>
+        <translation>היסט אופקי</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="40"/>
@@ -5222,7 +5222,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="62"/>
         <source>Vertical offset</source>
-        <translation>הזחה אנכית</translation>
+        <translation>היסט אנכי</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="81"/>
@@ -8084,12 +8084,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
         <source>Add clef: treble</source>
-        <translation>הוספת מפתח: מפתח סול</translation>
+        <translation>הוספת מפתח: סול</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1811"/>
         <source>Add clef: bass</source>
-        <translation>הוספת מפתח: מפתח פה</translation>
+        <translation>הוספת מפתח: פה</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1823"/>
@@ -8272,17 +8272,17 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2203"/>
         <source>Toggle accidental: flat</source>
-        <translation>הפעל/כבה סימן היתק: במול</translation>
+        <translation>הפעלת/כיבוי סימן היתק: במול</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2217"/>
         <source>Toggle accidental: natural</source>
-        <translation>הפעל/כבה סימן היתק: בקר</translation>
+        <translation>הפעלת/כיבוי סימן היתק: בקר</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2224"/>
         <source>Toggle accidental: sharp</source>
-        <translation>הפעל/כבה סימן היתק: דיאז</translation>
+        <translation>הפעלת/כיבוי סימן היתק: דיאז</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
@@ -9706,17 +9706,17 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2202"/>
         <source>Toggle flat</source>
-        <translation>הפעל/כבה במול</translation>
+        <translation>הפעלת/כיבוי במול</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2209"/>
         <source>Toggle double-flat</source>
-        <translation>הפעל/כבה במול־כפול</translation>
+        <translation>הפעלת/כיבוי במול־כפול</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
         <source>Toggle accidental: double-flat</source>
-        <translation>הפעל/כבה סימן היתק: במול־כפול</translation>
+        <translation>הפעלת/כיבוי סימן היתק: במול־כפול</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2216"/>
@@ -9726,17 +9726,17 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2223"/>
         <source>Toggle sharp</source>
-        <translation>הפעל/כבה דיאז</translation>
+        <translation>הפעלת/כיבוי דיאז</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2230"/>
         <source>Toggle double-sharp</source>
-        <translation>הפעל/כבה דיאז־כפול</translation>
+        <translation>הפעלת/כיבוי דיאז־כפול</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2231"/>
         <source>Toggle accidental: double-sharp</source>
-        <translation>הפעל/כבה סימן היתק: דיאז־כפול</translation>
+        <translation>הפעלת/כיבוי סימן היתק: דיאז־כפול</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2245"/>
@@ -9797,7 +9797,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/autobot/internal/autobotactions.cpp" line="40"/>
         <source>Show &amp;scripts…</source>
-        <translation>הצג &amp;סקריפטים...</translation>
+        <translation>הצגת &amp;סקריפטים...</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="35"/>
@@ -9839,7 +9839,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="40"/>
         <source>Show p&amp;aths…</source>
-        <translation>הצג &amp;נתיבים...</translation>
+        <translation>הצגת &amp;נתיבים...</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="45"/>
@@ -9854,7 +9854,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation type="unfinished"/>
+        <translation>הצגת &amp;עץ נגישות...</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
@@ -10114,7 +10114,7 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
         <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
         <source>MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -10122,7 +10122,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="32"/>
         <source>About MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>אודות MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="84"/>
@@ -10211,7 +10211,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="191"/>
         <source>Finish</source>
-        <translation>סיים</translation>
+        <translation>סיום</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="31"/>
@@ -10231,7 +10231,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>ברוכים הבאים ל־MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10268,7 +10268,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>כדי לשמור על פרטיותכם, MuseScore Studio לא שומרת מידע אישי כלל. ראו את &lt;a href=&quot;%1&quot;&gt;מדיניות הפרטיות&lt;/a&gt; שלנו למידע נוסף.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -10526,12 +10526,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation type="unfinished"/>
+        <translation>בדקו האם ישנה גרסה חדשה של MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>לבדיקת עדכונים נדרשת גישה לרשת. כדי להגן על פרטיותכם, MuseScore Studio לא שומרת מידע אישי כלל. ראו את &lt;a href=&quot;%1&quot;&gt;מדיניות הפרטיות&lt;/a&gt; שלנו למידע נוסף.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -10957,7 +10957,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="151"/>
         <source>General</source>
-        <translation>כללי:</translation>
+        <translation>כללי</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="157"/>
@@ -11123,7 +11123,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
         <source>Publish to MuseScore.com</source>
-        <translation>פרסום ל-musescore.com</translation>
+        <translation>פרסום ב־MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
@@ -11246,7 +11246,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>תהליך ההתחברות הושלם בהצלחה! ניתן לחזור כעת ל־MuseScore Studio.</translation>
     </message>
 </context>
 <context>
@@ -12383,7 +12383,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="271"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1100"/>
         <source>Text line</source>
-        <translation>קו טקסט</translation>
+        <translation>קו מלל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
@@ -12747,7 +12747,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1323"/>
         <source>triple sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation>דיאז משולש</translation>
+        <translation>דיאז־משולש</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1328"/>
@@ -12783,7 +12783,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1353"/>
         <source>triple flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation>במול משולש</translation>
+        <translation>במול־משולש</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1395"/>
@@ -13023,17 +13023,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
         <source>A major, F♯ minor</source>
-        <translation>לה מז&apos;ור / פה♯ מינור</translation>
+        <translation>לה מז&apos;ור, פה♯ מינור</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <source>D♭ major, B♭ minor</source>
-        <translation>רה♭ מז&apos;ור/ סי♭ מינור</translation>
+        <translation>רה♭ מז&apos;ור, סי♭ מינור</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2596"/>
         <source>E major, C♯ minor</source>
-        <translation>מי מז&apos;ור / דו♯ מינור</translation>
+        <translation>מי מז&apos;ור, דו♯ מינור</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
@@ -13058,7 +13058,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
         <source>B♭ major, G minor</source>
-        <translation>סי♭ מז&apos;ור / סול מינור</translation>
+        <translation>סי♭ מז&apos;ור, סול מינור</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
@@ -13158,7 +13158,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>קובץ זה נשמר עם גרסה חדשה יותר של MuseScore Studio. בקרו ב&lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; על מנת לשדרג לגרסה העדכנית ביותר.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -14171,62 +14171,62 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="658"/>
         <source>Soprano clef</source>
-        <translation>מפתח סופרן</translation>
+        <translation>מפתח דו סופרן</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="659"/>
         <source>Mezzo-soprano clef</source>
-        <translation>מפתח מצו־סופרן</translation>
+        <translation>מפתח דו מצו־סופרן</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="660"/>
         <source>Alto clef</source>
-        <translation>מפתח אלט</translation>
+        <translation>מפתח דו אלט</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="661"/>
         <source>Tenor clef</source>
-        <translation>מפתח טנור</translation>
+        <translation>מפתח דו טנור</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="662"/>
         <source>Baritone clef (C clef)</source>
-        <translation>מפתח דו בריטון</translation>
+        <translation>מפתח בריטון (מפתח דו)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="663"/>
         <source>C clef, H shape (19th century)</source>
-        <translation>מפתח דו, צורת H (המאה ה19)</translation>
+        <translation>מפתח דו, צורת H (המאה ה-19)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="664"/>
         <source>Soprano clef (French, 18th century)</source>
-        <translation>מפתח סופרן (צרפתי, המאה ה18)</translation>
+        <translation>מפתח דו סופרן (צרפתי, המאה ה-18)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="665"/>
         <source>Alto clef (French, 18th century)</source>
-        <translation>מפתח אלט (צרפתי, המאה ה18)</translation>
+        <translation>מפתח דו אלט (צרפתי, המאה ה-18)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="666"/>
         <source>Tenor clef (French, 18th century)</source>
-        <translation>מפתח טנור (צרפתי, המאה ה18)</translation>
+        <translation>מפתח דו טנור (צרפתי, המאה ה-18)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="667"/>
         <source>Soprano clef (French, 20th century)</source>
-        <translation>מפתח סופרן (צרפתי, המאה ה20)</translation>
+        <translation>מפתח דו סופרן (צרפתי, המאה ה-20)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="668"/>
         <source>Alto clef (French, 20th century)</source>
-        <translation>מפתח אלט (צרפתי, המאה ה20)</translation>
+        <translation>מפתח דו אלט (צרפתי, המאה ה-20)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="669"/>
         <source>Tenor clef (French, 20th century)</source>
-        <translation>מפתח טנור (צרפתי, המאה ה20)</translation>
+        <translation>מפתח דו טנור (צרפתי, המאה ה-20)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="670"/>
@@ -14266,12 +14266,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="677"/>
         <source>F clef (French, 18th century)</source>
-        <translation>מפתח פה (צרפתי, המאה ה18)</translation>
+        <translation>מפתח פה (צרפתי, המאה ה-18)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="678"/>
         <source>F clef (19th century)</source>
-        <translation>מפתח פה (המאה ה19)</translation>
+        <translation>מפתח פה (המאה ה-19)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="680"/>
@@ -16001,7 +16001,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3597"/>
         <source>Triple flat</source>
-        <translation>במול משולש</translation>
+        <translation>במול־משולש</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3598"/>
@@ -17904,7 +17904,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
         <source>MuseScore Studio instrument</source>
-        <translation type="unfinished"/>
+        <translation>כלי נגינה של MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -18043,7 +18043,7 @@ notes</source>
         <source>Show
 tempo text</source>
         <translation>הצגת
-טקסט טמפו</translation>
+מלל מִפְעָם </translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="835"/>
@@ -18142,7 +18142,7 @@ pickup measure</source>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="51"/>
         <source>Limit MusicXML export for compatibility with MuseScore 3</source>
         <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
-        <translation type="unfinished"/>
+        <translation>הגבלת ייצוא MusicXML כדי לשמור על תאימות עם MuseScore 3</translation>
     </message>
 </context>
 <context>
@@ -18243,7 +18243,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="122"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="66"/>
         <source>Offset</source>
-        <translation>הזחה</translation>
+        <translation>היסט</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="56"/>
@@ -18407,7 +18407,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="106"/>
         <source>Normal</source>
         <comment>velocity change speed</comment>
-        <translation>נורמלי</translation>
+        <translation>רגיל</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="107"/>
@@ -18504,7 +18504,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="51"/>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="34"/>
         <source>General</source>
-        <translation>כללי:</translation>
+        <translation>כללי</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="58"/>
@@ -19790,7 +19790,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="207"/>
         <source>Align left edge of text to reference point</source>
-        <translation>יישור קצה שמאלי של טקסט לנקודת ההתיחסות</translation>
+        <translation>יישור הקצה השמאלי של המלל לנקודת הייחוס</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="212"/>
@@ -20334,7 +20334,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="74"/>
         <location filename="../../src/inspector/models/score/scoredisplaysettingsmodel.cpp" line="34"/>
         <source>Show</source>
-        <translation>הצגה</translation>
+        <translation>תצוגה</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml" line="49"/>
@@ -21338,7 +21338,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>מאחר שקובץ סגנון זה הוא מגרסת MuseScore Studio שונה, ייתכן שהפרטיטורה לא תוצג כהלכה.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1623"/>
@@ -21643,7 +21643,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="79"/>
         <source>Normal</source>
-        <translation>נורמלי</translation>
+        <translation>רגיל</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="80"/>
@@ -22600,7 +22600,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1284"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>גרסת MuseScore Studio עימה נשמרה פרטיטורה זו לאחרונה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1286"/>
@@ -22714,7 +22714,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1174"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2535"/>
         <source>Tempo</source>
-        <translation>טמפו</translation>
+        <translation>מִפְעָם</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="769"/>
@@ -23006,7 +23006,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="98"/>
         <source>Element offset</source>
-        <translation>הזחת רכיב</translation>
+        <translation>היסט רכיב</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="106"/>
@@ -23790,7 +23790,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1657"/>
         <source>vibrato</source>
-        <translation>vibrato</translation>
+        <translation>ויברטו</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1659"/>
@@ -23930,7 +23930,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="667"/>
         <source>MuseScore Studio may not be able to load this drumset file.</source>
-        <translation type="unfinished"/>
+        <translation>ייתכן ש־MuseScore Studio לא תצליח לטעון את קובץ מערכת התופים הזה.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="698"/>
@@ -25718,7 +25718,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="645"/>
         <source>Change sound</source>
-        <translation type="unfinished"/>
+        <translation>שינוי צליל</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="648"/>
@@ -25778,12 +25778,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
         <source>Modify sound</source>
-        <translation type="unfinished"/>
+        <translation>שינוי צליל</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>
         <source>Playing techniques</source>
-        <translation type="unfinished"/>
+        <translation>טכניקת נגינה</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
@@ -25813,17 +25813,17 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="294"/>
         <source>Allow multiple selection</source>
-        <translation type="unfinished"/>
+        <translation>אפשור בחירה מרובה</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="307"/>
         <source>Apply selection to all staves</source>
-        <translation type="unfinished"/>
+        <translation>החלת הבחירה לכל החמשות</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="391"/>
         <source>ordinary</source>
-        <translation type="unfinished"/>
+        <translation>רגיל</translation>
     </message>
 </context>
 <context>
@@ -26052,7 +26052,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1659"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>קובץ זה נשמר עם גרסה חדשה יותר של MuseScore Studio. בקרו ב־&lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; על מנת לשדרג לגרסה העדכנית ביותר.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
@@ -26105,12 +26105,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1486"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
-        <translation>ניתן להמשיך לשמור אותו באופן מקומי, אך ייתכן שהקובץ לא יהיה שמיש יותר. ניתן לתקן שגיאות אלו ידנית או לקבל עזרה לבעיה זו ב־musescore.org.</translation>
+        <translation>ניתן להמשיך את השמירה באופן מקומי, אך ייתכן שהקובץ ייהפך ללא שמיש. ניתן לתקן את השגיאות ידנית או לקבל עזרה לבעיה זו ב־musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1488"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
-        <translation>ניתן להמשיך לשמור אותו באופן מקומי, אך ייתכן שהקובץ לא יהיה שמיש יותר. בשביל לשמר את הפרטיטורה, יש לחזור לגרסה שנשמרה לאחרונה או לתקן שגיאות אלו ידנית. ניתן גם לקבל עזרה לבעיה זו ב־musescore.org.</translation>
+        <translation>ניתן להמשיך את השמירה באופן מקומי, אך ייתכן שהקובץ ייהפך ללא שמיש. בשביל לשמר את הפרטיטורה, יש לחזור לגרסה שנשמרה לאחרונה או לתקן שגיאות אלו ידנית. ניתן גם לקבל עזרה לבעיה זו ב־musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1495"/>
@@ -26161,12 +26161,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1666"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
-        <translation type="unfinished"/>
+        <translation>קובץ זה מכיל שגיאות שעלולות לגרום ל־MuseScore Studio לא לתפקד כהלכה.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1705"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation type="unfinished"/>
+        <translation>קובץ זה אינו ניתן לפתיחה. אנא וודאו של־MuseScore Studio ההרשאות הנחוצות לקריאת קובץ זה.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
@@ -26241,7 +26241,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1777"/>
         <source>MuseScore developer files</source>
-        <translation>קבצי מפתחים MuseScore</translation>
+        <translation>קבצי מפתחים של MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1778"/>
@@ -26526,7 +26526,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
         <source>Your musescore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>עליכם קודם לאמת את חשבון musescore.com שלכם. אנא הפעילו את חשבונכם באמצעות הקישור בדוא&quot;ל ההפעלה שנשלח אליכם.</translation>
+        <translation>תחילה יש לאמת את חשבון ה־musescore.com שלכם. אנא הפעילו את חשבונכם באמצעות הקישור בדוא&quot;ל ההפעלה שנשלח אליכם.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
@@ -27310,7 +27310,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation type="unfinished"/>
+        <translation>גרסת MuseScore Studio:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -27433,7 +27433,7 @@ failed.</source>
     <message>
         <location filename="../../src/cloud/view/cloudsmodel.cpp" line="185"/>
         <source>Publish to MuseScore.com</source>
-        <translation>פרסום ל-musescore.com</translation>
+        <translation>פרסום ב־MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/cloud/view/cloudsmodel.cpp" line="188"/>
@@ -27550,7 +27550,7 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="420"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="517"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
-        <translation>התחבר או צור חשבון חינמי ב־musescore.com כדי לפתוח את הפרטיטורה הזו.</translation>
+        <translation>התחברו או צרו חשבון חינמי ב־musescore.com כדי לפתוח פרטיטורה זו.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1324"/>
@@ -27560,7 +27560,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1327"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
-        <translation>כל השינויים השמורים יתעדכנו כעת בענן. אפשר לנהל קובץ זה במנהל היצירות ב־musescore.com.</translation>
+        <translation>כל השינויים השמורים יתעדכנו כעת בענן. ניתן לנהל קובץ זה במנהל היצירות ב־musescore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
@@ -27576,12 +27576,12 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="946"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
-        <translation>יש להיכנס לmusescore.com כדי לשמור פרטיטורה זו בענן</translation>
+        <translation>יש להכנס ל־musescore.com כדי לשמור פרטיטורה זו בענן.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="236"/>
         <source>Log in to musescore.com to publish this score.</source>
-        <translation>יש להיכנס לmusescore.com כדי לפרסם פרטיטורה זו</translation>
+        <translation>יש להכנס ל־musescore.com כדי לפרסם פרטיטורה זו.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="382"/>
@@ -28288,7 +28288,7 @@ failed.</source>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="82"/>
         <source>A new version of MuseScore Studio is available!</source>
-        <translation type="unfinished"/>
+        <translation>ישנה גרסה חדשה יותר של MuseScore Studio!</translation>
     </message>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/AppReleaseInfoDialog.qml" line="89"/>
@@ -28338,18 +28338,18 @@ failed.</source>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
-        <translation type="unfinished"/>
+        <translation>קחו אותי אל Muse Hub</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/appupdateservice.cpp" line="111"/>
         <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio %1 בהורדה</translation>
     </message>
     <message>
         <location filename="../../src/update/view/updatemodel.cpp" line="37"/>
         <source>Updating MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio בעדכון</translation>
     </message>
 </context>
 <context>

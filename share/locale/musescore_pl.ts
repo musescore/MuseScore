@@ -12114,7 +12114,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
         <source>Triplet feel</source>
-        <translation>Triplet feel</translation>
+        <translation>Rytm triolowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
@@ -16563,7 +16563,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4296"/>
         <source>Volume swell</source>
-        <translation>Zgłośnienie/ściszenie</translation>
+        <translation>Zgłośnienie i ściszenie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4505"/>
@@ -17161,7 +17161,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/tripletfeel.cpp" line="112"/>
         <source>No triplet feel</source>
-        <translation>Bez triplet feel</translation>
+        <translation>Bez rytmu triolowego</translation>
     </message>
 </context>
 <context>
