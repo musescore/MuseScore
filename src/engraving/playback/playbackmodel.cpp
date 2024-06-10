@@ -794,6 +794,10 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
 void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom,
                                       const muse::mpe::timestamp_t timestampTo)
 {
+    IF_ASSERT_FAILED(timestampFrom <= timestampTo) {
+        return;
+    }
+
     auto search = m_playbackDataMap.find(trackId);
 
     if (search == m_playbackDataMap.cend()) {
@@ -819,7 +823,7 @@ void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mu
 
     auto upperBound = trackPlaybackData.originEvents.upper_bound(timestampTo);
 
-    for (auto it = lowerBound; it != upperBound;) {
+    for (auto it = lowerBound; it != upperBound && it != trackPlaybackData.originEvents.end();) {
         it = trackPlaybackData.originEvents.erase(it);
     }
 }
