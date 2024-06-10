@@ -111,9 +111,7 @@
       <Measure>
         <voice>
           <Expression>
-            <placement>above</placement>
             <snapToDynamics>0</snapToDynamics>
-            <offset x="0" y="2.5"/>
             <text>expr text</text>
             </Expression>
           <Chord>
@@ -144,7 +142,6 @@
       <Measure>
         <voice>
           <Expression>
-            <placement>above</placement>
             <snapToDynamics>0</snapToDynamics>
             <offset x="0" y="-4.72943"/>
             <text><i>expr </i><u>text</u></text>
