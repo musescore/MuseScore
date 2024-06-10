@@ -1526,19 +1526,13 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
     }
     break;
     case BracketType::NORMAL: {
-        double spatium = item->spatium();
         double w = conf.styleMM(Sid::bracketWidth) * .5;
-        double x = -w;
+        double bd = item->spatium() * (conf.styleSt(Sid::MusicalSymbolFont) == "Leland" ? .5 : .25);
 
-        double bd = (conf.styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
-        ldata->shape.add(RectF(x, -bd, w * 2, 2 * (ldata->bracketHeight * 0.5 + bd)));
-        ldata->shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
-        ldata->shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + ldata->bracketHeight)));
-
-        w += item->symWidth(SymId::bracketTop);
-        double y = -item->symHeight(SymId::bracketTop) - bd;
-        double h = (-y + ldata->bracketHeight * 0.5) * 2;
-        ldata->setBbox(RectF(x, y, w, h));
+        Shape shape = RectF(-w, -bd, w * 2, 2 * (ldata->bracketHeight * 0.5 + bd));
+        shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
+        shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + ldata->bracketHeight)));
+        ldata->setShape(shape);
 
         ldata->bracketWidth = conf.styleMM(Sid::bracketWidth) + conf.styleMM(Sid::bracketDistance);
     }
