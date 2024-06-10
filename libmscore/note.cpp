@@ -906,6 +906,7 @@ SymId Note::noteHead() const
 
       const Staff* st = chord() ? chord()->staff() : nullptr;
 
+      NoteHead::Group headGroup = _headGroup;
       if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
             if (st) {
                   if (st->staffTypeForElement(chord())->isDrumStaff()) {
@@ -920,6 +921,8 @@ SymId Note::noteHead() const
                               return noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
                               }
                         }
+                  else
+                        headGroup = NoteHead::Group::HEAD_NORMAL;
                   }
             else {
                   return _cachedNoteheadSym;
@@ -938,9 +941,9 @@ SymId Note::noteHead() const
             }
       if (scheme == NoteHead::Scheme::HEAD_AUTO)
             scheme = NoteHead::Scheme::HEAD_NORMAL;
-      SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
+      SymId t = noteHead(up, headGroup, ht, tpc(), key, scheme);
       if (t == SymId::noSym) {
-            qDebug("invalid notehead %d/%d", int(_headGroup), int(ht));
+            qDebug("invalid notehead %d/%d", int(headGroup), int(ht));
             t = noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
