@@ -296,13 +296,9 @@ void SlurSegment::editDrag(EditData& ed)
     case Grip::GRIPS:
         break;
     }
-    renderer()->computeBezier(this, delta);
 
-    System* startSys = slur()->startCR()->measure()->system();
-    System* endSys = slur()->endCR()->measure()->system();
-    if (startSys && endSys && startSys == endSys) {
-        renderer()->layoutItem(slur());
-    }
+    renderer()->computeBezier(this, delta);
+    triggerLayout();
 }
 
 //---------------------------------------------------------

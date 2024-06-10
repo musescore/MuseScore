@@ -48,14 +48,15 @@
 #include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
 
-#include "tlayout.h"
-#include "systemlayout.h"
-#include "chordlayout.h"
+#include "arpeggiolayout.h"
 #include "beamlayout.h"
+#include "chordlayout.h"
 #include "measurelayout.h"
+#include "slurtielayout.h"
+#include "systemlayout.h"
+#include "tlayout.h"
 #include "tupletlayout.h"
 #include "verticalgapdata.h"
-#include "arpeggiolayout.h"
 
 #include "log.h"
 
@@ -407,7 +408,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
 
     // HACK: we relayout here cross-staff slurs because only now the information
     // about staff distances is fully available.
-    for (const System* system : page->systems()) {
+    for (System* system : page->systems()) {
         long int stick = 0;
         long int etick = 0;
         if (system->firstMeasure()) {
@@ -424,7 +425,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                 continue;
             }
             if (toSlur(sp)->isCrossStaff()) {
-                TLayout::layoutSlur(toSlur(sp), ctx);
+                SlurTieLayout::layoutSystem(toSlur(sp), system, ctx);
             }
         }
     }
