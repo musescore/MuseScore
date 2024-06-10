@@ -331,7 +331,7 @@ PointF Volta::linePos(Grip grip, System** system) const
 
     if (start && segment->rtick().isZero()) {
         while (!segment->isType(SegmentType::BarLineType)) {
-            Segment* prev = segment->prev1enabled();
+            Segment* prev = segment->prev1MMenabled();
             if (prev && (prev->isType(SegmentType::BarLineType) || (prev->tick() == segment->tick() && !isAtSystemStart))) {
                 segment = prev;
             } else {
@@ -341,7 +341,7 @@ PointF Volta::linePos(Grip grip, System** system) const
     } else if (!start) {
         Segment* prev = segment;
         while (prev && !prev->isEndBarLineType() && prev->tick() == segment->tick()) {
-            prev = prev->prev1enabled();
+            prev = prev->prev1MMenabled();
         }
         if (prev && prev->isEndBarLineType()) {
             segment = prev;
