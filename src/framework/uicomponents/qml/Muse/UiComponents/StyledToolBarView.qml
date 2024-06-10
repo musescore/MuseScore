@@ -97,6 +97,8 @@ Rectangle {
 
                 onLoaded: {
                     loader.item.itemData = loader.itemData
+
+                    loader.item.y = (root.rowHeight - loader.item.height) / 2 // equal to anchors.verticalCenter = parent.verticalCenter
                 }
 
                 Component {
