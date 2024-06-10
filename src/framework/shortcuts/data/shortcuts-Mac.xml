@@ -84,6 +84,7 @@
     <SC>
       <key>nav-trigger-control</key>
       <seq>Return</seq>
+      <seq>Enter</seq>
       <seq>Space</seq>
       <autorepeat>0</autorepeat>
     </SC>
@@ -777,10 +778,12 @@
   <SC>
     <key>system-break</key>
     <seq>Return</seq>
+    <seq>Enter</seq>
     </SC>
   <SC>
     <key>page-break</key>
     <seq>Ctrl+Return</seq>
+    <seq>Ctrl+Enter</seq>
     </SC>
   <SC>
     <key>edit-element</key>
@@ -937,6 +940,7 @@
   <SC>
     <key>add-lyric-verse</key>
     <seq>Return</seq>
+    <seq>Enter</seq>
   </SC>
   <SC>
     <key>toggle-visible</key>
