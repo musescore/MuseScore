@@ -34,8 +34,6 @@ public:
     virtual const TrackList& allTracks() const = 0;
     virtual ms_Track addTrack() = 0;
 };
-
-using IMuseSamplerTracksPtr = std::shared_ptr<IMuseSamplerTracks>;
 }
 
 #endif // MUSE_MUSESAMPLER_IMUSESAMPLERTRACKS_H
