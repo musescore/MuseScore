@@ -113,8 +113,14 @@ PointF LineSegment::leftAnchorPosition(const double& systemPositionY) const
 
 PointF LineSegment::rightAnchorPosition(const double& systemPositionY) const
 {
-    if (isMiddleType() || isBeginType()) {
-        return PointF(system()->endingXForOpenEndedLines(), systemPositionY);
+    const System* sys = system();
+    IF_ASSERT_FAILED(sys) {
+        return PointF();
+    }
+
+    bool endsAtSystemEnd = isSingleEndType() && line()->tick2() == sys->endTick();
+    if (isMiddleType() || isBeginType() || endsAtSystemEnd) {
+        return PointF(sys->endingXForOpenEndedLines() + sys->x(), systemPositionY);
     }
 
     PointF result;
