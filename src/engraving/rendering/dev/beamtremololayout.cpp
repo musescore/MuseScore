@@ -84,7 +84,7 @@ void BeamTremoloLayout::setupLData(const BeamBase* item, BeamBase::LayoutData* l
 }
 
 void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const BeamBase::LayoutData* ldata,
-                                                     const std::vector<ChordRest*> chordRests,
+                                                     const std::vector<ChordRest*>& chordRests,
                                                      int& dictator,
                                                      int& pointer,
                                                      const double startX, const double endX,
@@ -150,13 +150,13 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
 }
 
 void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutData* ldata, const LayoutConfiguration& conf,
-                                                       std::vector<ChordRest*> chordRests, int& dictator,
+                                                       const std::vector<ChordRest*>& chordRests, int& dictator,
                                                        int& pointer, int staffLines,
                                                        bool isStartDictator, int stemLengthDictator)
 {
-    Chord* startChord = nullptr;
-    Chord* endChord = nullptr;
-    for (ChordRest* cr : chordRests) {
+    const Chord* startChord = nullptr;
+    const Chord* endChord = nullptr;
+    for (const ChordRest* cr : chordRests) {
         if (cr->isChord()) {
             endChord = toChord(cr);
             if (!startChord) {
@@ -457,13 +457,13 @@ bool BeamTremoloLayout::computeTremoloUp(const BeamBase::LayoutData* ldata)
     }
 }
 
-int BeamTremoloLayout::strokeCount(const BeamBase::LayoutData* ldata, ChordRest* cr)
+int BeamTremoloLayout::strokeCount(const BeamBase::LayoutData* ldata, const ChordRest* cr)
 {
     if (cr->isRest()) {
         return cr->beams();
     }
     int strokes = 0;
-    Chord* c = toChord(cr);
+    const Chord* c = toChord(cr);
     if (ldata->beamType == BeamType::TREMOLO) {
         strokes = ldata->trem->lines();
     } else if (ldata->beamType == BeamType::BEAM && c->tremoloTwoChord()) {
@@ -850,7 +850,7 @@ bool BeamTremoloLayout::noSlope(const Beam* beam)
 }
 
 int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, const LayoutConfiguration& conf,
-                                          ChordRest* startChord, ChordRest* endChord,
+                                          const ChordRest* startChord, const ChordRest* endChord,
                                           int staffLines)
 {
     bool isFullSize = muse::RealIsEqual(ldata->mag(), 1.0) && !ldata->isGrace;
@@ -1019,10 +1019,10 @@ int BeamTremoloLayout::getMaxSlope(const BeamBase::LayoutData* ldata)
     return maxSlope;
 }
 
-int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std::vector<ChordRest*> chordRests)
+int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std::vector<const ChordRest*>& chordRests)
 {
     int maxBeams = 0;
-    for (ChordRest* chordRest : chordRests) {
+    for (const ChordRest* chordRest : chordRests) {
         if (chordRest->isChord() && strokeCount(ldata, chordRest) > maxBeams) {
             maxBeams = strokeCount(ldata, chordRest);
         }

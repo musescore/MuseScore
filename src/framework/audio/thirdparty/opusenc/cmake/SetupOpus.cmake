@@ -18,17 +18,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (MUE_COMPILE_USE_SYSTEM_FREETYPE)
-    find_package(Freetype)
+if (MUE_COMPILE_USE_SYSTEM_OPUS)
+    find_package(PkgConfig REQUIRED)
 
-    if (FREETYPE_FOUND)
-        message(STATUS "Found freetype: ${FREETYPE_VERSION_STRING}")
-    else()
-        message(WARNING "Set MUE_COMPILE_USE_SYSTEM_FREETYPE=ON, but system freetype not found, built-in will be used")
-    endif()
-endif()
+    pkg_check_modules(OPUS opus)
 
-if (NOT FREETYPE_FOUND)
-    # sets FREETYPE_LIBRARIES and FREETYPE_INCLUDE_DIRS
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/freetype freetype)
-endif()
+    if (OPUS_FOUND)
+        message(STATUS "Found opus: ${OPUS_VERSION}")
+    else ()
+        message(WARNING "Set MUE_COMPILE_USE_SYSTEM_OPUS=ON, but system opus not found, built-in will be used")
+    endif ()
+endif ()
+
+
+if (NOT OPUS_FOUND)
+    set(OPUS_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../opus)
+    add_subdirectory(${OPUS_LIB_DIR} opus)
+
+    set(OPUS_INCLUDE_DIRS ${OPUS_LIB_DIR}/include)
+    set(OPUS_LIBRARIES opus)
+endif ()

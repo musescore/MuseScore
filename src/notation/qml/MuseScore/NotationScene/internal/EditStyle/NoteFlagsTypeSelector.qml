@@ -33,6 +33,10 @@ Rectangle {
         id: notesPageModel
     }
 
+    Component.onCompleted: {
+        notesPageModel.load()
+    }
+
     RadioButtonGroup {
         width: 224
         height: 70

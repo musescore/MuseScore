@@ -278,38 +278,18 @@ if (MUSE_MODULE_AUDIO_EXPORT)
         ${MODULE_LINK}
         lame
     )
-    if (MUE_COMPILE_USE_SYSTEM_OPUSENC)
-        pkg_check_modules(libopusenc REQUIRED IMPORTED_TARGET libopusenc)
-        # Transitive dependency
-        pkg_check_modules(opus REQUIRED IMPORTED_TARGET opus)
-        set(MODULE_LINK
-            ${MODULE_LINK}
-            PkgConfig::libopusenc
-            PkgConfig::opus
-        )
-        set(MODULE_DEF "SYSTEM_OPUSENC")
-    else()
-        add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/opusenc opusenc)
-        set(MODULE_LINK
-            ${MODULE_LINK}
-            opusenc
-        )
-    endif()
-    if (MUE_COMPILE_USE_SYSTEM_FLAC)
-        pkg_check_modules(flac REQUIRED IMPORTED_TARGET flac)
-        pkg_check_modules(flacpp REQUIRED IMPORTED_TARGET flac++)
-        set(MODULE_LINK
-            ${MODULE_LINK}
-            PkgConfig::flac
-            PkgConfig::flacpp
-        )
-    else()
-        add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/flac flac)
-        set(MODULE_LINK
-            ${MODULE_LINK}
-            flac
-        )
-    endif()
+
+    include(cmake/SetupOpusEnc.cmake)
+    set(MODULE_LINK
+        ${MODULE_LINK}
+        ${LIBOPUSENC_TARGETS}
+    )
+
+    include(cmake/SetupFlac.cmake)
+    set(MODULE_LINK
+        ${MODULE_LINK}
+        ${FLAC_TARGETS}
+    )
 endif()
 
 if (ARCH_IS_X86_64)

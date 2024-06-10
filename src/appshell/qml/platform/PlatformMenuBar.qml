@@ -25,6 +25,8 @@ import Qt.labs.platform 1.1 as PLATFORM
 import MuseScore.AppShell 1.0
 
 Item {
+    id: root
+
     readonly property bool available: menuModel.isGlobalMenuAvailable()
 
     PLATFORM.MenuBar {
@@ -83,11 +85,11 @@ Item {
     }
 
     function makeMenuItem(parentMenu, itemInfo) {
-            var menuItem = menuItemComponent.createObject(parentMenu)
+        var menuItem = menuItemComponent.createObject(parentMenu)
 
-            setUpMenuItem(menuItem, itemInfo)
+        setUpMenuItem(menuItem, itemInfo)
 
-            return menuItem
+        return menuItem
     }
 
     function setUpMenuItem(menuItem, itemInfo) {
@@ -119,11 +121,11 @@ Item {
                     var isMenu = Boolean(item.subitems) && item.subitems.length > 0
 
                     if (isMenu) {
-                        let menu = makeMenu(item)
+                        let menu = root.makeMenu(item)
                         addMenu(menu)
                         menu.load()
                     } else {
-                        let menuItem = makeMenuItem(this, item)
+                        let menuItem = root.makeMenuItem(this, item)
                         addItem(menuItem)
                     }
                 }
@@ -135,9 +137,9 @@ Item {
                     let isMenu = Boolean(item.subitems) && item.subitems.length > 0
 
                     if (isMenu) {
-                        setUpMenu(items[i].subMenu, item)
+                        root.setUpMenu(items[i].subMenu, item)
                     } else {
-                        setUpMenuItem(items[i], item)
+                        root.setUpMenuItem(items[i], item)
                     }
                 }
             }

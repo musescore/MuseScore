@@ -5822,8 +5822,8 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     TextLineBaseSegment::LayoutData* ldata = item->mutldata();
     item->npointsRef() = 0;
     TextLineBase* tl = item->textLineBase();
-    double _spatium = tl->spatium();
-    bool isSingleOrBegin = item->isSingleBeginType();
+    const double _spatium = tl->spatium();
+    const bool isSingleOrBegin = item->isSingleBeginType();
 
     if (item->spanner()->placeBelow()) {
         ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
@@ -5918,20 +5918,20 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 
     double x1 = std::min(0.0, pp2.x());
     double x2 = std::max(0.0, pp2.x());
-    double y0 = -tl->lineWidth();
+    const double y0 = -tl->lineWidth();
     double y1 = std::min(0.0, pp2.y()) + y0;
     double y2 = std::max(0.0, pp2.y()) - y0;
 
     double l1 = 0.0;
     double l2 = 0.0;
-    double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
+    const double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
 
-    bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
-    bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
-    bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
-    bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
-    bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
-    bool hasEndText = !item->endText()->empty() && item->isSingleEndType();
+    const bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
+    const bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
+    const bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
+    const bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
+    const bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
+    const bool hasEndText = !item->endText()->empty() && item->isSingleEndType();
 
     if (!item->text()->empty()) {
         if ((isSingleOrBegin && alignBeginText) || (!isSingleOrBegin && alignContinueText)) {

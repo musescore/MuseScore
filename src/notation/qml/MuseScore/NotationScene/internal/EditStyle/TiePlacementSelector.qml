@@ -34,6 +34,10 @@ Rectangle {
         id: tiePlacementSelector
     }
 
+    Component.onCompleted: {
+        tiePlacementSelector.load()
+    }
+
     Column {
         spacing: 8
 

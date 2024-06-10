@@ -514,10 +514,11 @@ staff_idx_t Tuplet::vStaffIdx() const
     while (cr->isTuplet()) {
         const Tuplet* t = toTuplet(cr);
         if (t->elements().empty()) {
-            break;
+            return muse::nidx;
         }
         cr = t->elements().front();
     }
+
     return cr->vStaffIdx();
 }
 
