@@ -544,6 +544,9 @@ TEST_F(Musicxml_Tests, divisionsDefinedTooLate1) {
 TEST_F(Musicxml_Tests, divisionsDefinedTooLate2) {
     mxmlIoTestRef("testDivsDefinedTooLate2");
 }
+TEST_F(Musicxml_Tests, divisionsDuration) {
+    mxmlIoTest("testDivisionsDuration");
+}
 TEST_F(Musicxml_Tests, doubleClefError) {
     mxmlIoTestRef("testDoubleClefError");
 }
