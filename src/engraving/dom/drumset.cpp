@@ -270,7 +270,7 @@ DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation
 //    initialize standard midi drumset
 //---------------------------------------------------------
 
-void initDrumset()
+void Drumset::initDrumset()
 {
     smDrumset = new Drumset;
     for (int i = 0; i < 128; ++i) {

@@ -24,7 +24,9 @@
 
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/instrument.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/spanner.h"
 
@@ -42,6 +44,8 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
     if (score->mscVersion() >= 420) {
         undoStaffTextExcludeFromPart(score);
     }
+
+    migrateDynamicPosOnVocalStaves(score);
 }
 
 void EngravingCompat::correctPedalEndPoints(MasterScore* score)
@@ -92,6 +96,46 @@ void EngravingCompat::undoStaffTextExcludeFromPart(MasterScore* masterScore)
     }
 }
 
+void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Part* part : score->parts()) {
+            if (!part->instrument()->isVocalInstrument()) {
+                continue;
+            }
+            for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+                for (Segment& segment : toMeasure(mb)->segments()) {
+                    if (!segment.isChordRestType()) {
+                        continue;
+                    }
+                    for (EngravingItem* item : segment.annotations()) {
+                        if (!item || !item->hasVoiceApplicationProperties()) {
+                            continue;
+                        }
+                        if (item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION)) {
+                            item->setProperty(Pid::DIRECTION, DirectionV::DOWN);
+                            item->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+                        }
+                    }
+                }
+            }
+        }
+        for (auto pair : score->spanner()) {
+            Spanner* spanner = pair.second;
+            if (!spanner->isHairpin()) {
+                continue;
+            }
+            if (spanner->getProperty(Pid::DIRECTION) == spanner->propertyDefault(Pid::DIRECTION)) {
+                spanner->setProperty(Pid::DIRECTION, DirectionV::DOWN);
+                spanner->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+            }
+        }
+    }
+}
+
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
     if (score->mscVersion() >= 440) {
@@ -114,7 +158,7 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
 {
     bool found = false;
 
-    auto findBeam = [&found, score](ChordRest* cr) {
+    auto findBeam = [&found](ChordRest* cr) {
         Beam* beam = cr->beam();
         if (beam && beam->userModified() && beam->cross() && beam->elements().front() == cr) {
             found = true;

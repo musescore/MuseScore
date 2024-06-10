@@ -60,7 +60,6 @@
 #include "view/preferences/braillepreferencesmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
-#include "view/windowdroparea.h"
 #include "view/internal/maintoolbarmodel.h"
 
 #ifdef Q_OS_MAC
@@ -99,7 +98,6 @@ void AppShellModule::registerExports()
     #endif
 
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
-    ioc()->registerExport<IApplicationActionController>(moduleName(), m_applicationActionController);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
     ioc()->registerExport<ISessionsManager>(moduleName(), m_sessionsManager);
 
@@ -174,8 +172,6 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");
     qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
     qmlRegisterType<MainToolBarModel>("MuseScore.AppShell", 1, 0, "MainToolBarModel");
-
-    qmlRegisterType<WindowDropArea>("Muse.Ui", 1, 0, "WindowDropArea");
 }
 
 void AppShellModule::onPreInit(const IApplication::RunMode& mode)

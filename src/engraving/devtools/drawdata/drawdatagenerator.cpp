@@ -51,6 +51,11 @@ using namespace mu::engraving;
 
 static const std::vector<std::string> FILES_FILTER = { "*.mscz", "*.mscx", "*.gp", "*.gpx", "*.gp4", "*.gp5" };
 
+DrawDataGenerator::DrawDataGenerator(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 Ret DrawDataGenerator::processDir(const muse::io::path_t& scoreDir, const muse::io::path_t& outDir, const GenOpt& opt)
 {
     io::Dir::mkpath(outDir);
@@ -101,7 +106,7 @@ Ret DrawDataGenerator::processFile(const muse::io::path_t& scoreFile, const muse
 
 DrawDataPtr DrawDataGenerator::genDrawData(const muse::io::path_t& scorePath, const GenOpt& opt) const
 {
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
     if (!loadScore(score, scorePath)) {
         LOGE() << "failed load score: " << scorePath;
         return nullptr;
@@ -139,7 +144,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const muse::io::path_t& scorePath, co
 Pixmap DrawDataGenerator::genImage(const muse::io::path_t& scorePath) const
 {
     LOGD() << "try: " << scorePath;
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
     if (!loadScore(score, scorePath)) {
         LOGE() << "failed load score: " << scorePath;
         return Pixmap();

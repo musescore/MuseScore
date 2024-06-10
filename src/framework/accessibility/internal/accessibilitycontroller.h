@@ -47,17 +47,18 @@ class DiagnosticAccessibleModel;
 }
 
 namespace muse::accessibility {
-class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
+class AccessibilityController : public IAccessibilityController, public IAccessible, public muse::Injectable, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
 public:
-    Inject<IApplication> application;
-    Inject<ui::IMainWindow> mainWindow;
-    Inject<ui::IInteractiveProvider> interactiveProvider;
-    Inject<IAccessibilityConfiguration> configuration;
+    Inject<IApplication> application = { this };
+    Inject<ui::IMainWindow> mainWindow = { this };
+    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    Inject<IAccessibilityConfiguration> configuration = { this };
 
 public:
-    AccessibilityController() = default;
+    AccessibilityController(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
     ~AccessibilityController() override;
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
@@ -83,6 +84,7 @@ public:
     IAccessible* accessibleChild(size_t i) const override;
 
     QWindow* accessibleWindow() const override;
+    muse::modularity::ContextPtr iocContext() const override;
 
     Role accessibleRole() const override;
     QString accessibleName() const override;

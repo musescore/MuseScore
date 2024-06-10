@@ -70,7 +70,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/configreader.h
 
     ${KORS_MODULARITY_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/modularity/ioc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modularity/ioccontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/modularity/ioc.h
     ${CMAKE_CURRENT_LIST_DIR}/modularity/imoduleinterface.h
     ${CMAKE_CURRENT_LIST_DIR}/modularity/imodulesetup.h
@@ -251,6 +251,10 @@ endif()
 
 if (MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
+endif()
+
+if (MUSE_MODULE_GLOBAL_MULTI_IOC)
+    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_GLOBAL_MULTI_IOC)
 endif()
 
 setup_module()

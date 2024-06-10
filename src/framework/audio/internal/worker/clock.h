@@ -33,8 +33,6 @@ class Clock : public IClock, public async::Asyncable
 public:
     Clock();
 
-    msecs_t currentTime() const override;
-
     void forward(const msecs_t nextMsecs) override;
 
     void start() override;
@@ -43,17 +41,19 @@ public:
     void pause() override;
     void resume() override;
     void seek(const msecs_t msecs) override;
+    async::Notification seekOccurred() const override;
+    bool isRunning() const override;
+
+    PlaybackStatus status() const override;
+    async::Channel<PlaybackStatus> statusChanged() const override;
 
     msecs_t timeDuration() const override;
     void setTimeDuration(const msecs_t duration) override;
     Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetTimeLoop() override;
 
-    bool isRunning() const override;
-
-    async::Channel<msecs_t> timeChanged() const override;
-    async::Notification seekOccurred() const override;
-    async::Channel<PlaybackStatus> statusChanged() const override;
+    msecs_t currentTime() const override;
+    async::Channel<secs_t> timeChanged() const override;
 
 private:
     void setCurrentTime(msecs_t time);
@@ -64,7 +64,7 @@ private:
     msecs_t m_timeLoopStart = 0;
     msecs_t m_timeLoopEnd = 0;
 
-    async::Channel<msecs_t> m_timeChangedInMilliSecs;
+    async::Channel<secs_t> m_timeChangedInSecs;
     async::Notification m_seekOccurred;
 };
 }

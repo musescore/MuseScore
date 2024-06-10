@@ -94,3 +94,8 @@ void ActionsDispatcher::reg(Actionable* client, const ActionCode& actionCode, co
     CallBacks& callbacks = clients[client];
     callbacks.insert({ actionCode, call });
 }
+
+bool ActionsDispatcher::isReg(Actionable* client) const
+{
+    return client->isDispatcher(this);
+}

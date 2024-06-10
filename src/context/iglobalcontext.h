@@ -22,10 +22,11 @@
 #ifndef MU_CONTEXT_IGLOBALCONTEXT_H
 #define MU_CONTEXT_IGLOBALCONTEXT_H
 
+#include "async/notification.h"
 #include "modularity/imoduleinterface.h"
 #include "project/inotationproject.h"
-#include "async/notification.h"
-#include "io/path.h"
+#include "audio/iplayer.h"
+#include "iplaybackstate.h"
 
 namespace mu::context {
 class IGlobalContext : MODULE_EXPORT_INTERFACE
@@ -45,6 +46,9 @@ public:
     virtual void setCurrentNotation(const notation::INotationPtr& notation) = 0;
     virtual notation::INotationPtr currentNotation() const = 0;
     virtual muse::async::Notification currentNotationChanged() const = 0;
+
+    virtual void setCurrentPlayer(const muse::audio::IPlayerPtr& player) = 0;
+    virtual IPlaybackStatePtr playbackState() const = 0;
 };
 }
 

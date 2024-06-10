@@ -48,7 +48,8 @@ void NoteInputCursor::paint(muse::draw::Painter* painter)
         const StaffType* staffType = state.staff ? state.staff->staffType() : nullptr;
 
         if (staffType) {
-            staffType->drawInputStringMarks(painter, state.currentString, state.currentVoiceIndex, cursorRect);
+            staffType->drawInputStringMarks(painter, state.currentString,
+                                            configuration()->selectionColor(state.currentVoiceIndex), cursorRect);
         }
     }
 }

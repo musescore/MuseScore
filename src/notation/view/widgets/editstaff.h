@@ -31,18 +31,20 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "global/iinteractive.h"
+#include "engraving/iengravingconfiguration.h"
 #include "iselectinstrumentscenario.h"
 
 namespace mu::notation {
 class EditStaffType;
 
-class EditStaff : public QDialog, private Ui::EditStaffBase
+class EditStaff : public QDialog, private Ui::EditStaffBase, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(ISelectInstrumentsScenario, selectInstrumentsScenario)
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     EditStaff(QWidget* parent = nullptr);

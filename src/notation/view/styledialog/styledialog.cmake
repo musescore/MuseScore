@@ -14,4 +14,6 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/bendstyleselector.h
     ${CMAKE_CURRENT_LIST_DIR}/tieplacementselector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tieplacementselector.h
+    ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.h
     )

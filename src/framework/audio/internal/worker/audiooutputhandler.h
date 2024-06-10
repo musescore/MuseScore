@@ -38,12 +38,12 @@ class SoundTrackWriter;
 using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 }
 
-class AudioOutputHandler : public IAudioOutput, public async::Asyncable
+class AudioOutputHandler : public IAudioOutput, public Injectable, public async::Asyncable
 {
-    Inject<fx::IFxResolver> fxResolver;
+    Inject<fx::IFxResolver> fxResolver = { this };
 
 public:
-    explicit AudioOutputHandler(IGetTrackSequence* getSequence);
+    explicit AudioOutputHandler(IGetTrackSequence* getSequence, const muse::modularity::ContextPtr& iocCtx);
 
     async::Promise<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) override;

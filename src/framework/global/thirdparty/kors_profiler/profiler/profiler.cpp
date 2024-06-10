@@ -188,6 +188,7 @@ void Profiler::clear()
             m_funcs.threads[i] = empty;
         }
         m_funcs.threads[MAIN_THREAD_INDEX] = std::this_thread::get_id();
+        m_funcs.lastIndex.store(1);
     }
     {
         std::lock_guard<std::mutex> lock(m_funcs.mutex);

@@ -40,7 +40,7 @@ Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chord
 {
     MCursor c;
     c.setTimeSig(_sig);
-    c.createScore(u"");
+    c.createScore(iocContext(), u"");
     c.addPart(u"voice");
     c.move(0, Fraction(0, 1));
     c.addKeySig(Key::C);
@@ -78,7 +78,7 @@ Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chord
 }
 
 NoteGroups::NoteGroups(QWidget* parent)
-    : QGroupBox(parent)
+    : QGroupBox(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
 

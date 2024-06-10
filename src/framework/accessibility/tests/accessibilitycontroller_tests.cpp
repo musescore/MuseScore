@@ -44,7 +44,7 @@ public:
 
     void SetUp() override
     {
-        m_controller = std::make_shared<AccessibilityController>();
+        m_controller = std::make_shared<AccessibilityController>(muse::modularity::globalCtx());
 
         m_mainWindow = std::make_shared<muse::ui::MainWindowMock>();
         m_controller->mainWindow.set(m_mainWindow);
@@ -65,6 +65,7 @@ public:
         size_t accessibleChildCount() const override { return 0; }
         const IAccessible* accessibleChild(size_t) const override { return nullptr; }
         QWindow* accessibleWindow() const override { return nullptr; }
+        muse::modularity::ContextPtr iocContext() const override { return muse::modularity::globalCtx(); }
         IAccessible::Role accessibleRole() const override { return IAccessible::NoRole; }
         QString accessibleName() const override { return QString(); }
         QString accessibleDescription() const override { return QString(); }

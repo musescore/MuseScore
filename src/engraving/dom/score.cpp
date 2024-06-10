@@ -147,10 +147,14 @@ static void markInstrumentsAsPrimary(std::vector<Part*>& parts)
 //   Score
 //---------------------------------------------------------
 
-Score::Score()
-    : EngravingObject(ElementType::SCORE, nullptr), m_headersText(MAX_HEADERS, nullptr)
-    , m_footersText(MAX_FOOTERS, nullptr), m_selection(this)
+Score::Score(const modularity::ContextPtr& iocCtx)
+    : EngravingObject(ElementType::SCORE, nullptr), muse::Injectable(iocCtx)
+    , m_headersText(MAX_HEADERS, nullptr), m_footersText(MAX_FOOTERS, nullptr), m_selection(this)
 {
+    if (elementsProvider()) {
+        elementsProvider()->reg(this);
+    }
+
     Score::validScores.insert(this);
     m_masterScore = 0;
 
@@ -172,7 +176,7 @@ Score::Score()
 }
 
 Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
-    : Score{}
+    : Score{parent->iocContext()}
 {
     Score::validScores.insert(this);
     m_masterScore = parent;

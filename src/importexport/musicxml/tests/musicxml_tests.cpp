@@ -923,6 +923,15 @@ TEST_F(Musicxml_Tests, notesRests2) {
 TEST_F(Musicxml_Tests, numberedLyrics) {
     mxmlIoTestRef("testNumberedLyrics");
 }
+TEST_F(Musicxml_Tests, overlappingSpanners) {
+    mxmlIoTest("testOverlappingSpanners");
+}
+TEST_F(Musicxml_Tests, partNames) {
+    mxmlImportTestRef("testPartNames");
+}
+TEST_F(Musicxml_Tests, partNames2) {
+    mxmlIoTest("testPartNames2");
+}
 TEST_F(Musicxml_Tests, pedalChanges) {
     mxmlIoTest("testPedalChanges");
 }
@@ -934,12 +943,6 @@ TEST_F(Musicxml_Tests, pedalStyles) {
 }
 TEST_F(Musicxml_Tests, placementDefaults) {
     mxmlImportTestRef("testPlacementDefaults");
-}
-TEST_F(Musicxml_Tests, overlappingSpanners) {
-    mxmlIoTest("testOverlappingSpanners");
-}
-TEST_F(Musicxml_Tests, partNames) {
-    mxmlImportTestRef("testPartNames");
 }
 TEST_F(Musicxml_Tests, printSpacingNo) {
     mxmlIoTestRef("testPrintSpacingNo");

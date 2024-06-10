@@ -138,6 +138,7 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Chord>
             <durationType>half</durationType>
@@ -185,6 +186,7 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Expression>
             <text><i>sub.</i></text>
@@ -212,6 +214,7 @@
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Chord>
             <durationType>half</durationType>
@@ -236,11 +239,13 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
               <lineVisible>0</lineVisible>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>

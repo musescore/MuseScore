@@ -280,10 +280,10 @@ void LyricsLayout::layoutMelismaLine(LyricsLineSegment* item)
 
     double tolerance = 0.05 * item->spatium();
     if (endX - startX < style.styleMM(Sid::lyricsMelismaMinLength) - tolerance) {
-        if (style.styleB(Sid::lyricsMelismaForce)) {
+        if (style.styleB(Sid::lyricsMelismaForce) || startLyrics->ticks() == Lyrics::TEMP_MELISMA_TICKS) {
             endX = startX + style.styleMM(Sid::lyricsMelismaMinLength);
         } else {
-            return;
+            endX = startX;
         }
     }
 
@@ -588,6 +588,9 @@ void LyricsLayout::collectLyricsVerses(staff_idx_t staffIdx, System* system, Lyr
 
     for (SpannerSegment* spannerSegment : system->spannerSegments()) {
         if (spannerSegment->staffIdx() == staffIdx && spannerSegment->isLyricsLineSegment()) {
+            if (muse::RealIsNull(spannerSegment->pos2().x())) {
+                continue;
+            }
             LyricsLineSegment* lyricsLineSegment = toLyricsLineSegment(spannerSegment);
             Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
             int verse = lyrics->no();

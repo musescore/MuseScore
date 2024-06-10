@@ -10597,7 +10597,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
         <source>Keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Tastaturoppsett</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="31"/>

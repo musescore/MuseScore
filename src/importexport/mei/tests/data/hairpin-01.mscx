@@ -257,7 +257,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <placement>above</placement>
+              <direction>up</direction>
               <lineStyle>dashed</lineStyle>
               <lineStyle>dashed</lineStyle>
               </HairPin>
@@ -311,7 +311,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
-              <placement>above</placement>
+              <direction>up</direction>
               <lineStyle>dotted</lineStyle>
               <lineStyle>dotted</lineStyle>
               </HairPin>
@@ -637,7 +637,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <placement>above</placement>
+              <direction>up</direction>
               </HairPin>
             <next>
               <location>
@@ -690,7 +690,6 @@
             <HairPin>
               <subtype>3</subtype>
               <beginText>diminuendo</beginText>
-              <placement>above</placement>
               <lineStyle>dotted</lineStyle>
               <lineStyle>dotted</lineStyle>
               </HairPin>

@@ -94,7 +94,7 @@ TEST_F(Engraving_ElementTests, DISABLED_testIds)
         ElementType::TAB_DURATION_SYMBOL,
     };
 
-    MasterScore* score = compat::ScoreAccess::createMasterScore();
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
     for (ElementType t : ids) {
         EngravingItem* e = Factory::createItem(t, score->dummy());
         EngravingItem* ee = ScoreRW::writeReadElement(e);

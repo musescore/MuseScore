@@ -3306,7 +3306,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5506"/>
         <source>Accidental distance:</source>
-        <translation>Odległość znaków chromatycznych:</translation>
+        <translation>Odległość znaku chrom. od znaku chrom.:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5538"/>
@@ -4094,7 +4094,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10554"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
-        <translation>Resetuj wartość &quot;Współczynnik Y pozycji łącznika&quot;</translation>
+        <translation>Resetuj wartość &quot;Współczynnik pozycji Y łącznika&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10564"/>
@@ -4154,7 +4154,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10737"/>
         <source>Dash Y position ratio:</source>
-        <translation>Współczynnik Y pozycji łącznika:</translation>
+        <translation>Współczynnik pozycji Y łącznika:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10747"/>
@@ -12114,7 +12114,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
         <source>Triplet feel</source>
-        <translation>Triplet feel</translation>
+        <translation>Rytm triolowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
@@ -16563,7 +16563,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4296"/>
         <source>Volume swell</source>
-        <translation>Zgłośnienie/ściszenie</translation>
+        <translation>Zgłośnienie i ściszenie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4505"/>
@@ -17161,7 +17161,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/tripletfeel.cpp" line="112"/>
         <source>No triplet feel</source>
-        <translation>Bez triplet feel</translation>
+        <translation>Bez rytmu triolowego</translation>
     </message>
 </context>
 <context>

@@ -113,7 +113,7 @@
               <no>1</no>
               <syllabic>end</syllabic>
               <ticks>1920</ticks>
-              <ticks_f>2/2</ticks_f>
+              <ticks_f>8/8</ticks_f>
               <text>que</text>
               </Lyrics>
             <Lyrics>
@@ -190,7 +190,7 @@
               </Lyrics>
             <Lyrics>
               <ticks>1920</ticks>
-              <ticks_f>1/1</ticks_f>
+              <ticks_f>8/8</ticks_f>
               <text>màs,</text>
               </Lyrics>
             <Note>
@@ -328,7 +328,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <ticks>1920</ticks>
-              <ticks_f>2/2</ticks_f>
+              <ticks_f>8/8</ticks_f>
               <text>màs</text>
               </Lyrics>
             <Note>
@@ -476,7 +476,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <ticks>1920</ticks>
-              <ticks_f>1/1</ticks_f>
+              <ticks_f>8/8</ticks_f>
               <text>màs,</text>
               </Lyrics>
             <Lyrics>

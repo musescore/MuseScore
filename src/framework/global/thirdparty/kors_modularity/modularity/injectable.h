@@ -23,26 +23,31 @@ public:
     Injectable(const GetContext& getCtx)
         : m_getCtx(getCtx) {}
 
+    Injectable(const Injectable& i) = default;
+
+    Injectable& operator=(const Injectable& i) = default;
+
     const modularity::ContextPtr& iocContext() const
     {
         if (m_ctx) {
             return m_ctx;
         }
 
-        assert(m_inj || m_getCtx);
-
         if (m_inj) {
-            return m_inj->iocContext();
+            m_ctx = m_inj->iocContext();
         }
 
-        m_ctx = m_getCtx();
+        if (m_getCtx) {
+            m_ctx = m_getCtx();
+        }
+
         return m_ctx;
     }
 
 private:
     mutable modularity::ContextPtr m_ctx;
     const Injectable* m_inj = nullptr;
-    const GetContext m_getCtx;
+    GetContext m_getCtx;
 };
 }
 

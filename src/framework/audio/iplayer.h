@@ -36,18 +36,23 @@ class IPlayer
 public:
     virtual ~IPlayer() = default;
 
-    virtual void play(const TrackSequenceId sequenceId) = 0;
-    virtual void seek(const TrackSequenceId sequenceId, const msecs_t newPositionMsecs) = 0;
-    virtual void stop(const TrackSequenceId sequenceId) = 0;
-    virtual void pause(const TrackSequenceId sequenceId) = 0;
-    virtual void resume(const TrackSequenceId sequenceId) = 0;
+    virtual TrackSequenceId sequenceId() const = 0;
 
-    virtual void setDuration(const TrackSequenceId sequenceId, const msecs_t durationMsec) = 0;
-    virtual async::Promise<bool> setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) = 0;
-    virtual void resetLoop(const TrackSequenceId sequenceId) = 0;
+    virtual void play() = 0;
+    virtual void seek(const secs_t newPosition) = 0;
+    virtual void stop() = 0;
+    virtual void pause() = 0;
+    virtual void resume() = 0;
 
-    virtual async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const = 0;
-    virtual async::Channel<TrackSequenceId, PlaybackStatus> playbackStatusChanged() const = 0;
+    virtual PlaybackStatus playbackStatus() const = 0;
+    virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
+
+    virtual void setDuration(const msecs_t durationMsec) = 0;
+    virtual async::Promise<bool> setLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
+    virtual void resetLoop() = 0;
+
+    virtual secs_t playbackPosition() const = 0;
+    virtual async::Channel<secs_t> playbackPositionChanged() const = 0;
 };
 
 using IPlayerPtr = std::shared_ptr<IPlayer>;

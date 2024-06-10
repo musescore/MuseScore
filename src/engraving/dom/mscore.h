@@ -195,7 +195,6 @@ public:
 
     static MsError _error;
 
-    static void init();
     static void registerUiTypes();
 
     static double hRaster() { return _hRaster; }

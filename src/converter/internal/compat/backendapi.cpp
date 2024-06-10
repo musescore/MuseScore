@@ -209,7 +209,7 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::pat
 {
     TRACEFUNC
 
-    auto notationProject = notationCreator()->newProject();
+    auto notationProject = notationCreator()->newProject(nullptr);
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Ret::Code::InternalError);
     }
@@ -647,7 +647,7 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
     MscWriter mscWriter(params);
     mscWriter.open();
 
-    bool ok = MscSaver().exportPart(score, mscWriter);
+    bool ok = MscSaver(muse::modularity::globalCtx()).exportPart(score, mscWriter);
     if (!ok) {
         LOGW() << "Error save mscz file";
     }

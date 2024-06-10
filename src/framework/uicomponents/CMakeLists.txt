@@ -75,6 +75,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/menuitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/menuitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstracttoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstracttoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/toolbaritem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/toolbaritem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/popupviewclosecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/popupviewclosecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/radiobuttongroupbox.cpp

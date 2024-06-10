@@ -34,7 +34,7 @@ using namespace mu::engraving;
 using IconCode = muse::ui::IconCode::Code;
 
 TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository, mu::engraving::ElementType elementType)
-    : AbstractInspectorModel(parent, repository, elementType)
+    : InspectorModelWithVoiceAndPositionOptions(parent, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
     setTitle(muse::qtrc("inspector", "Text line"));
@@ -63,6 +63,8 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
 
 void TextLineSettingsModel::createProperties()
 {
+    InspectorModelWithVoiceAndPositionOptions::createProperties();
+
     auto applyPropertyValueAndUpdateAvailability = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         onUpdateLinePropertiesAvailability();
@@ -90,18 +92,20 @@ void TextLineSettingsModel::createProperties()
 
     m_placement = buildPropertyItem(Pid::PLACEMENT);
 
-    m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
+    m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT, applyPropertyValueAndUpdateAvailability);
     m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
 
-    m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
+    m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT, applyPropertyValueAndUpdateAvailability);
     m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
 
-    m_endText = buildPropertyItem(Pid::END_TEXT);
+    m_endText = buildPropertyItem(Pid::END_TEXT, applyPropertyValueAndUpdateAvailability);
     m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
 }
 
 void TextLineSettingsModel::loadProperties()
 {
+    InspectorModelWithVoiceAndPositionOptions::loadProperties();
+
     static const PropertyIdSet propertyIdSet {
         Pid::LINE_VISIBLE,
         Pid::DIAGONAL,
@@ -128,6 +132,8 @@ void TextLineSettingsModel::loadProperties()
 
 void TextLineSettingsModel::resetProperties()
 {
+    InspectorModelWithVoiceAndPositionOptions::resetProperties();
+
     QList<PropertyItem*> allProperties {
         m_isLineVisible,
         m_allowDiagonal,
@@ -296,6 +302,15 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
 
     m_dashLineLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
+
+    bool hasBeginText = !m_beginningText->value().toString().isEmpty();
+    bool hasContinueText = !m_continuousText->value().toString().isEmpty();
+    bool hasEndText = !m_endText->value().toString().isEmpty();
+
+    m_beginningTextOffset->setIsEnabled(hasBeginText);
+    m_continuousTextOffset->setIsEnabled(hasContinueText);
+    m_endTextOffset->setIsEnabled(hasEndText);
+    m_gapBetweenTextAndLine->setIsEnabled(isLineAvailable && (hasBeginText || hasContinueText || hasEndText));
 }
 
 void TextLineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>& types)

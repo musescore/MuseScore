@@ -33,8 +33,8 @@ class KeyboardApi : public api::ApiObject
 {
     Q_OBJECT
 
-    INJECT(shortcuts::IShortcutsController, shortcutsController)
-    INJECT(ui::IMainWindow, mainWindow)
+    Inject<shortcuts::IShortcutsController> shortcutsController = { this };
+    Inject<ui::IMainWindow> mainWindow = { this };
 
 public:
     explicit KeyboardApi(api::IApiEngine* e);

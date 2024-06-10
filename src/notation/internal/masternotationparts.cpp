@@ -190,14 +190,19 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
 
     startGlobalEdit();
 
-    const Part* part = partModifiable(instrumentKey.partId);
+    Part* part = partModifiable(instrumentKey.partId);
     bool isMainInstrument = part && isMainInstrumentForPart(instrumentKey, part);
+
+    mu::engraving::Interval oldTranspose = part ? part->instrument()->transpose() : mu::engraving::Interval(0, 0);
 
     NotationParts::replaceInstrument(instrumentKey, newInstrument);
 
     for (INotationPartsPtr parts : excerptsParts()) {
         parts->replaceInstrument(instrumentKey, newInstrument);
     }
+
+    // this also transposes all linked parts
+    score()->transpositionChanged(part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
 
     if (isMainInstrument) {
         if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {

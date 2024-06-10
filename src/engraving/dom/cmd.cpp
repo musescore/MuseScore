@@ -3553,8 +3553,8 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, staff
     }
 
     if (!empty) {
-        auto b = MessageBox::warning(muse::trc("engraving", "Current contents of measures will be replaced"),
-                                     muse::trc("engraving", "Continue with inserting measure repeat?"));
+        auto b = MessageBox(iocContext()).warning(muse::trc("engraving", "Current contents of measures will be replaced"),
+                                                  muse::trc("engraving", "Continue with inserting measure repeat?"));
         if (b == MessageBox::Button::Cancel) {
             return false;
         }

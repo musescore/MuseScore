@@ -274,8 +274,9 @@ Chord::Chord(Segment* parent)
     m_playEventType    = PlayEventType::Auto;
     m_spaceLw          = 0.;
     m_spaceRw          = 0.;
-    m_crossMeasure    = CrossMeasure::UNKNOWN;
-    m_graceIndex   = 0;
+    m_crossMeasure     = CrossMeasure::UNKNOWN;
+    m_graceIndex       = 0;
+    m_combineVoice       = true;
 }
 
 Chord::Chord(const Chord& c, bool link)
@@ -316,7 +317,8 @@ Chord::Chord(const Chord& c, bool link)
     m_playEventType  = c.m_playEventType;
     m_stemDirection  = c.m_stemDirection;
     m_noteType       = c.m_noteType;
-    m_crossMeasure  = CrossMeasure::UNKNOWN;
+    m_crossMeasure   = CrossMeasure::UNKNOWN;
+    m_combineVoice     = c.m_combineVoice;
 
     if (c.m_stem) {
         add(Factory::copyStem(*(c.m_stem)));
@@ -2101,6 +2103,7 @@ PropertyValue Chord::getProperty(Pid propertyId) const
     case Pid::SMALL:           return isSmall();
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
+    case Pid::COMBINE_VOICE: return combineVoice();
     default:
         return ChordRest::getProperty(propertyId);
     }
@@ -2118,6 +2121,7 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     case Pid::SMALL:           return false;
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::PLAY: return true;
+    case Pid::COMBINE_VOICE: return true;
     default:
         return ChordRest::propertyDefault(propertyId);
     }
@@ -2144,6 +2148,9 @@ bool Chord::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PLAY:
         setIsChordPlayable(v.toBool());
+        break;
+    case Pid::COMBINE_VOICE:
+        setCombineVoice(v.toBool());
         break;
     default:
         return ChordRest::setProperty(propertyId, v);
@@ -2340,9 +2347,6 @@ void Chord::setSlash(bool flag, bool stemless)
         return;
     }
 
-    // set stem to auto (mostly important for rhythmic notation on drum staves)
-    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
-
     // make stemless if asked
     if (stemless) {
         undoChangeProperty(Pid::NO_STEM, true);
@@ -2355,6 +2359,7 @@ void Chord::setSlash(bool flag, bool stemless)
     if (track() % VOICES < 2) {
         // use middle line
         line = staffType->middleLine();
+        undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::DOWN));
     } else {
         // set small
         undoChangeProperty(Pid::SMALL, true);
@@ -2363,11 +2368,13 @@ void Chord::setSlash(bool flag, bool stemless)
         if (track() % 2) {
             line = staffType->bottomLine() + 1;
             y    = 0.5 * spatium();
+            undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::DOWN));
         } else {
             line = -1;
             if (!staffType->isDrumStaff()) {
                 y = -0.5 * spatium();
             }
+            undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::UP));
         }
         // for non-drum staves, add an additional offset
         // for drum staves, no offset, but use normal head
@@ -3219,7 +3226,7 @@ void Chord::computeKerningExceptions()
     }
 }
 
-Ornament* Chord::findOrnament() const
+Ornament* Chord::findOrnament(bool forPlayback) const
 {
     for (Articulation* art : m_articulations) {
         if (art->isOrnament()) {
@@ -3229,6 +3236,13 @@ Ornament* Chord::findOrnament() const
     for (Spanner* spanner : m_startingSpanners) {
         if (spanner->isTrill()) {
             return toTrill(spanner)->ornament();
+        }
+    }
+    if (forPlayback) {
+        for (Spanner* spanner : m_endingSpanners) {
+            if (spanner->isTrill()) {
+                return toTrill(spanner)->ornament();
+            }
         }
     }
     return nullptr;

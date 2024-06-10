@@ -703,7 +703,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 note->setFret(n.value);
                 note->setString(n.str);
                 const StringData* sd = score->staff(staff)->part()->instrument()->stringData();
-                int k     = int(curTrack->infos[staff].strings.size()) - n.str - 1;
+                int k     = std::max(int(curTrack->infos[staff].strings.size()) - n.str - 1, 0);
                 int pitch = sd->stringList().at(k).pitch + n.value;         //getPitch(n.str, n.value, 0);
                 note->setPitch(pitch);
                 note->setTpcFromPitch();
@@ -782,8 +782,16 @@ void PowerTab::addToScore(ptSection& sec)
             Staff* s = Factory::createStaff(part);
             auto info = &curTrack->infos[i];
             std::string ss = info->name;
-            part->setPartName(String::fromStdString(ss));
-            part->setPlainLongName(String::fromStdString(ss));
+            String staffName;
+            if (muse::UtfCodec::isValidUtf8(ss)) {
+                staffName = muse::String::fromStdString(ss);
+            } else {
+                // invalid utf most likely windows-125x used
+                std::string n = "part " + std::to_string(i + 1);
+                staffName = muse::String::fromStdString(n);
+            }
+            part->setPartName(staffName);
+            part->setPlainLongName(staffName);
 
             std::vector<int> reverseStr;
             for (auto it = info->strings.rbegin(); it != info->strings.rend(); ++it) {

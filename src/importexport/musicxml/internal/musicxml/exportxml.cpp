@@ -354,14 +354,15 @@ struct MeasurePrintContext final
 typedef std::unordered_map<const ChordRest*, const Trill*> TrillHash;
 typedef std::map<const Instrument*, int> MxmlInstrumentMap;
 
-class ExportMusicXml
+class ExportMusicXml : public muse::Injectable
 {
 public:
-    INJECT_STATIC(mu::iex::musicxml::IMusicXmlConfiguration, configuration)
-    INJECT_STATIC(muse::IApplication, application)
+    static inline muse::GlobalInject<mu::iex::musicxml::IMusicXmlConfiguration> configuration;
+    muse::Inject<muse::IApplication> application  = { this };
 
 public:
     ExportMusicXml(Score* s)
+        : muse::Injectable(s->iocContext())
     {
         m_score = s;
         m_tick = { 0, 1 };
@@ -437,7 +438,7 @@ private:
 
     static String elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm);
     static String positioningAttributesForTboxText(const PointF position, float spatium);
-    static void identification(XmlWriter& xml, Score const* const score);
+    void identification(XmlWriter& xml, Score const* const score);
 
     Score* m_score = nullptr;
     XmlWriter m_xml;
@@ -2858,6 +2859,34 @@ static void writeAccidental(XmlWriter& xml, const String& tagName, const Acciden
             addColorAttr(acc, attrs);
             xml.tag(AsciiStringView(tag.toStdString()), attrs, s);
         }
+    }
+}
+
+//---------------------------------------------------------
+//   writeDisplayName
+//---------------------------------------------------------
+
+static void writeDisplayName(XmlWriter& xml, const String& partName)
+{
+    String displayText;
+    for (size_t i = 0; i < partName.size(); ++i) {
+        Char ch = partName.at(i);
+        if (ch != u'♭' && ch != u'♯') {
+            displayText += ch;
+        } else {
+            if (!displayText.empty()) {
+                xml.tag("display-text", displayText);
+            }
+            if (ch == u'♭') {
+                xml.tag("accidental-text", "flat");
+            } else if (ch == u'♯') {
+                xml.tag("accidental-text", "sharp");
+            }
+            displayText.clear();
+        }
+    }
+    if (!displayText.empty()) {
+        xml.tag("display-text", displayText);
     }
 }
 
@@ -7390,21 +7419,30 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
 
         xml.startElementRaw(String(u"score-part id=\"P%1\"").arg(idx + 1));
         initInstrMap(instrMap, part->instruments(), score);
+        static const std::wregex acc(L"[♭♯]");
+        XmlWriter::Attributes attributes;
         // by default export the parts long name as part-name
-        if (part->longName() != "") {
-            xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
-        } else {
-            if (part->partName() != "") {
-                // use the track name if no part long name
-                // to prevent an empty track name on import
-                xml.tag("part-name", { { "print-object", "no" } }, MScoreTextToMXML::toPlainText(part->partName()));
-            } else {
-                // part-name is required
-                xml.tag("part-name", "");
+        String partName = part->longName();
+        // use the track name if no part long name
+        if (partName.empty()) {
+            partName = part->partName();
+            if (!partName.empty()) {
+                attributes.push_back({ "print-object", "no" });
             }
         }
+        xml.tag("part-name", attributes, MScoreTextToMXML::toPlainText(partName).replace(u"♭", u"b").replace(u"♯", u"#"));
+        if (partName.contains(acc)) {
+            xml.startElement("part-name-display");
+            writeDisplayName(xml, partName);
+            xml.endElement();
+        }
         if (!part->shortName().isEmpty()) {
-            xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
+            xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()).replace(u"♭", u"b").replace(u"♯", u"#"));
+            if (part->shortName().contains(acc)) {
+                xml.startElement("part-abbreviation-display");
+                writeDisplayName(xml, part->shortName());
+                xml.endElement();
+            }
         }
 
         if (part->instrument()->useDrumset()) {

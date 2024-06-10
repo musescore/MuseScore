@@ -217,7 +217,7 @@ PropertyValue Jump::propertyDefault(Pid propertyId) const
 EngravingItem* Jump::nextSegmentElement()
 {
     Segment* seg = measure()->last();
-    return seg->firstElement(staffIdx());
+    return seg->firstElementForNavigation(staffIdx());
 }
 
 //---------------------------------------------------------

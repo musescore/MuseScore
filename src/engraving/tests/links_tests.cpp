@@ -71,7 +71,7 @@ TEST_F(Engraving_LinksTests, test3LinkedSameScore_99796)
 {
     MCursor c;
     c.setTimeSig(Fraction(4, 4));
-    c.createScore(u"test");
+    c.createScore(nullptr, u"test");
     c.addPart(u"voice");
     c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 
@@ -174,7 +174,7 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
 {
     MCursor c;
     c.setTimeSig(Fraction(4, 4));
-    c.createScore(u"test");
+    c.createScore(nullptr, u"test");
     c.addPart(u"voice");
     c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 
@@ -255,7 +255,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
 {
     MCursor c;
     c.setTimeSig(Fraction(4, 4));
-    c.createScore(u"test");
+    c.createScore(nullptr, u"test");
     c.addPart(u"electric-guitar");
     c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 
@@ -378,7 +378,7 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
 {
     MCursor c;
     c.setTimeSig(Fraction(4, 4));
-    c.createScore(u"test");
+    c.createScore(nullptr, u"test");
     c.addPart(u"electric-guitar");
     c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 

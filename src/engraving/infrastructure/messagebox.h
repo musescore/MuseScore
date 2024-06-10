@@ -25,25 +25,29 @@
 #include <set>
 #include <string>
 
-#ifndef ENGRAVING_NO_INTERACTIVE
 #include "modularity/ioc.h"
+
+#ifndef ENGRAVING_NO_INTERACTIVE
 #include "iinteractive.h"
 #endif
 
 namespace mu::engraving {
-class MessageBox
+class MessageBox : public muse::Injectable
 {
 #ifndef ENGRAVING_NO_INTERACTIVE
-    INJECT_STATIC(muse::IInteractive, interactive)
+    muse::Inject<muse::IInteractive> interactive = { this };
 #endif
 public:
+
+    MessageBox(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     enum Button {
         Ok,
         Cancel
     };
 
-    static Button warning(const std::string& title, const std::string& text, const std::set<Button>& buttons = { Ok, Cancel });
+    Button warning(const std::string& title, const std::string& text, const std::set<Button>& buttons = { Ok, Cancel });
 };
 }
 

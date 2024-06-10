@@ -271,7 +271,7 @@ RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const muse::io
 {
     TRACEFUNC;
 
-    auto project = projectCreator()->newProject();
+    auto project = projectCreator()->newProject(iocContext());
     IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::InternalError);
     }

@@ -59,12 +59,15 @@ void PlaybackToolBarModel::load()
 {
     AbstractMenuModel::load();
     updateActions();
+
+    connect(this, &PlaybackToolBarModel::isToolbarFloatingChanged, this, &PlaybackToolBarModel::updateActions);
+
     setupConnections();
 }
 
 void PlaybackToolBarModel::setupConnections()
 {
-    connect(this, &PlaybackToolBarModel::isToolbarFloatingChanged, this, &PlaybackToolBarModel::updateActions);
+    context::IPlaybackStatePtr playbackState = globalContext()->playbackState();
 
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         emit isPlayAllowedChanged();
@@ -74,13 +77,14 @@ void PlaybackToolBarModel::setupConnections()
         onActionsStateChanges({ PLAY_ACTION_CODE });
     });
 
-    playbackController()->playbackPositionChanged().onNotify(this, [this]() {
-        updatePlayPosition();
+    playbackState->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
+        updatePlayPosition(secs);
     });
 
     playbackController()->totalPlayTimeChanged().onNotify(this, [this]() {
         emit maxPlayTimeChanged();
-        updatePlayPosition();
+        secs_t pos = globalContext()->playbackState()->playbackPosition();
+        updatePlayPosition(pos);
     });
 
     playbackController()->currentTempoChanged().onNotify(this, [this]() {
@@ -231,10 +235,9 @@ UiAction PlaybackToolBarModel::playAction() const
     return action;
 }
 
-void PlaybackToolBarModel::updatePlayPosition()
+void PlaybackToolBarModel::updatePlayPosition(secs_t secs)
 {
-    float seconds = playbackController()->playbackPositionInSeconds();
-    QTime playTime = timeFromSeconds(seconds);
+    QTime playTime = timeFromSeconds(secs);
 
     if (m_playTime == playTime) {
         return;

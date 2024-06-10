@@ -78,7 +78,7 @@
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="50"/>
         <source>No.</source>
         <extracomment>Number</extracomment>
-        <translation>No.</translation>
+        <translation>เบอร์</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="55"/>

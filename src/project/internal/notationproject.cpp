@@ -95,7 +95,7 @@ void NotationProject::setupProject()
 {
     TRACEFUNC;
 
-    m_engravingProject = EngravingProject::create();
+    m_engravingProject = EngravingProject::create(iocContext());
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
     m_masterNotation = notationCreator()->newMasterNotationPtr();
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());

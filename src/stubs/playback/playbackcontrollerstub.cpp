@@ -44,31 +44,13 @@ muse::async::Notification PlaybackControllerStub::isPlayingChanged() const
     return muse::async::Notification();
 }
 
-void PlaybackControllerStub::seek(const muse::midi::tick_t)
-{
-}
-
-void PlaybackControllerStub::seek(const muse::audio::msecs_t)
-{
-}
-
 void PlaybackControllerStub::reset()
 {
-}
-
-muse::async::Notification PlaybackControllerStub::playbackPositionChanged() const
-{
-    return muse::async::Notification();
 }
 
 muse::async::Channel<uint32_t> PlaybackControllerStub::midiTickPlayed() const
 {
     return muse::async::Channel<uint32_t>();
-}
-
-float PlaybackControllerStub::playbackPositionInSeconds() const
-{
-    return 0.f;
 }
 
 muse::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() const

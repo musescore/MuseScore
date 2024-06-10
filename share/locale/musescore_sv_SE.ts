@@ -1709,12 +1709,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13682"/>
         <source>Padding:</source>
-        <translation>Utfyllnad:</translation>
+        <translation>Avstånd:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13728"/>
         <source>Reset &apos;Padding&apos; value</source>
-        <translation>Återställ &apos;Utfyllnad&apos;</translation>
+        <translation>Återställ &apos;Avstånd&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="49"/>
@@ -1792,7 +1792,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="134"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7428"/>
         <source>Hairpins</source>
-        <translation>Crescendo-/diminuendoklykor</translation>
+        <translation>Crescendo- och diminuendoklykor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
@@ -1816,7 +1816,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="290"/>
         <source>Musical symbols font:</source>
-        <translation>Musikteckensnitt:</translation>
+        <translation>Notteckensnitt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="353"/>
@@ -2405,12 +2405,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="884"/>
         <source>Disable vertical justification of staves</source>
-        <translation>Avaktivera vertikal justering för system</translation>
+        <translation>Inaktivera vertikal justering för system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Klaver, fasta förtecken och taktartssignaturer</translation>
+        <translation>Klaver, fasta förtecken, taktartssignaturer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="350"/>
@@ -2677,13 +2677,13 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3415"/>
         <source>Bracket thickness:</source>
         <comment>System bracket</comment>
-        <translation>Balkklammertjocklek:</translation>
+        <translation>Balkklammers tjocklek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3428"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
-        <translation>Återställ &apos;Balkklammertjocklek&apos;</translation>
+        <translation>Återställ &apos;Balkklammers tjocklek&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3526"/>
@@ -2794,17 +2794,17 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3906"/>
         <source>Set value for padding inside parentheses around accidentals</source>
-        <translation>Ange värde för utfyllnad inuti parenteser runt förtecken</translation>
+        <translation>Ange värde för avstånd inuti parenteser runt förtecken</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3931"/>
         <source>Reset padding inside parentheses to default</source>
-        <translation>Återställ utfyllnad inuti parenteser till förval</translation>
+        <translation>Återställ avstånd inuti parenteser till förval</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3934"/>
         <source>Reset &apos;Padding inside parentheses&apos; value</source>
-        <translation>Återställ &apos;Utfyllnad inuti parenteser&apos;</translation>
+        <translation>Återställ &apos;Avstånd inuti parenteser&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3950"/>
@@ -2814,7 +2814,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3953"/>
         <source>Padding inside parentheses:</source>
-        <translation>Utfyllnad inuti parenteser:</translation>
+        <translation>Avstånd inuti parenteser:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3966"/>
@@ -2854,7 +2854,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4114"/>
         <source>Padding</source>
-        <translation>Utfyllnad</translation>
+        <translation>Avstånd</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4120"/>
@@ -3156,7 +3156,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4821"/>
         <source>System header</source>
-        <translation>Ackoladrubrik</translation>
+        <translation>Systemstart</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4853"/>
@@ -3171,12 +3171,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4889"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
-        <translation>Återställ &apos;Avstånd till ackoladrubrik med taktartssignatur&apos;</translation>
+        <translation>Återställ &apos;Avstånd till taktartssignatur vid systemstart&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4902"/>
         <source>Reset &apos;System header distance&apos; value</source>
-        <translation>Återställ &apos;Avstånd till ackoladrubrik&apos;</translation>
+        <translation>Återställ &apos;Avstånd vid systemstart&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4948"/>
@@ -3186,12 +3186,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4974"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation>Återställ &apos;Tjocklek för tunna taktstreck&apos;</translation>
+        <translation>Återställ &apos;Tjocklek för taktstreck&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4997"/>
         <source>Thin barline thickness:</source>
-        <translation>Tjocklek för tunna taktstreck:</translation>
+        <translation>Tjocklek för taktstreck:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5010"/>
@@ -3211,12 +3211,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5105"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
-        <translation>Återställ &apos;Avstånd till tjockt taktstreck&apos;</translation>
+        <translation>Återställ &apos;Gap i tjockt dubbelstreck&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5128"/>
         <source>Thick barline distance:</source>
-        <translation>Avstånd till tjockt taktstreck:</translation>
+        <translation>Gap i tjockt dubbelstreck:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5138"/>
@@ -3256,7 +3256,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5230"/>
         <source>Double barline distance:</source>
-        <translation>Avstånd för dubbelstreck:</translation>
+        <translation>Gap i dubbelstreck:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5243"/>
@@ -3316,7 +3316,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5547"/>
         <source>Shortest stem:</source>
-        <translation>Kortast skaft:</translation>
+        <translation>Kortaste skaft:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5573"/>
@@ -3542,7 +3542,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="64"/>
         <source>Header &amp; footer</source>
-        <translation>Sidhuvud &amp; sidfot</translation>
+        <translation>Sidhuvud och sidfot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="89"/>
@@ -3553,7 +3553,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="129"/>
         <source>Slurs &amp; ties</source>
-        <translation>Legatobågar &amp; bindebågar</translation>
+        <translation>Legatobågar och bindebågar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
@@ -3606,7 +3606,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Articulations &amp; ornaments</source>
-        <translation>Artikulations- &amp; ornamenttecken</translation>
+        <translation>Artikulations- och ornamenttecken</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
@@ -3728,7 +3728,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7165"/>
         <source>Slurs &amp;&amp; ties</source>
-        <translation>Legatobågar &amp;&amp; bindebågar</translation>
+        <translation>Legatobågar och bindebågar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7193"/>
@@ -3772,12 +3772,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7348"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>Återställ &apos;Linjens tjocklek vid slutet&apos;</translation>
+        <translation>Återställ &apos;Linjens tjocklek i ändarna&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7361"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>Återställ &apos;Linjens tjocklek vid mitten&apos;</translation>
+        <translation>Återställ &apos;Linjens tjocklek i mitten&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7374"/>
@@ -4001,7 +4001,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9651"/>
         <source>Articulations &amp;&amp; ornaments</source>
-        <translation>Artikulations- &amp;&amp; ornamenttecken</translation>
+        <translation>Artikulations- och ornamenttecken</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9657"/>
@@ -4059,7 +4059,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9842"/>
         <source>Articulation alignment when positioned at the stem</source>
-        <translation>Justering av artikulatonsbeteckning vid skaft</translation>
+        <translation>Justering av artikulationstecken vid skaft</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9848"/>
@@ -4144,7 +4144,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10717"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation>Återställ &apos;Tjocklek på bindestreck&apos;</translation>
+        <translation>Återställ &apos;Tjocklek för bindestreck&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10727"/>
@@ -4215,22 +4215,22 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11119"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
-        <translation>Återställ &apos;Melismlinjetjocklek&apos;</translation>
+        <translation>Återställ &apos;Melismlinjes tjocklek&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
         <source>Melisma thickness:</source>
-        <translation>Melismlinjetjocklek:</translation>
+        <translation>Melismlinjes tjocklek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11164"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
-        <translation>Återställ ”Melismutfyllnad”</translation>
+        <translation>Återställ &apos;Melismavstånd&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
         <source>Melisma pad:</source>
-        <translation>Melismutfyllnad:</translation>
+        <translation>Melismavstånd:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11203"/>
@@ -4438,7 +4438,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12382"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12596"/>
         <source>Maximum shift below:</source>
-        <translation>Maximal förskjutning under:</translation>
+        <translation>Maximal förskjutning nedan:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12399"/>
@@ -4638,12 +4638,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
         <source>Barre line thickness</source>
-        <translation>Barrélinjens tjocklek</translation>
+        <translation>Barrélinjes tjocklek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12763"/>
         <source>Barre line thickness:</source>
-        <translation>Barrélinjens tjocklek:</translation>
+        <translation>Barrélinjes tjocklek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
@@ -6705,24 +6705,24 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="743"/>
         <source>Grace: 8th after</source>
-        <translation>Prydnadsnot: åttondel efter</translation>
+        <translation>Prydnadsnot: åttondelsefterslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="778"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="779"/>
         <source>Break beam left</source>
-        <translation>Bryt balk vänster</translation>
+        <translation>Bryt balk/balkar till vänster</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="785"/>
         <source>Break inner beams (8th)</source>
-        <translation>Bryt inre balkar (8-del)</translation>
+        <translation>Bryt till åttondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="792"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="793"/>
         <source>Break inner beams (16th)</source>
-        <translation>Bryt inre balkar (16-del)</translation>
+        <translation>Bryt till sextondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="799"/>
@@ -7465,47 +7465,47 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="709"/>
         <source>Add grace note: acciaccatura</source>
-        <translation>Lägg till prydnadsnot: acciaccatura</translation>
+        <translation>Lägg till prydnadsnot: kort förslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="716"/>
         <source>Add grace note: appoggiatura</source>
-        <translation>Lägg till prydnadsnot: appoggiatura</translation>
+        <translation>Lägg till prydnadsnot: långt förslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="723"/>
         <source>Add grace note: quarter</source>
-        <translation>Lägg till prydnadsnot: fjärdedelsnot</translation>
+        <translation>Lägg till prydnadsnot: fjärdedelsförslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="730"/>
         <source>Add grace note: 16th</source>
-        <translation>Lägg till prydnadsnot: 16-del</translation>
+        <translation>Lägg till prydnadsnot: 16-delsförslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="737"/>
         <source>Add grace note: 32nd</source>
-        <translation>Lägg till prydnadsnot: 32-del</translation>
+        <translation>Lägg till prydnadsnot: 32-delsförslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="744"/>
         <source>Add grace note: eighth after</source>
-        <translation>Lägg till prydnadsnot: åttondel efter</translation>
+        <translation>Lägg till prydnadsnot: åttondelsefterslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="751"/>
         <source>Add grace note: 16th after</source>
-        <translation>Lägg till prydnadsnot: 16-del efter</translation>
+        <translation>Lägg till prydnadsnot: 16-delsefterslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="758"/>
         <source>Add grace note: 32nd after</source>
-        <translation>Lägg till prydnadsnot: 32-del efter</translation>
+        <translation>Lägg till prydnadsnot: 32-delsefterslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="786"/>
         <source>Break inner beams (eighth)</source>
-        <translation>Bryt inre balkar (åttondel)</translation>
+        <translation>Bryt till åttondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="807"/>
@@ -8463,12 +8463,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="708"/>
         <source>Acciaccatura</source>
-        <translation>Acciaccatura</translation>
+        <translation>Kort förslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="715"/>
         <source>Appoggiatura</source>
-        <translation>Appoggiatura</translation>
+        <translation>Långt förslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="722"/>
@@ -8488,12 +8488,12 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="750"/>
         <source>Grace: 16th after</source>
-        <translation>Prydnadsnot: 16-del efter</translation>
+        <translation>Prydnadsnot: 16-delsefterslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="757"/>
         <source>Grace: 32nd after</source>
-        <translation>Prydnadsnot: 32-del efter</translation>
+        <translation>Prydnadsnot: 32-delsefterslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2252"/>
@@ -8818,7 +8818,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="197"/>
         <source>&amp;Preferences</source>
-        <translation>&amp;Inställningar</translation>
+        <translation>&amp;Inställningar …</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/updateuiactions.cpp" line="34"/>
@@ -8930,7 +8930,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="409"/>
         <source>&amp;Transpose…</source>
-        <translation>&amp;Transponera…</translation>
+        <translation>&amp;Transponera …</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
@@ -9874,7 +9874,7 @@ Som standard kommer de att placeras så att deras högersidor är i linje. Anvä
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="45"/>
         <source>&amp;Manage plugins…</source>
-        <translation>&amp;Hantera insticksprogram …</translation>
+        <translation>&amp;Hantera insticksprogram</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="46"/>
@@ -10612,7 +10612,7 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="79"/>
         <source>Check for language updates</source>
-        <translation>Leta efter språkuppdateringar</translation>
+        <translation>Leta efter språkuppdatering</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
@@ -10967,7 +10967,7 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="160"/>
         <source>Save &amp; publish</source>
-        <translation>Spara &amp; publicera</translation>
+        <translation>Spara och publicera</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
@@ -11087,7 +11087,7 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="31"/>
         <source>Enable/disable</source>
-        <translation>Aktivera/avaktivera</translation>
+        <translation>Aktivera/inaktivera</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="40"/>
@@ -11519,12 +11519,12 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2181"/>
         <source>Acciaccatura</source>
-        <translation>Acciaccatura</translation>
+        <translation>Kort förslag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2183"/>
         <source>Appoggiatura</source>
-        <translation>Appoggiatura</translation>
+        <translation>Långt förslag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2187"/>
@@ -12676,12 +12676,12 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1093"/>
         <source>LH guitar fingering</source>
-        <translation>VH, gitarrfingersättning</translation>
+        <translation>Gitarrfingersättning, VH</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1094"/>
         <source>RH guitar fingering</source>
-        <translation>HH, gitarrfingersättning</translation>
+        <translation>Gitarrfingersättning, HH</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1109"/>
@@ -14717,17 +14717,17 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
         <source>Circled</source>
-        <translation>Inringad (svagt)</translation>
+        <translation>Inringat (svagt)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
         <source>Circled large</source>
-        <translation>Inringad (starkt)</translation>
+        <translation>Inringat (starkt)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="535"/>
         <source>Large arrow</source>
-        <translation>Stor pil</translation>
+        <translation>Stor triangel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
@@ -18508,7 +18508,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="58"/>
         <source>Number of measures to insert:</source>
-        <translation>Antal takter att infoga:</translation>
+        <translation>Antal takter att lägga till:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="80"/>
@@ -19401,17 +19401,17 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
         <source>Break beam left</source>
-        <translation>Bryt balk till vänster</translation>
+        <translation>Bryt balk/balkar till vänster</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation>Bryt inre balkar (8-del)</translation>
+        <translation>Bryt till åttondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation>Bryt inre balkar (16-del)</translation>
+        <translation>Bryt till sextondelsbalk</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
@@ -19909,7 +19909,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="140"/>
         <source>Padding</source>
-        <translation>Utfyllnad</translation>
+        <translation>Avstånd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="162"/>
@@ -19955,7 +19955,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Andning &amp; pauser</translation>
+        <translation>Andningstecken och fermat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
@@ -20489,22 +20489,22 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml" line="49"/>
         <source>Left padding</source>
-        <translation>Vänster utfyllnad</translation>
+        <translation>Vänster avstånd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml" line="65"/>
         <source>Right padding</source>
-        <translation>Höger utfyllnad</translation>
+        <translation>Höger avstånd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
         <source>Top padding</source>
-        <translation>Övre utfyllnad</translation>
+        <translation>Övre avstånd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="65"/>
         <source>Bottom padding</source>
-        <translation>Nedre utfyllnad</translation>
+        <translation>Nedre avstånd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="77"/>
@@ -21206,7 +21206,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="60"/>
         <source>Number of measures to insert:</source>
-        <translation>Antal takter att infoga:</translation>
+        <translation>Antal takter att lägga till:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="78"/>
@@ -22263,12 +22263,12 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
         <source>Placement on single notes:</source>
-        <translation>Placering på enstaka noter:</translation>
+        <translation>Placering vid enstaka noter:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="68"/>
         <source>Placement on chords:</source>
-        <translation>Placering på ackord:</translation>
+        <translation>Placering vid ackord:</translation>
     </message>
 </context>
 <context>
@@ -23084,7 +23084,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="376"/>
         <source>Repeats &amp; jumps</source>
-        <translation>Repriser &amp; hopp</translation>
+        <translation>Repriser och hopp</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="472"/>
@@ -23149,19 +23149,19 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="588"/>
         <source>Fingering %1</source>
-        <translation>Fingersättning %1</translation>
+        <translation>Finger %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="596"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
         <source>RH guitar fingering %1</source>
-        <translation>HH, gitarrfingersättning %1</translation>
+        <translation>Gitarr, finger %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="604"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1880"/>
         <source>LH guitar fingering %1</source>
-        <translation>VH, gitarrfingersättning %1</translation>
+        <translation>Gitarr, finger %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="611"/>
@@ -23236,7 +23236,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="954"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Andning &amp; pauser</translation>
+        <translation>Andningstecken och fermat</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1062"/>
@@ -23256,7 +23256,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1135"/>
         <source>Lines</source>
-        <translation>Linjer</translation>
+        <translation>Diverse</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1211"/>
@@ -23378,12 +23378,12 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="578"/>
         <source>Fingerings</source>
-        <translation>Fingersättningar</translation>
+        <translation>Fingersättningar och strängangivelser</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1001"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation>Arpeggio &amp; glissando</translation>
+        <translation>Arpeggio och glissando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1310"/>
@@ -25848,7 +25848,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="71"/>
         <source>Disable</source>
-        <translation>Avaktivera</translation>
+        <translation>Inaktivera</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="116"/>
@@ -25858,7 +25858,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="147"/>
         <source>Disabled</source>
-        <translation>Avaktiverat</translation>
+        <translation>Inaktiverat</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="188"/>
@@ -25874,7 +25874,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="81"/>
         <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
-        <translation>Insticksprogrammet “%1” är avaktiverat. Vill du aktivera det nu?</translation>
+        <translation>Insticksprogrammet “%1” är inaktiverat. Vill du aktivera det nu?</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="82"/>
@@ -25970,7 +25970,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="153"/>
         <source>New &amp; recent</source>
-        <translation>Nya &amp; senaste</translation>
+        <translation>Nya och senaste</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="87"/>
@@ -26307,7 +26307,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="60"/>
         <source>Audio.com URL</source>
-        <translation>Audio.com URL</translation>
+        <translation>Adress på Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoresListView.qml" line="77"/>

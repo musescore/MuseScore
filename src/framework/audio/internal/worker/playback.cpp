@@ -28,7 +28,7 @@
 #include "internal/audiothread.h"
 #include "internal/audiosanitizer.h"
 
-#include "internal/worker/playerhandler.h"
+#include "internal/worker/player.h"
 #include "internal/worker/trackshandler.h"
 #include "internal/worker/audiooutputhandler.h"
 #include "internal/worker/tracksequence.h"
@@ -45,9 +45,8 @@ void Playback::init()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_playerHandlersPtr = std::make_shared<PlayerHandler>(this);
     m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
-    m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
+    m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this, iocContext());
 }
 
 void Playback::deinit()
@@ -56,7 +55,6 @@ void Playback::deinit()
 
     m_sequences.clear();
 
-    m_playerHandlersPtr = nullptr;
     m_trackHandlersPtr = nullptr;
     m_audioOutputPtr = nullptr;
 
@@ -65,7 +63,7 @@ void Playback::deinit()
 
 bool Playback::isInited() const
 {
-    return m_playerHandlersPtr != nullptr;
+    return m_trackHandlersPtr != nullptr;
 }
 
 Promise<TrackSequenceId> Playback::addSequence()
@@ -126,11 +124,11 @@ Channel<TrackSequenceId> Playback::sequenceRemoved() const
     return m_sequenceRemoved;
 }
 
-IPlayerPtr Playback::player() const
+IPlayerPtr Playback::player(const TrackSequenceId id) const
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-
-    return m_playerHandlersPtr;
+    std::shared_ptr<Player> p = std::make_shared<Player>(this, id);
+    p->init();
+    return p;
 }
 
 ITracksPtr Playback::tracks() const

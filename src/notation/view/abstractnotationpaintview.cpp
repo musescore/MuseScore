@@ -42,7 +42,7 @@ static void compensateFloatPart(RectF& rect)
 }
 
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
-    : muse::uicomponents::QuickPaintedView(parent)
+    : muse::uicomponents::QuickPaintedView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
@@ -69,11 +69,6 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
     m_continuousPanel = std::make_unique<ContinuousPanel>();
 
-    //! NOTE For diagnostic tools
-    dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
-        scheduleRedraw();
-    });
-
     m_enableAutoScrollTimer.setSingleShot(true);
     connect(&m_enableAutoScrollTimer, &QTimer::timeout, this, [this]() {
         m_autoScrollEnabled = true;
@@ -93,6 +88,13 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
 void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
+
+    //! NOTE For diagnostic tools
+    if (!dispatcher()->isReg(this)) {
+        dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
+            scheduleRedraw();
+        });
+    }
 
     m_inputController->init();
 
@@ -1321,8 +1323,8 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_enableAutoScrollTimer.stop();
 
     if (isPlaying) {
-        float playPosSec = playbackController()->playbackPositionInSeconds();
-        muse::midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
+        audio::secs_t pos = globalContext()->playbackState()->playbackPosition();
+        muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
         movePlaybackCursor(tick);
     } else {
         scheduleRedraw();

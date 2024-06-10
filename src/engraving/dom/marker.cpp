@@ -240,12 +240,12 @@ EngravingItem* Marker::nextSegmentElement()
     Segment* seg;
     if (markerType() == MarkerType::FINE) {
         seg = measure()->last();
-        return seg->firstElement(staffIdx());
+        return seg->firstElementForNavigation(staffIdx());
     }
     Measure* prevMeasure = measure()->prevMeasureMM();
     if (prevMeasure) {
         seg = prevMeasure->last();
-        return seg->firstElement(staffIdx());
+        return seg->firstElementForNavigation(staffIdx());
     }
     return EngravingItem::nextSegmentElement();
 }

@@ -167,6 +167,9 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::TIE_PLACEMENT:    return static_cast<int>(value<TiePlacement>());
     case P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE: return static_cast<int>(value<LyricsDashSystemStart>());
 
+    case P_TYPE::VOICE_APPLICATION: return static_cast<int>(value<VoiceApplication>());
+    case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
+
     // Other
     case P_TYPE::GROUPS: {
         NOT_SUPPORTED;
@@ -268,6 +271,8 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::SLUR_STYLE_TYPE:  return PropertyValue(SlurStyleType(v.toInt()));
     case P_TYPE::TIE_PLACEMENT:    return PropertyValue(TiePlacement(v.toInt()));
     case P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE:    return PropertyValue(LyricsDashSystemStart(v.toInt()));
+    case P_TYPE::VOICE_APPLICATION: return PropertyValue(VoiceApplication(v.toInt()));
+    case P_TYPE::AUTO_ON_OFF:      return PropertyValue(AutoOnOff(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

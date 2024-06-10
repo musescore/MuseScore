@@ -68,12 +68,7 @@ public:
 
     void reset() override;
 
-    void seek(const muse::midi::tick_t tick) override;
-    void seek(const muse::audio::msecs_t msecs) override;
-
-    muse::async::Notification playbackPositionChanged() const override;
     muse::async::Channel<uint32_t> midiTickPlayed() const override;
-    float playbackPositionInSeconds() const override;
 
     muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     muse::async::Notification currentTrackSequenceIdChanged() const override;
@@ -123,6 +118,8 @@ public:
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
 private:
+    muse::audio::IPlayerPtr currentPlayer() const;
+
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
@@ -132,6 +129,9 @@ private:
     uint64_t notationPlaybackKey() const;
 
     void updateCurrentTempo();
+
+    void seek(const muse::midi::tick_t tick);
+    void seek(const muse::audio::secs_t secs);
 
     bool isPaused() const;
     bool isLoaded() const;
@@ -162,8 +162,6 @@ private:
     muse::audio::msecs_t playbackEndMsecs() const;
 
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
-
-    void setCurrentPlaybackStatus(muse::audio::PlaybackStatus status);
 
     void togglePlayRepeats();
     void togglePlayChordSymbols();
@@ -197,8 +195,6 @@ private:
     void updateSoloMuteStates();
     void updateAuxMuteStates();
 
-    void setCurrentPlaybackTime(muse::audio::msecs_t msecs);
-
     using TrackAddFinished = std::function<void ()>;
 
     void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished);
@@ -212,22 +208,22 @@ private:
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
     muse::audio::msecs_t tickToMsecs(int tick) const;
+    muse::audio::secs_t tickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
+    muse::audio::IPlayerPtr m_player;
 
     muse::async::Notification m_isPlayAllowedChanged;
     muse::async::Notification m_isPlayingChanged;
-    muse::async::Notification m_playbackPositionChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
     muse::async::Channel<uint32_t> m_tickPlayed;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
     muse::audio::TrackSequenceId m_currentSequenceId = -1;
+
     muse::async::Notification m_currentSequenceIdChanged;
-    muse::audio::PlaybackStatus m_currentPlaybackStatus = muse::audio::PlaybackStatus::Stopped;
-    muse::audio::msecs_t m_currentPlaybackTimeMsecs = 0;
     muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 

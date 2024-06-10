@@ -33,15 +33,16 @@
 #include "../iengravingconfiguration.h"
 
 namespace mu::engraving {
-class EngravingConfiguration : public IEngravingConfiguration, public muse::async::Asyncable
+class EngravingConfiguration : public IEngravingConfiguration, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
-    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration = { this };
+    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
 
 public:
-    EngravingConfiguration() = default;
+    EngravingConfiguration(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     void init();
 
@@ -83,6 +84,9 @@ public:
 
     bool scoreInversionEnabled() const override;
     void setScoreInversionEnabled(bool value) override;
+
+    bool dynamicsApplyToAllVoices() const override;
+    void setDynamicsApplyToAllVoices(bool v) override;
 
     muse::async::Notification scoreInversionChanged() const override;
 

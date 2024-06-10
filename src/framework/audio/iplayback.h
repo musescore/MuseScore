@@ -58,7 +58,7 @@ public:
     virtual std::shared_ptr<ITracks> tracks() const = 0;
 
     // 3. Play Sequence
-    virtual std::shared_ptr<IPlayer> player() const = 0;
+    virtual std::shared_ptr<IPlayer> player(const TrackSequenceId id) const = 0;
 
     // 4. Adjust a Sequence output
     virtual std::shared_ptr<IAudioOutput> audioOutput() const = 0;

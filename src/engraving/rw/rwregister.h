@@ -22,10 +22,9 @@
 #ifndef MU_ENGRAVING_RWREGISTER_H
 #define MU_ENGRAVING_RWREGISTER_H
 
-#include <memory>
-
 #include "ireader.h"
 #include "iwriter.h"
+#include "modularity/ioc.h"
 
 namespace mu::engraving::rw {
 class RWRegister
@@ -34,7 +33,7 @@ public:
 
     static IReaderPtr reader(int version = -1);
 
-    static IWriterPtr writer();
+    static IWriterPtr writer(const muse::modularity::ContextPtr& iocCtx);
 };
 }
 

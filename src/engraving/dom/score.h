@@ -251,18 +251,19 @@ struct ShowAnchors {
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public EngravingObject
+class Score : public EngravingObject, public muse::Injectable
 {
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    Inject<muse::draw::IImageProvider> imageProvider;
-    Inject<IEngravingConfiguration> configuration;
-    Inject<IEngravingFontsProvider> engravingFonts;
-    Inject<muse::IApplication> application;
+    muse::Inject<muse::draw::IImageProvider> imageProvider = { this };
+    muse::Inject<IEngravingConfiguration> configuration = { this };
+    muse::Inject<IEngravingFontsProvider> engravingFonts = { this };
+    muse::Inject<muse::IApplication> application = { this };
+    muse::Inject<IEngravingElementsProvider> elementsProvider = { this };
 
     // internal
-    Inject<rendering::IScoreRenderer> renderer;
+    muse::Inject<rendering::IScoreRenderer> renderer = { this };
 
 public:
     Score(const Score&) = delete;
@@ -642,7 +643,7 @@ public:
 
     ChordList* chordList() { return &m_chordList; }
     const ChordList* chordList() const { return &m_chordList; }
-    void checkChordList() { m_chordList.checkChordList(style()); }
+    void checkChordList();
 
     MStyle& style() { return m_style; }
     const MStyle& style() const { return m_style; }
@@ -991,7 +992,7 @@ public:
 protected:
 
     friend class MasterScore;
-    Score();
+    Score(const muse::modularity::ContextPtr& iocCtx);
     Score(MasterScore*, bool forcePartStyle = true);
     Score(MasterScore*, const MStyle&);
 

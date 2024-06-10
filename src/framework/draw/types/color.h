@@ -26,6 +26,7 @@
 #include <string>
 
 #include "global/types/string.h"
+#include "global/types/number.h"
 
 #include "rgba.h"
 
@@ -39,7 +40,9 @@ class Color
 public:
     Color();
     Color(const Color& other);
-    Color(int red, int green, int blue, int alpha = DEFAULT_ALPHA);
+    constexpr Color(int r, int g, int b, int a = DEFAULT_ALPHA)
+        :  m_rgba(rgba(r, g, b, a)), m_isValid(isRgbaValid(r, g, b, a)) {}
+
     Color(const char* color);
 
 #ifndef NO_QT_SUPPORT
@@ -102,12 +105,73 @@ private:
     bool m_isValid = false;
 };
 
-inline const Color Color::transparent { 255, 255, 255, 0 };
-inline const Color Color::BLACK { 0, 0, 0 };
-inline const Color Color::WHITE { 255, 255, 255 };
-inline const Color Color::RED { 255, 0, 0 };
-inline const Color Color::GREEN { 0, 255, 0 };
-inline const Color Color::BLUE { 0, 0, 255 };
+inline const Color Color::transparent = { 255, 255, 255, 0 };
+inline const Color Color::BLACK = { 0, 0, 0, 255 };
+inline const Color Color::WHITE = { 255, 255, 255, 255 };
+inline const Color Color::RED = { 255, 0, 0, 255 };
+inline const Color Color::GREEN = { 0, 255, 0, 255 };
+inline const Color Color::BLUE { 0, 0, 255, 255 };
+
+inline Color blendColors(const Color& c1, const Color& c2)
+{
+    float alpha1 = c1.alpha() / 255.f;
+    float alpha2 = c2.alpha() / 255.f;
+
+    float alphaOut = alpha2 + alpha1 * (1 - alpha2);
+
+    if (is_zero(alphaOut)) {
+        return Color(0, 0, 0, 0);
+    }
+    int r = (c2.red() * alpha2 + c1.red() * alpha1 * (1 - alpha2)) / alphaOut;
+    int g = (c2.green() * alpha2 + c1.green() * alpha1 * (1 - alpha2)) / alphaOut;
+    int b = (c2.blue() * alpha2 + c1.blue() * alpha1 * (1 - alpha2)) / alphaOut;
+
+    return Color(r, g, b, alphaOut * 255);
+}
+
+inline Color blendColors(const Color& c1, const Color& c2, float alpha)
+{
+    float alpha1 = 1.0;
+    float alpha2 = alpha;
+
+    int r = (c2.red() * alpha2 + c1.red() * alpha1 * (1 - alpha2));
+    int g = (c2.green() * alpha2 + c1.green() * alpha1 * (1 - alpha2));
+    int b = (c2.blue() * alpha2 + c1.blue() * alpha1 * (1 - alpha2));
+
+    return Color(r, g, b, 255);
+}
+
+#ifndef NO_QT_SUPPORT
+inline QColor blendQColors(const QColor& c1, const QColor& c2)
+{
+    float alpha1 = c1.alphaF();
+    float alpha2 = c2.alphaF();
+
+    float alphaOut = alpha2 + alpha1 * (1 - alpha2);
+
+    if (is_zero(alphaOut)) {
+        return QColor(0, 0, 0, 0);
+    }
+    int r = (c2.red() * alpha2 + c1.red() * alpha1 * (1 - alpha2)) / alphaOut;
+    int g = (c2.green() * alpha2 + c1.green() * alpha1 * (1 - alpha2)) / alphaOut;
+    int b = (c2.blue() * alpha2 + c1.blue() * alpha1 * (1 - alpha2)) / alphaOut;
+
+    return QColor(r, g, b, alphaOut * 255);
+}
+
+inline QColor blendQColors(const QColor& c1, const QColor& c2, float alpha)
+{
+    float alpha1 = 1.0;
+    float alpha2 = alpha;
+
+    int r = (c2.red() * alpha2 + c1.red() * alpha1 * (1 - alpha2));
+    int g = (c2.green() * alpha2 + c1.green() * alpha1 * (1 - alpha2));
+    int b = (c2.blue() * alpha2 + c1.blue() * alpha1 * (1 - alpha2));
+
+    return QColor(r, g, b, 255);
+}
+
+#endif
 }
 
 #endif // MUSE_DRAW_COLOR_H

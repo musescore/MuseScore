@@ -32,7 +32,7 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 TransposeDialog::TransposeDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName("TransposeDialog");
     setupUi(this);

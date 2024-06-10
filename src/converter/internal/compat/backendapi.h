@@ -42,10 +42,10 @@ namespace mu::converter {
 class BackendJsonWriter;
 class BackendApi
 {
-    INJECT_STATIC(muse::IApplication, application)
-    INJECT_STATIC(muse::io::IFileSystem, fileSystem)
-    INJECT_STATIC(project::IProjectCreator, notationCreator)
-    INJECT_STATIC(project::INotationWritersRegister, writers)
+    inline static muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    inline static muse::GlobalInject<muse::IApplication> application;
+    inline static muse::GlobalInject<project::IProjectCreator> notationCreator;
+    inline static muse::GlobalInject<project::INotationWritersRegister> writers;
 
 public:
     static muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,

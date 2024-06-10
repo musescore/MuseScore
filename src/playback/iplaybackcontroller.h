@@ -48,13 +48,9 @@ public:
     virtual bool isPlaying() const = 0;
     virtual muse::async::Notification isPlayingChanged() const = 0;
 
-    virtual void seek(const muse::midi::tick_t tick) = 0;
-    virtual void seek(const muse::audio::msecs_t msecs) = 0;
     virtual void reset() = 0;
 
-    virtual muse::async::Notification playbackPositionChanged() const = 0;
     virtual muse::async::Channel<uint32_t> midiTickPlayed() const = 0;
-    virtual float playbackPositionInSeconds() const = 0;
 
     virtual muse::audio::TrackSequenceId currentTrackSequenceId() const = 0;
     virtual muse::async::Notification currentTrackSequenceIdChanged() const = 0;

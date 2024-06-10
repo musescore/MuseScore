@@ -150,17 +150,17 @@ bool NotationParts::staffExists(const ID& staffId) const
 
 StaffConfig NotationParts::staffConfig(const ID& staffId) const
 {
+    StaffConfig config;
     Staff* staff = staffModifiable(staffId);
     if (!staff) {
-        return StaffConfig();
+        return config;
     }
 
     mu::engraving::StaffType* staffType = staff->staffType(DEFAULT_TICK);
     if (!staffType) {
-        return StaffConfig();
+        return config;
     }
 
-    StaffConfig config;
     config.visible = staff->visible();
     config.userDistance = staff->userDist();
     config.cutaway = staff->cutaway();
@@ -574,14 +574,8 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
     startEdit();
 
     if (isMainInstrumentForPart(instrumentKey, part)) {
-        mu::engraving::Interval oldTranspose = part->instrument()->transpose();
-
         QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
         score()->undo(new mu::engraving::ChangePart(part, new mu::engraving::Instrument(newInstrument), newInstrumentPartName));
-        if (score()->isMaster()) {
-            // this also transposes all linked parts
-            score()->transpositionChanged(part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
-        }
 
         // Update clefs
         for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {

@@ -29,11 +29,11 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::engraving {
-class CorruptScoreDevToolsModel : public QObject
+class CorruptScoreDevToolsModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
+    muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit CorruptScoreDevToolsModel(QObject* parent = nullptr);

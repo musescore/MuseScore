@@ -1821,7 +1821,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="353"/>
         <source>Automatically load style settings based on font</source>
-        <translation>Tự động nạp định kiểu dựa trên phông chữ</translation>
+        <translation>Tự động nạp thiết đật định kiểu dựa trên phông chữ</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="376"/>
@@ -4540,7 +4540,7 @@ Theo mặc định, chúng sẽ được đặt sao cho đầu bên phải của
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="603"/>
         <source>Swing settings</source>
-        <translation>Thiết lập swing</translation>
+        <translation>Thiết đặt swing</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="628"/>
@@ -5237,12 +5237,12 @@ Theo mặc định, chúng sẽ được đặt sao cho đầu bên phải của
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="20"/>
         <source>Page settings</source>
-        <translation>Các thiết lập Trang</translation>
+        <translation>Thiết đặt trang</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="55"/>
         <source>Reset all page settings to default</source>
-        <translation>Đặt thiết lập trang về mặc định</translation>
+        <translation>Đặt thiết đặt trang về mặc định</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="75"/>
@@ -5574,7 +5574,7 @@ Theo mặc định, chúng sẽ được đặt sao cho đầu bên phải của
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="27"/>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="33"/>
         <source>Swing settings</source>
-        <translation>Thiết lập swing</translation>
+        <translation>Thiết đặt swing</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="54"/>
@@ -9816,7 +9816,7 @@ Theo mặc định, chúng sẽ được đặt sao cho đầu bên phải của
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="120"/>
         <source>Playback settings</source>
-        <translation type="unfinished"/>
+        <translation>Thiết đặt phát lại</translation>
     </message>
     <message>
         <location filename="../../src/workspace/internal/workspaceuiactions.cpp" line="34"/>
@@ -18955,7 +18955,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="59"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Thiết đặt</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="65"/>
@@ -19032,7 +19032,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="123"/>
         <source>Style settings</source>
-        <translation type="unfinished"/>
+        <translation>Thiết đặt định kiểu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
@@ -20725,7 +20725,7 @@ trong bản nhạc Thánh ca.</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="292"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Thiết đặt</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="55"/>
@@ -25762,7 +25762,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="193"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Thiết đặt</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="201"/>

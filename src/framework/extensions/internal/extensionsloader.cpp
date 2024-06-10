@@ -36,14 +36,14 @@ using namespace muse::extensions;
 const std::string MANIFEST("manifest.json");
 const std::string DEV_EXTENSIONS("extensions/dev/");
 
-ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const
+ManifestList ExtensionsLoader::loadManifestList(const io::path_t& defPath, const io::path_t& extPath) const
 {
     TRACEFUNC;
 
     LOGD() << "try load extensions, def: " << defPath << ", user: " << extPath;
 
-    ManifestList defaultManifests = manifesList(defPath);
-    ManifestList externalManifests = manifesList(extPath);
+    ManifestList defaultManifests = manifestList(defPath);
+    ManifestList externalManifests = manifestList(extPath);
 
     ManifestList retList;
     for (const Manifest& m : defaultManifests) {
@@ -73,7 +73,7 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
     return retList;
 }
 
-ManifestList ExtensionsLoader::manifesList(const io::path_t& rootPath) const
+ManifestList ExtensionsLoader::manifestList(const io::path_t& rootPath) const
 {
     ManifestList manifests;
     io::paths_t paths = manifestPaths(rootPath);

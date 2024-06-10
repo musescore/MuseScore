@@ -38,7 +38,7 @@ using namespace muse::dock;
 using namespace muse::ui;
 
 DockPageView::DockPageView(QQuickItem* parent)
-    : QQuickItem(parent),
+    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
     m_mainToolBars(this),
     m_toolBars(this),
     m_toolBarsDockingHolders(this),

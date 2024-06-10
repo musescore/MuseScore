@@ -81,6 +81,8 @@ private:
 
     samples_t m_sampleRate = 0;
 };
+
+using EventAudioSourcePtr = std::shared_ptr<EventAudioSource>;
 }
 
 #endif // EVENTAUDIOSOURCE_H

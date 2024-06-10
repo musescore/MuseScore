@@ -116,7 +116,7 @@ bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
         m_sym = v.value<SymId>();
         break;
     case Pid::SCORE_FONT:
-        m_scoreFont = engravingFonts()->fontByName(v.value<String>().toStdString());
+        m_scoreFont = score()->engravingFonts()->fontByName(v.value<String>().toStdString());
         break;
     case Pid::SYMBOLS_SIZE:
         m_symbolsSize = v.toDouble();

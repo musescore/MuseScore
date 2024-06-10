@@ -19,8 +19,18 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>B♭ Clarinet</part-name>
-      <part-abbreviation>B♭ Cl.</part-abbreviation>
+      <part-name>Bb Clarinet</part-name>
+      <part-name-display>
+        <display-text>B</display-text>
+        <accidental-text>flat</accidental-text>
+        <display-text> Clarinet</display-text>
+        </part-name-display>
+      <part-abbreviation>Bb Cl.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text>B</display-text>
+        <accidental-text>flat</accidental-text>
+        <display-text> Cl.</display-text>
+        </part-abbreviation-display>
       <score-instrument id="P1-I1">
         <instrument-name>B♭ Clarinet</instrument-name>
         </score-instrument>

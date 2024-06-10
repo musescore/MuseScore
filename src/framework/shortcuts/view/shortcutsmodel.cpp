@@ -296,6 +296,7 @@ QVariant ShortcutsModel::shortcutToObject(const Shortcut& shortcut) const
     obj["title"] = actionText(shortcut.action);
     obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
     obj["context"] = QString::fromStdString(shortcut.context);
+    obj["autoRepeat"] = shortcut.autoRepeat;
 
     return obj;
 }

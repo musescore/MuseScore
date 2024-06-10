@@ -42,6 +42,8 @@ void ChordSettingsModel::createProperties()
         onPropertyValueChanged(pid, newValue);
         updateShowStemSlashEnabled();
     });
+
+    m_combineVoice = buildPropertyItem(Pid::COMBINE_VOICE);
     m_showStemSlash = buildPropertyItem(Pid::SHOW_STEM_SLASH);
 }
 
@@ -54,6 +56,7 @@ void ChordSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isStemless);
     loadPropertyItem(m_showStemSlash);
+    loadPropertyItem(m_combineVoice);
     updateShowStemSlashVisible();
     updateShowStemSlashEnabled();
 }
@@ -73,6 +76,11 @@ PropertyItem* ChordSettingsModel::isStemless() const
 PropertyItem* ChordSettingsModel::showStemSlash() const
 {
     return m_showStemSlash;
+}
+
+PropertyItem* ChordSettingsModel::combineVoice() const
+{
+    return m_combineVoice;
 }
 
 bool ChordSettingsModel::showStemSlashVisible() const

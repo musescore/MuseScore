@@ -51,14 +51,27 @@ static muse::testing::SuiteEnvironment engraving_se(
 
     mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 
-    std::shared_ptr<::testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
-        = std::make_shared<::testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();
+    using ECMock = ::testing::NiceMock<mu::engraving::EngravingConfigurationMock>;
+
+    std::shared_ptr<ECMock> configurator(new ECMock(), [](ECMock*) {}); // no delete
     ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(::testing::Return(false));
     ON_CALL(*configurator, defaultColor()).WillByDefault(::testing::Return(muse::draw::Color::BLACK));
-    mu::engraving::EngravingItem::engravingConfiguration.set(configurator);
+
+    muse::modularity::globalIoc()->unregister<mu::engraving::IEngravingConfiguration>("utests");
+    muse::modularity::globalIoc()->registerExport<mu::engraving::IEngravingConfiguration>("utests", configurator);
 },
 
     []() {
-    mu::engraving::EngravingItem::engravingConfiguration.set(nullptr);
+    std::shared_ptr<mu::engraving::IEngravingConfiguration> mock
+        = muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingConfiguration>("utests");
+    muse::modularity::globalIoc()->unregister<mu::engraving::IEngravingConfiguration>("utests");
+
+    //! HACK
+    //! There are still live pointers to the mock
+    //! because of this, the mock generates an error stating that it has not been deleted
+    //! This is a hack to remove it manually to get rid of this error
+    //! The problem itself is deeper, it seems that some score objects are not deleted
+    mu::engraving::IEngravingConfiguration* ecptr = mock.get();
+    delete ecptr;
 }
     );

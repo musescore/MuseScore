@@ -104,7 +104,8 @@ Column {
         HeadSettings {
             height: implicitHeight
 
-            model: root.headModel
+            headModel: root.headModel
+            chordModel: root.chordModel
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1000

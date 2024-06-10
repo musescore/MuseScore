@@ -65,7 +65,7 @@ static Color colorForPointer(const void* ptr)
 void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
 {
     // Elements tree
-    bool isDiagnosticSelected = elementsProvider() ? elementsProvider()->isSelected(item) : false;
+    bool isDiagnosticSelected = item->score()->elementsProvider() ? item->score()->elementsProvider()->isSelected(item) : false;
 
     PointF pos(item->pagePos());
     painter.translate(pos);
@@ -81,7 +81,7 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
 
     if (!bbox.isEmpty()) {
         // Draw shape
-        if (configuration()->debuggingOptions().colorElementShapes
+        if (item->configuration()->debuggingOptions().colorElementShapes
             && !item->isPage() && !item->isSystem() && !item->isStaffLines() && !item->isBox()) {
             PainterPath path;
             path.setFillRule(PainterPath::FillRule::WindingFill);
@@ -97,8 +97,8 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
         }
 
         // Draw bbox
-        if (isDiagnosticSelected || configuration()->debuggingOptions().showElementBoundingRects) {
-            double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
+        if (isDiagnosticSelected || item->configuration()->debuggingOptions().showElementBoundingRects) {
+            double scaling = painter.worldTransform().m11() / item->configuration()->guiScaling();
             Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, (item->selected() ? 2.0 : 1.0) / scaling);
 
             painter.setPen(borderPen);
@@ -112,7 +112,11 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
 
 void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::vector<EngravingItem*>& items)
 {
-    auto options = configuration()->debuggingOptions();
+    if (items.empty()) {
+        return;
+    }
+
+    auto options = items.front()->configuration()->debuggingOptions();
     if (!options.anyEnabled()) {
         return;
     }
@@ -127,7 +131,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
         return;
     }
 
-    double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
+    double scaling = painter.worldTransform().m11() / items.front()->configuration()->guiScaling();
 
     painter.save();
 
@@ -158,7 +162,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
 
                 PointF pt(system->ldata()->pos().x(), system->ldata()->pos().y() + ss->y());
                 painter.translate(pt);
-                ss->skyline().paint(painter, 3.0 / scaling);
+                ss->skyline().paint(painter, 0.25 * system->spatium());
                 painter.translate(-pt);
             }
         }

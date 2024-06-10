@@ -30,13 +30,13 @@
 
 namespace muse::uicomponents {
 class ItemMultiSelectionModel;
-class SelectMultipleDirectoriesModel : public QAbstractListModel
+class SelectMultipleDirectoriesModel : public QAbstractListModel, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(IInteractive, interactive)
-
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY selectionChanged)
+
+    muse::Inject<IInteractive> interactive = { this };
 
 public:
     explicit SelectMultipleDirectoriesModel(QObject* parent = nullptr);

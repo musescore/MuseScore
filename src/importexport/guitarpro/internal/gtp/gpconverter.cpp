@@ -582,7 +582,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
             setBeamMode(beat, cr, lastMeasure, ctx.curTick);
         }
 
-        if (!graceChords.empty()) {
+        if (cr->isChord() && !graceChords.empty()) {
             int grIndex = 0;
 
             for (auto [pGrChord, pBeat] : graceChords) {
@@ -597,8 +597,8 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
                 cr->add(pGrChord);
                 addLegato(pBeat, pGrChord);
             }
+            graceChords.clear();
         }
-        graceChords.clear();
 
         convertNotes(beat->notes(), cr);
 
@@ -1011,7 +1011,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     bool createTitleField
         = std::any_of(fieldNames.begin(), fieldNames.end(), [](const String& fieldName) { return !fieldName.isEmpty(); });
 
-    if (!createTitleField) {
+    if (!createTitleField && !engravingConfiguration()->guitarProImportExperimental()) {
         return;
     }
 
@@ -1030,12 +1030,13 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         }
     }
 
-    if (!gpscore->title().isEmpty()) {
+    if (!gpscore->title().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::TITLE);
         s->setPlainText(gpscore->title());
         m->add(s);
     }
-    if (!gpscore->subTitle().isEmpty() || !gpscore->artist().isEmpty() || !gpscore->album().isEmpty()) {
+    if (!gpscore->subTitle().isEmpty() || !gpscore->artist().isEmpty() || !gpscore->album().isEmpty()
+        || engravingConfiguration()->guitarProImportExperimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::SUBTITLE);
         String str;
         if (!gpscore->subTitle().isEmpty()) {
@@ -1061,7 +1062,8 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         s->setPlainText(muse::mtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
         m->add(s);
     }
-    if (!gpscore->poet().isEmpty()) {
+
+    if (!gpscore->poet().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
         s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
         m->add(s);

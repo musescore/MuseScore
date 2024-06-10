@@ -3275,7 +3275,7 @@
         <source>Sopranino clarinet in A♭.</source>
         <comment>piccolo-clarinet description</comment>
         <extracomment>description for Piccolo Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopranklarinett i Ass.</translation>
+        <translation>Sopraninoklarinett i Ass.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1259"/>
@@ -3499,7 +3499,7 @@
         <source>Soprano clarinet in A. One of the standard orchestral clarinets.</source>
         <comment>a-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopranklarinett i Ess. En av de vanliga orkesterklarinetterna.</translation>
+        <translation>Sopranklarinett i A. En av de vanliga orkesterklarinetterna.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1330"/>
@@ -3534,7 +3534,7 @@
         <source>Soprano clarinet in G.</source>
         <comment>g-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopranklarinett i G.</translation>
+        <translation>Sopraninoklarinett i G.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1341"/>
@@ -3653,7 +3653,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet.</source>
         <comment>bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten.</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1379"/>
@@ -3681,7 +3681,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the treble clef (‘French notation’).</source>
         <comment>bb-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten. Noterad i diskantklav (&quot;Fransk notation&quot;).</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i diskantklav (&quot;Fransk notation&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1388"/>
@@ -3716,7 +3716,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the bass clef (‘German notation’).</source>
         <comment>bb-bass-clarinet-bass-clef description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten. Noterad i basklav (&quot;Tysk notation&quot;).</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i basklav (&quot;Tysk notation&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1399"/>
@@ -12606,7 +12606,7 @@
         <source>Orchestral percussion drumset.</source>
         <comment>percussion description</comment>
         <extracomment>description for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Orkestralt slagverk.</translation>
+        <translation>Orkestertrumset.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4237"/>
@@ -15357,28 +15357,28 @@
         <source>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-steel description</comment>
         <extracomment>description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Stålsträngad akustisk gitarr (noterad i gitarrklav).</translation>
+        <translation>Gitarr, stålsträngad (noterad i gitarrklav).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5152"/>
         <source>Acoustic steel-string guitar (staff notation, with normal treble clef).</source>
         <comment>guitar-steel-treble-clef description</comment>
         <extracomment>description for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Stålsträngad akustisk gitarr (noterad i diskantklav).</translation>
+        <translation>Gitarr, stålsträngad (noterad i diskantklav).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5161"/>
         <source>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-nylon description</comment>
         <extracomment>description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nylonsträngad akustisk gitarr (noterad i gitarrklav).</translation>
+        <translation>Gitarr, nylonsträngad (noterad i gitarrklav).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5174"/>
         <source>Acoustic nylon-string guitar (staff notation, with normal treble clef).</source>
         <comment>guitar-nylon-treble-clef description</comment>
         <extracomment>description for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nylonsträngad akustisk gitarr (noterad i diskantklav).</translation>
+        <translation>Gitarr, nylonsträngad (noterad i diskantklav).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5607"/>
@@ -15406,7 +15406,7 @@
         <source>Acoustic Guitar</source>
         <comment>guitar-steel trackName</comment>
         <extracomment>trackName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akustisk gitarr</translation>
+        <translation>Gitarr, stålsträngad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="266"/>
@@ -15518,7 +15518,7 @@
         <source>Acoustic Guitar</source>
         <comment>guitar-steel longName</comment>
         <extracomment>longName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akustisk gitarr</translation>
+        <translation>Gitarr, stålsträngad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5143"/>
@@ -15553,7 +15553,7 @@
         <source>Acoustic Guitar (treble clef)</source>
         <comment>guitar-steel-treble-clef trackName</comment>
         <extracomment>trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akustisk gitarr (diskantklav)</translation>
+        <translation>Gitarr, stålsträngad (diskantklav)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5156"/>
@@ -15574,14 +15574,14 @@
         <source>Classical Guitar</source>
         <comment>guitar-nylon trackName</comment>
         <extracomment>trackName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klassisk gitarr</translation>
+        <translation>Gitarr, nylonsträngad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5165"/>
         <source>Classical Guitar</source>
         <comment>guitar-nylon longName</comment>
         <extracomment>longName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klassisk gitarr</translation>
+        <translation>Gitarr, nylonsträngad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5167"/>
@@ -15665,35 +15665,35 @@
         <source>Acoustic nylon-string guitar (tablature).</source>
         <comment>guitar-nylon-tablature description</comment>
         <extracomment>description for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nylonsträngad akustisk gitarr (tabulatur).</translation>
+        <translation>Gitarr, nylonsträngad (tabulatur).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5196"/>
         <source>Classical Guitar (tablature)</source>
         <comment>guitar-nylon-tablature trackName</comment>
         <extracomment>trackName for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klassisk gitarr (tabulatur)</translation>
+        <translation>Gitarr, nylonsträngad (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5198"/>
         <source>Classical Guitar</source>
         <comment>guitar-nylon-tablature longName</comment>
         <extracomment>longName for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klassisk gitarr</translation>
+        <translation>Gitarr, nylonsträngad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5201"/>
         <source>Acoustic steel-string guitar (tablature).</source>
         <comment>guitar-steel-tablature description</comment>
         <extracomment>description for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Stålsträngad akustisk gitarr (tabulatur).</translation>
+        <translation>Gitarr, stålsträngad (tabulatur).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5203"/>
         <source>Acoustic Guitar (tablature)</source>
         <comment>guitar-steel-tablature trackName</comment>
         <extracomment>trackName for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akustisk gitarr (tabulatur)</translation>
+        <translation>Gitarr, stålsträngad (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5205"/>
@@ -16281,7 +16281,7 @@
         <source>Acoustic bass guitar.</source>
         <comment>acoustic-bass description</comment>
         <extracomment>description for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akustisk basgitarr.</translation>
+        <translation>Basgitarr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5390"/>
@@ -19322,7 +19322,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="157"/>
         <source>Pitched Metal Percussion</source>
-        <translation>Stämt metallslagverk</translation>
+        <translation>Metallslagverk med bestämd tonhöjd</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="158"/>
@@ -19362,12 +19362,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="165"/>
         <source>Unpitched Metal Percussion</source>
-        <translation>Ostämt metallslagverk</translation>
+        <translation>Metallslagverk utan bestämd tonhöjd</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="166"/>
         <source>Unpitched Wooden Percussion</source>
-        <translation>Ostämt träslagverk</translation>
+        <translation>Träslagverk utan bestämd tonhöjd</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="167"/>
@@ -19608,12 +19608,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3410"/>
         <source>Percussion - Pitched</source>
-        <translation>Slagverk – stämt</translation>
+        <translation>Slagverk – med bestämd tonhöjd</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3800"/>
         <source>Percussion - Unpitched</source>
-        <translation>Slagverk – ostämt</translation>
+        <translation>Slagverk – utan bestämd tonhöjd</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4334"/>
@@ -19889,7 +19889,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="66"/>
         <source>Large Pit Percussion</source>
-        <translation>Stor dikesslagverk</translation>
+        <translation>Stort dikesslagverk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="67"/>

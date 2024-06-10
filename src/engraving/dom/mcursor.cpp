@@ -145,10 +145,10 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
 //   createScore
 //---------------------------------------------------------
 
-void MCursor::createScore(const String& /*name*/)
+void MCursor::createScore(const muse::modularity::ContextPtr& iocCtx, const String& /*name*/)
 {
     delete m_score;
-    m_score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    m_score = compat::ScoreAccess::createMasterScoreWithBaseStyle(iocCtx);
     // TODO: set path/filename
     NOT_IMPLEMENTED;
     move(0, Fraction(0, 1));

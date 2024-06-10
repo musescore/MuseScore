@@ -108,7 +108,7 @@ void AudioModule::registerExports()
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>();
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
-    m_playbackFacade = std::make_shared<Playback>();
+    m_playbackFacade = std::make_shared<Playback>(iocContext());
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 

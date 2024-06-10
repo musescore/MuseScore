@@ -3,9 +3,7 @@
 using namespace mu::notation;
 
 RestsPageModel::RestsPageModel(QObject* parent)
-    : AbstractStyleDialogModel(parent, {
-    StyleId::multiVoiceRestTwoSpaceOffset
-})
+    : AbstractStyleDialogModel(parent, { StyleId::multiVoiceRestTwoSpaceOffset })
 {
 }
 

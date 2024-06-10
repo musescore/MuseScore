@@ -234,7 +234,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     for (const char* dynamicType : defaultPalette ? defaultDynamics : masterDynamics) {
         auto dynamic = makeElement<Dynamic>(mu::engraving::gpaletteScore);
         dynamic->setDynamicType(String::fromAscii(dynamicType));
-        sp->appendElement(dynamic, dynamicType);
+        sp->appendElement(dynamic, TConv::userName(dynamic->dynamicType()));
     }
 
     std::pair<HairpinType, const char*> hairpins[] = {
@@ -1762,73 +1762,73 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
 
     auto fret = FretDiagram::createFromString(gpaletteScore, u"X32O1O");
     fret->setHarmony(u"C");
-    sp->appendElement(fret, "C");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "C"));
     fret = FretDiagram::createFromString(gpaletteScore, u"X-554-");
     fret->setHarmony(u"Cm");
-    sp->appendElement(fret, "Cm");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Cm"));
     fret = FretDiagram::createFromString(gpaletteScore, u"X3231O");
     fret->setHarmony(u"C7");
-    sp->appendElement(fret, "C7");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "C7"));
 
     fret = FretDiagram::createFromString(gpaletteScore, u"XXO232");
     fret->setHarmony(u"D");
-    sp->appendElement(fret, "D");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "D"));
     fret = FretDiagram::createFromString(gpaletteScore, u"XXO231");
     fret->setHarmony(u"Dm");
-    sp->appendElement(fret, "Dm");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Dm"));
     fret = FretDiagram::createFromString(gpaletteScore, u"XXO212");
     fret->setHarmony(u"D7");
-    sp->appendElement(fret, "D7");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "D7"));
 
     fret = FretDiagram::createFromString(gpaletteScore, u"O221OO");
     fret->setHarmony(u"E");
-    sp->appendElement(fret, "E");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "E"));
     fret = FretDiagram::createFromString(gpaletteScore, u"O22OOO");
     fret->setHarmony(u"Em");
-    sp->appendElement(fret, "Em");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Em"));
     fret = FretDiagram::createFromString(gpaletteScore, u"O2O1OO");
     fret->setHarmony(u"E7");
-    sp->appendElement(fret, "E7");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "E7"));
 
     fret = FretDiagram::createFromString(gpaletteScore, u"-332--");
     fret->setHarmony(u"F");
-    sp->appendElement(fret, "F");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "F"));
     fret = FretDiagram::createFromString(gpaletteScore, u"-33---");
     fret->setHarmony(u"Fm");
-    sp->appendElement(fret, "Fm");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Fm"));
     fret = FretDiagram::createFromString(gpaletteScore, u"-3-2--");
     fret->setHarmony(u"F7");
-    sp->appendElement(fret, "F7");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "F7"));
 
     fret = FretDiagram::createFromString(gpaletteScore, u"32OOO3");
     fret->setHarmony(u"G");
-    sp->appendElement(fret, "G");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "G"));
     fret = FretDiagram::createFromString(gpaletteScore, u"-55---");
     fret->setHarmony(u"Gm");
-    sp->appendElement(fret, "Gm");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Gm"));
     fret = FretDiagram::createFromString(gpaletteScore, u"32OOO1");
     fret->setHarmony(u"G7");
-    sp->appendElement(fret, "G7");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "G7"));
 
     fret = FretDiagram::createFromString(gpaletteScore, u"XO222O");
     fret->setHarmony(u"A");
-    sp->appendElement(fret, "A");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "A"));
     fret = FretDiagram::createFromString(gpaletteScore, u"XO221O");
     fret->setHarmony(u"Am");
-    sp->appendElement(fret, "Am");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Am"));
     fret = FretDiagram::createFromString(gpaletteScore, u"XO2O2O");
     fret->setHarmony(u"A7");
-    sp->appendElement(fret, "A7");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "A7"));
 
     fret = FretDiagram::createFromString(gpaletteScore, u"X-444-");
     fret->setHarmony(u"B");
-    sp->appendElement(fret, "B");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "B"));
     fret = FretDiagram::createFromString(gpaletteScore, u"X-443-");
     fret->setHarmony(u"Bm");
-    sp->appendElement(fret, "Bm");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Bm"));
     fret = FretDiagram::createFromString(gpaletteScore, u"X212O2");
     fret->setHarmony(u"B7");
-    sp->appendElement(fret, "B7");
+    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "B7"));
 
     return sp;
 }

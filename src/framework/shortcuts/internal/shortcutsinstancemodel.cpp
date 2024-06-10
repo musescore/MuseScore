@@ -43,7 +43,7 @@ void ShortcutsInstanceModel::init()
     doLoadShortcuts();
 }
 
-QStringList ShortcutsInstanceModel::shortcuts() const
+QVariantMap ShortcutsInstanceModel::shortcuts() const
 {
     return m_shortcuts;
 }
@@ -53,9 +53,9 @@ bool ShortcutsInstanceModel::active() const
     return shortcutsRegister()->active();
 }
 
-void ShortcutsInstanceModel::activate(const QString& key)
+void ShortcutsInstanceModel::activate(const QString& seq)
 {
-    doActivate(key);
+    doActivate(seq);
 }
 
 void ShortcutsInstanceModel::doLoadShortcuts()
@@ -65,12 +65,18 @@ void ShortcutsInstanceModel::doLoadShortcuts()
     const ShortcutList& shortcuts = shortcutsRegister()->shortcuts();
     for (const Shortcut& sc : shortcuts) {
         for (const std::string& seq : sc.sequences) {
-            QString sequence = QString::fromStdString(seq);
+            QString seqStr = QString::fromStdString(seq);
 
-            //! NOTE There may be several identical shortcuts for different contexts.
-            //! We only need a list of unique ones.
-            if (!m_shortcuts.contains(sequence)) {
-                m_shortcuts << sequence;
+            // RULE: If a sequence is used for several shortcuts but the values for autoRepeat vary depending on
+            // the context, then we should force autoRepeat to false for all shortcuts sharing the sequence in
+            // question. This prevents the creation of ambiguous shortcuts (see QShortcutEvent::isAmbiguous)
+            auto search = m_shortcuts.find(seqStr);
+            if (search == m_shortcuts.end()) {
+                // Sequence not found, add it...
+                m_shortcuts.insert(seqStr, QVariant(sc.autoRepeat));
+            } else if (search.value().toBool() && !sc.autoRepeat) {
+                // Sequence already exists, but we need to enforce the above rule...
+                search.value() = false;
             }
         }
     }
@@ -78,7 +84,7 @@ void ShortcutsInstanceModel::doLoadShortcuts()
     emit shortcutsChanged();
 }
 
-void ShortcutsInstanceModel::doActivate(const QString& key)
+void ShortcutsInstanceModel::doActivate(const QString& seq)
 {
-    controller()->activate(key.toStdString());
+    controller()->activate(seq.toStdString());
 }

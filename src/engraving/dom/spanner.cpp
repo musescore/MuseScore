@@ -1273,7 +1273,7 @@ EngravingItem* Spanner::nextSegmentElement()
 {
     Segment* s = startSegment();
     if (s) {
-        return s->firstElement(staffIdx());
+        return s->firstElementForNavigation(staffIdx());
     }
     return score()->lastElement();
 }
@@ -1286,7 +1286,7 @@ EngravingItem* Spanner::prevSegmentElement()
 {
     Segment* s = endSegment();
     if (s) {
-        return s->lastElement(staffIdx());
+        return s->lastElementForNavigation(staffIdx());
     }
     return score()->firstElement();
 }

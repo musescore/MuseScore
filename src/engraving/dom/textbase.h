@@ -26,7 +26,6 @@
 #include <variant>
 
 #include "draw/fontmetrics.h"
-#include "draw/types/color.h"
 
 #include "modularity/ioc.h"
 #include "../iengravingfontsprovider.h"
@@ -214,17 +213,23 @@ private:
 
 class TextFragment
 {
-    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
+public:
+    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
+
 public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;
 
-    bool operator ==(const TextFragment& f) const;
-
-    TextFragment();
+    TextFragment() = default;
     TextFragment(const String& s);
     TextFragment(TextCursor*, const String&);
+    TextFragment(const TextFragment& f);
+
+    TextFragment& operator =(const TextFragment& f);
+
+    bool operator ==(const TextFragment& f) const;
+
     TextFragment split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
     muse::draw::Font font(const TextBase*) const;
@@ -240,7 +245,8 @@ public:
 class TextBlock
 {
 public:
-    TextBlock() {}
+    TextBlock() = default;
+
     bool operator ==(const TextBlock& x) const { return m_fragments == x.m_fragments; }
     bool operator !=(const TextBlock& x) const { return m_fragments != x.m_fragments; }
     void draw(muse::draw::Painter*, const TextBase*) const;
@@ -248,7 +254,8 @@ public:
     const std::list<TextFragment>& fragments() const { return m_fragments; }
     std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
-    const RectF& boundingRect() const { return m_bbox; }
+    const Shape& shape() const { return m_shape; }
+    const RectF& boundingRect() const { return m_shape.bbox(); }
     RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
     void insert(TextCursor*, const String&);
@@ -276,7 +283,7 @@ private:
     std::list<TextFragment> m_fragments;
     double m_y = 0.0;
     double m_lineSpacing = 0.0;
-    RectF m_bbox;
+    Shape m_shape;
     bool m_eol = false;
 };
 
@@ -287,8 +294,6 @@ private:
 class TextBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TextBase)
-
-    INJECT(IEngravingFontsProvider, engravingFonts)
 
     M_PROPERTY2(bool, isTextLinkedToMaster, setTextLinkedToMaster, true)
 
@@ -476,6 +481,13 @@ public:
     //! At the moment it's: Text, Jump, Marker
     bool layoutToParentWidth() const { return m_layoutToParentWidth; }
 
+    void setApplyToVoice(VoiceApplication v) { m_applyToVoice = v; }
+    VoiceApplication applyToVoice() const { return m_applyToVoice; }
+    void setDirection(DirectionV v) { m_direction = v; }
+    DirectionV direction() const { return m_direction; }
+    void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
+    AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -533,6 +545,10 @@ private:
     bool m_primed = 0;
 
     TextCursor* m_cursor = nullptr;
+
+    VoiceApplication m_applyToVoice = VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+    DirectionV m_direction = DirectionV::AUTO;
+    AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
 };
 
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)

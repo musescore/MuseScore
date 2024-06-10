@@ -122,7 +122,7 @@ std::string DockModule::moduleName() const
 
 void DockModule::registerExports()
 {
-    m_actionsController = std::make_shared<DockWindowActionsController>();
+    m_actionsController = std::make_shared<DockWindowActionsController>(iocContext());
 
     ioc()->registerExport<IDockWindowProvider>(moduleName(), new DockWindowProvider());
 }

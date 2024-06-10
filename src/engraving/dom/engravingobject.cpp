@@ -79,8 +79,11 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         }
     }
 
-    if (elementsProvider()) {
-        elementsProvider()->reg(this);
+    // reg to debug
+    if (type != ElementType::SCORE) {
+        if (m_score && m_score->elementsProvider()) {
+            m_score->elementsProvider()->reg(this);
+        }
     }
 }
 
@@ -111,8 +114,11 @@ EngravingObject::EngravingObject(const EngravingObject& se)
         }
     }
 
-    if (elementsProvider()) {
-        elementsProvider()->reg(this);
+    // reg to debug
+    if (m_type != ElementType::SCORE) {
+        if (m_score && m_score->elementsProvider()) {
+            m_score->elementsProvider()->reg(this);
+        }
     }
 }
 
@@ -147,8 +153,8 @@ EngravingObject::~EngravingObject()
         m_children.clear();
     }
 
-    if (elementsProvider()) {
-        elementsProvider()->unreg(this);
+    if (score() && score()->elementsProvider()) {
+        score()->elementsProvider()->unreg(this);
     }
 
     if (m_links) {

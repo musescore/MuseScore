@@ -87,7 +87,7 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* parent, E
     : EngravingObject(type, parent)
 {
     m_flags         = f;
-    m_color         = engravingConfiguration()->defaultColor();
+    m_color         = configuration()->defaultColor();
     m_z             = -1;
     m_minDistance   = Spatium(0.0);
 }
@@ -173,6 +173,21 @@ EngravingItemList EngravingItem::childrenItems(bool all) const
     EngravingItemList list;
     collectChildrenItems(this, list, all);
     return list;
+}
+
+const muse::modularity::ContextPtr& EngravingItem::iocContext() const
+{
+    return score()->iocContext();
+}
+
+const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+{
+    return score()->configuration.get();
+}
+
+const std::shared_ptr<rendering::IScoreRenderer>& EngravingItem::renderer() const
+{
+    return score()->renderer.get();
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -616,11 +631,11 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 {
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
-        return (normalColor == engravingConfiguration()->defaultColor()) ? Color::BLACK : normalColor;
+        return (normalColor == configuration()->defaultColor()) ? Color::BLACK : normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
-        return engravingConfiguration()->highlightSelectionColor(track() == muse::nidx ? 0 : voice());
+        return configuration()->highlightSelectionColor(track() == muse::nidx ? 0 : voice());
     }
 
     bool marked = false;
@@ -629,14 +644,21 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        return engravingConfiguration()->selectionColor(track() == muse::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster());
+        voice_idx_t voiceForColorChoice = track() == muse::nidx ? 0 : voice();
+        if (hasVoiceApplicationProperties()) {
+            VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+            if (voiceApplication != VoiceApplication::CURRENT_VOICE_ONLY) {
+                voiceForColorChoice = VOICES;
+            }
+        }
+        return configuration()->selectionColor(voiceForColorChoice, isVisible, isUnlinkedFromMaster());
     }
 
     if (!isVisible) {
-        return engravingConfiguration()->invisibleColor();
+        return configuration()->invisibleColor();
     }
 
-    if (m_colorsInversionEnabled && engravingConfiguration()->scoreInversionEnabled()) {
+    if (m_colorsInversionEnabled && configuration()->scoreInversionEnabled()) {
         return normalColor.inverted();
     }
 
@@ -817,6 +839,13 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
     return hitShape().intersects(rr.translated(-pagePos()));
 }
 
+void EngravingItem::drawAt(muse::draw::Painter* p, const PointF& pt) const
+{
+    p->translate(pt);
+    renderer()->drawItem(this, p);
+    p->translate(-pt);
+}
+
 //---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
@@ -977,7 +1006,7 @@ muse::ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
         xml.tagPoint("dragOffset", dragOffset);
     }
 
-    rw::RWRegister::writer()->writeItem(this, xml);
+    rw::RWRegister::writer(iocContext())->writeItem(this, xml);
 
     xml.endElement();
     buffer.close();
@@ -1253,6 +1282,73 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+bool EngravingItem::appliesToAllVoicesInInstrument() const
+{
+    return hasVoiceApplicationProperties()
+           && getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>() == VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+}
+
+void EngravingItem::setInitialTrackAndVoiceApplication(track_idx_t track)
+{
+    IF_ASSERT_FAILED(track != muse::nidx) {
+        return;
+    }
+
+    if (configuration()->dynamicsApplyToAllVoices()) {
+        setTrack(trackZeroVoice(track));
+        setProperty(Pid::APPLY_TO_VOICE, VoiceApplication::ALL_VOICE_IN_INSTRUMENT);
+    } else {
+        setTrack(track);
+        setProperty(Pid::APPLY_TO_VOICE, VoiceApplication::CURRENT_VOICE_ONLY);
+    }
+}
+
+void EngravingItem::checkVoiceApplicationCompatibleWithTrack()
+{
+    voice_idx_t currentVoice = voice();
+    VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+
+    if (voiceApplication != VoiceApplication::CURRENT_VOICE_ONLY && currentVoice != 0) {
+        setProperty(Pid::TRACK, trackZeroVoice(track()));
+    }
+}
+
+void EngravingItem::setPlacementBasedOnVoiceApplication(DirectionV styledDirection)
+{
+    PlacementV oldPlacement = placement();
+    bool offsetIsStyled = isStyled(Pid::OFFSET);
+
+    PlacementV newPlacement;
+
+    DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
+    if (internalDirectionProperty != DirectionV::AUTO) {
+        newPlacement = internalDirectionProperty == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
+    } else if (styledDirection != DirectionV::AUTO) {
+        newPlacement = styledDirection == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
+    } else if (part()->nstaves() > 1 && getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON) {
+        bool isOnLastStaffOfInstrument = staffIdx() == part()->staves().back()->idx();
+        newPlacement = isOnLastStaffOfInstrument ? PlacementV::ABOVE : PlacementV::BELOW;
+    } else {
+        VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+        if (voiceApplication == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || voiceApplication == VoiceApplication::ALL_VOICE_IN_STAFF) {
+            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
+                newPlacement = PlacementV::ABOVE;
+            } else {
+                newPlacement = PlacementV::BELOW;
+            }
+        } else {
+            newPlacement = voice() % 2 ? PlacementV::BELOW : PlacementV::ABOVE;
+        }
+    }
+
+    if (newPlacement != oldPlacement) {
+        setPlacement(newPlacement);
+        if (offsetIsStyled) {
+            resetProperty(Pid::OFFSET);
+        }
+    }
+}
+
 void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
 {
     assert(!score()->isMaster());
@@ -1379,7 +1475,7 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::VISIBLE:
         return true;
     case Pid::COLOR:
-        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::PLACEMENT: {
         PropertyValue v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
@@ -1774,7 +1870,7 @@ EngravingItem* EngravingItem::nextSegmentElement()
         break;
         case ElementType::SEGMENT: {
             Segment* s = toSegment(p);
-            return s->firstElement(staffIdx());
+            return s->firstElementForNavigation(staffIdx());
         }
         case ElementType::MEASURE: {
             Measure* m = toMeasure(p);
@@ -1822,7 +1918,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
         break;
         case ElementType::SEGMENT: {
             Segment* s = toSegment(p);
-            return s->lastElement(staffIdx());
+            return s->lastElementForNavigation(staffIdx());
         }
         case ElementType::MEASURE: {
             Measure* m = toMeasure(p);
@@ -1963,11 +2059,11 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
 {
     using namespace muse::draw;
-    Pen pen(engravingConfiguration()->defaultColor(), 0.0);
+    Pen pen(configuration()->defaultColor(), 0.0);
     p->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
-            p->setBrush(engravingConfiguration()->formattingMarksColor());
+            p->setBrush(configuration()->formattingMarksColor());
         } else {
             p->setBrush(BrushStyle::NoBrush);
         }
@@ -2344,7 +2440,7 @@ void EngravingItem::setSelected(bool f)
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 void EngravingItem::initAccessibleIfNeed()
 {
-    if (!engravingConfiguration()->isAccessibleEnabled()) {
+    if (!configuration()->isAccessibleEnabled()) {
         return;
     }
 

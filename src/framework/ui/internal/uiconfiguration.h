@@ -36,13 +36,17 @@
 #include "async/asyncable.h"
 
 namespace muse::ui {
-class UiConfiguration : public IUiConfiguration, public async::Asyncable
+class UiConfiguration : public IUiConfiguration, public Injectable, public async::Asyncable
 {
-    INJECT(IMainWindow, mainWindow)
-    INJECT(IPlatformTheme, platformTheme)
-    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<IMainWindow> mainWindow = { this };
+    Inject<IPlatformTheme> platformTheme = { this };
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
+
+    UiConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx), m_uiArrangement(iocCtx) {}
+
     void init();
     void load();
     void deinit();

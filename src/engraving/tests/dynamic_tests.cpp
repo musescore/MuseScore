@@ -40,35 +40,23 @@ class Engraving_DynamicTests : public ::testing::Test
 
 TEST_F(Engraving_DynamicTests, test1)
 {
-    MasterScore* score = compat::ScoreAccess::createMasterScore();
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
 
     Dynamic* dynamic = new Dynamic(score->dummy()->segment());
     dynamic->setDynamicType(DynamicType(1));
 
     Dynamic* d;
 
-    dynamic->setPlacement(PlacementV::ABOVE);
-    dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    dynamic->setDirection(DirectionV::UP);
+    dynamic->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
     d = toDynamic(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->placement(), PlacementV::ABOVE);
+    EXPECT_EQ(d->direction(), DirectionV::UP);
     delete d;
 
-    dynamic->setPlacement(PlacementV::BELOW);
-    dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    dynamic->setDirection(DirectionV::DOWN);
+    dynamic->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->placement(), PlacementV::BELOW);
-    delete d;
-
-    dynamic->setProperty(Pid::PLACEMENT, PlacementV::ABOVE);
-    dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->placement(), PlacementV::ABOVE);
-    delete d;
-
-    dynamic->setProperty(Pid::PLACEMENT, PlacementV::BELOW);
-    dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->placement(), PlacementV::BELOW);
+    EXPECT_EQ(d->direction(), DirectionV::DOWN);
     delete d;
 
     dynamic->setVelocity(23);

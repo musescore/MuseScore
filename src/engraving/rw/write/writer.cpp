@@ -39,12 +39,17 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::write;
 
+Writer::Writer(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* inout)
 {
     TRACEFUNC;
 
     XmlWriter xml(device);
-    WriteContext ctx;
+    WriteContext ctx(score);
     if (inout) {
         ctx = inout->ctx;
     }
@@ -265,7 +270,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 void Writer::writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t strack, track_idx_t etrack,
                            Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig, Fraction& curTick)
 {
-    WriteContext ctx;
+    WriteContext ctx(sseg->score());
     ctx.setClipboardmode(true);
     ctx.setFilter(*filter);
     ctx.setCurTrack(strack);
@@ -276,7 +281,7 @@ void Writer::writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t 
 
 void Writer::doWriteItem(const EngravingItem* item, XmlWriter& xml)
 {
-    WriteContext ctx;
+    WriteContext ctx(item->score());
     ctx.setClipboardmode(true);
     TWrite::writeItem(item, xml, ctx);
 }

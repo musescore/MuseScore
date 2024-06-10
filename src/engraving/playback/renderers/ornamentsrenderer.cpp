@@ -309,7 +309,7 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     }
 
     IntervalsInfo intervalsInfo;
-    if (const Ornament* ornament = chord->findOrnament()) {
+    if (const Ornament* ornament = chord->findOrnament(true)) {
         intervalsInfo = makeIntervalsInfo(ornament->intervalBelow(), ornament->intervalAbove());
     } else {
         intervalsInfo = makeIntervalsInfo(DEFAULT_ORNAMENT_INTERVAL, DEFAULT_ORNAMENT_INTERVAL);

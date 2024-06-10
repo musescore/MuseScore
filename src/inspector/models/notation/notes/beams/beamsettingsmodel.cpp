@@ -136,7 +136,7 @@ void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prope
 
     loadPropertyItem(m_stemDirection);
     loadPropertyItem(m_crossStaffMove);
-    updateisCrossStaffMoveAvailable();
+    updateIsCrossStaffMoveAvailable();
 }
 
 void BeamSettingsModel::loadBeamHeightProperties()
@@ -248,7 +248,7 @@ void BeamSettingsModel::updateFeatheringMode(const qreal left, const qreal right
     }
 }
 
-void BeamSettingsModel::updateisCrossStaffMoveAvailable()
+void BeamSettingsModel::updateIsCrossStaffMoveAvailable()
 {
     bool available = true;
     for (EngravingItem* item : m_elementList) {
@@ -261,7 +261,7 @@ void BeamSettingsModel::updateisCrossStaffMoveAvailable()
         }
     }
 
-    setisCrossStaffMoveAvailable(available);
+    setIsCrossStaffMoveAvailable(available);
 }
 
 bool BeamSettingsModel::isBeamHeightLocked() const
@@ -345,7 +345,7 @@ void BeamSettingsModel::setFeatheringMode(BeamTypes::FeatheringMode featheringMo
     emit featheringModeChanged(featheringMode);
 }
 
-void BeamSettingsModel::setisCrossStaffMoveAvailable(bool isCrossStaffMoveAvailable)
+void BeamSettingsModel::setIsCrossStaffMoveAvailable(bool isCrossStaffMoveAvailable)
 {
     if (m_isCrossStaffMoveAvailable == isCrossStaffMoveAvailable) {
         return;

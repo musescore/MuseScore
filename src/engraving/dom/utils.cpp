@@ -268,6 +268,11 @@ BeatType Score::tick2beatType(const Fraction& tick) const
     return timeSig.rtick2beatType(rtick);
 }
 
+void Score::checkChordList()
+{
+    m_chordList.checkChordList(configuration()->appDataPath(), style());
+}
+
 //---------------------------------------------------------
 //   nextSeg
 //---------------------------------------------------------

@@ -52,11 +52,11 @@ void SequencePlayer::play()
     setAllTracksActive(true);
 }
 
-void SequencePlayer::seek(const msecs_t newPositionMsecs)
+void SequencePlayer::seek(const secs_t newPosition)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    msecs_t newPos = newPositionMsecs * 1000;
+    msecs_t newPos = secsToMicrosecs(newPosition);
     m_clock->seek(newPos);
     seekAllTracks(newPos);
 }
@@ -120,11 +120,25 @@ void SequencePlayer::resetLoop()
     m_clock->resetTimeLoop();
 }
 
-Channel<msecs_t> SequencePlayer::playbackPositionMSecs() const
+secs_t SequencePlayer::playbackPosition() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return microsecsToSecs(m_clock->currentTime());
+}
+
+Channel<secs_t> SequencePlayer::playbackPositionChanged() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     return m_clock->timeChanged();
+}
+
+PlaybackStatus SequencePlayer::playbackStatus() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_clock->status();
 }
 
 Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const

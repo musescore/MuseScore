@@ -26,11 +26,15 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
-AbstractStyleDialogModel::AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids)
-    : QObject(parent)
+AbstractStyleDialogModel::AbstractStyleDialogModel(QObject* parent, const std::set<StyleId>& ids)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_ids(ids)
 {
-    for (StyleId id : ids) {
-        m_items.insert_or_assign(id, buildStyleItem(id));
+}
+
+void AbstractStyleDialogModel::load()
+{
+    for (StyleId mid : m_ids) {
+        m_items.insert_or_assign(mid, buildStyleItem(mid));
     }
 
     currentNotationStyle()->styleChanged().onNotify(this, [this]() {
@@ -50,12 +54,12 @@ INotationStylePtr AbstractStyleDialogModel::currentNotationStyle() const
     return context()->currentNotation()->style();
 }
 
-StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id)
+StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id) const
 {
     QVariant value = toUiValue(id, currentNotationStyle()->styleValue(id));
     QVariant defaultValue = toUiValue(id, currentNotationStyle()->defaultStyleValue(id));
 
-    StyleItem* item = new StyleItem(this, value, defaultValue);
+    StyleItem* item = new StyleItem(const_cast<AbstractStyleDialogModel*>(this), value, defaultValue);
 
     connect(item, &StyleItem::valueModified, this, [this, id](const QVariant& newValue) {
         currentNotationStyle()->setStyleValue(id, fromUiValue(id, newValue));

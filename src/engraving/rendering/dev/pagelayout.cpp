@@ -360,6 +360,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                         Fingering* fingering = toFingering(e);
                                         if (fingering->isOnCrossBeamSide()) {
                                             TLayout::layoutFingering(fingering, fingering->mutldata());
+                                            if (fingering->addToSkyline()) {
+                                                const Note* n = fingering->note();
+                                                const RectF r
+                                                    = fingering->ldata()->bbox().translated(
+                                                          fingering->pos() + n->pos() + n->chord()->pos() + segment->pos()
+                                                          + segment->measure()->pos());
+                                                s->staff(fingering->note()->chord()->vStaffIdx())->skyline().add(r, fingering);
+                                            }
                                         }
                                     }
                                 }
@@ -418,6 +426,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
             if (toSlur(sp)->isCrossStaff()) {
                 TLayout::layoutSlur(toSlur(sp), ctx);
             }
+        }
+    }
+
+    for (const System* system : page->systems()) {
+        Fraction systemStartTick = system->measures().front()->tick();
+        Fraction systemEndTick = system->measures().back()->endTick();
+        if (systemEndTick > ctx.state().startTick() && systemStartTick <= ctx.state().endTick()) {
+            SystemLayout::centerElementsBetweenStaves(system);
         }
     }
 

@@ -24,6 +24,7 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QObject>
+class QQmlEngine;
 #endif
 
 #include "../thirdparty/kors_modularity/modularity/ioc.h" // IWYU pragma: export
@@ -44,6 +45,12 @@ inline ModulesIoC* _ioc(const ContextPtr& ctx = nullptr)
 inline ModulesIoC* globalIoc()
 {
     return kors::modularity::_ioc(nullptr);
+}
+
+inline muse::modularity::ContextPtr globalCtx()
+{
+    static muse::modularity::ContextPtr ctx = std::make_shared<kors::modularity::Context>();
+    return ctx;
 }
 
 inline ModulesIoC* fixmeIoc()
@@ -80,6 +87,8 @@ public:
 };
 
 Injectable::GetContext iocCtxForQmlObject(const QObject* o);
+modularity::ContextPtr iocCtxForQmlEngine(const QQmlEngine* e);
+modularity::ContextPtr iocCtxForQWidget(const QWidget* o);
 #endif
 }
 

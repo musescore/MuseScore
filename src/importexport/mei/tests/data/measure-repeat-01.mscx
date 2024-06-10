@@ -127,7 +127,7 @@
           <MeasureRepeat>
             <subtype>1</subtype>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </MeasureRepeat>
           </voice>
         </Measure>
@@ -138,7 +138,7 @@
             <subtype>1</subtype>
             <color r="255" g="38" b="0" a="255"/>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </MeasureRepeat>
           <BarLine>
             </BarLine>

@@ -54,8 +54,8 @@ using namespace mu::engraving;
 //   MasterScore
 //---------------------------------------------------------
 
-MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
-    : Score()
+MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_ptr<engraving::EngravingProject> project)
+    : Score(iocCtx)
 {
     m_project = project;
     m_undoStack   = new UndoStack();
@@ -87,8 +87,8 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     metaTags().insert({ u"creationDate", muse::Date::currentDate().toString(muse::DateFormat::ISODate) });
 }
 
-MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
-    : MasterScore{project}
+MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
+    : MasterScore{iocCtx, project}
 {
     setStyle(s);
 }
@@ -250,12 +250,12 @@ MasterScore* MasterScore::clone()
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
 
-    rw::RWRegister::writer()->writeScore(this, &buffer, false);
+    rw::RWRegister::writer(iocContext())->writeScore(this, &buffer, false);
 
     buffer.close();
 
     muse::ByteArray scoreData = buffer.data();
-    MasterScore* score = new MasterScore(style(), m_project);
+    MasterScore* score = new MasterScore(iocContext(), style(), m_project);
 
     XmlReader r(scoreData);
     MscLoader().readMasterScore(score, r, true);

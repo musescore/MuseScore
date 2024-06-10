@@ -32,14 +32,14 @@
 #include "ui/iinteractiveprovider.h"
 
 namespace muse::ui {
-class QmlToolTip : public QObject, public async::Asyncable
+class QmlToolTip : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IInteractiveProvider, interactiveProvider)
+    Inject<IInteractiveProvider> interactiveProvider = { this };
 
 public:
-    explicit QmlToolTip(QObject* parent = nullptr);
+    explicit QmlToolTip(QObject* parent, const modularity::ContextPtr& iocCtx);
 
     Q_INVOKABLE void show(QQuickItem* item, const QString& title, const QString& description = "", const QString& shortcut = "");
     Q_INVOKABLE void hide(QQuickItem* item, bool force = false);

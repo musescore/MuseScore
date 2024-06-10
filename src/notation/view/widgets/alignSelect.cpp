@@ -30,7 +30,7 @@ using namespace mu::notation;
 using namespace muse::ui;
 
 AlignSelect::AlignSelect(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
 

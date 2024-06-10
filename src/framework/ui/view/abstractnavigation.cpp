@@ -32,7 +32,7 @@ using namespace muse::ui;
 using namespace muse::accessibility;
 
 AbstractNavigation::AbstractNavigation(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

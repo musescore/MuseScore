@@ -244,6 +244,7 @@ extern String accSymId2SmuflMxmlString(const SymId id);
 extern String accidentalType2MxmlString(const AccidentalType type);
 extern String accidentalType2SmuflMxmlString(const AccidentalType type);
 extern AccidentalType mxmlString2accidentalType(const String mxmlName, const String smufl);
+extern String mxmlAccidentalTextToChar(const String mxmlName);
 extern SymId mxmlString2accSymId(const String mxmlName, const String smufl = {});
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);

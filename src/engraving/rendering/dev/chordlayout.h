@@ -64,7 +64,8 @@ public:
 
     static void layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
-    static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);
+    static void layoutChords3(const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);
+    static void layoutLedgerLines(const std::vector<Chord*>& chords);
     static void getNoteListForDots(Chord* c, std::vector<Note*>&, std::vector<Note*>&, std::vector<int>&);
     static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
     static void repositionGraceNotesAfter(Segment* segment, size_t tracks);
@@ -96,6 +97,9 @@ private:
     static void layoutNote2(Note* note, LayoutContext& ctx);
 
     static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes);
+
+    static void setDotX(const std::vector<Chord*>& chords, const std::array<double, 3 * VOICES>& dotPos, const Staff* staff,
+                        const double upDotPosX, const double downDotPosX);
 
     static void skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack);
 

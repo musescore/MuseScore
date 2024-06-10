@@ -34,13 +34,9 @@ public:
     bool isPlaying() const override;
     muse::async::Notification isPlayingChanged() const override;
 
-    void seek(const muse::midi::tick_t tick) override;
-    void seek(const muse::audio::msecs_t msecs) override;
     void reset() override;
 
-    muse::async::Notification playbackPositionChanged() const override;
     muse::async::Channel<uint32_t> midiTickPlayed() const override;
-    float playbackPositionInSeconds() const override;
 
     muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     muse::async::Notification currentTrackSequenceIdChanged() const override;

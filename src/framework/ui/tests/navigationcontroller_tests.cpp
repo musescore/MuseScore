@@ -53,7 +53,7 @@ class Ui_NavigationControllerTests : public ::testing::Test
 public:
     void SetUp() override
     {
-        m_controller = std::make_shared<NavigationController>();
+        m_controller = std::make_shared<NavigationController>(nullptr);
 
         m_dispatcher = std::make_shared<actions::ActionsDispatcher>();
         m_controller->dispatcher.set(m_dispatcher);

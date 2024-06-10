@@ -6263,7 +6263,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="47"/>
         <source>&amp;Close</source>
-        <translation>&amp;Fermer</translation>
+        <translation>Fer&amp;mer</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="48"/>
@@ -6273,7 +6273,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="53"/>
         <source>&amp;Save</source>
-        <translation>Enregistrer</translation>
+        <translation>Enregi&amp;strer</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="54"/>
@@ -6283,7 +6283,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="60"/>
         <source>Save &amp;as…</source>
-        <translation>Enregistrer sous…</translation>
+        <translation>Enre&amp;gistrer sous…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="61"/>
@@ -6293,7 +6293,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="66"/>
         <source>Save a cop&amp;y…</source>
-        <translation>Enregistrer une copie…</translation>
+        <translation>Enregis&amp;trer une copie…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="67"/>
@@ -6303,7 +6303,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="72"/>
         <source>Save se&amp;lection…</source>
-        <translation>Enregistrer la sélection…</translation>
+        <translation>Enregistrer la sé&amp;lection…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="73"/>
@@ -6313,7 +6313,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="78"/>
         <source>Save to clo&amp;ud…</source>
-        <translation>Enregistrer dans le cloud…</translation>
+        <translation>Enregistrer dans le clo&amp;ud…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="79"/>
@@ -6323,7 +6323,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="85"/>
         <source>Pu&amp;blish to MuseScore.com…</source>
-        <translation>Publier sur MuseScore.com…</translation>
+        <translation>Pu&amp;blier sur MuseScore.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="86"/>
@@ -6349,7 +6349,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="106"/>
         <source>Import P&amp;DF…</source>
-        <translation>Importer un PDF…</translation>
+        <translation>Importer un P&amp;DF…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="107"/>
@@ -6359,7 +6359,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="113"/>
         <source>Project propert&amp;ies…</source>
-        <translation>Propriétés de la partition…</translation>
+        <translation>Propriétés de la p&amp;artition…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="114"/>
@@ -6369,7 +6369,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="119"/>
         <source>&amp;Print…</source>
-        <translation>Imprimer…</translation>
+        <translation>Im&amp;primer…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="126"/>
@@ -6559,7 +6559,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="291"/>
         <source>Cu&amp;t</source>
-        <translation>Couper</translation>
+        <translation>Co&amp;uper</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="298"/>
@@ -6569,22 +6569,22 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="305"/>
         <source>Past&amp;e</source>
-        <translation>Coller</translation>
+        <translation>Coll&amp;er</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="312"/>
         <source>Paste &amp;half duration</source>
-        <translation>Collage demi durée</translation>
+        <translation>Collage dem&amp;i durée</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="318"/>
         <source>Paste &amp;double duration</source>
-        <translation>Collage double durée</translation>
+        <translation>Collage &amp;double durée</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="330"/>
         <source>&amp;Swap with clipboard</source>
-        <translation>Échanger avec le presse-papier</translation>
+        <translation>&amp;Échanger avec le presse-papier</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="336"/>
@@ -6595,12 +6595,12 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="342"/>
         <source>Select &amp;all</source>
-        <translation>Tout sélectionner</translation>
+        <translation>&amp;Tout sélectionner</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="348"/>
         <source>Select sectio&amp;n</source>
-        <translation>Sélectionner une section </translation>
+        <translation>Sélectionner une sectio&amp;n </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="354"/>
@@ -6711,18 +6711,18 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="778"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="779"/>
         <source>Break beam left</source>
-        <translation>Interrompre la ligature gauche</translation>
+        <translation>Interrompre la ligature à gauche de la note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="785"/>
         <source>Break inner beams (8th)</source>
-        <translation>Interrompre les ligatures intérieures (croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Croches)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="792"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="793"/>
         <source>Break inner beams (16th)</source>
-        <translation>Interrompre les ligatures intérieures (double-croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Doubles-croches)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="799"/>
@@ -6733,12 +6733,12 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="806"/>
         <source>Feathered beam, decelerate</source>
-        <translation>Ligature en ralentissant</translation>
+        <translation>Ligature progressive, ralentir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="813"/>
         <source>Feathered beam, accelerate</source>
-        <translation>Ligature en accélérant</translation>
+        <translation>Ligature progressive, accélérer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="827"/>
@@ -7386,7 +7386,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="516"/>
         <source>&amp;Find / Go to</source>
-        <translation>Rechercher / Aller à</translation>
+        <translation>&amp;Rechercher / Aller à</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="517"/>
@@ -7505,12 +7505,12 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="786"/>
         <source>Break inner beams (eighth)</source>
-        <translation>Interrompre les ligatures intérieures (croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Croches)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="807"/>
         <source>Add feathered beam: decelerate</source>
-        <translation>Ajouter une ligature progressive : Décélérer</translation>
+        <translation>Ajouter une ligature progressive : Ralentir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="814"/>
@@ -8632,7 +8632,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="771"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="772"/>
         <source>No beam</source>
-        <translation>Note seule</translation>
+        <translation>Note seule sans ligature</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="764"/>
@@ -9083,7 +9083,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="378"/>
         <source>De&amp;lete</source>
-        <translation>Supprimer</translation>
+        <translation>&amp;Supprimer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="106"/>
@@ -10326,7 +10326,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="227"/>
         <source>&amp;Add</source>
-        <translation>&amp;Ajouter</translation>
+        <translation>A&amp;jouter</translation>
     </message>
 </context>
 <context>
@@ -10359,7 +10359,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="395"/>
         <source>&amp;Diagnostic</source>
-        <translation>&amp;Diagnostic</translation>
+        <translation>Dia&amp;gnostique</translation>
     </message>
 </context>
 <context>
@@ -10375,7 +10375,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="137"/>
         <source>Open &amp;recent</source>
-        <translation>Partitions récentes</translation>
+        <translation>Partitions &amp;récentes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="158"/>
@@ -10393,7 +10393,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="254"/>
         <source>F&amp;ormat</source>
-        <translation>Format</translation>
+        <translation>F&amp;ormat</translation>
     </message>
 </context>
 <context>
@@ -10401,7 +10401,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="343"/>
         <source>&amp;Help</source>
-        <translation>Aide</translation>
+        <translation>Ai&amp;de</translation>
     </message>
 </context>
 <context>
@@ -10427,7 +10427,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="298"/>
         <source>&amp;Tools</source>
-        <translation>Outils</translation>
+        <translation>Ou&amp;tils</translation>
     </message>
 </context>
 <context>
@@ -19317,7 +19317,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="87"/>
         <source>Feathered beams</source>
-        <translation>Ligature avec changement de tempo</translation>
+        <translation>Ligature progressive</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="102"/>
@@ -19332,12 +19332,12 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="136"/>
         <source>Feathering left</source>
-        <translation>Ligature avec changement de tempo à gauche</translation>
+        <translation>Progress. à gauche</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="156"/>
         <source>Feathering right</source>
-        <translation>Ligature avec changement de tempo à droite</translation>
+        <translation>Progress. à droite</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="182"/>
@@ -19397,22 +19397,22 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
         <source>No beam</source>
-        <translation>Note seule</translation>
+        <translation>Note seule sans ligature</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
         <source>Break beam left</source>
-        <translation>Interrompre la ligature gauche</translation>
+        <translation>Interrompre la ligature à gauche de la note</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation>Interrompre les ligatures intérieures (croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Croches)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation>Interrompre les ligatures intérieures (double-croches)</translation>
+        <translation>Interrompre les ligatures à gauche et / ou à droite (Doubles-croches)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
@@ -26925,7 +26925,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="93"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation>Veuillez noter que l&apos;apparence de votre partition changera en raison des améliorations que nous avons apportées aux paramètres par défaut de la ligature, les liaisons de prolongation, les liaisons de phrasé, les objets système et l&apos;espacement horizontal.</translation>
+        <translation>Veuillez noter que l&apos;apparence de votre partition changera en raison des améliorations que nous avons apportées aux paramètres par défaut des ligatures, des liaisons de prolongation, des liaisons de phrasé, des objets système et d&apos;espacement horizontal.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="116"/>

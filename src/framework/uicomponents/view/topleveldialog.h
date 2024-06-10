@@ -29,10 +29,10 @@
 #include "ui/imainwindow.h"
 
 namespace muse::uicomponents {
-class TopLevelDialog : public QDialog
+class TopLevelDialog : public QDialog, public muse::Injectable
 {
 public:
-    INJECT(ui::IMainWindow, mainWindow)
+    muse::Inject<ui::IMainWindow> mainWindow = { this };
 
 public:
     explicit TopLevelDialog(QWidget* parent = nullptr);

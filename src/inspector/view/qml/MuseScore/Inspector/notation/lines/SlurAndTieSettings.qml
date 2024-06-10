@@ -52,6 +52,8 @@ Column {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
+
+        lineStyleTitleText: qsTrc("inspector", "Style")
     }
 
     SeparatorLine { anchors.margins: -12 }

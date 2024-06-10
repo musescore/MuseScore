@@ -37,6 +37,7 @@ public:
 private:
     static void correctPedalEndPoints(MasterScore* score);
     static void undoStaffTextExcludeFromPart(MasterScore* masterScore);
+    static void migrateDynamicPosOnVocalStaves(MasterScore* masterScore);
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
 };

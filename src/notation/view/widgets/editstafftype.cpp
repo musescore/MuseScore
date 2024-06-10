@@ -63,7 +63,7 @@ mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
 //---------------------------------------------------------
 
 EditStaffType::EditStaffType(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName("EditStaffType");
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -86,7 +86,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample standard score in preview
-    mu::engraving::MasterScore* sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
+    mu::engraving::MasterScore* sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle(iocContext());
     if (loadScore(sc, ":/view/resources/data/std_sample.mscx")) {
         standardPreview->setScore(sc);
     } else {
@@ -94,7 +94,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample tablature score in preview
-    sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
+    sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle(iocContext());
     if (loadScore(sc, ":/view/resources/data/tab_sample.mscx")) {
         tabPreview->setScore(sc);
     } else {

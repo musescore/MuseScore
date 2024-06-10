@@ -32,7 +32,7 @@ class AccessibilityApi : public muse::api::ApiObject
 {
     Q_OBJECT
 
-    INJECT(IAccessibilityController, accessibilityController)
+    muse::Inject<IAccessibilityController> accessibilityController = { this };
 
 public:
     explicit AccessibilityApi(muse::api::IApiEngine* e);

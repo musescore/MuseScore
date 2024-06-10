@@ -42,6 +42,7 @@ FocusScope {
     property string toolTipShortcut: ""
 
     property font iconFont: ui.theme.iconsFont
+    property color iconColor: ui.theme.fontPrimaryColor
     property font textFont: ui.theme.bodyFont
 
     property bool transparent: false
@@ -55,6 +56,8 @@ FocusScope {
     property bool isNarrow: buttonType === FlatButton.Horizontal
     property real margins: isNarrow ? 12 : 16
     property real minWidth: isNarrow ? 24 : 132
+
+    property real backgroundRadius: 3
 
     property bool drawFocusBorderInsideRect: false
 
@@ -141,7 +144,7 @@ FocusScope {
             color: root.normalColor
             opacity: ui.theme.buttonOpacityNormal
 
-            radius: 3
+            radius: root.backgroundRadius
             border.width: ui.theme.borderWidth
             border.color: ui.theme.strokeColor
 
@@ -200,6 +203,7 @@ FocusScope {
                 Layout.alignment: Qt.AlignHCenter
                 iconCode: root.icon
                 font: root.iconFont
+                color: root.iconColor
                 visible: !isEmpty
             }
 
@@ -226,6 +230,7 @@ FocusScope {
                 Layout.alignment: Qt.AlignVCenter
                 iconCode: root.icon
                 font: root.iconFont
+                color: root.iconColor
                 visible: !isEmpty
             }
 

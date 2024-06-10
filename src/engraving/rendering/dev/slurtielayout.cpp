@@ -925,7 +925,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     /// adding extra space above slurs for notes in circles
-    if (Slur::engravingConfiguration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
+    if (item->configuration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
         auto adjustSlur = [](Chord* ch, PointF& coord, bool up) {
             const Fraction halfFraction = Fraction(1, 2);
             if (ch && ch->ticks() >= halfFraction) {
@@ -991,7 +991,8 @@ void SlurTieLayout::adjustEndPoints(SlurSegment* slurSeg)
     double y2sp = p2.y() / lw;
 
     // point 1
-    int lines = slurSeg->staff()->lines(slurSeg->tick());
+    const Staff* staff = slurSeg->staff();
+    int lines = staff ? staff->lines(slurSeg->tick()) : 0;
     auto adjustPoint = [staffLineMargin](bool up, double ysp) {
         double y1offset = ysp - floor(ysp);
         double adjust = 0;
@@ -2452,7 +2453,7 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
 
 bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
 {
-    if (Slur::engravingConfiguration()->specificSlursLayoutWorkaround()) {
+    if (item->configuration()->specificSlursLayoutWorkaround()) {
         Slur* slur = item->slur();
         if (slur->connectedElement() == Slur::ConnectedElement::GLISSANDO) {
             return false;

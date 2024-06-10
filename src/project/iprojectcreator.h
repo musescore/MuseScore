@@ -25,6 +25,7 @@
 #include "inotationproject.h"
 
 #include "modularity/imoduleinterface.h"
+#include "modularity/ioc.h"
 
 namespace mu::project {
 class IProjectCreator : MODULE_EXPORT_INTERFACE
@@ -34,7 +35,7 @@ class IProjectCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectCreator() = default;
 
-    virtual INotationProjectPtr newProject() const = 0;
+    virtual INotationProjectPtr newProject(const muse::modularity::ContextPtr& iocCtx) const = 0;
 };
 }
 

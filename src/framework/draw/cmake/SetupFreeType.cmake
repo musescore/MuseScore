@@ -20,6 +20,7 @@
 
 if (MUE_COMPILE_USE_SYSTEM_FREETYPE)
     find_package(Freetype)
+
     if (FREETYPE_FOUND)
         message(STATUS "Found freetype: ${FREETYPE_VERSION_STRING}")
     else()

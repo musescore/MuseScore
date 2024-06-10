@@ -94,27 +94,28 @@ private:
     bool readMeasure(pugi::xml_node measureNode);
     bool readPb(pugi::xml_node pbNode);
     bool readSb(pugi::xml_node sbNode);
-    bool readStaves(pugi::xml_node parentNode, engraving::Measure* measure, int& measureTicks);
-    bool readLayers(pugi::xml_node parentNode, engraving::Measure* measure, int staffIdx, int& measureTicks);
+    bool readStaves(pugi::xml_node parentNode, engraving::Measure* measure, engraving::Fraction& measureTicks);
+    bool readLayers(pugi::xml_node parentNode, engraving::Measure* measure, int staffIdx, engraving::Fraction& measureTicks);
 
     /**
      * Methods for parsing MEI elements within a <layer>
      */
-    bool readElements(pugi::xml_node parentNode, engraving::Measure* measure, int track, int& ticks);
+    bool readElements(pugi::xml_node parentNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readArtics(pugi::xml_node parentNode, engraving::Chord* chord);
     bool readArtic(pugi::xml_node articNode, engraving::Chord* chord);
-    bool readBeam(pugi::xml_node beamNode, engraving::Measure* measure, int track, int& ticks);
-    bool readBTrem(pugi::xml_node bTremNode, engraving::Measure* measure, int track, int& ticks);
-    bool readClef(pugi::xml_node clefNode, engraving::Measure* measure, int track, int& ticks);
-    bool readChord(pugi::xml_node chordNode, engraving::Measure* measure, int track, int& ticks);
-    bool readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* measure, int track, int& ticks);
-    bool readMRest(pugi::xml_node mRestNode, engraving::Measure* measure, int track, int& ticks);
-    bool readMRpt(pugi::xml_node mRptNode, engraving::Measure* measure, int track, int& ticks);
-    bool readNote(pugi::xml_node noteNode, engraving::Measure* measure, int track, int& ticks, engraving::Chord* chord = nullptr);
-    bool readRest(pugi::xml_node restNode, engraving::Measure* measure, int track, int& ticks);
-    bool readSpace(pugi::xml_node spaceNode, engraving::Measure* measure, int track, int& ticks);
+    bool readBeam(pugi::xml_node beamNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readBTrem(pugi::xml_node bTremNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readClef(pugi::xml_node clefNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readChord(pugi::xml_node chordNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readMRest(pugi::xml_node mRestNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readMRpt(pugi::xml_node mRptNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readNote(pugi::xml_node noteNode, engraving::Measure* measure, int track, engraving::Fraction& ticks,
+                  engraving::Chord* chord = nullptr);
+    bool readRest(pugi::xml_node restNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readSpace(pugi::xml_node spaceNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readSyl(pugi::xml_node sylNode, engraving::Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision);
-    bool readTuplet(pugi::xml_node tupletNode, engraving::Measure* measure, int track, int& ticks);
+    bool readTuplet(pugi::xml_node tupletNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readVerses(pugi::xml_node parentNode, engraving::Chord* chord);
     bool readVerse(pugi::xml_node verseNode, engraving::Chord* chord);
 
@@ -132,10 +133,12 @@ private:
     bool readFermata(pugi::xml_node fermataNode, engraving::Measure* measure);
     bool readHairpin(pugi::xml_node hairpinNode, engraving::Measure* measure);
     bool readHarm(pugi::xml_node harmNode, engraving::Measure* measure);
+    bool readLv(pugi::xml_node lvNode, Measure* measure);
     bool readMordent(pugi::xml_node mordentNode, engraving::Measure* measure);
     bool readOctave(pugi::xml_node octaveNode, engraving::Measure* measure);
     bool readOrnam(pugi::xml_node ornamNode, engraving::Measure* measure);
     bool readPedal(pugi::xml_node pedalNode, engraving::Measure* measure);
+    bool readReh(pugi::xml_node rehNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
@@ -173,7 +176,7 @@ private:
     void addLog(const std::string& msg, pugi::xml_node node);
     bool isNode(pugi::xml_node node, const muse::String& name);
     engraving::ChordRest* addChordRest(pugi::xml_node node, engraving::Measure* measure, int track, const libmei::Element& meiElement,
-                                       int& ticks, bool isRest);
+                                       engraving::Fraction& ticks, bool isRest);
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);

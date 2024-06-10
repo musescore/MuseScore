@@ -48,20 +48,10 @@
 #include "abstractelementpopupmodel.h"
 
 namespace mu::notation {
-class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::async::Asyncable,
-    public muse::actions::Actionable
+class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Injectable,
+    public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
-
-    INJECT(INotationConfiguration, configuration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(muse::ui::IUiContextResolver, uiContextResolver)
-    INJECT(muse::ui::IMainWindow, mainWindow)
-    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)
@@ -73,6 +63,16 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
+
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::ui::IUiContextResolver> uiContextResolver = { this };
+    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);

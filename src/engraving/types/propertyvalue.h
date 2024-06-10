@@ -106,6 +106,9 @@ enum class P_TYPE {
     SLUR_STYLE_TYPE,
     LYRICS_DASH_SYSTEM_START_TYPE,
 
+    VOICE_APPLICATION,
+    AUTO_ON_OFF,
+
     // Other
     GROUPS,
 };
@@ -280,6 +283,12 @@ public:
 
     PropertyValue(const LyricsDashSystemStart& v)
         : m_type(P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE), m_data(make_data<LyricsDashSystemStart>(v)) {}
+
+    PropertyValue(const VoiceApplication& v)
+        : m_type(P_TYPE::VOICE_APPLICATION), m_data(make_data<VoiceApplication>(v)) {}
+
+    PropertyValue(const AutoOnOff& v)
+        : m_type(P_TYPE::AUTO_ON_OFF), m_data(make_data<AutoOnOff>(v)) {}
 
     bool isValid() const;
 

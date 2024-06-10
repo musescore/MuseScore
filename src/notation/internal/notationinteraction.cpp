@@ -305,7 +305,7 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
 
 void NotationInteraction::paint(Painter* painter)
 {
-    EngravingItem::renderer()->drawItem(score()->shadowNote(), painter);
+    score()->renderer()->drawItem(score()->shadowNote(), painter);
 
     drawAnchorLines(painter);
     drawTextEditMode(painter);
@@ -313,7 +313,7 @@ void NotationInteraction::paint(Painter* painter)
     drawGripPoints(painter);
 
     if (m_lasso && !m_lasso->isEmpty()) {
-        EngravingItem::renderer()->drawItem(m_lasso, painter);
+        score()->renderer()->drawItem(m_lasso, painter);
     }
 
     if (m_dropData.dropRect.isValid()) {
@@ -406,7 +406,7 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
                             inputState.accidentalType(), inputState.articulationIds());
     }
 
-    EngravingItem::renderer()->layoutItem(&shadowNote);
+    score()->renderer()->layoutItem(&shadowNote);
 
     shadowNote.setPos(position.pos);
 
@@ -1701,7 +1701,9 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             } else {
                 score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
-            if (spanner->isVoiceSpecific()) {
+            if (spanner->hasVoiceApplicationProperties()) {
+                spanner->setInitialTrackAndVoiceApplication(cr1->track());
+            } else if (spanner->isVoiceSpecific()) {
                 spanner->setTrack(cr1->track());
             }
         } else if (element->isArticulationFamily() && sel.elements().size() == 1) {
@@ -1867,6 +1869,9 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 spanner->setScore(score);
                 spanner->styleChanged();
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
+                if (spanner->hasVoiceApplicationProperties()) {
+                    spanner->setInitialTrackAndVoiceApplication(staff2track(i));
+                }
             }
         } else if (element->isTextBase() && !element->isFingering() && !element->isSticking()) {
             mu::engraving::Segment* firstSegment = sel.startSegment();
@@ -1876,10 +1881,10 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             // A text should only be added at the start of the selection
             // There shouldn't be a text at each element
             if (element->systemFlag()) {
-                applyDropPaletteElement(score, firstSegment->firstElement(0), element, modifiers);
+                applyDropPaletteElement(score, firstSegment->firstElementForNavigation(0), element, modifiers);
             } else {
                 for (staff_idx_t staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
-                    applyDropPaletteElement(score, firstSegment->firstElement(staff), element, modifiers);
+                    applyDropPaletteElement(score, firstSegment->firstElementForNavigation(staff), element, modifiers);
                 }
             }
         } else if (element->isActionIcon()
@@ -2001,6 +2006,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
                 rollback();
                 return;
             }
+        }
+
+        if (el && el->hasVoiceApplicationProperties()) {
+            el->setInitialTrackAndVoiceApplication(el->track());
         }
 
         if (el && !score->inputState().noteEntryMode()) {
@@ -2987,7 +2996,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
             cursor->updateCursorFormat();
             text->editInsertText(cursor, preeditString);
             text->setTextInvalid();
-            EngravingItem::renderer()->layoutText1(text);
+            score()->renderer()->layoutText1(text);
             score()->update();
         }
     }

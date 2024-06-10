@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Laissez vibrer test</title>
+            <respStmt>
+               <persName role="composer">Klaus Rettinghaus</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2024-05-21T12:00:00" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Laissez vibrer test</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Klaus Rettinghaus</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="2" meter.unit="4">
+                        <label>Oboe</label>
+                        <labelAbbr>Ob.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m10rbt48" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="n19cl3ph" dur="2" pname="c" oct="5">
+                              <artic xml:id="a1cjn40" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <lv xml:id="l1g1b4bt" startid="#n19cl3ph" curvedir="above" />
+                  </measure>
+                  <measure xml:id="m1lruvx2" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="n19s9szz" dur="2" pname="c" oct="5">
+                              <artic xml:id="aj10287" place="below" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <lv xml:id="l4vz2tp" startid="#n19s9szz" curvedir="below" />
+                  </measure>
+                  <measure xml:id="m1i0jnoo" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <note xml:id="n154mkwr" dur="2" pname="c" oct="5">
+                              <artic xml:id="a1sen8gz" place="above" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <lv xml:id="l1wv85md" startid="#n154mkwr" curvedir="above" />
+                  </measure>
+                  <measure xml:id="mucnjps" right="end" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <note xml:id="ne85xiy" dur="2" pname="c" oct="5">
+                              <artic xml:id="a1klgotp" color="#FF2600" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <lv xml:id="l41525" startid="#ne85xiy" color="#FF2600" curvedir="above" />
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

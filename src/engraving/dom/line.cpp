@@ -837,7 +837,7 @@ SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);
-    m_lineColor = engravingConfiguration()->defaultColor();
+    m_lineColor = configuration()->defaultColor();
     m_lineWidth = 0.15 * spatium();
 }
 
@@ -996,7 +996,7 @@ PropertyValue SLine::propertyDefault(Pid pid) const
     case Pid::DIAGONAL:
         return false;
     case Pid::COLOR:
-        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::LINE_WIDTH:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);

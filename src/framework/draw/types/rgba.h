@@ -66,6 +66,19 @@ inline constexpr int getAlpha(Rgba rgba)
 {
     return rgba >> 24;
 }
+
+inline constexpr bool isValidComp(int num)
+{
+    return (num >= 0) && (num < 256);
+}
+
+inline constexpr bool isRgbaValid(int r, int g, int b, int a)
+{
+    return isValidComp(r)
+           && isValidComp(g)
+           && isValidComp(b)
+           && isValidComp(a);
+}
 }
 
 #endif // MUSE_DRAW_RGBA_H

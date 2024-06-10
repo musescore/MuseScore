@@ -7760,7 +7760,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
         <source>&amp;Nonuplet</source>
-        <translation type="unfinished"/>
+        <translation>9連符</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
@@ -8346,37 +8346,37 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2410"/>
         <source>Show element bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>要素の境界の長方形を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2416"/>
         <source>Color element shapes</source>
-        <translation type="unfinished"/>
+        <translation>要素の形に色をつける</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
         <source>Show segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>セグメントの形を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
         <source>Color segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>セグメントの形に色をつける</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
         <source>Show skylines</source>
-        <translation type="unfinished"/>
+        <translation>スカイラインを表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
         <source>Show system bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>段の境界の長方形を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2446"/>
         <source>Show corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>破損した小節を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
@@ -9854,17 +9854,17 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation type="unfinished"/>
+        <translation>アクセシビリティツリーを表示...(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation type="unfinished"/>
+        <translation>アクセシビリティツリーをコンソールにダンプ(&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="65"/>
         <source>Show engraving &amp;elements</source>
-        <translation type="unfinished"/>
+        <translation>浄書要素を表示(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/multiinstances/internal/multiinstancesuiactions.cpp" line="35"/>
@@ -25805,7 +25805,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
         <source>Ord. (default)</source>
-        <translation type="unfinished"/>
+        <translation>Ord. (デフォルト)</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="282"/>
@@ -25825,7 +25825,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="391"/>
         <source>ordinary</source>
-        <translation type="unfinished"/>
+        <translation>普通の</translation>
     </message>
 </context>
 <context>
@@ -28335,7 +28335,7 @@ failed.</source>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
-        <translation type="unfinished"/>
+        <translation>いいえ</translation>
     </message>
     <message>
         <location filename="../../src/update/qml/MuseScore/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>

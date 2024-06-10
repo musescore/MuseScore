@@ -88,7 +88,7 @@ void PaddingTable::createTable(const MStyle& style)
                                                                   Sid::dotDotDistance));
     table[ElementType::NOTEDOT][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::NOTEDOT][ElementType::NOTE] - ledgerLength, ledgerPad);
-    table[ElementType::NOTEDOT][ElementType::ACCIDENTAL] = table[ElementType::NOTEDOT][ElementType::NOTE];
+    table[ElementType::NOTEDOT][ElementType::ACCIDENTAL] = 0.35 * spatium;
     table[ElementType::NOTEDOT][ElementType::REST] = table[ElementType::NOTEDOT][ElementType::NOTE];
     table[ElementType::NOTEDOT][ElementType::CLEF] = 1.0 * spatium;
     table[ElementType::NOTEDOT][ElementType::ARPEGGIO] = 0.5 * spatium;
@@ -213,4 +213,9 @@ void PaddingTable::createTable(const MStyle& style)
         elem[ElementType::LYRICS] = lyricsSpacing;
     }
     table[ElementType::NOTE][ElementType::LYRICS] = style.styleMM(Sid::lyricsMelismaPad);
+
+    // Accidental -> padding (used by accidental placement algorithm)
+    table[ElementType::ACCIDENTAL][ElementType::NOTE] = style.styleMM(Sid::accidentalNoteDistance);
+    table[ElementType::ACCIDENTAL][ElementType::LEDGER_LINE] = 0.18 * spatium;
+    table[ElementType::ACCIDENTAL][ElementType::STEM] = table[ElementType::ACCIDENTAL][ElementType::NOTE];
 }

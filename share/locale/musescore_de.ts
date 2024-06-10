@@ -2767,7 +2767,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
         <source>Show courtesy time signatures</source>
-        <translation>Tonartwechselankündigung anzeigen</translation>
+        <translation>Taktartwechselankündigung anzeigen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3863"/>
@@ -10612,7 +10612,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="79"/>
         <source>Check for language updates</source>
-        <translation>Auf Sprachaktualisierungen prüfen</translation>
+        <translation>Auf Übersetzungsaktualisierungen prüfen</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
@@ -10886,7 +10886,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="62"/>
         <source>Your version of %1 is up to date.</source>
-        <translation>Ihre Version von %1 ist aktuell.</translation>
+        <translation>Ihre Übersetzungen für „%1“ sind aktuell.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="95"/>

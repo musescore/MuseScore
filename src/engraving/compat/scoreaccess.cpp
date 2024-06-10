@@ -26,22 +26,22 @@
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
-MasterScore* ScoreAccess::createMasterScore()
+MasterScore* ScoreAccess::createMasterScore(const muse::modularity::ContextPtr& iocCtx)
 {
-    return new MasterScore();
+    return new MasterScore(iocCtx);
 }
 
-MasterScore* ScoreAccess::createMasterScoreWithBaseStyle()
+MasterScore* ScoreAccess::createMasterScoreWithBaseStyle(const muse::modularity::ContextPtr& iocCtx)
 {
-    return new MasterScore(DefaultStyle::baseStyle());
+    return new MasterScore(iocCtx, DefaultStyle::baseStyle());
 }
 
-MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle()
+MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle(const muse::modularity::ContextPtr& iocCtx)
 {
-    return new MasterScore(DefaultStyle::defaultStyle());
+    return new MasterScore(iocCtx, DefaultStyle::defaultStyle());
 }
 
-MasterScore* ScoreAccess::createMasterScore(const MStyle& style)
+MasterScore* ScoreAccess::createMasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle& style)
 {
-    return new MasterScore(style);
+    return new MasterScore(iocCtx, style);
 }

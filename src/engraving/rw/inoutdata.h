@@ -55,6 +55,8 @@ struct ReadInOutData {
 
 struct WriteInOutData {
     write::WriteContext ctx;
+    WriteInOutData(const Score* s)
+        : ctx(s) {}
 };
 }
 

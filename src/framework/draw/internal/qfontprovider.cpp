@@ -26,7 +26,6 @@
 #include <QFontDatabase>
 #include <QFontMetricsF>
 
-#include "engraving/dom/mscore.h"
 #include "fontengineft.h"
 
 using namespace muse;
@@ -45,7 +44,7 @@ protected:
     {
         switch (m) {
         case QPaintDevice::PdmDpiY:
-            return static_cast<int>(mu::engraving::DPI);
+            return 360; // same as mu::engraving::DPI
         default:
             return 1;
         }

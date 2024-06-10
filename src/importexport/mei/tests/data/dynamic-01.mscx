@@ -66,7 +66,7 @@
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
-            <placement>above</placement>
+            <direction>up</direction>
             </Dynamic>
           <Chord>
             <durationType>half</durationType>

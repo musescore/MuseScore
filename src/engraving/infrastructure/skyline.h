@@ -23,7 +23,9 @@
 #ifndef MU_ENGRAVING_SKYLINE_H
 #define MU_ENGRAVING_SKYLINE_H
 
+#include <cfloat>
 #include <vector>
+#include <map>
 
 #include "draw/types/geometry.h"
 #include "shape.h"
@@ -36,55 +38,52 @@ namespace mu::engraving {
 class Segment;
 
 //---------------------------------------------------------
-//   SkylineSegment
-//---------------------------------------------------------
-
-struct SkylineSegment {
-    double x;
-    double y;
-    double w;
-
-    SkylineSegment(double _x, double _y, double _w)
-        : x(_x), y(_y), w(_w) {}
-};
-
-//---------------------------------------------------------
 //   SkylineLine
 //---------------------------------------------------------
 
 class SkylineLine
 {
-    const bool north;
-    std::vector<SkylineSegment> seg;
-    typedef std::vector<SkylineSegment>::iterator SegIter;
-    typedef std::vector<SkylineSegment>::const_iterator SegConstIter;
-
-    SegIter insert(SegIter i, double x, double y, double w);
-    void append(double x, double y, double w);
-    SegIter find(double x);
-    SegConstIter find(double x) const;
-
 public:
     SkylineLine(bool n)
-        : north(n) {}
-    void add(const Shape& s);
-    void add(const ShapeElement& r);
-    void add(double x, double y, double w);
-    void add(const RectF& r) { add(ShapeElement(r)); }
+        : m_isNorth(n) {}
 
-    void clear() { seg.clear(); }
-    void paint(muse::draw::Painter& painter) const;
-    void dump() const;
+    void add(const ShapeElement& r);
+    void add(const RectF& r, EngravingItem* item) { add(ShapeElement(r, item)); }
+    void add(const Shape& s);
+
+    template<typename Predicate>
+    inline bool remove_if(Predicate p) { return m_shape.remove_if(p); }
+
+    void clear();
     double minDistance(const SkylineLine&) const;
     double max() const;
     bool valid() const;
-    bool valid(const SkylineSegment& s) const;
-    bool isNorth() const { return north; }
 
-    SegIter begin() { return seg.begin(); }
-    SegConstIter begin() const { return seg.begin(); }
-    SegIter end() { return seg.end(); }
-    SegConstIter end() const { return seg.end(); }
+    double top(double startX = -DBL_MAX, double endX = DBL_MAX);
+    double bottom(double startX = -DBL_MAX, double endX = DBL_MAX);
+
+    bool isNorth() const { return m_isNorth; }
+
+    const std::vector<ShapeElement>& elements() const { return m_shape.elements(); }
+    std::vector<ShapeElement>& elements() { return m_shape.elements(); }
+
+private:
+    double staffLinesTopAtX(double x) const;
+    double staffLinesBottomAtX(double x) const;
+
+private:
+    const bool m_isNorth;
+    Shape m_shape;
+
+    struct StaffLineEdge {
+        double top = 0.0;
+        double bottom = 0.0;
+        StaffLineEdge(double t, double b)
+            : top(t), bottom(b) {}
+    };
+
+    std::map<double, StaffLineEdge> m_staffLineEdges;
+    bool hasValidStaffLineEdges() const { return !m_staffLineEdges.empty(); }
 };
 
 //---------------------------------------------------------
@@ -103,7 +102,7 @@ public:
     void clear();
     void add(const Shape& s);
     void add(const ShapeElement& r);
-    void add(const RectF& r) { add(ShapeElement(r)); }
+    void add(const RectF& r, EngravingItem* item) { add(ShapeElement(r, item)); }
 
     double minDistance(const Skyline&) const;
 
@@ -112,9 +111,11 @@ public:
     const SkylineLine& north() const { return _north; }
     const SkylineLine& south() const { return _south; }
 
-    void paint(muse::draw::Painter& painter, double lineWidth) const;
-    void dump(const char*, bool north = false) const;
+    void paint(muse::draw::Painter& painter, double lineWidth) const; // DEBUG only
 };
+
+void dump(const SkylineLine& slylineline, std::stringstream& ss);
+std::string dump(const Skyline& skyline);
 } // namespace mu::engraving
 
 #endif

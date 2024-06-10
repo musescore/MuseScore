@@ -64,6 +64,7 @@ Rectangle {
                     { textRole: "StyledMenuScrollable", componentRole: styledScrollableMenuComponent },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
                     { textRole: "VisibilityBox", componentRole: visibilityBoxSample },
+                    { textRole: "ColorBlend", componentRole: colorBlendSample },
                     { textRole: "ColorPicker", componentRole: colorPickerSample },
                     { textRole: "ExpandableBlank", componentRole: expandableBlankSample },
                     { textRole: "FlatButton", componentRole: flatButtonSample },
@@ -222,7 +223,7 @@ Rectangle {
         Row {
             spacing: 12
 
-            FlatButton {
+            component SampleMenuButton : FlatButton {
                 text: "Show Menu"
 
                 onClicked: {
@@ -256,6 +257,16 @@ Rectangle {
                         console.log("selected " + itemId)
                     }
                 }
+            }
+
+            SampleMenuButton {}
+
+            SampleMenuButton {
+                text: "With right-click and menu indicator triangle"
+
+                FlatButtonMenuIndicatorTriangle {}
+
+                mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
             }
         }
     }
@@ -317,6 +328,37 @@ Rectangle {
                 onVisibleToggled: {
                     isVisible = !isVisible
                 }
+            }
+        }
+    }
+
+    Component {
+        id: colorBlendSample
+
+        Row {
+            spacing: 12
+            Rectangle {
+                height: 20
+                width: 20
+                color: "#FFFFFF"
+            }
+
+            Rectangle {
+                height: 20
+                width: 20
+                color: "#677CE4"
+            }
+
+            Rectangle {
+                height: 20
+                width: 20
+                color: ui.blendColors("#FFFFFF", ui.colorWithAlphaF("#677CE4", 0.8))
+            }
+
+            Rectangle {
+                height: 20
+                width: 20
+                color: ui.blendColors("#FFFFFF", "#677CE4", 0.8)
             }
         }
     }

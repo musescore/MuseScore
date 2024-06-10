@@ -918,8 +918,13 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
     }
 
     if (!placement.empty()) {
-        el->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
-        el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        if (el->hasVoiceApplicationProperties()) {
+            el->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
+            el->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+        } else {
+            el->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
+            el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        }
     }
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
@@ -1394,8 +1399,13 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
 static void setSLinePlacement(SLine* sli, const String& placement)
 {
     if (placement == u"above" || placement == u"below") {
-        sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
-        sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        if (sli->hasVoiceApplicationProperties()) {
+            sli->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
+            sli->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+        } else {
+            sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
+            sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        }
     }
 }
 
@@ -1842,7 +1852,7 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
         st = SegmentType::BeginBarLine;
     }
     Segment* const segment = measure->getSegment(st, tick);
-    EngravingItem::renderer()->layoutItem(barline.get());
+    barline->renderer()->layoutItem(barline.get());
     segment->add(barline.release());
 }
 
@@ -6071,6 +6081,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     NoteHeadScheme headScheme = NoteHeadScheme::HEAD_AUTO;
     const Color noteColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     Color noteheadColor;
+    Color stemColor;
     bool noteheadParentheses = false;
     String noteheadFilled;
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
@@ -6138,6 +6149,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
                 staff = -1;
             }
         } else if (m_e.name() == "stem") {
+            stemColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             stem(stemDir, noStem);
         } else if (m_e.name() == "tie") {
             tieType = m_e.attribute("type");
@@ -6323,8 +6335,19 @@ Note* MusicXMLParserPass2::note(const String& partId,
         if (noteColor.isValid()) {
             note->setColor(noteColor);
         }
+        Stem* stem = c->stem();
+        if (!stem) {
+            stem = Factory::createStem(c);
+            if (stemColor.isValid()) {
+                stem->setColor(stemColor);
+            } else if (noteColor.isValid()) {
+                stem->setColor(noteColor);
+            }
+            c->add(stem);
+        }
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
         note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
+        stem->setVisible(printObject);
 
         if (!grace) {
             // regular note
@@ -6380,6 +6403,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
         }
 
         if (acc) {
+            acc->setVisible(printObject);
             note->add(acc);
             // save alter value for user accidental
             if (acc->accidentalType() != AccidentalType::NONE) {

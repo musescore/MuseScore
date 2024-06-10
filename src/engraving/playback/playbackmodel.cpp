@@ -591,6 +591,7 @@ bool PlaybackModel::hasToReloadScore(const ScoreChangesRange& changesRange) cons
         ElementType::SYSTEM_TEXT,
         ElementType::JUMP,
         ElementType::MARKER,
+        ElementType::BREATH,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
@@ -890,6 +891,13 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
 
             result.tickFrom = std::min(result.tickFrom, firstTiedNote->tick().ticks());
             result.tickTo = std::max(result.tickTo, lastTiedNote->tick().ticks());
+        }
+        if (item->parent() && item->parent()->isChord()) {
+            for (Spanner* spanner : toChord(item->parent())->startingSpanners()) {
+                if (spanner->isTrill() && result.tickTo < spanner->tick2().ticks()) {
+                    result.tickTo = spanner->tick2().ticks();
+                }
+            }
         }
     }
 

@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace muse::ui;
 
 FontStyleSelect::FontStyleSelect(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
 

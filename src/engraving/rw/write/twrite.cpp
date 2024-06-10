@@ -497,10 +497,14 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         xml.tagProperty(Pid::POSITION, item->rtick());
     }
 
-    for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT }) {
+    for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z }) {
         if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
             writeProperty(item, xml, pid);
         }
+    }
+
+    if (!item->hasVoiceApplicationProperties() && item->propertyFlags(Pid::PLACEMENT) == PropertyFlags::NOSTYLE) {
+        writeProperty(item, xml, Pid::PLACEMENT);
     }
 
     writeProperty(item, xml, Pid::POSITION_LINKED_TO_MASTER);
@@ -515,6 +519,7 @@ void TWrite::write(const Accidental* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::ACCIDENTAL_ROLE);
     writeProperty(item, xml, Pid::SMALL);
     writeProperty(item, xml, Pid::ACCIDENTAL_TYPE);
+    writeProperty(item, xml, Pid::ACCIDENTAL_STACKING_ORDER_OFFSET);
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
@@ -900,6 +905,8 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(item->tremoloTwoChord(), xml, ctx);
     }
 
+    writeProperty(item, xml, Pid::COMBINE_VOICE);
+
     for (EngravingItem* e : item->el()) {
         if (e->isChordLine() && toChordLine(e)->note()) { // this is now written by Note
             continue;
@@ -1118,6 +1125,10 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ANCHOR_TO_END_OF_PREVIOUS);
+
+    writeProperty(item, xml, Pid::APPLY_TO_VOICE);
+    writeProperty(item, xml, Pid::DIRECTION);
+    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
 
     if (item->isVelocityChangeAvailable()) {
         writeProperty(item, xml, Pid::VELO_CHANGE);
@@ -1591,6 +1602,10 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::BEGIN_TEXT_OFFSET);
     writeProperty(item, xml, Pid::CONTINUE_TEXT_OFFSET);
     writeProperty(item, xml, Pid::END_TEXT_OFFSET);
+
+    writeProperty(item, xml, Pid::APPLY_TO_VOICE);
+    writeProperty(item, xml, Pid::DIRECTION);
+    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
 
     for (const StyledProperty& spp : *item->styledProperties()) {
         if (!item->isStyled(spp.pid)) {
@@ -2199,7 +2214,7 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
     writeItems(item->el(), xml, ctx);
     bool write_dots = false;
     for (NoteDot* dot : item->dots()) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != ctx.configuration()->defaultColor()
             || dot->visible() != item->visible()) {
             write_dots = true;
             break;
@@ -2431,7 +2446,7 @@ void TWrite::write(const Rest* item, XmlWriter& xml, WriteContext& ctx)
     writeItems(item->el(), xml, ctx);
     bool write_dots = false;
     for (NoteDot* dot : item->dotList()) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != ctx.configuration()->defaultColor()
             || dot->visible() != item->visible()) {
             write_dots = true;
             break;
@@ -2490,7 +2505,7 @@ void TWrite::writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& 
 void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no)
 {
     if (seg->visible() && seg->autoplace()
-        && (seg->color() == engravingConfiguration()->defaultColor())
+        && (seg->color() == ctx.configuration()->defaultColor())
         && seg->offset().isNull()
         && seg->ups(Grip::START).off.isNull()
         && seg->ups(Grip::BEZIER1).off.isNull()
@@ -2682,7 +2697,7 @@ void TWrite::writeProperties(const StaffTextBase* item, XmlWriter& xml, WriteCon
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 }
 
-void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
+void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement("StaffType", { { "group", TConv::toXml(item->group()) } });
     if (!item->xmlName().isEmpty()) {
@@ -2722,7 +2737,7 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
     if (item->invisible()) {
         xml.tag("invisible", item->invisible());
     }
-    if (item->color() != engravingConfiguration()->defaultColor()) {
+    if (item->color() != ctx.configuration()->defaultColor()) {
         xml.tagProperty(Pid::COLOR, item->color());
     }
     if (item->group() == StaffGroup::STANDARD) {
@@ -3375,6 +3390,19 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                 }
                 if (segment->segmentType() == SegmentType::ChordRest) {
                     crWritten = true;
+                }
+            }
+        }
+
+        // write spanners whose end tick lies outside the clip region
+        if (clip) {
+            for (Spanner* s : spanners) {
+                if ((s->tick2() == endTick)
+                    && !s->isSlur()
+                    && (s->track2() == track || (s->track2() == muse::nidx && s->track() == track))
+                    && (!clip || s->tick() >= sseg->tick())
+                    ) {
+                    writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
                 }
             }
         }

@@ -51,6 +51,7 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -817,12 +818,17 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isArticulation() && !controlEvent.first->isOrnament()) {
+            // laissez vibrer is the only non-ornamental articulation we find in the list, see MeiExporter::writeArtics
+            success = success && this->writeLv(dynamic_cast<const Articulation*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOrnament()) {
             success = success && this->writeOrnament(dynamic_cast<const Ornament*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOttava()) {
             success = success && this->writeOctave(dynamic_cast<const Ottava*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isPedal()) {
             success = success && this->writePedal(dynamic_cast<const Pedal*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isRehearsalMark()) {
+            success = success && this->writeRehearsalMark(dynamic_cast<const RehearsalMark*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isSlur()) {
             success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTempoText()) {
@@ -965,7 +971,8 @@ bool MeiExporter::writeArtics(const Chord* chord)
     }
 
     for (const Articulation* articulation : chord->articulations()) {
-        if (articulation->isArticulation()) {
+        if (articulation->isArticulation() && !this->isLaissezVibrer(articulation->symId())) {
+            // laissez vibrer is handled as control element
             this->writeArtic(articulation);
         }
     }
@@ -1070,6 +1077,11 @@ bool MeiExporter::writeBeam(const Beam* beam, const ChordRest* chordRest, bool& 
 {
     IF_ASSERT_FAILED(beam && chordRest) {
         return false;
+    }
+
+    // Cross-measure beams are not supported in the export to MEI Basic
+    if (beam->elements().front()->measure() != beam->elements().back()->measure()) {
+        return true;
     }
 
     if (beam->elements().front() == chordRest) {
@@ -1361,6 +1373,7 @@ bool MeiExporter::writeMRpt(const MeasureRepeat* measureRepeat)
 
     libmei::MRpt meiMRpt;
     Convert::colorToMEI(measureRepeat, meiMRpt);
+    meiMRpt.SetExpand(libmei::BOOLEAN_false);
     pugi::xml_node mRptNode = m_currentNode.append_child();
     meiMRpt.Write(mRptNode, this->getXmlIdFor(measureRepeat, 'm'));
 
@@ -1753,6 +1766,24 @@ bool MeiExporter::writeHarm(const Harmony* harmony, const std::string& startid)
 }
 
 /**
+ * Write a lv.
+ */
+
+bool MeiExporter::writeLv(const Articulation* articulation, const std::string& startid)
+{
+    IF_ASSERT_FAILED(articulation) {
+        return false;
+    }
+
+    pugi::xml_node lvNode = m_currentNode.append_child();
+    libmei::Lv meiLv = Convert::lvToMEI(articulation);
+    meiLv.SetStartid(startid);
+    meiLv.Write(lvNode, this->getXmlIdFor(articulation, 'l'));
+
+    return true;
+}
+
+/**
  * Write a octave (ottava).
  */
 
@@ -1858,6 +1889,33 @@ bool MeiExporter::writeRepeatMark(const Jump* jump, const Measure* measure)
 }
 
 /**
+ * Write a reh from a RehearsalMark.
+ */
+
+bool MeiExporter::writeRehearsalMark(const RehearsalMark* mark, const std::string& startid)
+{
+    IF_ASSERT_FAILED(mark) {
+        return false;
+    }
+
+    pugi::xml_node rehNode = m_currentNode.append_child();
+    String text = mark->plainText();
+    libmei::Reh meiReh;
+    Convert::colorToMEI(mark, meiReh);
+
+    if (text.size() > 0) {
+        rehNode.text().set(text.toStdString().c_str());
+    }
+
+    meiReh.SetStartid(startid);
+
+    std::string xmlId = this->getXmlIdFor(mark, 'r');
+    meiReh.Write(rehNode, xmlId);
+
+    return true;
+}
+
+/**
  * Write a repeatMark from a Marker.
  */
 
@@ -1921,7 +1979,12 @@ bool MeiExporter::writeTempo(const TempoText* tempoText, const std::string& star
 
     pugi::xml_node tempoNode = m_currentNode.append_child();
     libmei::Tempo meiTempo = Convert::tempoToMEI(tempoText, meiLines);
-    meiTempo.SetStartid(startid);
+    if (tempoText->tick() == tempoText->measure()->tick()) {
+        double tstamp = Convert::tstampFromFraction(tempoText->tick() - tempoText->measure()->tick(), tempoText->measure()->timesig());
+        meiTempo.SetTstamp(tstamp);
+    } else {
+        meiTempo.SetStartid(startid);
+    }
     meiTempo.Write(tempoNode, this->getXmlIdFor(tempoText, 't'));
 
     this->writeLinesWithSMuFL(tempoNode, meiLines);
@@ -2087,9 +2150,11 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
     // For chords only
     if (chordRest->isChord()) {
         const Chord* chord = toChord(chordRest);
-        // Ornaments
+        // Ornaments and laissez vibrer
         for (const Articulation* articulation : chord->articulations()) {
-            if (articulation->isOrnament()) {
+            if (this->isLaissezVibrer(articulation->symId())) {
+                m_startingControlEventList.push_back(std::make_pair(articulation, "#" + xmlId));
+            } else if (articulation->isOrnament()) {
                 m_startingControlEventList.push_back(std::make_pair(articulation, "#" + xmlId));
             }
         }
@@ -2490,4 +2555,13 @@ std::string MeiExporter::getLayerXmlIdFor(layerElementCounter elementType)
                                                                                                                                      elementType)));
     }
     return id.toStdString();
+}
+
+/**
+ * Return true if the used symbol is a laissez vibrer
+ */
+
+bool MeiExporter::isLaissezVibrer(const SymId id)
+{
+    return id == SymId::articLaissezVibrerAbove || id == SymId::articLaissezVibrerBelow;
 }
