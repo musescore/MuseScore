@@ -373,6 +373,8 @@ public:
     bool contains(const PointX<T>& p) const;
     bool contains(const RectX<T>& r) const;
 
+    T distanceTo(const PointX<T>& p) const;
+
     bool intersects(const RectX<T>& r) const;
 
     RectX<T> united(const RectX<T>& r) const;
@@ -743,6 +745,14 @@ bool RectX<T>::contains(const RectX<T>& r) const
         return false;
     }
     return true;
+}
+
+template<typename T>
+T RectX<T>::distanceTo(const PointX<T>& p) const
+{
+    T dx = std::max({ bottomLeft().x() - p.x(), 0.0, p.x() - bottomRight().x() });
+    T dy = std::max({ bottomLeft().y() - p.y(), 0.0, p.y() - topLeft().y() });
+    return std::sqrt(dx * dx + dy * dy);
 }
 
 template<typename T>
