@@ -181,6 +181,74 @@ std::vector<EngravingItem*> BspTree::items(const PointF& pos)
     return l;
 }
 
+//---------------------------------------------------------
+//   nearestNeighbor (public)
+//---------------------------------------------------------
+
+EngravingItem* BspTree::nearestNeighbor(const PointF& pos)
+{
+    EngravingItem* nn = nullptr;
+    double bestDistance = std::numeric_limits<double>::max();
+    nearestNeighbor(pos, &nn, bestDistance);
+    return nn;
+}
+
+//---------------------------------------------------------
+//   nearestNeighbor (private)
+//---------------------------------------------------------
+
+void BspTree::nearestNeighbor(const PointF& pos, EngravingItem** bestItem, double& bestDistance, int nodeIndex)
+{
+    if (m_nodes.empty()) {
+        return;
+    }
+
+    Node* node = &m_nodes[nodeIndex];
+
+    // Base case: go through the items in the leaf node (if any), and update bestItem/bestDistance accordingly
+    if (node->type == Node::Type::LEAF) {
+        for (auto item : m_leaves[node->leafIndex]) {
+            PointF itemPos = item->pageBoundingRect().center();
+            double currDistance = std::sqrt(std::pow(pos.x() - itemPos.x(), 2) + std::pow(pos.y() - itemPos.y(), 2));
+            if (currDistance < bestDistance) {
+                *bestItem = item;
+                bestDistance = currDistance;
+            }
+        }
+        return;
+    }
+
+    // Find which child contains pos and which is the "sibling"
+    int containerIdx = firstChildIndex(nodeIndex);
+    int siblingIdx =  containerIdx + 1;
+    if (node->type == Node::Type::VERTICAL) {
+        if (pos.x() >= node->offset) {
+            ++containerIdx;
+            --siblingIdx;
+        }
+    } else if (pos.y() >= node->offset) {
+        ++containerIdx;
+        --siblingIdx;
+    }
+
+    // Recursion on container node
+    nearestNeighbor(pos, bestItem, bestDistance, containerIdx);
+
+    // If the distance to the "offset" is shorter than the best distance we've found so far, then it's possible that the nearest
+    // neighbour is in the sibling node (so we should search there too).
+    double distanceToOffset;
+    if (node->type == Node::Type::HORIZONTAL) {
+        distanceToOffset = std::abs(pos.y() - node->offset);
+    } else {
+        distanceToOffset = std::abs(pos.x() - node->offset);
+    }
+
+    if (distanceToOffset < bestDistance) {
+        // Recursion on sibling node
+        nearestNeighbor(pos, bestItem, bestDistance, siblingIdx);
+    }
+}
+
 #ifndef NDEBUG
 //---------------------------------------------------------
 //   debug

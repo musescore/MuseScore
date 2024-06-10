@@ -586,11 +586,6 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
         spanner->setTick2(tick2);
     } else {      // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
         Measure* m = toMeasure(mb);
-        RectF b(m->canvasBoundingRect());
-
-        if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM() && m->nextMeasure()->system() == m->system()) {
-            m = m->nextMeasure();
-        }
         spanner->setTick(m->tick());
         spanner->setTick2(m->endTick());
     }

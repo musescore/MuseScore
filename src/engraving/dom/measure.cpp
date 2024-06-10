@@ -1319,29 +1319,31 @@ bool Measure::acceptDrop(EditData& data) const
         return false;
     }
 
-    RectF staffR = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
-    staffR.intersect(canvasBoundingRect());
+    RectF staffRect = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
+    staffRect.intersect(canvasBoundingRect());
 
+    //! NOTE: Should match NotationInteraction::dragMeasureAnchorElement
     switch (e->type()) {
     case ElementType::MEASURE_LIST:
+    case ElementType::MEASURE_NUMBER:
     case ElementType::JUMP:
     case ElementType::MARKER:
     case ElementType::LAYOUT_BREAK:
     case ElementType::STAFF_LIST:
+        // Always drop to all staves
         viewer->setDropRectangle(canvasBoundingRect());
         return true;
 
+    case ElementType::VOLTA:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::KEYSIG:
     case ElementType::TIMESIG:
+        // Drop to all staves or single staff depending on modifier
         if (data.modifiers & ControlModifier) {
-            viewer->setDropRectangle(staffR);
+            viewer->setDropRectangle(staffRect);
         } else {
             viewer->setDropRectangle(canvasBoundingRect());
         }
-        return true;
-
-    case ElementType::MEASURE_NUMBER:
-        viewer->setDropRectangle(canvasBoundingRect());
         return true;
 
     case ElementType::BRACKET:
@@ -1353,7 +1355,8 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::SYMBOL:
     case ElementType::CLEF:
     case ElementType::STAFFTYPE_CHANGE:
-        viewer->setDropRectangle(staffR);
+        // Always drop to single staff
+        viewer->setDropRectangle(staffRect);
         return true;
 
     case ElementType::STRING_TUNINGS: {
@@ -1361,7 +1364,7 @@ bool Measure::acceptDrop(EditData& data) const
             return false;
         }
 
-        viewer->setDropRectangle(staffR);
+        viewer->setDropRectangle(staffRect);
         return true;
     }
 
@@ -1375,7 +1378,7 @@ bool Measure::acceptDrop(EditData& data) const
             viewer->setDropRectangle(canvasBoundingRect());
             return true;
         case ActionIconType::STAFF_TYPE_CHANGE:
-            viewer->setDropRectangle(staffR);
+            viewer->setDropRectangle(staffRect);
             return true;
         default:
             break;

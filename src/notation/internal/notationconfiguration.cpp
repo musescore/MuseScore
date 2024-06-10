@@ -429,7 +429,9 @@ QColor NotationConfiguration::selectionColor(engraving::voice_idx_t voiceIndex) 
 
 QColor NotationConfiguration::dropRectColor() const
 {
-    return QColor(80, 0, 0, 80);
+    QColor color = selectionColor();
+    color.setAlpha(80);
+    return color;
 }
 
 int NotationConfiguration::selectionProximity() const
