@@ -64,7 +64,7 @@ namespace mu::musesampler {
 class MuseSamplerSequencer : public audio::AbstractEventSequencer<mu::mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
 {
 public:
-    void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks, std::string&& defaultPresetCode);
+    void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
@@ -98,7 +98,7 @@ private:
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
     ms_MuseSampler m_sampler = nullptr;
-    IMuseSamplerTracksPtr m_tracks = nullptr;
+    IMuseSamplerTracks* m_tracks = nullptr;
 
     using layer_idx_t = size_t;
     std::unordered_map<layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
