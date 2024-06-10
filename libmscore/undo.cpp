@@ -23,63 +23,53 @@
 */
 
 #include "global/log.h"
-#include "undo.h"
+
+#include "accidental.h"
+#include "articulation.h"
+#include "barline.h"
+#include "beam.h"
+#include "bend.h"
+#include "bracket.h"
+#include "chord.h"
+#include "chordline.h"
+#include "clef.h"
+#include "dynamic.h"
 #include "element.h"
+#include "excerpt.h"
+#include "fret.h"
+#include "glissando.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "input.h"
+#include "instrchange.h"
+#include "key.h"
+#include "keysig.h"
+#include "measure.h"
 #include "note.h"
+#include "noteevent.h"
+#include "page.h"
+#include "part.h"
+#include "pitchspelling.h"
 #include "score.h"
 #include "segment.h"
-#include "measure.h"
-#include "system.h"
 #include "select.h"
-#include "input.h"
-#include "slur.h"
-#include "tie.h"
-#include "clef.h"
-#include "staff.h"
-#include "chord.h"
-#include "sig.h"
-#include "key.h"
-#include "barline.h"
-#include "volta.h"
-#include "tuplet.h"
-#include "harmony.h"
-#include "pitchspelling.h"
-#include "part.h"
-#include "beam.h"
-#include "dynamic.h"
-#include "page.h"
-#include "keysig.h"
-#include "image.h"
-#include "hairpin.h"
-#include "rest.h"
-#include "bend.h"
-#include "tremolobar.h"
-#include "articulation.h"
-#include "noteevent.h"
-#include "slur.h"
-#include "tempotext.h"
-#include "instrchange.h"
-#include "box.h"
-#include "stafftype.h"
-#include "accidental.h"
-#include "layoutbreak.h"
-#include "spanner.h"
 #include "sequencer.h"
-#include "breath.h"
-#include "fingering.h"
-#include "rehearsalmark.h"
-#include "excerpt.h"
-#include "stafftext.h"
-#include "chordline.h"
-#include "tremolo.h"
-#include "sym.h"
-#include "utils.h"
-#include "glissando.h"
+#include "spanner.h"
+#include "staff.h"
 #include "stafflines.h"
-#include "bracket.h"
-#include "fret.h"
+#include "stafftype.h"
+#include "sym.h"
+#include "system.h"
+#include "tempotext.h"
 #include "textedit.h"
 #include "textline.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "tremolobar.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
 
 namespace Ms {
 
@@ -2056,7 +2046,11 @@ void RemoveExcerpt::redo(EditData*)
 
 void SwapExcerpt::flip(EditData*)
       {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+      score->excerpts().swapItemsAt(pos1, pos2);
+#else
       score->excerpts().swap(pos1, pos2);
+#endif
       score->setExcerptsChanged(true);
       }
 
@@ -2389,7 +2383,7 @@ void ChangeParent::flip(EditData*)
       int si = element->staffIdx();
       p->remove(element);
       element->setParent(parent);
-      element->setTrack(staffIdx * VOICES);
+      element->setTrack(staffIdx * VOICES + element->voice());
       parent->add(element);
       staffIdx = si;
       parent = p;
