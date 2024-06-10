@@ -3034,7 +3034,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
     if (item->isSingleBeginType()) {
         possibleSnapBeforeElement = item->findElementToSnapBefore();
     }
-    if (item->isSingleEndType()) {
+    if (item->isSingleEndType() && item->hairpin()->ticks().isNotZero()) {
         possibleSnapAfterElement = item->findElementToSnapAfter();
     }
 

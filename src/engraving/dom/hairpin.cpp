@@ -296,7 +296,8 @@ EngravingItem* HairpinSegment::findElementToSnapBefore() const
     auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
     for (auto interval : intervals) {
         Spanner* spanner = interval.value;
-        if (!spanner->isHairpin() || spanner->track() != hairp->track() || spanner->tick2() != startTick || !spanner->visible()) {
+        if (!spanner->isHairpin() || spanner->track() != hairp->track() || spanner->tick2() != startTick || !spanner->visible()
+            || spanner == hairp) {
             continue;
         }
         Hairpin* precedingHairpin = toHairpin(spanner);

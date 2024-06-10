@@ -2604,7 +2604,7 @@ void EngravingItem::LayoutData::setBbox(const RectF& r)
 
 void EngravingItem::LayoutData::connectItemSnappedBefore(EngravingItem* itemBefore)
 {
-    IF_ASSERT_FAILED(itemBefore) {
+    IF_ASSERT_FAILED(itemBefore && itemBefore != m_item && itemBefore != m_itemSnappedAfter) {
         return;
     }
     m_itemSnappedBefore = itemBefore;
@@ -2622,7 +2622,7 @@ void EngravingItem::LayoutData::disconnectItemSnappedBefore()
 
 void EngravingItem::LayoutData::connectItemSnappedAfter(EngravingItem* itemAfter)
 {
-    IF_ASSERT_FAILED(itemAfter) {
+    IF_ASSERT_FAILED(itemAfter && itemAfter != m_item && itemAfter != m_itemSnappedBefore) {
         return;
     }
     m_itemSnappedAfter = itemAfter;

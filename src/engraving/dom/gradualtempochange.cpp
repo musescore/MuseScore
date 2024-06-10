@@ -326,7 +326,7 @@ GradualTempoChangeSegment* GradualTempoChangeSegment::findElementToSnapBefore() 
     for (auto interval : intervals) {
         Spanner* spanner = interval.value;
         if (!spanner->isGradualTempoChange() || spanner->track() != gradTempoChange->track() || spanner->tick2() != startTick
-            || !spanner->visible()) {
+            || !spanner->visible() || spanner == gradTempoChange) {
             continue;
         }
         GradualTempoChange* precedingTempoChange = toGradualTempoChange(spanner);
