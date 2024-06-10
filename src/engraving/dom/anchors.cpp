@@ -80,13 +80,10 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
     for (const Fraction& anchorTick : anchorTicks) {
         createTimeTickAnchor(measure, anchorTick, staffIdx);
     }
-    measure->computeTicks();
+
+    updateLayout(measure);
 
     Score* score = measure->score();
-
-    LayoutContext ctx(score);
-    MeasureLayout::layoutTimeTickAnchors(measure, ctx);
-
     score->updateShowAnchors(staffIdx, measure->tick(), measure->endTick());
 }
 
@@ -110,6 +107,15 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
     }
 
     return anchor;
+}
+
+void EditTimeTickAnchors::updateLayout(Measure* measure)
+{
+    measure->computeTicks();
+
+    Score* score = measure->score();
+    LayoutContext ctx(score);
+    MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 }
 
 /********************************************
