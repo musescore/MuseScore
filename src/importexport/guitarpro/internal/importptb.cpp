@@ -787,7 +787,8 @@ void PowerTab::addToScore(ptSection& sec)
                 staffName = String::fromStdString(ss);
             } else {
                 // invalid utf most likely windows-125x used
-                staffName = String("part ") + String::number(i + 1);
+                std::string partName = "part " + std::to_string(i + 1);
+                staffName = String::fromStdString(partName);
             }
             part->setPartName(staffName);
             part->setPlainLongName(staffName);
