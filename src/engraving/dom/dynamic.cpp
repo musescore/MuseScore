@@ -593,7 +593,7 @@ bool Dynamic::moveSegment(const EditData& ed)
         score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
     }
 
-    EditTimeTickAnchors::updateAnchors(this, staffIdx());
+    EditTimeTickAnchors::updateAnchors(this, track());
     return true;
 }
 
