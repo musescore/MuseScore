@@ -2782,7 +2782,7 @@ void ChangeParent::flip(EditData*)
     staff_idx_t si = element->staffIdx();
     p->remove(element);
     element->setParent(parent);
-    element->setTrack(staffIdx * VOICES);
+    element->setTrack(staffIdx * VOICES + element->voice());
     parent->add(element);
     staffIdx = si;
     parent = p;
