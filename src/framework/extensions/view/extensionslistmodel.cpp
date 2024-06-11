@@ -94,7 +94,7 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
 
         return QUrl::fromLocalFile(plugin.thumbnail.toQString());
     case rEnabled:
-        return plugin.config.enabled;
+        return plugin.enabled();
     case rCategory:
         return plugin.category.toQString();
     case rVersion:

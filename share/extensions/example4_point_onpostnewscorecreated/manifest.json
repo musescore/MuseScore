@@ -1,0 +1,7 @@
+{
+    "uri": "musescore://extensions/dev/onpost_newscorecreated/example4",
+    "type": "macros",
+    "title": "Example 4 (onpost_newscorecreated) (default)",
+
+    "main": "main.js"
+}

@@ -63,7 +63,7 @@ void ExtensionsActionController::onPluginTriggered(const UriQuery& q)
         return;
     }
 
-    if (m.config.enabled) {
+    if (m.enabled()) {
         provider()->perform(q);
         return;
     }

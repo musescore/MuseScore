@@ -35,7 +35,6 @@
 #include "multiinstances/iprojectprovider.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
-#include "cloud/cloudqmltypes.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
@@ -45,6 +44,7 @@
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
 #include "update/imusesoundscheckupdatescenario.h"
+#include "extensions/iextensionsprovider.h"
 
 #include "async/asyncable.h"
 
@@ -76,6 +76,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::Inject<print::IPrintProvider> printProvider = { this };
     muse::Inject<muse::io::IFileSystem> fileSystem = { this };
     muse::Inject<muse::update::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
+    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
 public:
 

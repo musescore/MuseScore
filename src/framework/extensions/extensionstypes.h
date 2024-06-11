@@ -118,6 +118,21 @@ enum Filter {
     All
 };
 
+//! NOTE Exec points
+using ExecPointName = std::string;
+struct ExecPoint {
+    ExecPointName name;
+    TranslatableString title;
+
+    inline bool operator==(const ExecPoint& p) const { return p.name == name; }
+    inline bool operator!=(const ExecPoint& p) const { return !this->operator==(p); }
+
+    inline bool isNull() const { return name.empty(); }
+};
+
+static inline const ExecPointName EXEC_DISABLED = "disabled";
+static inline const ExecPointName EXEC_MANUALLY = "manually";
+
 struct Action {
     std::string code;
     Type type = Type::Undefined;
@@ -127,6 +142,11 @@ struct Action {
     io::path_t main;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
+
+    struct Config {
+        ExecPointName execPoint = EXEC_DISABLED;
+        std::string shortcut;
+    };
 
     bool isValid() const { return type != Type::Undefined && !code.empty(); }
 };
@@ -168,11 +188,48 @@ struct Manifest {
     std::vector<Action> actions;
 
     struct Config {
-        bool enabled = false;
+        std::map<std::string /*action*/, Action::Config> actions;
+
+        //! TODO remove
         std::string shortcuts;
+
+        const Action::Config& aconfig(const std::string& code) const
+        {
+            auto it = actions.find(code);
+            if (it != actions.end()) {
+                return it->second;
+            }
+            static Action::Config _dummy;
+            return _dummy;
+        }
     } config;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
+
+    bool enabled() const
+    {
+        //! NOTE If at least one is enabled, then it's enabled.
+        for (const Action& a : actions) {
+            auto it = config.actions.find(a.code);
+            if (it == config.actions.end()) {
+                continue;
+            }
+            const Action::Config& ac = it->second;
+            if (!ac.execPoint.empty() && ac.execPoint != EXEC_DISABLED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //! TODO remove
+    void setEnable(bool val)
+    {
+        for (const Action& a : actions) {
+            Action::Config& ac = config.actions[a.code];
+            ac.execPoint = val ? EXEC_MANUALLY : EXEC_DISABLED;
+        }
+    }
 
     Action action(const std::string& code) const
     {

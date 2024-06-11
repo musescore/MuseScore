@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "iextensionsexecpointsregister.h"
 
 #include "global/async/asyncable.h"
 
@@ -35,6 +36,7 @@ class ExtensionsConfiguration : public IExtensionsConfiguration, public async::A
 {
     Inject<IGlobalConfiguration> globalConfiguration;
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<IExtensionsExecPointsRegister> execPointsRegister;
 
 public:
     ExtensionsConfiguration() = default;

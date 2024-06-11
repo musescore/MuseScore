@@ -36,8 +36,9 @@
 #include "cloud/clouderrors.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
-#include "network/networkerrors.h"
+
 #include "projecterrors.h"
+#include "projectextensionpoints.h"
 
 #include "log.h"
 
@@ -380,6 +381,10 @@ muse::Ret ProjectActionsController::doOpenCloudProjectOffline(const muse::io::pa
 
 Ret ProjectActionsController::doFinishOpenProject()
 {
+    if (extensionsProvider()) {
+        extensionsProvider()->performPoint(EXEC_ONPOST_PROJECT_CREATED);
+    }
+
     //! Show MuseSampler update if need
     async::Channel<Uri> opened = interactive()->opened();
     opened.onReceive(this, [this, opened](const Uri&) {
