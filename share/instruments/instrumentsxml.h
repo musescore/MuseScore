@@ -3337,7 +3337,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Helicon", "helicon trackName"),
 //: longName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Helicon", "helicon longName"),
 //: shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Helicon", "helicon shortName"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Hel.", "helicon shortName"),
 
 //: description for Conch; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Conch shell, sometimes fitted with a mouthpiece.", "conch description"),
@@ -6245,7 +6245,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "pizzicato", "nyckelharpa channel"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "tremolo", "nyckelharpa channel"),
 
 // Score orders
-QT_TRANSLATE_NOOP("engraving/scoreorder", "Orchestral"),
+QT_TRANSLATE_NOOP("engraving/scoreorder", "Orchestra"),
 QT_TRANSLATE_NOOP("engraving/scoreorder", "Choir"),
 QT_TRANSLATE_NOOP("engraving/scoreorder", "Marching Band"),
 QT_TRANSLATE_NOOP("engraving/scoreorder", "Big Band"),
