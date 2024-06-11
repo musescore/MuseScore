@@ -125,7 +125,27 @@ void AbstractToolBarModel::setItems(const ToolBarItemList& items)
     TRACEFUNC;
 
     beginResetModel();
-    m_items = items;
+
+    m_items.clear();
+
+    //! NOTE: make sure that we don't have two separators sequentially
+    bool isPreviousSeparator = false;
+
+    for (ToolBarItem* item : items) {
+        if (item->type() == ToolBarItemType::SEPARATOR) {
+            if (isPreviousSeparator) {
+                delete item;
+                continue;
+            }
+
+            isPreviousSeparator = true;
+        } else {
+            isPreviousSeparator = false;
+        }
+
+        m_items << item;
+    }
+
     endResetModel();
 
     emit itemsChanged();
