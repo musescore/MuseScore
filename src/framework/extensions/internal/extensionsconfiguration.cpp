@@ -84,8 +84,17 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
     for (const auto& p : configs) {
         JsonObject obj;
         obj["uri"] = p.first.toString();
-        obj["enabled"] = p.second.enabled;
-        obj["shortcuts"] = p.second.shortcuts;
+
+        const Manifest::Config& c = p.second;
+        JsonArray acts;
+        for (const auto& a : c.actions) {
+            JsonObject act;
+            obj["code"] = a.first;
+            obj["exec_point"] = a.second.execPoint;
+            obj["shortcut"] = a.second.shortcut;
+            acts.append(act);
+        }
+        obj["actions"] = acts;
 
         arr.append(obj);
     }
@@ -140,14 +149,38 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
 
         Uri uri;
         Manifest::Config c;
-        if (obj.contains("uri")) {
-            uri = Uri(obj.value("uri").toStdString());
-        } else {
+        // old plugins format
+        if (obj.contains("codeKey")) {
             uri = Uri("muse://extensions/v1/" + obj.value("codeKey").toStdString());
-        }
+            bool enabled = obj.value("enabled").toBool();
+            Action::Config ac;
+            ac.shortcut = obj.value("shortcuts").toStdString();
+            ac.execPoint = enabled ? EXEC_MANUALLY : EXEC_DISABLED;
 
-        c.enabled = obj.value("enabled").toBool();
-        c.shortcuts = obj.value("shortcuts").toStdString();
+            c.actions["main"] = ac;
+        }
+        // extensions format
+        else {
+            uri = Uri(obj.value("uri").toStdString());
+            JsonValue actsVal = obj.value("actions");
+            // old extensions format
+            if (actsVal.isNull()) {
+                continue;
+            }
+
+            // current extensions format
+            JsonArray acts = actsVal.toArray();
+            for (size_t ai = 0; ai < acts.size(); ++ai) {
+                JsonObject ao = acts.at(ai).toObject();
+
+                std::string code = ao.value("code").toStdString();
+                Action::Config ac;
+                ac.execPoint = ao.value("exec_point").toStdString();
+                ac.shortcut = ao.value("shortcut").toStdString();
+
+                c.actions[code] = ac;
+            }
+        }
 
         if (uri.isValid()) {
             result[uri] = c;

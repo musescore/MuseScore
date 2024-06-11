@@ -42,6 +42,7 @@ public:
     ManifestList manifestList(Filter filter = Filter::All) const override;
     async::Notification manifestListChanged() const override;
 
+    bool exists(const Uri& uri) const override;
     const Manifest& manifest(const Uri& uri) const override;
     async::Channel<Manifest> manifestChanged() const override;
     Action action(const UriQuery& q) const override;
@@ -52,6 +53,8 @@ public:
 
     Ret perform(const UriQuery& uri) override;
     Ret run(const UriQuery& uri) override;
+
+    Ret performPoint(const ExecPointName& name) override;
 
 private:
 

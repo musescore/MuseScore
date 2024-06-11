@@ -49,6 +49,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/projecterrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/projectextensionpoints.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h

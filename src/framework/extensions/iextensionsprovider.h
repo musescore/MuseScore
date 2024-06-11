@@ -42,6 +42,7 @@ public:
     virtual ManifestList manifestList(Filter filter = Filter::All) const = 0;
     virtual async::Notification manifestListChanged() const = 0;
 
+    virtual bool exists(const Uri& uri) const = 0;
     virtual const Manifest& manifest(const Uri& uri) const = 0;
     virtual async::Channel<Manifest> manifestChanged() const = 0;
     virtual Action action(const UriQuery& q) const = 0;
@@ -52,5 +53,7 @@ public:
 
     virtual Ret perform(const UriQuery& uri) = 0;
     virtual Ret run(const UriQuery& uri) = 0;
+
+    virtual Ret performPoint(const ExecPointName& name) = 0;
 };
 }

@@ -22,6 +22,7 @@
 #include "extensionsprovider.h"
 
 #include "global/containers.h"
+#include "global/stringutils.h"
 
 #include "extensionsloader.h"
 #include "legacy/extpluginsloader.h"
@@ -72,7 +73,7 @@ ManifestList ExtensionsProvider::manifestList(Filter filter) const
     if (filter == Filter::Enabled) {
         ManifestList list;
         for (const Manifest& m : m_manifests) {
-            if (m.config.enabled) {
+            if (m.enabled()) {
                 list.push_back(m);
             }
         }
@@ -85,6 +86,19 @@ ManifestList ExtensionsProvider::manifestList(Filter filter) const
 muse::async::Notification ExtensionsProvider::manifestListChanged() const
 {
     return m_manifestListChanged;
+}
+
+bool ExtensionsProvider::exists(const Uri& uri) const
+{
+    auto it = std::find_if(m_manifests.begin(), m_manifests.end(), [uri](const Manifest& m) {
+        return m.uri == uri;
+    });
+
+    if (it != m_manifests.end()) {
+        return true;
+    }
+
+    return false;
 }
 
 const Manifest& ExtensionsProvider::manifest(const Uri& uri) const
@@ -134,7 +148,7 @@ muse::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
     std::map<Uri, Manifest::Config> allconfigs;
     for (Manifest& m : m_manifests) {
         if (m.uri == uri) {
-            m.config.enabled = enable;
+            m.setEnable(enable);
             m_manifestChanged.send(m);
             ok = true;
         }
@@ -193,6 +207,25 @@ muse::Ret ExtensionsProvider::run(const Action& a)
     } else {
         ExtensionRunner runner(iocContext());
         ret = runner.run(a);
+    }
+
+    return ret;
+}
+
+muse::Ret ExtensionsProvider::performPoint(const ExecPointName& name)
+{
+    Ret ret = make_ok();
+    for (const Manifest& m : m_manifests) {
+        for (const Action& a : m.actions) {
+            if (m.config.aconfig(a.code).execPoint != name) {
+                continue;
+            }
+
+            Ret r = run(a);
+            if (ret) {
+                ret = r;
+            }
+        }
     }
 
     return ret;

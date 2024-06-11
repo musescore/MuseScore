@@ -31,6 +31,7 @@
 #include "internal/extensionsconfiguration.h"
 #include "internal/extensionsactioncontroller.h"
 #include "internal/extensioninstaller.h"
+#include "internal/extensionsexecpointsregister.h"
 
 #include "view/extensionbuilder.h"
 #include "view/extensionsuiengine.h"
@@ -60,11 +61,13 @@ void ExtensionsModule::registerExports()
     m_configuration = std::make_shared<ExtensionsConfiguration>();
     m_provider = std::make_shared<ExtensionsProvider>(iocContext());
     m_actionController = std::make_shared<ExtensionsActionController>();
+    m_execPointsRegister = std::make_shared<ExtensionsExecPointsRegister>();
 
     ioc()->registerExport<IExtensionsProvider>(moduleName(), m_provider);
     ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IExtensionsUiEngine>(moduleName(), new ExtensionsUiEngine(iocContext()));
     ioc()->registerExport<IExtensionInstaller>(moduleName(), new ExtensionInstaller());
+    ioc()->registerExport<IExtensionsExecPointsRegister>(moduleName(), m_execPointsRegister);
 }
 
 void ExtensionsModule::registerResources()
@@ -85,6 +88,9 @@ void ExtensionsModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("muse://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
     }
+
+    m_execPointsRegister->reg(moduleName(), { EXEC_DISABLED, TranslatableString("extensions", "Disabled") });
+    m_execPointsRegister->reg(moduleName(), { EXEC_MANUALLY, TranslatableString("extensions", "Manually") });
 }
 
 void ExtensionsModule::registerApi()
