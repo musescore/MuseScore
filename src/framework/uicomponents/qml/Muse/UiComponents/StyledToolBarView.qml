@@ -37,7 +37,6 @@ Rectangle {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
         enabled: root.enabled && root.visible
 
-        accessible.role: MUAccessible.List
         accessible.name: "ToolBar"
         accessible.visualItem: root
     }
@@ -97,6 +96,8 @@ Rectangle {
 
                 onLoaded: {
                     loader.item.itemData = loader.itemData
+
+                    loader.item.y = (root.rowHeight - loader.item.height) / 2 // equal to anchors.verticalCenter = parent.verticalCenter
                 }
 
                 Component {

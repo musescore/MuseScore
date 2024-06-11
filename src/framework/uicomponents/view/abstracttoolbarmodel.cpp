@@ -163,9 +163,31 @@ ToolBarItem& AbstractToolBarModel::findItem(const ActionCode& actionCode)
     return item(m_items, actionCode);
 }
 
+ToolBarItem* AbstractToolBarModel::findItemPtr(const actions::ActionCode& actionCode)
+{
+    for (ToolBarItem* toolBarItem : m_items) {
+        if (toolBarItem->action().code == actionCode) {
+            return toolBarItem;
+        }
+    }
+
+    return nullptr;
+}
+
 ToolBarItem& AbstractToolBarModel::findItem(const QString& itemId)
 {
     return item(m_items, itemId);
+}
+
+ToolBarItem* AbstractToolBarModel::findItemPtr(const QString& itemId)
+{
+    for (ToolBarItem* toolBarItem : m_items) {
+        if (toolBarItem->id() == itemId) {
+            return toolBarItem;
+        }
+    }
+
+    return nullptr;
 }
 
 ToolBarItem* AbstractToolBarModel::makeItem(const ActionCode& actionCode, const TranslatableString& title)
@@ -183,13 +205,6 @@ ToolBarItem* AbstractToolBarModel::makeItem(const ActionCode& actionCode, const 
         item->setTitle(title);
     }
 
-    return item;
-}
-
-ToolBarItem* AbstractToolBarModel::makeItem(const actions::ActionCode& actionCode, bool showTitle)
-{
-    ToolBarItem* item = makeItem(actionCode);
-    item->setShowTitle(showTitle);
     return item;
 }
 
