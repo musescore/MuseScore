@@ -5990,7 +5990,7 @@
                   <family>sousaphones</family>
                   <trackName>Helicon</trackName>
                   <longName>Helicon</longName>
-                  <shortName>Helicon</shortName>
+                  <shortName>Hel.</shortName>
                   <description>Instrument of the tuba family.</description>
                   <musicXMLid>brass.helicon</musicXMLid>
                   <clef>F</clef>
@@ -13776,10 +13776,18 @@
                   <shortName>Pds. v.</shortName>
                   <description>Highest-pitched member of the viol family.</description>
                   <musicXMLid>strings.viol</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>55</string>
+                        <string>62</string>
+                        <string>69</string>
+                        <string>74</string>
+                        <string>79</string>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-91</aPitchRange>
-                  <pPitchRange>43-96</pPitchRange>
+                  <pPitchRange>55-96</pPitchRange>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 40; MS General: Violin-->
                         <program value="40"/> <!--Violin-->
@@ -13903,6 +13911,9 @@
                   <longName>Viola da gamba</longName>
                   <shortName>Vla. d. g.</shortName>
                   <description>Viola da gamba (tablature).</description>
+                  <StringData>
+                        <frets>13</frets>
+                  </StringData>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <genre>earlymusic</genre>
             </Instrument>
