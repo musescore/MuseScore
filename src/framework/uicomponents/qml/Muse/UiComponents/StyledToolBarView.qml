@@ -37,7 +37,6 @@ Rectangle {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
         enabled: root.enabled && root.visible
 
-        accessible.role: MUAccessible.List
         accessible.name: "ToolBar"
         accessible.visualItem: root
     }

@@ -201,6 +201,16 @@ bool ToolBarItem::enabled_property() const
     return m_state.enabled;
 }
 
+bool ToolBarItem::checkable_property() const
+{
+    return m_action.checkable == Checkable::Yes;
+}
+
+bool ToolBarItem::checked_property() const
+{
+    return m_state.checked;
+}
+
 bool ToolBarItem::selected_property() const
 {
     return m_selected;

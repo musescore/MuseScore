@@ -66,7 +66,7 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    virtual void load();
+    Q_INVOKABLE virtual void load();
 
     QVariantList itemsProperty() const;
     const ToolBarItemList& items() const;
@@ -101,7 +101,6 @@ protected:
     ToolBarItem* findItemPtr(const QString& itemId);
 
     ToolBarItem* makeItem(const actions::ActionCode& actionCode, const TranslatableString& title = {});
-    ToolBarItem* makeItem(const actions::ActionCode& actionCode, bool showTitle);
     ToolBarItem* makeMenuItem(const TranslatableString& title, const actions::ActionCodeList& subitemsActionCodesLists,
                               const QString& menuId = "", bool enabled = true);
     ToolBarItem* makeSeparator();

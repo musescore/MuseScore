@@ -52,6 +52,10 @@ class ToolBarItem : public QObject, public Injectable, public async::Asyncable
     Q_PROPERTY(int icon READ icon_property NOTIFY actionChanged)
 
     Q_PROPERTY(bool enabled READ enabled_property NOTIFY stateChanged)
+
+    Q_PROPERTY(bool checkable READ checkable_property NOTIFY actionChanged)
+    Q_PROPERTY(bool checked READ checked_property NOTIFY stateChanged)
+
     Q_PROPERTY(bool selected READ selected_property NOTIFY selectedChanged)
 
     Q_PROPERTY(bool isTransparent READ isTransparent WRITE setIsTransparent NOTIFY isTransparentChanged)
@@ -124,6 +128,8 @@ private:
     QString description_property() const;
     int icon_property() const;
     bool enabled_property() const;
+    bool checkable_property() const;
+    bool checked_property() const;
     bool selected_property() const;
     int type_property() const;
 
