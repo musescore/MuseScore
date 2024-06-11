@@ -1349,51 +1349,6 @@ void EngravingItem::setPlacementBasedOnVoiceApplication(DirectionV styledDirecti
     }
 }
 
-bool EngravingItem::shouldBeCenteredBetweenStaves(const System* system) const
-{
-    if (!isStyled(Pid::OFFSET)) {
-        // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
-        return false;
-    }
-
-    const Part* itemPart = part();
-    bool centerStyle = style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
-    AutoOnOff centerProperty = getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
-    if (itemPart->nstaves() <= 1 || centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
-        return false;
-    }
-
-    if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
-        return false;
-    }
-
-    const Staff* thisStaff = staff();
-    const std::vector<Staff*>& partStaves = itemPart->staves();
-    IF_ASSERT_FAILED(partStaves.size() > 0) {
-        return false;
-    }
-
-    if ((thisStaff == partStaves.front() && placeAbove()) || (thisStaff == partStaves.back() && placeBelow())) {
-        return false;
-    }
-
-    staff_idx_t thisIdx = thisStaff->idx();
-    if (placeAbove()) {
-        IF_ASSERT_FAILED(thisIdx > 0) {
-            return false;
-        }
-    }
-    staff_idx_t nextIdx = placeAbove() ? thisIdx - 1 : thisIdx + 1;
-
-    const SysStaff* thisSystemStaff = system->staff(thisIdx);
-    const SysStaff* nextSystemStaff = system->staff(nextIdx);
-    if (!thisSystemStaff->show() || !nextSystemStaff->show()) {
-        return false;
-    }
-
-    return centerProperty == AutoOnOff::ON || appliesToAllVoicesInInstrument();
-}
-
 void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
 {
     assert(!score()->isMaster());

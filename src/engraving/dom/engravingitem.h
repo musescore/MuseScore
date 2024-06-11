@@ -676,8 +676,6 @@ public:
     void checkVoiceApplicationCompatibleWithTrack();
     void setPlacementBasedOnVoiceApplication(DirectionV styledDirection);
 
-    bool shouldBeCenteredBetweenStaves(const System* system) const;
-
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------
 

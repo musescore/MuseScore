@@ -84,6 +84,7 @@ private:
                                   std::vector<Bracket*>& bl, Measure* measure);
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2);
 
+    static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
     static void centerElementBetweenStaves(EngravingItem* element, const System* system);
 };
 }

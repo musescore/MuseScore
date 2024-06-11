@@ -2735,7 +2735,7 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
     std::vector<EngravingItem*> centeredItems;
 
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
-        if (spannerSeg->isHairpinSegment() && spannerSeg->shouldBeCenteredBetweenStaves(system)) {
+        if (spannerSeg->isHairpinSegment() && elementShouldBeCenteredBetweenStaves(spannerSeg, system)) {
             centerElementBetweenStaves(spannerSeg, system);
             centeredItems.push_back(spannerSeg);
         }
@@ -2747,7 +2747,7 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
         }
         for (const Segment& seg : toMeasure(mb)->segments()) {
             for (EngravingItem* item : seg.annotations()) {
-                if ((item->isDynamic() || item->isExpression()) && item->shouldBeCenteredBetweenStaves(system)) {
+                if ((item->isDynamic() || item->isExpression()) && elementShouldBeCenteredBetweenStaves(item, system)) {
                     centerElementBetweenStaves(item, system);
                     centeredItems.push_back(item);
                 }
@@ -2756,6 +2756,51 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
     }
 
     AlignmentLayout::alignStaffCenteredItems(centeredItems, system);
+}
+
+bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system)
+{
+    if (!item->isStyled(Pid::OFFSET)) {
+        // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
+        return false;
+    }
+
+    const Part* itemPart = item->part();
+    bool centerStyle = item->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
+    AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
+    if (itemPart->nstaves() <= 1 || centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
+        return false;
+    }
+
+    if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
+        return false;
+    }
+
+    const Staff* thisStaff = item->staff();
+    const std::vector<Staff*>& partStaves = itemPart->staves();
+    IF_ASSERT_FAILED(partStaves.size() > 0) {
+        return false;
+    }
+
+    if ((thisStaff == partStaves.front() && item->placeAbove()) || (thisStaff == partStaves.back() && item->placeBelow())) {
+        return false;
+    }
+
+    staff_idx_t thisIdx = thisStaff->idx();
+    if (item->placeAbove()) {
+        IF_ASSERT_FAILED(thisIdx > 0) {
+            return false;
+        }
+    }
+    staff_idx_t nextIdx = item->placeAbove() ? thisIdx - 1 : thisIdx + 1;
+
+    const SysStaff* thisSystemStaff = system->staff(thisIdx);
+    const SysStaff* nextSystemStaff = system->staff(nextIdx);
+    if (!thisSystemStaff->show() || !nextSystemStaff->show()) {
+        return false;
+    }
+
+    return centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument();
 }
 
 void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const System* system)
