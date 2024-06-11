@@ -14,7 +14,7 @@
 #define __TEMPOTEXT_H__
 
 #include "durationtype.h"
-#include "text.h"
+#include "textbase.h"
 
 namespace Ms {
 

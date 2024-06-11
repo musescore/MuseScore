@@ -11,15 +11,16 @@
 //=============================================================================
 
 #include <limits>
-#include "score.h"
-#include "tempotext.h"
-#include "tempo.h"
-#include "system.h"
+
 #include "measure.h"
-#include "staff.h"
-#include "xml.h"
-#include "undo.h"
 #include "musescoreCore.h"
+#include "score.h"
+#include "staff.h"
+#include "system.h"
+#include "tempo.h"
+#include "tempotext.h"
+#include "undo.h"
+#include "xml.h"
 
 namespace Ms {
 

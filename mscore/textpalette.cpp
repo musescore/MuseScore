@@ -17,17 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "palette.h"
 #include "menus.h"
+#include "musescore.h"
+#include "palette.h"
 #include "textpalette.h"
-#include "icons.h"
-#include "libmscore/text.h"
+
+#include "libmscore/score.h"
 #include "libmscore/sym.h"
 #include "libmscore/symbol.h"
-#include "libmscore/style.h"
-#include "libmscore/clef.h"
-#include "libmscore/score.h"
-#include "musescore.h"
 
 namespace Ms {
 
@@ -430,7 +427,7 @@ TextPalette::TextPalette(QWidget* parent)
 //   populateCommon
 //---------------------------------------------------------
 
-int unicodeAccidentals[] = { //better size and alignment, so put these first
+static constexpr char32_t unicodeAccidentals[] = { //better size and alignment, so put these first
       0x266d,    // flat
       0x266e,    // natural
       0x266f     // sharp
@@ -439,7 +436,7 @@ int unicodeAccidentals[] = { //better size and alignment, so put these first
       // 0x1d12a    // double sharp
       };
 
-int commonTextSymbols[] = {
+static constexpr char32_t commonTextSymbols[] = {
       0x00a9,    // &copy;
 
       // upper case ligatures
@@ -582,24 +579,24 @@ void TextPalette::populateCommon()
       {
       pCommon->clear();
 
-      for (auto id : unicodeAccidentals) {
+      for (char32_t id : unicodeAccidentals) {
             FSymbol* fs = new FSymbol(gscore);
             fs->setCode(id);
             fs->setFont(_font);
-            pCommon->append(fs, QString(id));
+            pCommon->append(fs, QString::fromUcs4(&id, 1));
             }
 
-      for (auto id : Sym::commonScoreSymbols) {
+      for (SymId id : Sym::commonScoreSymbols) {
             Symbol* s = new Symbol(gscore);
             s->setSym(id, gscore->scoreFont());
             pCommon->append(s, Sym::id2userName(id));
             }
 
-      for (auto id : commonTextSymbols) {
+      for (char32_t id : commonTextSymbols) {
             FSymbol* fs = new FSymbol(gscore);
             fs->setCode(id);
             fs->setFont(_font);
-            pCommon->append(fs, QString(id));
+            pCommon->append(fs, QString::fromUcs4(&id, 1));
             }
       }
 
