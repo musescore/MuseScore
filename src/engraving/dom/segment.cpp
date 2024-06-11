@@ -2395,16 +2395,6 @@ void Segment::createShapes()
     addPreAppendedToShape();
 }
 
-static PointF staffOffset(EngravingItem* e)
-{
-    if (!e) {
-        return PointF();
-    }
-    const StaffType* st = e->staffType();
-    const double yOffset = st ? st->yoffset().val() * e->spatium() : 0.0;
-    return PointF(0.0, yOffset);
-}
-
 //---------------------------------------------------------
 //   createShape
 //---------------------------------------------------------
@@ -2428,7 +2418,7 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (bl) {
             rendering::dev::LayoutContext lctx(score());
             RectF r = rendering::dev::TLayout::layoutRect(bl, lctx);
-            s.add(r.translated(bl->pos() + staffOffset(bl)), bl);
+            s.add(r.translated(bl->pos() + bl->staffOffset()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
         return;
@@ -2455,14 +2445,14 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translate((e->isClef() ? e->ldata()->pos() : e->pos()) + staffOffset(e)));
+                s.add(e->shape().translate((e->isClef() ? e->ldata()->pos() : e->pos()) + e->staffOffset()));
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {
                 Ornament* orn = toChord(e)->findOrnament();
                 Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
                 if (cueNoteChord && cueNoteChord->upNote()->visible()) {
-                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + staffOffset(cueNoteChord)));
+                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
                 }
             }
         }
@@ -2505,7 +2495,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isStringTunings()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
-            s.add(e->shape().translate(e->pos() + staffOffset(e)));
+            s.add(e->shape().translate(e->pos() + e->staffOffset()));
         }
     }
 }
@@ -2522,7 +2512,7 @@ void Segment::addPreAppendedToShape()
             toGraceNotesGroup(item)->addToShape();
         } else {
             Shape& shape = m_shapes[item->vStaffIdx()];
-            shape.add(item->shape().translate(item->pos() + staffOffset(item)));
+            shape.add(item->shape().translate(item->pos() + item->staffOffset()));
         }
     }
 }

@@ -988,14 +988,13 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         }
     }
 
-    const StaffType* st = item->staffType();
     double stacAccentKern = 0.2 * item->spatium();
     double mag = item->mag();
     double minDist = ctx.conf().styleMM(Sid::articulationMinDistance) * mag;
     double staffDist = ctx.conf().styleMM(Sid::propertyDistance) * mag;
     double stemDist = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
     double noteDist = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
-    double yOffset = st ? st->yoffset().val() * item->spatium() : 0.0;
+    double yOffset = item->staffOffsetY();
 
     double chordTopY = item->upPos() - 0.5 * item->upNote()->headHeight() + yOffset;       // note position of highest note
     double chordBotY = item->downPos() + 0.5 * item->upNote()->headHeight() + yOffset;     // note position of lowest note
@@ -1107,7 +1106,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             // but adding to skyline is always good
             Segment* s = item->segment();
             Measure* m = s->measure();
-            Shape sh = a->shape().translate(a->pos() + item->pos() + PointF(0.0, yOffset));
+            Shape sh = a->shape().translate(a->pos() + item->pos() + item->staffOffset());
             // TODO: limit to width of chord
             // this avoids "staircase" effect due to space not having been allocated already
             // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
@@ -1142,14 +1141,12 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
     Segment* s = item->segment();
     Measure* m = item->measure();
     SysStaff* sstaff = m->system() ? m->system()->staff(item->vStaffIdx()) : nullptr;
-    const StaffType* st = item->staffType();
-    const double yOffset = st ? st->yoffset().val() * item->spatium() : 0.0;
     for (auto iter = item->articulations().begin(); iter != item->articulations().end(); ++iter) {
         Articulation* a = *iter;
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }
-        Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + PointF(0.0, yOffset));
+        Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset());
         Shape sShape = ss->shape().translate(ss->pos());
         double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
         double vertClearance = a->up() ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
@@ -1162,7 +1159,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
                 Articulation* aa = *iter2;
                 aa->mutldata()->moveY(minDist);
                 if (sstaff && aa->addToSkyline()) {
-                    sstaff->skyline().add(aa->shape().translate(aa->pos() + item->pos() + s->pos() + m->pos() + PointF(0.0, yOffset)));
+                    sstaff->skyline().add(aa->shape().translate(aa->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset()));
                     for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
                         if (sh.item() == aa) {
                             sh.translate(0.0, minDist);
@@ -3404,9 +3401,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
     shape.add(chordRestShape(item));      // add lyrics
 
     for (const LedgerLine* l = item->ledgerLines(); l; l = l->next()) {
-        const StaffType* staffType = item->staffType();
-        const PointF ledgerOffset = PointF(0.0, staffType ? staffType->yoffset().val() * item->spatium() : 0.0);
-        shape.add(l->shape().translate(l->pos() - ledgerOffset));
+        shape.add(l->shape().translate(l->pos() - l->staffOffset()));
     }
 
     if (beamlet && stem) {

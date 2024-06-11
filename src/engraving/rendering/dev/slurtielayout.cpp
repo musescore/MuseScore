@@ -1725,13 +1725,11 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         return;
     }
 
-    const StaffType* st = tieSegment->staffType();
     const double spatium = tieSegment->spatium();
-    const double yOffset = st ? st->yoffset().val() * spatium : 0.0;
     TieSegment::LayoutData* ldata = tieSegment->mutldata();
 
     ldata->setPos(PointF());
-    ldata->moveY(yOffset);
+    ldata->moveY(tieSegment->staffOffsetY());
 
     Fraction tick = tieSegment->tick();
 
@@ -2350,9 +2348,7 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
     item->setExtraHeight(0.0);
 
     //Adjust Y pos to staff type yOffset before other calculations
-    if (item->staffType()) {
-        ldata->moveY(item->staffType()->yoffset().val() * item->spatium());
-    }
+    ldata->moveY(item->staffOffsetY());
 
     computeBezier(item);
 }

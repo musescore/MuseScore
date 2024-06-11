@@ -2429,7 +2429,7 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
         const StaffType* st = s->staffType(lines->measure()->tick());
         dist         *= st->lineDistance().val();
         _lines        = st->lines();
-        lines->mutldata()->setPosY(st->yoffset().val() * _spatium);
+        lines->mutldata()->setPosY(lines->staffOffsetY());
     } else {
         _lines = 5;
         lines->setColor(lines->configuration()->defaultColor());

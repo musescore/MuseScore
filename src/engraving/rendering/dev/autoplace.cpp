@@ -69,10 +69,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         RectF r = shape.bbox();
 
         // Adjust bbox Y pos for staffType offset
-        if (item->staffType()) {
-            double stYOffset = item->staffType()->yoffset().val() * sp;
-            shape.translate(PointF(0.0, stYOffset));
-        }
+        shape.translate(item->staffOffset());
 
         SkylineLine sk(!above);
         double d;
@@ -135,10 +132,8 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
         double minDistance = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        // Adjust bbox Y pos for staffType offset
-        const double stYOffset = item->staffType() ? item->staffType()->yoffset().val() * sp : 0.0;
         // shape rather than bbox is good for tuplets especially
-        Shape sh = item->shape().translate(m->pos() + item->pos() + PointF(0.0, stYOffset));
+        Shape sh = item->shape().translate(m->pos() + item->pos() + item->staffOffset());
 
         SkylineLine sk(!above);
         double d;
@@ -373,9 +368,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
 
         SysStaff* ss = m->system()->staff(si);
 
-        // Adjust bbox Y pos for staffType offset
-        const double stYOffset = item->staffType() ? item->staffType()->yoffset().val() * sp : 0.0;
-        Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos() + PointF(0.0, stYOffset));
+        Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos() + item->staffOffset());
 
         for (const ShapeElement& shapeEl : thisShape.elements()) {
             RectF r = shapeEl;

@@ -3251,15 +3251,14 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                     ny = std::max(ny, sd->ldata()->pos().y());
                 }
                 if (sd->ldata()->pos().y() != ny) {
-                    const double yOff = stType ? stType->yoffset().val() * _spatium : 0.0;
-                    sd->mutldata()->setPosY(ny - yOff);
+                    const PointF offset = sd->staffOffset();
+                    sd->mutldata()->setPosY(ny - offset.y());
                     if (sd->snappedExpression()) {
                         sd->snappedExpression()->mutldata()->setPosY(ny);
                     }
                     if (sd->addToSkyline()) {
                         Segment* s = sd->segment();
                         Measure* m = s->measure();
-                        const PointF offset = PointF(0.0, yOff);
                         RectF r = sd->ldata()->bbox().translated(sd->pos() + offset);
                         s->staffShape(sd->staffIdx()).add(r);
                         r = sd->ldata()->bbox().translated(sd->pos() + s->pos() + m->pos() + offset);
@@ -3276,8 +3275,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                     ny = std::max(ny, ed->ldata()->pos().y());
                 }
                 if (ed->ldata()->pos().y() != ny) {
-                    const double yOff = stType ? stType->yoffset().val() * _spatium : 0.0;
-                    ed->mutldata()->setPosY(ny - yOff);
+                    const PointF offset = ed->staffOffset();
+                    ed->mutldata()->setPosY(ny - offset.y());
                     Expression* snappedExpression = ed->snappedExpression();
                     if (snappedExpression) {
                         double yOffsetDiff = snappedExpression->offset().y() - ed->offset().y();
@@ -3286,7 +3285,6 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
                     if (ed->addToSkyline()) {
                         Segment* s = ed->segment();
                         Measure* m = s->measure();
-                        const PointF offset = PointF(0.0, yOff);
                         RectF r = ed->ldata()->bbox().translated(ed->pos() + offset);
                         s->staffShape(ed->staffIdx()).add(r);
                         r = ed->ldata()->bbox().translated(ed->pos() + s->pos() + m->pos() + offset);
@@ -3892,9 +3890,7 @@ static void _layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, 
     double w2 = ldata->lineWidth * .5;
 
     //Adjust Y position to staffType offset
-    if (item->staffType()) {
-        ldata->moveY(item->staffType()->yoffset().val() * item->spatium());
-    }
+    ldata->moveY(item->staffOffsetY());
 
     if (item->vertical()) {
         ldata->setBbox(-w2, 0, w2, item->len());
@@ -4856,7 +4852,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
     if (item->ledgerLinesVisible()) {
         double extraLen = ctx.conf().styleMM(Sid::ledgerLineLength) * mag;
         double step = 0.5 * _spatium * item->staffType()->lineDistance().val();
-        double yOffset = item->staffType() ? item->staffType()->yoffset().val() * _spatium : 0.0;
+        double yOffset = item->staffOffsetY();
         double x = noteheadBbox.x() - extraLen;
         double w = noteheadBbox.width() + 2 * extraLen;
 
@@ -5830,9 +5826,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     // adjust Y pos to staffType offset
-    if (const StaffType* st = item->staffType()) {
-        ldata->moveY(st->yoffset().val() * item->spatium());
-    }
+    ldata->moveY(item->staffOffsetY());
 
     if (!tl->diagonal()) {
         item->setUserYoffset2(0);
@@ -6287,7 +6281,6 @@ void TLayout::layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* l
 void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    const StaffType* st = item->staffType();
     const double sp = item->spatium();
     TrillSegment::LayoutData* ldata = item->mutldata();
     Trill* trill = item->trill();
@@ -6305,7 +6298,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
     if (item->spanner()->placeBelow()) {
         ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
     }
-    const double yOff = st ? st->yoffset().val() * sp : 0.0;
+    const double yOff = item->staffOffsetY();
     ldata->moveY(yOff);
 
     bool accidentalGoesBelow = trill->trillType() == TrillType::DOWNPRALL_LINE;
@@ -6450,8 +6443,6 @@ void TLayout::fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata)
 void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    const StaffType* st = item->staffType();
-    const double sp = item->spatium();
     VibratoSegment::LayoutData* ldata = item->mutldata();
     if (item->staff()) {
         ldata->setMag(item->staff()->staffMag(item->tick()));
@@ -6460,8 +6451,7 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
         ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
     }
 
-    const double yOff = st ? st->yoffset().val() * sp : 0.0;
-    ldata->moveY(yOff);
+    ldata->moveY(item->staffOffsetY());
 
     switch (item->vibrato()->vibratoType()) {
     case VibratoType::GUITAR_VIBRATO:

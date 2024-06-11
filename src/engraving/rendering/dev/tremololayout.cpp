@@ -125,7 +125,7 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
         x = item->chord()->centerX();
     }
 
-    double staveOffset = staffType ? staffType->yoffset().val() * spatium : 0.0;
+    double staveOffset = item->staffOffsetY();
     bool up = item->chord()->up();
     int upValue = up ? -1 : 1;
     double mag = item->chord()->intrinsicMag();

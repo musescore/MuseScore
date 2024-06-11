@@ -165,9 +165,7 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
             y += system()->staff(stIdx)->bbox().height();
         }
         // adjust Y to staffType offset
-        if (staffType()) {
-            y += staffType()->yoffset().val() * spatium();
-        }
+        y += staffOffsetY();
     }
 
     const Page* p = system()->page();

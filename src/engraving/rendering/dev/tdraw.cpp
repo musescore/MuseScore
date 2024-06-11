@@ -635,7 +635,7 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
         }
 
         //adjust for staffType offset
-        double stYOffset = st->yoffset().val() * spatium;
+        double stYOffset = item->staffOffsetY();
         y1l += stYOffset;
         y2l += stYOffset;
     }
@@ -2517,7 +2517,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
         double extraLen = item->style().styleS(Sid::ledgerLineLength).val() * sp;
         double x1 = -extraLen;
         double x2 = noteheadWidth + extraLen;
-        double yOffset = item->staffType() ? item->staffType()->yoffset().val() * sp : 0.0;
+        double yOffset = item->staffOffsetY();
         double step = sp2 * item->staffType()->lineDistance().val();
 
         lw = item->style().styleMM(Sid::ledgerLineWidth) * item->mag();

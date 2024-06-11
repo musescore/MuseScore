@@ -1754,8 +1754,7 @@ PointF Chord::pagePos() const
         if (!system) {
             return p;
         }
-        double staffYOffset = staff() ? staff()->staffType(tick())->yoffset().val() * spatium() : 0.0;
-        p.ry() += system->staffYpage(vStaffIdx()) + staffYOffset;
+        p.ry() += system->staffYpage(vStaffIdx()) + staffOffsetY();
         return p;
     }
     return EngravingItem::pagePos();
@@ -3267,8 +3266,7 @@ void GraceNotesGroup::setPos(double x, double y)
 void GraceNotesGroup::addToShape()
 {
     for (Chord* grace : *this) {
-        const StaffType* st = grace->staffType();
-        const PointF yOffset = PointF(0.0, st ? st->yoffset().val() * grace->spatium() : 0.0);
+        const PointF yOffset = grace->staffOffset();
         staff_idx_t staffIdx = grace->staffIdx();
         staff_idx_t vStaffIdx = grace->vStaffIdx();
         Shape& s = _appendedSegment->staffShape(staffIdx);

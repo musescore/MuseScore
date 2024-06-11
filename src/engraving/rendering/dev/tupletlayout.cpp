@@ -429,7 +429,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     item->p1().ry() -= l2l * (item->isUp() ? 1.0 : -1.0);
     item->p2().ry() -= l2r * (item->isUp() ? 1.0 : -1.0);
 
-    const double yOffset = stt->yoffset().val() * _spatium;
+    const double yOffset = item->staffOffsetY();
 
     item->p1().ry() -= yOffset;
     item->p2().ry() -= yOffset;

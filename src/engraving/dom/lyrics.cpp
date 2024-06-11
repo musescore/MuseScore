@@ -491,15 +491,13 @@ void Lyrics::triggerLayout() const
 
 double Lyrics::yRelativeToStaff() const
 {
-    const StaffType* st = staffType();
-    const double yOff = st ? st->yoffset().val() * spatium() : 0.0;
+    const double yOff = staffOffsetY();
     return pos().y() + chordRest()->pos().y() + yOff;
 }
 
 void Lyrics::setYRelativeToStaff(double y)
 {
-    const StaffType* st = staffType();
-    const double yOff = st ? st->yoffset().val() * spatium() : 0.0;
+    const double yOff = staffOffsetY();
     mutldata()->setPosY(y - chordRest()->pos().y() - yOff);
 }
 
