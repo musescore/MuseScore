@@ -33,6 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsuiengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/iextensioninstaller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/api/extapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/extapi.h
@@ -54,6 +55,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsactioncontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensioninstaller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensioninstaller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.h

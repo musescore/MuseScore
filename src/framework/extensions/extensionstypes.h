@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSTYPES_H
-#define MUSE_EXTENSIONS_EXTENSIONSTYPES_H
+#pragma once
 
 #include <vector>
 #include <map>
@@ -38,6 +37,8 @@ constexpr int DEFAULT_API_VERSION = 2;
 
 //! NOTE Default extension dialog modality
 constexpr bool DEFAULT_MODAL = false;
+
+constexpr const char* SINGLE_FILE_EXT = "mext";
 
 enum class Type {
     Undefined = 0,
@@ -145,5 +146,3 @@ using ManifestList = std::vector<Manifest>;
 
 using KnownCategories = std::map<std::string /*name*/, TranslatableString /*title*/>;
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSTYPES_H

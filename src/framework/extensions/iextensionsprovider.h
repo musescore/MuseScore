@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H
-#define MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -55,5 +54,3 @@ public:
     virtual Ret run(const UriQuery& uri) = 0;
 };
 }
-
-#endif // MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H
