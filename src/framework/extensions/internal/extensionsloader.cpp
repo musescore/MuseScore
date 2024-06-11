@@ -104,6 +104,11 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
         return Manifest();
     }
 
+    return parseManifest(data);
+}
+
+Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
+{
     std::string jsonErr;
     JsonObject obj = JsonDocument::fromJson(data, &jsonErr).rootObject();
     if (!jsonErr.empty()) {

@@ -117,6 +117,21 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
+ApplicationActionController::DragTarget ApplicationActionController::dragTarget(const QUrl& url) const
+{
+    if (projectFilesController()->isUrlSupported(url)) {
+        return DragTarget::ProjectFile;
+    } else if (url.isLocalFile()) {
+        muse::io::path_t filePath = url.toLocalFile();
+        if (muse::audio::synth::isSoundFont(filePath)) {
+            return DragTarget::SoundFont;
+        } else if (extensionInstaller()->isFileSupported(filePath)) {
+            return DragTarget::Extension;
+        }
+    }
+    return DragTarget::Unknown;
+}
+
 bool ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
 {
     return onDragMoveEvent(event);
@@ -128,8 +143,8 @@ bool ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
         const QUrl& url = urls.front();
-        if (projectFilesController()->isUrlSupported(url)
-            || (url.isLocalFile() && muse::audio::synth::isSoundFont(muse::io::path_t(url)))) {
+        DragTarget target = dragTarget(url);
+        if (target != DragTarget::Unknown) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
             return true;
@@ -145,30 +160,39 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
         const QUrl& url = urls.front();
-        LOGD() << url;
 
-        bool shouldBeHandled = false;
-
-        if (projectFilesController()->isUrlSupported(url)) {
+        bool shouldBeHandled = true;
+        DragTarget target = dragTarget(url);
+        switch (target) {
+        case DragTarget::ProjectFile: {
             async::Async::call(this, [this, url]() {
-                Ret ret = projectFilesController()->openProject(url);
-                if (!ret) {
-                    LOGE() << ret.toString();
-                }
-            });
-            shouldBeHandled = true;
-        } else if (url.isLocalFile()) {
-            muse::io::path_t filePath { url };
-
-            if (muse::audio::synth::isSoundFont(filePath)) {
-                async::Async::call(this, [this, filePath]() {
+                    Ret ret = projectFilesController()->openProject(url);
+                    if (!ret) {
+                        LOGE() << ret.toString();
+                    }
+                });
+        } break;
+        case DragTarget::SoundFont: {
+            muse::io::path_t filePath = url.toLocalFile();
+            async::Async::call(this, [this, filePath]() {
                     Ret ret = soundFontRepository()->addSoundFont(filePath);
                     if (!ret) {
                         LOGE() << ret.toString();
                     }
                 });
-                shouldBeHandled = true;
-            }
+        } break;
+        case DragTarget::Extension: {
+            muse::io::path_t filePath = url.toLocalFile();
+            async::Async::call(this, [this, filePath]() {
+                    Ret ret = extensionInstaller()->installExtension(filePath);
+                    if (!ret) {
+                        LOGE() << ret.toString();
+                    }
+                });
+        } break;
+        case DragTarget::Unknown:
+            shouldBeHandled = false;
+            break;
         }
 
         if (shouldBeHandled) {

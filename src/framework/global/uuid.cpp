@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#include "uuid.h"
 
-#include "modularity/imoduleinterface.h"
+#include <random>
 
-class QQmlEngine;
-namespace muse::extensions {
-class IExtensionsUiEngine : MODULE_EXPORT_INTERFACE
+using namespace muse;
+
+std::string Uuid::gen()
 {
-    INTERFACE_ID(IExtensionsUiEngine)
+    static std::random_device dev;
+    static std::mt19937 rng(dev());
 
-public:
+    std::uniform_int_distribution<int> dist(0, 15);
 
-    virtual ~IExtensionsUiEngine() = default;
+    static const char* v = "0123456789abcdef";
+    static const bool dash[] = { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0 };
 
-    virtual QQmlEngine* qmlEngine() const = 0;
-    virtual QQmlEngine* qmlEngineApiV1() const = 0;
-};
+    std::string res;
+    for (int i = 0; i < 16; i++) {
+        if (dash[i]) {
+            res += "-";
+        }
+        res += v[dist(rng)];
+        res += v[dist(rng)];
+    }
+    return res;
 }

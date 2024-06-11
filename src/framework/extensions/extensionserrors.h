@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSERRORS_H
-#define MUSE_EXTENSIONS_EXTENSIONSERRORS_H
+#pragma once
 
 #include "global/types/ret.h"
 #include "global/translation.h"
@@ -52,5 +51,3 @@ inline Ret make_ret(Err e)
     return Ret(static_cast<int>(e));
 }
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSERRORS_H

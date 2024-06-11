@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,19 +21,14 @@
  */
 #pragma once
 
-#include "modularity/imoduleinterface.h"
+#include <string>
 
-class QQmlEngine;
-namespace muse::extensions {
-class IExtensionsUiEngine : MODULE_EXPORT_INTERFACE
+namespace muse {
+class Uuid
 {
-    INTERFACE_ID(IExtensionsUiEngine)
-
 public:
 
-    virtual ~IExtensionsUiEngine() = default;
-
-    virtual QQmlEngine* qmlEngine() const = 0;
-    virtual QQmlEngine* qmlEngineApiV1() const = 0;
+    //! NOTE Just pseudo random
+    static std::string gen();
 };
 }

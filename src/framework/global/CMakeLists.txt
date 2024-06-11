@@ -68,6 +68,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isysteminfo.h
     ${CMAKE_CURRENT_LIST_DIR}/configreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/configreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/uuid.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/uuid.h
 
     ${KORS_MODULARITY_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/modularity/ioccontext.cpp
