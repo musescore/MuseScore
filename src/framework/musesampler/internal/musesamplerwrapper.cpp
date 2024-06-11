@@ -176,7 +176,7 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
         }
     }
 
-    m_sequencer.init(m_samplerLib, m_sampler, shared_from_this(), resolveDefaultPresetCode(m_instrument));
+    m_sequencer.init(m_samplerLib, m_sampler, this, resolveDefaultPresetCode(m_instrument));
 }
 
 void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
