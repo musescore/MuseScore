@@ -316,8 +316,8 @@ GradualTempoChangeSegment* GradualTempoChangeSegment::findElementToSnapBefore() 
         return nullptr;
     }
 
-    GradualTempoChange* gradTempoChange = tempoChange();
-    Fraction startTick = gradTempoChange->tick();
+    GradualTempoChange* thisTempoChange = tempoChange();
+    Fraction startTick = thisTempoChange->tick();
     if (!sys->measures().empty() && startTick == sys->measures().front()->tick()) {
         return nullptr;
     }
@@ -325,13 +325,18 @@ GradualTempoChangeSegment* GradualTempoChangeSegment::findElementToSnapBefore() 
     auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
     for (auto interval : intervals) {
         Spanner* spanner = interval.value;
-        if (!spanner->isGradualTempoChange() || spanner->track() != gradTempoChange->track() || spanner->tick2() != startTick
-            || !spanner->visible() || spanner == gradTempoChange) {
+        bool isValidTempoChange = spanner->isGradualTempoChange() && !spanner->segmentsEmpty() && spanner->visible()
+                                  && spanner != thisTempoChange;
+        if (!isValidTempoChange) {
             continue;
         }
+
         GradualTempoChange* precedingTempoChange = toGradualTempoChange(spanner);
-        bool canSnap = precedingTempoChange->snapToItemAfter() && precedingTempoChange->placeAbove() == gradTempoChange->placeAbove();
-        if (canSnap && !precedingTempoChange->segmentsEmpty()) {
+        bool endsMatch = precedingTempoChange->track() == thisTempoChange->track()
+                         && precedingTempoChange->tick2() == startTick
+                         && precedingTempoChange->placeAbove() == thisTempoChange->placeAbove();
+
+        if (endsMatch && precedingTempoChange->snapToItemAfter()) {
             return toGradualTempoChangeSegment(precedingTempoChange->backSegment());
         }
     }

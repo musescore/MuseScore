@@ -155,7 +155,7 @@ void AlignmentLayout::scanConnectedItems(EngravingItem* item, std::function<void
     }
 }
 
-double AlignmentLayout::computeAverageY(const std::vector<double> vecOfY)
+double AlignmentLayout::computeAverageY(const std::vector<double>& vecOfY)
 {
     double sum = std::accumulate(vecOfY.begin(), vecOfY.end(), 0.0);
     return sum / static_cast<double>(vecOfY.size());

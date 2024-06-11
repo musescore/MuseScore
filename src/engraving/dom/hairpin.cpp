@@ -286,7 +286,7 @@ EngravingItem* HairpinSegment::findElementToSnapBefore() const
         return startDynOrExpr;
     }
 
-    Hairpin* hairp = hairpin();
+    Hairpin* thisHairpin = hairpin();
     Fraction startTick = hairpin()->tick();
     System* sys = system();
     if (sys && !sys->measures().empty() && startTick == sys->measures().front()->tick()) {
@@ -296,14 +296,16 @@ EngravingItem* HairpinSegment::findElementToSnapBefore() const
     auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
     for (auto interval : intervals) {
         Spanner* spanner = interval.value;
-        if (!spanner->isHairpin() || spanner->track() != hairp->track() || spanner->tick2() != startTick || !spanner->visible()
-            || spanner == hairp) {
+        bool isValidHairpin = spanner->isHairpin() && !spanner->segmentsEmpty() && spanner->visible() && spanner != thisHairpin;
+        if (!isValidHairpin) {
             continue;
         }
         Hairpin* precedingHairpin = toHairpin(spanner);
-        bool canSnap = precedingHairpin->placeAbove() == hairp->placeAbove()
-                       && toHairpin(spanner)->applyToVoice() == hairp->applyToVoice();
-        if (canSnap && !precedingHairpin->segmentsEmpty()) {
+        bool endsMatch = precedingHairpin->track() == thisHairpin->track()
+                         && precedingHairpin->tick2() == startTick
+                         && precedingHairpin->placeAbove() == thisHairpin->placeAbove()
+                         && toHairpin(spanner)->applyToVoice() == thisHairpin->applyToVoice();
+        if (endsMatch && precedingHairpin->snapToItemAfter()) {
             return precedingHairpin->backSegment();
         }
     }
@@ -341,11 +343,16 @@ TextBase* HairpinSegment::findStartDynamicOrExpression() const
             break;
         }
         for (EngravingItem* item : segment->annotations()) {
-            if ((item->isDynamic() || item->isExpression())
-                && item->visible()
-                && item->track() == hairpin()->track()
-                && item->placement() == placement()
-                && item->getProperty(Pid::APPLY_TO_VOICE) == hairpin()->getProperty(Pid::APPLY_TO_VOICE)) {
+            if (!item->isDynamic() && !item->isExpression()) {
+                continue;
+            }
+            if (!item->visible()) {
+                continue;
+            }
+            bool endsMatch = item->track() == hairpin()->track()
+                             && item->placement() == placement()
+                             && item->getProperty(Pid::APPLY_TO_VOICE) == hairpin()->getProperty(Pid::APPLY_TO_VOICE);
+            if (endsMatch) {
                 dynamicsAndExpr.push_back(toTextBase(item));
             }
         }
@@ -360,9 +367,10 @@ TextBase* HairpinSegment::findStartDynamicOrExpression() const
 
     if (dynamicsAndExpr.size() > 1) {
         std::sort(dynamicsAndExpr.begin(), dynamicsAndExpr.end(), [](TextBase* item1, TextBase* item2) {
-            return (item1->isDynamic() && item2->isExpression())
-                   || (item1->isDynamic() && toDynamic(item1)->anchorToEndOfPrevious()
-                       && item2->isDynamic() && !toDynamic(item2)->anchorToEndOfPrevious());
+            bool dynamicBeforeExpression = item1->isDynamic() && item2->isExpression();
+            bool oneIsAnchorToPrevious = item1->isDynamic() && toDynamic(item1)->anchorToEndOfPrevious()
+                                         && item2->isDynamic() && !toDynamic(item2)->anchorToEndOfPrevious();
+            return dynamicBeforeExpression || oneIsAnchorToPrevious;
         });
     }
 
@@ -392,11 +400,16 @@ TextBase* HairpinSegment::findEndDynamicOrExpression() const
             break;
         }
         for (EngravingItem* item : segment->annotations()) {
-            if ((item->isDynamic() || item->isExpression())
-                && item->visible()
-                && item->track() == hairpin()->track()
-                && item->placement() == placement()
-                && item->getProperty(Pid::APPLY_TO_VOICE) == hairpin()->getProperty(Pid::APPLY_TO_VOICE)) {
+            if (!item->isDynamic() && !item->isExpression()) {
+                continue;
+            }
+            if (!item->visible()) {
+                continue;
+            }
+            bool endsMatch = item->track() == hairpin()->track()
+                             && item->placement() == placement()
+                             && item->getProperty(Pid::APPLY_TO_VOICE) == hairpin()->getProperty(Pid::APPLY_TO_VOICE);
+            if (endsMatch) {
                 dynamicsAndExpr.push_back(toTextBase(item));
             }
         }
@@ -411,9 +424,10 @@ TextBase* HairpinSegment::findEndDynamicOrExpression() const
 
     if (dynamicsAndExpr.size() > 1) {
         std::sort(dynamicsAndExpr.begin(), dynamicsAndExpr.end(), [](TextBase* item1, TextBase* item2) {
-            return (item1->isDynamic() && item2->isExpression())
-                   || (item1->isDynamic() && toDynamic(item1)->anchorToEndOfPrevious()
-                       && item2->isDynamic() && !toDynamic(item2)->anchorToEndOfPrevious());
+            bool dynamicBeforeExpression = item1->isDynamic() && item2->isExpression();
+            bool oneIsAnchorToPrevious = item1->isDynamic() && toDynamic(item1)->anchorToEndOfPrevious()
+                                         && item2->isDynamic() && !toDynamic(item2)->anchorToEndOfPrevious();
+            return dynamicBeforeExpression || oneIsAnchorToPrevious;
         });
     }
 

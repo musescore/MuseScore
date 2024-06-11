@@ -43,7 +43,7 @@ private:
     static void moveItemToY(EngravingItem* item, double y, const System* system, std::set<EngravingItem*>& alignedItems);
     static double yOpticalCenter(const EngravingItem* item);
     static void scanConnectedItems(EngravingItem* item, std::function<void(EngravingItem*)> func);
-    static double computeAverageY(const std::vector<double> vecOfY);
+    static double computeAverageY(const std::vector<double>& vecOfY);
 };
 } // namespace mu::engraving::rendering::dev
 #endif // MU_ENGRAVING_ALIGNMENTLAYOUT_DEV_H
