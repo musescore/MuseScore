@@ -34,10 +34,6 @@ Rectangle {
         id: restsPageModel
     }
 
-    Component.onCompleted: {
-        restsPageModel.load()
-    }
-
     RadioButtonGroup {
         model: [
             { text: qsTrc("notation", "1 space"), value: false },
