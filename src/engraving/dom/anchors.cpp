@@ -99,11 +99,6 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
         anchor->setParent(segment);
         anchor->setTrack(track);
         segment->add(anchor);
-        if (System* system = measure->system()) {
-            if (Page* page = system->page()) {
-                page->invalidateBspTree();
-            }
-        }
     }
 
     return anchor;
