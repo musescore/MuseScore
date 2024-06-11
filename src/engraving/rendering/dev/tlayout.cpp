@@ -6281,7 +6281,6 @@ void TLayout::layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* l
 void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    const double sp = item->spatium();
     TrillSegment::LayoutData* ldata = item->mutldata();
     Trill* trill = item->trill();
     EngravingItem* startItem = trill->startElement();
