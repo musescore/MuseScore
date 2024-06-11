@@ -809,7 +809,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 continue;
             }
             if (mno && mno->addToSkyline()) {
-                ss->skyline().add(mno->ldata()->bbox().translated(m->pos() + mno->pos()), mno);
+                ss->skyline().add(mno->ldata()->bbox().translated(m->pos() + mno->pos() + mno->staffOffset()), mno);
             }
             if (mmrr && mmrr->addToSkyline()) {
                 ss->skyline().add(mmrr->ldata()->bbox().translated(m->pos() + mmrr->pos()), mmrr);
@@ -827,12 +827,12 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                     if (bl && bl->addToSkyline()) {
                         RectF r = TLayout::layoutRect(bl, ctx);
-                        skyline.add(r.translated(bl->pos() + p), bl);
+                        skyline.add(r.translated(bl->pos() + p + bl->staffOffset()), bl);
                     }
                 } else if (s.segmentType() & SegmentType::TimeSig) {
                     TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
                     if (ts && ts->addToSkyline()) {
-                        skyline.add(ts->shape().translate(ts->pos() + p));
+                        skyline.add(ts->shape().translate(ts->pos() + p + ts->staffOffset()));
                     }
                 } else {
                     track_idx_t strack = staffIdx * VOICES;
@@ -848,7 +848,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
                         // add element to skyline
                         if (e->addToSkyline()) {
-                            skyline.add(e->shape().translate(e->pos() + p));
+                            const PointF offset = e->staffOffset();
+                            skyline.add(e->shape().translate(e->pos() + p + offset));
                             // add grace notes to skyline
                             if (e->isChord()) {
                                 GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
@@ -856,10 +857,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                                 TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
                                 TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
                                 if (!graceBefore.empty()) {
-                                    skyline.add(graceBefore.shape().translate(graceBefore.pos() + p));
+                                    skyline.add(graceBefore.shape().translate(graceBefore.pos() + p + offset));
                                 }
                                 if (!graceAfter.empty()) {
-                                    skyline.add(graceAfter.shape().translate(graceAfter.pos() + p));
+                                    skyline.add(graceAfter.shape().translate(graceAfter.pos() + p + offset));
                                 }
                             }
                             // If present, add ornament cue note to skyline
@@ -868,7 +869,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                                 if (ornament) {
                                     Chord* cue = ornament->cueNoteChord();
                                     if (cue && cue->upNote()->visible()) {
-                                        skyline.add(cue->shape().translate(cue->pos() + p));
+                                        skyline.add(cue->shape().translate(cue->pos() + p + cue->staffOffset()));
                                     }
                                 }
                             }
@@ -1064,7 +1065,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         staff_idx_t si = e->staffIdx();
         Segment* s = toSegment(parent);
         Measure* m = s->measure();
-        system->staff(si)->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
+        system->staff(si)->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos() + e->staffOffset()));
     }
 
     //-------------------------------------------------------------

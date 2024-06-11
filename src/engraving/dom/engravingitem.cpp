@@ -2697,6 +2697,13 @@ double EngravingItem::mag() const
     return ldata()->mag();
 }
 
+PointF EngravingItem::staffOffset() const
+{
+    const StaffType* st = staffType();
+    const double yOffset = st ? st->yoffset().val() * spatium() : 0.0;
+    return PointF(0.0, yOffset);
+}
+
 void EngravingItem::setOffsetChanged(bool val, bool absolute, const PointF& diff)
 {
     rendering::dev::Autoplace::setOffsetChanged(this, mutldata(), val, absolute, diff);

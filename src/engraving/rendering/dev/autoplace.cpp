@@ -69,10 +69,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         RectF r = shape.bbox();
 
         // Adjust bbox Y pos for staffType offset
-        if (item->staffType()) {
-            double stYOffset = item->staffType()->yoffset().val() * sp;
-            shape.translate(PointF(0.0, stYOffset));
-        }
+        shape.translate(item->staffOffset());
 
         SkylineLine sk(!above);
         double d;
@@ -92,7 +89,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight();
+                bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
                 if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
                     shape.translate(PointF(0.0, rebase));
                 }
@@ -136,7 +133,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
 
         SysStaff* ss = m->system()->staff(si);
         // shape rather than bbox is good for tuplets especially
-        Shape sh = item->shape().translate(m->pos() + item->pos());
+        Shape sh = item->shape().translate(m->pos() + item->pos() + item->staffOffset());
 
         SkylineLine sk(!above);
         double d;
@@ -156,7 +153,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < item->staff()->staffHeight();
+                bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < item->staff()->staffHeight(item->tick());
                 if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
                     sh.translateY(rebase);
                 }
@@ -220,7 +217,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
                 double adj = item->pos().y() + rebase;
-                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->staffHeight();
+                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->staffHeight(item->tick());
                 rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
             }
             ldata->moveY(yd);
@@ -254,7 +251,7 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
         // TODO: refactor to take advantage of existing cmdFlip() algorithms
         // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
         RectF r = ldata->bbox().translated(ldata->autoplace.changedPos);
-        double staffHeight = item->staff()->staffHeight();
+        double staffHeight = item->staff()->staffHeight(item->tick());
         const EngravingItem* e = item->isSpannerSegment() ? toSpannerSegment(item)->spanner() : item;
         bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
         bool above = e->placeAbove();
@@ -371,7 +368,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
 
         SysStaff* ss = m->system()->staff(si);
 
-        Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos());
+        Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos() + item->staffOffset());
 
         for (const ShapeElement& shapeEl : thisShape.elements()) {
             RectF r = shapeEl;

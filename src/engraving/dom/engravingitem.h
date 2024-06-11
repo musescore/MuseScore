@@ -617,6 +617,9 @@ public:
     RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
     RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
 
+    PointF staffOffset() const;
+    double staffOffsetY() const { return staffOffset().y(); }
+
     virtual bool isPropertyLinkedToMaster(Pid id) const;
     virtual bool isUnlinkedFromMaster() const;
     void unlinkPropertyFromMaster(Pid id);
