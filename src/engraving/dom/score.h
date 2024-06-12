@@ -213,16 +213,28 @@ enum class PlayMode : char {
 };
 
 struct ShowAnchors {
-    staff_idx_t staffIdx;
-    Fraction startTick;
-    Fraction endTick;
+    ShowAnchors() = default;
+    ShowAnchors(voice_idx_t vIdx, staff_idx_t stfIdx, const Fraction& sTickMain, const Fraction& eTickMain,
+                const Fraction& sTickExt, const Fraction& eTickExt)
+        : voiceIdx(vIdx), staffIdx(stfIdx), startTickMainRegion(sTickMain), endTickMainRegion(eTickMain),
+        startTickExtendedRegion(sTickExt), endTickExtendedRegion(eTickExt) {}
 
     void reset()
     {
+        voiceIdx = muse::nidx;
         staffIdx = muse::nidx;
-        startTick = Fraction(-1, 1);
-        endTick = Fraction(-1, 1);
+        startTickMainRegion = Fraction(-1, 1);
+        endTickMainRegion = Fraction(-1, 1);
+        startTickExtendedRegion = Fraction(-1, 1);
+        endTickExtendedRegion = Fraction(-1, 1);
     }
+
+    voice_idx_t voiceIdx = muse::nidx;
+    staff_idx_t staffIdx = muse::nidx;
+    Fraction startTickMainRegion = Fraction(-1, 1);
+    Fraction endTickMainRegion = Fraction(-1, 1);
+    Fraction startTickExtendedRegion = Fraction(-1, 1);
+    Fraction endTickExtendedRegion = Fraction(-1, 1);
 };
 
 //---------------------------------------------------------------------------------------
@@ -572,7 +584,7 @@ public:
     void setShowInstrumentNames(bool v) { m_showInstrumentNames = v; }
 
     void hideAnchors() { m_showAnchors.reset(); }
-    void updateShowAnchors(staff_idx_t staffIdx, const Fraction& startTick, const Fraction& endTick);
+    void setShowAnchors(const ShowAnchors& showAnchors);
     const ShowAnchors& showAnchors() const { return m_showAnchors; }
 
     void print(muse::draw::Painter* printer, int page);

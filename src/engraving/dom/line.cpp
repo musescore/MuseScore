@@ -257,7 +257,7 @@ bool LineSegment::edit(EditData& ed)
         if (ed.isKeyRelease) {
             score()->hideAnchors();
         } else {
-            EditTimeTickAnchors::updateAnchors(this, moveStart ? spanner()->tick() : spanner()->tick2(), moveStart ? track : track2);
+            EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
         }
         triggerLayout();
         return true;
@@ -283,7 +283,6 @@ bool LineSegment::edit(EditData& ed)
             LOGD("LineSegment::edit: no start/end segment");
             return true;
         }
-        EditTimeTickAnchors::updateAnchors(this, moveStart ? spanner()->tick() : spanner()->tick2(), moveStart ? track : track2);
         if (ed.key == Key_Left) {
             if (moveStart) {
                 s1 = allowTimeAnchor ? s1->prev1ChordRestOrTimeTick() : s1->prev1WithElemsOnStaff(track2staff(track));
@@ -307,6 +306,8 @@ bool LineSegment::edit(EditData& ed)
         }
         spanner()->undoChangeProperty(Pid::SPANNER_TICK, s1->tick());
         spanner()->undoChangeProperty(Pid::SPANNER_TICKS, s2->tick() - s1->tick());
+
+        EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
     }
     break;
     case Spanner::Anchor::NOTE:
@@ -745,8 +746,7 @@ void LineSegment::updateAnchors(EditData& ed) const
     if (ed.curGrip != Grip::START && ed.curGrip != Grip::END) {
         return;
     }
-    EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->tick() : line()->tick2(),
-                                       ed.curGrip == Grip::START ? line()->track() : line()->track2());
+    EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->track() : line()->track2());
 }
 
 //---------------------------------------------------------

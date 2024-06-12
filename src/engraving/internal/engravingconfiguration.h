@@ -70,9 +70,7 @@ public:
     Color thumbnailBackgroundColor() const override;
     Color noteBackgroundColor() const override;
     Color fontPrimaryColor() const override;
-
-    Color timeTickAnchorColorLighter() const override;
-    Color timeTickAnchorColorDarker() const override;
+    Color voiceColor(voice_idx_t voiceIdx) const override;
 
     double guiScaling() const override;
 

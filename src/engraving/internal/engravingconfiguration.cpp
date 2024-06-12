@@ -232,14 +232,9 @@ Color EngravingConfiguration::fontPrimaryColor() const
     return Color(uiConfiguration()->currentTheme().values[muse::ui::ThemeStyleKey::FONT_PRIMARY_COLOR].toString());
 }
 
-Color EngravingConfiguration::timeTickAnchorColorLighter() const
+Color EngravingConfiguration::voiceColor(voice_idx_t voiceIdx) const
 {
-    return Color(204, 234, 255);
-}
-
-Color EngravingConfiguration::timeTickAnchorColorDarker() const
-{
-    return Color(153, 213, 255);
+    return VOICE_COLORS[voiceIdx].color;
 }
 
 double EngravingConfiguration::guiScaling() const
@@ -257,11 +252,9 @@ Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible
 
     constexpr float tint = .6f; // Between 0 and 1. Higher means lighter, lower means darker
 
-    int red = color.red();
-    int green = color.green();
-    int blue = color.blue();
+    color.applyTint(tint);
 
-    return Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
+    return color;
 }
 
 void EngravingConfiguration::setSelectionColor(voice_idx_t voiceIndex, Color color)

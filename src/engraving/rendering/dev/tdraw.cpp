@@ -3027,15 +3027,27 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
 
 void TDraw::draw(const TimeTickAnchor* item, Painter* painter)
 {
-    if (!item->isDraw()) {
+    TimeTickAnchor::DrawRegion drawRegion = item->drawRegion();
+
+    if (drawRegion == TimeTickAnchor::DrawRegion::OUT_OF_RANGE) {
         return;
     }
 
-    static const Color lighterColor = item->configuration()->timeTickAnchorColorLighter();
-    static const Color darkerColor =  item->configuration()->timeTickAnchorColorDarker();
+    Color voiceColor = item->configuration()->voiceColor(item->voiceIdx());
+
+    static constexpr double TINT_MAIN_DARKER = 0.45;
+    static constexpr double TINT_MAIN_LIGHTER = 0.55;
+    static constexpr double TINT_EXTENDED_DARKER = 0.75;
+    static constexpr double TINT_EXTENDED_LIGHTER = 0.85;
+
+    double tint = drawRegion == TimeTickAnchor::DrawRegion::MAIN_REGION
+                  ? item->ldata()->darker() ? TINT_MAIN_DARKER : TINT_MAIN_LIGHTER
+                  : item->ldata()->darker() ? TINT_EXTENDED_DARKER : TINT_EXTENDED_LIGHTER;
+
+    voiceColor.applyTint(tint);
 
     Brush brush;
-    brush.setColor(item->ldata()->darker() ? darkerColor : lighterColor);
+    brush.setColor(voiceColor);
     brush.setStyle(BrushStyle::SolidPattern);
     painter->setBrush(brush);
     painter->setNoPen();

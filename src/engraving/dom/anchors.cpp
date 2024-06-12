@@ -38,27 +38,38 @@ namespace mu::engraving {
  * EditTimeTickAnchors
  * ************************************/
 
-void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, Fraction absTick, track_idx_t track)
+void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, track_idx_t track)
 {
     if (!item->allowTimeAnchor()) {
         item->score()->hideAnchors();
         return;
     }
 
-    const Score* score = item->score();
-    Measure* measure = score->tick2measure(absTick);
-    if (!measure) {
+    Fraction startTickMainRegion = item->isSpannerSegment() ? toSpannerSegment(item)->spanner()->tick() : item->tick();
+    Fraction endTickMainRegion = item->isSpannerSegment() ? toSpannerSegment(item)->spanner()->tick2() : item->tick();
+
+    Score* score = item->score();
+    Measure* startMeasure = score->tick2measure(startTickMainRegion);
+    Measure* endMeasure = score->tick2measure(endTickMainRegion);
+    if (!startMeasure || !endMeasure) {
         return;
     }
 
-    Fraction measureTick = measure->tick();
-    Measure* prevMeasure = measureTick == absTick ? measure->prevMeasure() : nullptr;
-
     staff_idx_t staff = track2staff(track);
-    if (prevMeasure) {
-        updateAnchors(prevMeasure, staff);
+    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        updateAnchors(toMeasure(mb), staff);
     }
-    updateAnchors(measure, staff);
+
+    Fraction startTickExtendedRegion = startMeasure->tick();
+    Fraction endTickExtendedRegion = endMeasure->endTick();
+    voice_idx_t voiceIdx = item->getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>()
+                           != VoiceApplication::CURRENT_VOICE_ONLY ? VOICES : item->voice();
+
+    score->setShowAnchors(ShowAnchors(voiceIdx, staff, startTickMainRegion, endTickMainRegion, startTickExtendedRegion,
+                                      endTickExtendedRegion));
 }
 
 void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
@@ -82,9 +93,6 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
     }
 
     updateLayout(measure);
-
-    Score* score = measure->score();
-    score->updateShowAnchors(staffIdx, measure->tick(), measure->endTick());
 }
 
 TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx)
@@ -126,11 +134,24 @@ TimeTickAnchor::TimeTickAnchor(Segment* parent)
     setZ(-INT_MAX); // Make sure it is behind everything
 }
 
-bool TimeTickAnchor::isDraw() const
+TimeTickAnchor::DrawRegion TimeTickAnchor::drawRegion() const
 {
     const ShowAnchors& showAnchors = score()->showAnchors();
     Fraction thisTick = segment()->tick();
 
-    return showAnchors.staffIdx == staffIdx() && showAnchors.startTick <= thisTick && showAnchors.endTick > thisTick;
+    if (thisTick < showAnchors.startTickExtendedRegion || thisTick >= showAnchors.endTickExtendedRegion) {
+        return DrawRegion::OUT_OF_RANGE;
+    }
+
+    if (thisTick < showAnchors.startTickMainRegion || thisTick >= showAnchors.endTickMainRegion) {
+        return DrawRegion::EXTENDED_REGION;
+    }
+
+    return DrawRegion::MAIN_REGION;
+}
+
+voice_idx_t TimeTickAnchor::voiceIdx() const
+{
+    return score()->showAnchors().voiceIdx;
 }
 } // namespace mu::engraving

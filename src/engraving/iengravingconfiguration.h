@@ -64,9 +64,7 @@ public:
     virtual Color thumbnailBackgroundColor() const = 0;
     virtual Color noteBackgroundColor() const = 0;
     virtual Color fontPrimaryColor() const = 0;
-
-    virtual Color timeTickAnchorColorLighter() const = 0;
-    virtual Color timeTickAnchorColorDarker() const = 0;
+    virtual Color voiceColor(voice_idx_t voiceIdx) const = 0;
 
     virtual double guiScaling() const = 0;
 
