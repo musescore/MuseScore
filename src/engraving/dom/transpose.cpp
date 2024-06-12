@@ -32,6 +32,7 @@
 #include "pitchspelling.h"
 #include "score.h"
 #include "segment.h"
+#include "select.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "undo.h"
@@ -429,7 +430,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     for (Staff* s : sl) {
         track_idx_t idx = s->idx() * VOICES;
         for (voice_idx_t i = 0; i < VOICES; ++i) {
-            tracks.push_back(idx + i);
+            if (selectionFilter().canSelectVoice(i)) {
+                tracks.push_back(idx + i);
+            }
         }
     }
 
@@ -507,9 +510,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 }
             }
         }
-        if (transposeChordNames) {
+        if (transposeChordNames && selectionFilter().isFiltered(SelectionFilterType::CHORD_SYMBOL)) {
             for (EngravingItem* e : segment->annotations()) {
-                if ((e->type() != ElementType::HARMONY) || (!muse::contains(tracks, e->track()))) {
+                if (!e->isHarmony() || (!muse::contains(tracks, e->track()))) {
                     continue;
                 }
                 // TODO also source interval should reflect modified key (f.ex. by prefer flat)
