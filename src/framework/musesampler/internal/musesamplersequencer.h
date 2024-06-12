@@ -74,7 +74,8 @@ private:
     void clearAllTracks();
     void finalizeAllTracks();
 
-    ms_Track resolveTrack(mpe::staff_layer_idx_t staffLayerIdx);
+    ms_Track resolveTrack(mpe::layer_idx_t layerIdx);
+    ms_Track findTrack(mpe::layer_idx_t layerIdx) const;
 
     const TrackList& allTracks() const;
 
@@ -101,8 +102,7 @@ private:
     ms_MuseSampler m_sampler = nullptr;
     IMuseSamplerTracks* m_tracks = nullptr;
 
-    using layer_idx_t = size_t;
-    std::unordered_map<layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
+    std::unordered_map<mpe::layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
 
     struct {
         std::string presets;
