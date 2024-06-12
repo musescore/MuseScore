@@ -3830,6 +3830,15 @@ void MusicXMLParserDirection::textToDynamic(String& text)
         return;
     }
     String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+    // Correct finale's incorrect dynamic export
+    if (m_pass1.exporterString().contains(u"finale")) {
+        static const std::map<String, String> finaleDynamicSubs = { { u"π", u"pp" }, { u"P", u"mp" }, { u"F", u"mf" }, { u"ƒ", u"ff" } };
+        for (const auto& sub : finaleDynamicSubs) {
+            if (simplifiedText == sub.first) {
+                simplifiedText = sub.second;
+            }
+        }
+    }
     // We don't want to count a single 'm', 'r', 's' or 'z' as a whole dynamic
     static const std::wregex singleCharDynamic = std::wregex(L"^[mrsz]$");
     // try to find a dynamic - xml representation or
