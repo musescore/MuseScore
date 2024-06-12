@@ -147,6 +147,14 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="Vibrato">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>

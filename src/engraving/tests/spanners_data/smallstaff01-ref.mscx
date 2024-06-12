@@ -162,6 +162,13 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>
