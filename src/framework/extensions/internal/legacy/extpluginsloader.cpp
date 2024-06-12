@@ -108,10 +108,16 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
         if (str.startsWith(u"qsTr(\"") && str.endsWith(u"\")")) {
             return str.mid(6, str.size() - 8);
         }
-        return str.mid(1, str.size() - 2);
+
+        if (str.startsWith(u"\"") && str.endsWith(u"\"")) {
+            return str.mid(1, str.size() - 2);
+        }
+
+        return str;
     };
 
-    int needProperties = 5; // title, description, pluginType, category, thumbnail
+    String uiCtx = DEFAULT_UI_CONTEXT;
+    int needProperties = 6; // title, description, pluginType, category, thumbnail, requiresScore
     int propertiesFound = 0;
     String content = String::fromUtf8(data);
     size_t current, previous = 0;
@@ -139,6 +145,12 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
         } else if (line.startsWith(u"thumbnailName:")) {
             m.thumbnail = dropQuotes(line.mid(14).trimmed()).toStdString();
             ++propertiesFound;
+        } else if (line.startsWith(u"requiresScore:")) {
+            String requiresScore = dropQuotes(line.mid(14).trimmed());
+            if (requiresScore == u"false") {
+                uiCtx = "Any";
+            }
+            ++propertiesFound;
         }
 
         if (propertiesFound == needProperties) {
@@ -153,6 +165,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     a.code = "main";
     a.type = m.type;
     a.title = m.title;
+    a.uiCtx = uiCtx;
     a.apiversion = m.apiversion;
     a.legacyPlugin = m.legacyPlugin;
     a.main = fi.fileName();

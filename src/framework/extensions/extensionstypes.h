@@ -28,6 +28,10 @@
 #include "global/types/string.h"
 #include "global/io/path.h"
 #include "global/types/translatablestring.h"
+#include "ui/uiaction.h"
+#include "shortcuts/shortcutcontext.h"
+
+#include "log.h"
 
 namespace muse::extensions {
 //! NOTE Api versions:
@@ -39,6 +43,45 @@ constexpr int DEFAULT_API_VERSION = 2;
 constexpr bool DEFAULT_MODAL = false;
 
 constexpr const char* SINGLE_FILE_EXT = "mext";
+
+//! NOTE Should a project be open...
+//!
+//! Must match contexts in `context/uicontext.h`
+//! Slightly different values ​​were intentionally made
+//! so that it would look neater in the manifest and there would be a conversion function,
+//! i.e. we had the ability to change the internal names.
+//! And the external names (specified in the manifest) remained unchanged.
+//! And there was a list of contexts that we specifically provide for extensions.
+//!
+//! If contexts appear outside the muse framework,
+//! then we need to add an interface for conversion, and require the application to implement it.
+//!
+constexpr const char16_t* DEFAULT_UI_CONTEXT = u"ProjectOpened";
+static inline ui::UiContext toUiContext(const String& ctx)
+{
+    if (ctx == u"ProjectOpened") {
+        return ui::UiCtxProjectOpened;
+    } else if (ctx == u"Any") {
+        return ui::UiCtxAny;
+    }
+    LOGE() << "unknown ui context: " << ctx << ", will be use default: " << DEFAULT_UI_CONTEXT;
+    return ui::UiCtxProjectOpened;
+}
+
+//! NOTE There is currently no separate context shortcut in the manifest properties.
+//! But if needed, it needs to be added.
+//! Also see the comments above for the UiContext
+
+static inline std::string toScContext(const String& uiCtx)
+{
+    if (uiCtx == u"ProjectOpened") {
+        return shortcuts::CTX_PROJECT_OPENED;
+    } else if (uiCtx == u"Any") {
+        return shortcuts::CTX_ANY;
+    }
+    LOGE() << "unknown ui context: " << uiCtx << ", will be use default: " << DEFAULT_UI_CONTEXT;
+    return shortcuts::CTX_PROJECT_OPENED;
+}
 
 enum class Type {
     Undefined = 0,
@@ -80,6 +123,7 @@ struct Action {
     Type type = Type::Undefined;
     bool modal = DEFAULT_MODAL;
     String title;
+    String uiCtx = DEFAULT_UI_CONTEXT;
     io::path_t main;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
@@ -120,7 +164,6 @@ struct Manifest {
     String version;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
-    bool requiresProject = true;
 
     std::vector<Action> actions;
 

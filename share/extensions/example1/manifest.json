@@ -3,6 +3,7 @@
     "type": "form",
     "modal": true,
     "title": "Example 1 (default)",
+    "ui_context": "Any",
 
-    "main": "main.qml"
+    "main": "Main.qml"
 }
