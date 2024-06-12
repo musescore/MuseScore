@@ -125,6 +125,7 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
     m.thumbnail = obj.value("thumbnail").toStdString();
     m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
 
+    String uiCtx = obj.value("ui_context", String(DEFAULT_UI_CONTEXT)).toString();
     if (obj.contains("actions")) {
         JsonArray arr = obj.value("actions").toArray();
         for (size_t i = 0; i < arr.size(); ++i) {
@@ -134,6 +135,7 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
             a.type = typeFromString(ao.value("type").toStdString());
             a.modal = ao.value("modal", DEFAULT_MODAL).toBool();
             a.title = ao.value("title").toString();
+            a.uiCtx = ao.value("ui_context", uiCtx).toString();
             a.main = ao.value("main").toStdString();
             a.apiversion = m.apiversion;
             m.actions.push_back(std::move(a));
@@ -144,6 +146,7 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
         a.type = m.type;
         a.modal = obj.value("modal", DEFAULT_MODAL).toBool();
         a.title = m.title;
+        a.uiCtx = uiCtx;
         a.main = obj.value("main").toStdString();
         a.apiversion = m.apiversion;
         m.actions.push_back(std::move(a));

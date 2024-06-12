@@ -48,7 +48,12 @@ muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 muse::modularity::ContextPtr muse::iocCtxForQmlEngine(const QQmlEngine* e)
 {
     QmlIoCContext* qmlIoc = e->property("ioc_context").value<QmlIoCContext*>();
-    IF_ASSERT_FAILED(qmlIoc) {
+    // IF_ASSERT_FAILED(qmlIoc) {
+    //     return modularity::ContextPtr();
+    // }
+
+    //! NOTE At the monent, it can be null, need add ioc context to extension qml engine
+    if (!qmlIoc) {
         return modularity::ContextPtr();
     }
 
