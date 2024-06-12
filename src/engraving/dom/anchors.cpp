@@ -56,7 +56,8 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, track_idx_t t
     }
 
     staff_idx_t staff = track2staff(track);
-    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+    Measure* startOneBefore = startMeasure->prevMeasure();
+    for (MeasureBase* mb = startOneBefore ? startOneBefore : startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
         if (!mb->isMeasure()) {
             continue;
         }
