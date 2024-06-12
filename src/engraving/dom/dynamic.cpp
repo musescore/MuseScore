@@ -517,14 +517,21 @@ bool Dynamic::editNonTextual(EditData& ed)
 
     bool changeAnchorType = shiftMod && altMod && leftRightKey;
     if (changeAnchorType) {
-        if (changeTimeAnchorType(ed)) {
-            return true;
-        }
+        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
+    }
+    bool doesntNeedMoveSeg = changeAnchorType && ((ed.key == Key_Left && anchorToEndOfPrevious())
+                                                  || (ed.key == Key_Right && !anchorToEndOfPrevious()));
+    if (doesntNeedMoveSeg) {
+        checkMeasureBoundariesAndMoveIfNeed();
+        return true;
     }
 
     bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
     if (moveSeg) {
-        return moveSegment(ed);
+        bool moved = moveSegment(ed);
+        EditTimeTickAnchors::updateAnchors(this, track());
+        checkMeasureBoundariesAndMoveIfNeed();
+        return moved;
     }
 
     if (shiftMod) {
@@ -539,50 +546,61 @@ bool Dynamic::editNonTextual(EditData& ed)
     return true;
 }
 
-bool Dynamic::changeTimeAnchorType(const EditData& ed)
+void Dynamic::checkMeasureBoundariesAndMoveIfNeed()
 {
+    /* Dynamics are always assigned to a ChordRest segment if available at this tick,
+     * EXCEPT if we are at a measure boundary. In this case, if anchorToEndOfPrevious()
+     * we must assign to a TimeTick segment at the end of previous measure, otherwise to a
+     * ChordRest segment at the start of the next measure. */
+
     Segment* curSeg = segment();
+    Fraction curTick = curSeg->tick();
+    Measure* curMeasure = curSeg->measure();
+    Measure* prevMeasure = curMeasure->prevMeasure();
+    bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious();
+    bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious() && prevMeasure;
 
-    undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
-    if (anchorToEndOfPrevious() && curSeg->rtick().isZero() && ed.key == Key_Left) {
-        Segment* endOfPrevMeasTick = curSeg->prev1(SegmentType::TimeTick);
-        if (endOfPrevMeasTick && endOfPrevMeasTick->tick() == curSeg->tick()) {
-            score()->undoChangeParent(this, endOfPrevMeasTick, staffIdx());
-            if (snappedExpression()) {
-                score()->undoChangeParent(snappedExpression(), endOfPrevMeasTick, staffIdx());
-            }
-            return true;
-        }
-    } else if (!anchorToEndOfPrevious() && curSeg->rtick() == curSeg->measure()->ticks() && ed.key == Key_Right) {
-        Segment* startOfNextMeas = curSeg->next1(SegmentType::ChordRest);
-        if (startOfNextMeas && startOfNextMeas->tick() == curSeg->tick()) {
-            score()->undoChangeParent(this, startOfNextMeas, staffIdx());
-            if (snappedExpression()) {
-                score()->undoChangeParent(snappedExpression(), startOfNextMeas, staffIdx());
-            }
-            return true;
-        }
-    }
-    if ((anchorToEndOfPrevious() && ed.key == Key_Left)
-        || (!anchorToEndOfPrevious() && ed.key == Key_Right)) {
-        return true;
+    if (!needMoveToPrevious && !needMoveToNext) {
+        return;
     }
 
-    return false;
+    Segment* newSeg = nullptr;
+    if (needMoveToPrevious) {
+        newSeg = prevMeasure->findSegment(SegmentType::TimeTick, curSeg->tick());
+        if (!newSeg) {
+            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(), staffIdx());
+            EditTimeTickAnchors::updateLayout(prevMeasure);
+            newSeg = anchor->segment();
+        }
+    } else {
+        newSeg = curSeg->next1(SegmentType::ChordRest);
+    }
+
+    if (newSeg && newSeg->tick() == curTick) {
+        score()->undoChangeParent(this, newSeg, staffIdx());
+        if (snappedExpression()) {
+            score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
+        }
+    }
 }
 
 bool Dynamic::moveSegment(const EditData& ed)
 {
-    if (!(ed.modifiers & AltModifier) && anchorToEndOfPrevious()) {
-        undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-        return true;
+    bool forward = ed.key == Key_Right;
+    if (!(ed.modifiers & AltModifier)) {
+        if (anchorToEndOfPrevious()) {
+            undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
+            if (forward) {
+                return true;
+            }
+        }
     }
+
     Segment* curSeg = segment();
-    if (!curSeg) {
+    IF_ASSERT_FAILED(curSeg) {
         return false;
     }
 
-    bool forward = ed.key == Key_Right;
     Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
     if (!newSeg) {
         return false;
@@ -593,7 +611,6 @@ bool Dynamic::moveSegment(const EditData& ed)
         score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
     }
 
-    EditTimeTickAnchors::updateAnchors(this, track());
     return true;
 }
 
