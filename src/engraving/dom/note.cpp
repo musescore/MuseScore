@@ -3534,9 +3534,11 @@ EngravingItem* Note::prevSegmentElement()
 
 //---------------------------------------------------------
 //   lastTiedNote
+//
+//   positionTickOffset is used to indicate this is for a repeat
 //---------------------------------------------------------
 
-const Note* Note::lastTiedNote() const
+const Note* Note::lastTiedNote(const int positionTickOffset) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
@@ -3545,8 +3547,21 @@ const Note* Note::lastTiedNote() const
         if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end()) {
             break;
         }
-        if (!note->tieFor()->endNote()) {
+        auto next = note->tieFor()->endNote();
+        if (!next) {
             break;
+        }
+        if (positionTickOffset > 0) { // this is for a repeat
+            auto chord = next->chord();
+            auto intervals = score()->spannerMap().findOverlapping(next->tick().ticks(), (next->tick() + chord->actualTicks()).ticks());
+            // find start of first volta
+            auto it = std::find_if(intervals.cbegin(), intervals.cend(),
+                                   [positionTickOffset](const interval_tree::Interval<Spanner*>& interval) {
+                return interval.value != nullptr && interval.value->isVolta();
+            });
+            if (it != intervals.end() && chord->tick().ticks() >= it->start) {
+                break; // next note is at or beyond start of volta, don't look any further
+            }
         }
         note = note->tieFor()->endNote();
         notes.push_back(note);
