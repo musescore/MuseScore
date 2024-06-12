@@ -85,6 +85,7 @@
               </Note>
             <Arpeggio>
               <subtype>5</subtype>
+              <timeStretch>0.5</timeStretch>
               </Arpeggio>
             </Chord>
           </voice>
@@ -113,6 +114,7 @@
               </Note>
             <Arpeggio>
               <subtype>4</subtype>
+              <timeStretch>0.5</timeStretch>
               </Arpeggio>
             </Chord>
           </voice>
