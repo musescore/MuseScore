@@ -404,13 +404,12 @@ enum class SegmentType {
     BarLine            = 0x80,
     Breath             = 0x100,
     //--
-    ChordRest          = 0x200,
+    TimeTick           = 0x200,
+    ChordRest          = 0x400,
     //--
-    EndBarLine         = 0x400,
-    KeySigAnnounce     = 0x800,
-    TimeSigAnnounce    = 0x1000,
-    //--
-    TimeTick           = 0x2000,
+    EndBarLine         = 0x800,
+    KeySigAnnounce     = 0x1000,
+    TimeSigAnnounce    = 0x2000,
     //--
     All                = -1,   ///< Includes all barline types
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
