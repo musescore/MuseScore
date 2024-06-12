@@ -30,7 +30,7 @@ namespace mu::engraving {
 class EditTimeTickAnchors
 {
 public:
-    static void updateAnchors(const EngravingItem* item, Fraction absTick, track_idx_t track);
+    static void updateAnchors(const EngravingItem* item, track_idx_t track);
     static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
     static void updateLayout(Measure* measure);
 
@@ -47,7 +47,15 @@ public:
 
     TimeTickAnchor* clone() const override { return new TimeTickAnchor(*this); }
 
-    bool isDraw() const;
+    enum class DrawRegion {
+        OUT_OF_RANGE,
+        EXTENDED_REGION,
+        MAIN_REGION
+    };
+
+    DrawRegion drawRegion() const;
+
+    voice_idx_t voiceIdx() const;
 
     struct LayoutData : public EngravingItem::LayoutData {
         bool darker() const { return m_darker; }

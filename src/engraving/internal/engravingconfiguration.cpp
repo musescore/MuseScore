@@ -232,14 +232,9 @@ Color EngravingConfiguration::fontPrimaryColor() const
     return Color(uiConfiguration()->currentTheme().values[muse::ui::ThemeStyleKey::FONT_PRIMARY_COLOR].toString());
 }
 
-Color EngravingConfiguration::timeTickAnchorColorLighter() const
+Color EngravingConfiguration::voiceColor(voice_idx_t voiceIdx) const
 {
-    return Color(204, 234, 255);
-}
-
-Color EngravingConfiguration::timeTickAnchorColorDarker() const
-{
-    return Color(153, 213, 255);
+    return VOICE_COLORS[voiceIdx].color;
 }
 
 double EngravingConfiguration::guiScaling() const

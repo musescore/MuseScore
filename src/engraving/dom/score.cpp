@@ -752,15 +752,9 @@ void Score::setMarkIrregularMeasures(bool v)
     m_markIrregularMeasures = v;
 }
 
-void Score::updateShowAnchors(staff_idx_t staffIdx, const Fraction& startTick, const Fraction& endTick)
+void Score::setShowAnchors(const ShowAnchors& showAnchors)
 {
-    m_showAnchors.staffIdx = staffIdx;
-    if (m_showAnchors.startTick == Fraction(-1, 1) || startTick < m_showAnchors.startTick) {
-        m_showAnchors.startTick = startTick;
-    }
-    if (m_showAnchors.endTick == Fraction(-1, 1) || endTick > m_showAnchors.endTick) {
-        m_showAnchors.endTick = endTick;
-    }
+    m_showAnchors = showAnchors;
 }
 
 //---------------------------------------------------------

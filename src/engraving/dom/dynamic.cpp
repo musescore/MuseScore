@@ -501,7 +501,7 @@ bool Dynamic::editNonTextual(EditData& ed)
         if (ed.isKeyRelease) {
             score()->hideAnchors();
         } else {
-            EditTimeTickAnchors::updateAnchors(this, tick(), track());
+            EditTimeTickAnchors::updateAnchors(this, track());
         }
         triggerLayout();
         return true;
@@ -593,7 +593,7 @@ bool Dynamic::moveSegment(const EditData& ed)
         score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
     }
 
-    EditTimeTickAnchors::updateAnchors(this, tick(), staffIdx());
+    EditTimeTickAnchors::updateAnchors(this, staffIdx());
     return true;
 }
 
@@ -624,7 +624,7 @@ bool Dynamic::nudge(const EditData& ed)
 
 void Dynamic::editDrag(EditData& ed)
 {
-    EditTimeTickAnchors::updateAnchors(this, tick(), track());
+    EditTimeTickAnchors::updateAnchors(this, track());
 
     KeyboardModifiers km = ed.modifiers;
     if (km != (ShiftModifier | ControlModifier)) {
