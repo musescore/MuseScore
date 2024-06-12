@@ -446,7 +446,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             TRead::read(dyn, e, ctx);
             segment->add(dyn);
         } else if (tag == "Expression") {
-            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            segment = measure->getChordRestOrTimeTickSegment(ctx.tick());
             Expression* expr = Factory::createExpression(segment);
             expr->setTrack(ctx.track());
             TRead::read(expr, e, ctx);
