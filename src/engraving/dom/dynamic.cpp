@@ -427,6 +427,12 @@ String Dynamic::dynamicText(DynamicType t)
     return String::fromUtf8(DYN_LIST[int(t)].text);
 }
 
+Expression* Dynamic::snappedExpression() const
+{
+    EngravingItem* item = ldata()->itemSnappedAfter();
+    return item && item->isExpression() ? toExpression(item) : nullptr;
+}
+
 bool Dynamic::acceptDrop(EditData& ed) const
 {
     ElementType droppedType = ed.dropElement->type();
@@ -624,11 +630,16 @@ void Dynamic::editDrag(EditData& ed)
     if (km != (ShiftModifier | ControlModifier)) {
         staff_idx_t si = staffIdx();
         Segment* seg = segment();
-        score()->dragPosition(canvasPos(), &si, &seg, allowTimeAnchor());
+        static constexpr double spacingFactor = 1.0;
+        score()->dragPosition(canvasPos(), &si, &seg, spacingFactor, allowTimeAnchor());
         if (seg != segment() || staffIdx() != si) {
             const PointF oldOffset = offset();
             PointF pos1(canvasPos());
-            score()->undoChangeParent(this, seg, si);
+            score()->undoChangeParent(this, seg, staffIdx());
+            Expression* snappedExpr = snappedExpression();
+            if (snappedExpr) {
+                score()->undoChangeParent(snappedExpr, seg, staffIdx());
+            }
             setOffset(PointF());
 
             renderer()->layoutItem(this);
@@ -666,6 +677,10 @@ void Dynamic::reset()
     undoResetProperty(Pid::DIRECTION);
     undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
     TextBase::reset();
+    Expression* snappedExp = snappedExpression();
+    if (snappedExp && snappedExp->getProperty(Pid::OFFSET) != snappedExp->propertyDefault(Pid::OFFSET)) {
+        snappedExp->reset();
+    }
 }
 
 //---------------------------------------------------------
@@ -812,17 +827,6 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
         return false;
     default:
         return TextBase::propertyDefault(id);
-    }
-}
-
-void Dynamic::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
-{
-    TextBase::undoChangeProperty(id, v, ps);
-    if (m_snappedExpression) {
-        if ((id == Pid::OFFSET && m_snappedExpression->offset() != v.value<PointF>())
-            || (id == Pid::PLACEMENT && m_snappedExpression->placement() != v.value<PlacementV>())) {
-            m_snappedExpression->undoChangeProperty(id, v, ps);
-        }
     }
 }
 

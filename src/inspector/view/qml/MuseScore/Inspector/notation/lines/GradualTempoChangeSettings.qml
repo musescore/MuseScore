@@ -50,11 +50,19 @@ Column {
         id: tabBar
 
         InspectorTabButton {
+            text: qsTrc("inspector", "Position")
+
+            navigation.name: "PositionTab"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart
+        }
+
+        InspectorTabButton {
             text: qsTrc("inspector", "Style")
 
             navigation.name: "StyleTab"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart
+            navigation.row: root.navigationRowStart + 1
         }
 
         InspectorTabButton {
@@ -62,7 +70,7 @@ Column {
 
             navigation.name: "TextTab"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + 1
+            navigation.row: root.navigationRowStart + 2
         }
     }
 
@@ -72,20 +80,20 @@ Column {
 
         height: itemAt(currentIndex).implicitHeight
 
-        Loader {
+        GradualTempoChangePositionSettingsTab {
             height: implicitHeight
 
-            sourceComponent: {
-                let  modelType = root.model ? root.model.modelType : -1
+            model: root.model
 
-                switch (modelType) {
-                case Inspector.TYPE_VOLTA: return voltaStyleSettings
-                case Inspector.TYPE_OTTAVA: return ottavaStyleSettings
-                case Inspector.TYPE_PEDAL: return pedalStyleSettings
-                }
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 3
+        }
 
-                return commonStyleSettings
-            }
+        GradualTempoChangeStyleTab {
+            model: root.model
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1000
         }
 
         LineTextSettingsTab {
@@ -95,50 +103,6 @@ Column {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 2000
-        }
-    }
-
-    Component {
-        id: voltaStyleSettings
-
-        VoltaStyleSettings {
-            model: root.model
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 1000
-        }
-    }
-
-    Component {
-        id: ottavaStyleSettings
-
-        OttavaStyleSettings {
-            model: root.model
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 1000
-        }
-    }
-
-    Component {
-        id: pedalStyleSettings
-
-        PedalStyleSettings {
-            model: root.model
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 1000
-        }
-    }
-
-    Component {
-        id: commonStyleSettings
-
-        LineWithHooksCommonStyleSettings {
-            model: root.model
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 1000
         }
     }
 }

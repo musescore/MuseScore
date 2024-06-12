@@ -161,6 +161,7 @@
       <Measure>
         <voice>
           <Expression>
+            <direction>down</direction>
             <text><i>sub.</i></text>
             </Expression>
           <Chord>
@@ -189,6 +190,7 @@
             <direction>down</direction>
             </Dynamic>
           <Expression>
+            <direction>down</direction>
             <text><i>sub.</i></text>
             </Expression>
           <Chord>

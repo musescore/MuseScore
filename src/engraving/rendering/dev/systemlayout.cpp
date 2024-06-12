@@ -62,6 +62,7 @@
 #include "dom/volta.h"
 
 #include "tlayout.h"
+#include "alignmentlayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
@@ -1033,6 +1034,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
+    std::vector<EngravingItem*> dynamicsExprAndHairpinsToAlign;
+
     //-------------------------------------------------------------
     // Dynamics and figured bass
     //-------------------------------------------------------------
@@ -1045,6 +1048,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 if (e->autoplace()) {
                     if (e->isDynamic()) {
                         toDynamic(e)->manageBarlineCollisions();
+                        dynamicsExprAndHairpinsToAlign.push_back(e);
                     }
                     Autoplace::autoplaceSegmentElement(e, e->mutldata(), false);
                     dynamicsAndFigBass.push_back(e);
@@ -1079,6 +1083,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             if (e->isExpression()) {
                 TLayout::layoutItem(e, ctx);
                 if (e->addToSkyline()) {
+                    dynamicsExprAndHairpinsToAlign.push_back(e);
                     system->staff(e->staffIdx())->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
                 }
             }
@@ -1128,6 +1133,15 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
     processLines(system, ctx, hairpins, false);
+
+    for (SpannerSegment* spannerSegment : system->spannerSegments()) {
+        if (spannerSegment->isHairpinSegment()) {
+            dynamicsExprAndHairpinsToAlign.push_back(spannerSegment);
+        }
+    }
+
+    AlignmentLayout::alignItems(dynamicsExprAndHairpinsToAlign, system);
+
     processLines(system, ctx, spanner, false);
     processLines(system, ctx, ottavas, false);
     processLines(system, ctx, pedal,   true);
@@ -1301,14 +1315,25 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     // TempoText, tempo change lines
     //-------------------------------------------------------------
 
+    std::vector<EngravingItem*> tempoElementsToAlign;
+
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isTempoText()) {
                 TLayout::layoutItem(e, ctx);
+                tempoElementsToAlign.push_back(e);
             }
         }
     }
+
     processLines(system, ctx, tempoChangeLines, false);
+    for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+        if (spannerSeg->isGradualTempoChangeSegment()) {
+            tempoElementsToAlign.push_back(spannerSeg);
+        }
+    }
+
+    AlignmentLayout::alignItems(tempoElementsToAlign, system);
 
     //-------------------------------------------------------------
     // Marker and Jump
@@ -2303,7 +2328,8 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             // the result is space is good to start and grows as needed
             // it does not, however, shrink when possible - only by trigger a full layout
             // (such as by toggling to page view and back)
-            double d = ss->skyline().minDistance(system->System::staff(si2)->skyline());
+            const double minHorizontalClearance = ctx.conf().styleMM(Sid::skylineMinHorizontalClearance);
+            double d = ss->skyline().minDistance(system->System::staff(si2)->skyline(), minHorizontalClearance);
             if (ctx.conf().isLineMode()) {
                 double previousDist = ss->continuousDist();
                 if (d > previousDist) {
@@ -2654,7 +2680,8 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     top->setFixedDownDistance(false);
 
     const SysStaff* sysStaff = top->staff(lastStaff);
-    double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline()) : 0;
+    const double minHorizontalClearance = conf.styleMM(Sid::skylineMinHorizontalClearance);
+    double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline(), minHorizontalClearance) : 0;
     sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
 
     if (conf.isFloatMode()) {
@@ -2692,11 +2719,25 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     return dist;
 }
 
+void SystemLayout::updateSkylineForElement(EngravingItem* element, const System* system, double yMove)
+{
+    Skyline& skyline = system->staff(element->staffIdx())->skyline();
+    SkylineLine& skylineLine = element->placeAbove() ? skyline.north() : skyline.south();
+    for (ShapeElement& shapeEl : skylineLine.elements()) {
+        if (shapeEl.item() == element) {
+            shapeEl.translate(0.0, yMove);
+        }
+    }
+}
+
 void SystemLayout::centerElementsBetweenStaves(const System* system)
 {
+    std::vector<EngravingItem*> centeredItems;
+
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
-        if (spannerSeg->isHairpinSegment() && elementNeedsCenterBetweenStaves(spannerSeg, system)) {
+        if (spannerSeg->isHairpinSegment() && elementShouldBeCenteredBetweenStaves(spannerSeg, system)) {
             centerElementBetweenStaves(spannerSeg, system);
+            centeredItems.push_back(spannerSeg);
         }
     }
 
@@ -2706,53 +2747,52 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
         }
         for (const Segment& seg : toMeasure(mb)->segments()) {
             for (EngravingItem* item : seg.annotations()) {
-                if (item->isDynamic() && elementNeedsCenterBetweenStaves(item, system)) {
+                if ((item->isDynamic() || item->isExpression()) && elementShouldBeCenteredBetweenStaves(item, system)) {
                     centerElementBetweenStaves(item, system);
-                    Expression* snappedExpr = toDynamic(item)->snappedExpression();
-                    if (snappedExpr) {
-                        snappedExpr->mutldata()->setPosY(item->ldata()->pos().y());
-                    }
+                    centeredItems.push_back(item);
                 }
             }
         }
     }
+
+    AlignmentLayout::alignStaffCenteredItems(centeredItems, system);
 }
 
-bool SystemLayout::elementNeedsCenterBetweenStaves(const EngravingItem* element, const System* system)
+bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system)
 {
-    if (!element->isStyled(Pid::OFFSET)) {
+    if (!item->isStyled(Pid::OFFSET)) {
         // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
         return false;
     }
 
-    const Part* part = element->part();
-    bool centerStyle = element->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
-    AutoOnOff centerProperty = element->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
-    if (part->nstaves() <= 1 || centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
+    const Part* itemPart = item->part();
+    bool centerStyle = item->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
+    AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
+    if (itemPart->nstaves() <= 1 || centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
         return false;
     }
 
-    if (centerProperty != AutoOnOff::ON && !part->instrument()->isNormallyMultiStaveInstrument()) {
+    if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
         return false;
     }
 
-    const Staff* thisStaff = element->staff();
-    const std::vector<Staff*>& partStaves = part->staves();
+    const Staff* thisStaff = item->staff();
+    const std::vector<Staff*>& partStaves = itemPart->staves();
     IF_ASSERT_FAILED(partStaves.size() > 0) {
         return false;
     }
 
-    if ((thisStaff == partStaves.front() && element->placeAbove()) || (thisStaff == partStaves.back() && element->placeBelow())) {
+    if ((thisStaff == partStaves.front() && item->placeAbove()) || (thisStaff == partStaves.back() && item->placeBelow())) {
         return false;
     }
 
     staff_idx_t thisIdx = thisStaff->idx();
-    if (element->placeAbove()) {
+    if (item->placeAbove()) {
         IF_ASSERT_FAILED(thisIdx > 0) {
             return false;
         }
     }
-    staff_idx_t nextIdx = element->placeAbove() ? thisIdx - 1 : thisIdx + 1;
+    staff_idx_t nextIdx = item->placeAbove() ? thisIdx - 1 : thisIdx + 1;
 
     const SysStaff* thisSystemStaff = system->staff(thisIdx);
     const SysStaff* nextSystemStaff = system->staff(nextIdx);
@@ -2760,7 +2800,7 @@ bool SystemLayout::elementNeedsCenterBetweenStaves(const EngravingItem* element,
         return false;
     }
 
-    return centerProperty == AutoOnOff::ON || element->appliesToAllVoicesInInstrument();
+    return centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument();
 }
 
 void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const System* system)
@@ -2782,31 +2822,42 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     }
 
     double elementXinSystemCoord = element->pageX() - system->pageX();
-    RectF elementBbox = element->ldata()->bbox().translated(PointF(elementXinSystemCoord, element->y()));
-    const double horizontalMargin = 0.25 * element->spatium();
-    double startX = elementBbox.left() - horizontalMargin;
-    double endX = elementBbox.right() + horizontalMargin;
+    const double minHorizontalClearance = system->style().styleMM(Sid::skylineMinHorizontalClearance);
 
-    // Take a *copy* of the skyline of this staff
-    SkylineLine thisSkyline = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
-    thisSkyline.remove_if([element](ShapeElement& shEl) {
+    Shape elementShape = element->ldata()->shape()
+                         .translated(PointF(elementXinSystemCoord, element->y()))
+                         .adjust(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
+    elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
+
+    const SkylineLine& skylineOfThisStaff = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
+
+    SkylineLine thisSkyline = skylineOfThisStaff.getFilteredCopy([element](const ShapeElement& shEl) {
         const EngravingItem* shapeItem = shEl.item();
-        return shapeItem && (shapeItem == element || shapeItem->isAccidental());
+        if (!shapeItem) {
+            return false;
+        }
+        return shapeItem == element || shapeItem->parentItem(true) == element || shapeItem->type() == element->type()
+               || shapeItem->isAccidental() || shapeItem == element->ldata()->itemSnappedBefore()
+               || shapeItem == element->ldata()->itemSnappedAfter();
     });
-    double edgeOfThisStaff = isAbove ? thisSkyline.top(startX, endX) : thisSkyline.bottom(startX, endX);
 
-    SkylineLine& nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
-    double edgeOfNextStaff = isAbove ? nextSkyline.bottom(startX, endX) : nextSkyline.top(startX, endX);
     double yStaffDiff = nextStaff->y() - thisStaff->y();
-    edgeOfNextStaff += yStaffDiff;
+    SkylineLine nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
+    nextSkyline.translateY(yStaffDiff);
 
-    double yCenter = 0.5 * (edgeOfThisStaff + edgeOfNextStaff) + visualVerticalCenter(element);
+    double elementMinDist = element->minDistance().toMM(element->spatium());
+    double availSpaceAbove = (isAbove ? nextSkyline.verticalClaranceBelow(elementShape) : thisSkyline.verticalClaranceBelow(elementShape))
+                             - elementMinDist;
+    double availSpaceBelow = (isAbove ? thisSkyline.verticalClearanceAbove(elementShape) : nextSkyline.verticalClearanceAbove(elementShape))
+                             - elementMinDist;
 
-    element->mutldata()->setPosY(yCenter - element->offset().y());
-}
+    double yMove = 0.5 * (availSpaceBelow - availSpaceAbove);
 
-double SystemLayout::visualVerticalCenter(const EngravingItem* element)
-{
-    RectF elementBbox = element->ldata()->bbox();
-    return -0.5 * (elementBbox.top() + elementBbox.bottom());
+    element->mutldata()->moveY(yMove);
+
+    availSpaceAbove += yMove;
+    availSpaceBelow -= yMove;
+    element->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
+
+    updateSkylineForElement(element, system, yMove);
 }

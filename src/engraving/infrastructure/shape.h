@@ -148,8 +148,8 @@ public:
     Shape adjusted(double xp1, double yp1, double xp2, double yp2) const;
 
     const RectF& bbox() const;
-    double minVerticalDistance(const Shape&) const;
-    double verticalClearance(const Shape&, double minHorizontalDistance = 0) const;
+    double minVerticalDistance(const Shape&, double minHorizontalClearance = 0.0) const;
+    double verticalClearance(const Shape&, double minHorizontalDistance = 0.0) const;
     double topDistance(const PointF&) const;
     double bottomDistance(const PointF&) const;
     double left() const;
@@ -183,15 +183,12 @@ std::string dump(const Shape& sh);
 //   intersects
 //---------------------------------------------------------
 
-inline static bool intersects(double a, double b, double c, double d, double verticalClearance)
+inline static bool intersects(double a, double b, double c, double d, double minClearance = 0.0)
 {
-    // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
-    // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));
-    // if we can assume a <= b and c <= d
-    if (a == b || c == d) {   // zero height
+    if (a == b || c == d) {
         return false;
     }
-    return (b + verticalClearance > c) && (a < d + verticalClearance);
+    return (b + minClearance > c) && (a < d + minClearance);
 }
 } // namespace mu::engraving
 

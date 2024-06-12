@@ -70,12 +70,14 @@ public:
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
-    Dynamic* findStartDynamic() const;
-    Dynamic* findEndDynamic() const;
-
     bool hasVoiceApplicationProperties() const override { return spanner()->hasVoiceApplicationProperties(); }
 
+    EngravingItem* findElementToSnapBefore() const;
+    EngravingItem* findElementToSnapAfter() const;
+
 private:
+    TextBase* findStartDynamicOrExpression() const;
+    TextBase* findEndDynamicOrExpression() const;
 
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
@@ -175,6 +177,11 @@ public:
     void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
     AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
 
+    bool snapToItemBefore() const { return m_snapToItemBefore; }
+    void setSnapToItemBefore(bool v) { m_snapToItemBefore = v; }
+    bool snapToItemAfter() const { return m_snapToItemAfter; }
+    void setSnapToItemAfter(bool v) { m_snapToItemAfter = v; }
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
@@ -193,6 +200,9 @@ private:
     VoiceApplication m_applyToVoice = VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
     DirectionV m_direction = DirectionV::AUTO;
     AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
+
+    bool m_snapToItemBefore = true;
+    bool m_snapToItemAfter = true;
 };
 } // namespace mu::engraving
 

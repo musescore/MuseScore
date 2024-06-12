@@ -1126,10 +1126,6 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ANCHOR_TO_END_OF_PREVIOUS);
 
-    writeProperty(item, xml, Pid::APPLY_TO_VOICE);
-    writeProperty(item, xml, Pid::DIRECTION);
-    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
-
     if (item->isVelocityChangeAvailable()) {
         writeProperty(item, xml, Pid::VELO_CHANGE);
         writeProperty(item, xml, Pid::VELO_CHANGE_SPEED);
@@ -1151,6 +1147,12 @@ void TWrite::write(const Expression* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext& ctx, bool writeText)
 {
+    if (item->hasVoiceApplicationProperties()) {
+        writeProperty(item, xml, Pid::APPLY_TO_VOICE);
+        writeProperty(item, xml, Pid::DIRECTION);
+        writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
+    }
+
     writeItemProperties(item, xml, ctx);
     writeProperty(item, xml, Pid::TEXT_STYLE);
 
@@ -1559,6 +1561,7 @@ void TWrite::write(const GradualTempoChange* item, XmlWriter& xml, WriteContext&
     writeProperty(item, xml, Pid::TEMPO_EASING_METHOD);
     writeProperty(item, xml, Pid::TEMPO_CHANGE_FACTOR);
     writeProperty(item, xml, Pid::PLACEMENT);
+    writeProperty(item, xml, Pid::SNAP_AFTER);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
@@ -1606,6 +1609,9 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::APPLY_TO_VOICE);
     writeProperty(item, xml, Pid::DIRECTION);
     writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
+
+    writeProperty(item, xml, Pid::SNAP_BEFORE);
+    writeProperty(item, xml, Pid::SNAP_AFTER);
 
     for (const StyledProperty& spp : *item->styledProperties()) {
         if (!item->isStyled(spp.pid)) {

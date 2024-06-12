@@ -157,6 +157,7 @@
             <text><font size="12"/><b>Straight</b></text>
             </Tempo>
           <Expression>
+            <direction>down</direction>
             <text><i>Cantabile</i></text>
             </Expression>
           <Beam>

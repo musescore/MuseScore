@@ -27,6 +27,7 @@
 #include "score.h"
 #include "spanner.h"
 #include "system.h"
+#include "page.h"
 
 #include "rendering/dev/measurelayout.h"
 
@@ -80,11 +81,9 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
         createTimeTickAnchor(measure, anchorTick, staffIdx);
     }
 
+    updateLayout(measure);
+
     Score* score = measure->score();
-
-    LayoutContext ctx(score);
-    MeasureLayout::layoutTimeTickAnchors(measure, ctx);
-
     score->updateShowAnchors(staffIdx, measure->tick(), measure->endTick());
 }
 
@@ -103,6 +102,15 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
     }
 
     return anchor;
+}
+
+void EditTimeTickAnchors::updateLayout(Measure* measure)
+{
+    measure->computeTicks();
+
+    Score* score = measure->score();
+    LayoutContext ctx(score);
+    MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 }
 
 /********************************************

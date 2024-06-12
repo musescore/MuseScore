@@ -279,7 +279,48 @@ Sid HairpinSegment::getPropertyStyle(Pid pid) const
     return TextLineBaseSegment::getPropertyStyle(pid);
 }
 
-Dynamic* HairpinSegment::findStartDynamic() const
+EngravingItem* HairpinSegment::findElementToSnapBefore() const
+{
+    TextBase* startDynOrExpr = findStartDynamicOrExpression();
+    if (startDynOrExpr) {
+        return startDynOrExpr;
+    }
+
+    Hairpin* thisHairpin = hairpin();
+    Fraction startTick = hairpin()->tick();
+    System* sys = system();
+    if (sys && !sys->measures().empty() && startTick == sys->measures().front()->tick()) {
+        return nullptr;
+    }
+
+    auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
+    for (auto interval : intervals) {
+        Spanner* spanner = interval.value;
+        bool isValidHairpin = spanner->isHairpin() && !spanner->segmentsEmpty() && spanner->visible() && spanner != thisHairpin;
+        if (!isValidHairpin) {
+            continue;
+        }
+        Hairpin* precedingHairpin = toHairpin(spanner);
+        bool endsMatch = precedingHairpin->track() == thisHairpin->track()
+                         && precedingHairpin->tick2() == startTick
+                         && precedingHairpin->placeAbove() == thisHairpin->placeAbove()
+                         && toHairpin(spanner)->applyToVoice() == thisHairpin->applyToVoice();
+        if (endsMatch && precedingHairpin->snapToItemAfter()) {
+            return precedingHairpin->backSegment();
+        }
+    }
+
+    return nullptr;
+}
+
+EngravingItem* HairpinSegment::findElementToSnapAfter() const
+{
+    // Note: we don't need to look for a hairpin after.
+    // It is the next hairpin which looks for a hairpin before.
+    return findEndDynamicOrExpression();
+}
+
+TextBase* HairpinSegment::findStartDynamicOrExpression() const
 {
     Fraction refTick = hairpin()->tick();
     Measure* measure = score()->tick2measure(refTick);
@@ -287,8 +328,8 @@ Dynamic* HairpinSegment::findStartDynamic() const
         return nullptr;
     }
 
-    std::vector<Dynamic*> dynamics;
-    dynamics.reserve(2);
+    std::vector<TextBase*> dynamicsAndExpr;
+    dynamicsAndExpr.reserve(2);
 
     for (Segment* segment = measure->last(); segment; segment = segment->prev1()) {
         if (segment->system() != system()) {
@@ -302,28 +343,41 @@ Dynamic* HairpinSegment::findStartDynamic() const
             break;
         }
         for (EngravingItem* item : segment->annotations()) {
-            if (item->isDynamic() && item->track() == track()) {
-                dynamics.push_back(toDynamic(item));
+            if (!item->isDynamic() && !item->isExpression()) {
+                continue;
+            }
+            if (!item->visible()) {
+                continue;
+            }
+            bool endsMatch = item->track() == hairpin()->track()
+                             && item->placement() == placement()
+                             && item->getProperty(Pid::APPLY_TO_VOICE) == hairpin()->getProperty(Pid::APPLY_TO_VOICE);
+            if (endsMatch) {
+                dynamicsAndExpr.push_back(toTextBase(item));
             }
         }
-        if (dynamics.size() > 0) {
+        if (dynamicsAndExpr.size() > 0) {
             break;
         }
     }
 
-    if (dynamics.size() == 0) {
+    if (dynamicsAndExpr.size() == 0) {
         return nullptr;
     }
 
-    if (dynamics.size() > 1) {
-        std::sort(dynamics.begin(), dynamics.end(),
-                  [](Dynamic* dyn1, Dynamic* dyn2) { return dyn1->anchorToEndOfPrevious() && !dyn2->anchorToEndOfPrevious(); });
+    if (dynamicsAndExpr.size() > 1) {
+        std::sort(dynamicsAndExpr.begin(), dynamicsAndExpr.end(), [](TextBase* item1, TextBase* item2) {
+            bool dynamicBeforeExpression = item1->isDynamic() && item2->isExpression();
+            bool oneIsAnchorToPrevious = item1->isDynamic() && toDynamic(item1)->anchorToEndOfPrevious()
+                                         && item2->isDynamic() && !toDynamic(item2)->anchorToEndOfPrevious();
+            return dynamicBeforeExpression || oneIsAnchorToPrevious;
+        });
     }
 
-    return dynamics.back();
+    return dynamicsAndExpr.back();
 }
 
-Dynamic* HairpinSegment::findEndDynamic() const
+TextBase* HairpinSegment::findEndDynamicOrExpression() const
 {
     Fraction refTick = hairpin()->tick2();
     Measure* measure = score()->tick2measure(refTick - Fraction::eps());
@@ -331,8 +385,8 @@ Dynamic* HairpinSegment::findEndDynamic() const
         return nullptr;
     }
 
-    std::vector<Dynamic*> dynamics;
-    dynamics.reserve(2);
+    std::vector<TextBase*> dynamicsAndExpr;
+    dynamicsAndExpr.reserve(2);
 
     for (Segment* segment = measure->first(); segment; segment = segment->next1()) {
         if (segment->system() != system()) {
@@ -346,25 +400,38 @@ Dynamic* HairpinSegment::findEndDynamic() const
             break;
         }
         for (EngravingItem* item : segment->annotations()) {
-            if (item->isDynamic() && item->track() == track()) {
-                dynamics.push_back(toDynamic(item));
+            if (!item->isDynamic() && !item->isExpression()) {
+                continue;
+            }
+            if (!item->visible()) {
+                continue;
+            }
+            bool endsMatch = item->track() == hairpin()->track()
+                             && item->placement() == placement()
+                             && item->getProperty(Pid::APPLY_TO_VOICE) == hairpin()->getProperty(Pid::APPLY_TO_VOICE);
+            if (endsMatch) {
+                dynamicsAndExpr.push_back(toTextBase(item));
             }
         }
-        if (dynamics.size() > 0) {
+        if (dynamicsAndExpr.size() > 0) {
             break;
         }
     }
 
-    if (dynamics.size() == 0) {
+    if (dynamicsAndExpr.size() == 0) {
         return nullptr;
     }
 
-    if (dynamics.size() > 1) {
-        std::sort(dynamics.begin(), dynamics.end(),
-                  [](Dynamic* dyn1, Dynamic* dyn2) { return dyn1->anchorToEndOfPrevious() && !dyn2->anchorToEndOfPrevious(); });
+    if (dynamicsAndExpr.size() > 1) {
+        std::sort(dynamicsAndExpr.begin(), dynamicsAndExpr.end(), [](TextBase* item1, TextBase* item2) {
+            bool dynamicBeforeExpression = item1->isDynamic() && item2->isExpression();
+            bool oneIsAnchorToPrevious = item1->isDynamic() && toDynamic(item1)->anchorToEndOfPrevious()
+                                         && item2->isDynamic() && !toDynamic(item2)->anchorToEndOfPrevious();
+            return dynamicBeforeExpression || oneIsAnchorToPrevious;
+        });
     }
 
-    return dynamics.front();
+    return dynamicsAndExpr.front();
 }
 
 Sid Hairpin::getPropertyStyle(Pid pid) const
@@ -507,6 +574,11 @@ PropertyValue Hairpin::getProperty(Pid id) const
         return centerBetweenStaves();
     case Pid::DIRECTION:
         return direction();
+    case Pid::SNAP_BEFORE:
+        return snapToItemBefore();
+    case Pid::SNAP_AFTER:
+        return snapToItemAfter();
+
     default:
         return TextLineBase::getProperty(id);
     }
@@ -554,6 +626,12 @@ bool Hairpin::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::DIRECTION:
         setDirection(v.value<DirectionV>());
+        break;
+    case Pid::SNAP_BEFORE:
+        setSnapToItemBefore(v.toBool());
+        break;
+    case Pid::SNAP_AFTER:
+        setSnapToItemAfter(v.toBool());
         break;
     default:
         return TextLineBase::setProperty(id, v);
@@ -642,6 +720,11 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::DIRECTION:
         return DirectionV::AUTO;
+
+    case Pid::SNAP_BEFORE:
+        return true;
+    case Pid::SNAP_AFTER:
+        return true;
 
     default:
         return TextLineBase::propertyDefault(id);
