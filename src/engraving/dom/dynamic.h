@@ -135,6 +135,7 @@ private:
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
 
     bool moveSegment(const EditData& ed);
+    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
     bool nudge(const EditData& ed);
 
     DynamicType m_dynamicType = DynamicType::OTHER;

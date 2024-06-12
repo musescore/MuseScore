@@ -27,6 +27,7 @@
 #include "anchors.h"
 #include "dynamichairpingroup.h"
 #include "expression.h"
+#include "hairpin.h"
 #include "measure.h"
 #include "mscore.h"
 #include "score.h"
@@ -607,11 +608,46 @@ bool Dynamic::moveSegment(const EditData& ed)
     }
 
     score()->undoChangeParent(this, newSeg, staffIdx());
-    if (snappedExpression()) {
-        score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
-    }
+    moveSnappedItems(newSeg, newSeg->tick() - curSeg->tick());
 
     return true;
+}
+
+void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
+{
+    if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
+        if (itemSnappedBefore->isHairpinSegment()) {
+            Hairpin* hairpinBefore = toHairpinSegment(itemSnappedBefore)->hairpin();
+            Fraction newHairpinDuration = hairpinBefore->ticks() + tickDiff;
+            if (newHairpinDuration > Fraction(0, 1)) {
+                hairpinBefore->undoChangeProperty(Pid::SPANNER_TICKS, newHairpinDuration);
+            } else {
+                hairpinBefore->undoChangeProperty(Pid::SPANNER_TICK, hairpinBefore->tick() + tickDiff);
+            }
+        }
+    }
+
+    if (EngravingItem* itemSnappedAfter = ldata()->itemSnappedAfter()) {
+        Hairpin* hairpinAfter = itemSnappedAfter->isHairpinSegment() ? toHairpinSegment(itemSnappedAfter)->hairpin() : nullptr;
+        if (itemSnappedAfter->isExpression()) {
+            Expression* expressionAfter = toExpression(itemSnappedAfter);
+            Segment* curExpressionSegment = expressionAfter->segment();
+            if (curExpressionSegment != newSeg) {
+                score()->undoChangeParent(expressionAfter, newSeg, expressionAfter->staffIdx());
+            }
+            EngravingItem* possibleHairpinAfterExpr = expressionAfter->ldata()->itemSnappedAfter();
+            if (!hairpinAfter && possibleHairpinAfterExpr->isHairpinSegment()) {
+                hairpinAfter = toHairpinSegment(possibleHairpinAfterExpr)->hairpin();
+            }
+        }
+        if (hairpinAfter) {
+            Fraction newHairpinDuration = hairpinAfter->ticks() - tickDiff;
+            hairpinAfter->undoChangeProperty(Pid::SPANNER_TICK, hairpinAfter->tick() + tickDiff);
+            if (newHairpinDuration > Fraction(0, 1)) {
+                hairpinAfter->undoChangeProperty(Pid::SPANNER_TICKS, newHairpinDuration);
+            }
+        }
+    }
 }
 
 bool Dynamic::nudge(const EditData& ed)
