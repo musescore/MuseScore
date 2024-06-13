@@ -226,6 +226,7 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
         { BACKGROUND_PRIMARY_COLOR, config.value("background_primary_color").toQString() },
         { BACKGROUND_SECONDARY_COLOR, config.value("background_secondary_color").toQString() },
         { BACKGROUND_TERTIARY_COLOR, config.value("background_tertiary_color").toQString() },
+        { BACKGROUND_QUARTERNARY_COLOR, config.value("background_quarternary_color").toQString() },
         { POPUP_BACKGROUND_COLOR, config.value("popup_background_color").toQString() },
         { PROJECT_TAB_COLOR, config.value("project_tab_color").toQString() },
         { TEXT_FIELD_COLOR, config.value("text_field_color").toQString() },
