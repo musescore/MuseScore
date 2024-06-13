@@ -60,6 +60,7 @@
 #include "dom/tie.h"
 #include "dom/slur.h"
 
+#include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 
 #include "dom/undo.h"
@@ -994,12 +995,13 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     double staffDist = ctx.conf().styleMM(Sid::propertyDistance) * mag;
     double stemDist = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
     double noteDist = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
+    double yOffset = item->staffOffsetY();
 
-    double chordTopY = item->upPos() - 0.5 * item->upNote()->headHeight();      // note position of highest note
-    double chordBotY = item->downPos() + 0.5 * item->upNote()->headHeight();    // note position of lowest note
+    double chordTopY = item->upPos() - 0.5 * item->upNote()->headHeight() + yOffset;       // note position of highest note
+    double chordBotY = item->downPos() + 0.5 * item->upNote()->headHeight() + yOffset;     // note position of lowest note
 
-    double staffTopY = -staffDist;
-    double staffBotY = item->staff()->staffHeight() + staffDist;
+    double staffTopY = -staffDist + yOffset;
+    double staffBotY = item->staff()->staffHeight(item->tick()) + staffDist + yOffset;
 
     // avoid collisions of staff articulations with chord notes:
     // gap between note and staff articulation is distance0 + 0.5 spatium
@@ -1011,13 +1013,13 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
                          ? item->hook()->ldata()->bbox().translated(item->hook()->pos()).top()
                          : item->stem()->ldata()->bbox().translated(item->stem()->pos()).top();
 
-            chordTopY = tip;
+            chordTopY = tip + yOffset;
         } else {
             double tip = item->hook()
                          ? item->hook()->ldata()->bbox().translated(item->hook()->pos()).bottom()
                          : item->stem()->ldata()->bbox().translated(item->stem()->pos()).bottom();
 
-            chordBotY = tip;
+            chordBotY = tip + yOffset;
         }
     }
 
@@ -1031,9 +1033,9 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         ArticulationAnchor aa = a->anchor();
         if (a->layoutCloseToNote() && a->visible() && aa == ArticulationAnchor::AUTO) {
             if (a->up()) {
-                chordTopY = a->y() - a->height() - minDist;
+                chordTopY = a->y() - a->height() - minDist + yOffset;
             } else {
-                chordBotY = a->y() + a->height() + minDist;
+                chordBotY = a->y() + a->height() + minDist + yOffset;
             }
         }
     }
@@ -1047,11 +1049,11 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         }
         if (a->up()) {
             if (a->visible()) {
-                chordTopY = a->y() - a->height() - minDist;
+                chordTopY = a->y() - a->height() - minDist + yOffset;
             }
         } else {
             if (a->visible()) {
-                chordBotY = a->y() + a->height() + minDist;
+                chordBotY = a->y() + a->height() + minDist + yOffset;
             }
         }
     }
@@ -1070,7 +1072,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             stacc = a;
         } else if (stacc && a->isAccent() && stacc->up() == a->up()
                    && (muse::RealIsEqualOrLess(stacc->ldata()->pos().y(), 0.0)
-                       || muse::RealIsEqualOrMore(stacc->ldata()->pos().y(), item->staff()->staffHeight()))) {
+                       || muse::RealIsEqualOrMore(stacc->ldata()->pos().y(), item->staff()->staffHeight(item->tick())))) {
             // obviously, the accent doesn't have a cutout, so this value just artificially moves the stacc
             // and accent closer to each other to simulate some kind of kerning. Looks great using all musescore fonts,
             // though there is a possibility that a different font which has vertically-asymmetrical accents
@@ -1083,14 +1085,14 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         if (!a->layoutCloseToNote()) {
             TLayout::layoutItem(a, ctx);
             if (a->up()) {
-                a->setPos(!item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffTopY + kearnHeight);
+                a->setPos(!item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffTopY + kearnHeight - yOffset);
                 if (a->visible()) {
-                    staffTopY = a->y() - a->height() - minDist;
+                    staffTopY = a->y() - a->height() - minDist + yOffset;
                 }
             } else {
-                a->setPos(item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffBotY - kearnHeight);
+                a->setPos(item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffBotY - kearnHeight - yOffset);
                 if (a->visible()) {
-                    staffBotY = a->y() + a->height() + minDist;
+                    staffBotY = a->y() + a->height() + minDist + yOffset;
                 }
             }
             Autoplace::doAutoplace(a, a->mutldata());
@@ -1105,7 +1107,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             // but adding to skyline is always good
             Segment* s = item->segment();
             Measure* m = s->measure();
-            Shape sh = a->shape().translate(a->pos() + item->pos());
+            Shape sh = a->shape().translate(a->pos() + item->pos() + item->staffOffset());
             // TODO: limit to width of chord
             // this avoids "staircase" effect due to space not having been allocated already
             // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
@@ -1145,7 +1147,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }
-        Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos());
+        Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset());
         Shape sShape = ss->shape().translate(ss->pos());
         double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
         double vertClearance = a->up() ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
@@ -1158,7 +1160,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
                 Articulation* aa = *iter2;
                 aa->mutldata()->moveY(minDist);
                 if (sstaff && aa->addToSkyline()) {
-                    sstaff->skyline().add(aa->shape().translate(aa->pos() + item->pos() + s->pos() + m->pos()));
+                    sstaff->skyline().add(aa->shape().translate(aa->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset()));
                     for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
                         if (sh.item() == aa) {
                             sh.translate(0.0, minDist);
@@ -3352,6 +3354,11 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         LD_CONDITION(stemSlash->ldata()->isSetShape());
     }
 
+    TremoloSingleChord* tremolo = item->tremoloSingleChord();
+    if (tremolo) {
+        LD_CONDITION(tremolo->ldata()->isSetShape());
+    }
+
     Arpeggio* arpeggio = item->arpeggio();
     if (arpeggio) {
         LD_CONDITION(arpeggio->ldata()->isSetShape());
@@ -3376,6 +3383,10 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(stemSlash->shape().translate(stemSlash->pos()));
     }
 
+    if (tremolo && tremolo->addToSkyline()) {
+        shape.add(tremolo->shape().translate(tremolo->pos()));
+    }
+
     if (arpeggio && arpeggio->addToSkyline()) {
         shape.add(arpeggio->shape().translate(arpeggio->pos()));
     }
@@ -3385,8 +3396,6 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(spanArpeggio->shape().translate(spanArpPos));
     }
 
-//      if (_tremolo)
-//            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : item->notes()) {
         shape.add(note->shape().translate(note->pos()));
     }
@@ -3400,7 +3409,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
     shape.add(chordRestShape(item));      // add lyrics
 
     for (const LedgerLine* l = item->ledgerLines(); l; l = l->next()) {
-        shape.add(l->shape().translate(l->pos()));
+        shape.add(l->shape().translate(l->pos() - l->staffOffset()));
     }
 
     if (beamlet && stem) {

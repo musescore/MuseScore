@@ -575,6 +575,24 @@ public:
 
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
+        void connectItemSnappedBefore(EngravingItem* itemBefore);
+        void disconnectItemSnappedBefore();
+        void connectItemSnappedAfter(EngravingItem* itemAfter);
+        void disconnectItemSnappedAfter();
+        EngravingItem* itemSnappedBefore() const { return m_itemSnappedBefore; }
+        EngravingItem* itemSnappedAfter() const { return m_itemSnappedAfter; }
+
+        struct StaffCenteringInfo {
+            double availableVertSpaceAbove = 0.0;
+            double availableVertSpaceBelow = 0.0;
+        };
+        const StaffCenteringInfo& staffCenteringInfo() const { return m_staffCenteringInfo; }
+        void setStaffCenteringInfo(double availSpaceAbove, double availSpaceBelow)
+        {
+            m_staffCenteringInfo.availableVertSpaceAbove = availSpaceAbove;
+            m_staffCenteringInfo.availableVertSpaceBelow = availSpaceBelow;
+        }
+
         void dump(std::stringstream& ss) const;
 
     protected:
@@ -604,6 +622,11 @@ public:
         double m_mag = 1.0;                     // standard magnification (derived value)
         ld_field<PointF> m_pos = "pos";         // Reference position, relative to _parent, set by autoplace
         ld_field<Shape> m_shape = "shape";
+
+        EngravingItem* m_itemSnappedBefore = nullptr;
+        EngravingItem* m_itemSnappedAfter = nullptr;
+
+        StaffCenteringInfo m_staffCenteringInfo;
     };
 
     const LayoutData* ldata() const;
@@ -616,6 +639,9 @@ public:
     RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
     RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
     RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
+
+    PointF staffOffset() const;
+    double staffOffsetY() const { return staffOffset().y(); }
 
     virtual bool isPropertyLinkedToMaster(Pid id) const;
     virtual bool isUnlinkedFromMaster() const;

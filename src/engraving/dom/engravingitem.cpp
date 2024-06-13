@@ -2557,6 +2557,42 @@ void EngravingItem::LayoutData::setBbox(const RectF& r)
     m_shape.set_value(Shape(r, m_item, Shape::Type::Fixed));
 }
 
+void EngravingItem::LayoutData::connectItemSnappedBefore(EngravingItem* itemBefore)
+{
+    IF_ASSERT_FAILED(itemBefore && itemBefore != m_item && itemBefore != m_itemSnappedAfter) {
+        return;
+    }
+    m_itemSnappedBefore = itemBefore;
+    itemBefore->mutldata()->m_itemSnappedAfter = const_cast<EngravingItem*>(m_item);
+}
+
+void EngravingItem::LayoutData::disconnectItemSnappedBefore()
+{
+    if (!m_itemSnappedBefore) {
+        return;
+    }
+    m_itemSnappedBefore->mutldata()->m_itemSnappedAfter = nullptr;
+    m_itemSnappedBefore = nullptr;
+}
+
+void EngravingItem::LayoutData::connectItemSnappedAfter(EngravingItem* itemAfter)
+{
+    IF_ASSERT_FAILED(itemAfter && itemAfter != m_item && itemAfter != m_itemSnappedBefore) {
+        return;
+    }
+    m_itemSnappedAfter = itemAfter;
+    itemAfter->mutldata()->m_itemSnappedBefore = const_cast<EngravingItem*>(m_item);
+}
+
+void EngravingItem::LayoutData::disconnectItemSnappedAfter()
+{
+    if (!m_itemSnappedAfter) {
+        return;
+    }
+    m_itemSnappedAfter->mutldata()->m_itemSnappedBefore = nullptr;
+    m_itemSnappedAfter = nullptr;
+}
+
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
 {
     //! NOTE Temporary disabled CHECK - a lot of messages
@@ -2695,6 +2731,13 @@ double EngravingItem::mag() const
         return 1.0;
     }
     return ldata()->mag();
+}
+
+PointF EngravingItem::staffOffset() const
+{
+    const StaffType* st = staffType();
+    const double yOffset = st ? st->yoffset().val() * spatium() : 0.0;
+    return PointF(0.0, yOffset);
 }
 
 void EngravingItem::setOffsetChanged(bool val, bool absolute, const PointF& diff)

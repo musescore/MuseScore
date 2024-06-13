@@ -151,17 +151,6 @@ FocusableItem {
                 navigationRowStart: heightSection.navigationRowEnd + 1
             }
         }
-
-        SeparatorLine { anchors.margins: -12 }
-
-        VoicesAndPositionSection {
-            id: voicesAndPositionSection
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: continuousHeightSection.navigationRowEnd + 1
-
-            model: root.model
-        }
     }
 }
 

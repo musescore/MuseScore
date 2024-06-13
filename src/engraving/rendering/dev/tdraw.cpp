@@ -635,7 +635,7 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
         }
 
         //adjust for staffType offset
-        double stYOffset = st->yoffset().val() * spatium;
+        double stYOffset = item->staffOffsetY();
         y1l += stYOffset;
         y2l += stYOffset;
     }
@@ -2517,17 +2517,19 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
         double extraLen = item->style().styleS(Sid::ledgerLineLength).val() * sp;
         double x1 = -extraLen;
         double x2 = noteheadWidth + extraLen;
+        double yOffset = item->staffOffsetY();
         double step = sp2 * item->staffType()->lineDistance().val();
 
         lw = item->style().styleMM(Sid::ledgerLineWidth) * item->mag();
         pen.setWidthF(lw);
         painter->setPen(pen);
 
-        for (int i = -2; i >= item->lineIndex(); i -= 2) {
+        const int topLine = -2 + yOffset / step;
+        for (int i = topLine; i >= item->lineIndex(); i -= 2) {
             double y = step * (i - item->lineIndex());
             painter->drawLine(LineF(x1, y, x2, y));
         }
-        int l = item->staffType()->lines() * 2; // first ledger line below staff
+        int l = item->staffType()->lines() * 2 + yOffset / step; // first ledger line below staff
         for (int i = l; i <= item->lineIndex(); i += 2) {
             double y = step * (i - item->lineIndex());
             painter->drawLine(LineF(x1, y, x2, y));
@@ -3025,15 +3027,27 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
 
 void TDraw::draw(const TimeTickAnchor* item, Painter* painter)
 {
-    if (!item->isDraw()) {
+    TimeTickAnchor::DrawRegion drawRegion = item->drawRegion();
+
+    if (drawRegion == TimeTickAnchor::DrawRegion::OUT_OF_RANGE) {
         return;
     }
 
-    static const Color lighterColor = item->configuration()->timeTickAnchorColorLighter();
-    static const Color darkerColor =  item->configuration()->timeTickAnchorColorDarker();
+    Color voiceColor = item->configuration()->voiceColor(item->voiceIdx());
+
+    static constexpr double TINT_MAIN_DARKER = 0.45;
+    static constexpr double TINT_MAIN_LIGHTER = 0.55;
+    static constexpr double TINT_EXTENDED_DARKER = 0.75;
+    static constexpr double TINT_EXTENDED_LIGHTER = 0.85;
+
+    double tint = drawRegion == TimeTickAnchor::DrawRegion::MAIN_REGION
+                  ? item->ldata()->darker() ? TINT_MAIN_DARKER : TINT_MAIN_LIGHTER
+                  : item->ldata()->darker() ? TINT_EXTENDED_DARKER : TINT_EXTENDED_LIGHTER;
+
+    voiceColor.applyTint(tint);
 
     Brush brush;
-    brush.setColor(item->ldata()->darker() ? darkerColor : lighterColor);
+    brush.setColor(voiceColor);
     brush.setStyle(BrushStyle::SolidPattern);
     painter->setBrush(brush);
     painter->setNoPen();

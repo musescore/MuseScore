@@ -822,6 +822,11 @@ double Staff::staffHeight() const
     return (lines(tick) - 1) * spatium(tick) * staffType(tick)->lineDistance().val();
 }
 
+double Staff::staffHeight(const Fraction& tick) const
+{
+    return (lines(tick) - 1) * spatium(tick) * staffType(tick)->lineDistance().val();
+}
+
 //---------------------------------------------------------
 //   spatium
 //---------------------------------------------------------

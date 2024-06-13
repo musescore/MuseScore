@@ -103,7 +103,7 @@ static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES = 
     { ArticulationType::SlashedForwardsNote, ms_NoteHead_SlashLeftFilled },
 };
 
-void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks,
+void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks,
                                 std::string&& defaultPresetCode)
 {
     m_samplerLib = samplerLib;

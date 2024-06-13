@@ -1066,6 +1066,9 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     } else if (m_editData.element && !m_editData.element->hasGrips()) {
         m_dragData.ed.delta = evtDelta;
         m_editData.element->editDrag(m_dragData.ed);
+        for (auto& group : m_dragData.dragGroups) {
+            score()->addRefresh(group->drag(m_dragData.ed));
+        }
     } else {
         for (auto& group : m_dragData.dragGroups) {
             score()->addRefresh(group->drag(m_dragData.ed));
@@ -2293,7 +2296,7 @@ bool NotationInteraction::dragStandardElement(const PointF& pos, Qt::KeyboardMod
 
         // Where "m" is the number of page elements and "n" is the number of elements accepting a drop...
         // O(log m) operation
-        m_droppableTree.initialize(page->pageBoundingRect(), page->elements().size());
+        m_droppableTree.initialize(page->pageBoundingRect(), static_cast<int>(page->elements().size()));
 
         // O(m log n) operation
         for (EngravingItem* elem : page->elements()) {

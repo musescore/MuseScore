@@ -428,7 +428,7 @@ void Arpeggio::reset()
 
 bool Arpeggio::crossStaff() const
 {
-    return (track() + span() - 1) / VOICES != staffIdx();
+    return (track() + span() - 1) / VOICES != vStaffIdx();
 }
 
 staff_idx_t Arpeggio::vStaffIdx() const

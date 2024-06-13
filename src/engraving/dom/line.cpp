@@ -165,9 +165,7 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
             y += system()->staff(stIdx)->bbox().height();
         }
         // adjust Y to staffType offset
-        if (staffType()) {
-            y += staffType()->yoffset().val() * spatium();
-        }
+        y += staffOffsetY();
     }
 
     const Page* p = system()->page();
@@ -259,7 +257,7 @@ bool LineSegment::edit(EditData& ed)
         if (ed.isKeyRelease) {
             score()->hideAnchors();
         } else {
-            EditTimeTickAnchors::updateAnchors(this, moveStart ? spanner()->tick() : spanner()->tick2(), moveStart ? track : track2);
+            EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
         }
         triggerLayout();
         return true;
@@ -285,7 +283,6 @@ bool LineSegment::edit(EditData& ed)
             LOGD("LineSegment::edit: no start/end segment");
             return true;
         }
-        EditTimeTickAnchors::updateAnchors(this, moveStart ? spanner()->tick() : spanner()->tick2(), moveStart ? track : track2);
         if (ed.key == Key_Left) {
             if (moveStart) {
                 s1 = allowTimeAnchor ? s1->prev1ChordRestOrTimeTick() : s1->prev1WithElemsOnStaff(track2staff(track));
@@ -309,6 +306,8 @@ bool LineSegment::edit(EditData& ed)
         }
         spanner()->undoChangeProperty(Pid::SPANNER_TICK, s1->tick());
         spanner()->undoChangeProperty(Pid::SPANNER_TICKS, s2->tick() - s1->tick());
+
+        EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
     }
     break;
     case Spanner::Anchor::NOTE:
@@ -456,7 +455,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
 
     const staff_idx_t oldStaffIndex = left ? staffIdx() : track2staff(l->effectiveTrack2());
 
-    const double spacingFactor = left ? 0.5 : 1.0;   // defines the point where canvas is divided between segments, systems etc.
+    const double spacingFactor = 0.5;   // defines the point where canvas is divided between segments, systems etc.
 
     System* sys = system();
     const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
@@ -667,30 +666,8 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
     }
     break;
     case Grip::MIDDLE: {
-        if (!isSingleType()) {
-            return;
-        }
-
-        SLine* l = line();
-
-        // If dragging middle grip (or the entire hairpin), mouse position
-        // does not directly correspond to any sensible position, so use
-        // actual line coordinates instead. This method doesn't allow for
-        // system changes, but that seems OK when dragging the entire line:
-        // the line will just push away other systems according to autoplacement
-        // rules if necessary.
-        PointF cpos = canvasPos();
-        cpos.setY(system()->staffCanvasYpage(l->staffIdx()));           // prevent cross-system move
-
-        Segment* seg1 = findSegmentForGrip(Grip::START, cpos);
-        Segment* seg2 = findSegmentForGrip(Grip::END, cpos + pos2());
-
-        if (!(seg1 && seg2 && seg1->system() == seg2->system() && seg1->system() == system())) {
-            return;
-        }
-
-        rebaseAnchor(Grip::START, seg1);
-        rebaseAnchor(Grip::END, seg2);
+        // The middle grip is used for vertical movement 99% of the time, so don't try to rebase anchors.
+        return;
     }
     default:
         break;
@@ -769,8 +746,7 @@ void LineSegment::updateAnchors(EditData& ed) const
     if (ed.curGrip != Grip::START && ed.curGrip != Grip::END) {
         return;
     }
-    EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->tick() : line()->tick2(),
-                                       ed.curGrip == Grip::START ? line()->track() : line()->track2());
+    EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->track() : line()->track2());
 }
 
 //---------------------------------------------------------

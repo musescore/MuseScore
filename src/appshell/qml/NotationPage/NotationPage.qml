@@ -126,12 +126,6 @@ DockPage {
             NotationToolBar {
                 navigationPanel.section: root.topToolKeyNavSec
                 navigationPanel.order: 2
-
-                onActiveFocusRequested: {
-                    if (navigationPanel.active) {
-                        notationToolBar.forceActiveFocus()
-                    }
-                }
             }
         },
 

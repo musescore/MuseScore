@@ -1,10 +1,10 @@
 #ifndef EXPRESSIONSETTINGSMODEL_H
 #define EXPRESSIONSETTINGSMODEL_H
 
-#include "models/abstractinspectormodel.h"
+#include "models/inspectormodelwithvoiceandpositionoptions.h"
 
 namespace mu::inspector {
-class ExpressionSettingsModel : public AbstractInspectorModel
+class ExpressionSettingsModel : public InspectorModelWithVoiceAndPositionOptions
 {
     Q_OBJECT
 

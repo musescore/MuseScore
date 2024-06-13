@@ -19,21 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_PUBLISHTOOLBARMODEL_H
-#define MU_APPSHELL_PUBLISHTOOLBARMODEL_H
+#pragma once
 
 #include "uicomponents/view/abstracttoolbarmodel.h"
 
 namespace mu::appshell {
 class PublishToolBarModel : public muse::uicomponents::AbstractToolBarModel
 {
-    Q_OBJECT
-
 public:
-    PublishToolBarModel(QObject* parent = nullptr);
-
     Q_INVOKABLE void load() override;
 };
 }
-
-#endif // MU_APPSHELL_PUBLISHTOOLBARMODEL_H

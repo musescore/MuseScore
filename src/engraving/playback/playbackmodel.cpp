@@ -722,38 +722,11 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
             continue;
         }
 
-        timestamp_t removeEventsFrom = std::numeric_limits<timestamp_t>::max();
-        timestamp_t removeEventsTo = -std::numeric_limits<timestamp_t>::max();
+        int removeEventsFromTick = std::max(tickFrom, repeatStartTick);
+        timestamp_t removeEventsFrom = timestampFromTicks(m_score, removeEventsFromTick + tickPositionOffset);
 
-        for (const Measure* measure : repeatSegment->measureList()) {
-            int measureStartTick = measure->tick().ticks();
-            int measureEndTick = measure->endTick().ticks();
-
-            if (measureStartTick > tickTo || measureEndTick <= tickFrom) {
-                continue;
-            }
-
-            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
-                if (!segment->isChordRestType()) {
-                    continue;
-                }
-
-                int segmentStartTick = segment->tick().ticks();
-                int segmentEndTick = segmentStartTick + segment->ticks().ticks();
-
-                if (segmentStartTick > tickTo || segmentEndTick <= tickFrom) {
-                    continue;
-                }
-
-                //! NOTE: the end tick of the current segment == the start tick of the next segment,
-                //! so subtract 1 to avoid removing events belonging to the next segment
-                timestamp_t segmentStartTime = timestampFromTicks(m_score, segmentStartTick + tickPositionOffset);
-                timestamp_t segmentEndTime = timestampFromTicks(m_score, segmentEndTick - 1 + tickPositionOffset);
-
-                removeEventsFrom = std::min(removeEventsFrom, segmentStartTime);
-                removeEventsTo = std::max(removeEventsTo, segmentEndTime);
-            }
-        }
+        int removeEventsToTick = std::min(tickTo, repeatEndTick);
+        timestamp_t removeEventsTo = timestampFromTicks(m_score, removeEventsToTick + tickPositionOffset);
 
         removeEventsFromRange(trackFrom, trackTo, removeEventsFrom, removeEventsTo);
     }
@@ -794,6 +767,10 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
 void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom,
                                       const muse::mpe::timestamp_t timestampTo)
 {
+    IF_ASSERT_FAILED(timestampFrom <= timestampTo) {
+        return;
+    }
+
     auto search = m_playbackDataMap.find(trackId);
 
     if (search == m_playbackDataMap.cend()) {
@@ -819,7 +796,7 @@ void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mu
 
     auto upperBound = trackPlaybackData.originEvents.upper_bound(timestampTo);
 
-    for (auto it = lowerBound; it != upperBound;) {
+    for (auto it = lowerBound; it != upperBound && it != trackPlaybackData.originEvents.end();) {
         it = trackPlaybackData.originEvents.erase(it);
     }
 }

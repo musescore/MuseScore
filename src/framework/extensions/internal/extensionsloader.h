@@ -34,6 +34,8 @@ public:
 
     ManifestList loadManifestList(const io::path_t& defPath, const io::path_t& extPath) const;
 
+    Manifest parseManifest(const ByteArray& data) const;
+
 private:
     ManifestList manifestList(const io::path_t& rootPath) const;
     io::paths_t manifestPaths(const io::path_t& rootPath) const;

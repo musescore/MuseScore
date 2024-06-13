@@ -96,6 +96,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
+    ioc()->registerExport<mi::IProjectProvider>(moduleName(), m_actionsController);
     ioc()->registerExport<IOpenSaveProjectScenario>(moduleName(), new OpenSaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
     ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);

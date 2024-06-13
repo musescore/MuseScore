@@ -34,10 +34,6 @@ Rectangle {
         id: accidentalGroupPageModel
     }
 
-    Component.onCompleted: {
-        accidentalGroupPageModel.load()
-    }
-
     ColumnLayout {
         spacing: 12
 

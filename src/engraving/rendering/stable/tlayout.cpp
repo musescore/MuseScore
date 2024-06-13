@@ -1820,7 +1820,8 @@ void TLayout::layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData
 
 void TLayout::layoutDynamic(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    const_cast<Dynamic*>(item)->setSnappedExpression(nullptr); // Here we reset it. It will become known again when we layout expression
+    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectItemSnappedBefore();
 
     const StaffType* stType = item->staffType();
     if (stType && stType->isHiddenElementOnTab(conf.style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
@@ -1917,7 +1918,8 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
         }
     }
 
-    const_cast<Expression*>(item)->setSnappedDynamic(nullptr);
+    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectItemSnappedBefore();
 
     if (!item->autoplace()) {
         return;
@@ -1940,14 +1942,13 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
         return;
     }
 
-    const_cast<Expression*>(item)->setSnappedDynamic(dynamic);
-    dynamic->setSnappedExpression(const_cast<Expression*>(item));
+    ldata->connectItemSnappedBefore(dynamic);
 
     LD_CONDITION(dynamic->ldata()->isSetBbox()); // dynamic->shape()
     LD_CONDITION(dynamic->ldata()->isSetPos());
 
     // If there is a dynamic on same segment and track, lock this expression to it
-    double padding = item->computeDynamicExpressionDistance();
+    double padding = item->computeDynamicExpressionDistance(dynamic);
     double dynamicRight = dynamic->shape().translate(dynamic->pos()).right();
     double expressionLeft = ldata->bbox().translated(item->pos()).left();
     double difference = expressionLeft - dynamicRight - padding;

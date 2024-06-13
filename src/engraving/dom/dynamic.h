@@ -100,20 +100,18 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
-//    void doAutoplace();
+
     void manageBarlineCollisions();
 
     static String dynamicText(DynamicType t);
     bool hasCustomText() const { return dynamicText(m_dynamicType) != xmlText(); }
 
-    void setSnappedExpression(Expression* e) { m_snappedExpression = e; }
-    Expression* snappedExpression() const { return m_snappedExpression; }
+    Expression* snappedExpression() const;
 
     bool playDynamic() const { return m_playDynamic; }
     void setPlayDynamic(bool v) { m_playDynamic = v; }
@@ -140,7 +138,6 @@ private:
     bool nudge(const EditData& ed);
 
     DynamicType m_dynamicType = DynamicType::OTHER;
-    Expression* m_snappedExpression = nullptr;
     bool m_playDynamic = true;
 
     mutable PointF m_dragOffset;
