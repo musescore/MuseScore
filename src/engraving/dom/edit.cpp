@@ -3242,7 +3242,7 @@ void Score::reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbEnd)
 //---------------------------------------------------------
 
 void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t track1, track_idx_t track2,
-                                    const SelectionFilter& filter)
+                                                const SelectionFilter& filter)
 {
     static const std::set<ElementType> SPANNER_TYPES_TO_SHORTEN_OUT {
         ElementType::HAIRPIN,
