@@ -3176,9 +3176,13 @@ void MusicXMLParserDirection::direction(const String& partId,
                 }
             }
 
-            if (isLikelyFingering()) {
-                m_logger->logDebugInfo(String(u"Inferring fingering: %1").arg(m_wordsText));
-                MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, m_wordsText, track,
+            String fingeringStr = m_wordsText;
+            static const std::regex xmlFormating("(<.*?>)");
+            fingeringStr.remove(xmlFormating).remove(u'\u00A0');
+            if (isLikelyFingering(fingeringStr)) {
+                m_logger->logDebugInfo(String(u"Inferring fingering: %1").arg(fingeringStr));
+                t->setXmlText(fingeringStr);
+                MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, fingeringStr, track,
                                                                                              placement(), measure, tick + m_offset);
                 inferredFingerings.push_back(inferredFingering);
             } else {
@@ -3704,14 +3708,16 @@ static void addSymbolsToCoda(String& wordsString, const String& codaId)
 //   isLikelyFingering
 //---------------------------------------------------------
 
-bool MusicXMLParserDirection::isLikelyFingering() const
+bool MusicXMLParserDirection::isLikelyFingering(const String& fingeringStr) const
 {
     if (!configuration()->inferTextType()) {
         return false;
     }
+
     // One or more newline-separated digits, possibly lead or trailed by whitespace
-    static const std::wregex re(L"^(?:\\s|\\u00A0)*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*(?:\\s|\\u00A0)*$");
-    return m_wordsText.contains(re)
+    static const std::wregex re(
+        L"^(?:\\s|\\u00A0)*[-–]?(?:\\s|\\u00A0)?[0-5pimac](?:[-–][0-5pimac])?(?:\n[-–]?(?:\\s|\\u00A0)?[0-5pimac](?:[-–][0-5pimac])?)*(?:\\s|\\u00A0)*$");
+    return fingeringStr.contains(re)
            && m_rehearsalText.empty()
            && m_metroText.empty()
            && m_tpoSound < 0.1;

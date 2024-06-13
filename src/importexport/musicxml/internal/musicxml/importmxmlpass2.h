@@ -461,7 +461,7 @@ private:
     bool isLikelyTempoText(const track_idx_t track) const;
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<String> metaTags);
-    bool isLikelyFingering() const;
+    bool isLikelyFingering(const String& fingeringStr) const;
     bool isLikelySticking();
     PlayingTechniqueType getPlayingTechnique() const;
 
