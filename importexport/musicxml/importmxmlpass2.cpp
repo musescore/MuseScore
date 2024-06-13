@@ -3270,6 +3270,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       handleRepeats(measure, track, tick + _offset);
       handleNmiCmi(measure, track, tick + _offset, delayedDirections);
       handleChordSym(track, tick + _offset, harmonyMap);
+      handleFraction();
 
       // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
       // if necessary, use the value calculated by metronome()
@@ -3994,6 +3995,30 @@ bool MusicXMLParserDirection::isLikelyTempoText(const int track) const
                   return true;
             }
       return false;
+      }
+
+void MusicXMLParserDirection::handleFraction()
+      {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return;
+
+      QString rawWordsText = _wordsText;
+      static const QRegularExpression re("(<.*?>)");
+      rawWordsText.remove(re);
+      rawWordsText = rawWordsText.simplified();
+
+      //                         UTF-16 encoding: 0x00BC, 0x00BD, 0x00BE, 0x2150, 0x2151, 0x2152,  etc...
+      static const std::array<QString, 18> fracs { "1/4", "1/2", "3/4", "1/7", "1/9", "1/10", "1/3", "2/3", "1/5", "2/5", "3/5",
+                                                   "4/5", "1/6", "5/6", "1/8", "3/8", "5/8", "7/8" };
+
+      for (size_t n = 0; n < fracs.size(); n++) {
+            if (rawWordsText.contains(fracs.at(n))) {
+                  int p = n <= 2 ? 0x00BC + n : 0x2150 + n - 3;
+                  rawWordsText.replace(fracs.at(n), QString(char16_t(p)));
+                  _wordsText = rawWordsText;
+                  return;
+                  }
+            }
       }
 
 //---------------------------------------------------------
