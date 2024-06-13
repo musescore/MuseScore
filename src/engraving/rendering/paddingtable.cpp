@@ -196,7 +196,9 @@ void PaddingTable::createTable(const MStyle& style)
     }
 
     // This is needed for beamlets, not beams themselves
-    table[ElementType::BEAM][ElementType::BEAM] = 0.4 * spatium;
+    table[ElementType::BEAM].fill(0.35 * spatium);
+
+    table[ElementType::TREMOLO_SINGLECHORD] = table[ElementType::BEAM];
 
     // Symbols (semi-hack: the only symbol for which
     // this is relevant is noteHead parenthesis)

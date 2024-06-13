@@ -60,6 +60,7 @@
 #include "dom/tie.h"
 #include "dom/slur.h"
 
+#include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 
 #include "dom/undo.h"
@@ -3353,6 +3354,11 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         LD_CONDITION(stemSlash->ldata()->isSetShape());
     }
 
+    TremoloSingleChord* tremolo = item->tremoloSingleChord();
+    if (tremolo) {
+        LD_CONDITION(tremolo->ldata()->isSetShape());
+    }
+
     Arpeggio* arpeggio = item->arpeggio();
     if (arpeggio) {
         LD_CONDITION(arpeggio->ldata()->isSetShape());
@@ -3377,6 +3383,10 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(stemSlash->shape().translate(stemSlash->pos()));
     }
 
+    if (tremolo && tremolo->addToSkyline()) {
+        shape.add(tremolo->shape().translate(tremolo->pos()));
+    }
+
     if (arpeggio && arpeggio->addToSkyline()) {
         shape.add(arpeggio->shape().translate(arpeggio->pos()));
     }
@@ -3386,8 +3396,6 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(spanArpeggio->shape().translate(spanArpPos));
     }
 
-//      if (_tremolo)
-//            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : item->notes()) {
         shape.add(note->shape().translate(note->pos()));
     }
