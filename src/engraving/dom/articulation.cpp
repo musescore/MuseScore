@@ -394,6 +394,9 @@ Articulation::AnchorGroup Articulation::anchorGroup(SymId symId)
     case SymId::tremoloDivisiDots6:
         return AnchorGroup::ARTICULATION;
 
+    case SymId::dynamicPiano:
+    case SymId::dynamicForte:
+        return AnchorGroup::DYNAMIC;
     default:
         break;
     }

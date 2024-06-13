@@ -415,6 +415,17 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
     MScoreErrorsController::checkAndShowMScoreError();
 }
 
+void NotationNoteInput::setDynamic(DynamicType dynamicType)
+{
+    TRACEFUNC;
+
+    score()->toggleDynamic(dynamicType);
+
+    notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
+}
+
 void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 {
     TRACEFUNC;

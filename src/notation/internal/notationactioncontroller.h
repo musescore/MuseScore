@@ -90,6 +90,7 @@ private:
     void realtimeAdvance();
 
     void toggleAccidental(AccidentalType type);
+    void addDynamic(DynamicType type);
     void addArticulation(SymbolId articulationSymbolId);
 
     void putTuplet(const muse::actions::ActionData& data);

@@ -529,6 +529,14 @@
     <autorepeat>0</autorepeat>
     </SC>
   <SC>
+    <key>add-piano</key>
+    <seq>Alt+Shift+P</seq>
+    </SC>
+  <SC>
+    <key>add-forte</key>
+    <seq>Alt+Shift+F</seq>
+    </SC>
+  <SC>
     <key>add-slur</key>
     <seq>S</seq>
     </SC>

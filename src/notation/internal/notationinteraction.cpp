@@ -49,6 +49,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/dynamic.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
@@ -2217,6 +2218,7 @@ bool NotationInteraction::notesHaveActiculation(const std::vector<Note*>& notes,
     return true;
 }
 
+
 //! NOTE Copied from ScoreView::dragLeaveEvent
 void NotationInteraction::endDrop()
 {
@@ -3214,6 +3216,10 @@ void NotationInteraction::endEditText()
 
     doEndEditElement();
 
+    if (changeTextToDynamic(element)) {
+        score()->removeElement(element);
+    }
+
     notifyAboutTextEditingEnded(toTextBase(element));
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
@@ -4015,6 +4021,52 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
     score()->toggleAccidental(type, editData);
     apply();
 }
+
+void NotationInteraction::addDynamicToSelection(DynamicType type) 
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->toggleDynamic(type);
+    apply();
+}
+
+bool NotationInteraction::changeTextToDynamic(EngravingItem* element) {
+    
+    if (toTextBase(element)->xmlText() == "pp" || toTextBase(element)->xmlText() == "PP") {
+        addDynamicToSelection(DynamicType::PP);
+        return true;
+    }
+    /**else if (toTextBase(element)->xmlText() == "p" || toTextBase(element)->xmlText() == "P") {
+        addDynamicToSelection(DynamicType::P);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "mp" || toTextBase(element)->xmlText() == "MP") {
+        addDynamicToSelection(DynamicType::MP);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "m" || toTextBase(element)->xmlText() == "M") {
+        addDynamicToSelection(DynamicType::M);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "mf" || toTextBase(element)->xmlText() == "MF") {
+        addDynamicToSelection(DynamicType::MF);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "f" || toTextBase(element)->xmlText() == "F") {
+        addDynamicToSelection(DynamicType::F);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "ff" || toTextBase(element)->xmlText() == "FF") {
+        addDynamicToSelection(DynamicType::FF);
+        return true;
+    }
+    */
+    return false;
+}
+
 
 void NotationInteraction::putRestToSelection()
 {
