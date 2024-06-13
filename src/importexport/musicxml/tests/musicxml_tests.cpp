@@ -722,6 +722,9 @@ TEST_F(Musicxml_Tests, inferCodaII) {
 TEST_F(Musicxml_Tests, inferSegnoII) {
     mxmlImportTestRef("testInferSegnoII");
 }
+TEST_F(Musicxml_Tests, inferFraction) {
+    mxmlImportTestRef("testInferFraction");
+}
 TEST_F(Musicxml_Tests, inferredFingerings) {
     mxmlImportTestRef("testInferredFingerings");
 }
