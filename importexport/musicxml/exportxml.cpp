@@ -2064,8 +2064,8 @@ void ExportMusicXml::timesig(TimeSig* tsig)
       tagName += color2xml(tsig);
       _xml.stag(tagName);
 
-      QRegExp rx("^\\d+(\\+\\d+)+$"); // matches a compound numerator
-      if (rx.exactMatch(ns))
+      static const QRegExp beats_re("^\\d+(\\+\\d+)+$"); // matches a compound numerator
+      if (beats_re.exactMatch(ns))
             // if compound numerator, exported as is
             _xml.tag("beats", ns);
       else

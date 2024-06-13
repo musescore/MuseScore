@@ -1785,7 +1785,8 @@ static void cleanupUnterminatedTie(Tie*& tie, const Score* score, bool fixForCro
 
 static bool isLikelyIncorrectPartName(const QString& partName)
       {
-      return partName.contains(QRegularExpression("^P[0-9]+$"));
+      static const QRegularExpression re("^P[0-9]+$");
+      return partName.contains(re);
       }
 
 //---------------------------------------------------------
@@ -3316,12 +3317,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   else {
                         t = new TempoText(_score);
                         QString rawWordsText = _wordsText;
-                        rawWordsText.remove(QRegularExpression("(<.*?>)"));
+                        static const QRegularExpression re("(<.*?>)");
+                        rawWordsText.remove(re);
+                        QString sep = !_metroText.isEmpty() && !_wordsText.isEmpty()
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-                        QString sep = !_metroText.isEmpty() && !_wordsText.isEmpty() && rawWordsText.back() != ' ' ? " " : QString();
+                                    && rawWordsText.back()
 #else
-                        QString sep = !_metroText.isEmpty() && !_wordsText.isEmpty() && rawWordsText.at(rawWordsText.size() - 1) != ' ' ? " " : QString();
+                                    && rawWordsText.at(rawWordsText.size() - 1)
 #endif
+                                    != ' ' ? " " : QString();
                         t->setXmlText(_wordsText + sep + _metroText);
                         if (_tpoSound > 0.1) {
                               _tpoSound /= 60;
@@ -3876,8 +3880,17 @@ bool MusicXMLParserDirection::directionToDynamic()
 
 bool MusicXMLParserDirection::isLyricBracket() const
       {
-      return _wordsText.contains(QRegularExpression("^}|{$"))
-            && _rehearsalText.isEmpty()
+      if (_wordsText.isEmpty())
+            return false;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      if (!(_wordsText.front() == '}' || _wordsText.back() == '{'))
+#else
+      if (!(_wordsText.at(0) == '}' || _wordsText.at(_wordsText.size() - 1) == '{'))
+#endif
+            return false;
+
+      return _rehearsalText.isEmpty()
             && _metroText.isEmpty()
             && _dynamicsList.isEmpty()
             && _tpoSound < 0.1;
@@ -3892,7 +3905,8 @@ bool MusicXMLParserDirection::isLikelyFingering() const
       if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
             return false;
       // One or more newline-separated digits (or changes), possibly lead or trailed by whitespace
-      return _wordsText.contains(QRegularExpression("^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$"))
+      static const QRegularExpression re("^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$");
+      return _wordsText.contains(re)
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
             && _tpoSound < 0.1;
@@ -4117,7 +4131,7 @@ MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
 
 double MusicXMLParserDirection::convertTextToNotes()
       {
-      QRegularExpression notesRegex("(?<note>[yxeqhwW]\\.{0,2})(\\s*=)");
+      static const QRegularExpression notesRegex("(?<note>[yxeqhwW]\\.{0,2})(\\s*=)");
       QString notesSubstring = notesRegex.match(_wordsText).captured("note");
 
       QList<QPair<QString, QString>> noteSyms{{"q", QString("<sym>metNoteQuarterUp</sym>")},   // note4_Sym
@@ -4152,8 +4166,9 @@ double MusicXMLParserDirection::convertTextToNotes()
 bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
       {
       QList<QString> tempoWords{"rit", "rall", "accel", "tempo", "allegr", "poco", "molto", "più", "meno", "mosso", "rubato"};
-      if (_wordsText.contains(QRegularExpression("[yxeqhwW.]+\\s*=\\s*\\d+"))) {
-            QRegularExpression tempoValRegex("=\\s*(?<tempo>\\d+)");
+      static const QRegularExpression re("[yxeqhwW.]+\\s*=\\s*\\d+");
+      if (_wordsText.contains(re)) {
+            static const QRegularExpression tempoValRegex("=\\s*(?<tempo>\\d+)");
             double tempoVal = tempoValRegex.match(_wordsText).captured("tempo").toDouble();
             double noteVal = convertTextToNotes() * 60.0;
             _tpoSound = tempoVal / noteVal;
@@ -4294,7 +4309,7 @@ void MusicXMLParserDirection::handleChordSym(const int track, const Fraction tic
       if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
             return;
 
-      static const QRegExp re("^([abcdefg])(([#b♯♭])\3?)?(maj|min|m)?[769]?((add[#b♯♭]?(9|11|))|(sus[24]?))?(\\(.*\\))?$");
+      static const QRegularExpression re("^([abcdefg])(([#b♯♭])\3?)?(maj|min|m)?[769]?((add[#b♯♭]?(9|11|))|(sus[24]?))?(\\(.*\\))?$");
       QString plainWords = _wordsText.simplified().toLower();
       if (!plainWords.contains(re))
             return;
