@@ -3388,9 +3388,14 @@ void MusicXMLParserDirection::direction(const QString& partId,
                               wordsPlacement = "below";
                         }
 
-                  if (isLikelyFingering()) {
-                        _logger->logDebugInfo(QString("Inferring fingering: %1").arg(_wordsText));
-                        MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, _wordsText, track, wordsPlacement, measure, tick + _offset);
+                  QString fingeringStr = _wordsText;
+                  static const QRegularExpression xmlFormating("(<.*?>)");
+                  fingeringStr.remove(xmlFormating).remove(u'\u00A0');
+                  if (isLikelyFingering(fingeringStr)) {
+                        _logger->logDebugInfo(QString("Inferring fingering: %1").arg(fingeringStr));
+                        t->setXmlText(fingeringStr);
+                        MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, fingeringStr, track,
+                                                                                                     wordsPlacement, measure, tick + _offset);
                         inferredFingerings.push_back(inferredFingering);
                         }
                   else if (directionToDynamic()) {
@@ -3900,13 +3905,14 @@ bool MusicXMLParserDirection::isLyricBracket() const
 //   isLikelyFingering
 //---------------------------------------------------------
 
-bool MusicXMLParserDirection::isLikelyFingering() const
+bool MusicXMLParserDirection::isLikelyFingering(const QString& fingeringStr) const
       {
       if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
             return false;
       // One or more newline-separated digits (or changes), possibly lead or trailed by whitespace
-      static const QRegularExpression re("^(?:\\s|\u00A0)*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*(?:\\s|\u00A0)*$");
-      return _wordsText.contains(re)
+      static const QRegularExpression re(
+          "^(?:\\s|\u00A0)*[-–]?(?:\\s|\u00A0)?[0-5pimac](?:[-–][0-5pimac])?(?:\n[-–]?(?:\\s|\u00A0)?[0-5pimac](?:[-–][0-5pimac])?)*(?:\\s|\u00A0)*$");
+      return fingeringStr.contains(re)
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
             && _tpoSound < 0.1;
