@@ -721,6 +721,11 @@ bool isLikelyCreditText(const QString& text, const bool caseInsensitive = true)
             || text.trimmed().contains(QRegularExpression("^(Traditional|Trad\\.)", caseOption)));
       }
 
+static bool isLikelyRightsText(const QString& text)
+      {
+      return text.contains("all rights reserved", Qt::CaseInsensitive) || text.contains("\u00A9");
+      }
+
 //---------------------------------------------------------
 //   inferSubTitleFromTitle
 //---------------------------------------------------------
@@ -805,6 +810,13 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
                   if (!vbox)
                         vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
                   addText2(vbox, score, w->words, tid, align, yoffs);
+                  }
+            else if (w->type == "rights" && score->metaTag("copyright").isEmpty()) {
+                  // Add rights to footer, not a vbox
+                  static const QRegularExpression tagRe("(<.*?>)");
+                  QString rights = w->words;
+                  rights.remove(tagRe);
+                  score->setMetaTag("copyright", rights);
                   }
             }
 
@@ -1467,6 +1479,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
       QString valign;
       QStringList crtypes;
       QString crwords;
+      bool hasRights = false;
       while (_e.readNextStartElement()) {
             if (_e.name() == "credit-words") {
                   // IMPORT_LAYOUT
@@ -1484,11 +1497,15 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
             else if (_e.name() == "credit-type") {
                   // multiple credit-type elements may be present, supported by
                   // e.g. Finale v26.3 for Mac.
-                  crtypes += _e.readElementText();
+                  QString type = _e.readElementText();
+                  crtypes.push_back(type);
+                  hasRights = hasRights || type == "rights";
                   }
             else
                   skipLogCurrElem();
             }
+      if (!hasRights && isLikelyRightsText(crwords))
+            crtypes.push_back("rights");
       if (!crwords.isEmpty()) {
             // as the meaning of multiple credit-types is undocumented,
             // use credit-type only if exactly one was found

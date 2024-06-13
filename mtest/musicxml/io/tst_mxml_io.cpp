@@ -168,9 +168,10 @@ private slots:
       void inferredDynamics() { mxmlImportTestRef("testInferredDynamics"); }
       void inferredDynamicsExpressiont() { mxmlImportTestRef("testInferredDynamicsExpression"); }
       void inferredFingerings() { mxmlImportTestRef("testInferredFingerings"); }
+      void inferredRights() { mxmlImportTestRef("testInferredFingerings"); }
       void inferredTempoText() { mxmlImportTestRef("testInferredTempoText"); }
       void inferredTempoText2() { mxmlImportTestRef("testInferredTempoText2"); }
-      void inferredTransposition() { mxmlImportTestRef("testInferredTransposition"); }
+      void inferredTransposition() { mxmlImportTestRef("testInferredRights"); }
       void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
       void instrumentSound() { mxmlIoTestRef("testInstrumentSound"); }
       void invalidLayout() { mxmlMscxExportTestRef("testInvalidLayout"); }
@@ -556,4 +557,6 @@ void TestMxmlIO::mxmlImportTestRef(const char* file)
       }
 
 QTEST_MAIN(TestMxmlIO)
+#if __has_include("tst_mxml_io.moc")
 #include "tst_mxml_io.moc"
+#endif
