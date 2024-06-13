@@ -851,7 +851,9 @@ void PowerTab::addToScore(ptSection& sec)
 
         t = new RehearsalMark(seg);
         t->setFrameType(FrameType::NO_FRAME);
-        t->setPlainText(String::fromStdString(sec.partName));
+        std::string valid;
+        UtfCodec::replaceInvalid(sec.partName, valid);
+        t->setPlainText(String::fromStdString(valid));
         t->setOffset(mu::PointF(10.0, 0.0));
         t->setTrack(0);
         seg->add(t);
@@ -1282,7 +1284,9 @@ Err PowerTab::read()
     std::string name = song.info.name;
     if (!name.empty()) {
         Text* s = Factory::createText(m, TextStyleType::TITLE);
-        s->setPlainText(String::fromStdString(name));
+        std::string valid;
+        UtfCodec::replaceInvalid(name, valid);
+        s->setPlainText(String::fromStdString(valid));
         m->add(s);
     }
     return Err::NoError;
