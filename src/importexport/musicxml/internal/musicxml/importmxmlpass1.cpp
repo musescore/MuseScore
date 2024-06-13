@@ -823,6 +823,11 @@ bool isLikelyCreditText(const String& text, const bool caseInsensitive = true)
            || text.trimmed().contains(std::wregex(L"^(Traditional|Trad\\.)", caseOption));
 }
 
+static bool isLikelyRightsText(const String& text)
+{
+    return text.contains(u"all rights reserved", CaseSensitivity::CaseInsensitive) || text.contains(u"\u00A9");
+}
+
 //---------------------------------------------------------
 //   inferSubTitleFromTitle
 //---------------------------------------------------------
@@ -902,6 +907,12 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
                 vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
             }
             addText2(vbox, score, w->words, tid, align, yoffs);
+        } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {
+            // Add rights to footer, not a vbox
+            static const std::regex tagRe("(<.*?>)");
+            String rights = w->words;
+            rights.remove(tagRe);
+            score->setMetaTag(u"copyright", rights);
         }
     }
 
@@ -1525,6 +1536,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
     String valign;
     StringList crtypes;
     String crwords;
+    bool hasRights = false;
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "credit-words") {
             // IMPORT_LAYOUT
@@ -1541,10 +1553,15 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
         } else if (m_e.name() == "credit-type") {
             // multiple credit-type elements may be present, supported by
             // e.g. Finale v26.3 for Mac.
-            crtypes.push_back(m_e.readText());
+            String type = m_e.readText();
+            crtypes.push_back(type);
+            hasRights = hasRights || type == u"rights";
         } else {
             skipLogCurrElem();
         }
+    }
+    if (!hasRights && isLikelyRightsText(crwords)) {
+        crtypes.push_back(u"rights");
     }
     if (!crwords.empty()) {
         // as the meaning of multiple credit-types is undocumented,
