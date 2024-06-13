@@ -216,7 +216,7 @@ public:
     void setLayoutStretch(double stretchCoeff) { m_layoutStretch = stretchCoeff; }
     double layoutStretch() const { return m_layoutStretch; }
 
-    Fraction computeTicks();
+    void computeTicks();
     Fraction anacrusisOffset() const;
     Fraction shortestChordRest() const;
     Fraction maxTicks() const;
