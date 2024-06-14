@@ -237,7 +237,9 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
 
 QColor Interactive::selectColor(const QColor& color, const QString& title)
 {
+    shortcutsRegister.get()->setActive(false);
     QColor selectedColor = QColorDialog::getColor(color, nullptr, title);
+    shortcutsRegister.get()->setActive(true);
     return selectedColor.isValid() ? selectedColor : color;
 }
 
