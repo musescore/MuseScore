@@ -1473,7 +1473,6 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         // chord symbols can exist without chord/rest so they should not be removed
         constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
         deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
-        deleteSpannersFromRange(t1, t2, track, track + 1, filter);
     }
 
     return accumulated;
@@ -1515,7 +1514,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
             // chord symbols can exist without chord/rest so they should not be removed
             constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
             deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
-            deleteSpannersFromRange(tick, endTick, track, track + 1, filter);
+            deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
 
         seg = m->undoGetSegment(SegmentType::ChordRest, tick);

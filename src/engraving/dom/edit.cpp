@@ -3241,12 +3241,21 @@ void Score::reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbEnd)
 ///   given selection filter.
 //---------------------------------------------------------
 
-void Score::deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t track1, track_idx_t track2,
-                                    const SelectionFilter& filter)
+void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t track1, track_idx_t track2,
+                                                const SelectionFilter& filter)
 {
+    static const std::set<ElementType> SPANNER_TYPES_TO_SHORTEN_OUT {
+        ElementType::HAIRPIN,
+        ElementType::OTTAVA,
+        ElementType::TRILL,
+        ElementType::VIBRATO,
+    };
+
     auto spanners = m_spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
     for (auto i : spanners) {
         Spanner* sp = i.value;
+        Fraction spStartTick = sp->tick();
+        Fraction spEndTick = sp->tick2();
         if (sp->isVolta() || sp->systemFlag()) {
             continue;
         }
@@ -3254,12 +3263,23 @@ void Score::deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, trac
             continue;
         }
         if (sp->track() >= track1 && sp->track() < track2) {
-            if (sp->tick() >= t1 && sp->tick() < t2
-                && sp->tick2() >= t1 && sp->tick2() <= t2) {
+            if (spStartTick >= t1 && spStartTick < t2
+                && spEndTick >= t1 && spEndTick <= t2) {
                 undoRemoveElement(sp);
-            } else if (sp->isSlur() && ((sp->tick() >= t1 && sp->tick() < t2)
-                                        || (sp->tick2() >= t1 && sp->tick2() < t2))) {
+            } else if (sp->isSlur() && ((spStartTick >= t1 && spStartTick < t2)
+                                        || (spEndTick >= t1 && spEndTick < t2))) {
                 undoRemoveElement(sp);
+            } else if (muse::contains(SPANNER_TYPES_TO_SHORTEN_OUT, sp->type())) {
+                bool moveStart = spStartTick >= t1 && spStartTick < t2;
+                bool moveEnd = spEndTick > t1 && spEndTick <= t2;
+                if (moveStart) {
+                    Fraction tickDiff = t2 - spStartTick;
+                    sp->undoChangeProperty(Pid::SPANNER_TICK, t2);
+                    sp->undoChangeProperty(Pid::SPANNER_TICKS, sp->ticks() - tickDiff);
+                } else if (moveEnd) {
+                    Fraction tickDiff = spEndTick - t1;
+                    sp->undoChangeProperty(Pid::SPANNER_TICKS, sp->ticks() - tickDiff);
+                }
             }
         }
     }
@@ -3333,7 +3353,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
 
         Fraction tick2 = s2 ? s2->tick() : Fraction::max();
 
-        deleteSpannersFromRange(stick1, stick2, track1, track2, filter);
+        deleteOrShortenOutSpannersFromRange(stick1, stick2, track1, track2, filter);
 
         for (track_idx_t track = track1; track < track2; ++track) {
             if (!filter.canSelectVoice(track)) {
