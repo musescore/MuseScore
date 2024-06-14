@@ -177,6 +177,20 @@ typedef struct ms_AuditionStartNoteEvent_3
     const char* _active_text_articulation; // text articulation that is active for this note. Can be empty
 } ms_AuditionStartNoteEvent_3;
 
+// Added in v0.7 -> changed from ms_AuditionStartNoteEvent3 by adding "_active_syllable"
+typedef struct ms_AuditionStartNoteEvent_4
+{
+    int _pitch;      // MIDI pitch
+    int _offset_cents; // pitch offsets in cents ()
+    ms_NoteArticulation _articulation;
+    ms_NoteHead _notehead;
+    double _dynamics;
+    const char* _active_presets; // presets that are selected for this note. list is separated by "|". If "" then the
+                                 // first available preset is used.
+    const char* _active_text_articulation; // text articulation that is active for this note. Can be empty
+    const char* _active_syllable;        // currently active lyrics syllable. Can be empty
+} ms_AuditionStartNoteEvent_4;
+
 typedef struct ms_AuditionStopNoteEvent
 {
     int _pitch; // MIDI pitch
@@ -225,6 +239,13 @@ typedef struct ms_TextArticulationEvent
     long long _start_us;
     const char* _articulation; // articulation name
 } ms_TextArticulationEvent;
+
+// Added in v0.7
+typedef struct ms_SyllableEvent
+{
+    const char* _text;
+    long long _position_us;
+} ms_SyllableEvent;
 
 typedef ms_Result (* ms_init)();
 typedef ms_Result (* ms_disable_reverb)();
@@ -277,6 +298,9 @@ typedef ms_Result (* ms_MuseSampler_stop_audition_note)(ms_MuseSampler ms, ms_Tr
 // Added in 0.6
 typedef ms_Result (* ms_MuseSampler_start_audition_note_3)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 evt);
 
+// Added in 0.7
+typedef ms_Result (* ms_MuseSampler_start_audition_note_4)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4 evt);
+
 typedef ms_Result (* ms_MuseSampler_start_liveplay_mode)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_stop_liveplay_mode)(ms_MuseSampler ms);
 
@@ -308,6 +332,9 @@ typedef ms_Result (* ms_MuseSampler_add_track_text_articulation_event)(ms_MuseSa
 typedef const char*(* ms_get_drum_mapping)(int instrument_id);
 // ------------------------------------------------------------
 
+// Added in 0.7
+typedef ms_Result (* ms_MuseSampler_add_track_syllable_event)(ms_MuseSampler ms, ms_Track track, ms_SyllableEvent evt);
+
 namespace muse::musesampler {
 using track_idx_t = size_t;
 using TrackList = std::vector<ms_Track>;
@@ -323,7 +350,7 @@ struct InstrumentInfo {
 };
 
 struct AuditionStartNoteEvent {
-    ms_AuditionStartNoteEvent_3 msEvent;
+    ms_AuditionStartNoteEvent_4 msEvent;
     ms_Track msTrack = nullptr;
 };
 

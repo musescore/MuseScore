@@ -294,6 +294,8 @@ struct PlaybackParam {
         Undefined = -1,
         SoundPreset,
         PlayingTechnique,
+        Syllable,
+        Sticking,
     };
 
     using Value = String;

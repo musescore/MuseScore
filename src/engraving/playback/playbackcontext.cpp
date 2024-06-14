@@ -34,6 +34,8 @@
 #include "dom/segment.h"
 #include "dom/spanner.h"
 #include "dom/measurerepeat.h"
+#include "dom/lyrics.h"
+#include "dom/sticking.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
@@ -180,6 +182,7 @@ void PlaybackContext::update(const ID partId, const Score* score)
     // cache them for optimization
     m_partStartTrack = part->startTrack();
     m_partEndTrack = part->endTrack();
+    m_playbleSoundFlagFound = false;
 
     IF_ASSERT_FAILED(m_partStartTrack <= m_partEndTrack) {
         return;
@@ -194,19 +197,11 @@ void PlaybackContext::update(const ID partId, const Score* score)
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const Measure* measure : repeatSegment->measureList()) {
-            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
 
-                for (track_idx_t track = m_partStartTrack; track < m_partEndTrack; ++track) {
-                    const EngravingItem* item = segment->elementAt(track);
-                    if (!item || !item->isMeasureRepeat()) {
-                        continue;
-                    }
-
-                    measureRepeats.push_back(toMeasureRepeat(item));
-                }
-
-                handleAnnotations(partId, segment, segmentStartTick);
+                handleSegmentElements(segment, segmentStartTick, measureRepeats);
+                handleSegmentAnnotations(partId, segment, segmentStartTick);
             }
         }
 
@@ -221,6 +216,7 @@ void PlaybackContext::clear()
 {
     m_partStartTrack = 0;
     m_partEndTrack = 0;
+    m_playbleSoundFlagFound = false;
     m_dynamicsByTrack.clear();
     m_playTechniquesMap.clear();
     m_playbackParamByTrack.clear();
@@ -228,7 +224,7 @@ void PlaybackContext::clear()
 
 bool PlaybackContext::hasSoundFlags() const
 {
-    return !m_playbackParamByTrack.empty();
+    return m_playbleSoundFlagFound;
 }
 
 dynamic_level_t PlaybackContext::nominalDynamicLevel(const track_idx_t trackIdx, const int positionTick) const
@@ -307,7 +303,7 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     }
 }
 
-void PlaybackContext::updatePlaybackParams(const SoundFlag* flag, const int segmentPositionTick)
+void PlaybackContext::updatePlaybackParamsForSoundFlag(const SoundFlag* flag, const int segmentPositionTick)
 {
     if (!flag->play()) {
         return;
@@ -335,6 +331,25 @@ void PlaybackContext::updatePlaybackParams(const SoundFlag* flag, const int segm
 
     if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
         m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
+    }
+
+    m_playbleSoundFlagFound = true;
+}
+
+void PlaybackContext::updatePlaybackParamsForText(const TextBase* text, const int segmentPositionTick)
+{
+    IF_ASSERT_FAILED(text->isLyrics() || text->isSticking()) {
+        return;
+    }
+
+    PlaybackParam::Type type = text->isLyrics() ? PlaybackParam::Syllable : PlaybackParam::Sticking;
+    PlaybackParam param(type, text->plainText());
+
+    staff_idx_t staffIdx = text->staffIdx();
+
+    for (voice_idx_t voiceIdx = 0; voiceIdx < VOICES; ++voiceIdx) {
+        track_idx_t trackIdx = staff2track(staffIdx, voiceIdx);
+        m_playbackParamByTrack[trackIdx][segmentPositionTick].push_back(param);
     }
 }
 
@@ -432,7 +447,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
     }
 }
 
-void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick)
+void PlaybackContext::handleSegmentAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick)
 {
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->part()) {
@@ -453,9 +468,37 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
             continue;
         }
 
+        if (annotation->isSticking()) {
+            updatePlaybackParamsForText(toTextBase(annotation), segmentPositionTick);
+            continue;
+        }
+
         if (annotation->isStaffText()) {
             if (const SoundFlag* flag = toStaffText(annotation)->soundFlag()) {
-                updatePlaybackParams(flag, segmentPositionTick);
+                updatePlaybackParamsForSoundFlag(flag, segmentPositionTick);
+            }
+        }
+    }
+}
+
+void PlaybackContext::handleSegmentElements(const Segment* segment, const int segmentPositionTick,
+                                            std::vector<const MeasureRepeat*>& foundMeasureRepeats)
+{
+    for (track_idx_t track = m_partStartTrack; track < m_partEndTrack; ++track) {
+        const EngravingItem* item = segment->elementAt(track);
+        if (!item) {
+            continue;
+        }
+
+        if (item->isMeasureRepeat()) {
+            foundMeasureRepeats.push_back(toMeasureRepeat(item));
+            continue;
+        }
+
+        if (item->isChordRest()) {
+            const ChordRest* chordRest = toChordRest(item);
+            for (const Lyrics* lyrics : chordRest->lyrics()) {
+                updatePlaybackParamsForText(lyrics, segmentPositionTick);
             }
         }
     }
