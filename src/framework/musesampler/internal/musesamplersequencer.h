@@ -86,6 +86,7 @@ private:
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
     void addTextArticulation(const String& articulationCode, long long startUs, ms_Track track);
     void addPresets(const StringList& presets, long long startUs, ms_Track track);
+    void addSyllable(const String& syllable, long long positionUs, ms_Track track);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
@@ -96,7 +97,24 @@ private:
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
     void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
 
-    void parseOffStreamParams(const mpe::PlaybackParamList& params, std::string& presets, std::string& textArticulation) const;
+    struct OffStreamParams {
+        std::string presets;
+        std::string textArticulation;
+        std::string syllable;
+        bool textArticulationStartsAtNote = false;
+        bool syllableStartsAtNote = false;
+
+        void clear()
+        {
+            presets.clear();
+            textArticulation.clear();
+            syllable.clear();
+            textArticulationStartsAtNote = false;
+            syllableStartsAtNote = false;
+        }
+    };
+
+    void parseOffStreamParams(const mpe::PlaybackParamList& params, OffStreamParams& out) const;
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
     ms_MuseSampler m_sampler = nullptr;
@@ -104,18 +122,8 @@ private:
 
     std::unordered_map<mpe::layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
 
-    struct {
-        std::string presets;
-        std::string textArticulation;
-
-        void clear()
-        {
-            presets.clear();
-            textArticulation.clear();
-        }
-    } m_offStreamCache;
-
     std::string m_defaultPresetCode;
+    OffStreamParams m_offStreamCache;
 };
 }
 
