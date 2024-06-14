@@ -3832,7 +3832,10 @@ void MusicXMLParserDirection::textToDynamic(String& text)
     String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
     // Correct finale's incorrect dynamic export
     if (m_pass1.exporterString().contains(u"finale")) {
-        static const std::map<String, String> finaleDynamicSubs = { { u"π", u"pp" }, { u"P", u"mp" }, { u"F", u"mf" }, { u"ƒ", u"ff" } };
+        static const std::map<String,
+                              String> finaleDynamicSubs
+            = { { u"π", u"pp" }, { u"P", u"mp" }, { u"F", u"mf" }, { u"ƒ", u"ff" }, { u"Ï", u"fff" }, { u"S", u"sf" }, { u"ß", u"sfz" },
+            { u"Z", u"fz" },  { u"Í", u"fp" } };
         for (const auto& sub : finaleDynamicSubs) {
             if (simplifiedText == sub.first) {
                 simplifiedText = sub.second;
