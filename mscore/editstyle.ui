@@ -2702,6 +2702,9 @@
                  </item>
                  <item>
                   <widget class="QCheckBox" name="footerInsideMargins">
+                   <property name="toolTip">
+                    <string>Inside margins</string>
+                   </property>
                    <property name="text">
                     <string>Inside margins</string>
                    </property>
