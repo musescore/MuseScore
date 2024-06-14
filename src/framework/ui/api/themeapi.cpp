@@ -123,6 +123,8 @@ void ThemeApi::initThemeValues()
 
     m_backgroundPrimaryColor = themeValues[BACKGROUND_PRIMARY_COLOR].toString();
     m_backgroundSecondaryColor = themeValues[BACKGROUND_SECONDARY_COLOR].toString();
+    m_backgroundTertiaryColor = themeValues[BACKGROUND_TERTIARY_COLOR].toString();
+    m_backgroundQuarternaryColor = themeValues[BACKGROUND_QUARTERNARY_COLOR].toString();
     m_popupBackgroundColor = themeValues[POPUP_BACKGROUND_COLOR].toString();
     m_textFieldColor = themeValues[TEXT_FIELD_COLOR].toString();
     m_accentColor = themeValues[ACCENT_COLOR].toString();
@@ -165,6 +167,16 @@ QColor ThemeApi::backgroundPrimaryColor() const
 QColor ThemeApi::backgroundSecondaryColor() const
 {
     return m_backgroundSecondaryColor;
+}
+
+QColor ThemeApi::backgroundTertiaryColor() const
+{
+    return m_backgroundTertiaryColor;
+}
+
+QColor ThemeApi::backgroundQuarternaryColor() const
+{
+    return m_backgroundQuarternaryColor;
 }
 
 QColor ThemeApi::popupBackgroundColor() const
