@@ -262,6 +262,15 @@ bool UtfCodec::isValidUtf8(const std::string_view& src)
     return utf8::is_valid(src.begin(), src.end());
 }
 
+void UtfCodec::replaceInvalid(std::string_view src, std::string& dst)
+{
+    try {
+        utf8::replace_invalid(src.begin(), src.end(), std::back_inserter(dst));
+    } catch (const std::exception& e) {
+        LOGE() << e.what();
+    }
+}
+
 // ============================
 // String
 // ============================
