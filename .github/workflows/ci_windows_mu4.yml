@@ -23,8 +23,8 @@ on:
         required: false
         default: ''
 
-env:
-  CURRENT_RELEASE_BRANCH: 4.3.2
+# env:
+#   CURRENT_RELEASE_BRANCH: 4.3.2
 
 jobs:
   build_mu4_x64:

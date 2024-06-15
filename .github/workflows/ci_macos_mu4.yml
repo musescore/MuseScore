@@ -24,7 +24,7 @@ on:
         default: ''
 
 env:
-  CURRENT_RELEASE_BRANCH: 4.3.2
+  # CURRENT_RELEASE_BRANCH: 4.3.2
   DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
 jobs:
