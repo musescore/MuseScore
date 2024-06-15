@@ -17,12 +17,10 @@ set(_components
     Qml
     Quick
     QuickControls2
-    QuickTemplates2
     QuickWidgets
     Xml
     Svg
     PrintSupport
-    OpenGL
     LinguistTools
 
     Core5Compat
