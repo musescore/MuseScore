@@ -532,7 +532,7 @@ static bool overrideTextStyleForComposer(const QString& creditString)
 
 static void addText2(VBox* vbx, Score* s, const QString strTxt, const Tid stl, const Align align, const double yoffs)
       {
-      if (overrideTextStyleForComposer(strTxt)) {
+      if (stl != Tid::COMPOSER && overrideTextStyleForComposer(strTxt)) {
             // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
             // This overrides the formatting and introduces proper composer text
             Text* text = new Text(s, Tid::COMPOSER);
@@ -576,7 +576,7 @@ static void findYMinYMaxInWords(const std::vector<const CreditWords*>& words, in
 //   alignForCreditWords
 //---------------------------------------------------------
 
-static Align alignForCreditWords(const CreditWords* const w, const int pageWidth)
+static Align alignForCreditWords(const CreditWords* const w, const int pageWidth, const Tid tid)
       {
       Align align = Align::LEFT;
       if (w->defaultX > (pageWidth / 3)) {
@@ -585,6 +585,8 @@ static Align alignForCreditWords(const CreditWords* const w, const int pageWidth
             else
                   align = Align::RIGHT;
             }
+      if (tid == Tid::COMPOSER)
+            align = Align::BOTTOM;
       return align;
       }
 
@@ -804,9 +806,9 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
 
       for (const CreditWords* w : words) {
             if (mustAddWordToVbox(w->type)) {
-                  const Align align = alignForCreditWords(w, pageSize.width());
                   const Tid tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
-                  double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
+                  const Align align = alignForCreditWords(w, pageSize.width(), tid);
+                  double yoffs = tid == Tid::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->spatium() / 10;
                   if (!vbox)
                         vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
                   addText2(vbox, score, w->words, tid, align, yoffs);

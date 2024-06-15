@@ -197,8 +197,7 @@
           </Text>
         <Text>
           <style>Composer</style>
-          <align>right,top</align>
-          <offset x="0" y="17.4247"/>
+          <align>left,bottom</align>
           <text>Henry Ives</text>
           </Text>
         </VBox>

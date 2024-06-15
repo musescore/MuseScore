@@ -128,9 +128,9 @@ private slots:
       void elision() { mxmlImportTestRef("testElision"); }
       void emptyMeasure() { mxmlIoTestRef("testEmptyMeasure"); }
       void emptyVoice1() { mxmlIoTestRef("testEmptyVoice1"); }
+      void excessHiddenStaves() { mxmlImportTestRef("testExcessHiddenStaves"); }
       void excessiveFretDiagrams1() { mxmlImportTestRef("testExcessiveFretDiagrams1"); }
       void excessiveFretDiagrams2() { mxmlImportTestRef("testExcessiveFretDiagrams2"); }
-      void excessHiddenStaves() { mxmlImportTestRef("testExcessHiddenStaves"); }
       void extendedLyrics() { mxmlIoTestRef("testExtendedLyrics"); }
       void figuredBass1() { mxmlIoTest("testFiguredBass1"); }
       void figuredBass2() { mxmlIoTest("testFiguredBass2"); }
