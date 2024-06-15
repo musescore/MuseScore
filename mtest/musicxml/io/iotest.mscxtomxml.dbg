@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# simple standalone iotest for MusicXML import
+# run in mtest/musicxml/io directory as "./iotest.mscxtomxml"
+
+# Linux
+#MSCORE=../../build.debug/mscore/mscore
+# OS X terminal build
+#MSCORE=../../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+#MSCORE=../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build (since early 2020)
+#MSCORE=../../build.xcode/main/Debug/mscore.app/Contents/MacOS/mscore
+# OS X QtCreator build (since early 2024)
+MSCORE=../../../builds/Mac-Qtlibexec-qt5-Make-RelWithDebInfo/install/mscore.app/Contents/MacOS/mscore
+# OS X QtCreator build (since early 2024) using Qt6
+#MSCORE=../../../builds/Mac-Qt6.2.4-macos-Make-RelWithDebInfo/install/mscore.app/Contents/MacOS/mscore
+
+echo "----------------------------------------------"
+echo "Regression Tests for MuseScore MusicXML import"
+echo "----------------------------------------------"
+echo
+$MSCORE -v
+echo
+
+musicxml_files=`cat tst_mxml_io.cpp | grep "{ mxmlMscxExportTestRef" | grep testLocalTimesig | awk -F\" '{print $2}' | sort`
+# temp ------------------------------------------------------------>   ^^^^^^^^^^^^^^^^^^^^^^^
+echo $musicxml_files
+
+testcount=0
+failures=0
+
+rwtestXmlRef() {
+      echo -n "testing load/save $1";
+      REF=`basename $1 .mscx`_ref.xml
+      grep -v software <$REF | grep -v encoding-date >mops_ref.xml
+      $MSCORE $1 -d -o mops.xml &> /dev/null
+      grep -v software <mops.xml | grep -v encoding-date >mops_new.xml
+      if diff -q mops_ref.xml mops_new.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff mops_ref.xml mops_new.xml
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      rm mops_new.xml
+      rm mops_ref.xml
+      testcount=$(($testcount+1))
+      }
+
+rwtestAllXml() {
+      for f in $musicxml_files; do
+            rwtestXmlRef ${f}.mscx
+      done
+      }
+
+usage() {
+      echo "usage: $0"
+      echo
+      exit 1
+      }
+
+if [ $# -eq 0 ]; then
+      rwtestAllXml
+else
+      usage
+fi
+
+echo
+echo "$testcount test(s), $failures failure(s)"

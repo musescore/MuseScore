@@ -343,14 +343,14 @@ class ExportMusicXml {
       void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff, const std::vector<Lyrics*>* ll);
       void clef(int staff, const ClefType ct, const QString& extraAttributes = QString());
-      void timesig(TimeSig* tsig);
+      void timesig(TimeSig* tsig, int staff);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(const Measure* const m, const int track);
       void barlineMiddle(const BarLine* bl);
       void barlineRight(const Measure* const m, const int strack, const int etrack);
       void lyrics(const std::vector<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
-      void calcDivMoveToTick(const Fraction& t);
+      void calcDivMoveToTick(const Fraction& t, const Fraction& stretch = {1, 1});
       void calcDivisions();
       void keysigTimesig(const Measure* m, const Part* p);
       void chordAttributes(Chord* chord, Notations& notations, Technical& technical,
@@ -376,7 +376,7 @@ public:
             }
       void write(QIODevice* dev);
       void credits(XmlWriter& xml);
-      void moveToTick(const Fraction& t);
+      void moveToTick(const Fraction& t, const Fraction& stretch = {1, 1});
       void words(TextBase const* const text, int staff);
       void tboxTextAsWords(TextBase const* const text, int staff, QPointF position);
       void rehearsal(RehearsalMark const* const rmk, int staff);
@@ -1060,19 +1060,24 @@ static void addFraction(const Fraction& len)
 //   calcDivMoveToTick
 //---------------------------------------------------------
 
-void ExportMusicXml::calcDivMoveToTick(const Fraction& t)
+void ExportMusicXml::calcDivMoveToTick(const Fraction& t, const Fraction& stretch)
       {
+      Fraction stretched_tick { t + stretch * (tick() - t) };
+#ifdef DEBUG_TICK
+      qDebug() << "t (target) " << fractionToQString(t) << " stretch " << fractionToQString(stretch)
+               << " _tick (current) " << fractionToQString(_tick) << " stretchedM_tick " << fractionToQString(stretched_tick);
+#endif
       if (t < tick()) {
 #ifdef DEBUG_TICK
             qDebug() << "backup " << fractionToQString(tick() - t);
 #endif
-            addFraction(tick() - t);
+            addFraction(stretched_tick - t);
             }
       else if (t > tick()) {
 #ifdef DEBUG_TICK
             qDebug() << "forward " << fractionToQString(t - tick());
 #endif
-            addFraction(t - tick());
+            addFraction(t - stretched_tick);
             }
       tick() = t;
       }
@@ -1109,10 +1114,25 @@ static int lcm(int a, int b)
 
 
 //---------------------------------------------------------
+//  stretch
+//---------------------------------------------------------
+
+static Fraction stretch(Score* score, int st, Fraction tick)
+      {
+      Staff* staff { score->staff(track2staff(st)) };
+      Fraction res { staff->timeStretch(tick) };
+#ifdef DEBUG_TICK
+      qDebug() << "track " << st << " tick " << fractionToQString(tick) << " stretch " << fractionToQString(res);
+#endif
+      return res;
+      }
+
+//---------------------------------------------------------
 //  calcDivisions
 //---------------------------------------------------------
 
 // Loop over all voices in all staves and determine a suitable value for divisions.
+// All parts are taken into account, a global divisions value results.
 
 // Length of time in MusicXML is expressed in "units", which should allow expressing all time values
 // as an integral number of units. Divisions contains the number of units in a quarter note.
@@ -1147,9 +1167,10 @@ void ExportMusicXml::calcDivisions()
                                     if (e->track() == st && e->type() == ElementType::FIGURED_BASS) {
                                           const FiguredBass* fb = toFiguredBass(e);
 #ifdef DEBUG_TICK
-                                          qDebug("figuredbass tick %d duration %d", fb->tick().ticks(), fb->ticks().ticks());
+                                          qDebug() << "figuredbass tick " << fractionToQString(fb->tick())
+                                                   << " tickLen " << fractionToQString(fb->ticks());
 #endif
-                                          addFraction(fb->ticks());
+                                          addFraction(stretch(_score, st, m->tick()) * fb->ticks());
                                           }
                                     }
 
@@ -1163,7 +1184,7 @@ void ExportMusicXml::calcDivisions()
                                     continue;
 
                               if (_tick != seg->tick())
-                                    calcDivMoveToTick(seg->tick());
+                                    calcDivMoveToTick(seg->tick(), stretch(_score, st, m->tick()));
 
                               if (el->isChordRest()) {
                                     Fraction l = toChordRest(el)->actualTicks();
@@ -1175,13 +1196,13 @@ void ExportMusicXml::calcDivisions()
                                     qDebug() << "chordrest tick " << fractionToQString(el->tick())
                                              << " tickLen" << durElemTicksToQString(*toChordRest(el));
 #endif
-                                    addFraction(l);
+                                    addFraction(stretch(_score, st, m->tick()) * l);
                                     _tick += l;
                                     }
                               }
                         }
                   // move to end of measure (in case of incomplete last voice)
-                  calcDivMoveToTick(m->endTick());
+                  calcDivMoveToTick(m->endTick(), stretch(_score, etrack - 1, m->tick()));
                   }
             }
 
@@ -2017,16 +2038,20 @@ static int calculateDurationInDivisions(const Fraction& tick, const int division
 //   moveToTick
 //---------------------------------------------------------
 
-void ExportMusicXml::moveToTick(const Fraction& t)
+void ExportMusicXml::moveToTick(const Fraction& t, const Fraction& stretch)
       {
-      //qDebug("ExportMusicXml::moveToTick(t=%s) _tick=%s", qPrintable(t.print()), qPrintable(_tick.print()));
+      Fraction stretchedM_tick { t + stretch * (tick() - t) };
+#ifdef DEBUG_TICK
+      qDebug() << "t (target) " << fractionToQString(t) << " stretch " << fractionToQString(stretch)
+               << " _tick (current) " << fractionToQString(_tick) << " stretchedM_tick " << fractionToQString(stretchedM_tick);
+#endif
       if (t < _tick) {
 #ifdef DEBUG_TICK
             qDebug(" -> backup");
 #endif
             _attr.doAttr(_xml, false);
             _xml.stag("backup");
-            _xml.tag("duration", calculateTimeDeltaInDivisions(_tick, t, div));
+            _xml.tag("duration", calculateTimeDeltaInDivisions(stretchedM_tick, t, div));
             _xml.etag();
             }
       else if (t > _tick) {
@@ -2035,7 +2060,7 @@ void ExportMusicXml::moveToTick(const Fraction& t)
 #endif
             _attr.doAttr(_xml, false);
             _xml.stag("forward");
-            _xml.tag("duration", calculateTimeDeltaInDivisions(t, _tick, div));
+            _xml.tag("duration", calculateTimeDeltaInDivisions(t, stretchedM_tick, div));
             _xml.etag();
             }
       _tick = t;
@@ -2045,7 +2070,7 @@ void ExportMusicXml::moveToTick(const Fraction& t)
 //   timesig
 //---------------------------------------------------------
 
-void ExportMusicXml::timesig(TimeSig* tsig)
+void ExportMusicXml::timesig(TimeSig* tsig, int staff)
       {
       TimeSigType st = tsig->timeSigType();
       Fraction ts = tsig->sig();
@@ -2059,6 +2084,8 @@ void ExportMusicXml::timesig(TimeSig* tsig)
             tagName += " symbol=\"common\"";
       else if (st == TimeSigType::ALLA_BREVE)
             tagName += " symbol=\"cut\"";
+      if (staff)
+            tagName += QString(" number=\"%1\"").arg(staff);
       if (!tsig->visible())
             tagName += " print-object=\"no\"";
       tagName += color2xml(tsig);
@@ -3665,18 +3692,6 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
       }
 
 //---------------------------------------------------------
-//   stretchCorrActFraction
-//---------------------------------------------------------
-
-static Fraction stretchCorrActFraction(const Note* const note)
-      {
-      // time signature stretch factor
-      const Fraction str = note->chord()->staff()->timeStretch(note->chord()->tick());
-      // chord's actual ticks corrected for stretch
-      return note->chord()->actualTicks() * str;
-      }
-
-//---------------------------------------------------------
 //   tremoloCorrection
 //---------------------------------------------------------
 
@@ -3737,7 +3752,7 @@ static void writeType(XmlWriter& xml, const Note* const note)
       int dots { 0 };
       const Fraction ratio = timeModification(note->chord()->tuplet());
 
-      const Fraction strActFraction = stretchCorrActFraction(note);
+      const Fraction strActFraction = note->chord()->globalTicks();
       const Fraction tt  = strActFraction * ratio * tremoloCorrection(note);
       const QString s { tick2xml(tt, &dots) };
       if (s.isEmpty())
@@ -3925,7 +3940,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 
             // duration
             if (!grace)
-                  _xml.tag("duration", calculateDurationInDivisions(stretchCorrActFraction(note), div));
+                  _xml.tag("duration", calculateDurationInDivisions(chord->globalTicks(), div));
 
             if (!isCueNote(note)) {
                   if (note->tieBack())
@@ -4138,12 +4153,10 @@ void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
             _xml.etag();
             }
 
-      Fraction tickLen = rest->actualTicks();
-      if (d.type() == TDuration::DurationType::V_MEASURE) {
-            // to avoid forward since rest->ticklen=0 in this case.
-            tickLen = rest->measure()->ticks();
-            }
-      _tick += tickLen;
+      Fraction tickLen;
+      // regular rest
+      tickLen = rest->globalTicks(); // MusicXML requires unstretched duration
+      _tick += rest->actualTicks(); // prevent <backward> or <forward> by moving to next note's tick
 #ifdef DEBUG_TICK
       qDebug() << "tickLen " << fractionToQString(tickLen)
                << "newtick " << fractionToQString(tick());
@@ -6175,16 +6188,56 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                   }
             }
 
-      TimeSig* tsig = 0;
+      // search all staves for non-generated time signatures
+      QMap<int, TimeSig*> timesigs;   // map staff to time signature
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
             if (seg->tick() > m->tick())
                   break;
-            Element* el = seg->element(strack);
-            if (el && el->type() == ElementType::TIMESIG)
-                  tsig = (TimeSig*) el;
+            for (int t = strack; t < etrack; t += VOICES) {
+                  Element* el = seg->element(t);
+                  if (!el)
+                        continue;
+                  if (el->type() == ElementType::TIMESIG) {
+                        qDebug(" found timesig %p tick %d track %d", el, el->tick().ticks(), el->track());
+                        int st = (t - strack) / VOICES;
+                        if (!el->generated())
+                              timesigs[st] = toTimeSig(el);
+                        }
+                  }
             }
-      if (tsig)
-            timesig(tsig);
+
+
+      // write the time signatues
+      if (!timesigs.empty()) {
+            // determine if all staves have a timesig and all timesigs are identical
+            // in that case a single <time> is written, without number=... attribute
+            size_t nstaves = p->nstaves();
+            bool singleTime = true;
+            // check if all staves have a keysig
+            for (size_t i = 0; i < nstaves; i++) {
+                  if (!timesigs.contains(i))
+                        singleTime = false;
+                  }
+            // check if all timesigs are identical
+            if (singleTime) {
+                  for (size_t i = 1; i < nstaves; i++) {
+                        if (!(timesigs[i]->sig() == timesigs[0]->sig()))
+                              singleTime = false;
+                        }
+                  }
+
+            // write the timesigs
+            qDebug(" singleTime %d", singleTime);
+            if (singleTime) {
+                  // timesig applies to all staves
+                  timesig(timesigs[0], 0);
+                  }
+            else {
+                  // staff-specific timesig
+                  for (int st : timesigs.keys())
+                        timesig(timesigs[st], st + 1);
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -7215,7 +7268,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                   // generate backup or forward to the start time of the element
                   if (_tick != seg->tick()) {
                         _attr.doAttr(_xml, false);
-                        moveToTick(seg->tick());
+                        moveToTick(seg->tick(), stretch(_score, st, m->tick()));
                         }
 
                   // handle annotations and spanners (directions attached to this note or rest)
@@ -7263,6 +7316,12 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
 
                   } // for (Segment* seg = ...
             _attr.stop(_xml);
+            const bool isLastVoiceOfStaff = st % VOICES == VOICES - 1;
+            const bool isLastVoiceOfLastStaff = st == etrack - 1;
+            if (isLastVoiceOfStaff && !isLastVoiceOfLastStaff) {
+                  // move tick to start of measure, generates backup to next staff, needs this staff's stretch
+                  moveToTick(m->tick(), stretch(_score, st, m->tick()));
+                  }
             } // for (int st = ...
       }
 
@@ -7351,10 +7410,10 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
       annotationsWithoutNote(this, strack, staves, m);
 
       // move to end of measure (in case of incomplete last voice)
-       #ifdef DEBUG_TICK
+#ifdef DEBUG_TICK
       qDebug("end of measure");
-       #endif
-      moveToTick(m->endTick());
+#endif
+      moveToTick(m->endTick(), stretch(_score, etrack - 1, m->tick()));
       if (partIndex == 0)
             repeatAtMeasureStop(m, strack, etrack, strack);
       // note: don't use "m->repeatFlags() & Repeat::END" here, because more

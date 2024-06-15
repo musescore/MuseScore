@@ -191,6 +191,20 @@ private slots:
       void lines2() { mxmlIoTest("testLines2"); }
       void lines3() { mxmlIoTest("testLines3"); }
       void lines4() { mxmlMscxExportTestRef("testLines4"); }
+      void localTimesig1() { mxmlMscxExportTestRef("testLocalTimesig1"); }
+      void localTimesig2() { mxmlMscxExportTestRef("testLocalTimesig2"); }
+      void localTimesig3() { mxmlMscxExportTestRef("testLocalTimesig3"); }
+      void localTimesig4() { mxmlMscxExportTestRef("testLocalTimesig4"); }
+      void localTimesig5() { mxmlMscxExportTestRef("testLocalTimesig5"); }
+      void localTimesig6() { mxmlMscxExportTestRef("testLocalTimesig6"); }
+      void localTimesig8() { mxmlMscxExportTestRef("testLocalTimesig8"); }
+      void localTimesig9() { mxmlMscxExportTestRef("testLocalTimesig9"); }
+      void localTimesig10() { mxmlMscxExportTestRef("testLocalTimesig10"); }
+      void localTimesig11() { mxmlMscxExportTestRef("testLocalTimesig11"); }
+      void localTimesig12() { mxmlMscxExportTestRef("testLocalTimesig12"); }
+      //void localTimesig14() { mxmlMscxExportTestRef("testLocalTimesig14"); } TODO, needs #6365 backported to support measure-repeats
+      //void localTimesig98() { mxmlMscxExportTestRef("testLocalTimesig98"); }
+      //void localTimesig99() { mxmlMscxExportTestRef("testLocalTimesig99"); }
       void lyricBracket() { mxmlImportTestRef("testLyricBracket"); }
       void lyricColor() { mxmlIoTest("testLyricColor"); }
       void lyricExtensions1() { mxmlIoTest("testLyricExtensions"); }
