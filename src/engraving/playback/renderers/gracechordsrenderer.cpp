@@ -229,7 +229,7 @@ duration_t GraceChordsRenderer::graceNotesMaxAvailableDuration(const Articulatio
         }
     }
 
-    duration_t minAcciacaturaDuration = durationFromTempoAndTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS);
+    duration_t minAcciacaturaDuration = durationFromTempoAndTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);
 
     return std::min(minAcciacaturaDuration * static_cast<duration_t>(graceNotesCount), halvedDuration);
 }

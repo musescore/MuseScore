@@ -1167,13 +1167,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
     int expectedSubNotesCount = 2;
 
     std::vector<duration_t> expectedDurations = {
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        QUARTER_NOTE_DURATION - (DEMI_SEMI_QUAVER_NOTE_DURATION / 2)
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        DEMI_SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1239,11 +1239,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AcciaccaturaChord)
     int expectedSubNotesCount = 5;
 
     std::vector<duration_t> expectedDurations = {
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        QUARTER_NOTE_DURATION - (DEMI_SEMI_QUAVER_NOTE_DURATION / 2)
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
@@ -1251,7 +1251,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AcciaccaturaChord)
         0,
         0,
         0,
-        DEMI_SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1323,15 +1323,15 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION * 2
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        QUARTER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION* 2
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {
