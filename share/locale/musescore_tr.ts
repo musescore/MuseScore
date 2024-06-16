@@ -28346,7 +28346,7 @@ yazılamadı.</translation>
         <location filename="../../src/update/internal/appupdateservice.cpp" line="111"/>
         <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation>MuseScore Studio %1 İndiriliyor</translation>
+        <translation>MuseScore Studio %1 indiriliyor</translation>
     </message>
     <message>
         <location filename="../../src/update/view/updatemodel.cpp" line="37"/>
