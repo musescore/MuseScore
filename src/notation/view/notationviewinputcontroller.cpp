@@ -638,29 +638,29 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
 
-        std::vector<EngravingItem*> ll = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
-        int n = ll.size();
+        std::vector<EngravingItem*> hitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
+        size_t numHitElements = hitElements.size();
 
         // overlapping elements with ctrl modifier
-        if (ll.size() > 1 && (keyState & Qt::ControlModifier)) {
-            int currTop = n - 1;
-            EngravingItem* e = ll[currTop];
+        if (numHitElements > 1 && (keyState & Qt::ControlModifier)) {
+            size_t currTop = numHitElements - 1;
+            EngravingItem* e = hitElements[currTop];
             bool found = false;
 
             // e is the topmost element in stacking order,
             // but we want to replace it with "first non-measure element after a selected element"
             // (if such an element exists)
-            for (size_t i = 0; i <= ll.size(); ++i) {
+            for (size_t i = 0; i <= numHitElements; ++i) {
                 if (found) {
-                    e = ll[currTop];
+                    e = hitElements[currTop];
                     if (!e->isMeasure()) {
                         break;
                     }
-                } else if (ll[currTop]->selected()) {
+                } else if (hitElements[currTop]->selected()) {
                     found = true;
                     e = nullptr;
                 }
-                currTop = (currTop + 1) % n;
+                currTop = (currTop + 1) % numHitElements;
             }
 
             if (e && !e->selected()) {
