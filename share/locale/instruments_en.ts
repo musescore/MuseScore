@@ -9874,13 +9874,6 @@
         <translation type="unfinished">Helicon</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3340"/>
-        <source>Helicon</source>
-        <comment>helicon shortName</comment>
-        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Helicon</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3343"/>
         <source>Conch shell, sometimes fitted with a mouthpiece.</source>
         <comment>conch description</comment>
@@ -15432,6 +15425,13 @@
         <translation type="unfinished">*B♭</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3340"/>
+        <source>Hel.</source>
+        <comment>helicon shortName</comment>
+        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Hel.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
         <source>Bass Drum</source>
         <comment>bass-drum trackName</comment>
@@ -19657,8 +19657,8 @@
     <name>engraving/scoreorder</name>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6248"/>
-        <source>Orchestral</source>
-        <translation type="unfinished">Orchestral</translation>
+        <source>Orchestra</source>
+        <translation type="unfinished">Orchestra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6249"/>
