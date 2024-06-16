@@ -155,7 +155,7 @@ if (MUSE_MODULE_NETWORK_WEBSOCKET)
     set(QT_ADD_WEBSOCKET ON)
 endif()
 
-include(FindQt6)
+include(SetupQt6)
 
 if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
