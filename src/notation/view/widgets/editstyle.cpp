@@ -1074,7 +1074,7 @@ EditStyle::EditStyle(QWidget* parent)
         } else if (auto radioButton = qobject_cast<QRadioButton*>(sw.widget)) {
             connect(radioButton, &QRadioButton::toggled, setSignalMapper, mapFunction);
         } else if (auto checkBox = qobject_cast<QCheckBox*>(sw.widget)) {
-            connect(checkBox, &QCheckBox::stateChanged, setSignalMapper, mapFunction);
+            connect(checkBox, &QCheckBox::checkStateChanged, setSignalMapper, mapFunction);
         } else if (auto button = qobject_cast<QAbstractButton*>(sw.widget)) {
             connect(button, &QAbstractButton::toggled, setSignalMapper, mapFunction);
         } else if (auto groupBox = qobject_cast<QGroupBox*>(sw.widget)) {
