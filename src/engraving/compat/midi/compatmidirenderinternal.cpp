@@ -1115,7 +1115,7 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
             pedalEventList.emplace(pedalEventList.cend() - 1,
                                    st + (2 - pedalEventsMinTicks), false, staffIdx);
         }
-        int a = st + 2;
+        int a = st + (3 - pedalEventsMinTicks);
         pedalEventList.emplace_back(a, true, staffIdx);
 
         int t = s->tick2().ticks() + (2 - pedalEventsMinTicks);
