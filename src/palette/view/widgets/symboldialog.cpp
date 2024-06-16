@@ -107,7 +107,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     m_symbolsWidget->setDrawGrid(true);
     m_symbolsWidget->setSelectable(true);
 
-    connect(systemFlag, &QCheckBox::stateChanged, this, &SymbolDialog::systemFlagChanged);
+    connect(systemFlag, &QCheckBox::checkStateChanged, this, &SymbolDialog::systemFlagChanged);
     connect(fontList, &QComboBox::currentIndexChanged, this, &SymbolDialog::systemFontChanged);
 
     symbolsArea->setWidget(m_symbolsWidget);
@@ -120,7 +120,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
 //   systemFlagChanged
 //---------------------------------------------------------
 
-void SymbolDialog::systemFlagChanged(int state)
+void SymbolDialog::systemFlagChanged(Qt::CheckState state)
 {
     bool sysFlag = state == Qt::Checked;
     for (int i = 0; i < m_symbolsWidget->actualCellCount(); ++i) {
