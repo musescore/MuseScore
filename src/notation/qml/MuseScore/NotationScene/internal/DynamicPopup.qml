@@ -168,7 +168,7 @@ StyledPopupView {
                 }
 
                 onClicked: {
-                    // TO-DO
+                    dynamicModel.changeDynamic(currentPage, index)
                 }
             }
         }

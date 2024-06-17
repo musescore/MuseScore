@@ -28,10 +28,12 @@ public:
         QString name;
         double width;
         double offset;
-        ItemType type;
+        ItemType itemType;
+        engraving::DynamicType dynType;
     };
 
     Q_INVOKABLE void init() override;
+    Q_INVOKABLE void changeDynamic(int page, int index);
 
     QVariantList pages() const;
 
@@ -41,7 +43,6 @@ signals:
 private:
     // Represents different pages of the popup, each containing dynamic/hairpin symbols as strings, width, offset and ItemType
     QVariantList m_pages;
-
 };
 } // namespace mu::notation
 
