@@ -3467,8 +3467,10 @@ void NotationInteraction::editElement(QKeyEvent* event)
     m_editData.key = event->key();
     m_editData.s = event->text();
 
-    if (event->type() == QKeyEvent::Type::KeyRelease) {
+    bool isShiftRelease = event->type() == QKeyEvent::Type::KeyRelease;
+    if (isShiftRelease) {
         m_editData.isKeyRelease = true;
+        resetAnchorLines();
     } else {
         m_editData.isKeyRelease = false;
     }
@@ -3514,10 +3516,12 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
         apply();
 
-        if (isGripEditStarted()) {
-            updateGripAnchorLines();
-        } else if (isElementEditStarted()) {
-            updateDragAnchorLines();
+        if (!isShiftRelease) {
+            if (isGripEditStarted()) {
+                updateGripAnchorLines();
+            } else if (isElementEditStarted()) {
+                updateDragAnchorLines();
+            }
         }
     } else {
         rollback();
