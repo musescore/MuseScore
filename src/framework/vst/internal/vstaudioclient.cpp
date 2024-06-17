@@ -88,14 +88,14 @@ muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesP
         return 0;
     }
 
-    m_processData.numSamples = samplesPerChannel;
-
     //! NOTE: From the VST3 documentation:
     //!
     //! Note that the ProcessData->numSamples
     //! which indicates how many samples are used in a process call can change from call to call,
     //! but never bigger than the maxSamplesPerBlock
-    if (samplesPerChannel != m_samplesInfo.samplesPerBlock) {
+    m_processData.numSamples = samplesPerChannel;
+
+    if (samplesPerChannel > m_samplesInfo.maxSamplesPerBlock) {
         setBlockSize(samplesPerChannel);
     }
 
@@ -121,9 +121,14 @@ muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesP
 
 void VstAudioClient::flush()
 {
-    flushBuffers();
+    allNotesOff();
 
     disableActivity();
+}
+
+void VstAudioClient::allNotesOff()
+{
+    flushBuffers();
 
     m_eventList.clear();
     m_paramChanges.clearQueue();
@@ -135,11 +140,11 @@ void VstAudioClient::flush()
 
 void VstAudioClient::setBlockSize(unsigned int samples)
 {
-    if (m_samplesInfo.samplesPerBlock == samples) {
+    if (m_samplesInfo.maxSamplesPerBlock == samples) {
         return;
     }
 
-    m_samplesInfo.samplesPerBlock = samples;
+    m_samplesInfo.maxSamplesPerBlock = samples;
     m_needUnprepareProcessData = true;
 
     updateProcessSetup();
@@ -221,7 +226,7 @@ void VstAudioClient::setUpProcessData()
     }
 
     if (!m_processData.outputs || !m_processData.inputs) {
-        m_processData.prepare(*component, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
+        m_processData.prepare(*component, m_samplesInfo.maxSamplesPerBlock, Steinberg::Vst::kSample32);
     }
 
     if (!m_activeOutputBusses.empty() && !m_activeInputBusses.empty()) {
@@ -296,7 +301,7 @@ void VstAudioClient::updateProcessSetup()
     VstProcessSetup setup;
     setup.processMode = Steinberg::Vst::kRealtime;
     setup.symbolicSampleSize = Steinberg::Vst::kSample32;
-    setup.maxSamplesPerBlock = m_samplesInfo.samplesPerBlock;
+    setup.maxSamplesPerBlock = m_samplesInfo.maxSamplesPerBlock;
     setup.sampleRate = m_samplesInfo.sampleRate;
 
     if (processor->setupProcessing(setup) != Steinberg::kResultOk) {
@@ -401,18 +406,20 @@ void VstAudioClient::disableActivity()
 
 void VstAudioClient::flushBuffers()
 {
-    for (int i = 0; i < m_processData.numSamples; ++i) {
-        for (int inputsNumber = 0; inputsNumber < m_processData.numInputs; ++inputsNumber) {
-            Steinberg::Vst::AudioBusBuffers input = m_processData.inputs[inputsNumber];
+    for (int inputsNumber = 0; inputsNumber < m_processData.numInputs; ++inputsNumber) {
+        Steinberg::Vst::AudioBusBuffers input = m_processData.inputs[inputsNumber];
 
+        for (int i = 0; i < m_processData.numSamples; ++i) {
             for (int audioChannel = 0; audioChannel < input.numChannels; ++audioChannel) {
                 input.channelBuffers32[audioChannel][i] = 0.f;
             }
         }
+    }
 
-        for (int outputsNumber = 0; outputsNumber < m_processData.numOutputs; ++outputsNumber) {
-            Steinberg::Vst::AudioBusBuffers output = m_processData.outputs[outputsNumber];
+    for (int outputsNumber = 0; outputsNumber < m_processData.numOutputs; ++outputsNumber) {
+        Steinberg::Vst::AudioBusBuffers output = m_processData.outputs[outputsNumber];
 
+        for (int i = 0; i < m_processData.numSamples; ++i) {
             for (int audioChannel = 0; audioChannel < output.numChannels; ++audioChannel) {
                 output.channelBuffers32[audioChannel][i] = 0.f;
             }
