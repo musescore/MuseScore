@@ -15,18 +15,6 @@ StyledPopupView {
     property int buttonHeight: 30
 
     property int currentPage: 0
-    property bool isHairpinPage: currentPage == 6
-
-    property var widthOffsetList: [
-        // [Width, Offset] of each dynamic in that Page
-        [[30, 1.5], [21, 1.0], [29, 0.5], [30, 0.5], [23, 2.5], [30, 2.5]], // Page 1
-        [[38, 2.5], [45, 2.5], [53, 2.5]                                 ], // Page 2
-        [[30, 2.5], [32 ,2.0], [25, 0.5], [29, 0.5], [38 ,0.5]           ], // Page 3
-        [[37, 0.5], [33, 0,5], [30, 0.5], [26, 0.5], [26, 2.5]           ], // Page 4
-        [[74, 2.0], [60, 2.5]                                            ], // Page 5
-        [[64, 2.0], [52, 2.0], [44, 2.0]                                 ], // Page 6
-        [[62, 0.0], [62, 0.0]                                            ]  // Page 7 - Hairpins
-    ]
 
     margins: 4
 
@@ -38,7 +26,6 @@ StyledPopupView {
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        var h = root.contentHeight
         root.x = root.parent.width / 2 - root.contentWidth / 2
         root.y = root.parent.height / 2 + root.margins * 2
     }
@@ -102,22 +89,24 @@ StyledPopupView {
             delegate: FlatButton {
                 id: dynamicButton
 
-                implicitWidth: widthOffsetList[currentPage][index][0]
+                implicitWidth: modelData.width
                 implicitHeight: root.buttonHeight
                 transparent: true
 
-                contentItem: isHairpinPage ? index == 0 ? crescHairpinComp : dimHairpinComp : dynamicComp
+                contentItem: modelData.type === DynamicPopupModel.Dynamic ? dynamicComp :
+                                modelData.type === DynamicPopupModel.Crescendo ? crescHairpinComp :
+                                modelData.type === DynamicPopupModel.Decrescendo ? dimHairpinComp : null
 
                 Component {
                     id: dynamicComp
 
                     StyledTextLabel {
                         id: dynamicLabel
-                        text: modelData
+                        text: modelData.symbol
                         font.pixelSize: 30
 
                         anchors.centerIn: parent
-                        anchors.horizontalCenterOffset: widthOffsetList[currentPage][index][1]
+                        anchors.horizontalCenterOffset: modelData.offset
                         anchors.verticalCenterOffset: 5
                     }
                 }
@@ -126,7 +115,7 @@ StyledPopupView {
                     id: crescHairpinComp
 
                     Canvas {
-                        width: widthOffsetList[currentPage][index][0]
+                        width: modelData.width
                         height: root.buttonHeight
 
                         onPaint: {
@@ -154,7 +143,7 @@ StyledPopupView {
                     id: dimHairpinComp
 
                     Canvas {
-                        width: widthOffsetList[currentPage][index][0]
+                        width: modelData.width
                         height: root.buttonHeight
 
                         onPaint: {
