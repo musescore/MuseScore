@@ -153,3 +153,27 @@ void InspectorModelWithVoiceAndPositionOptions::setIsStaveCenteringAvailable(boo
     m_isStaveCenteringAvailable = v;
     emit isStaveCenteringAvailableChanged(m_isStaveCenteringAvailable);
 }
+
+void InspectorModelWithVoiceAndPositionOptions::changeVoice(int voice)
+{
+    if (m_elementList.empty()) {
+        return;
+    }
+
+    beginCommand();
+
+    for (EngravingItem* item : m_elementList) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        item->undoChangeProperty(Pid::APPLY_TO_VOICE, VoiceApplication::CURRENT_VOICE_ONLY);
+        item->undoChangeProperty(Pid::VOICE, voice);
+    }
+
+    loadPropertyItem(m_applyToVoice);
+    loadPropertyItem(m_voice);
+
+    updateNotation();
+    endCommand();
+}

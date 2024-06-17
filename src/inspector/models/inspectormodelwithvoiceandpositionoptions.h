@@ -55,6 +55,8 @@ public:
     bool isMultiStaffInstrument() const;
     bool isStaveCenteringAvailable() const;
 
+    Q_INVOKABLE void changeVoice(int voice);
+
 public slots:
     void setIsMultiStaffInstrument(bool v);
     void setIsStaveCenteringAvailable(bool v);

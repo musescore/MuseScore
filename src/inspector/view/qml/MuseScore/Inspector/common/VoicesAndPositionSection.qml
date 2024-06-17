@@ -50,7 +50,6 @@ Column {
         onRequestResetToDefault: {
             if (root.model) {
                 propertyItem.resetToDefault()
-                root.model.voice.resetToDefault()
             }
         }
 
@@ -91,7 +90,6 @@ Column {
                         allVoicesMenu.toggleOpened(allVoicesMenu.model)
                     } else {
                         applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_INSTRUMENT
-                        root.model.voice.value = 0
                     }
                 }
 
@@ -121,8 +119,6 @@ Column {
                         if (!applyToVoiceSection.propertyItem) {
                             return
                         }
-
-                        root.model.voice.value = 0
 
                         switch (itemId) {
                         case "VOICE_ALL_IN_INSTRUMENT":
@@ -158,8 +154,7 @@ Column {
 
                 onToggled: function(newValue) {
                     if (root.model) {
-                        applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_CURRENT_ONLY
-                        root.model.voice.value = newValue
+                        root.model.changeVoice(newValue)
                     }
                 }
             }
