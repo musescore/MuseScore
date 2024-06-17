@@ -1078,18 +1078,9 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     score()->update();
 
     if (isGripEditStarted()) {
-        updateAnchorLines();
+        updateGripAnchorLines();
     } else {
-        std::vector<LineF> anchorLines;
-        for (const EngravingItem* e : selection()->elements()) {
-            std::vector<LineF> elAnchorLines = e->dragAnchorLines();
-            if (!elAnchorLines.empty()) {
-                for (LineF& l : elAnchorLines) {
-                    anchorLines.push_back(l);
-                }
-            }
-        }
-        setAnchorLines(anchorLines);
+        updateDragAnchorLines();
     }
 
     if (m_dragData.elements.size() == 0) {
@@ -3329,7 +3320,7 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
     m_editData.element = element;
     m_editData.curGrip = grip;
 
-    updateAnchorLines();
+    updateGripAnchorLines();
     m_editData.element->startEdit(m_editData);
 
     notifyAboutNotationChanged();
@@ -3345,7 +3336,7 @@ void NotationInteraction::endEditGrip()
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::updateAnchorLines()
+void NotationInteraction::updateGripAnchorLines()
 {
     std::vector<LineF> lines;
     mu::engraving::Grip anchorLinesGrip = m_editData.curGrip
@@ -3361,6 +3352,21 @@ void NotationInteraction::updateAnchorLines()
     }
 
     setAnchorLines(lines);
+}
+
+void NotationInteraction::updateDragAnchorLines()
+{
+    std::vector<LineF> anchorLines;
+    for (const EngravingItem* e : selection()->elements()) {
+        std::vector<LineF> elAnchorLines = e->dragAnchorLines();
+        if (!elAnchorLines.empty()) {
+            for (LineF& l : elAnchorLines) {
+                anchorLines.push_back(l);
+            }
+        }
+    }
+
+    setAnchorLines(anchorLines);
 }
 
 bool NotationInteraction::isElementEditStarted() const
@@ -3509,7 +3515,9 @@ void NotationInteraction::editElement(QKeyEvent* event)
         apply();
 
         if (isGripEditStarted()) {
-            updateAnchorLines();
+            updateGripAnchorLines();
+        } else if (isElementEditStarted()) {
+            updateDragAnchorLines();
         }
     } else {
         rollback();
