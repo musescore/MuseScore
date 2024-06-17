@@ -4881,8 +4881,9 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
             if (parent->isSegment()) {
                 // Get parent segment in linked score
                 Segment* oldSeg = toSegment(parent);
-                Measure* m = linkedScore->tick2measure(oldSeg->tick());
-                linkedParent = m->tick2segment(oldSeg->tick(), oldSeg->segmentType());
+                Measure* oldMeas = oldSeg->measure();
+                Measure* newMeas = linkedScore->tick2measure(oldMeas->tick());
+                linkedParent = newMeas->tick2segment(oldSeg->tick(), oldSeg->segmentType());
             } else {
                 linkedParent = parent->findLinkedInScore(linkedScore);
             }

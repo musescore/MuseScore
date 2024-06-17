@@ -135,6 +135,7 @@ Dynamic::Dynamic(const Dynamic& d)
     _avoidBarLines = d._avoidBarLines;
     _dynamicsSize = d._dynamicsSize;
     _centerOnNotehead = d._centerOnNotehead;
+    m_anchorToEndOfPrevious = d.m_anchorToEndOfPrevious;
 }
 
 //---------------------------------------------------------
