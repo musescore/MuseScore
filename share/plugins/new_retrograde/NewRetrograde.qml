@@ -15,7 +15,7 @@ import MuseScore 3.0
 
 MuseScore {
 	title: "New Retrograde"
-	description: "Takes a selection of notes and reverses them."
+	description: qsTr("Takes a selection of notes and reverses them.")
 	version: "1.0"
     categoryCode: "composing-arranging-tools"
     thumbnailName: "retrograde.png"
