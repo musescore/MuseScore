@@ -121,18 +121,18 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
 
 TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
 {
-    // [GIVEN] Score with 5 measures. There is a measure repeat on the last 2 measures
+    // [GIVEN] Score with 5 measures and 2 instruments. There is a measure repeat on the last 2 measures of the 1st instrument
     // (so the previous 2 measures will be repeated)
     Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_and_measure_repeats.mscx");
 
     const std::vector<Part*>& parts = score->parts();
-    ASSERT_FALSE(parts.empty());
+    ASSERT_EQ(parts.size(), 2);
 
     // [GIVEN] Context for parsing dynamics
     PlaybackContext ctx;
 
-    // [WHEN] Parse dynamics
-    ctx.update(parts.front()->id(), score);
+    // [WHEN] Parse dynamics for the 1st instrument (with measure repeats)
+    ctx.update(parts.at(0)->id(), score);
 
     // [WHEN] Get the actual dynamics map
     DynamicLevelMap actualDynamics = ctx.dynamicLevelMap(score);
@@ -156,6 +156,24 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
         // copy of 3rd measure
         { timestampFromTicks(score, 8160), dynamicLevelFromType(mpe::DynamicType::mf) },
         { timestampFromTicks(score, 9120), dynamicLevelFromType(mpe::DynamicType::fff) },
+    };
+
+    EXPECT_EQ(actualDynamics, expectedDynamics);
+
+    // [WHEN] Parse dynamics for the 2nd instrument (without measure repeats)
+    ctx.clear();
+    ctx.update(parts.at(1)->id(), score);
+
+    // [WHEN] Get the actual dynamics map
+    actualDynamics = ctx.dynamicLevelMap(score);
+
+    // [THEN] Measure repeat on the 1st instrument doesn't affect other instruments
+    expectedDynamics = {
+        // 1st measure
+        { timestampFromTicks(score, 0), dynamicLevelFromType(mpe::DynamicType::f) },
+
+        // 3rd measure
+        { timestampFromTicks(score, 3840), dynamicLevelFromType(mpe::DynamicType::ff) },
     };
 
     EXPECT_EQ(actualDynamics, expectedDynamics);
