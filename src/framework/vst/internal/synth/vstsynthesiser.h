@@ -76,11 +76,9 @@ private:
     void toggleVolumeGain(const bool isActive);
 
     VstPluginPtr m_pluginPtr = nullptr;
-
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     async::Channel<unsigned int> m_streamsCountChanged;
-    muse::audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;
 

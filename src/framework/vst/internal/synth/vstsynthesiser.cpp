@@ -56,13 +56,13 @@ void VstSynthesiser::init()
     pluginsRegister()->registerInstrPlugin(m_trackId, m_pluginPtr);
     m_pluginPtr->load();
 
-    m_samplesPerChannel = config()->driverBufferSize();
-
     m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr);
 
-    auto onPluginLoaded = [this]() {
+    const samples_t blockSize = config()->samplesToPreallocate();
+
+    auto onPluginLoaded = [this, blockSize]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
-        m_vstAudioClient->setBlockSize(m_samplesPerChannel);
+        m_vstAudioClient->setMaxSamplesPerBlock(blockSize);
         m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS), m_useDynamicEvents);
     };
 

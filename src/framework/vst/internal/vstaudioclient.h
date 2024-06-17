@@ -41,9 +41,10 @@ public:
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
+
     void flush();
 
-    void setBlockSize(unsigned int samples);
+    void setMaxSamplesPerBlock(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
@@ -51,11 +52,11 @@ public:
 private:
     struct SamplesInfo {
         unsigned int sampleRate = 0;
-        unsigned int samplesPerBlock = 0;
+        unsigned int maxSamplesPerBlock = 0;
 
         bool isValid()
         {
-            return sampleRate > 0 && samplesPerBlock > 0;
+            return sampleRate > 0 && maxSamplesPerBlock > 0;
         }
     };
 
@@ -65,7 +66,9 @@ private:
     void setUpProcessData();
     void updateProcessSetup();
     void extractInputSamples(muse::audio::samples_t sampleCount, const float* sourceBuffer);
-    bool fillOutputBuffer(muse::audio::samples_t sampleCount, float* output);
+
+    bool fillOutputBufferInstrument(muse::audio::samples_t sampleCount, float* output);
+    bool fillOutputBufferFx(muse::audio::samples_t sampleCount, float* output);
 
     void ensureActivity();
     void disableActivity();
