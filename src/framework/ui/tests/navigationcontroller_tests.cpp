@@ -375,7 +375,7 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnPrevSectionExclusive)
     sect2->section->setType(NavigationSection::Exclusive);
     sect2->section->requestActive();
 
-    //! [WHEN] Send action `nav-next-section` (usually F6)
+    //! [WHEN] Send action `nav-prev-section` (usually Shift+F6)
     m_dispatcher->dispatch("nav-prev-section");
 
     //! [THEN] The second section, the first panel, the first control must be activated
@@ -401,7 +401,7 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextPanel)
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
-    //! DO Send action `nav-next-section` (usually Tab)
+    //! DO Send action `nav-next-panel` (usually Tab)
     m_dispatcher->dispatch("nav-next-panel");
 
     //! [THEN] The first section, the first panel, the first control must be activated
@@ -427,7 +427,7 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnPrevSection)
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
-    //! [WHEN] Send action `nav-next-section` (usually Shift+F6)
+    //! [WHEN] Send action `nav-prev-section` (usually Shift+F6)
     m_dispatcher->dispatch("nav-prev-section");
 
     //! [THEN] The last section, the first panel, the first control must be activated.
@@ -453,7 +453,7 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnPrevPanel)
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
-    //! [WHEN] Send action `nav-next-section` (usually Shift+Tab)
+    //! [WHEN] Send action `nav-prev-panel` (usually Shift+Tab)
     m_dispatcher->dispatch("nav-prev-panel");
 
     //! [THEN] The second section, the first panel, the first control must be activated
