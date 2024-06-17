@@ -48,8 +48,8 @@ const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
         for (const Action& a : m.actions) {
             UiAction action;
             action.code = makeUriQuery(m.uri, a.code).toString();
-            action.uiCtx = m.requiresProject ? ui::UiCtxProjectOpened : ui::UiCtxAny;
-            action.scCtx = m.requiresProject ? shortcuts::CTX_PROJECT_OPENED : shortcuts::CTX_ANY;
+            action.uiCtx = toUiContext(a.uiCtx);
+            action.scCtx = toScContext(a.uiCtx);
             action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
             action.title = action.description;
 

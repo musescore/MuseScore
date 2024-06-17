@@ -190,6 +190,7 @@ public:
     static void utf16to8(std::u16string_view src, std::string& dst);
     static void utf8to32(std::string_view src, std::u32string& dst);
     static void utf32to8(std::u32string_view src, std::string& dst);
+    static void replaceInvalid(std::string_view src, std::string& dst);
     static bool isValidUtf8(const std::string_view& src);
 };
 
@@ -469,7 +470,7 @@ private:
 
 inline String operator+(char16_t s1, const String& s2) { String t(s1); t += s2; return t; }
 inline String operator+(const char16_t* s1, const String& s2) { String t(s1); t += s2; return t; }
-}
+} // namespace muse
 
 // ============================
 // Char (UTF-16)

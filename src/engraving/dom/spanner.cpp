@@ -1058,6 +1058,15 @@ Segment* Spanner::startSegment() const
         startSeg = score()->tick2segment(startTick, true, SegmentType::TimeTick, mmRest);
     }
 
+    if (!startSeg && startTick < score()->endTick()) {
+        Measure* measure = mmRest ? score()->tick2measureMM(startTick) : score()->tick2measure(startTick);
+        if (measure) {
+            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, startTick - measure->tick(), track2staff(trackIdx));
+            EditTimeTickAnchors::updateLayout(measure);
+            return anchor->segment();
+        }
+    }
+
     if (!startSeg) {
         startSeg = score()->tick2rightSegment(startTick, mmRest);
     }
