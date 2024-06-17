@@ -45,6 +45,14 @@ Item {
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
 
+    function closeContextMenu() {
+        if (!menuButton.isMenuOpened) {
+            return
+        }
+
+        menuButton.toggleMenu(null)
+    }
+
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
     signal hideSelectedElementsRequested()

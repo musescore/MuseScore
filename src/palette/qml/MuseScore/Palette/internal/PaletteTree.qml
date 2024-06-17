@@ -425,6 +425,8 @@ StyledListView {
                     togglePopup();
                 }
 
+                paletteHeader.closeContextMenu()
+
                 paletteTree.itemDragged = true;
                 DelegateModel.inPersistedItems = true;
                 DelegateModel.inItems = false;
