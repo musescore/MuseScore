@@ -459,6 +459,7 @@ EngravingItem* Dynamic::drop(EditData& ed)
     score()->undoAddElement(item);
     item->undoChangeProperty(Pid::PLACEMENT, placement(), PropertyFlags::UNSTYLED);
     if (item->isDynamic()) {
+        toDynamic(item)->setAnchorToEndOfPrevious(anchorToEndOfPrevious());
         score()->undoRemoveElement(this); // swap this dynamic for the newly added one
     }
     return item;
