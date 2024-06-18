@@ -36,7 +36,7 @@ void AlignmentLayout::alignItems(const std::vector<EngravingItem*>& elements, co
 
     double outermostY = 0.0;
     bool firstItem = true;
-    auto computeOutermostY = [&outermostY, &firstItem, &alignedItems](EngravingItem* item) {
+    auto computeOutermostY = [&outermostY, &firstItem](EngravingItem* item) {
         double curY = yOpticalCenter(item);
         if (firstItem) {
             outermostY = curY;
