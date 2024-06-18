@@ -1267,6 +1267,10 @@ bool Segment::hasElements(staff_idx_t staffIdx) const
 
 bool Segment::allElementsInvisible() const
 {
+    if (isType(SegmentType::TimeTick)) {
+        return true;
+    }
+
     if (isType(SegmentType::BarLineType | SegmentType::ChordRest)) {
         return false;
     }

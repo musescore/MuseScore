@@ -1506,6 +1506,7 @@ void Score::addElement(EngravingItem* element)
     break;
 
     case ElementType::DYNAMIC:
+        toDynamic(element)->checkMeasureBoundariesAndMoveIfNeed();
         setPlaylistDirty();
         break;
 

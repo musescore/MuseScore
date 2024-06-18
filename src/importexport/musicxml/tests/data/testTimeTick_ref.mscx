@@ -134,9 +134,8 @@
             </Spanner>
           <location>
             <fractions>7/16</fractions>
+            <timeTick>1</timeTick>
             </location>
-          <BarLine>
-            </BarLine>
           <Spanner type="HairPin">
             <prev>
               <location>
@@ -144,6 +143,15 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-7/16</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

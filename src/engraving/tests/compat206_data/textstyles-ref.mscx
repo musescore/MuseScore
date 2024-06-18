@@ -612,9 +612,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           <Spanner type="TextLine">
             <prev>
               <location>
@@ -622,6 +619,16 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="TextLine">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

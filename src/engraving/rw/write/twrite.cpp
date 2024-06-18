@@ -3403,13 +3403,25 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         // write spanners whose end tick lies outside the clip region
         if (clip) {
             for (Spanner* s : spanners) {
-                if ((s->tick2() == endTick)
-                    && !s->isSlur()
-                    && (s->track2() == track || (s->track2() == muse::nidx && s->track() == track))
-                    && (!clip || s->tick() >= sseg->tick())
-                    ) {
-                    writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
+                Fraction spannerEndTick = s->tick2();
+                bool spannerEndingAtEdgeOfClipZone = spannerEndTick == endTick && !s->isSlur() && s->effectiveTrack2() == track
+                                                     && s->tick() >= sseg->tick();
+                if (!spannerEndingAtEdgeOfClipZone) {
+                    continue;
                 }
+                bool needMove = spannerEndTick != ctx.curTick();
+                if (needMove) {
+                    // If spanner started on a timeTick and there was no other segment in between there and here,
+                    // ctx.curTick hasn't been moved forward, so we must move it forward here.
+                    Location curr = Location::absolute();
+                    Location dest = Location::absolute();
+                    curr.setFrac(ctx.curTick());
+                    dest.setFrac(spannerEndTick);
+                    dest.toRelative(curr);
+                    TWrite::write(&dest, xml, ctx);
+                    ctx.setCurTick(spannerEndTick);
+                }
+                writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
             }
         }
 

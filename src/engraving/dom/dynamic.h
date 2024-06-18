@@ -124,6 +124,7 @@ public:
 
     bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
+    void checkMeasureBoundariesAndMoveIfNeed();
 
     bool hasVoiceApplicationProperties() const override { return true; }
 
@@ -133,8 +134,8 @@ private:
     M_PROPERTY(double, dynamicsSize, setDynamicsSize)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
 
-    bool changeTimeAnchorType(const EditData& ed);
     bool moveSegment(const EditData& ed);
+    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
     bool nudge(const EditData& ed);
 
     DynamicType m_dynamicType = DynamicType::OTHER;

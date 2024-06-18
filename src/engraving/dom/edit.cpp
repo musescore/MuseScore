@@ -3354,6 +3354,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
         Fraction tick2 = s2 ? s2->tick() : Fraction::max();
 
         deleteOrShortenOutSpannersFromRange(stick1, stick2, track1, track2, filter);
+        deleteAnnotationsFromRange(s1, s2, track1, track2, filter);
 
         for (track_idx_t track = track1; track < track2; ++track) {
             if (!filter.canSelectVoice(track)) {
@@ -3367,8 +3368,6 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                     deleteItem(s->element(track));
                     continue;
                 }
-                // delete annotations just from this segment and track
-                deleteAnnotationsFromRange(s, s->next1(), track, track + 1, filter);
 
                 EngravingItem* e = s->element(track);
                 if (!e) {
@@ -4882,8 +4881,9 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
             if (parent->isSegment()) {
                 // Get parent segment in linked score
                 Segment* oldSeg = toSegment(parent);
-                Measure* m = linkedScore->tick2measure(oldSeg->tick());
-                linkedParent = m->tick2segment(oldSeg->tick(), oldSeg->segmentType());
+                Measure* oldMeas = oldSeg->measure();
+                Measure* newMeas = linkedScore->tick2measure(oldMeas->tick());
+                linkedParent = newMeas->tick2segment(oldSeg->tick(), oldSeg->segmentType());
             } else {
                 linkedParent = parent->findLinkedInScore(linkedScore);
             }

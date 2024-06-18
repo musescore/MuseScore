@@ -3114,36 +3114,22 @@ String Measure::accessibleInfo() const
 //       return minTick
 //---------------------------------------------------
 
-Fraction Measure::computeTicks()
+void Measure::computeTicks()
 {
-    Fraction minTick = ticks();
-    if (minTick <= Fraction(0, 1)) {
-        LOGD("=====minTick %d measure %p", minTick.ticks(), this);
-    }
-    assert(minTick > Fraction(0, 1));
-
-    Segment* ns = first();
-    while (ns && !ns->enabled()) {
-        ns = ns->next();
-    }
-    while (ns) {
-        Segment* s = ns;
-        Segment* nextSeg = s->nextActive();
-        ns = nextSeg;
-        while (s->isChordRestType() && ns && ns->isTimeTickType()) {
-            // Ignore timeTick segments when computing duration of chordRest segments
-            ns = ns->nextActive();
-        }
-        Fraction nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
-        if (nticks.isNotZero()) {
-            if (nticks < minTick) {
-                minTick = nticks;
+    for (Segment* segment = firstEnabled(); segment; segment = segment->nextActive()) {
+        Segment* nextSegment = segment->nextActive();
+        if (segment->isTimeTickType()) {
+            while (nextSegment && nextSegment->rtick() == segment->rtick()) {
+                nextSegment = nextSegment->nextActive();
+            }
+        } else {
+            while (nextSegment && nextSegment->isTimeTickType()) {
+                nextSegment = nextSegment->nextActive();
             }
         }
-        s->setTicks(nticks);
-        ns = nextSeg;
+        Fraction nextTick = nextSegment ? nextSegment->rtick() : ticks();
+        segment->setTicks(nextTick - segment->rtick());
     }
-    return minTick;
 }
 
 //---------------------------------------------------------

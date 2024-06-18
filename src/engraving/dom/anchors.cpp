@@ -56,7 +56,8 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, track_idx_t t
     }
 
     staff_idx_t staff = track2staff(track);
-    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+    Measure* startOneBefore = startMeasure->prevMeasure();
+    for (MeasureBase* mb = startOneBefore ? startOneBefore : startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
         if (!mb->isMeasure()) {
             continue;
         }
@@ -97,19 +98,30 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
 
 TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx)
 {
-    Segment* segment = measure->getSegmentR(SegmentType::TimeTick, relTick);
+    TimeTickAnchor* returnAnchor = nullptr;
 
-    track_idx_t track = staff2track(staffIdx);
-    EngravingItem* element = segment->elementAt(track);
-    TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
-    if (!anchor) {
-        anchor = Factory::createTimeTickAnchor(segment);
-        anchor->setParent(segment);
-        anchor->setTrack(track);
-        segment->add(anchor);
+    for (EngravingObject* linkedObj : measure->linkList()) {
+        IF_ASSERT_FAILED(linkedObj) {
+            continue;
+        }
+        Measure* linkedMeasure = toMeasure(linkedObj);
+        Segment* segment = linkedMeasure->getSegmentR(SegmentType::TimeTick, relTick);
+
+        track_idx_t track = staff2track(staffIdx);
+        EngravingItem* element = segment->elementAt(track);
+        TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
+        if (!anchor) {
+            anchor = Factory::createTimeTickAnchor(segment);
+            anchor->setParent(segment);
+            anchor->setTrack(track);
+            segment->add(anchor);
+        }
+        if (linkedMeasure == measure) {
+            returnAnchor = anchor;
+        }
     }
 
-    return anchor;
+    return returnAnchor;
 }
 
 void EditTimeTickAnchors::updateLayout(Measure* measure)

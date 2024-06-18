@@ -2158,7 +2158,6 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
     x = HorizontalSpacing::computeFirstSegmentXPosition(m, s, ctx.state().segmentShapeSqueezeFactor());
     bool isSystemHeader = s->header();
 
-    m->setSqueezableSpace(0.0);
     computeWidth(m, ctx, s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff, overrideMinMeasureWidth);
 }
 
@@ -2170,22 +2169,26 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
             continue;
         }
 
-        Segment* prevSeg = segment.prev();
-        while (prevSeg && !prevSeg->isChordRestType()) {
-            prevSeg = prevSeg->prev();
+        Segment* refCRSeg = m->findSegmentR(SegmentType::ChordRest, segment.rtick());
+        if (!refCRSeg) {
+            refCRSeg = segment.prev();
+            while (refCRSeg && !refCRSeg->isChordRestType()) {
+                refCRSeg = refCRSeg->prev();
+            }
         }
-        if (!prevSeg || prevSeg->ticks().isZero()) {
+
+        if (!refCRSeg || refCRSeg->ticks().isZero()) {
             continue;
         }
 
-        Fraction prevSegDuration = prevSeg->ticks();
+        Fraction refSegDuration = refCRSeg->ticks();
         Fraction thisDuration = segment.ticks();
-        Fraction relativeTick = segment.rtick() - prevSeg->rtick();
+        Fraction relativeTick = segment.rtick() - refCRSeg->rtick();
 
-        double relativeX = prevSeg->width() * (relativeTick.toDouble() / prevSeg->ticks().toDouble());
-        double relativeWidth = prevSeg->width() * (thisDuration.toDouble() / prevSegDuration.toDouble());
+        double relativeX = refCRSeg->width() * (relativeTick.toDouble() / refCRSeg->ticks().toDouble());
+        double relativeWidth = refCRSeg->width() * (thisDuration.toDouble() / refSegDuration.toDouble());
 
-        segment.mutldata()->setPosX(prevSeg->x() + relativeX);
+        segment.mutldata()->setPosX(refCRSeg->x() + relativeX);
         segment.setWidth(relativeWidth);
 
         for (EngravingItem* item : segment.elist()) {
@@ -2224,6 +2227,9 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
     double usrStretch = std::max(m->userStretch(), double(0.1)); // Avoids stretch going to zero
     usrStretch = std::min(usrStretch, double(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
 
+    if (s->rtick().isZero()) {
+        m->setSqueezableSpace(0.0); // TODO: store squeezableSpace segment by segment
+    }
     // PASS 1: compute the spacing of all left-aligned segments by stacking them one after the other
     while (s) {
         s->setWidthOffset(0.0);

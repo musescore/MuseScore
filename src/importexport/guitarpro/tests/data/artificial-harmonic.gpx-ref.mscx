@@ -326,6 +326,13 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="HarmonicMark">
+            <prev>
+              <location>
+                <fractions>-3/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>

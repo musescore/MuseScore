@@ -774,7 +774,7 @@ PointF Hairpin::linePos(Grip grip, System** system) const
 
     *system = segment->measure()->system();
     double x = segment->x() + segment->measure()->x();
-    if (!start && !segment->isTimeTickType()) {
+    if (!start) {
         x -= spatium();
     }
 
