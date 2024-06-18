@@ -39,6 +39,7 @@ public:
     MOCK_METHOD(void, toggleVisible, (), (override));
 
     MOCK_METHOD(EngravingItem*, hitElement, (const muse::PointF&, float), (const, override));
+    MOCK_METHOD(std::vector<EngravingItem*>, hitElements, (const muse::PointF&, float), (const, override));
     MOCK_METHOD(Staff*, hitStaff, (const muse::PointF&), (const, override));
 
     MOCK_METHOD(const HitElementContext&, hitElementContext, (), (const, override));

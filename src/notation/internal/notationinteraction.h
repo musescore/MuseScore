@@ -73,6 +73,7 @@ public:
 
     // Hit
     EngravingItem* hitElement(const muse::PointF& pos, float width) const override;
+    std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const override;
     Staff* hitStaff(const muse::PointF& pos) const override;
     const HitElementContext& hitElementContext() const override;
     void setHitElementContext(const HitElementContext& context) override;
@@ -306,7 +307,7 @@ private:
     void doEndDrag();
 
     bool doDropStandard();
-    bool doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset);
+    bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);
 
     void onElementDestroyed(EngravingItem* element);
 
@@ -339,7 +340,6 @@ private:
     bool needEndTextEdit() const;
 
     mu::engraving::Page* point2page(const muse::PointF& p, bool useNearestPage = false) const;
-    std::vector<EngravingItem*> hitElements(const muse::PointF& p_in, float w) const;
     std::vector<EngravingItem*> elementsAt(const muse::PointF& p) const;
     EngravingItem* elementAt(const muse::PointF& p) const;
 

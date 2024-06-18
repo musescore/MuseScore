@@ -53,6 +53,7 @@ public:
 
     // Hit
     virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
+    virtual std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const = 0;
     virtual Staff* hitStaff(const muse::PointF& pos) const = 0;
 
     struct HitElementContext
