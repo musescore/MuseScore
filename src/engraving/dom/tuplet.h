@@ -161,6 +161,7 @@ public:
     PointF bracketR[3];
 
     EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
 
 private:
 

@@ -851,4 +851,16 @@ EngravingItem* Tuplet::nextElement()
     }
     return firstElement;
 }
+
+EngravingItem* Tuplet::prevElement()
+{
+    ChordRest* lastElement = toChordRest(elements().back());
+    if (lastElement) {
+        if (lastElement->isChord()) {
+            return toChord(lastElement)->notes().back();
+        }
+        return toRest(lastElement);
+    }
+    return lastElement;
+}
 } // namespace mu::engraving
