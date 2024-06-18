@@ -347,7 +347,8 @@ private:
     // interesting to be selected at the end of the list
     static bool elementIsLess(const mu::engraving::EngravingItem* e1, const mu::engraving::EngravingItem* e2);
 
-    void updateAnchorLines();
+    void updateGripAnchorLines();
+    void updateDragAnchorLines();
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
     double currentScaling(muse::draw::Painter* painter) const;
