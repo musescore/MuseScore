@@ -222,15 +222,6 @@ struct Manifest {
         return false;
     }
 
-    //! TODO remove
-    void setEnable(bool val)
-    {
-        for (const Action& a : actions) {
-            Action::Config& ac = config.actions[a.code];
-            ac.execPoint = val ? EXEC_MANUALLY : EXEC_DISABLED;
-        }
-    }
-
     Action action(const std::string& code) const
     {
         for (const Action& a : actions) {

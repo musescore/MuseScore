@@ -49,7 +49,11 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void setEnable(const QString& uri, bool enable);
+
+    Q_INVOKABLE int currentExecPointIndex(const QString& uri) const;
+    Q_INVOKABLE QVariantList execPointsModel(const QString& uri) const;
+    Q_INVOKABLE void selectExecPoint(const QString& uri, int index);
+
     Q_INVOKABLE void editShortcut(QString codeKey);
     Q_INVOKABLE void reloadPlugins();
 
@@ -70,11 +74,19 @@ private:
         rShortcuts
     };
 
+    struct ExecPoints {
+        QString uri;
+        std::vector<ExecPoint> points;
+    };
+
     void updatePlugin(const Manifest& plugin);
     int itemIndexByCodeKey(const QString& uri) const;
 
+    const std::vector<ExecPoint>& execPoints(const QString& uri) const;
+
     QHash<int, QByteArray> m_roles;
     ManifestList m_plugins;
+    mutable ExecPoints m_execPointsCache;
 };
 }
 

@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <vector>
+
 #include "modularity/imoduleinterface.h"
 
 #include "extensionstypes.h"
@@ -35,5 +37,6 @@ public:
 
     virtual void reg(const std::string& module, const ExecPoint& p) = 0;
     virtual ExecPoint point(const std::string& name) const = 0;
+    virtual std::vector<ExecPoint> allPoints() const = 0;
 };
 }

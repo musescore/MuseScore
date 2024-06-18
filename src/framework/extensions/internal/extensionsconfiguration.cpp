@@ -89,9 +89,9 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
         JsonArray acts;
         for (const auto& a : c.actions) {
             JsonObject act;
-            obj["code"] = a.first;
-            obj["exec_point"] = a.second.execPoint;
-            obj["shortcut"] = a.second.shortcut;
+            act["code"] = a.first;
+            act["exec_point"] = a.second.execPoint;
+            act["shortcut"] = a.second.shortcut;
             acts.append(act);
         }
         obj["actions"] = acts;

@@ -74,7 +74,7 @@ void ExtensionsActionController::onPluginTriggered(const UriQuery& q)
         { IInteractive::Button::No, IInteractive::Button::Yes });
 
     if (result.standardButton() == IInteractive::Button::Yes) {
-        provider()->setEnable(q.uri(), true);
+        provider()->setExecPoint(q.uri(), EXEC_MANUALLY);
         provider()->perform(q);
     }
 }

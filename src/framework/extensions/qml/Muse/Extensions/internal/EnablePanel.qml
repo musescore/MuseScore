@@ -30,17 +30,47 @@ InfoPanel {
 
     property bool isEnabled: false
 
+    property var execPointsModel: null
+    property int currentExecPointIndex: 0
+
     signal editShortcutRequested()
-    signal enabledChanged(bool enabled)
+    signal execPointSelected(int index)
 
     buttonsPanel: RowLayout {
         id: buttons
 
         spacing: 19
 
+        StyledDropdown {
+            id: execPoints
+
+            property string text: currentText
+
+            Component.onCompleted: {
+                root.mainButton = execPoints
+            }
+
+            Layout.alignment: Qt.AlignLeft
+
+            width: 280
+
+            navigation.name: "ExecPointSelector"
+            navigation.panel: root.contentNavigation
+            navigation.column: 3
+
+            currentIndex: root.currentExecPointIndex
+            model: root.execPointsModel
+
+            onActivated: function(index, value) {
+                currentIndex = index
+                root.execPointSelected(index)
+            }
+        }
+
         FlatButton {
             id: neutralButton
-            Layout.alignment: Qt.AlignLeft
+
+            Layout.alignment: Qt.AlignRight
 
             navigation.name: "EditShortcutButton"
             navigation.panel: root.contentNavigation
@@ -54,29 +84,31 @@ InfoPanel {
             }
         }
 
-        FlatButton {
-            id: mainButton
-            Layout.alignment: Qt.AlignRight
 
-            navigation.name: text + "Button"
-            navigation.panel: root.contentNavigation
-            navigation.column: 3
-            accessible.ignored: true
-            navigation.onActiveChanged: {
-                if (!navigation.active) {
-                    accessible.ignored = false
-                }
-            }
 
-            text: !root.isEnabled ? qsTrc("extensions", "Enable") : qsTrc("extensions", "Disable")
+        // FlatButton {
+        //     id: mainButton
+        //     Layout.alignment: Qt.AlignRight
 
-            Component.onCompleted: {
-                root.mainButton = mainButton
-            }
+        //     navigation.name: text + "Button"
+        //     navigation.panel: root.contentNavigation
+        //     navigation.column: 3
+        //     accessible.ignored: true
+        //     navigation.onActiveChanged: {
+        //         if (!navigation.active) {
+        //             accessible.ignored = false
+        //         }
+        //     }
 
-            onClicked: {
-                root.enabledChanged(!root.isEnabled)
-            }
-        }
+        //     text: !root.isEnabled ? qsTrc("extensions", "Enable") : qsTrc("extensions", "Disable")
+
+        //     Component.onCompleted: {
+        //         root.mainButton = mainButton
+        //     }
+
+        //     onClicked: {
+        //         root.enabledChanged(!root.isEnabled)
+        //     }
+        // }
     }
 }
