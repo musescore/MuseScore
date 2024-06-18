@@ -484,8 +484,8 @@ static std::pair<String, String> separateTransposition(const String& name)
     String n = name;
     n.replace(u"♭", u"b").replace(u"♯", u"#");
     std::pair<String, String> ret;
-    static const std::regex re("(^| )([ABCDEF][b#]?)( |$)");
-    static const std::regex in(" in");
+    static const std::regex re("(^|(?:\\s|\\u00A0))([ABCDEF][b#]?)((?:\\s|\\u00A0)|$)");
+    static const std::regex in("(?:\\s|\\u00A0)in");
 
     const StringList results = n.search(re, { 2 });
     if (!results.empty()) {
@@ -3176,9 +3176,13 @@ void MusicXMLParserDirection::direction(const String& partId,
                 }
             }
 
-            if (isLikelyFingering()) {
-                m_logger->logDebugInfo(String(u"Inferring fingering: %1").arg(m_wordsText));
-                MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, m_wordsText, track,
+            String fingeringStr = m_wordsText;
+            static const std::regex xmlFormating("(<.*?>)");
+            fingeringStr.remove(xmlFormating).remove(u'\u00A0');
+            if (isLikelyFingering(fingeringStr)) {
+                m_logger->logDebugInfo(String(u"Inferring fingering: %1").arg(fingeringStr));
+                t->setXmlText(fingeringStr);
+                MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, fingeringStr, track,
                                                                                              placement(), measure, tick + m_offset);
                 inferredFingerings.push_back(inferredFingering);
             } else {
@@ -3392,7 +3396,7 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
            && m_rehearsalText.empty()
            && m_metroText.empty()
            && m_tpoSound < 0.1
-           && m_wordsText.contains(std::wregex(L"This music has been legally downloaded\\.\\sDo not photocopy\\."));
+           && m_wordsText.contains(std::wregex(L"This music has been legally downloaded\\.(?:\\s|\\u00A0)Do not photocopy\\."));
 }
 
 bool MusicXMLParserDirection::isLikelyTempoText(const track_idx_t track) const
@@ -3704,14 +3708,16 @@ static void addSymbolsToCoda(String& wordsString, const String& codaId)
 //   isLikelyFingering
 //---------------------------------------------------------
 
-bool MusicXMLParserDirection::isLikelyFingering() const
+bool MusicXMLParserDirection::isLikelyFingering(const String& fingeringStr) const
 {
     if (!configuration()->inferTextType()) {
         return false;
     }
+
     // One or more newline-separated digits, possibly lead or trailed by whitespace
-    static const std::wregex re(L"^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$");
-    return m_wordsText.contains(re)
+    static const std::wregex re(
+        L"^(?:\\s|\\u00A0)*[-–]?(?:\\s|\\u00A0)?[0-5pimac](?:[-–][0-5pimac])?(?:\n[-–]?(?:\\s|\\u00A0)?[0-5pimac](?:[-–][0-5pimac])?)*(?:\\s|\\u00A0)*$");
+    return fingeringStr.contains(re)
            && m_rehearsalText.empty()
            && m_metroText.empty()
            && m_tpoSound < 0.1;
@@ -4203,7 +4209,7 @@ void MusicXMLParserDirection::handleTempo()
     // which we need to map to SMuFL syms
     String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
 
-    static const std::regex tempo(".*([yxeqhVwW])(\\.?)\\s*=[^0-9]*([0-9]+).*");
+    static const std::regex tempo(".*([yxeqhVwW])(\\.?)(?:\\s|\\u00A0)*=[^0-9]*([0-9]+).*");
     StringList tempoMatches = plainWords.search(tempo, { 1, 2, 3 }, SplitBehavior::SkipEmptyParts);
 
     // Not a tempo
@@ -4228,7 +4234,7 @@ void MusicXMLParserDirection::handleTempo()
         { u"W", { u"<sym>metNoteDoubleWhole</sym>", DurationType::V_BREVE } }
     };
 
-    static const std::regex replace("(.*)[yxeqhVwW]\\.?(\\s*=[^0-9]*[0-9]+.*)");
+    static const std::regex replace("(.*)[yxeqhVwW]\\.?((?:\\s|\\u00A0)*=[^0-9]*[0-9]+.*)");
     const String newStr = u"$1" + syms.at(dur).first + dotStr + u"$2";
     plainWords.replace(replace, newStr);
     m_wordsText = plainWords;
