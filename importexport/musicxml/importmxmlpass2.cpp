@@ -3905,7 +3905,7 @@ bool MusicXMLParserDirection::isLikelyFingering() const
       if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
             return false;
       // One or more newline-separated digits (or changes), possibly lead or trailed by whitespace
-      static const QRegularExpression re("^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$");
+      static const QRegularExpression re("^(?:\\s|\u00A0)*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*(?:\\s|\u00A0)*$");
       return _wordsText.contains(re)
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
@@ -3954,7 +3954,7 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
             && _tpoSound < 0.1
-            && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.\\sDo not photocopy\\."));
+            && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.(?:\\s|\u00A0)Do not photocopy\\."));
       }
 
 bool MusicXMLParserDirection::isLikelyTempoText(const int track) const
@@ -4131,16 +4131,16 @@ MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
 
 double MusicXMLParserDirection::convertTextToNotes()
       {
-      static const QRegularExpression notesRegex("(?<note>[yxeqhwW]\\.{0,2})(\\s*=)");
+      static const QRegularExpression notesRegex("(?<note>[yxeqhwW]\\.{0,2})((?:\\s|\u00A0)*=)");
       QString notesSubstring = notesRegex.match(_wordsText).captured("note");
 
       QList<QPair<QString, QString>> noteSyms{{"q", QString("<sym>metNoteQuarterUp</sym>")},   // note4_Sym
-                                                {"e", QString("<sym>metNote8thUp</sym>")},       // note8_Sym
-                                                {"h", QString("<sym>metNoteHalfUp</sym>")},      // note2_Sym
-                                                {"y", QString("<sym>metNote32ndUp</sym>")},      // note32_Sym
-                                                {"x", QString("<sym>metNote16thUp</sym>")},      // note16_Sym
-                                                {"w", QString("<sym>metNoteWhole</sym>")},
-                                                {"W", QString("<sym>metNoteDoubleWhole</sym>")}};
+                                              {"e", QString("<sym>metNote8thUp</sym>")},       // note8_Sym
+                                              {"h", QString("<sym>metNoteHalfUp</sym>")},      // note2_Sym
+                                              {"y", QString("<sym>metNote32ndUp</sym>")},      // note32_Sym
+                                              {"x", QString("<sym>metNote16thUp</sym>")},      // note16_Sym
+                                              {"w", QString("<sym>metNoteWhole</sym>")},
+                                              {"W", QString("<sym>metNoteDoubleWhole</sym>")}};
       for (auto noteSym : noteSyms) {
             if (notesSubstring.contains(noteSym.first)) {
                   notesSubstring.replace(noteSym.first, noteSym.second);
@@ -4166,9 +4166,9 @@ double MusicXMLParserDirection::convertTextToNotes()
 bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
       {
       QList<QString> tempoWords{"rit", "rall", "accel", "tempo", "allegr", "poco", "molto", "più", "meno", "mosso", "rubato"};
-      static const QRegularExpression re("[yxeqhwW.]+\\s*=\\s*\\d+");
+      static const QRegularExpression re("[yxeqhwW.]+(?:\\s|\u00A0)*=(?:\\s|\u00A0)*\\d+");
       if (_wordsText.contains(re)) {
-            static const QRegularExpression tempoValRegex("=\\s*(?<tempo>\\d+)");
+            static const QRegularExpression tempoValRegex("=(?:\\s|\u00A0)*(?<tempo>\\d+)");
             double tempoVal = tempoValRegex.match(_wordsText).captured("tempo").toDouble();
             double noteVal = convertTextToNotes() * 60.0;
             _tpoSound = tempoVal / noteVal;
