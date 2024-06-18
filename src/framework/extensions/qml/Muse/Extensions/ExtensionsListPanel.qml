@@ -130,9 +130,7 @@ Item {
                 navigationPanel.order: 4
 
                 onPluginClicked: function(plugin, navigationControl) {
-                    prv.selectedPlugin = plugin
-                    panel.open()
-                    prv.lastNavigatedExtension = navigationControl
+                    root.openInfoPanel(plugin, navigationControl)
                 }
 
                 onNavigationActivated: function(itemRect) {
@@ -161,9 +159,7 @@ Item {
                 navigationPanel.order: 5
 
                 onPluginClicked: function(plugin, navigationControl) {
-                    prv.selectedPlugin = Object.assign({}, plugin)
-                    panel.open()
-                    prv.lastNavigatedExtension = navigationControl
+                    root.openInfoPanel(plugin, navigationControl)
                 }
 
                 onNavigationActivated: function(itemRect) {
@@ -171,6 +167,14 @@ Item {
                 }
             }
         }
+    }
+
+    function openInfoPanel(plugin, navigationControl) {
+        prv.selectedPlugin = Object.assign({}, plugin)
+        panel.currentExecPointIndex = extensionsModel.currentExecPointIndex(prv.selectedPlugin.codeKey)
+        panel.execPointsModel = extensionsModel.execPointsModel(prv.selectedPlugin.codeKey)
+        panel.open()
+        prv.lastNavigatedExtension = navigationControl
     }
 
     EnablePanel {
@@ -190,8 +194,8 @@ Item {
             {"title": qsTrc("extensions", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 
-        onEnabledChanged: function(enabled) {
-            extensionsModel.setEnable(selectedPlugin.codeKey, enabled)
+        onExecPointSelected: function(index) {
+            extensionsModel.selectExecPoint(selectedPlugin.codeKey, index)
         }
 
         onEditShortcutRequested: {

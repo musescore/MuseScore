@@ -22,7 +22,7 @@
 #include "extensionsprovider.h"
 
 #include "global/containers.h"
-#include "global/stringutils.h"
+#include "global/async/async.h"
 
 #include "extensionsloader.h"
 #include "legacy/extpluginsloader.h"
@@ -142,30 +142,6 @@ Action ExtensionsProvider::action(const UriQuery& q) const
     return Action();
 }
 
-muse::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
-{
-    bool ok = false;
-    std::map<Uri, Manifest::Config> allconfigs;
-    for (Manifest& m : m_manifests) {
-        if (m.uri == uri) {
-            m.setEnable(enable);
-            m_manifestChanged.send(m);
-            ok = true;
-        }
-
-        allconfigs[m.uri] = m.config;
-    }
-
-    Ret ret;
-    if (ok) {
-        ret = configuration()->setManifestConfigs(allconfigs);
-    } else {
-        ret = make_ret(Ret::Code::UnknownError);
-    }
-
-    return ret;
-}
-
 muse::Ret ExtensionsProvider::perform(const UriQuery& uri)
 {
     Action a = action(uri);
@@ -212,6 +188,40 @@ muse::Ret ExtensionsProvider::run(const Action& a)
     return ret;
 }
 
+muse::Ret ExtensionsProvider::setExecPoint(const Uri& uri, const ExecPointName& name)
+{
+    bool ok = false;
+    std::map<Uri, Manifest::Config> allconfigs;
+    for (Manifest& m : m_manifests) {
+        if (m.uri == uri) {
+            for (const Action& a : m.actions) {
+                Action::Config& ac = m.config.actions[a.code];
+                ac.execPoint = name;
+            }
+
+            m_manifestChanged.send(m);
+            ok = true;
+        }
+
+        allconfigs[m.uri] = m.config;
+    }
+
+    Ret ret;
+    if (ok) {
+        ret = configuration()->setManifestConfigs(allconfigs);
+    } else {
+        ret = make_ret(Ret::Code::UnknownError);
+    }
+
+    return ret;
+}
+
+std::vector<ExecPoint> ExtensionsProvider::execPoints(const Uri& uri) const
+{
+    UNUSED(uri);
+    return execPointsRegister()->allPoints();
+}
+
 muse::Ret ExtensionsProvider::performPoint(const ExecPointName& name)
 {
     Ret ret = make_ok();
@@ -221,7 +231,7 @@ muse::Ret ExtensionsProvider::performPoint(const ExecPointName& name)
                 continue;
             }
 
-            Ret r = run(a);
+            Ret r = perform(makeUriQuery(m.uri, a.code));
             if (ret) {
                 ret = r;
             }
@@ -229,4 +239,11 @@ muse::Ret ExtensionsProvider::performPoint(const ExecPointName& name)
     }
 
     return ret;
+}
+
+void ExtensionsProvider::performPointAsync(const ExecPointName& name)
+{
+    async::Async::call(this, [this, name]() {
+        performPoint(name);
+    });
 }

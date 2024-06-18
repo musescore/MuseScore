@@ -64,6 +64,8 @@
 
 #include "ui/iuiactionsregister.h"
 #include "ui/iinteractiveuriregister.h"
+#include "extensions/iextensionsexecpointsregister.h"
+#include "projectextensionpoints.h"
 
 using namespace mu::project;
 using namespace muse;
@@ -130,6 +132,18 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore/Project/UploadProgressDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore/Project/ProjectUploadedDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore/Project/AudioGenerationSettingsDialog.qml");
+    }
+
+    auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(moduleName());
+    if (er) {
+        er->reg(moduleName(), { EXEC_ONPOST_PROJECT_CREATED,
+                                TranslatableString("project", "On post project created") });
+        er->reg(moduleName(), { EXEC_ONPOST_PROJECT_OPENED,
+                                TranslatableString("project", "On post project opened") });
+        er->reg(moduleName(), { EXEC_ONPRE_PROJECT_SAVE,
+                                TranslatableString("project", "On pre project save") });
+        er->reg(moduleName(), { EXEC_ONPOST_PROJECT_SAVED,
+                                TranslatableString("project", "On post project saved") });
     }
 }
 

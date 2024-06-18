@@ -21,6 +21,8 @@
  */
 #include "extensionsexecpointsregister.h"
 
+#include "containers.h"
+
 #include "log.h"
 
 using namespace muse::extensions;
@@ -46,4 +48,9 @@ ExecPoint ExtensionsExecPointsRegister::point(const std::string& name) const
         return it->second;
     }
     return ExecPoint();
+}
+
+std::vector<ExecPoint> ExtensionsExecPointsRegister::allPoints() const
+{
+    return muse::values(m_points);
 }

@@ -49,11 +49,12 @@ public:
 
     virtual KnownCategories knownCategories() const = 0;
 
-    virtual Ret setEnable(const Uri& uri, bool enable) = 0;
-
     virtual Ret perform(const UriQuery& uri) = 0;
     virtual Ret run(const UriQuery& uri) = 0;
 
+    virtual Ret setExecPoint(const Uri& uri, const ExecPointName& name) = 0;
+    virtual std::vector<ExecPoint> execPoints(const Uri& uri) const = 0;
     virtual Ret performPoint(const ExecPointName& name) = 0;
+    virtual void performPointAsync(const ExecPointName& name) = 0;
 };
 }

@@ -33,6 +33,7 @@ public:
 
     void reg(const std::string& module, const ExecPoint& p) override;
     ExecPoint point(const std::string& name) const override;
+    std::vector<ExecPoint> allPoints() const override;
 
 private:
 
