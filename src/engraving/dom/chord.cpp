@@ -1519,6 +1519,20 @@ double Chord::calcDefaultStemLength()
     return finalStemLength + extraLength;
 }
 
+Fraction Chord::endTickIncludingTied() const
+{
+    const Chord* lastTied = this;
+    while (lastTied) {
+        const Chord* next = lastTied->nextTiedChord();
+        if (next) {
+            lastTied = next;
+        } else {
+            break;
+        }
+    }
+    return lastTied->tick() + lastTied->actualTicks();
+}
+
 Chord* Chord::prev() const
 {
     ChordRest* prev = prevChordRest(const_cast<Chord*>(this));
@@ -2651,7 +2665,7 @@ void Chord::sortNotes()
 //    back to this one. Set sameSize=true to return 0 in this case.
 //---------------------------------------------------------
 
-Chord* Chord::nextTiedChord(bool backwards, bool sameSize)
+Chord* Chord::nextTiedChord(bool backwards, bool sameSize) const
 {
     Segment* nextSeg = backwards ? segment()->prev1(SegmentType::ChordRest) : segment()->next1(SegmentType::ChordRest);
     if (!nextSeg) {

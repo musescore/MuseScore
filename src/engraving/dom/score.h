@@ -590,7 +590,7 @@ public:
     void print(muse::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
     std::set<ChordRest*> getSelectedChordRests() const;
-    void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
+    void getSelectedStartEndChordRests(ChordRest*& cr1, ChordRest*& cr2) const;
 
     void select(EngravingItem* item, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
     void select(const std::vector<EngravingItem*>& items, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
@@ -906,11 +906,9 @@ public:
     void addUnmanagedSpanner(Spanner*);
     void removeUnmanagedSpanner(Spanner*);
 
-    void addHairpinToChordRest(Hairpin* hairpin, ChordRest* chordRest);
+    Hairpin* addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2 = nullptr);
+    void addHairpin(Hairpin* hairpin, ChordRest* cr1, ChordRest* cr2 = nullptr);
     void addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic);
-
-    Hairpin* addHairpin(HairpinType, const Fraction& tickStart, const Fraction& tickEnd, track_idx_t track);
-    Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr);
 
     ChordRest* findCR(Fraction tick, track_idx_t track) const;
     ChordRest* findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const;

@@ -35,6 +35,7 @@
 #include "chord.h"
 #include "chordline.h"
 #include "clef.h"
+#include "dynamic.h"
 #include "excerpt.h"
 #include "expression.h"
 #include "factory.h"
@@ -142,29 +143,29 @@ ChordRest* Score::getSelectedChordRest() const
 //   getSelectedChordRest2
 //---------------------------------------------------------
 
-void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
+void Score::getSelectedStartEndChordRests(ChordRest*& cr1, ChordRest*& cr2) const
 {
-    *cr1 = 0;
-    *cr2 = 0;
+    cr1 = 0;
+    cr2 = 0;
     for (EngravingItem* e : selection().elements()) {
         if (e->isNote()) {
             e = e->parentItem();
         }
         if (e->isChordRest()) {
             ChordRest* cr = toChordRest(e);
-            if (*cr1 == 0 || (*cr1)->tick() > cr->tick()) {
-                *cr1 = cr;
+            if (cr1 == 0 || (cr1)->tick() > cr->tick()) {
+                cr1 = cr;
             }
-            if (*cr2 == 0 || (*cr2)->tick() < cr->tick()) {
-                *cr2 = cr;
+            if (cr2 == 0 || (cr2)->tick() < cr->tick()) {
+                cr2 = cr;
             }
         }
     }
-    if (*cr1 == 0) {
+    if (cr1 == 0) {
         MScore::setError(MsError::NO_NOTE_REST_SELECTED);
     }
-    if (*cr1 == *cr2) {
-        *cr2 = 0;
+    if (cr1 == cr2) {
+        cr2 = 0;
     }
 }
 
@@ -2066,7 +2067,7 @@ void Score::cmdAddOttava(OttavaType type)
     } else {
         ChordRest* cr1;
         ChordRest* cr2;
-        getSelectedChordRest2(&cr1, &cr2);
+        getSelectedStartEndChordRests(cr1, cr2);
         if (!cr1) {
             return;
         }
@@ -2089,33 +2090,6 @@ void Score::cmdAddOttava(OttavaType type)
             select(ottava, SelectType::SINGLE, 0);
         }
     }
-}
-
-//---------------------------------------------------------
-//   addHairpins
-//---------------------------------------------------------
-
-std::vector<Hairpin*> Score::addHairpins(HairpinType type)
-{
-    std::vector<Hairpin*> hairpins;
-
-    // add hairpin on each staff if possible
-    if (selection().isRange() && selection().staffStart() != selection().staffEnd() - 1) {
-        for (staff_idx_t staffIdx = selection().staffStart(); staffIdx < selection().staffEnd(); ++staffIdx) {
-            ChordRest* cr1 = selection().firstChordRest(staffIdx * VOICES);
-            ChordRest* cr2 = selection().lastChordRest(staffIdx * VOICES);
-            hairpins.push_back(addHairpin(type, cr1, cr2));
-        }
-    } else {
-        // for single staff range selection, or single selection,
-        // find start & end elements elements
-        ChordRest* cr1 = nullptr;
-        ChordRest* cr2 = nullptr;
-        getSelectedChordRest2(&cr1, &cr2);
-        hairpins.push_back(addHairpin(type, cr1, cr2));
-    }
-
-    return hairpins;
 }
 
 //---------------------------------------------------------
@@ -3766,44 +3740,120 @@ Lyrics* Score::addLyrics()
     return lyrics;
 }
 
-//---------------------------------------------------------
-//   addHairpin
-//---------------------------------------------------------
-
-Hairpin* Score::addHairpin(HairpinType t, const Fraction& tickStart, const Fraction& tickEnd, track_idx_t track)
+std::vector<Hairpin*> Score::addHairpins(HairpinType type)
 {
-    Hairpin* pin = Factory::createHairpin(this->dummy()->segment());
-    pin->setHairpinType(t);
-    if (t == HairpinType::CRESC_LINE) {
-        pin->setBeginText(u"cresc.");
-        pin->setContinueText(u"(cresc.)");
-    } else if (t == HairpinType::DECRESC_LINE) {
-        pin->setBeginText(u"dim.");
-        pin->setContinueText(u"(dim.)");
-    }
-    pin->setTrack(track);
-    pin->setTrack2(track);
-    pin->setTick(tickStart);
-    pin->setTick2(tickEnd);
-    undoAddElement(pin);
-    return pin;
-}
+    std::vector<Hairpin*> hairpins;
 
-//---------------------------------------------------------
-//   Score::addHairpin
-//---------------------------------------------------------
+    // add hairpin on each staff if possible
+    if (selection().isRange() && selection().staffStart() != selection().staffEnd() - 1) {
+        for (staff_idx_t staffIdx = selection().staffStart(); staffIdx < selection().staffEnd(); ++staffIdx) {
+            ChordRest* cr1 = selection().firstChordRest(staffIdx * VOICES);
+            ChordRest* cr2 = selection().lastChordRest(staffIdx * VOICES);
+            hairpins.push_back(addHairpin(type, cr1, cr2));
+        }
+    } else {
+        // for single staff range selection, or single selection,
+        // find start & end elements elements
+        ChordRest* cr1 = nullptr;
+        ChordRest* cr2 = nullptr;
+        getSelectedStartEndChordRests(cr1, cr2);
+        hairpins.push_back(addHairpin(type, cr1, cr2));
+    }
+
+    return hairpins;
+}
 
 Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2)
 {
     if (!cr1) {
         return nullptr;
     }
-    if (!cr2) {
-        cr2 = cr1;
+
+    Hairpin* hairpin = Factory::createHairpin(this->dummy()->segment());
+    hairpin->setHairpinType(type);
+    if (type == HairpinType::CRESC_LINE) {
+        hairpin->setBeginText(u"cresc.");
+        hairpin->setContinueText(u"(cresc.)");
+    } else if (type == HairpinType::DECRESC_LINE) {
+        hairpin->setBeginText(u"dim.");
+        hairpin->setContinueText(u"(dim.)");
     }
-    assert(cr1->staffIdx() == cr2->staffIdx());
-    const Fraction end = cr2->tick() + cr2->actualTicks();
-    return addHairpin(type, cr1->tick(), end, cr1->track());
+
+    addHairpin(hairpin, cr1, cr2);
+
+    return hairpin;
+}
+
+void Score::addHairpin(Hairpin* hairpin, ChordRest* cr1, ChordRest* cr2)
+{
+    track_idx_t track = cr1->track();
+    Fraction startTick = cr1->tick();
+
+    Fraction endTick = startTick;
+    if (m_selection.isRange()) {
+        endTick = m_selection.tickEnd();
+    } else {
+        if (cr2 && cr2 != cr1) {
+            endTick = cr2->endTick();
+        } else {
+            endTick = cr1->isChord() ? toChord(cr1)->endTickIncludingTied() : cr1->endTick();
+        }
+        const Segment* startSegment = cr2 ? cr2->segment() : cr1->segment();
+        for (const Segment* segment = startSegment; segment && segment->tick() < endTick;
+             segment = segment->next1(SegmentType::ChordRest | SegmentType::TimeTick)) {
+            if (segment == startSegment) {
+                continue;
+            }
+            if (segment->findAnnotation(ElementType::DYNAMIC, track, track)) {
+                endTick = segment->tick();
+                break;
+            }
+        }
+    }
+
+    hairpin->setTrack(track);
+    hairpin->setTrack2(track);
+    hairpin->setTick(startTick);
+    hairpin->setTick2(endTick);
+
+    undoAddElement(hairpin);
+}
+
+void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
+{
+    track_idx_t track = dynamic->track();
+    hairpin->setTrack(track);
+    hairpin->setTrack2(track);
+
+    hairpin->setTick(dynamic->tick());
+
+    Segment* dynamicSegment = dynamic->segment();
+
+    Chord* startChord = nullptr;
+    for (Segment* segment = dynamicSegment; segment; segment = segment->prev(SegmentType::ChordRest)) {
+        EngravingItem* element = segment->elementAt(track);
+        if (element && element->isChord()) {
+            startChord = toChord(element);
+            break;
+        }
+    }
+
+    Fraction endTick = startChord ? startChord->endTickIncludingTied() : dynamic->segment()->measure()->endTick();
+
+    for (Segment* segment = dynamicSegment; segment && segment->tick() < endTick;
+         segment = segment->next1(SegmentType::ChordRest | SegmentType::TimeTick)) {
+        if (segment == dynamicSegment) {
+            continue;
+        }
+        if (segment->findAnnotation(ElementType::DYNAMIC, track, track)) {
+            endTick = segment->tick();
+            break;
+        }
+    }
+
+    hairpin->setTick2(endTick);
+
+    undoAddElement(hairpin);
 }
 
 //---------------------------------------------------------

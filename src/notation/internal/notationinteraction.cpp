@@ -1729,8 +1729,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
             rw::RWRegister::reader()->readItem(spanner, e);
             spanner->styleChanged();
-            if (spanner->isHairpin() && cr1 == cr2) {
-                score->addHairpinToChordRest(toHairpin(spanner), cr1);
+            if (spanner->isHairpin()) {
+                score->addHairpin(toHairpin(spanner), cr1, cr2);
             } else {
                 score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
