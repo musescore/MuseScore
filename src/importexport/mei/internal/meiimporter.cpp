@@ -44,6 +44,7 @@
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/ottava.h"

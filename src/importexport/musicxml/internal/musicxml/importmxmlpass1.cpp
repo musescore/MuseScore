@@ -569,6 +569,8 @@ static bool overrideTextStyleForComposer(const String& creditString)
 //   addText2
 //---------------------------------------------------------
 
+static void scaleTitle(Score* score, Text* text);
+
 /**
  Add text \a strTxt to VBox \a vbx using Tid \a stl.
  Also sets Align and Yoff.

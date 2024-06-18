@@ -3206,9 +3206,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
     }
 
     // rebase vertical offset on drag
-    double rebase = 0.0;
     if (ldata->offsetChanged() != OffsetChange::NONE) {
-        rebase = Autoplace::rebaseOffset(item, ldata);
+        Autoplace::rebaseOffset(item, ldata);
     }
 
     if (item->autoplace()) {

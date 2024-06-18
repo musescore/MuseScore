@@ -22,6 +22,7 @@
 
 #include "vstfxprocessor.h"
 
+using namespace muse;
 using namespace muse::vst;
 using namespace muse::audio;
 
