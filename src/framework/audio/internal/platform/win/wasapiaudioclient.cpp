@@ -96,6 +96,11 @@ unsigned int WasapiAudioClient::channelCount() const
     return m_mixFormat.get()->nChannels;
 }
 
+unsigned int WasapiAudioClient::minPeriodInFrames() const
+{
+    return m_minPeriodInFrames;
+}
+
 void WasapiAudioClient::setFallbackDevice(const hstring& deviceId)
 {
     m_fallbackDeviceIdString = deviceId;
@@ -184,6 +189,7 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
 
         // Get the maximum size of the AudioClient Buffer
         check_hresult(m_audioClient->GetBufferSize(&m_bufferFrames));
+        LOGI() << "Buffer size: " << m_bufferFrames;
 
         // Get the render client
         m_audioRenderClient.capture(m_audioClient, &IAudioClient::GetService);
@@ -668,7 +674,9 @@ void WasapiAudioClient::setStateAndNotify(const DeviceState newState, hresult re
         break;
     }
 
-    LOGE() << errMsg;
+    if (!errMsg.empty()) {
+        LOGE() << errMsg;
+    }
 
     m_deviceState = newState;
 }
