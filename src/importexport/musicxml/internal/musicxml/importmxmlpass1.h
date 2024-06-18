@@ -197,6 +197,8 @@ public:
     std::map<Fraction, Fraction>& adjustedDurations() { return m_adjustedDurations; }
     void insertSeenDenominator(int val) { m_seenDenominators.emplace(val); }
     String exporterString() const { return m_exporterString; }
+    bool hasDingbats() const { return m_hasDingbats; }
+    void setHasDingbats() { m_hasDingbats = true; }
 
 private:
     // functions
@@ -228,6 +230,7 @@ private:
     const int m_maxDiff = 5;                   // Duration rounding tick threshold;
     std::map<Fraction, Fraction> m_adjustedDurations;  // Rounded durations
     std::set<int> m_seenDenominators;          // Denominators seen. Used for rounding errors.
+    bool m_hasDingbats = false;
 };
 } // namespace Ms
 #endif

@@ -470,6 +470,7 @@ private:
     void otherDirection();
     void handleRepeats(Measure* measure, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
                        DelayedDirectionsList& delayedDirections);
+    void symbol();
     Marker* findMarker(const String& repeat) const;
     Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const Fraction& tick, DelayedDirectionsList& delayedDirections);
@@ -495,8 +496,6 @@ private:
     bool isLikelyDynamicRange() const;
     PlayingTechniqueType getPlayingTechnique() const;
     void handleDrumInstrument(bool isPerc, Fraction tick) const;
-
-    // void terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick);
 
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 

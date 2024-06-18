@@ -1475,6 +1475,22 @@ static void handleSpannerStop(SLine* cur_sp, track_idx_t track2, const Fraction&
     spanners[cur_sp].second = tick.ticks();
 }
 
+static SystemText* createDingbat(const String& number, Score* score)
+{
+    SystemText* t = Factory::createSystemText(score->dummy()->segment());
+    t->setPlainText(number);
+    t->setFrameType(FrameType::CIRCLE);
+    t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
+    t->setFrameColor(muse::draw::Color::BLACK);
+    t->setPropertyFlags(Pid::FRAME_FG_COLOR, PropertyFlags::UNSTYLED);
+    t->setBgColor(muse::draw::Color::BLACK);
+    t->setPropertyFlags(Pid::FRAME_BG_COLOR, PropertyFlags::UNSTYLED);
+    t->setColor(muse::draw::Color::WHITE);
+    t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+
+    return t;
+}
+
 //---------------------------------------------------------
 //   The MusicXML parser, pass 2
 //---------------------------------------------------------
@@ -3721,10 +3737,7 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             m_wordsText += u"<sym>segno</sym>";
             m_e.skipCurrentElement();
         } else if (m_e.name() == "symbol") {
-            const String smufl = m_e.readText();
-            if (!smufl.empty()) {
-                m_wordsText += u"<sym>" + smufl + u"</sym>";
-            }
+            symbol();
         } else if (m_e.name() == "other-direction") {
             otherDirection();
         } else {
@@ -3826,6 +3839,24 @@ void MusicXMLParserDirection::otherDirection()
             }
             m_elems.push_back(smuflSym);
         }
+    }
+}
+
+void MusicXMLParserDirection::symbol()
+{
+    const String smufl = m_e.readText();
+
+    if (m_pass1.hasDingbats() && m_pass1.exporterString().contains(u"finale") && configuration()->inferTextType()) {
+        // Convert zapf dingbat '2'
+        if (smufl == u"restWhole" && placement() == u"above") {
+            SystemText* dingbat = createDingbat(u"2", m_score);
+            m_elems.push_back(dingbat);
+            return;
+        }
+    }
+
+    if (!smufl.empty()) {
+        m_wordsText += u"<sym>" + smufl + u"</sym>";
     }
 }
 
@@ -7739,7 +7770,27 @@ void MusicXMLParserNotations::dynamics()
         if (m_e.name() == "other-dynamics") {
             m_dynamicsList.push_back(m_e.readText());
         } else {
-            m_dynamicsList.push_back(String::fromAscii(m_e.name().ascii()));
+            const String name = String::fromAscii(m_e.name().ascii());
+
+            // Convert zapf dingbat '3' and '4'
+            if (m_pass1.hasDingbats() && m_pass1.exporterString().contains(u"finale") && configuration()->inferTextType()
+                && m_dynamicsPlacement == u"above") {
+                String no;
+                if (name == u"ppp") {
+                    no = u"3";
+                } else if (name == u"pp") {
+                    no = u"4";
+                }
+
+                if (!no.empty()) {
+                    Notation notation = Notation::notationWithAttributes(u"dingbat" + no, m_e.attributes(), u"articulations");
+                    m_notations.push_back(notation);
+                    m_e.skipCurrentElement();
+                    continue;
+                }
+            }
+
+            m_dynamicsList.push_back(name);
             m_e.skipCurrentElement();  // skip but don't log
         }
     }
@@ -7806,6 +7857,15 @@ void MusicXMLParserNotations::articulations()
             artic.setSubType(String::fromAscii(m_e.name().ascii()));
             m_notations.push_back(artic);
             m_e.skipCurrentElement();  // skip but don't log
+        } else if (m_e.name() == "other-articulation") {
+            if (m_pass1.exporterString().contains(u"finale") && configuration()->inferTextType()) {
+                // Convert zapf dingbat '1'
+                if (m_e.readText() == u"\u00CA") {
+                    m_pass1.setHasDingbats();
+                    Notation notation = Notation::notationWithAttributes(u"dingbat1", m_e.attributes(), u"articulations");
+                    m_notations.push_back(notation);
+                }
+            }
         } else {
             skipLogCurrElem();
         }
@@ -8528,6 +8588,12 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
     } else if (notation.parent() == u"articulations") {
         if (note && notation.name() == u"chord-line") {
             addChordLine(notation, note, m_logger, &m_e);
+        } else if (note && notation.name().contains(u"dingbat")) {
+            const String no = notation.name().back();
+            SystemText* dingbat = createDingbat(no, cr->score());
+            dingbat->setTrack(cr->track());
+            dingbat->setParent(cr->segment());
+            m_pass2.addSystemElement(dingbat, dingbat->tick());
         }
     } else {
         // LOGD("addNotation: notation has been skipped: %s %s", muPrintable(notation.name()), muPrintable(notation.parent()));
