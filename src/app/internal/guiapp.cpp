@@ -236,6 +236,16 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
         appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
     }
 
+    if (guitarProConfiguration()) {
+        if (options.guitarPro.experimental) {
+            guitarProConfiguration()->setExperimental(true);
+        }
+
+        if (options.guitarPro.linkedTabStaffCreated) {
+            guitarProConfiguration()->setLinkedTabStaffCreated(true);
+        }
+    }
+
     startupScenario()->setStartupType(options.startup.type);
 
     if (options.startup.scoreUrl.has_value()) {
