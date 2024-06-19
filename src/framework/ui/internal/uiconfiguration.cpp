@@ -235,7 +235,7 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
         { STROKE_SECONDARY_COLOR, config.value("stroke_secondary_color").toQString() },
         { BUTTON_COLOR, config.value("button_color").toQString() },
         { FONT_PRIMARY_COLOR, config.value("font_primary_color").toQString() },
-        { FONT_SECONDARY_COLOR, config.value("font_primary_color").toQString() },
+        { FONT_SECONDARY_COLOR, config.value("font_secondary_color").toQString() },
         { LINK_COLOR, config.value("link_color").toQString() },
         { FOCUS_COLOR, config.value("focus_color").toQString() },
         { WHITE_COLOR, config.value("white_color").toQString() },
