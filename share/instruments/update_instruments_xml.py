@@ -4,6 +4,25 @@ import sys
 def eprint(*args, **kwargs):
     print(*args, **kwargs, file=sys.stderr)
 
+if __name__ == '__main__' and sys.prefix == sys.base_prefix:
+    # Not running inside a virtual environment. Let's try to load one.
+    import os
+    old_dir = os.path.realpath(__file__)
+    new_dir, script_name = os.path.split(old_dir)
+    rel_pyi = r'.venv\Scripts\python.exe' if sys.platform == 'win32' else '.venv/bin/python'
+    while new_dir != old_dir:
+        abs_pyi = os.path.join(new_dir, rel_pyi)
+        if os.access(abs_pyi, os.X_OK):
+            eprint(f'{script_name}: Loading virtual environment:\n  {abs_pyi}')
+            if sys.platform == 'win32':
+                import subprocess
+                raise SystemExit(subprocess.run([abs_pyi, *sys.argv]).returncode)
+            os.execl(abs_pyi, abs_pyi, *sys.argv)
+        old_dir = new_dir
+        new_dir = os.path.dirname(new_dir)
+    eprint(f'{script_name}: Not running inside a virtual environment.')
+    del old_dir, new_dir, rel_pyi, abs_pyi, script_name
+
 import locale
 if locale.getpreferredencoding().lower() != 'utf-8':
     encoding = locale.getpreferredencoding()
