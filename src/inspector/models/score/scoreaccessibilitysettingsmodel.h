@@ -34,6 +34,7 @@ class ScoreAccessibilitySettingsModel : public AbstractInspectorModel
     Q_OBJECT
     INJECT(mu::context::IGlobalContext, globalContext)
     Q_PROPERTY(PropertyItem * scoreStylePreset READ scoreStylePreset WRITE setScoreStylePreset NOTIFY scoreStylePresetChanged)
+    Q_PROPERTY(PropertyItem * headSystem READ headSystem NOTIFY scoreStylePresetChanged)
 
 public:
     explicit ScoreAccessibilitySettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -44,16 +45,26 @@ public:
     void resetProperties() override;
 
     PropertyItem* scoreStylePreset() const;
+    PropertyItem* headSystem() const;
     void setScoreStylePreset(PropertyItem* preset);
+    void setHeadSystem(PropertyItem* headSystem);
     Q_INVOKABLE QVariantList possibleScoreStylePreset() const;
+    Q_INVOKABLE QVariantList possibleHeadSystemTypes() const;
     void loadStyle(PropertyItem* preset);
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
 signals:
     void scoreStylePresetChanged();
+    void headSystemChanged();
+/*
+public slots:
+    void onHeadSystemChanged();
+*/
+
 private:
     PropertyItem* m_scoreStylePreset = nullptr;
+    PropertyItem* m_headSystem = nullptr;
     bool m_ignoreStyleChange = false;
 };
 }

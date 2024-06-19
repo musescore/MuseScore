@@ -56,5 +56,16 @@ InspectorSectionView {
                 }
             }
         }
+
+        DropdownPropertyView {
+            id: noteheadScheme
+
+            titleText: qsTrc("inspector", "Notehead scheme")
+            propertyItem: root.model ? root.model.headSystem : null
+            visible: true
+            enabled: true
+
+            model: root.model ? root.model.possibleHeadSystemTypes() : []
+        }
     }
 }

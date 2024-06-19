@@ -45,11 +45,18 @@ ScoreAccessibilitySettingsModel::ScoreAccessibilitySettingsModel(QObject* parent
             emit scoreStylePresetChanged();
         }
     });
+
+    //connect(m_headSystem, &PropertyItem::valueChanged, this, &ScoreAccessibilitySettingsModel::onHeadSystemChanged);
 }
 
 PropertyItem* ScoreAccessibilitySettingsModel::scoreStylePreset() const
 {
     return m_scoreStylePreset;
+}
+
+PropertyItem* ScoreAccessibilitySettingsModel::headSystem() const
+{
+    return m_headSystem;
 }
 
 void ScoreAccessibilitySettingsModel::setScoreStylePreset(PropertyItem* preset)
@@ -61,11 +68,21 @@ void ScoreAccessibilitySettingsModel::setScoreStylePreset(PropertyItem* preset)
     m_ignoreStyleChange = false;
 }
 
+void ScoreAccessibilitySettingsModel::setHeadSystem(PropertyItem* headSystem)
+{
+    m_headSystem = headSystem;
+    //onHeadSystemChanged();
+    emit headSystemChanged();
+}
+
 void ScoreAccessibilitySettingsModel::createProperties()
 {
     m_scoreStylePreset = buildPropertyItem(mu::engraving::Pid::SCORE_STYLE_PRESET);
+    m_headSystem = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
     m_scoreStylePreset->setDefaultValue(static_cast<int>(mu::engraving::ScoreStylePreset::DEFAULT));
     m_scoreStylePreset->setValue(static_cast<int>(mu::engraving::ScoreStylePreset::DEFAULT));
+    m_headSystem->setDefaultValue(static_cast<int>(mu::engraving::NoteHeadScheme::HEAD_AUTO));
+    m_headSystem->setValue(static_cast<int>(mu::engraving::NoteHeadScheme::HEAD_AUTO));
 }
 
 void ScoreAccessibilitySettingsModel::requestElements()
@@ -76,7 +93,8 @@ void ScoreAccessibilitySettingsModel::requestElements()
 void ScoreAccessibilitySettingsModel::loadProperties()
 {
     static PropertyIdSet propertyIdSet {
-        Pid::SCORE_STYLE_PRESET
+        Pid::SCORE_STYLE_PRESET,
+        Pid::HEAD_SCHEME
     };
 
     loadProperties(propertyIdSet);
@@ -87,12 +105,18 @@ void ScoreAccessibilitySettingsModel::loadProperties(const mu::engraving::Proper
     if (muse::contains(propertyIdSet, Pid::SCORE_STYLE_PRESET)) {
         loadPropertyItem(m_scoreStylePreset);
     }
+
+    if (muse::contains(propertyIdSet, Pid::HEAD_SCHEME)) {
+        loadPropertyItem(m_headSystem);
+    }
 }
 
 void ScoreAccessibilitySettingsModel::resetProperties()
 {
     m_scoreStylePreset->resetToDefault();
+    m_headSystem->resetToDefault();
     emit scoreStylePresetChanged();
+    emit headSystemChanged();
 }
 
 QVariantList ScoreAccessibilitySettingsModel::possibleScoreStylePreset() const
@@ -125,6 +149,36 @@ QVariantList ScoreAccessibilitySettingsModel::possibleScoreStylePreset() const
     return result;
 }
 
+QVariantList ScoreAccessibilitySettingsModel::possibleHeadSystemTypes() const
+{
+    QMap<mu::engraving::NoteHeadScheme, QString> types {
+        { mu::engraving::NoteHeadScheme::HEAD_AUTO,                    muse::qtrc("inspector", "Auto") },
+        { mu::engraving::NoteHeadScheme::HEAD_NORMAL,                  muse::qtrc("inspector", "Normal") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,               muse::qtrc("inspector", "Pitch names") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,        muse::qtrc("inspector", "German pitch names") },
+        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,                 muse::qtrc("inspector", "Solfège movable do") },
+        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,           muse::qtrc("inspector", "Solfège fixed do") },
+        { mu::engraving::NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3,     muse::qtrc("inspector", "Figurenotes (stage 3)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,            muse::qtrc("inspector", "4-shape (Walker)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,      muse::qtrc("inspector", "7-shape (Aikin)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,       muse::qtrc("inspector", "7-shape (Funk)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER,     muse::qtrc("inspector", "7-shape (Walker)") },
+    };
+
+    QVariantList result;
+
+    for (mu::engraving::NoteHeadScheme type : types.keys()) {
+        QVariantMap obj;
+
+        obj["text"] = types[type];
+        obj["value"] = static_cast<int>(type);
+
+        result << obj;
+    }
+
+    return result;
+}
+
 void ScoreAccessibilitySettingsModel::loadStyle(PropertyItem* preset)
 {
     int presetValue = preset->value().toInt();
@@ -148,3 +202,33 @@ void ScoreAccessibilitySettingsModel::loadStyle(PropertyItem* preset)
         LOGI() << "filePath is empty";
     }
 }
+
+/*
+void ScoreAccessibilitySettingsModel::onHeadSystemChanged()
+{
+    auto headScheme = static_cast<mu::engraving::NoteHeadScheme>(m_headSystem->value().toInt());
+    LOGI() << "Changing NoteHeadScheme to " << m_headSystem->value().toInt();
+
+    INotationPtr notation = currentNotation();
+    if (!notation) {
+        LOGE() << "No current notation found!";
+        return;
+    }
+
+    INotationElementsPtr elementsService = notation->elements();
+    if (!elementsService) {
+        LOGE() << "No elements service found!";
+        return;
+    }
+
+    auto elements = elementsService->elements();
+    LOGI() << elements.size();
+    for (auto* element : elements) {
+        if (auto* note = dynamic_cast<Note*>(element)) {
+            note->setHeadScheme(headScheme);
+        }
+    }
+
+    notation->notationChanged().notify();
+}
+*/
