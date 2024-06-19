@@ -834,6 +834,22 @@ void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::Ele
     score()->select(elementsToSelect, SelectType::ADD);
 }
 
+void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
+{
+    if (element->isSpanner() && !toSpanner(element)->segmentsEmpty()) {
+        SpannerSegment* frontSeg = toSpanner(element)->frontSegment();
+        select({ frontSeg });
+        if (frontSeg->needStartEditingAfterSelecting()) {
+            startEditElement(frontSeg, false);
+        }
+    } else {
+        select({ element });
+        if (element->needStartEditingAfterSelecting()) {
+            startEditElement(element, false);
+        }
+    }
+}
+
 void NotationInteraction::selectAll()
 {
     if (isTextEditingStarted()) {
@@ -1722,6 +1738,11 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             spanner->styleChanged();
             if (spanner->isHairpin()) {
                 score->addHairpin(toHairpin(spanner), cr1, cr2);
+                if (!spanner->segmentsEmpty()) {
+                    SpannerSegment* frontSegment = spanner->frontSegment();
+                    score->select(frontSegment);
+                    startEditElement(frontSegment);
+                }
             } else {
                 score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
@@ -1896,6 +1917,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 if (spanner->hasVoiceApplicationProperties()) {
                     spanner->setInitialTrackAndVoiceApplication(staff2track(i));
                 }
+                selectAndStartEditIfNeeded(spanner);
             }
         } else if (element->isTextBase() && !element->isFingering() && !element->isSticking()) {
             mu::engraving::Segment* firstSegment = sel.startSegment();
@@ -1974,6 +1996,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         LOGD("unknown selection state");
     }
 
+    m_notifyAboutDropChanged = true;
+
     score->setSelectionChanged(true);
 
     apply();
@@ -2037,11 +2061,9 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         }
 
         if (el && !score->inputState().noteEntryMode()) {
-            doSelect({ el }, mu::engraving::SelectType::SINGLE, 0);
-            if (el->needStartEditingAfterSelecting()) {
-                startEditElement(el, false);
-            }
+            selectAndStartEditIfNeeded(el);
         }
+
         dropData->dropElement = nullptr;
 
         m_notifyAboutDropChanged = true;
@@ -3874,6 +3896,10 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     }
 
     apply();
+
+    if (EngravingItem* element = selection()->element()) {
+        selectAndStartEditIfNeeded(element);
+    }
 
     MScoreErrorsController::checkAndShowMScoreError();
 }

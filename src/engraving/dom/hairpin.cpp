@@ -117,7 +117,7 @@ EngravingItem* HairpinSegment::drop(EditData& data)
     d->setParent(segment);
     score()->undoAddElement(d);
 
-    return nullptr;
+    return d;
 }
 
 //---------------------------------------------------------
