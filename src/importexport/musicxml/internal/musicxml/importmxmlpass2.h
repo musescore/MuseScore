@@ -463,6 +463,7 @@ private:
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<String> metaTags);
     bool isLikelyFingering(const String& fingeringStr) const;
     bool isLikelySticking();
+    bool isLikelyDynamicRange() const;
     PlayingTechniqueType getPlayingTechnique() const;
 
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }

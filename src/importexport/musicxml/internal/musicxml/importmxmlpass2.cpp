@@ -3009,6 +3009,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     //LOGD("direction track %d", track);
     std::vector<MusicXmlSpannerDesc> starts;
     std::vector<MusicXmlSpannerDesc> stops;
+    bool isDynamicRange = false;
 
     // note: file order is direction-type first, then staff
     // this means staff is still unknown when direction-type is handled
@@ -3106,6 +3107,8 @@ void MusicXMLParserDirection::direction(const String& partId,
         } else {
             addElemOffset(sticking, track, placement(), measure, tick + m_offset);
         }
+    } else if (isLikelyDynamicRange()) {
+        isDynamicRange = true;
     } else if (!m_wordsText.empty() || !m_rehearsalText.empty() || !m_metroText.empty()) {
         TextBase* t = 0;
         if (m_tpoSound > 0.1) {
@@ -3217,11 +3220,25 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
     }
 
+    Dynamic* firstDyn = nullptr;
+
     // do dynamics
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     for (StringList::iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
         Dynamic* dyn = Factory::createDynamic(m_score->dummy()->segment());
         dyn->setDynamicType(*it);
+
+        if (isDynamicRange) {
+            if (it == m_dynamicsList.begin()) {
+                firstDyn = dyn;
+            } else if (it == m_dynamicsList.end() - 1 && firstDyn) {
+                // append hyphen and this dynamic to first
+                firstDyn->setXmlText(firstDyn->xmlText() + u"<sym>dynamicCombinedSeparatorHyphen</sym>" + dyn->xmlText());
+                delete dyn;
+                continue;
+            }
+        }
+
         if (!m_dynaVelocity.isEmpty()) {
             int dynaValue = round(m_dynaVelocity.toDouble() * 0.9);
             if (dynaValue > 127) {
@@ -4264,6 +4281,20 @@ bool MusicXMLParserDirection::isLikelySticking()
            && m_rehearsalText.empty()
            && m_metroText.empty()
            && m_tpoSound < 0.1;
+}
+
+bool MusicXMLParserDirection::isLikelyDynamicRange() const
+{
+    if (!configuration()->inferTextType()) {
+        return false;
+    }
+
+    String rawWordsText = m_wordsText.simplified();
+    static const std::regex re("(<.*?>)");
+    rawWordsText.remove(re);
+
+    // If there are two dynamics and a hyphen in a single direction node, this is most likely something like "mp-f"
+    return (rawWordsText.simplified() == u"-" || rawWordsText.simplified() == u"—") && m_dynamicsList.size() == 2;
 }
 
 PlayingTechniqueType MusicXMLParserDirection::getPlayingTechnique() const
