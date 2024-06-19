@@ -568,9 +568,14 @@ static void updatePartWithInstrument(Part* const part, const MusicXMLInstrument&
  */
 
 static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInstrument& mxmlInstr, const Interval interval,
-                                                const track_idx_t track)
+                                                const track_idx_t track, const Instrument* curInstr)
 {
     const Instrument instr = createInstrument(mxmlInstr, interval);
+
+    if (curInstr->id() == instr.id() && instr.longNames() == curInstr->longNames() && instr.shortNames() == curInstr->shortNames()) {
+        return nullptr;
+    }
+
     InstrumentChange* instrChange = Factory::createInstrumentChange(score->dummy()->segment(), instr);
     instrChange->setTrack(track);
 
@@ -589,7 +594,13 @@ static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInst
 static void updatePartWithInstrumentChange(Part* const part, const MusicXMLInstrument& mxmlInstr, const Interval interval,
                                            Segment* const segment, const track_idx_t track, const Fraction tick)
 {
-    InstrumentChange* const ic = createInstrumentChange(part->score(), mxmlInstr, interval, track);
+    const Instrument* curInstr = part->instrument(tick);
+    InstrumentChange* const ic = createInstrumentChange(part->score(), mxmlInstr, interval, track, curInstr);
+
+    if (!ic) {
+        return;
+    }
+
     segment->add(ic);               // note: includes part::setInstrument(instr);
 
     // setMidiChannel() depends on setInstrument() already been done

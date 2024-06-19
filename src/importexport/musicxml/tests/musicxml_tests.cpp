@@ -565,6 +565,9 @@ TEST_F(Musicxml_Tests, dsalCodaMisplaced) {
 TEST_F(Musicxml_Tests, durationLargeErrorMscx) {
     mxmlImportTestRef("testDurationLargeError");
 }
+TEST_F(Musicxml_Tests, duplicateInstrChange) {
+    mxmlImportTestRef("testDuplicateInstrChange");
+}
 TEST_F(Musicxml_Tests, durationLargeErrorXml) {
     mxmlIoTestRef("testDurationLargeError");
 }
