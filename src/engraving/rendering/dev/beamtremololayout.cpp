@@ -83,6 +83,20 @@ void BeamTremoloLayout::setupLData(const BeamBase* item, BeamBase::LayoutData* l
     ldata->isBesideTabStaff = ldata->tab && !ldata->tab->stemless() && !ldata->tab->stemThrough();
 }
 
+int BeamTremoloLayout::minStemLength(const ChordRest* cr, const BeamBase::LayoutData* ldata)
+{
+    // min stem lengths in quarter spaces according to how many beams there are (starting with 1)
+    static constexpr int BEAMS_COUNT = 8;
+    static constexpr int minStemLengths[BEAMS_COUNT] = { 11, 13, 15, 18, 21, 24, 27, 30 };
+    int beams = strokeCount(ldata, cr);
+    if (beams > BEAMS_COUNT) {
+        LOGE() << "Beam count " << beams << " out of range (" << BEAMS_COUNT - 1 << ")";
+        return minStemLengths[BEAMS_COUNT - 1];
+    }
+
+    return minStemLengths[std::max(beams - 1, 0)];
+}
+
 void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const BeamBase::LayoutData* ldata,
                                                      const std::vector<ChordRest*>& chordRests,
                                                      int& dictator,
@@ -100,23 +114,40 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
 
     double startY = (isStartDictator ? dictator : pointer) * ldata->spatium / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * ldata->spatium / 4 + tolerance;
-    // min stem lengths according to how many beams there are (starting with 1)
-    static const int minStemLengths[] = { 11, 13, 15, 18, 21, 24, 27, 30 };
 
+    const ChordRest* firstChordRest = chordRests.front();
+    const ChordRest* lastChordRest = chordRests.back();
+
+    size_t curChordRest = 0;
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord() || chordRest == ldata->elements.back() || chordRest == ldata->elements.front()) {
+            curChordRest++;
             continue;
+        }
+
+        int sameLineException = 0;
+
+        if (chordRest->isChord()
+            && ((curChordRest == 1 && firstChordRest->isChord()) || (curChordRest == chordRests.size() - 2 && lastChordRest->isChord()))) {
+            const Chord* innerChord = toChord(chordRest);
+            const Chord* outerChord = curChordRest == 1 && firstChordRest->isChord() ? toChord(firstChordRest) : toChord(lastChordRest);
+            const int innerLine = ldata->up ? innerChord->upNote()->line() : innerChord->downNote()->line();
+            const int outerLine = ldata->up ? outerChord->upNote()->line() : outerChord->downNote()->line();
+
+            if (innerLine == outerLine) {
+                sameLineException = 1;
+            }
         }
 
         PointF anchor = chordBeamAnchor(ldata, chordRest, ChordBeamAnchorType::Middle) - item->pagePos();
 
-        const int minLen = minStemLengths[std::max(strokeCount(ldata, chordRest) - 1, 0)];
+        const int minLen = minStemLength(chordRest, ldata) - sameLineException;
 
+        // avoid division by zero for zero-length beams (can exist as a pre-layout state used
+        // for horizontal spacing computations)
         if (endX != startX) {
+            const double proportionAlongX = (anchor.x() - startX) / (endX - startX);
             while (true) {
-                // avoid division by zero for zero-length beams (can exist as a pre-layout state used
-                // for horizontal spacing computations)
-                const double proportionAlongX = (anchor.x() - startX) / (endX - startX);
                 const int slope = std::abs(dictator - pointer);
                 double reduction = 0.0;
                 if (!isFlat) {
@@ -136,6 +167,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
                 const Note* note = ldata->up ? toChord(chordRest)->downNote() : toChord(chordRest)->upNote();
                 const double noteAnchor = (ldata->up ? note->stemUpSE().y() : note->stemDownNW().y()) + note->pagePos().y()
                                           - item->pagePos().y();
+                // Resultant length in quarter spaces
                 const int desiredLen = std::abs(round((desiredY - noteAnchor) / ldata->spatium * 4)) + 1;
 
                 if (beamClearsAnchor && desiredLen >= round(minLen * chordRest->mag())) {
@@ -155,6 +187,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
                 endY = (isStartDictator ? pointer : dictator) * ldata->spatium / 4 + tolerance;
             }
         }
+        curChordRest++;
     }
 }
 
