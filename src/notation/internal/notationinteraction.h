@@ -313,6 +313,7 @@ private:
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
     void selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment);
+    void selectAndStartEditIfNeeded(EngravingItem* element);
 
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
