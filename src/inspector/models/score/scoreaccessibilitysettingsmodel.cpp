@@ -213,3 +213,61 @@ void ScoreAccessibilitySettingsModel::updateScoreStylePreset()
         emit scoreStylePresetIndexChanged();
     }
 }
+
+void ScoreAccessibilitySettingsModel::setAccessibleNoteHeadIndex(int index)
+{
+    m_accessibleNoteHead = static_cast<NoteHeadScheme>(index);
+    loadAccessibleNoteHead(m_accessibleNoteHead);
+    emit accessibleNoteHeadChanged();
+    emit accessibleNoteHeadIndexChanged();
+}
+
+QVariantList ScoreAccessibilitySettingsModel::possibleAccessibleNoteHeadTypes() const
+{
+    QMap<mu::engraving::NoteHeadScheme, QString> types {
+        { mu::engraving::NoteHeadScheme::HEAD_NORMAL,                  muse::qtrc("inspector", "Normal") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,               muse::qtrc("inspector", "Pitch names") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,        muse::qtrc("inspector", "German pitch names") },
+        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,                 muse::qtrc("inspector", "Solfège movable do") },
+        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,           muse::qtrc("inspector", "Solfège fixed do") },
+        { mu::engraving::NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3,     muse::qtrc("inspector", "Figurenotes (stage 3)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,            muse::qtrc("inspector", "4-shape (Walker)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,      muse::qtrc("inspector", "7-shape (Aikin)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,       muse::qtrc("inspector", "7-shape (Funk)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER,     muse::qtrc("inspector", "7-shape (Walker)") },
+    };
+
+    QVariantList result;
+
+    for (mu::engraving::NoteHeadScheme type : types.keys()) {
+        QVariantMap obj;
+
+        obj["text"] = types[type];
+        obj["value"] = static_cast<int>(type);
+
+        result << obj;
+    }
+
+    return result;
+}
+
+void ScoreAccessibilitySettingsModel::loadAccessibleNoteHead(NoteHeadScheme noteHeadScheme)
+{
+    globalContext()->currentNotation()->style()->setStyleValue(mu::engraving::Sid::noteHeadScheme, static_cast<int>(noteHeadScheme));
+}
+
+int ScoreAccessibilitySettingsModel::accessibleNoteHeadIndex() const
+{
+    return static_cast<int>(m_accessibleNoteHead);
+}
+
+void ScoreAccessibilitySettingsModel::updateAccessibleNoteHead()
+{
+    MStyle style = globalContext()->currentNotation()->elements()->msScore()->score()->style();
+    NoteHeadScheme noteheadScheme = static_cast<NoteHeadScheme>(style.styleI(mu::engraving::Sid::noteHeadScheme));
+    if (noteheadScheme != mu::engraving::NoteHeadScheme::HEAD_AUTO && m_accessibleNoteHead != noteheadScheme) {
+        m_accessibleNoteHead = noteheadScheme;
+        emit accessibleNoteHeadChanged();
+        emit accessibleNoteHeadIndexChanged();
+    }
+}

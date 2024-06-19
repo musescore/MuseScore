@@ -39,6 +39,10 @@ class ScoreAccessibilitySettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(QVariantList possibleScoreStylePresets READ possibleScoreStylePresets NOTIFY possibleScoreStylePresetsChanged);
     Q_PROPERTY(int scoreStylePresetIndex READ scoreStylePresetIndex WRITE setScoreStylePresetIndex NOTIFY scoreStylePresetIndexChanged);
+    Q_PROPERTY(QVariantList possibleAccessibleNoteHeadTypes READ possibleAccessibleNoteHeadTypes NOTIFY accessibleNoteHeadChanged);
+    Q_PROPERTY(
+        int accessibleNoteHeadIndex READ accessibleNoteHeadIndex WRITE setAccessibleNoteHeadIndex NOTIFY accessibleNoteHeadIndexChanged);
+
 public:
     explicit ScoreAccessibilitySettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -48,19 +52,27 @@ public:
     void resetProperties() override;
 
     QVariantList possibleScoreStylePresets() const;
+    QVariantList possibleAccessibleNoteHeadTypes() const;
     int scoreStylePresetIndex() const;
     void setScoreStylePresetIndex(int index);
+    int accessibleNoteHeadIndex() const;
+    void setAccessibleNoteHeadIndex(int index);
     Q_INVOKABLE void updateScoreStylePreset();
+    Q_INVOKABLE void updateAccessibleNoteHead();
 
 private:
     ScoreStylePreset m_scoreStylePreset = ScoreStylePreset::DEFAULT;
     bool m_scoreStylePresetEdited = false;
+    NoteHeadScheme m_accessibleNoteHead = NoteHeadScheme::HEAD_NORMAL;
     bool m_ignoreStyleChange = false;
 
     void loadStyle(ScoreStylePreset preset);
     muse::io::path_t getStyleFilePath(ScoreStylePreset preset) const;
+    void loadAccessibleNoteHead(NoteHeadScheme noteHeadScheme);
 signals:
     void possibleScoreStylePresetsChanged();
     void scoreStylePresetIndexChanged();
+    void accessibleNoteHeadChanged();
+    void accessibleNoteHeadIndexChanged();
 };
 }

@@ -58,5 +58,25 @@ InspectorSectionView {
                 root.model.scoreStylePresetIndex = index
             }
         }
+
+        Text {
+            text: qsTr("Notehead scheme")
+            color: ui.theme.fontPrimaryColor
+        }
+
+        StyledDropdown {
+            id: accessibleNoteHead
+            width: parent.width
+            currentIndex: root.model ? root.model.accessibleNoteHeadIndex : 0
+            model: root.model ? root.model.possibleAccessibleNoteHeadTypes : []
+
+            Component.onCompleted: {
+                root.model.updateAccessibleNoteHead()
+            }
+
+            onActivated: function(index, value) {
+                root.model.accessibleNoteHeadIndex = index
+            }
+        }
     }
 }

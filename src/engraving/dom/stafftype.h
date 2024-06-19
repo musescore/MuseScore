@@ -394,7 +394,7 @@ private:
     bool m_genKeysig = true;       // create key signature at beginning of system
 
     // Standard: configurable properties
-    NoteHeadScheme m_noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
+    NoteHeadScheme m_noteHeadScheme = NoteHeadScheme::HEAD_AUTO;
 
     // TAB: configurable propertiesm
     double m_durationFontSize = 15.0;       // the size (in points) for the duration symbol font

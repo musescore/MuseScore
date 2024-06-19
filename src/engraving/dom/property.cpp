@@ -289,7 +289,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STAFF_INVISIBLE,         false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "invisible") },
     { Pid::STAFF_COLOR,             false, "color",                 P_TYPE::COLOR,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "color") },
 
-    { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::NOTEHEAD_SCHEME,    PropertyGroup::APPEARANCE,          DUMMY_QT_TR_NOOP("propertyName", "notehead scheme") },
+    { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::NOTEHEAD_SCHEME,    PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "notehead scheme") },
     { Pid::STAFF_GEN_CLEF,          false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating clefs") },
     { Pid::STAFF_GEN_TIMESIG,       false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating time signature") },
     { Pid::STAFF_GEN_KEYSIG,        false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating key signature") },
