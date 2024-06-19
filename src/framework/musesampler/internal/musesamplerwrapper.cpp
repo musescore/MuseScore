@@ -213,10 +213,6 @@ ms_Track MuseSamplerWrapper::addTrack()
         return nullptr;
     }
 
-    if (!m_samplerLib->supportsMultipleTracks() && !m_tracks.empty()) {
-        return nullptr;
-    }
-
     ms_Track track = m_samplerLib->addTrack(m_sampler, m_instrument.instrumentId);
     if (track) {
         m_tracks.push_back(track);

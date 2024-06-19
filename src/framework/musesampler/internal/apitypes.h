@@ -59,24 +59,12 @@ typedef struct ms_OutputBuffer
     int _num_channels; // For sanity checking! Shouldn't change from init!
 } ms_OutputBuffer;
 
-typedef struct ms_DynamicsEvent
-{
-    long _location_us;
-    double _value; // 0.0 - 1.0
-} ms_DynamicsEvent;
-
 // Added in v0.4
 typedef struct ms_DynamicsEvent_2
 {
     long long _location_us;
     double _value; // 0.0 - 1.0
 } ms_DynamicsEvent_2;
-
-typedef struct ms_PedalEvent
-{
-    long _location_us;
-    double _value; // 0.0 - 1.0
-} ms_PedalEvent;
 
 // Added in v0.4
 typedef struct ms_PedalEvent_2
@@ -164,41 +152,7 @@ enum ms_NoteHead : int16_t
     ms_NoteHead_Plus,
 };
 
-typedef struct ms_NoteEvent
-{
-    int _voice; // 0-3
-    long _location_us;
-    long _duration_us;
-    int _pitch; // MIDI pitch
-    double _tempo;
-    ms_NoteArticulation _articulation;
-} ms_NoteEvent;
-
-// Added in v0.3
-typedef struct ms_NoteEvent_2
-{
-    int _voice; // 0-3
-    long _location_us;
-    long _duration_us;
-    int _pitch; // MIDI pitch
-    double _tempo;
-    int _offset_cents;
-    ms_NoteArticulation _articulation;
-} ms_NoteEvent_2;
-
-// Added in v0.4
-typedef struct ms_NoteEvent_3
-{
-    int _voice; // 0-3
-    long long _location_us;
-    long long _duration_us;
-    int _pitch; // MIDI pitch
-    double _tempo;
-    int _offset_cents;
-    ms_NoteArticulation _articulation;
-} ms_NoteEvent_3;
-
-// Added in v0.6 -> added Notehead enum
+// Added in v0.6
 typedef struct ms_NoteEvent_4
 {
     int _voice; // 0-3
@@ -211,23 +165,7 @@ typedef struct ms_NoteEvent_4
     ms_NoteHead _notehead;
 } ms_NoteEvent_4;
 
-typedef struct ms_AuditionStartNoteEvent
-{
-    int _pitch; // MIDI pitch
-    ms_NoteArticulation _articulation;
-    double _dynamics;
-} ms_AuditionStartNoteEvent;
-
-// Added in v0.3
-typedef struct ms_AuditionStartNoteEvent_2
-{
-    int _pitch; // MIDI pitch
-    int _offset_cents;
-    ms_NoteArticulation _articulation;
-    double _dynamics;
-} ms_AuditionStartNoteEvent_2;
-
-// Added in v0.6 -> changed from ms_AuditionStartNoteEvent2 by adding "_active_presets" and "_notehead"
+// Added in v0.6
 typedef struct ms_AuditionStartNoteEvent_3
 {
     int _pitch; // MIDI pitch
@@ -243,12 +181,6 @@ typedef struct ms_AuditionStopNoteEvent
 {
     int _pitch; // MIDI pitch
 } ms_AuditionStopNoteEvent;
-
-typedef struct ms_LivePlayStartNoteEvent
-{
-    int _pitch; // MIDI pitch
-    double _dynamics;
-} ms_LivePlayStartNoteEvent;
 
 // Added in v0.3
 typedef struct ms_LivePlayStartNoteEvent_2
@@ -324,19 +256,10 @@ typedef ms_Track (* ms_MuseSampler_add_track)(ms_MuseSampler ms, int instrument_
 typedef ms_Result (* ms_MuseSampler_finalize_track)(ms_MuseSampler ms, ms_Track track);
 typedef ms_Result (* ms_MuseSampler_clear_track)(ms_MuseSampler ms, ms_Track track);
 
-typedef ms_Result (* ms_MuseSampler_add_track_note_event)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent evt);
-// Added in 0.3
-typedef ms_Result (* ms_MuseSampler_add_track_note_event_2)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_2 evt);
-// Added in 0.4
-typedef ms_Result (* ms_MuseSampler_add_track_note_event_3)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_3 evt);
-typedef ms_Result (* ms_MuseSampler_add_track_dynamics_event)(ms_MuseSampler ms, ms_Track track, ms_DynamicsEvent evt);
-// Added in 0.5
-typedef ms_Result (* ms_MuseSampler_add_track_note_event_4)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_3 evt, long long& event_id);
 // Added in 0.6
 typedef ms_Result (* ms_MuseSampler_add_track_note_event_5)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_4 evt, long long& event_id);
 // Added in 0.4
 typedef ms_Result (* ms_MuseSampler_add_track_dynamics_event_2)(ms_MuseSampler ms, ms_Track track, ms_DynamicsEvent_2 evt);
-typedef ms_Result (* ms_MuseSampler_add_track_pedal_event)(ms_MuseSampler ms, ms_Track track, ms_PedalEvent evt);
 // Added in 0.4
 typedef ms_Result (* ms_MuseSampler_add_track_pedal_event_2)(ms_MuseSampler ms, ms_Track track, ms_PedalEvent_2 evt);
 
@@ -348,10 +271,7 @@ typedef ms_Result (* ms_MuseSampler_add_track_event_range_end)(ms_MuseSampler, m
 typedef ms_Result (* ms_MuseSampler_add_pitch_bend)(ms_MuseSampler ms, ms_Track track, ms_PitchBendInfo info);
 typedef ms_Result (* ms_MuseSampler_add_vibrato)(ms_MuseSampler ms, ms_Track track, ms_VibratoInfo info);
 
-typedef ms_Result (* ms_MuseSampler_start_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent evt);
-
 // Added in 0.3
-typedef ms_Result (* ms_MuseSampler_start_audition_note_2)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2 evt);
 typedef ms_Result (* ms_MuseSampler_stop_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStopNoteEvent evt);
 
 // Added in 0.6
@@ -359,7 +279,7 @@ typedef ms_Result (* ms_MuseSampler_start_audition_note_3)(ms_MuseSampler ms, ms
 
 typedef ms_Result (* ms_MuseSampler_start_liveplay_mode)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_stop_liveplay_mode)(ms_MuseSampler ms);
-typedef ms_Result (* ms_MuseSampler_start_liveplay_note)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStartNoteEvent evt);
+
 // Added in 0.3
 typedef ms_Result (* ms_MuseSampler_start_liveplay_note_2)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStartNoteEvent_2 evt);
 typedef ms_Result (* ms_MuseSampler_stop_liveplay_note)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStopNoteEvent evt);
