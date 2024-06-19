@@ -1,0 +1,18 @@
+[project]
+description = "Python scripts for MuseScore Studio development."
+readme = "https://github.com/musescore/MuseScore/wiki/Running-Python-scripts"
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.32.3",
+    "markdown>=3.6",
+]
+# Show files that use these dependencies, e.g. for requests: rg -lt py "import requests"
+
+# Useful PDM commands:
+# --------------------
+# pdm install                   Install all dependencies into a virtual environment (venv).
+# pdm run <script>              Run a Python script with access to venv.
+# pdm add <package>             Add new dependency on a PyPi package.
+# pdm venv remove in-project    Remove the venv (e.g. to test installation from scratch).
+[tool.pdm]
+distribution = false
