@@ -123,6 +123,12 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
+        <direction>
+        <direction-type>
+          <words default-y="-63" font-family="Scarlatti" font-size="14.4">Ï</words>
+        </direction-type>
+        <sound dynamics="36.67"/>
+        </direction>
       <note default-x="151.73" default-y="-20">
         <pitch>
           <step>B</step>
@@ -149,6 +155,12 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
+        <direction>
+        <direction-type>
+          <words default-y="-63" font-family="Scarlatti" font-size="14.4">S</words>
+        </direction-type>
+        <sound dynamics="36.67"/>
+        </direction>
       <note default-x="294.77" default-y="-20">
         <pitch>
           <step>B</step>
@@ -177,6 +189,12 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
+        <direction>
+        <direction-type>
+          <words default-y="-63" font-family="Scarlatti" font-size="14.4">ß</words>
+        </direction-type>
+        <sound dynamics="36.67"/>
+        </direction>
       <note default-x="84.52" default-y="-20">
         <pitch>
           <step>B</step>
@@ -203,6 +221,12 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
+        <direction>
+        <direction-type>
+          <words default-y="-63" font-family="Scarlatti" font-size="14.4">Z</words>
+        </direction-type>
+        <sound dynamics="36.67"/>
+        </direction>
       <note default-x="227.55" default-y="-20">
         <pitch>
           <step>B</step>
@@ -231,6 +255,12 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
+        <direction>
+        <direction-type>
+          <words default-y="-63" font-family="Scarlatti" font-size="14.4">Í</words>
+        </direction-type>
+        <sound dynamics="36.67"/>
+        </direction>
       <note default-x="84.52" default-y="-20">
         <pitch>
           <step>B</step>
