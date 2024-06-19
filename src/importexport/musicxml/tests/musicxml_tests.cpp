@@ -722,6 +722,9 @@ TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits2)) {
 TEST_F(Musicxml_Tests, inferCodaII) {
     mxmlImportTestRef("testInferCodaII");
 }
+TEST_F(Musicxml_Tests, inferredDynamicRange) {
+    mxmlImportTestRef("testInferredDynamicRange");
+}
 TEST_F(Musicxml_Tests, inferSegnoII) {
     mxmlImportTestRef("testInferSegnoII");
 }
