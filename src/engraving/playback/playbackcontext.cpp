@@ -130,6 +130,14 @@ DynamicLevelMap PlaybackContext::dynamicLevelMap(const Score* score) const
 
 void PlaybackContext::update(const ID partId, const Score* score)
 {
+    const Part* part = score->partById(partId);
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
+
+    const track_idx_t startTrack = part->startTrack();
+    const track_idx_t endTrack = part->endTrack();
+
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
         std::vector<const MeasureRepeat*> measureRepeats;
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -138,10 +146,13 @@ void PlaybackContext::update(const ID partId, const Score* score)
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
 
-                for (const EngravingItem* item : segment->elist()) {
-                    if (item && item->isMeasureRepeat()) {
-                        measureRepeats.push_back(toMeasureRepeat(item));
+                for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                    const EngravingItem* item = segment->elementAt(track);
+                    if (!item || !item->isMeasureRepeat()) {
+                        continue;
                     }
+
+                    measureRepeats.push_back(toMeasureRepeat(item));
                 }
 
                 handleAnnotations(partId, score, segment, segmentStartTick);
