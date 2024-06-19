@@ -409,6 +409,12 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         UiAction action;
         action.code = "file-open";
         action.title = TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true));
+        bool isCloud = projectConfiguration()->isCloudProject(file.path);
+
+        if (isCloud) {
+            action.iconCode = IconCode::Code::CLOUD;
+        }
+
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
