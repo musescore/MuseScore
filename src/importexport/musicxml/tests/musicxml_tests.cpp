@@ -1058,6 +1058,9 @@ TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDistance)) {
 TEST_F(Musicxml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDividers)) {
     mxmlIoTest("testSystemDividers", true);
 }
+TEST_F(Musicxml_Tests, systemObjectStaves) {
+    mxmlImportTestRef("testSystemObjectStaves");
+}
 TEST_F(Musicxml_Tests, tablature1) {
     mxmlIoTest("testTablature1");
 }
