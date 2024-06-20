@@ -256,13 +256,13 @@ void HorizontalSpacing::spaceRightAlignedSegments(Measure* m, double segmentShap
     for (Segment* raSegment : rightAlignedSegments) {
         // 1) right-align the segment against the following ones
         double minDistAfter = -DBL_MAX;
-        for (Segment* seg = raSegment->next(); seg; seg = seg->next()) {
+        for (Segment* seg = raSegment->nextActive(); seg; seg = seg->nextActive()) {
             double xDiff = seg->x() - raSegment->x();
             double minDist = minHorizontalCollidingDistance(raSegment, seg, segmentShapeSqueezeFactor);
             minDistAfter = std::max(minDistAfter, minDist - xDiff);
         }
         if (minDistAfter != -DBL_MAX && raSegment->prevActive()) {
-            Segment* prevSegment = raSegment->prev();
+            Segment* prevSegment = raSegment->prevActive();
             prevSegment->setWidth(prevSegment->width() - minDistAfter);
             prevSegment->setWidthOffset(prevSegment->widthOffset() - minDistAfter);
             raSegment->mutldata()->moveX(-minDistAfter);
@@ -279,7 +279,7 @@ void HorizontalSpacing::spaceRightAlignedSegments(Measure* m, double segmentShap
         if (prevSegment) {
             prevSegment->setWidth(prevSegment->width() + minDistBefore);
         }
-        for (Segment* seg = raSegment; seg; seg = seg->next()) {
+        for (Segment* seg = raSegment; seg; seg = seg->nextActive()) {
             seg->mutldata()->moveX(minDistBefore);
         }
         m->setWidth(m->width() + minDistBefore);
