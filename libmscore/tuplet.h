@@ -145,6 +145,9 @@ class Tuplet final : public DurationElement {
 
       void sanitizeTuplet();
       void addMissingElements();
+
+      Element* nextElement() override;
+      Element* prevElement() override;
       };
 
 

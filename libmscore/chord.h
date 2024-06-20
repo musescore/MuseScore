@@ -229,6 +229,8 @@ class Chord final : public ChordRest {
       Element* prevSegmentElement() override;
       QString accessibleExtraInfo() const override;
 
+      Note* firstGraceOrNote();
+
       Shape shape() const override;
       };
 

@@ -536,7 +536,8 @@ Element* Score::nextElement()
             switch (e->type()) {
                   case ElementType::NOTE:
                   case ElementType::REST:
-                  case ElementType::CHORD: {
+                  case ElementType::CHORD:
+                  case ElementType::TUPLET: {
                         Element* next = e->nextElement();
                         if (next)
                               return next;
@@ -664,7 +665,8 @@ Element* Score::prevElement()
             switch (e->type()) {
                   case ElementType::NOTE:
                   case ElementType::REST:
-                  case ElementType::CHORD: {
+                  case ElementType::CHORD:
+                  case ElementType::TUPLET: {
                         Element* prev = e->prevElement();
                         if (prev)
                               return prev;

@@ -1141,6 +1141,11 @@ Element* ChordRest::prevElement()
                   break;
                   }
             }
+
+      Tuplet* tuplet = this->tuplet();
+      if (tuplet && this == tuplet->elements().front())
+            return tuplet;
+
       int staffId = e->staffIdx();
       return segment()->prevElement(staffId);
       }

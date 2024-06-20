@@ -1395,8 +1395,16 @@ Element* Segment::firstElementOfSegment(Segment* s, int activeStaff)
       {
       for (auto i: s->elist()) {
             if (i && i->staffIdx() == activeStaff) {
-                  if (i->type() == ElementType::CHORD)
-                        return toChord(i)->notes().back();
+                  if (i->isDurationElement()) {
+                        DurationElement* de = toDurationElement(i);
+                        Tuplet* tuplet = de->tuplet();
+                        if (tuplet && de == tuplet->elements().front())
+                              return tuplet;
+                        }
+                  if (i->type() == ElementType::CHORD) {
+                        Chord* chord = toChord(i);
+                        return chord->firstGraceOrNote();
+                        }
                   else
                         return i;
                   }
@@ -1659,7 +1667,8 @@ Element* Segment::nextElement(int activeStaff)
             case ElementType::FIGURED_BASS:
             case ElementType::STAFF_STATE:
             case ElementType::INSTRUMENT_CHANGE:
-            case ElementType::STICKING: {
+            case ElementType::STICKING:
+            case ElementType::TUPLET:{
                   Element* next = nullptr;
                   if (e->parent() == this)
                         next = nextAnnotation(e);

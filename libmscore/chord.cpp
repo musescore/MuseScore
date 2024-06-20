@@ -3793,4 +3793,18 @@ void Chord::setNoteEventLists(QList<NoteEventList>& ell)
 
       }
 
+//---------------------------------
+// firstGraceOrNote
+//---------------------------------
+Note* Chord::firstGraceOrNote()
+      {
+      QVector<Chord*> graceNotesBefore = this->graceNotesBefore();
+      if (!graceNotesBefore.empty()) {
+            if (Chord* graceNotesBeforeFirstChord = graceNotesBefore.front())
+                  return graceNotesBeforeFirstChord->notes().front();
+            }
+
+      return this->notes().back();
+      }
+
 }

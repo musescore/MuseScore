@@ -1381,5 +1381,23 @@ void Tuplet::addMissingElements()
       if (!missingElementsDuration.isZero())
             qDebug("Tuplet::addMissingElements(): still missing duration of %d/%d", missingElementsDuration.numerator(), missingElementsDuration.denominator());
       }
+
+Element* Tuplet::nextElement()
+      {
+      ChordRest* firstElement = toChordRest(elements().front());
+      if (firstElement->type() == ElementType::CHORD) {
+            Chord* chord = toChord(firstElement);
+            return chord->firstGraceOrNote();
+            }
+      return firstElement;
+      }
+
+Element* Tuplet::prevElement()
+      {
+      ChordRest* firstElement = toChordRest(elements().front());
+      int staffId = firstElement->staffIdx();
+      Element* prevItem = firstElement->segment()->prevElement(staffId);
+      return prevItem;
+      }
 }  // namespace Ms
 
