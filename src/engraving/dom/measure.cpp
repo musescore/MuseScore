@@ -3386,7 +3386,7 @@ void Measure::respaceSegments()
     // Start respacing segments
     for (Segment& s : m_segments) {
         s.mutldata()->setPosX(x);
-        if (s.enabled() && s.visible() && !s.allElementsInvisible() && !s.isTimeTickType()) {
+        if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
             x += s.width(LD_ACCESS::BAD);
         }
     }
