@@ -46,6 +46,7 @@ public:
     int size() const { return m_size; }
 
     Segment* first() const { return m_first; }
+    Segment* firstActive() const;
     Segment* first(SegmentType) const;
     Segment* first(ElementFlag) const;
 
