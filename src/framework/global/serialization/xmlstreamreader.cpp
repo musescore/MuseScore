@@ -95,15 +95,12 @@ void XmlStreamReader::setData(const ByteArray& data_)
         return;
     }
 
-    if (enc == UtfCodec::Encoding::UTF_16BE) {
-        m_xml->err = XML_CAN_NOT_CONVERT_TEXT;
-        LOGE() << "unsupported encoding UTF-16BE";
-        return;
-    }
-
     ByteArray data = data_; // no copy, implicit sharing
     if (enc == UtfCodec::Encoding::UTF_16LE) {
         String u16 = String::fromUtf16LE(data_);
+        data = u16.toUtf8();
+    } else if (enc == UtfCodec::Encoding::UTF_16BE) {
+        String u16 = String::fromUtf16BE(data_);
         data = u16.toUtf8();
     }
 
