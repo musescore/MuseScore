@@ -507,6 +507,38 @@ String String::fromUtf16LE(const ByteArray& data)
     return u16;
 }
 
+String String::fromUtf16BE(const ByteArray& data)
+{
+    //make sure len is divisible by 2
+    size_t len = data.size();
+    if (len % 2) {
+        len--;
+    }
+
+    if (len < 2) {
+        return String();
+    }
+
+    String u16;
+    u16.reserve(len / 2);
+    String::Mutator mut = u16.mutStr();
+
+    const uint8_t* d = data.constData();
+    size_t start = 0;
+    if (std::memcmp(d, U16BE_BOM, 2) == 0) {
+        start += 2;
+    }
+
+    for (size_t i = start; i < len;) {
+        //big-endian
+        int hi = d[i++] & 0xFF;
+        int lo = d[i++] & 0xFF;
+        mut.push_back(hi << 8 | lo);
+    }
+
+    return u16;
+}
+
 String String::fromUtf8(const char* str)
 {
     if (!str) {

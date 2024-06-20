@@ -256,6 +256,7 @@ public:
     String& prepend(const String& s);
 
     static String fromUtf16LE(const ByteArray& data);
+    static String fromUtf16BE(const ByteArray& data);
 
     static String fromUtf8(const char* str);
     static String fromUtf8(const ByteArray& data);
