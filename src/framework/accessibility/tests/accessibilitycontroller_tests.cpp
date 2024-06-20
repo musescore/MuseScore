@@ -46,6 +46,8 @@ public:
     {
         m_controller = std::make_shared<AccessibilityController>();
 
+        m_controller->setAccesibilityEnabled(true);
+
         m_mainWindow = std::make_shared<ui::MainWindowMock>();
         m_controller->setmainWindow(m_mainWindow);
 

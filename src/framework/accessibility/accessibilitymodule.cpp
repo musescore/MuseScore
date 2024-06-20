@@ -41,9 +41,10 @@ std::string AccessibilityModule::moduleName() const
 void AccessibilityModule::registerExports()
 {
     m_configuration = std::make_shared<AccessibilityConfiguration>();
+    m_controller = std::make_shared<AccessibilityController>();
 
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IAccessibilityController>(moduleName(), std::make_shared<AccessibilityController>());
+    ioc()->registerExport<IAccessibilityController>(moduleName(), m_controller);
     ioc()->registerExport<IQAccessibleInterfaceRegister>(moduleName(), new QAccessibleInterfaceRegister());
 }
 
@@ -56,6 +57,15 @@ void AccessibilityModule::resolveImports()
 #endif
         accr->registerInterfaceGetter("mu::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
     }
+}
+
+void AccessibilityModule::onPreInit(const framework::IApplication::RunMode& mode)
+{
+    if (mode != framework::IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_controller->setAccesibilityEnabled(true);
 }
 
 void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)
