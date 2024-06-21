@@ -3541,7 +3541,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
         if (!isShiftRelease) {
             if (isGripEditStarted()) {
                 updateGripAnchorLines();
-            } else if (isElementEditStarted()) {
+            } else if (isElementEditStarted() && !m_editData.editTextualProperties) {
                 updateDragAnchorLines();
             }
         }
