@@ -4924,6 +4924,13 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
       QString loc = _e.attributes().value("location").toString();
       if (loc.isEmpty())
             loc = "right";
+      // Place barline in correct place
+      Fraction locTick = tick;
+      if (loc == "left")
+          locTick = measure->tick();
+      else if (loc == "right")
+          locTick = measure->endTick();
+
       QString barStyle;
       QColor barlineColor;
       QString endingNumber;
@@ -4949,7 +4956,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
             else if (_e.name() == "fermata") {
                   const QColor fermataColor = _e.attributes().value("color").toString();
                   const QString fermataType = _e.attributes().value("type").toString();
-                  Segment* const segment = measure->getSegment(SegmentType::EndBarLine, tick);
+                  Segment* const segment = measure->getSegment(SegmentType::EndBarLine, locTick);
                   const int track = _pass1.trackForPart(partId);
                   Fermata* fermata = new Fermata(measure->score());
                   fermata->setSymId(convertFermataToSymId(_e.readElementText()));
@@ -5001,7 +5008,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                               auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
                               if (barlineColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                                     b->setColor(barlineColor);
-                              addBarlineToMeasure(measure, tick, std::move(b));
+                              addBarlineToMeasure(measure, locTick, std::move(b));
                               }
                         }
                   }
