@@ -3853,6 +3853,8 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
 
     hairpin->setTick2(endTick);
 
+    hairpin->setApplyToVoice(dynamic->applyToVoice());
+
     undoAddElement(hairpin);
 }
 

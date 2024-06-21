@@ -456,19 +456,24 @@ EngravingItem* Dynamic::drop(EditData& ed)
         return item;
     }
 
-    if (!(item->isDynamic() || item->isExpression())) {
-        return nullptr;
+    if (item->isDynamic()) {
+        Dynamic* dynamic = toDynamic(item);
+        undoChangeProperty(Pid::DYNAMIC_TYPE, dynamic->dynamicType());
+        undoChangeProperty(Pid::TEXT, dynamic->xmlText());
+        delete dynamic;
+        ed.dropElement = this;
+        return this;
     }
 
-    item->setTrack(track());
-    item->setParent(segment());
-    score()->undoAddElement(item);
-    item->undoChangeProperty(Pid::PLACEMENT, placement(), PropertyFlags::UNSTYLED);
-    if (item->isDynamic()) {
-        toDynamic(item)->setAnchorToEndOfPrevious(anchorToEndOfPrevious());
-        score()->undoRemoveElement(this); // swap this dynamic for the newly added one
+    if (item->isExpression()) {
+        item->setTrack(track());
+        item->setParent(segment());
+        toExpression(item)->setApplyToVoice(applyToVoice());
+        score()->undoAddElement(item);
+        return item;
     }
-    return item;
+
+    return nullptr;
 }
 
 int Dynamic::dynamicVelocity(DynamicType t)
