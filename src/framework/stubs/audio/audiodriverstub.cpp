@@ -47,6 +47,11 @@ bool AudioDriverStub::isOpened() const
     return false;
 }
 
+AudioDriverStub::Spec AudioDriverStub::activeSpec() const
+{
+    return Spec();
+}
+
 std::string AudioDriverStub::outputDevice() const
 {
     return std::string();

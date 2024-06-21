@@ -34,6 +34,7 @@ public:
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    Spec activeSpec() const override;
 
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& id) override;

@@ -151,6 +151,10 @@ void Mixer::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    if (m_sampleRate == sampleRate) {
+        return;
+    }
+
     m_limiter = std::make_unique<dsp::Limiter>(sampleRate);
 
     AbstractAudioSource::setSampleRate(sampleRate);

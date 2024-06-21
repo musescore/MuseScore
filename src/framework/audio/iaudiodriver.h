@@ -64,6 +64,7 @@ public:
     virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
+    virtual Spec activeSpec() const = 0;
 
     virtual AudioDeviceID outputDevice() const = 0;
     virtual bool selectOutputDevice(const AudioDeviceID& id) = 0;

@@ -57,30 +57,30 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
 
 void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 {
-    m_sampleRate = sampleRate;
+    if (m_sampleRate == sampleRate) {
+        return;
+    }
 
     if (!m_sampler) {
         m_sampler = m_samplerLib->create();
-
-        samples_t renderStep = config()->renderStep();
-
-        if (m_samplerLib->initSampler(m_sampler, m_sampleRate, renderStep, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
-            LOGE() << "Unable to init MuseSampler";
+        IF_ASSERT_FAILED(m_sampler) {
+            LOGE() << "Unable to create MuseSampler";
             return;
-        } else {
-            LOGD() << "Successfully initialized sampler";
         }
-
-        m_leftChannel.resize(renderStep);
-        m_rightChannel.resize(renderStep);
-
-        m_bus._num_channels = AUDIO_CHANNELS_COUNT;
-        m_bus._num_data_pts = renderStep;
-
-        m_internalBuffer[0] = m_leftChannel.data();
-        m_internalBuffer[1] = m_rightChannel.data();
-        m_bus._channels = m_internalBuffer.data();
     }
+
+    samples_t renderStep = config()->renderStep();
+
+    if (m_samplerLib->initSampler(m_sampler, sampleRate, renderStep, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
+        LOGE() << "Unable to init MuseSampler";
+        return;
+    } else {
+        LOGD() << "Successfully initialized sampler";
+    }
+
+    m_sampleRate = sampleRate;
+
+    prepareOutputBuffer(renderStep);
 
     if (currentRenderMode() == RenderMode::OfflineMode) {
         m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
@@ -309,6 +309,24 @@ std::string MuseSamplerWrapper::resolveDefaultPresetCode(const InstrumentInfo& i
     }
 
     return std::string();
+}
+
+void MuseSamplerWrapper::prepareOutputBuffer(const muse::audio::samples_t samples)
+{
+    if (m_leftChannel.size() < samples) {
+        m_leftChannel.resize(samples, 0.f);
+    }
+
+    if (m_rightChannel.size() < samples) {
+        m_rightChannel.resize(samples, 0.f);
+    }
+
+    m_bus._num_channels = AUDIO_CHANNELS_COUNT;
+    m_bus._num_data_pts = samples;
+
+    m_internalBuffer[0] = m_leftChannel.data();
+    m_internalBuffer[1] = m_rightChannel.data();
+    m_bus._channels = m_internalBuffer.data();
 }
 
 void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventType& event)

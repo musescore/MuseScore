@@ -165,6 +165,11 @@ bool WasapiAudioDriver::isOpened() const
     return m_isOpened;
 }
 
+WasapiAudioDriver::Spec WasapiAudioDriver::activeSpec() const
+{
+    return m_activeSpec;
+}
+
 AudioDeviceID WasapiAudioDriver::outputDevice() const
 {
     return m_deviceId;
