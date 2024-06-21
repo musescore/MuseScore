@@ -129,7 +129,10 @@ void AbstractMenuModel::setItems(const MenuItemList& items)
     TRACEFUNC;
 
     beginResetModel();
+
+    qDeleteAll(m_items);
     m_items = items;
+
     endResetModel();
 
     emit itemsChanged();
