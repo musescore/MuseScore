@@ -24,10 +24,11 @@
 
 #include "anchors.h"
 #include "factory.h"
+#include "page.h"
 #include "score.h"
 #include "spanner.h"
+#include "staff.h"
 #include "system.h"
-#include "page.h"
 
 #include "rendering/dev/measurelayout.h"
 
@@ -100,14 +101,21 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
 {
     TimeTickAnchor* returnAnchor = nullptr;
 
-    for (EngravingObject* linkedObj : measure->linkList()) {
+    Staff* staff = measure->score()->staff(staffIdx);
+    IF_ASSERT_FAILED (staff) {
+        return nullptr;
+    }
+
+    for (EngravingObject* linkedObj : staff->linkList()) {
         IF_ASSERT_FAILED(linkedObj) {
             continue;
         }
-        Measure* linkedMeasure = toMeasure(linkedObj);
-        Segment* segment = linkedMeasure->getSegmentR(SegmentType::TimeTick, relTick);
 
-        track_idx_t track = staff2track(staffIdx);
+        Staff* linkedStaff = toStaff(linkedObj);
+        Measure* linkedMeasure = linkedStaff->score()->tick2measureMM(measure->tick());
+
+        Segment* segment = linkedMeasure->getSegmentR(SegmentType::TimeTick, relTick);
+        track_idx_t track = staff2track(linkedStaff->idx());
         EngravingItem* element = segment->elementAt(track);
         TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
         if (!anchor) {
