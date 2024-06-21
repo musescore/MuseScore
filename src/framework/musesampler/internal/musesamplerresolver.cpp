@@ -113,7 +113,7 @@ ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, con
 {
     InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
     if (instrument.isValid()) {
-        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params);
+        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params, iocContext());
     }
 
     return nullptr;

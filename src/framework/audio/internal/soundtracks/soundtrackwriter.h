@@ -31,12 +31,15 @@
 #include "iaudioconfiguration.h"
 #include "audiotypes.h"
 #include "iaudiosource.h"
-#include "internal/encoders/abstractaudioencoder.h"
+#include "../worker/iaudioengine.h"
+#include "../encoders/abstractaudioencoder.h"
 
 namespace muse::audio::soundtrack {
 class SoundTrackWriter : public muse::Injectable, public async::Asyncable
 {
     muse::Inject<IAudioConfiguration> config = { this };
+    muse::Inject<IAudioEngine> audioEngine = { this };
+
 public:
     SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source,
                      const muse::modularity::ContextPtr& iocCtx);

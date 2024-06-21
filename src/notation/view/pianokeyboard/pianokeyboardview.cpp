@@ -23,8 +23,6 @@
 
 #include <QPainter>
 
-#include "global/async/async.h"
-
 #include "pianokeyboardcontroller.h"
 
 #include "log.h"

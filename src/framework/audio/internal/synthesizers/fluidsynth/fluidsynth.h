@@ -35,7 +35,7 @@
 
 namespace muse::audio::synth {
 struct Fluid;
-class FluidSynth : public AbstractSynthesizer, public muse::Injectable
+class FluidSynth : public AbstractSynthesizer
 {
     Inject<midi::IMidiOutPort> midiOutPort = { this };
 

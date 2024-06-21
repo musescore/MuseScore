@@ -30,19 +30,6 @@
 using namespace muse;
 using namespace muse::audio;
 
-AudioEngine* AudioEngine::instance()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    static AudioEngine e(nullptr);
-    return &e;
-}
-
-AudioEngine::AudioEngine()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-}
-
 AudioEngine::~AudioEngine()
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;

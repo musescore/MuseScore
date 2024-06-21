@@ -25,6 +25,7 @@
 
 #include "global/async/asyncable.h"
 #include "modularity/ioc.h"
+#include "iaudioengine.h"
 
 #include "itracksequence.h"
 #include "igettracks.h"
@@ -36,6 +37,8 @@ namespace muse::audio {
 class Mixer;
 class TrackSequence : public ITrackSequence, public IGetTracks, public muse::Injectable, public async::Asyncable
 {
+    Inject<IAudioEngine> audioEngine = { this };
+
 public:
     TrackSequence(const TrackSequenceId id, const muse::modularity::ContextPtr& iocCtx);
     ~TrackSequence();
