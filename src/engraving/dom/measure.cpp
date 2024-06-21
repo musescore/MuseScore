@@ -3388,10 +3388,13 @@ void Measure::respaceSegments()
         }
     }
     // Start respacing segments
-    for (Segment* s = firstActive(); s; s = s->nextActive()) {
-        s->mutldata()->setPosX(x);
-        if (s->enabled() && s->visible() && !s->allElementsInvisible()) {
-            x += s->width(LD_ACCESS::BAD);
+    for (Segment& s : m_segments) {
+        if (s.isTimeTickType()) {
+            continue;
+        }
+        s.mutldata()->setPosX(x);
+        if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
+            x += s.width(LD_ACCESS::BAD);
         }
     }
     // Update measure width
