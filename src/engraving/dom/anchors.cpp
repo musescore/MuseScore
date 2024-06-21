@@ -102,7 +102,7 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
     TimeTickAnchor* returnAnchor = nullptr;
 
     Staff* staff = measure->score()->staff(staffIdx);
-    IF_ASSERT_FAILED (staff) {
+    IF_ASSERT_FAILED(staff) {
         return nullptr;
     }
 
