@@ -2143,7 +2143,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
     Segment* s = nullptr;
 
     // skip disabled segment
-    for (s = m->first(); s && (!s->enabled() || s->allElementsInvisible()); s = s->next()) {
+    for (s = m->first(); s && (!s->enabled() || !s->isActive() || s->allElementsInvisible()); s = s->next()) {
         s->mutldata()->setPosX(HorizontalSpacing::computeFirstSegmentXPosition(m, s, ctx.state().segmentShapeSqueezeFactor()));  // this is where placement of hidden key/time sigs is set
         s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
     }
@@ -2232,6 +2232,11 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
     }
     // PASS 1: compute the spacing of all left-aligned segments by stacking them one after the other
     while (s) {
+        if (s->isTimeTickType()) {
+            s = s->next();
+            continue;
+        }
+
         s->setWidthOffset(0.0);
         s->mutldata()->setPosX(x);
         // skip disabled / invisible segments
@@ -2239,8 +2244,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
         // skipped in computeMinWidth() -- the only way this would be an issue here is
         // if this method was called specifically with the invisible segment specified
         // which I'm pretty sure doesn't happen at this point. still...
-        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || (s->isRightAligned() && s != m->firstEnabled())
-            || s->isTimeTickType()) {
+        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || (s->isRightAligned() && s != m->firstEnabled())) {
             s->setWidth(0);
             s = s->next();
             continue;

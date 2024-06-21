@@ -568,6 +568,9 @@ public:
 
         void setWidth(double v)
         {
+#ifndef NDEBUG
+            setWidthDebugHook(v);
+#endif
             RectF r = bbox();
             r.setWidth(v);
             setBbox(r);
@@ -601,6 +604,7 @@ public:
 
 #ifndef NDEBUG
         void doSetPosDebugHook(double x, double y);
+        void setWidthDebugHook(double w);
 #endif
 
         inline void doSetPos(double x, double y)

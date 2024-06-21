@@ -3116,19 +3116,23 @@ String Measure::accessibleInfo() const
 
 void Measure::computeTicks()
 {
-    for (Segment* segment = firstEnabled(); segment; segment = segment->nextActive()) {
+    for (Segment* segment = firstActive(); segment; segment = segment->nextActive()) {
         Segment* nextSegment = segment->nextActive();
-        if (segment->isTimeTickType()) {
-            while (nextSegment && nextSegment->rtick() == segment->rtick()) {
-                nextSegment = nextSegment->nextActive();
-            }
-        } else {
-            while (nextSegment && nextSegment->isTimeTickType()) {
-                nextSegment = nextSegment->nextActive();
-            }
-        }
         Fraction nextTick = nextSegment ? nextSegment->rtick() : ticks();
         segment->setTicks(nextTick - segment->rtick());
+    }
+
+    for (Segment* segment = first(SegmentType::TimeTick); segment; segment = segment->next(SegmentType::TimeTick)) {
+        segment->setTicks(Fraction(0, 1));
+        Segment* nextSegment = segment->next();
+        while (nextSegment) {
+            Fraction tickDiff = nextSegment->rtick() - segment->rtick();
+            if (!tickDiff.isZero()) {
+                segment->setTicks(tickDiff);
+                break;
+            }
+            nextSegment = nextSegment->next();
+        }
     }
 }
 
@@ -3385,8 +3389,11 @@ void Measure::respaceSegments()
     }
     // Start respacing segments
     for (Segment& s : m_segments) {
+        if (s.isTimeTickType()) {
+            continue;
+        }
         s.mutldata()->setPosX(x);
-        if (s.enabled() && s.visible() && !s.allElementsInvisible() && !s.isTimeTickType()) {
+        if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
             x += s.width(LD_ACCESS::BAD);
         }
     }

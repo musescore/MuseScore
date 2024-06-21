@@ -204,6 +204,7 @@ public:
     Segment* first() const { return m_segments.first(); }
     Segment* first(SegmentType t) const { return m_segments.first(t); }
     Segment* firstEnabled() const { return m_segments.first(ElementFlag::ENABLED); }
+    Segment* firstActive() const { return m_segments.firstActive(); }
 
     Segment* last() const { return m_segments.last(); }
     Segment* lastEnabled() const { return m_segments.last(ElementFlag::ENABLED); }

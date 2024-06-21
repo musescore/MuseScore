@@ -102,6 +102,8 @@ public:
 
     void setScore(Score*) override;
 
+    inline bool isActive() const { return !isTimeTickType() && enabled() && visible(); }
+
     Segment* next() const { return m_next; }
     Segment* next(SegmentType) const;
     Segment* nextActive() const;
@@ -333,58 +335,6 @@ private:
 
     CrossBeamType m_crossBeamType; // Will affect segment-to-segment horizontal spacing
 };
-
-//---------------------------------------------------------
-//   nextActive
-//---------------------------------------------------------
-
-inline Segment* Segment::nextActive() const
-{
-    Segment* ns = next();
-    while (ns && !(ns->enabled() && ns->visible())) {
-        ns = ns->next();
-    }
-    return ns;
-}
-
-//---------------------------------------------------------
-//   nextEnabled
-//---------------------------------------------------------
-
-inline Segment* Segment::nextEnabled() const
-{
-    Segment* ns = next();
-    while (ns && !ns->enabled()) {
-        ns = ns->next();
-    }
-    return ns;
-}
-
-//---------------------------------------------------------
-//   prevActive
-//---------------------------------------------------------
-
-inline Segment* Segment::prevActive() const
-{
-    Segment* ps = prev();
-    while (ps && !(ps->enabled() && ps->visible())) {
-        ps = ps->prev();
-    }
-    return ps;
-}
-
-//---------------------------------------------------------
-//   prevEnabled
-//---------------------------------------------------------
-
-inline Segment* Segment::prevEnabled() const
-{
-    Segment* ps = prev();
-    while (ps && !ps->enabled()) {
-        ps = ps->prev();
-    }
-    return ps;
-}
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT

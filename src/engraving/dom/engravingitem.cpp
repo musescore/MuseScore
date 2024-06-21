@@ -2703,6 +2703,11 @@ void EngravingItem::LayoutData::doSetPosDebugHook(double x, double y)
     UNUSED(y);
 }
 
+void EngravingItem::LayoutData::setWidthDebugHook(double w)
+{
+    UNUSED(w);
+}
+
 #endif
 
 void EngravingItem::LayoutData::dump(std::stringstream& ss) const
