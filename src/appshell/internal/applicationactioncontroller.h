@@ -39,6 +39,7 @@
 #include "istartupscenario.h"
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public muse::actions::Actionable, public muse::async::Asyncable
@@ -55,6 +56,7 @@ class ApplicationActionController : public QObject, public muse::actions::Action
     muse::Inject<IStartupScenario> startupScenario;
     muse::Inject<muse::IApplication> application;
     muse::Inject<muse::extensions::IExtensionInstaller> extensionInstaller;
+    muse::Inject<context::IGlobalContext> globalContext;
 
 public:
     void preInit();
@@ -91,6 +93,7 @@ private:
     void openOnlineHandbookPage();
     void openAskForHelpPage();
     void openPreferencesDialog();
+    void doOpenPreferencesDialog();
 
     void revertToFactorySettings();
 
