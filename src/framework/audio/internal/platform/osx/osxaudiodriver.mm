@@ -26,8 +26,6 @@
 
 #include <AudioToolbox/AudioToolbox.h>
 
-#include <QTimer>
-
 #include "translation.h"
 #include "log.h"
 
@@ -183,6 +181,11 @@ void OSXAudioDriver::close()
 bool OSXAudioDriver::isOpened() const
 {
     return m_data->audioQueue != nullptr;
+}
+
+const OSXAudioDriver::Spec& OSXAudioDriver::activeSpec() const
+{
+    return m_data->format;
 }
 
 AudioDeviceList OSXAudioDriver::availableOutputDevices() const

@@ -88,7 +88,7 @@ sample_rate_t AudioEngine::sampleRate() const
     return m_sampleRate;
 }
 
-void AudioEngine::setSampleRate(sample_rate_t sampleRate)
+void AudioEngine::setSampleRate(const sample_rate_t sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -108,7 +108,7 @@ void AudioEngine::setSampleRate(sample_rate_t sampleRate)
     }
 }
 
-void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
+void AudioEngine::setReadBufferSize(const uint16_t readBufferSize)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
