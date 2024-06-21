@@ -4943,6 +4943,14 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
     if (loc.empty()) {
         loc = u"right";
     }
+    // Place barline in correct place
+    Fraction locTick = tick;
+    if (loc == u"left") {
+        locTick = measure->tick();
+    } else if (loc == u"right") {
+        locTick = measure->endTick();
+    }
+
     String barStyle;
     Color barlineColor;
     String endingNumber;
@@ -4966,7 +4974,7 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "fermata") {
             const Color fermataColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             const String fermataType = m_e.attribute("type");
-            Segment* const segment = measure->getSegment(SegmentType::EndBarLine, tick);
+            Segment* const segment = measure->getSegment(SegmentType::EndBarLine, locTick);
             const track_idx_t track = m_pass1.trackForPart(partId);
             Fermata* fermata = Factory::createFermata(segment);
             fermata->setSymId(convertFermataToSymId(m_e.readText()));
@@ -5017,7 +5025,7 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
                     if (barlineColor.isValid()) {
                         b->setColor(barlineColor);
                     }
-                    addBarlineToMeasure(measure, tick, std::move(b));
+                    addBarlineToMeasure(measure, locTick, std::move(b));
                 }
             }
         }
