@@ -90,7 +90,7 @@ option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
-set(MUE_VTEST_MSCORE_REF_BIN "/home/igor/Dev/ORIGIN/build-MuseScore-Qt_6_2_4_Clang-Debug/install/bin/mscore" CACHE PATH "Path to mscore ref bin")
+set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 
 # === Compile ===
 option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)

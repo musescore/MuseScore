@@ -74,7 +74,7 @@ Ret SoundTrackWriter::write()
         return false;
     }
 
-    AudioEngine::instance()->setMode(RenderMode::OfflineMode);
+    audioEngine()->setMode(RenderMode::OfflineMode);
 
     m_source->setSampleRate(m_encoderPtr->format().sampleRate);
     m_source->setIsActive(true);
@@ -82,9 +82,9 @@ Ret SoundTrackWriter::write()
     DEFER {
         m_encoderPtr->flush();
 
-        AudioEngine::instance()->setMode(RenderMode::IdleMode);
+        audioEngine()->setMode(RenderMode::IdleMode);
 
-        m_source->setSampleRate(AudioEngine::instance()->sampleRate());
+        m_source->setSampleRate(audioEngine()->sampleRate());
         m_source->setIsActive(false);
 
         m_isAborted = false;

@@ -26,10 +26,10 @@
 #include "global/async/asyncable.h"
 #include "global/async/notification.h"
 
-#include "ifxresolver.h"
-#include "ifxprocessor.h"
+#include "../../ifxresolver.h"
+#include "../../ifxprocessor.h"
+#include "../dsp/compressor.h"
 #include "track.h"
-#include "internal/dsp/compressor.h"
 
 namespace muse::audio {
 class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable

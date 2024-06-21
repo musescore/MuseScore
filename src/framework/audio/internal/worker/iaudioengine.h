@@ -19,35 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
-#define MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
+#pragma once
 
-#include "global/async/asyncable.h"
-#include "global/modularity/ioc.h"
+#include "modularity/imoduleinterface.h"
 
-#include "../iaudioconfiguration.h"
-#include "../iaudiodriver.h"
-#include "worker/iaudioengine.h"
+#include "global/async/notification.h"
+
+#include "../../audiotypes.h"
+#include "mixer.h"
 
 namespace muse::audio {
-class AudioOutputDeviceController : public Injectable, public async::Asyncable
+class IAudioEngine : MODULE_EXPORT_INTERFACE
 {
-    Inject<IAudioConfiguration> configuration = { this };
-    Inject<IAudioDriver> audioDriver = { this };
-    Inject<IAudioEngine> audioEngine = { this };
+    INTERFACE_ID(IAudioEngine)
 
 public:
+    virtual ~IAudioEngine() = default;
 
-    AudioOutputDeviceController(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+    virtual sample_rate_t sampleRate() const = 0;
 
-    void init();
+    virtual void setReadBufferSize(uint16_t readBufferSize) = 0;
 
-private:
-    void checkConnection();
+    virtual RenderMode mode() const = 0;
+    virtual void setMode(const RenderMode newMode) = 0;
+    virtual async::Notification modeChanged() const = 0;
 
-    void connectCurrentOutputDevice();
+    virtual MixerPtr mixer() const = 0;
 };
 }
-
-#endif // MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H

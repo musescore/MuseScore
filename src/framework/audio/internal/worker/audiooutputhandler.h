@@ -29,6 +29,7 @@
 #include "ifxresolver.h"
 #include "iaudiooutput.h"
 #include "igettracksequence.h"
+#include "iaudioengine.h"
 
 namespace muse::audio {
 class Mixer;
@@ -41,6 +42,7 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 class AudioOutputHandler : public IAudioOutput, public Injectable, public async::Asyncable
 {
     Inject<fx::IFxResolver> fxResolver = { this };
+    Inject<IAudioEngine> audioEngine = { this };
 
 public:
     explicit AudioOutputHandler(IGetTrackSequence* getSequence, const muse::modularity::ContextPtr& iocCtx);

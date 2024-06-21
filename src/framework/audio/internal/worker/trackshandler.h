@@ -33,7 +33,7 @@
 namespace muse::audio {
 class TracksHandler : public ITracks, public Injectable, public async::Asyncable
 {
-    Inject<synth::ISynthResolver> resolver;
+    Inject<synth::ISynthResolver> resolver = { this };
 
 public:
     explicit TracksHandler(IGetTrackSequence* getSequence, const modularity::ContextPtr& iocCtx);

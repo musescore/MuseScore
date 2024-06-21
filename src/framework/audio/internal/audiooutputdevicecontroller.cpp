@@ -24,7 +24,6 @@
 #include "global/async/async.h"
 
 #include "audiothread.h"
-#include "worker/audioengine.h"
 
 #include "log.h"
 
@@ -47,8 +46,8 @@ void AudioOutputDeviceController::init()
         unsigned int bufferSize = configuration()->driverBufferSize();
         bool ok = audioDriver()->setOutputDeviceBufferSize(bufferSize);
         if (ok) {
-            async::Async::call(this, [bufferSize](){
-                AudioEngine::instance()->setReadBufferSize(bufferSize);
+            async::Async::call(this, [this, bufferSize](){
+                audioEngine()->setReadBufferSize(bufferSize);
             }, AudioThread::ID);
         }
     });

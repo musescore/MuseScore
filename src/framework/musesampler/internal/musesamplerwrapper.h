@@ -38,7 +38,8 @@ class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, publi
     public std::enable_shared_from_this<MuseSamplerWrapper>
 {
 public:
-    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params);
+    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params,
+                       const modularity::ContextPtr& iocCtx);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;

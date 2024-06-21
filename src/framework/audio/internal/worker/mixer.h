@@ -29,11 +29,12 @@
 #include "global/async/asyncable.h"
 #include "global/types/retval.h"
 
+#include "../../ifxresolver.h"
+#include "../../iaudioconfiguration.h"
+#include "../dsp/limiter.h"
+
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
-#include "internal/dsp/limiter.h"
-#include "ifxresolver.h"
-#include "iaudioconfiguration.h"
 #include "iclock.h"
 
 namespace muse::audio {

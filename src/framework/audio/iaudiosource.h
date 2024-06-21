@@ -24,7 +24,6 @@
 #define MUSE_AUDIO_ISOURCE_H
 
 #include <memory>
-#include <vector>
 
 #include "global/async/channel.h"
 

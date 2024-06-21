@@ -28,8 +28,8 @@
 #include "global/async/asyncable.h"
 #include "global/async/channel.h"
 
-#include "iaudiosource.h"
-#include "audiotypes.h"
+#include "../../iaudiosource.h"
+#include "../../audiotypes.h"
 
 namespace muse::audio {
 enum TrackType {

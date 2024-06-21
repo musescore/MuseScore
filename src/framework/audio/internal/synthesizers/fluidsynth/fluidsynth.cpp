@@ -58,7 +58,7 @@ struct muse::audio::synth::Fluid {
 };
 
 FluidSynth::FluidSynth(const AudioSourceParams& params, const modularity::ContextPtr& iocCtx)
-    : AbstractSynthesizer(params), muse::Injectable(iocCtx)
+    : AbstractSynthesizer(params, iocCtx)
 {
     m_fluid = std::make_shared<Fluid>();
 

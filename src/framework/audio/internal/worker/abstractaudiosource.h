@@ -22,7 +22,7 @@
 #ifndef MUSE_AUDIO_ABSTRACTAUDIOSOURCE_H
 #define MUSE_AUDIO_ABSTRACTAUDIOSOURCE_H
 
-#include "iaudiosource.h"
+#include "../../iaudiosource.h"
 
 namespace muse::audio {
 class AbstractAudioSource : public IAudioSource
