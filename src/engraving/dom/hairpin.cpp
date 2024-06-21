@@ -115,6 +115,7 @@ EngravingItem* HairpinSegment::drop(EditData& data)
     Dynamic* d = toDynamic(e->clone());
     d->setTrack(hairpin()->track());
     d->setParent(segment);
+    d->setApplyToVoice(hairpin()->applyToVoice());
     score()->undoAddElement(d);
 
     return d;
