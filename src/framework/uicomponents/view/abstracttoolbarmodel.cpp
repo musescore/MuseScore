@@ -126,6 +126,7 @@ void AbstractToolBarModel::setItems(const ToolBarItemList& items)
 
     beginResetModel();
 
+    qDeleteAll(m_items);
     m_items.clear();
 
     //! NOTE: make sure that we don't have two separators sequentially
