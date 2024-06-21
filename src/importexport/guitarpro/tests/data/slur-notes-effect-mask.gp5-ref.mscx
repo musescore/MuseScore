@@ -111,8 +111,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>44</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -192,8 +192,8 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <l1>52</l1>
-            <l2>52</l2>
+            <l1>54</l1>
+            <l2>54</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>

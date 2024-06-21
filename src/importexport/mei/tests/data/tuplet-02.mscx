@@ -348,8 +348,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>30</l1>
-            <l2>32</l2>
+            <l1>36</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

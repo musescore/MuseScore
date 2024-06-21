@@ -93,6 +93,7 @@ private:
     static int strokeCount(const BeamBase::LayoutData* ldata, const ChordRest* cr);
     static bool calculateAnchorsCross(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutConfiguration& conf);
     static bool computeTremoloUp(const BeamBase::LayoutData* ldata);
+    static int minStemLength(const ChordRest* cr, const BeamBase::LayoutData* ldata);
 };
 } // namespace mu::engraving
 #endif

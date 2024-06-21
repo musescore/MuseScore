@@ -83,6 +83,20 @@ void BeamTremoloLayout::setupLData(const BeamBase* item, BeamBase::LayoutData* l
     ldata->isBesideTabStaff = ldata->tab && !ldata->tab->stemless() && !ldata->tab->stemThrough();
 }
 
+int BeamTremoloLayout::minStemLength(const ChordRest* cr, const BeamBase::LayoutData* ldata)
+{
+    // min stem lengths in quarter spaces according to how many beams there are (starting with 1)
+    static constexpr int BEAMS_COUNT = 8;
+    static constexpr int minStemLengths[BEAMS_COUNT] = { 11, 13, 15, 18, 21, 24, 27, 30 };
+    int beams = strokeCount(ldata, cr);
+    if (beams > BEAMS_COUNT) {
+        LOGE() << "Beam count " << beams << " out of range (" << BEAMS_COUNT - 1 << ")";
+        return minStemLengths[BEAMS_COUNT - 1];
+    }
+
+    return minStemLengths[std::max(beams - 1, 0)];
+}
+
 void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const BeamBase::LayoutData* ldata,
                                                      const std::vector<ChordRest*>& chordRests,
                                                      int& dictator,
@@ -96,40 +110,67 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
 
     // tolerance eliminates all possibilities of floating point rounding errors
     const double tolerance = ldata->beamWidth * 0.25 * (ldata->up ? -1 : 1);
-    bool isSmall = ldata->isGrace || ldata->mag() < 1.;
+    const bool isSmall = ldata->isGrace || ldata->mag() < 1.;
 
     double startY = (isStartDictator ? dictator : pointer) * ldata->spatium / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * ldata->spatium / 4 + tolerance;
 
+    const ChordRest* firstChordRest = chordRests.front();
+    const ChordRest* lastChordRest = chordRests.back();
+
+    size_t curChordRest = 0;
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord() || chordRest == ldata->elements.back() || chordRest == ldata->elements.front()) {
+            curChordRest++;
             continue;
+        }
+
+        int sameLineException = 0;
+
+        if (chordRest->isChord()
+            && ((curChordRest == 1 && firstChordRest->isChord()) || (curChordRest == chordRests.size() - 2 && lastChordRest->isChord()))) {
+            const Chord* innerChord = toChord(chordRest);
+            const Chord* outerChord = curChordRest == 1 && firstChordRest->isChord() ? toChord(firstChordRest) : toChord(lastChordRest);
+            const int innerLine = ldata->up ? innerChord->upNote()->line() : innerChord->downNote()->line();
+            const int outerLine = ldata->up ? outerChord->upNote()->line() : outerChord->downNote()->line();
+
+            if (innerLine == outerLine) {
+                sameLineException = 1;
+            }
         }
 
         PointF anchor = chordBeamAnchor(ldata, chordRest, ChordBeamAnchorType::Middle) - item->pagePos();
 
-        int slope = std::abs(dictator - pointer);
-        double reduction = 0.0;
-        if (!isFlat) {
-            if (slope <= 3) {
-                reduction = 0.25 * ldata->spatium;
-            } else if (slope <= 6) {
-                reduction = 0.5 * ldata->spatium;
-            } else { // slope > 6
-                reduction = 0.75 * ldata->spatium;
-            }
-        }
+        const int minLen = minStemLength(chordRest, ldata) - sameLineException;
 
+        // avoid division by zero for zero-length beams (can exist as a pre-layout state used
+        // for horizontal spacing computations)
         if (endX != startX) {
-            // avoid division by zero for zero-length beams (can exist as a pre-layout state used
-            // for horizontal spacing computations)
-            double proportionAlongX = (anchor.x() - startX) / (endX - startX);
-
+            const double proportionAlongX = (anchor.x() - startX) / (endX - startX);
             while (true) {
-                double desiredY = proportionAlongX * (endY - startY) + startY;
-                bool beamClearsAnchor = (ldata->up && muse::RealIsEqualOrLess(desiredY, anchor.y() + reduction))
-                                        || (!ldata->up && muse::RealIsEqualOrMore(desiredY, anchor.y() - reduction));
-                if (beamClearsAnchor) {
+                const int slope = std::abs(dictator - pointer);
+                double reduction = 0.0;
+                if (!isFlat) {
+                    if (slope <= 3) {
+                        reduction = 0.25 * ldata->spatium;
+                    } else if (slope <= 6) {
+                        reduction = 0.5 * ldata->spatium;
+                    } else { // slope > 6
+                        reduction = 0.75 * ldata->spatium;
+                    }
+                }
+                // Ensure the beam clears the anchor's height and inner note's stem minimum stem length is enforced
+                const double desiredY = proportionAlongX * (endY - startY) + startY;    // start note stem len + extra for slope
+                const bool beamClearsAnchor = (ldata->up && muse::RealIsEqualOrLess(desiredY, anchor.y() + reduction))
+                                              || (!ldata->up && muse::RealIsEqualOrMore(desiredY, anchor.y() - reduction));
+
+                const Note* note = ldata->up ? toChord(chordRest)->downNote() : toChord(chordRest)->upNote();
+                const double noteAnchor = (ldata->up ? note->stemUpSE().y() : note->stemDownNW().y()) + note->pagePos().y()
+                                          - item->pagePos().y();
+                // Resultant length in quarter spaces
+                const int desiredLen = std::abs(round((desiredY - noteAnchor) / ldata->spatium * 4)) + 1;
+
+                if (beamClearsAnchor && desiredLen >= round(minLen * chordRest->mag())) {
                     break;
                 }
 
@@ -146,6 +187,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
                 endY = (isStartDictator ? pointer : dictator) * ldata->spatium / 4 + tolerance;
             }
         }
+        curChordRest++;
     }
 }
 
