@@ -1306,11 +1306,22 @@ unsigned int String::toUInt(bool* ok, int base) const
 String String::number(int n, int base)
 {
     std::stringstream stream;
-    if (base == 16) {
-        stream << std::hex;
+    switch (base) {
+    case 16: stream << std::hex;
+        break;
+    case 10: stream << std::dec;
+        break;
+    case 8: stream << std::oct;
+        break;
     }
     stream << n;
     std::string s = stream.str();
+    switch (base) {
+    case 16: s = "0x" + s;
+        break;
+    case 8: s = "0" + s;
+        break;
+    }
     return fromAscii(s.c_str(), s.size());
 }
 

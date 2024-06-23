@@ -417,7 +417,7 @@ String Page::replaceTextMacros(const String& s) const
                 } else {
                     int rev = score()->mscoreRevision();
                     if (rev > 99999) { // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
-                        d += String::number(rev, 16);
+                        d += String::number(rev, 16).remove(u"0x");
                     } else {
                         d += String::number(rev, 10);
                     }
