@@ -1255,6 +1255,16 @@ bool MeiImporter::readSectionElements(pugi::xml_node parentNode)
 {
     bool success = true;
 
+    libmei::Section meiSection;
+    meiSection.Read(parentNode);
+
+    if (meiSection.HasRestart() && meiSection.GetRestart() == libmei::BOOLEAN_true) {
+        MeasureBase* lastMeasureBase = !m_score->measures()->empty() ? m_score->measures()->last() : nullptr;
+        if (lastMeasureBase) {
+            m_score->insertBox(ElementType::HBOX, lastMeasureBase);
+        }
+    }
+
     pugi::xpath_node_set elements = parentNode.select_nodes("./*");
     for (pugi::xpath_node xpathNode : elements) {
         std::string elementName = std::string(xpathNode.node().name());
