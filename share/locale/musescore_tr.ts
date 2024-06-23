@@ -1780,7 +1780,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="119"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6267"/>
         <source>Tuplets</source>
-        <translation>Tupletler</translation>
+        <translation>Düzensiz guruplar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
@@ -6088,7 +6088,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="14"/>
         <source>Create tuplet</source>
-        <translation>Tuplet oluştur</translation>
+        <translation>Düzensiz gurup oluştur</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="34"/>
@@ -6253,7 +6253,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="40"/>
         <source>&amp;New…</source>
-        <translation>Ye&amp;ni…</translation>
+        <translation>&amp;Yeni…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="41"/>
@@ -6711,18 +6711,18 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="778"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="779"/>
         <source>Break beam left</source>
-        <translation>Kiriş başı</translation>
+        <translation>Kirişi solundan ayır</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="785"/>
         <source>Break inner beams (8th)</source>
-        <translation>Kiriş devamı (8&apos;lik)</translation>
+        <translation>İç kirişleri ayır (8&apos;lik)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="792"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="793"/>
         <source>Break inner beams (16th)</source>
-        <translation>Kiriş devamı (16&apos;lık)</translation>
+        <translation>İç kirişleri ayır (16&apos;lık)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="799"/>
@@ -6733,12 +6733,12 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="806"/>
         <source>Feathered beam, decelerate</source>
-        <translation>Tüylü kiriş, yavaşlayan</translation>
+        <translation>Yelpaze kiriş, yavaşlayan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="813"/>
         <source>Feathered beam, accelerate</source>
-        <translation>Tüylü kiriş, hızlanan</translation>
+        <translation>Yelpaze kiriş, hızlanan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="827"/>
@@ -6778,7 +6778,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Düzensiz gurup</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1062"/>
@@ -7505,17 +7505,17 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="786"/>
         <source>Break inner beams (eighth)</source>
-        <translation>Kiriş devamı (8&apos;lik)</translation>
+        <translation>İç kirişleri ayır (sekizlik)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="807"/>
         <source>Add feathered beam: decelerate</source>
-        <translation>Tüylü kiriş ekle: yavaşla</translation>
+        <translation>Yelpaze kiriş ekle: yavaşlayan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="814"/>
         <source>Add feathered beam: accelerate</source>
-        <translation>Tüylü kiriş ekle: hızlandır</translation>
+        <translation>Yelpaze kiriş ekle: hızlanan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="841"/>
@@ -7725,37 +7725,37 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1319"/>
         <source>Enter tuplet: duplet</source>
-        <translation>Tuplet girin: ikileme</translation>
+        <translation>Düzensiz gurup: ikileme</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1325"/>
         <source>Enter tuplet: triplet</source>
-        <translation>Tuplet girin: üçleme</translation>
+        <translation>Düzensiz gurup: üçleme</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1331"/>
         <source>Enter tuplet: quadruplet</source>
-        <translation>Tuplet girin: dörtleme</translation>
+        <translation>Düzensiz gurup: dörtleme</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1337"/>
         <source>Enter tuplet: quintuplet</source>
-        <translation>Tuplet girin: beşleme</translation>
+        <translation>Düzensiz gurup: beşleme</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1343"/>
         <source>Enter tuplet: sextuplet</source>
-        <translation>Tuplet girin: altılama</translation>
+        <translation>Düzensiz gurup: altılama</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1349"/>
         <source>Enter tuplet: septuplet</source>
-        <translation>Tuplet girin: yedileme</translation>
+        <translation>Düzensiz gurup: yedileme</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1355"/>
         <source>Enter tuplet: octuplet</source>
-        <translation>Tuplet girin: sekizleme</translation>
+        <translation>Düzensiz gurup: sekizleme</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
@@ -7765,7 +7765,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
         <source>Enter tuplet: nonuplet</source>
-        <translation>Tuplet girin: dokuzlama</translation>
+        <translation>Düzensiz gurup: dokuzlama</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1373"/>
@@ -7796,7 +7796,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1409"/>
         <source>Reset entire score to default layout</source>
-        <translation>Partisyonun tamamını varsayılan düzene sıfırla</translation>
+        <translation>&amp;Partisyonun tamamını varsayılan düzene sıfırla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
@@ -8632,13 +8632,13 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="771"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="772"/>
         <source>No beam</source>
-        <translation>Kiriş yok</translation>
+        <translation>Kirişsiz</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="764"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="765"/>
         <source>Auto beam</source>
-        <translation>Otomatik nota kirişi</translation>
+        <translation>Otomatik kiriş</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="50"/>
@@ -8798,7 +8798,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="96"/>
         <source>Restore the &amp;default layout</source>
-        <translation>Varsayılan yerleşimi &amp;geri yükle</translation>
+        <translation>&amp;Varsayılan yerleşimi geri yükle</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
@@ -8818,7 +8818,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="197"/>
         <source>&amp;Preferences</source>
-        <translation>&amp;Tercihler…</translation>
+        <translation>&amp;Tercihler</translation>
     </message>
     <message>
         <location filename="../../src/update/internal/updateuiactions.cpp" line="34"/>
@@ -8828,7 +8828,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
         <source>Mixer</source>
-        <translation>Karıştırıcı</translation>
+        <translation>&amp;Karıştırıcı</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="44"/>
@@ -8896,7 +8896,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="72"/>
         <source>Playback setup</source>
-        <translation>Çalma ayarları</translation>
+        <translation>Çal&amp;ma kurulumu</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="125"/>
@@ -9003,12 +9003,12 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
         <source>Show &amp;frames</source>
-        <translation>Çerçeveleri göster</translation>
+        <translation>Ç&amp;erçeveleri göster</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
         <source>Show page &amp;margins</source>
-        <translation>Sayfa kenar boşluğunu göster</translation>
+        <translation>&amp;Sayfa kenar boşluğunu göster</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="68"/>
@@ -9098,47 +9098,47 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="385"/>
         <source>&amp;Style…</source>
-        <translation>Biçim...</translation>
+        <translation>&amp;Biçim...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="391"/>
         <source>&amp;Page settings…</source>
-        <translation>Sayfa ayarları…</translation>
+        <translation>&amp;Sayfa ayarları…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="397"/>
         <source>&amp;Load style…</source>
-        <translation>Biçim yükle…</translation>
+        <translation>Biçim &amp;yükle…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="403"/>
         <source>S&amp;ave style…</source>
-        <translation>Biçimi kaydet...</translation>
+        <translation>B&amp;içimi kaydet...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="415"/>
         <source>&amp;Explode</source>
-        <translation>Akoru bölümlere dağıt</translation>
+        <translation>Akoru bölümlere &amp;dağıt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="421"/>
         <source>&amp;Implode</source>
-        <translation>Bölümleri akora topla</translation>
+        <translation>Bölümleri akora &amp;topla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="427"/>
         <source>Realize &amp;chord symbols</source>
-        <translation>Akor sembollerini notalara dönüştürün</translation>
+        <translation>Akor sembollerini notalara dönüştürü&amp;n</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="433"/>
         <source>Remove selected ran&amp;ge</source>
-        <translation>Seçili aralığı kaldır</translation>
+        <translation>Seçili aralığı &amp;kaldır</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="446"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>Eğik tartım çizgi notasyonunu aç/kapat</translation>
+        <translation>&amp;Eğik tartım çizgi notasyonunu aç/kapat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="447"/>
@@ -9148,27 +9148,27 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="452"/>
         <source>Respell &amp;pitches</source>
-        <translation>Perdeleri yeniden hecele</translation>
+        <translation>&amp;Perdeleri yeniden hecele</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="458"/>
         <source>Regroup &amp;rhythms</source>
-        <translation>Tartımı yeniden gurupla</translation>
+        <translation>Tartımı yeniden &amp;gurupla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="464"/>
         <source>Resequence re&amp;hearsal marks</source>
-        <translation>Prova işaretlerini yeniden sırala</translation>
+        <translation>Prova işaretlerini &amp;yeniden sırala</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="476"/>
         <source>Copy &amp;lyrics to clipboard</source>
-        <translation>Şarkı sözlerini panoya kopyala</translation>
+        <translation>Şarkı sözlerini panoya k&amp;opyala</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="482"/>
         <source>Remove empty trailing meas&amp;ures</source>
-        <translation>Sondaki boş ölçüleri kaldır</translation>
+        <translation>Sondak&amp;i boş ölçüleri kaldır</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="489"/>
@@ -9178,107 +9178,107 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="546"/>
         <source>Add/remove s&amp;ystem breaks…</source>
-        <translation>Satır sonu &amp;ekle/kaldır…</translation>
+        <translation>S&amp;atır sonu ekle/kaldır…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="566"/>
         <source>Exchange voice &amp;1-2</source>
-        <translation>Sesleri değiştir 1-2</translation>
+        <translation>Sesleri değiştir &amp;1-2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="578"/>
         <source>Exchange voice 1-&amp;4</source>
-        <translation>Sesleri değiştir 1-4</translation>
+        <translation>Sesleri değiştir 1-&amp;4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="584"/>
         <source>Exchange voice &amp;2-3</source>
-        <translation>Sesleri değiştir 2-3</translation>
+        <translation>Sesleri değiştir &amp;2-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="596"/>
         <source>Exchange voice &amp;3-4</source>
-        <translation>Sesleri değiştir 3-4</translation>
+        <translation>Sesleri değiştir &amp;3-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="620"/>
         <source>&amp;Split measure before selected note/rest</source>
-        <translation>Seçili notadan/sustan önce ölçüyü böl</translation>
+        <translation>Seçili notadan/sustan önce ölçüyü &amp;böl</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="626"/>
         <source>&amp;Join selected measures</source>
-        <translation>Seçili ölçüleri birleştir</translation>
+        <translation>Seçili ölçüleri bir&amp;leştir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
         <source>Insert &amp;horizontal frame</source>
-        <translation>Araya yatay çerçeve ekle</translation>
+        <translation>Araya &amp;yatay çerçeve ekle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="676"/>
         <source>Insert &amp;vertical frame</source>
-        <translation>Araya dikey çerçeve ekle</translation>
+        <translation>Araya &amp;dikey çerçeve ekle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="683"/>
         <source>Insert &amp;text frame</source>
-        <translation>Araya metin çerçevesi ekle</translation>
+        <translation>Araya &amp;metin çerçevesi ekle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="690"/>
         <source>Append h&amp;orizontal frame</source>
-        <translation>En sona yatay çerçeve ekle</translation>
+        <translation>En sona y&amp;atay çerçeve ekle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="696"/>
         <source>Append v&amp;ertical frame</source>
-        <translation>En sona dikey çerçeve ekle</translation>
+        <translation>En sona d&amp;ikey çerçeve ekle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="702"/>
         <source>Append te&amp;xt frame</source>
-        <translation>En sona metin çerçevesi ekle</translation>
+        <translation>En sona m&amp;etin çerçevesi ekle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="847"/>
         <source>Se&amp;cond above</source>
-        <translation>İkili üstü</translation>
+        <translation>&amp;İkili üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="853"/>
         <source>Thir&amp;d above</source>
-        <translation>Üçlü üstü</translation>
+        <translation>&amp;Üçlü üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="859"/>
         <source>Fou&amp;rth above</source>
-        <translation>Dörtlü üstü</translation>
+        <translation>&amp;Dörtlü üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
         <source>Fift&amp;h above</source>
-        <translation>Beşli üstü</translation>
+        <translation>B&amp;eşli üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
         <source>Si&amp;xth above</source>
-        <translation>Altılı üstü</translation>
+        <translation>&amp;Altılı üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="877"/>
         <source>Seve&amp;nth above</source>
-        <translation>Yedili üstü</translation>
+        <translation>&amp;Yedili üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="883"/>
         <source>Octave &amp;above</source>
-        <translation>Oktav üstü</translation>
+        <translation>&amp;Oktav üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="889"/>
         <source>Ninth abov&amp;e</source>
-        <translation>Dokuzlu üstü</translation>
+        <translation>Do&amp;kuzlu üstü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
@@ -9343,12 +9343,12 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1176"/>
         <source>&amp;Crescendo</source>
-        <translation>Crescendo</translation>
+        <translation>&amp;Artarak (Crescendo)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1182"/>
         <source>&amp;Decrescendo</source>
-        <translation>Decrescendo</translation>
+        <translation>A&amp;zalarak (Decrescendo)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1188"/>
@@ -9363,92 +9363,92 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1204"/>
         <source>&amp;Title</source>
-        <translation>Başlık</translation>
+        <translation>&amp;Başlık</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1210"/>
         <source>&amp;Subtitle</source>
-        <translation>Altbaşlık</translation>
+        <translation>&amp;Altbaşlık</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1216"/>
         <source>&amp;Composer</source>
-        <translation>Besteci</translation>
+        <translation>B&amp;esteci</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1222"/>
         <source>&amp;Lyricist</source>
-        <translation>Söz yazarı</translation>
+        <translation>&amp;Söz yazarı</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1228"/>
         <source>&amp;Part name</source>
-        <translation>Bölüm adı</translation>
+        <translation>Bö&amp;lüm adı</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1240"/>
         <source>Syst&amp;em text</source>
-        <translation>Sistem metni</translation>
+        <translation>S&amp;istem metni</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1246"/>
         <source>St&amp;aff text</source>
-        <translation>Dizek metni</translation>
+        <translation>&amp;Dizek metni</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1252"/>
         <source>E&amp;xpression text</source>
-        <translation>İfade metni</translation>
+        <translation>İ&amp;fade metni</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
         <source>&amp;Rehearsal mark</source>
-        <translation>Prova işareti</translation>
+        <translation>&amp;Prova işareti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
         <source>&amp;Instrument change</source>
-        <translation>Çalgı değişikliği</translation>
+        <translation>&amp;Çalgı değişikliği</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1270"/>
         <source>&amp;Fingering</source>
-        <translation>&amp;Parmak numaraları</translation>
+        <translation>Pa&amp;rmak numaraları</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1276"/>
         <source>Stic&amp;king</source>
-        <translation>Yapışkan</translation>
+        <translation>&amp;Yapışkan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1282"/>
         <source>Chor&amp;d symbol</source>
-        <translation>Akor sembolleri</translation>
+        <translation>A&amp;kor sembolleri</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1288"/>
         <source>R&amp;oman numeral analysis</source>
-        <translation>Romen rakamı analizi</translation>
+        <translation>Ro&amp;men rakamı analizi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1294"/>
         <source>&amp;Nashville number</source>
-        <translation>Nashville sayıları</translation>
+        <translation>Nas&amp;hville sayıları</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
         <source>L&amp;yrics</source>
-        <translation>Sözler</translation>
+        <translation>Sö&amp;zler</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1306"/>
         <source>Figured &amp;bass</source>
-        <translation>Sürekli bas (Şifreli bas)</translation>
+        <translation>Sürekli bas (&amp;Şifreli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1312"/>
         <source>Tempo &amp;marking</source>
-        <translation>Hız işaretleri</translation>
+        <translation>H&amp;ız işaretleri</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1318"/>
@@ -9488,12 +9488,12 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1366"/>
         <source>Othe&amp;r…</source>
-        <translation>Diğer</translation>
+        <translation>Diğ&amp;er</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1367"/>
         <source>Enter tuplet: create custom…</source>
-        <translation>Tuplet girin: özel oluştur…</translation>
+        <translation>Düzensiz gurup: özel oluştur…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1372"/>
@@ -9503,27 +9503,27 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1378"/>
         <source>&amp;Increase layout stretch</source>
-        <translation>Yerleştirme esnetmesini ar&amp;tır</translation>
+        <translation>Yerleştirme esnetmesini a&amp;rtır</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
         <source>&amp;Reset layout stretch</source>
-        <translation>&amp;Yerleştirme esnetmesini sıfırla</translation>
+        <translation>Yerleştirme esnetmesini &amp;sıfırla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
         <source>Reset &amp;text style overrides</source>
-        <translation>Geçersiz metin biçimlerini sıfırla</translation>
+        <translation>&amp;Geçersiz metin biçimlerini sıfırla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1396"/>
         <source>Reset &amp;beams</source>
-        <translation>Kirişleri &amp;sıfırla</translation>
+        <translation>&amp;Kirişleri sıfırla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1402"/>
         <source>Reset shapes and &amp;positions</source>
-        <translation>Şekilleri ve &amp;konumları sıfırla</translation>
+        <translation>&amp;Şekilleri ve konumları sıfırla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1513"/>
@@ -9756,7 +9756,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation>Düzgün olmayan ölçüleri işaretle</translation>
+        <translation>Düzgün olmayan ölçüleri &amp;işaretle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1618"/>
@@ -9787,7 +9787,7 @@ Varsayılan olarak, sağ uçları aynı seviyede olacak şekilde yerleştirilece
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="440"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="441"/>
         <source>Fill with slashes</source>
-        <translation>Eğik çizgilerle doldur</translation>
+        <translation>Eğik &amp;çizgilerle doldur</translation>
     </message>
     <message>
         <location filename="../../src/autobot/internal/autobotactions.cpp" line="35"/>
@@ -10301,7 +10301,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="219"/>
         <source>T&amp;uplets</source>
-        <translation>T&amp;uplets</translation>
+        <translation>&amp;Düzensiz guruplar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
@@ -10316,12 +10316,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="223"/>
         <source>&amp;Text</source>
-        <translation>Me&amp;tin</translation>
+        <translation>&amp;Metin</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
         <source>&amp;Lines</source>
-        <translation>&amp;Çizgiler</translation>
+        <translation>Ç&amp;izgiler</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="227"/>
@@ -10375,7 +10375,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="137"/>
         <source>Open &amp;recent</source>
-        <translation>Son kullanılanlar</translation>
+        <translation>Son a&amp;çılanlar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="158"/>
@@ -10388,7 +10388,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="243"/>
         <source>Str&amp;etch</source>
-        <translation>Esnetme</translation>
+        <translation>&amp;Esnetme</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="254"/>
@@ -10409,7 +10409,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="303"/>
         <source>&amp;Plugins</source>
-        <translation>E&amp;klentiler</translation>
+        <translation>&amp;Eklentiler</translation>
     </message>
 </context>
 <context>
@@ -10440,12 +10440,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="204"/>
         <source>W&amp;orkspaces</source>
-        <translation>&amp;Çalışma alanları</translation>
+        <translation>Çalı&amp;şma alanları</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
         <source>&amp;Show</source>
-        <translation>&amp;Göster</translation>
+        <translation>Göst&amp;er</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="211"/>
@@ -11335,7 +11335,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="512"/>
         <source>%1 note tuplet</source>
         <extracomment>%1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)</extracomment>
-        <translation>%1 nota tuplet</translation>
+        <translation>%1 nota düzensiz gurup</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="522"/>
@@ -12070,7 +12070,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1090"/>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Düzensiz gurup</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
@@ -13205,7 +13205,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="255"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation>%2 süresi için %1 oranına sahip tuplet oluşturulamıyor</translation>
+        <translation>%2 süresi için %1 oranına sahip düzensiz gurup oluşturulamıyor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="145"/>
@@ -17984,7 +17984,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="391"/>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Düzensiz guruplar</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
@@ -19317,7 +19317,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="87"/>
         <source>Feathered beams</source>
-        <translation>Tüylü kirişler</translation>
+        <translation>Yelpaze kirişler</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="102"/>
@@ -19332,12 +19332,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="136"/>
         <source>Feathering left</source>
-        <translation>Sol kanatçıklar</translation>
+        <translation>Sola yelpaze</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="156"/>
         <source>Feathering right</source>
-        <translation>Sağ kanatçıklar</translation>
+        <translation>Sağa yelpaze</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="182"/>
@@ -19397,22 +19397,22 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
         <source>No beam</source>
-        <translation>Kiriş yok</translation>
+        <translation>Kirişsiz</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
         <source>Break beam left</source>
-        <translation>Kiriş başı</translation>
+        <translation>Kirişi solundan ayır</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation>Kiriş devamı (8&apos;lik)</translation>
+        <translation>İç kirişleri ayır (8&apos;lik)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation>Kiriş devamı (16&apos;lık)</translation>
+        <translation>İç kirişleri ayır (16&apos;lık)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
@@ -20313,7 +20313,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Düzensiz gurup</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="67"/>
@@ -21085,7 +21085,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="99"/>
         <source>Broken beam minimum length</source>
-        <translation>Kırık nota kirişi en az uzunluğu</translation>
+        <translation>Ayrılmış nota kirişinin en az uzunluğu</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="120"/>
@@ -21269,7 +21269,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="847"/>
         <source>Cannot create tuplet</source>
-        <translation>Tuplet oluşturulamıyor</translation>
+        <translation>Düzensiz gurup oluşturulamıyor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="847"/>
@@ -21895,13 +21895,13 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="80"/>
         <source>Cannot insert chord/rest in tuplet</source>
-        <translation>Tuplet&apos;e akor/sus eklenemiyor</translation>
+        <translation>Düzensiz guruba akor/sus eklenemiyor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="83"/>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="90"/>
         <source>Cannot split tuplet</source>
-        <translation>Tuplet bölünemiyor</translation>
+        <translation>Düzensiz gurup bölünemiyor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="86"/>
@@ -21936,12 +21936,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="104"/>
         <source>Cannot remove time from tuplet</source>
-        <translation>Tuplet&apos;ten süre kaldırılamıyor</translation>
+        <translation>Düzensiz guruptan süre kaldırılamıyor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="105"/>
         <source>Please select the complete tuplet and retry</source>
-        <translation>Lütfen tuplet&apos;in tümü seçin ve yeniden deneyin</translation>
+        <translation>Lütfen düzensiz gurubun tümünü seçin ve yeniden deneyin</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="108"/>
@@ -21961,12 +21961,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="115"/>
         <source>Cannot paste into tuplet</source>
-        <translation>Tuplet&apos;e yapıştırılamıyor</translation>
+        <translation>Düzensiz guruba yapıştırılamıyor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="118"/>
         <source>Tuplet cannot cross barlines</source>
-        <translation>Tuplet ölçü çizgisini geçemez</translation>
+        <translation>Düzensiz gurup ölçü çizgisini geçemez</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="121"/>
@@ -22032,7 +22032,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/notationerrors.h" line="68"/>
         <source>Please select the complete tuplet or tremolo and retry</source>
-        <translation>Lütfen tupletin tümünü veya tremoloyu seçin ve yeniden deneyin</translation>
+        <translation>Lütfen düzensiz gurubun tümünü veya tremoloyu seçin ve yeniden deneyin</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="71"/>
@@ -22532,17 +22532,17 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1256"/>
         <source>Page number, except on first page</source>
-        <translation>İlk sayfa hariç sayfa numarası</translation>
+        <translation>Sayfa numarası, ilk sayfa hariç</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1258"/>
         <source>Page number, if there is more than one page</source>
-        <translation>Birden fazla sayfa varsa sayfa numarası</translation>
+        <translation>Sayfa numarası, birden fazla sayfa varsa </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1260"/>
         <source>Page number, on all pages</source>
-        <translation>Tüm sayfalarda sayfa numarası</translation>
+        <translation>Sayfa numarası, tüm sayfalarda</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1262"/>
@@ -22562,12 +22562,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1268"/>
         <source>Part name, except on first page</source>
-        <translation>İlk sayfa hariç, bölüm adı</translation>
+        <translation>Bölüm adı, ilk sayfa hariç</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1270"/>
         <source>Part name, on all pages</source>
-        <translation>Tüm sayfalarda bölüm adı</translation>
+        <translation>Bölüm adı, tüm sayfalarda</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1272"/>
@@ -25740,7 +25740,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
         <source>Playback setup</source>
-        <translation>Çalma ayarları</translation>
+        <translation>Çalma kurulumu</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="80"/>
@@ -27043,7 +27043,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation>İpucu: Partisyonunuzu oluşturduktan sonra da ölçü ekleyebilir ve silebilirsiniz.</translation>
+        <translation>İpucu: Partisyonunuzu oluşturduktan sonra da ölçü ekleyebilir &amp; silebilirsiniz.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="49"/>

@@ -10324,196 +10324,196 @@
         <source>Soprano steel drums.</source>
         <comment>soprano-steel-drums description</comment>
         <extracomment>description for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprano Steel Drums.</translation>
+        <translation>Sopransteeldrums.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3442"/>
         <source>Soprano Steel Drums</source>
         <comment>soprano-steel-drums trackName</comment>
         <extracomment>trackName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprano Steel Drums</translation>
+        <translation>Sopransteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3444"/>
         <source>Soprano Steel Drums</source>
         <comment>soprano-steel-drums longName</comment>
         <extracomment>longName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprano Steel Drums</translation>
+        <translation>Sopransteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3446"/>
         <source>S. St. Dr.</source>
         <comment>soprano-steel-drums shortName</comment>
         <extracomment>shortName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>S. St. Dr.</translation>
+        <translation>Sstdr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3449"/>
         <source>Alto steel drums.</source>
         <comment>alto-steel-drums description</comment>
         <extracomment>description for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alto Steel Drums.</translation>
+        <translation>Altsteeldrums.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3451"/>
         <source>Alto Steel Drums</source>
         <comment>alto-steel-drums trackName</comment>
         <extracomment>trackName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alto Steel Drums</translation>
+        <translation>Altsteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3453"/>
         <source>Alto Steel Drums</source>
         <comment>alto-steel-drums longName</comment>
         <extracomment>longName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alto Steel Drums</translation>
+        <translation>Altsteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3455"/>
         <source>A. St. Dr.</source>
         <comment>alto-steel-drums shortName</comment>
         <extracomment>shortName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A. St. Dr.</translation>
+        <translation>Astdr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3458"/>
         <source>Guitar steel drums.</source>
         <comment>guitar-steel-drums description</comment>
         <extracomment>description for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitar Steel Drums.</translation>
+        <translation>Guitarsteeldrums.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3460"/>
         <source>Guitar Steel Drums</source>
         <comment>guitar-steel-drums trackName</comment>
         <extracomment>trackName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitar Steel Drums</translation>
+        <translation>Guitarsteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3462"/>
         <source>Guitar Steel Drums</source>
         <comment>guitar-steel-drums longName</comment>
         <extracomment>longName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitar Steel Drums</translation>
+        <translation>Guitarsteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3464"/>
         <source>Gtr. St. Dr.</source>
         <comment>guitar-steel-drums shortName</comment>
         <extracomment>shortName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gtr. St. Dr.</translation>
+        <translation>Gstdr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3467"/>
         <source>Tenor steel drums.</source>
         <comment>tenor-steel-drums description</comment>
         <extracomment>description for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenor Steel Drums.</translation>
+        <translation>Tenorsteeldrums.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3469"/>
         <source>Tenor Steel Drums</source>
         <comment>tenor-steel-drums trackName</comment>
         <extracomment>trackName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenor Steel Drums</translation>
+        <translation>Tenorsteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3471"/>
         <source>Tenor Steel Drums</source>
         <comment>tenor-steel-drums longName</comment>
         <extracomment>longName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenor Steel Drums</translation>
+        <translation>Tenorsteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3473"/>
         <source>T. St. Dr.</source>
         <comment>tenor-steel-drums shortName</comment>
         <extracomment>shortName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>T. St. Dr.</translation>
+        <translation>Tstdr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3476"/>
         <source>Cello steel drums.</source>
         <comment>cello-steel-drums description</comment>
         <extracomment>description for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cello Steel Drums.</translation>
+        <translation>Cellosteeldrums.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3478"/>
         <source>Cello Steel Drums</source>
         <comment>cello-steel-drums trackName</comment>
         <extracomment>trackName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cello Steel Drums</translation>
+        <translation>Cellosteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3480"/>
         <source>Cello Steel Drums</source>
         <comment>cello-steel-drums longName</comment>
         <extracomment>longName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cello Steel Drums</translation>
+        <translation>Cellosteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3482"/>
         <source>Ce. St. Dr.</source>
         <comment>cello-steel-drums shortName</comment>
         <extracomment>shortName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ce. St. Dr.</translation>
+        <translation>Cstdr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3485"/>
         <source>Steel drums on a grand staff.</source>
         <comment>steel-drums description</comment>
         <extracomment>description for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Steel drums in Akkolade.</translation>
+        <translation>Steeldrums in Akkolade.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3487"/>
         <source>Steel Drums</source>
         <comment>steel-drums trackName</comment>
         <extracomment>trackName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Steel Drums</translation>
+        <translation>Steeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3489"/>
         <source>Steel Drums</source>
         <comment>steel-drums longName</comment>
         <extracomment>longName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Steel Drums</translation>
+        <translation>Steeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3491"/>
         <source>St. Dr.</source>
         <comment>steel-drums shortName</comment>
         <extracomment>shortName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>St. Dr.</translation>
+        <translation>Stdr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3494"/>
         <source>Bass steel drums.</source>
         <comment>bass-steel-drums description</comment>
         <extracomment>description for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Steel Drums.</translation>
+        <translation>Basssteeldrums.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3496"/>
         <source>Bass Steel Drums</source>
         <comment>bass-steel-drums trackName</comment>
         <extracomment>trackName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Steel Drums</translation>
+        <translation>Basssteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3498"/>
         <source>Bass Steel Drums</source>
         <comment>bass-steel-drums longName</comment>
         <extracomment>longName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Steel Drums</translation>
+        <translation>Basssteeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3500"/>
         <source>B. St. Dr.</source>
         <comment>bass-steel-drums shortName</comment>
         <extracomment>shortName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B. St. Dr.</translation>
+        <translation>Bstdr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3503"/>
@@ -17352,7 +17352,7 @@
         <source>Prima balalaika. The most common balalaika.</source>
         <comment>balalaika description</comment>
         <extracomment>description for Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Primabalalaika. Die gängigste Balalaika.</translation>
+        <translation>Primbalalaika. Die gängigste Balalaika.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5736"/>
@@ -17380,49 +17380,49 @@
         <source>Prima balalaika. The most common balalaika.</source>
         <comment>balalaika-prima description</comment>
         <extracomment>description for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Primabalalaika. Die gängigste Balalaika.</translation>
+        <translation>Primbalalaika. Die gängigste Balalaika.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5745"/>
         <source>Prima Balalaika</source>
         <comment>balalaika-prima trackName</comment>
         <extracomment>trackName for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Primabalalaika</translation>
+        <translation>Primbalalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5747"/>
         <source>Prima Balalaika</source>
         <comment>balalaika-prima longName</comment>
         <extracomment>longName for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Primabalalaika</translation>
+        <translation>Primbalalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5749"/>
         <source>Pr. Bal.</source>
         <comment>balalaika-prima shortName</comment>
         <extracomment>shortName for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pr. Bal.</translation>
+        <translation>Prbal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5752"/>
         <source>Secunda balalaika, tuned a fifth below the prima.</source>
         <comment>balalaika-secunda description</comment>
         <extracomment>description for Secunda Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sekundabalalaika, eine Quinte tiefer gestimmt als die Primabalalaika.</translation>
+        <translation>Sekundbalalaika, eine Quinte tiefer gestimmt als die Primbalalaika.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5754"/>
         <source>Secunda Balalaika</source>
         <comment>balalaika-secunda trackName</comment>
         <extracomment>trackName for Secunda Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sekundabalalaika</translation>
+        <translation>Sekundbalalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5756"/>
         <source>Secunda Balalaika</source>
         <comment>balalaika-secunda longName</comment>
         <extracomment>longName for Secunda Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sekundabalalaika</translation>
+        <translation>Sekundbalalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5758"/>
@@ -17436,7 +17436,7 @@
         <source>Alto balalaika, tuned an octave below the prima.</source>
         <comment>balalaika-alto description</comment>
         <extracomment>description for Alto Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Altbalalaika, eine Oktave tiefer gestimmt als die Primabalalaika.</translation>
+        <translation>Altbalalaika, eine Oktave tiefer gestimmt als die Primbalalaika.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5763"/>
@@ -19312,7 +19312,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="155"/>
         <source>Steel Drums</source>
-        <translation>Steel Drums</translation>
+        <translation>Steeldrums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="156"/>
