@@ -19027,7 +19027,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="98"/>
         <source>Pan Flutes</source>
-        <translation>חליל פאן</translation>
+        <translation>חלילי פאן</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="99"/>
@@ -19132,7 +19132,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="119"/>
         <source>Sarrusophones</source>
-        <translation>סארוספונים</translation>
+        <translation>סרוסופונים</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="120"/>
