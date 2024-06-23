@@ -86,6 +86,7 @@
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
 #include "dom/line.h"
+#include "dom/linkedobjects.h"
 #include "dom/lyrics.h"
 
 #include "dom/marker.h"
@@ -4209,6 +4210,58 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         const Staff* st = item->staff();
+        auto tick = item->chord()->segment()->tick();
+        auto stringData = item->staff()->part()->instrument(tick)->stringData();
+        auto scoreElement = item->links() ? item->links()->mainElement() : nullptr;
+        Note* staffNote = nullptr;
+        size_t maxStrings = stringData->strings();
+        int updatedString = item->string();
+        int updatedFret = item->fret();
+        if (scoreElement && scoreElement->isNote()) {
+            staffNote = toNote(scoreElement);
+            if (staffNote) {
+                // Handle String Text:
+                for (auto& e : staffNote->el()) {
+                    if (e->isFingering()) {
+                        if (auto fingering = toFingering(e)) {
+                            if (fingering->textStyleType() == TextStyleType::STRING_NUMBER) {
+                                int whichString = fingering->plainText().toInt();
+                                if (whichString <= maxStrings && whichString >= 0) {
+                                    updatedString = whichString;  // E.g: 1-6
+                                    updatedString -= 1;           // E.g: 0-5 (internal representation)
+                                    updatedFret = stringData->fret(item->pitch(), updatedString, st);
+                                }
+                            }
+                        }
+                    }
+                }
+                const_cast<Note*>(item)->setString(updatedString);
+                const_cast<Note*>(item)->setFret(updatedFret);
+            }
+        }
+
+        // Handle Capo Text:
+        // (Can be on either clef or tab staff)
+        Staff* clefStaff = staffNote ? staffNote->staff() : nullptr;
+        const Staff* tabStaff = item->staff();
+        const Staff* staff = clefStaff ? clefStaff : tabStaff;
+        int capoPosition = staff->capo(tick).fretPosition;
+        if (capoPosition > 0) {
+            while (updatedFret < capoPosition) {
+                updatedString += 1;
+                updatedFret = stringData->fret(item->pitch(), updatedString, tabStaff);
+                if (updatedFret < 0 || updatedString > maxStrings) {
+                    updatedFret = -1;
+                    updatedString = item->string();
+                    break;
+                } else if (updatedFret < capoPosition) {
+                    continue;
+                }
+            }
+            const_cast<Note*>(item)->setString(updatedString);
+            const_cast<Note*>(item)->setFret(updatedFret);
+        }
+
         const StaffType* tab = st->staffTypeForElement(item);
         // not complete but we need systems to be laid out to add parenthesis
         if (item->fixed()) {
@@ -4218,6 +4271,8 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
             if (item->negativeFretUsed()) {
                 const_cast<Note*>(item)->setFretString(u"-" + item->fretString());
+            } else if (item->fret() < 0) {
+                const_cast<Note*>(item)->setFretString(u"?");
             }
 
             if (item->displayFret() == Note::DisplayFretOption::ArtificialHarmonic) {
