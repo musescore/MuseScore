@@ -961,6 +961,7 @@ void BeamLayout::checkCrossPosAndStemConsistency(Beam* beam, LayoutContext& ctx)
             inconsistencyFound = true;
             chord->setUp(actualUp);
             ChordLayout::layoutChords1(ctx, chord->segment(), chord->staffIdx());
+            chord->segment()->createShape(chord->staffIdx());
         }
         if (actualUp) {
             correctCrossStaffIdx = std::min(correctCrossStaffIdx, chord->staffMove());
