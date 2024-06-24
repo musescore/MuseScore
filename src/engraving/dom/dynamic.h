@@ -111,6 +111,7 @@ public:
     bool hasCustomText() const { return dynamicText(m_dynamicType) != xmlText(); }
 
     Expression* snappedExpression() const;
+    HairpinSegment* findSnapBeforeHairpinAcrossSystemBreak() const;
 
     bool playDynamic() const { return m_playDynamic; }
     void setPlayDynamic(bool v) { m_playDynamic = v; }

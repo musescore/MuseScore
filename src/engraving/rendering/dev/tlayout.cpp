@@ -1875,6 +1875,11 @@ void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const Lay
     ldata->disconnectItemSnappedAfter();
     ldata->disconnectItemSnappedBefore();
 
+    HairpinSegment* snapBeforeHairpinAcrossSysBreak = item->findSnapBeforeHairpinAcrossSystemBreak();
+    if (snapBeforeHairpinAcrossSysBreak) {
+        ldata->connectItemSnappedBefore(snapBeforeHairpinAcrossSysBreak);
+    }
+
     const StaffType* stType = item->staffType();
     if (stType && stType->isHiddenElementOnTab(conf.style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
         ldata->setIsSkipDraw(true);
