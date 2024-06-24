@@ -441,6 +441,37 @@ Expression* Dynamic::snappedExpression() const
     return item && item->isExpression() ? toExpression(item) : nullptr;
 }
 
+HairpinSegment* Dynamic::findSnapBeforeHairpinAcrossSystemBreak() const
+{
+    /* Normally it is the hairpin which looks for a snappable dynamic. Except if this dynamic
+     * is on the first beat of next system, in which case it needs to look back for a hairpin. */
+    Segment* seg = segment();
+    Measure* measure = seg ? seg->measure() : nullptr;
+    System* system = measure ? measure->system() : nullptr;
+    bool isOnFirstBeatOfSystem = system && system->firstMeasure() == measure && seg->rtick().isZero();
+    if (!isOnFirstBeatOfSystem) {
+        return nullptr;
+    }
+
+    Measure* prevMeasure = measure->prevMeasure();
+    System* prevSystem = prevMeasure ? prevMeasure->system() : nullptr;
+    if (!prevSystem) {
+        return nullptr;
+    }
+
+    for (SpannerSegment* spannerSeg : prevSystem->spannerSegments()) {
+        if (!spannerSeg->isHairpinSegment() || spannerSeg->track() != track() || spannerSeg->spanner()->tick2() != tick()) {
+            continue;
+        }
+        HairpinSegment* hairpinSeg = toHairpinSegment(spannerSeg);
+        if (hairpinSeg->findElementToSnapAfter() == this) {
+            return hairpinSeg;
+        }
+    }
+
+    return nullptr;
+}
+
 bool Dynamic::acceptDrop(EditData& ed) const
 {
     ElementType droppedType = ed.dropElement->type();
