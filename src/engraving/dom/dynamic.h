@@ -25,6 +25,8 @@
 
 #include "textbase.h"
 
+#include "draw/painter.h"
+
 namespace mu::engraving {
 class Measure;
 class Segment;
@@ -129,6 +131,10 @@ public:
 
     bool hasVoiceAssignmentProperties() const override { return true; }
 
+    int gripsCount() const override { return 2; }
+    std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
+    void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
@@ -152,6 +158,9 @@ private:
     static const std::vector<Dyn> DYN_LIST;
 
     bool m_anchorToEndOfPrevious = false;
+
+    double m_leftDragOffset = 0.0;
+    double m_rightDragOffset = 0.0;
 };
 } // namespace mu::engraving
 
