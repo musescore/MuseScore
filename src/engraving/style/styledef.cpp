@@ -1088,7 +1088,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::translatorFrameBgColor,        "translatorFrameBgColor",       PropertyValue::fromValue(Color::transparent) },
 
     { Sid::systemTextFontFace,            "systemFontFace",               "Edwin" },
-    { Sid::systemTextFontSize,            "systemFontSize",               10.0 },
+    { Sid::systemTextFontSize,            "systemFontSize",               12.0 },
     { Sid::systemTextLineSpacing,         "systemTextLineSpacing",        1.0 },
     { Sid::systemTextFontSpatiumDependent, "systemFontSpatiumDependent",  true },
     { Sid::systemTextFontStyle,           "systemFontStyle",              int(FontStyle::Normal) },
