@@ -3120,7 +3120,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
     // In case of dynamics/expressions before or after, make space for them horizontally
     double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance);
-    if (possibleSnapBeforeElement && (possibleSnapBeforeElement->isDynamic() || possibleSnapBeforeElement->isExpression())) {
+    if (possibleSnapBeforeElement && possibleSnapBeforeElement->findAncestor(ElementType::SYSTEM) == item->system()
+        && (possibleSnapBeforeElement->isDynamic() || possibleSnapBeforeElement->isExpression())) {
         double xItemPos = possibleSnapBeforeElement->pageX() - item->system()->pageX();
         double itemRightEdge = xItemPos + possibleSnapBeforeElement->ldata()->bbox().right();
         double xMinHairpinStart = itemRightEdge + hairpinDistToDynOrExpr;
@@ -3130,7 +3131,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
             item->rxpos2() += xStartDiff;
         }
     }
-    if (possibleSnapAfterElement && (possibleSnapAfterElement->isDynamic() || possibleSnapAfterElement->isExpression())) {
+    if (possibleSnapAfterElement && possibleSnapAfterElement->findAncestor(ElementType::SYSTEM) == item->system()
+        && (possibleSnapAfterElement->isDynamic() || possibleSnapAfterElement->isExpression())) {
         double xItemPos = possibleSnapAfterElement->pageX() - item->system()->pageX();
         double itemLeftEdge = xItemPos + possibleSnapAfterElement->ldata()->bbox().left();
         double xMaxHairpinEnd = itemLeftEdge - hairpinDistToDynOrExpr;

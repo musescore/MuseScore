@@ -287,10 +287,6 @@ EngravingItem* HairpinSegment::findElementToSnapBefore() const
 
     Hairpin* thisHairpin = hairpin();
     Fraction startTick = hairpin()->tick();
-    System* sys = system();
-    if (sys && !sys->measures().empty() && startTick == sys->measures().front()->tick()) {
-        return nullptr;
-    }
 
     auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
     for (auto interval : intervals) {
@@ -331,9 +327,6 @@ TextBase* HairpinSegment::findStartDynamicOrExpression() const
     dynamicsAndExpr.reserve(2);
 
     for (Segment* segment = measure->last(); segment; segment = segment->prev1()) {
-        if (segment->system() != system()) {
-            continue;
-        }
         Fraction segmentTick = segment->tick();
         if (segmentTick > refTick) {
             continue;
@@ -388,9 +381,6 @@ TextBase* HairpinSegment::findEndDynamicOrExpression() const
     dynamicsAndExpr.reserve(2);
 
     for (Segment* segment = measure->first(); segment; segment = segment->next1()) {
-        if (segment->system() != system()) {
-            continue;
-        }
         Fraction segmentTick = segment->tick();
         if (segmentTick < refTick) {
             continue;
