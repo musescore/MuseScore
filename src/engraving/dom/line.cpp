@@ -29,6 +29,7 @@
 #include "anchors.h"
 #include "barline.h"
 #include "chord.h"
+#include "dynamic.h"
 #include "lyrics.h"
 #include "measure.h"
 #include "mscoreview.h"
@@ -307,8 +308,8 @@ bool LineSegment::edit(EditData& ed)
         if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick()) {
             return true;
         }
-        spanner()->undoChangeProperty(Pid::SPANNER_TICK, s1->tick());
-        spanner()->undoChangeProperty(Pid::SPANNER_TICKS, s2->tick() - s1->tick());
+
+        undoMoveStartEndAndSnappedItems(moveStart, moveEnd, s1, s2);
 
         EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
     }
@@ -812,6 +813,38 @@ RectF LineSegment::drag(EditData& ed)
     rebaseAnchors(ed, Grip::MIDDLE);
 
     return canvasBoundingRect();
+}
+
+void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2)
+{
+    SLine* thisLine = line();
+    if (moveStart) {
+        Fraction tickDiff = s1->tick() - thisLine->tick();
+        if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
+            if (itemSnappedBefore->isDynamic()) {
+                // Let the dynamic manage the move
+                toDynamic(itemSnappedBefore)->undoMoveSegment(s1, tickDiff);
+            } else if (itemSnappedBefore->isLineSegment()) {
+                toLineSegment(itemSnappedBefore)->line()->undoMoveEnd(tickDiff);
+                thisLine->undoMoveStart(tickDiff);
+            }
+        } else {
+            thisLine->undoMoveStart(tickDiff);
+        }
+    } else if (moveEnd) {
+        Fraction tickDiff = s2->tick() - thisLine->tick2();
+        if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter()) {
+            if (itemSnappedAfter->isDynamic()) {
+                // Let the dynamic manage the move
+                toDynamic(itemSnappedAfter)->undoMoveSegment(s2, tickDiff);
+            } else if (itemSnappedAfter->isLineSegment()) {
+                toLineSegment(itemSnappedAfter)->line()->undoMoveStart(tickDiff);
+                thisLine->undoMoveEnd(tickDiff);
+            }
+        } else {
+            thisLine->undoMoveEnd(tickDiff);
+        }
+    }
 }
 
 //---------------------------------------------------------

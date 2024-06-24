@@ -75,6 +75,7 @@ public:
     std::vector<LineF> dragAnchorLines() const override;
     RectF drag(EditData& ed) override;
 private:
+    void undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2);
     PointF leftAnchorPosition(const double& systemPositionY) const;
     PointF rightAnchorPosition(const double& systemPositionY) const;
 
