@@ -373,6 +373,11 @@
         </Measure>
       <Measure>
         <voice>
+          <Tempo>
+            <tempo>2</tempo>
+            <linkedMain/>
+            <text>Allegro</text>
+            </Tempo>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
@@ -509,6 +514,15 @@
         </Measure>
       <Measure>
         <voice>
+          <Tempo>
+            <tempo>2</tempo>
+            <linked>
+              <location>
+                <staves>-3</staves>
+                </location>
+              </linked>
+            <text>Allegro</text>
+            </Tempo>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>

@@ -1921,6 +1921,20 @@ void MusicXMLParserPass2::scorePartwise()
 
     for (EngravingItem* el : muse::values(m_sysElements)) {
         m_score->undoAddElement(el);
+        LOGI() << "el: " << toTextBase(el)->plainText();
+
+        // Remove potential duplicated text
+        const Segment* seg = toSegment(el->parentItem());
+        for (EngravingItem* existingEl : seg->annotations()) {
+            const bool bothText = existingEl->isTextBase() && el->isTextBase();
+            if (existingEl && existingEl != el && bothText) {
+                const bool textMatches = toTextBase(existingEl)->plainText() == toTextBase(el)->plainText();
+                const bool placementMatches = existingEl->placement() == el->placement();
+                if (textMatches && !existingEl->systemFlag() && placementMatches) {
+                    m_score->removeElement(existingEl);
+                }
+            }
+        }
     }
 
     // This method relies heavily on text metrics which differ from system to system and can be very volatile

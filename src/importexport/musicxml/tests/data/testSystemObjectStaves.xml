@@ -205,6 +205,11 @@
         </note>
       </measure>
     <measure number="3" width="266.27">
+    <direction placement="above">
+      <direction-type>
+        <words relative-y="10">Allegro</words>
+        </direction-type>
+      </direction>
       <note default-x="121.14" default-y="-10">
         <rest measure="yes"/>
         <duration>4</duration>
@@ -377,6 +382,11 @@
         </note>
       </measure>
     <measure number="3" width="266.27">
+    <direction placement="above">
+      <direction-type>
+        <words relative-y="10">Allegro</words>
+        </direction-type>
+      </direction>
       <note default-x="121.14" default-y="-437.45">
         <rest measure="yes"/>
         <duration>4</duration>
