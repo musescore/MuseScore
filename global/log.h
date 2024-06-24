@@ -28,13 +28,13 @@
 #define LOGE() qCritical()
 
 #define IF_ASSERT_FAILED(cond) if (!(cond)) { \
-    LOGE() << "\"ASSERT FAILED!\":" << #cond << __FILE__ << __LINE__; \
+    LOGE() << "ASSERT FAILED:    " << #cond << "    " << __FILE__ << ":" << __LINE__; \
     Q_ASSERT(cond); \
 } \
 if (!(cond)) \
 
 #define IF_FAILED(cond) if (!(cond)) { \
-    LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
+    LOGE() << "FAILED:    " << #cond << "    " << __FILE__ << ":" << __LINE__ ; \
 } \
 if (!(cond)) \
 
