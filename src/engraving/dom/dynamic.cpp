@@ -655,10 +655,15 @@ bool Dynamic::moveSegment(const EditData& ed)
         return false;
     }
 
-    score()->undoChangeParent(this, newSeg, staffIdx());
-    moveSnappedItems(newSeg, newSeg->tick() - curSeg->tick());
+    undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
 
     return true;
+}
+
+void Dynamic::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
+{
+    score()->undoChangeParent(this, newSeg, staffIdx());
+    moveSnappedItems(newSeg, tickDiff);
 }
 
 void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
@@ -666,12 +671,7 @@ void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
     if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
         if (itemSnappedBefore->isHairpinSegment()) {
             Hairpin* hairpinBefore = toHairpinSegment(itemSnappedBefore)->hairpin();
-            Fraction newHairpinDuration = hairpinBefore->ticks() + tickDiff;
-            if (newHairpinDuration > Fraction(0, 1)) {
-                hairpinBefore->undoChangeProperty(Pid::SPANNER_TICKS, newHairpinDuration);
-            } else {
-                hairpinBefore->undoChangeProperty(Pid::SPANNER_TICK, hairpinBefore->tick() + tickDiff);
-            }
+            hairpinBefore->undoMoveEnd(tickDiff);
         }
     }
 
@@ -689,11 +689,7 @@ void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
             }
         }
         if (hairpinAfter) {
-            Fraction newHairpinDuration = hairpinAfter->ticks() - tickDiff;
-            hairpinAfter->undoChangeProperty(Pid::SPANNER_TICK, hairpinAfter->tick() + tickDiff);
-            if (newHairpinDuration > Fraction(0, 1)) {
-                hairpinAfter->undoChangeProperty(Pid::SPANNER_TICKS, newHairpinDuration);
-            }
+            hairpinAfter->undoMoveStart(tickDiff);
         }
     }
 }

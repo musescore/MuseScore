@@ -113,6 +113,8 @@ public:
     Expression* snappedExpression() const;
     HairpinSegment* findSnapBeforeHairpinAcrossSystemBreak() const;
 
+    void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
+
     bool playDynamic() const { return m_playDynamic; }
     void setPlayDynamic(bool v) { m_playDynamic = v; }
 

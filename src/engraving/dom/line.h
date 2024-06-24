@@ -131,6 +131,9 @@ public:
     virtual PointF linePos(Grip grip, System** system) const;
     virtual bool allowTimeAnchor() const override { return true; }
 
+    void undoMoveStart(Fraction tickDiff);
+    void undoMoveEnd(Fraction tickDiff);
+
 private:
 
     friend class LineSegment;
