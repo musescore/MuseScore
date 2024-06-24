@@ -409,15 +409,17 @@ void PageLayout::collectPage(LayoutContext& ctx)
     // HACK: we relayout here cross-staff slurs because only now the information
     // about staff distances is fully available.
     for (System* system : page->systems()) {
-        long int stick = 0;
-        long int etick = 0;
-        if (system->firstMeasure()) {
-            stick = system->firstMeasure()->tick().ticks();
-        }
-        etick = system->endTick().ticks();
-        if (stick == 0 && etick == 0) {
+        if (!system->firstMeasure()) {
             continue;
         }
+
+        long int stick = system->firstMeasure()->tick().ticks();
+        long int etick = system->endTick().ticks();
+
+        IF_ASSERT_FAILED(stick < etick) {
+            continue;
+        }
+
         auto spanners = ctx.dom().spannerMap().findOverlapping(stick, etick);
         for (auto interval : spanners) {
             Spanner* sp = interval.value;
