@@ -1002,4 +1002,23 @@ PropertyValue SLine::propertyDefault(Pid pid) const
         return Spanner::propertyDefault(pid);
     }
 }
+
+void SLine::undoMoveStart(Fraction tickDiff)
+{
+    undoChangeProperty(Pid::SPANNER_TICK, tick() + tickDiff);
+    Fraction newDuration = ticks() - tickDiff;
+    if (newDuration > Fraction(0, 1)) {
+        undoChangeProperty(Pid::SPANNER_TICKS, newDuration);
+    }
+}
+
+void SLine::undoMoveEnd(Fraction tickDiff)
+{
+    Fraction newDuration = ticks() + tickDiff;
+    if (newDuration > Fraction(0, 1)) {
+        undoChangeProperty(Pid::SPANNER_TICKS, newDuration);
+    } else {
+        undoChangeProperty(Pid::SPANNER_TICK, tick() + tickDiff);
+    }
+}
 }
