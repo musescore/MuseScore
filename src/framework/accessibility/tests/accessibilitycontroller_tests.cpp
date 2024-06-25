@@ -46,6 +46,8 @@ public:
     {
         m_controller = std::make_shared<AccessibilityController>(muse::modularity::globalCtx());
 
+        m_controller->setAccesibilityEnabled(true);
+
         m_mainWindow = std::make_shared<muse::ui::MainWindowMock>();
         m_controller->mainWindow.set(m_mainWindow);
 
