@@ -995,6 +995,9 @@ TEST_F(Musicxml_Tests, sibMetronomeMarks) {
 TEST_F(Musicxml_Tests, sibOttavas) {
     mxmlImportTestRef("testSibOttavas");
 }
+TEST_F(Musicxml_Tests, sibRitLine) {
+    mxmlImportTestRef("testSibRitLine");
+}
 TEST_F(Musicxml_Tests, slurTieDirection) {
     mxmlIoTest("testSlurTieDirection");
 }

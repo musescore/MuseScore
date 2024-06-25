@@ -3082,7 +3082,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     //LOGD("direction tick %s", muPrintable(tick.print()));
 
     m_placement = m_e.attribute("placement");
-    track_idx_t track = m_pass1.trackForPart(partId);
+    m_track = m_pass1.trackForPart(partId);
     bool isVocalStaff = m_pass1.isVocalStaff(partId);
     bool isPercussionStaff = m_pass1.isPercussionStaff(partId);
     bool isExpressionText = false;
@@ -3115,7 +3115,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             String strStaff = m_e.readText();
             int staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
             if (staff >= 0) {
-                track += staff * VOICES;
+                m_track += staff * VOICES;
             }
         } else {
             skipLogCurrElem();
@@ -3123,10 +3123,10 @@ void MusicXMLParserDirection::direction(const String& partId,
     }
 
     handleTempo();
-    handleRepeats(measure, track, tick + m_offset, measureHasCoda, segnos, delayedDirections);
-    handleNmiCmi(measure, track, tick + m_offset, delayedDirections);
-    handleChordSym(track, tick + m_offset, harmonyMap);
+    handleRepeats(measure, tick + m_offset, measureHasCoda, segnos, delayedDirections);
+    handleNmiCmi(measure, tick + m_offset, delayedDirections);
     handleFraction();
+    handleChordSym(tick + m_offset, harmonyMap);
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
     // if necessary, use the value calculated by metronome()
@@ -3159,7 +3159,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     } else if (isLikelyLegallyDownloaded(tick)) {
         // Ignore (TBD: print to footer?)
         return;
-    } else if (isLikelyTempoText(track)) {
+    } else if (isLikelyTempoText(m_track)) {
         TempoText* tt = Factory::createTempoText(m_score->dummy()->segment());
         tt->setXmlText(m_wordsText + m_metroText);
         if (m_tpoSound > 0 && canAddTempoText(m_score->tempomap(), tick.ticks())) {
@@ -3171,9 +3171,9 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
         tt->setVisible(m_visible);
 
-        addElemOffset(tt, track, placement(), measure, tick + m_offset, m_pass2);
+        addElemOffset(tt, m_track, placement(), measure, tick + m_offset, m_pass2);
         tempoTextAdded = true;
-    } else if (isLikelyTempoLine(track)) {
+    } else if (isLikelyTempoLine(m_track)) {
         String simplifiedText = MScoreTextToMXML::toPlainText(m_wordsText).simplified();
         m_wordsText.clear();
 
@@ -3198,10 +3198,10 @@ void MusicXMLParserDirection::direction(const String& partId,
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
             MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
-                totalY(), sticking, track, placement(), measure, tick + m_offset);
+                totalY(), sticking, m_track, placement(), measure, tick + m_offset);
             delayedDirections.push_back(delayedDirection);
         } else {
-            addElemOffset(sticking, track, placement(), measure, tick + m_offset, m_pass2);
+            addElemOffset(sticking, m_track, placement(), measure, tick + m_offset, m_pass2);
         }
     } else if (isLikelyDynamicRange()) {
         isDynamicRange = true;
@@ -3282,7 +3282,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             if (isLikelyFingering(fingeringStr)) {
                 m_logger->logDebugInfo(String(u"Inferring fingering: %1").arg(fingeringStr));
                 t->setXmlText(fingeringStr);
-                MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, fingeringStr, track,
+                MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, fingeringStr, m_track,
                                                                                              placement(), measure, tick + m_offset);
                 inferredFingerings.push_back(inferredFingering);
             } else {
@@ -3290,10 +3290,10 @@ void MusicXMLParserDirection::direction(const String& partId,
                     // Add element to score later, after collecting all the others and sorting by default-y
                     // This allows default-y to be at least respected by the order of elements
                     MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
-                        totalY(), t, track, placement(), measure, tick + m_offset);
+                        totalY(), t, m_track, placement(), measure, tick + m_offset);
                     delayedDirections.push_back(delayedDirection);
                 } else {
-                    addElemOffset(t, track, placement(), measure, tick + m_offset, m_pass2);
+                    addElemOffset(t, m_track, placement(), measure, tick + m_offset, m_pass2);
                 }
             }
         }
@@ -3313,16 +3313,16 @@ void MusicXMLParserDirection::direction(const String& partId,
             // TBD may want ro use tick + _offset if sound is affected
             m_score->setTempo(tick, tpo);
 
-            addElemOffset(t, track, placement(), measure, tick + m_offset, m_pass2);
+            addElemOffset(t, m_track, placement(), measure, tick + m_offset, m_pass2);
             tempoTextAdded = true;
         }
     }
 
     if (tempoTextAdded) {
         const InferredTempoLineStack& lines = m_pass2.getInferredTempoLine();
-        terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), track, tick + m_offset);
+        terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), tick + m_offset);
     }
-    addInferredTempoLine(track, tick + m_offset);
+    addInferredTempoLine(tick + m_offset);
 
     Dynamic* firstDyn = nullptr;
 
@@ -3362,26 +3362,26 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
 
         const InferredHairpinsStack& hairpins = m_pass2.getInferredHairpins();
-        terminateInferredLine(std::vector<TextLineBase*>(hairpins.begin(), hairpins.end()), track, tick + m_offset);
+        terminateInferredLine(std::vector<TextLineBase*>(hairpins.begin(), hairpins.end()), tick + m_offset);
 
         // Add element to score later, after collecting all the others and sorting by default-y
         // This allows default-y to be at least respected by the order of elements
         MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
-            hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + m_offset);
+            hasTotalY() ? totalY() : 100, dyn, m_track, dynamicsPlacement, measure, tick + m_offset);
         delayedDirections.push_back(delayedDirection);
     }
 
-    addInferredHairpin(track, tick + m_offset, isVocalStaff);
+    addInferredHairpin(tick + m_offset, isVocalStaff);
 
     // handle the elems
     for (EngravingItem* elem : m_elems) {
         // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
         if (hasTotalY()) {
             MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
-                totalY(), elem, track, placement(), measure, tick + m_offset);
+                totalY(), elem, m_track, placement(), measure, tick + m_offset);
             delayedDirections.push_back(delayedDirection);
         } else {
-            addElemOffset(elem, track, placement(), measure, tick + m_offset, m_pass2);
+            addElemOffset(elem, m_track, placement(), measure, tick + m_offset, m_pass2);
         }
     }
 
@@ -3396,17 +3396,17 @@ void MusicXMLParserDirection::direction(const String& partId,
                 if (spdesc.sp && spdesc.sp->isOttava() && delayOttava) {
                     // Sibelius writes ottava ends 1 note too early
                     m_pass2.setDelayedOttava(spdesc.sp);
-                    m_pass2.delayedOttava()->setTrack2(track);
+                    m_pass2.delayedOttava()->setTrack2(m_track);
                     m_pass2.delayedOttava()->setTick2(tick + m_offset);
                     m_pass2.clearSpanner(desc);
                 } else {
-                    handleSpannerStop(spdesc.sp, track, tick + m_offset, spanners);
+                    handleSpannerStop(spdesc.sp, m_track, tick + m_offset, spanners);
                     m_pass2.clearSpanner(desc);
                 }
             } else {
                 spdesc.sp = desc.sp;
                 spdesc.tick2 = tick + m_offset;
-                spdesc.track2 = track;
+                spdesc.track2 = m_track;
                 spdesc.isStopped = true;
             }
         }
@@ -3434,12 +3434,12 @@ void MusicXMLParserDirection::direction(const String& partId,
                 m_pass2.addSpanner(desc);
                 // handleSpannerStart and handleSpannerStop must be called in order
                 // due to allocation of elements in the map
-                handleSpannerStart(desc.sp, track, spannerPlacement, tick + m_offset, spanners);
+                handleSpannerStart(desc.sp, m_track, spannerPlacement, tick + m_offset, spanners);
                 handleSpannerStop(spdesc.sp, spdesc.track2, spdesc.tick2, spanners);
                 m_pass2.clearSpanner(desc);
             } else {
                 m_pass2.addSpanner(desc);
-                handleSpannerStart(desc.sp, track, spannerPlacement, tick + m_offset, spanners);
+                handleSpannerStart(desc.sp, m_track, spannerPlacement, tick + m_offset, spanners);
                 spdesc.isStarted = true;
             }
         }
@@ -3564,7 +3564,7 @@ bool MusicXMLParserDirection::isLikelyTempoLine(const track_idx_t track) const
     }
 
     const String plainText = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
-    static const std::wregex re(L"(^|(?:\\s|\u00A0))(accel|faster|mosso|rit|rubato|slower|stretto)");
+    static const std::wregex re(L"(^|(?:\\s|\u00A0))(accel|faster|mosso|rit|rubato|slower|stretto)", std::regex_constants::icase);
 
     return plainText.contains(re);
 }
@@ -4032,13 +4032,13 @@ void MusicXMLParserDirection::textToCrescLine(String& text)
     m_inferredHairpinStart = line;
 }
 
-void MusicXMLParserDirection::addInferredHairpin(const track_idx_t track, const Fraction& tick, const bool isVocalStaff)
+void MusicXMLParserDirection::addInferredHairpin(const Fraction& tick, const bool isVocalStaff)
 {
     if (!configuration()->inferTextType() || !m_inferredHairpinStart) {
         return;
     }
 
-    m_inferredHairpinStart->setTrack(track);
+    m_inferredHairpinStart->setTrack(m_track);
     m_inferredHairpinStart->setTick(tick + m_offset);
 
     String spannerPlacement = m_placement;
@@ -4050,13 +4050,13 @@ void MusicXMLParserDirection::addInferredHairpin(const track_idx_t track, const 
     m_pass2.addInferredHairpin(m_inferredHairpinStart);
 }
 
-void MusicXMLParserDirection::addInferredTempoLine(const track_idx_t track, const Fraction& tick)
+void MusicXMLParserDirection::addInferredTempoLine(const Fraction& tick)
 {
     if (!configuration()->inferTextType() || !m_inferredTempoLineStart) {
         return;
     }
 
-    m_inferredTempoLineStart->setTrack(track);
+    m_inferredTempoLineStart->setTrack(m_track);
     m_inferredTempoLineStart->setTick(tick + m_offset);
 
     String spannerPlacement = placement();
@@ -4118,7 +4118,7 @@ static String countSegno(const String& plainWords)
 //   handleRepeats
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda,
+void MusicXMLParserDirection::handleRepeats(Measure* measure, const Fraction tick, bool& measureHasCoda,
                                             SegnoStack& segnos, DelayedDirectionsList& delayedDirections)
 {
     if (!configuration()->inferTextType()) {
@@ -4144,7 +4144,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
     }
     // Check if repeat number has become detached
     if (repeat == u"coda" || repeat == u"segno") {
-        m_wordsText += findDetachedRepeatNumber(measure, track, tick, placement(), delayedDirections);
+        m_wordsText += findDetachedRepeatNumber(measure, m_track, tick, placement(), delayedDirections);
     }
 
     // Check if coda is numbered by checking numerals after 'coda' or 'segno'
@@ -4207,7 +4207,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
                 }
             }
 
-            tb->setTrack(track);
+            tb->setTrack(m_track);
             if (!m_wordsText.empty()) {
                 tb->setXmlText(m_wordsText);
                 m_wordsText.clear();
@@ -4301,7 +4301,7 @@ Jump* MusicXMLParserDirection::findJump(const String& repeat) const
 //    text direction "NmiCmi".
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick,
+void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const Fraction& tick,
                                            DelayedDirectionsList& delayedDirections)
 {
     if (!configuration()->inferTextType()) {
@@ -4314,13 +4314,13 @@ void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t t
     ha->setRootTpc(Tpc::TPC_INVALID);
     ha->setId(-1);
     ha->setTextName(u"N.C.");
-    ha->setTrack(track);
-    MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, u"above", measure, tick);
+    ha->setTrack(m_track);
+    MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, m_track, u"above", measure, tick);
     delayedDirections.push_back(delayedDirection);
     m_wordsText.replace(u"NmiCmi", u"N.C.");
 }
 
-void MusicXMLParserDirection::handleChordSym(const track_idx_t track, const Fraction tick, HarmonyMap& harmonyMap)
+void MusicXMLParserDirection::handleChordSym(const Fraction& tick, HarmonyMap& harmonyMap)
 {
     if (!configuration()->inferTextType() || placement() == "below") {
         return;
@@ -4334,11 +4334,11 @@ void MusicXMLParserDirection::handleChordSym(const track_idx_t track, const Frac
 
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
     ha->setHarmony(m_wordsText);
-    ha->setTrack(track);
+    ha->setTrack(m_track);
     ha->setPlacement(placement() == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
     ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     ha->setVisible(m_visible);
-    HarmonyDesc newHarmonyDesc(track, ha, nullptr);
+    HarmonyDesc newHarmonyDesc(m_track, ha, nullptr);
 
     const int ticks = tick.ticks();
     bool insert = true;
@@ -4350,7 +4350,7 @@ void MusicXMLParserDirection::handleChordSym(const track_idx_t track, const Frac
 
         // Don't insert if there is a matching chord symbol
         // This symbol doesn't have a fret diagram, so no need to check that here
-        if (track2staff(foundHarmonyDesc.m_track) == track2staff(track) && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
+        if (track2staff(foundHarmonyDesc.m_track) == track2staff(m_track) && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
             insert = false;
         }
     }
@@ -4487,7 +4487,7 @@ PlayingTechniqueType MusicXMLParserDirection::getPlayingTechnique() const
     return PlayingTechniqueType::Undefined;
 }
 
-void MusicXMLParserDirection::terminateInferredLine(const std::vector<TextLineBase*> lines, const track_idx_t track, const Fraction& tick)
+void MusicXMLParserDirection::terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick)
 {
     // Check staff and end any lines which are waiting
     if (configuration()->inferTextType()) {
@@ -4496,9 +4496,9 @@ void MusicXMLParserDirection::terminateInferredLine(const std::vector<TextLineBa
         static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
         for (TextLineBase* line : lines) {
             Fraction diff = tick - line->tick();
-            if (line && line->staffIdx() == track2staff(track)
+            if (line && line->staffIdx() == track2staff(m_track)
                 && line->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
-                line->setTrack2(track);
+                line->setTrack2(m_track);
                 line->setTick2(tick);
             }
         }
@@ -4609,13 +4609,19 @@ void MusicXMLParserDirection::dashes(const String& type, const int number,
 {
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == u"start") {
-        TextLine* b = spdesc.isStopped ? toTextLine(spdesc.sp) : Factory::createTextLine(m_score->dummy());
+        TextLineBase* b = spdesc.isStopped ? toTextLine(spdesc.sp) : Factory::createTextLine(m_score->dummy());
         // if (placement.empty()) placement = "above";  // TODO ? set default
 
         // hack: combine with a previous words element
         if (!m_wordsText.empty()) {
             // TextLine supports only limited formatting, remove all (compatible with 1.3)
-            b->setBeginText(MScoreTextToMXML::toPlainText(m_wordsText));
+            String simplifiedText = MScoreTextToMXML::toPlainText(m_wordsText).simplified();
+            if (isLikelyTempoLine(m_track)) {
+                b = Factory::createGradualTempoChange(m_score->dummy()->segment());
+                GradualTempoChangeType gtc = getTempoChangeTypeFromString(simplifiedText);
+                toGradualTempoChange(b)->setTempoChangeType(gtc);
+            }
+            b->setBeginText(simplifiedText);
             m_wordsText.clear();
         }
 

@@ -456,21 +456,20 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
+    void handleRepeats(Measure* measure, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
                        DelayedDirectionsList& delayedDirections);
     Marker* findMarker(const String& repeat) const;
     Jump* findJump(const String& repeat) const;
-    void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
-    void handleChordSym(const track_idx_t track, const Fraction tick, HarmonyMap& harmonyMap);
+    void handleNmiCmi(Measure* measure, const Fraction& tick, DelayedDirectionsList& delayedDirections);
+    void handleChordSym(const Fraction& tick, HarmonyMap& harmonyMap);
     void handleTempo();
     String matchRepeat(const String& plainWords) const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     void textToDynamic(String& text);
     void textToCrescLine(String& text);
-    void addInferredHairpin(const track_idx_t track, const Fraction& tick, const bool isVocalStaff);
-    void addInferredTempoLine(const track_idx_t track, const Fraction& tick);
-    void addInferredLine(SLine* line, const track_idx_t track, const Fraction& tick, const String& placement);
+    void addInferredHairpin(const Fraction& tick, const bool isVocalStaff);
+    void addInferredTempoLine(const Fraction& tick);
     bool isLyricBracket() const;
     bool isLikelySubtitle(const Fraction& tick) const;
     bool isLikelyLegallyDownloaded(const Fraction& tick) const;
@@ -484,7 +483,7 @@ private:
     bool isLikelyDynamicRange() const;
     PlayingTechniqueType getPlayingTechnique() const;
 
-    void terminateInferredLine(const std::vector<TextLineBase*> lines, const track_idx_t track, const Fraction& tick);
+    void terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick);
 
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 
@@ -524,6 +523,7 @@ private:
     bool m_systemDirection = false;
     std::vector<EngravingItem*> m_elems;
     Fraction m_offset;
+    track_idx_t m_track;
 };
 
 //---------------------------------------------------------
