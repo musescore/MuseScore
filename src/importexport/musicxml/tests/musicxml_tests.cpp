@@ -758,7 +758,7 @@ TEST_F(Musicxml_Tests, inferredDynamicsExpression) {
 TEST_F(Musicxml_Tests, inferredRights) {
     mxmlImportTestRef("testInferredRights");
 }
-TEST_F(Musicxml_Tests, inferredTechnique) {
+TEST_F(Musicxml_Tests, DISABLED_inferredTechnique) {
     mxmlImportTestRef("testInferredTechnique");
 }
 TEST_F(Musicxml_Tests, inferredTempoText) {

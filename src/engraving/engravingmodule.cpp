@@ -256,34 +256,46 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         fdb->addFont(FontDataKey("Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
 
         // MusicSymbol[Text]
-        fdb->addFont(FontDataKey("Bravura"), ":/fonts/bravura/Bravura.otf");
+        auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& family, const muse::io::path_t& filePath){
+            fdb->addFont(FontDataKey(family), filePath);
+            m_engravingfonts->addFont(name, family.family(), filePath);
+        };
+
+        addMusicFont("Bravura", FontDataKey("Bravura"), ":/fonts/bravura/Bravura.otf");
         fdb->addFont(FontDataKey("Bravura Text"), ":/fonts/bravura/BravuraText.otf");
-        fdb->addFont(FontDataKey("Leland"), ":/fonts/leland/Leland.otf");
+        addMusicFont("Leland", FontDataKey("Leland"), ":/fonts/leland/Leland.otf");
         fdb->addFont(FontDataKey("Leland Text"), ":/fonts/leland/LelandText.otf");
+        addMusicFont("Emmentaler", FontDataKey("MScore"), ":/fonts/mscore/mscore.ttf");
+        fdb->addFont(FontDataKey("MScore Text"), ":/fonts/mscore/MScoreText.ttf");
+        addMusicFont("Gonville", FontDataKey("Gootville"), ":/fonts/gootville/Gootville.otf");
+        fdb->addFont(FontDataKey("Gootville Text"), ":/fonts/gootville/GootvilleText.otf");
+        addMusicFont("MuseJazz", FontDataKey("MuseJazz"), ":/fonts/musejazz/MuseJazz.otf");
+        fdb->addFont(FontDataKey("MuseJazz Text"), ":/fonts/musejazz/MuseJazzText.otf");
+        addMusicFont("Petaluma", FontDataKey("Petaluma"),    ":/fonts/petaluma/Petaluma.otf");
+        fdb->addFont(FontDataKey("Petaluma Text"), ":/fonts/petaluma/PetalumaText.otf");
+        addMusicFont("Finale Maestro", FontDataKey("Finale Maestro"), ":/fonts/finalemaestro/FinaleMaestro.otf");
+        fdb->addFont(FontDataKey("Finale Maestro Text"), ":/fonts/finalemaestro/FinaleMaestroText.otf");
+        addMusicFont("Finale Broadway", FontDataKey("Finale Broadway"), ":/fonts/finalebroadway/FinaleBroadway.otf");
+        fdb->addFont(FontDataKey("Finale Broadway Text"), ":/fonts/finalebroadway/FinaleBroadwayText.otf");
 
         // Tabulature
-        //fdb->addFont(FontDataKey("MuseScoreTab"), ":/fonts/MuseScoreTab.ttf");
         fdb->addFont(FontDataKey("FreeSerif"), ":/fonts/FreeSerif.ttf");
+        fdb->addFont(FontDataKey("FreeSerif", true, false), ":/fonts/FreeSerifBold.ttf");
+        fdb->addFont(FontDataKey("FreeSerif", false, true), ":/fonts/FreeSerifItalic.ttf");
+        fdb->addFont(FontDataKey("FreeSerif", true, true), ":/fonts/FreeSerifBoldItalic.ttf");
+        fdb->addFont(FontDataKey("FreeSans"), ":/fonts/FreeSans.ttf");
+        fdb->addFont(FontDataKey("MscoreBC"), ":/fonts/mscore-BC.ttf");
 
+        // Defaults
         fdb->setDefaultFont(Font::Type::Unknown, FontDataKey("Edwin"));
         fdb->setDefaultFont(Font::Type::Text, FontDataKey("Edwin"));
+        fdb->setDefaultFont(Font::Type::Tablature, FontDataKey("FreeSerif"));
         fdb->setDefaultFont(Font::Type::MusicSymbolText, FontDataKey("Bravura Text"));
         fdb->setDefaultFont(Font::Type::MusicSymbol, FontDataKey("Bravura"));
-        fdb->setDefaultFont(Font::Type::Tablature, FontDataKey("FreeSerif"));
+        m_engravingfonts->setFallbackFont("Bravura");
 
         // Symbols
         Smufl::init();
-
-        m_engravingfonts->addFont("Leland",     "Leland",      ":/fonts/leland/Leland.otf");
-        m_engravingfonts->addFont("Bravura",    "Bravura",     ":/fonts/bravura/Bravura.otf");
-        m_engravingfonts->addFont("Emmentaler", "MScore",      ":/fonts/mscore/mscore.ttf");
-        m_engravingfonts->addFont("Gonville",   "Gootville",   ":/fonts/gootville/Gootville.otf");
-        m_engravingfonts->addFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/MuseJazz.otf");
-        m_engravingfonts->addFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/Petaluma.otf");
-        m_engravingfonts->addFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/FinaleMaestro.otf");
-        m_engravingfonts->addFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/FinaleBroadway.otf");
-
-        m_engravingfonts->setFallbackFont("Bravura");
 
         //! NOTE It may be necessary to draw something with these fonts without requesting the fonts themselves
         //! (for example, simply specifying the family name for painter).

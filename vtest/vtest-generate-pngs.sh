@@ -75,5 +75,5 @@ ls $OUTPUT_DIR
 echo "::endgroup::"
 
 if [ -z "$SUCCESS" ]; then
-    exit 1
+   exit 1
 fi

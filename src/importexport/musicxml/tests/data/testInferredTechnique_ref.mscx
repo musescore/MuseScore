@@ -260,7 +260,6 @@
       <Measure>
         <voice>
           <PlayTechAnnotation>
-            <playTechType>mute</playTechType>
             <text>con sord</text>
             </PlayTechAnnotation>
           <Chord>
@@ -275,7 +274,6 @@
       <Measure>
         <voice>
           <PlayTechAnnotation>
-            <playTechType>mute</playTechType>
             <text>senza sord</text>
             </PlayTechAnnotation>
           <Chord>

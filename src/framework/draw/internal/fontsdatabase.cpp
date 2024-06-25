@@ -71,7 +71,9 @@ FontDataKey FontsDatabase::actualFont(const FontDataKey& requireKey, Font::Type 
         return requireKey;
     }
 
-    return defaultFont(type);
+    FontDataKey def = defaultFont(type);
+    LOGW() << "not found require font: " << requireKey.family() << ", will be use default: " << def.family();
+    return def;
 }
 
 std::vector<FontDataKey> FontsDatabase::substitutionFonts(Font::Type type) const

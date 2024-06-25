@@ -86,7 +86,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="158.4">
+    <measure number="1" width="158.39">
       <print>
         <system-layout>
           <system-margins>
@@ -110,7 +110,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <note default-x="74.22" default-y="-25">
+      <note default-x="74.21" default-y="-25">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -120,7 +120,7 @@
         <type>half</type>
         <stem>up</stem>
         </note>
-      <note default-x="115.41" default-y="-25">
+      <note default-x="115.4" default-y="-25">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -595,7 +595,7 @@
           <system-distance>150</system-distance>
           </system-layout>
         </print>
-      <note default-x="58.6" default-y="-25">
+      <note default-x="58.59" default-y="-25">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -1069,7 +1069,7 @@
         <stem>up</stem>
         </note>
       </measure>
-    <measure number="56" width="138.04">
+    <measure number="56" width="138.03">
       <print new-system="yes">
         <system-layout>
           <system-margins>
@@ -1079,7 +1079,7 @@
           <system-distance>150</system-distance>
           </system-layout>
         </print>
-      <note default-x="58.6" default-y="-25">
+      <note default-x="58.59" default-y="-25">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -1089,7 +1089,7 @@
         <type>half</type>
         <stem>up</stem>
         </note>
-      <note default-x="97.42" default-y="-25">
+      <note default-x="97.41" default-y="-25">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -1330,7 +1330,7 @@
           <system-distance>150</system-distance>
           </system-layout>
         </print>
-      <note default-x="58.6" default-y="-25">
+      <note default-x="58.59" default-y="-25">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -1340,7 +1340,7 @@
         <type>half</type>
         <stem>up</stem>
         </note>
-      <note default-x="96.85" default-y="-25">
+      <note default-x="96.84" default-y="-25">
         <pitch>
           <step>A</step>
           <octave>4</octave>
