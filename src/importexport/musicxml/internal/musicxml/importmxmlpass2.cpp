@@ -49,6 +49,7 @@
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/instrchange.h"
@@ -1616,6 +1617,7 @@ void MusicXMLParserPass2::initPartState(const String& partId)
     m_extendedLyrics.init();
     m_graceNoteLyrics.clear();
     m_inferredHairpins.clear();
+    m_inferredTempoLines.clear();
 
     m_nstaves = m_pass1.getPart(partId)->nstaves();
     m_measureRepeatNumMeasures.assign(m_nstaves, 0);
@@ -2085,6 +2087,9 @@ void MusicXMLParserPass2::part()
     if (configuration()->inferTextType()) {
         for (Hairpin* hp : m_inferredHairpins) {
             hp->score()->addElement(hp);
+        }
+        for (GradualTempoChange* line : m_inferredTempoLines) {
+            line->score()->addElement(line);
         }
     }
 
@@ -3028,6 +3033,34 @@ String MusicXMLParserDirection::placement() const
     }
 }
 
+static GradualTempoChangeType getTempoChangeTypeFromString(String txt)
+{
+    txt = txt.toLower();
+    if (txt.contains(u"accel")) {
+        return GradualTempoChangeType::Accelerando;
+    } else if (txt.contains(u"allarg")) {
+        return GradualTempoChangeType::Allargando;
+    } else if (txt == u"calando") {
+        return GradualTempoChangeType::Calando;
+    } else if (txt.contains(u"lent")) {
+        return GradualTempoChangeType::Lentando;
+    } else if (txt == u"morendo") {
+        return GradualTempoChangeType::Morendo;
+    } else if (txt == u"precipitando") {
+        return GradualTempoChangeType::Precipitando;
+    } else if (txt.contains(u"rall")) {
+        return GradualTempoChangeType::Rallentando;
+    } else if (txt.contains(u"rit")) {
+        return GradualTempoChangeType::Ritardando;
+    } else if (txt.contains(u"smorz")) {
+        return GradualTempoChangeType::Smorzando;
+    } else if (txt == u"stringendo") {
+        return GradualTempoChangeType::Stringendo;
+    } else {
+        return GradualTempoChangeType::Undefined;
+    }
+}
+
 //---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
@@ -3059,6 +3092,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     std::vector<MusicXmlSpannerDesc> starts;
     std::vector<MusicXmlSpannerDesc> stops;
     bool isDynamicRange = false;
+    bool tempoTextAdded = false;
 
     // note: file order is direction-type first, then staff
     // this means staff is still unknown when direction-type is handled
@@ -3138,6 +3172,18 @@ void MusicXMLParserDirection::direction(const String& partId,
         tt->setVisible(m_visible);
 
         addElemOffset(tt, track, placement(), measure, tick + m_offset, m_pass2);
+        tempoTextAdded = true;
+    } else if (isLikelyTempoLine(track)) {
+        String simplifiedText = MScoreTextToMXML::toPlainText(m_wordsText).simplified();
+        m_wordsText.clear();
+
+        GradualTempoChangeType gtc = getTempoChangeTypeFromString(simplifiedText);
+
+        GradualTempoChange* tempoLine = Factory::createGradualTempoChange(m_score->dummy()->segment());
+        tempoLine->setTempoChangeType(gtc);
+        tempoLine->setBeginText(simplifiedText);
+        tempoLine->setContinueText(u"");
+        m_inferredTempoLineStart = tempoLine;
     } else if (isLikelySticking() && isPercussionStaff) {
         Sticking* sticking = Factory::createSticking(m_score->dummy()->segment());
         sticking->setXmlText(m_wordsText);
@@ -3175,6 +3221,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                     ((TempoText*)t)->setFollowText(true);
                 }
                 m_score->setTempo(tick, m_tpoSound);
+                tempoTextAdded = true;
             }
         } else {
             if (!m_wordsText.empty() || !m_metroText.empty()) {
@@ -3267,8 +3314,15 @@ void MusicXMLParserDirection::direction(const String& partId,
             m_score->setTempo(tick, tpo);
 
             addElemOffset(t, track, placement(), measure, tick + m_offset, m_pass2);
+            tempoTextAdded = true;
         }
     }
+
+    if (tempoTextAdded) {
+        const InferredTempoLineStack& lines = m_pass2.getInferredTempoLine();
+        terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), track, tick + m_offset);
+    }
+    addInferredTempoLine(track, tick + m_offset);
 
     Dynamic* firstDyn = nullptr;
 
@@ -3307,20 +3361,8 @@ void MusicXMLParserDirection::direction(const String& partId,
             dynamicsPlacement = isVocalStaff ? u"above" : u"below";
         }
 
-        // Check staff and end any cresc lines which are waiting
-        if (configuration()->inferTextType()) {
-            // To avoid extending lines which aren't intended to be terminated by dynamics,
-            // only extend lines to dynamics within 24 quarter notes
-            static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
-            InferredHairpinsStack hairpins = m_pass2.getInferredHairpins();
-            for (Hairpin* h : hairpins) {
-                Fraction diff = tick + m_offset - h->tick();
-                if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
-                    h->setTrack2(track);
-                    h->setTick2(tick + m_offset);
-                }
-            }
-        }
+        const InferredHairpinsStack& hairpins = m_pass2.getInferredHairpins();
+        terminateInferredLine(std::vector<TextLineBase*>(hairpins.begin(), hairpins.end()), track, tick + m_offset);
 
         // Add element to score later, after collecting all the others and sorting by default-y
         // This allows default-y to be at least respected by the order of elements
@@ -3329,7 +3371,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         delayedDirections.push_back(delayedDirection);
     }
 
-    addInferredCrescLine(track, tick + m_offset, isVocalStaff);
+    addInferredHairpin(track, tick + m_offset, isVocalStaff);
 
     // handle the elems
     for (EngravingItem* elem : m_elems) {
@@ -3470,16 +3512,16 @@ bool MusicXMLParserDirection::isLikelyTempoText(const track_idx_t track) const
 {
     if (!configuration()->inferTextType() || m_wordsText.contains(u"<i>") || m_wordsText.contains(u"“")
         || m_wordsText.contains(u"”") || placement() == u"below"
-        || track2staff(track) != 0) {
+        || track2staff(track) != 0 || m_wordsText.empty()) {
         return false;
     }
 
     const String plainText = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
     static const std::array<String,
-                            31> tempoStrs
-        = { u"accel", u"adag", u"alleg", u"andant", u"a tempo", u"ballad", u"brisk", u"determination", u"dolce", u"expressive",
+                            29> tempoStrs
+        = { u"adag", u"alleg", u"andant", u"a tempo", u"ballad", u"brisk", u"determination", u"dolce", u"expressive",
             u"fast", u"free", u"gently", u"grave", u"larg", u"lento", u"stesso tempo", u"lively", u"maestoso", u"moderat", u"mosso",
-            u"prest", u"rit", u"rubato", u"slow", u"straight", u"tango", u"tempo i", u"tenderly", u"triumphant", u"vivace" };
+            u"prest", u"rubato", u"slow", u"straight", u"tango", u"tempo i", u"tenderly", u"triumphant", u"vivace" };
 
     for (const String& str : tempoStrs) {
         if (plainText.contains(str, CaseSensitivity::CaseInsensitive)) {
@@ -3511,6 +3553,20 @@ void MusicXMLParserDirection::handleFraction()
             return;
         }
     }
+}
+
+bool MusicXMLParserDirection::isLikelyTempoLine(const track_idx_t track) const
+{
+    if (!configuration()->inferTextType() || m_wordsText.contains(u"“")
+        || m_wordsText.contains(u"”") || placement() == u"below"
+        || track2staff(track) != 0 || m_wordsText.empty()) {
+        return false;
+    }
+
+    const String plainText = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
+    static const std::wregex re(L"(^|(?:\\s|\u00A0))(accel|faster|mosso|rit|rubato|slower|stretto)");
+
+    return plainText.contains(re);
 }
 
 Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType)
@@ -3976,12 +4032,9 @@ void MusicXMLParserDirection::textToCrescLine(String& text)
     m_inferredHairpinStart = line;
 }
 
-void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, const Fraction& tick, const bool isVocalStaff)
+void MusicXMLParserDirection::addInferredHairpin(const track_idx_t track, const Fraction& tick, const bool isVocalStaff)
 {
-    if (!configuration()->inferTextType()) {
-        return;
-    }
-    if (!m_inferredHairpinStart) {
+    if (!configuration()->inferTextType() || !m_inferredHairpinStart) {
         return;
     }
 
@@ -3992,9 +4045,25 @@ void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, cons
     if (m_placement.empty()) {
         spannerPlacement = isVocalStaff ? u"above" : u"below";
     }
-    setSLinePlacement(m_inferredHairpinStart, m_placement);
+    setSLinePlacement(m_inferredHairpinStart, spannerPlacement);
 
     m_pass2.addInferredHairpin(m_inferredHairpinStart);
+}
+
+void MusicXMLParserDirection::addInferredTempoLine(const track_idx_t track, const Fraction& tick)
+{
+    if (!configuration()->inferTextType() || !m_inferredTempoLineStart) {
+        return;
+    }
+
+    m_inferredTempoLineStart->setTrack(track);
+    m_inferredTempoLineStart->setTick(tick + m_offset);
+
+    String spannerPlacement = placement();
+
+    setSLinePlacement(m_inferredTempoLineStart, spannerPlacement);
+
+    m_pass2.addInferredTempoLine(m_inferredTempoLineStart);
 }
 
 static String findDetachedRepeatNumber(const Measure* measure, const track_idx_t track, const Fraction tick, const String& placement,
@@ -4418,6 +4487,24 @@ PlayingTechniqueType MusicXMLParserDirection::getPlayingTechnique() const
     return PlayingTechniqueType::Undefined;
 }
 
+void MusicXMLParserDirection::terminateInferredLine(const std::vector<TextLineBase*> lines, const track_idx_t track, const Fraction& tick)
+{
+    // Check staff and end any lines which are waiting
+    if (configuration()->inferTextType()) {
+        // To avoid extending lines which aren't intended to be terminated by their end markings,
+        // only extend lines to markings within 24 quarter notes
+        static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
+        for (TextLineBase* line : lines) {
+            Fraction diff = tick - line->tick();
+            if (line && line->staffIdx() == track2staff(track)
+                && line->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
+                line->setTrack2(track);
+                line->setTick2(tick);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   bracket
 //---------------------------------------------------------
@@ -4832,16 +4919,6 @@ void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
 {
     muse::remove(m_spanners, spanner);
     delete spanner;
-}
-
-void MusicXMLParserPass2::addInferredHairpin(Hairpin* hp)
-{
-    m_inferredHairpins.push_back(hp);
-}
-
-InferredHairpinsStack MusicXMLParserPass2::getInferredHairpins()
-{
-    return m_inferredHairpins;
 }
 
 //---------------------------------------------------------
