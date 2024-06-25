@@ -211,7 +211,7 @@
     <measure number="12">
       <direction placement="above" system="only-top">
         <direction-type>
-          <words enclosure="rectangle">Boxed Staff Text</words>
+          <words enclosure="rectangle" font-size="12">Boxed Staff Text</words>
           </direction-type>
         </direction>
       <note>
@@ -227,7 +227,7 @@
     <measure number="13">
       <direction placement="above" system="only-top">
         <direction-type>
-          <words enclosure="circle">Circled</words>
+          <words enclosure="circle" font-size="12">Circled</words>
           </direction-type>
         </direction>
       <note>
@@ -244,7 +244,7 @@
       <print new-system="yes"/>
       <direction placement="above" system="only-top">
         <direction-type>
-          <words>Normal Staff Text</words>
+          <words font-size="12">Normal Staff Text</words>
           </direction-type>
         </direction>
       <note>

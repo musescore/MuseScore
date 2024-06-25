@@ -75,6 +75,7 @@
 #include "engraving/dom/stafftypechange.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/textedit.h"
+#include "engraving/dom/textline.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/undo.h"
 #include "engraving/compat/dummyelement.h"
@@ -1726,15 +1727,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 // Ensure that list-selection results in the same endSegment as range selection
                 endSegment = cr2->nextSegmentAfterCR(SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef);
             }
-
-            ByteArray a = element->mimeData();
-//printf("<<%s>>\n", a.data());
-            mu::engraving::XmlReader e(a);
-            mu::engraving::Fraction duration;        // dummy
-            PointF dragOffset;
-            mu::engraving::ElementType type = mu::engraving::EngravingItem::readType(e, &dragOffset, &duration);
-            mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
-            rw::RWRegister::reader()->readItem(spanner, e);
+            mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(element->clone());
+            spanner->setScore(score);
             spanner->styleChanged();
             if (spanner->isHairpin()) {
                 score->addHairpin(toHairpin(spanner), cr1, cr2);
@@ -1744,7 +1738,9 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                     startEditElement(frontSegment);
                 }
             } else {
-                score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
+                bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
+                staff_idx_t targetStaff = firstStaffOnly ? 0 : cr1->staffIdx();
+                score->cmdAddSpanner(spanner, targetStaff, startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
             if (spanner->hasVoiceApplicationProperties()) {
                 spanner->setInitialTrackAndVoiceApplication(cr1->track());

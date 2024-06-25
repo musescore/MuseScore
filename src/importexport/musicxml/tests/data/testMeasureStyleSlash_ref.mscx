@@ -28,6 +28,7 @@
       <metronomeFontSize>10</metronomeFontSize>
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
+      <systemFontSize>10</systemFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <repeatLeftFontSize>10</repeatLeftFontSize>
       <repeatRightFontSize>10</repeatRightFontSize>

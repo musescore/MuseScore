@@ -74,7 +74,7 @@
         </direction>
       <direction placement="above" system="only-top">
         <direction-type>
-          <words>System text</words>
+          <words font-size="12">System text</words>
           </direction-type>
         </direction>
       <note>
