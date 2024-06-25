@@ -1921,17 +1921,27 @@ void MusicXMLParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(m_e, u"score-partwise"));
 
-    for (EngravingItem* el : muse::values(m_sysElements)) {
-        m_score->undoAddElement(el);
-        LOGI() << "el: " << toTextBase(el)->plainText();
+    for (EngravingItem* sysEl : muse::values(m_sysElements)) {
+        m_score->undoAddElement(sysEl);
 
-        // Remove potential duplicated text
-        const Segment* seg = toSegment(el->parentItem());
+        // Remove potential duplicated text for text and text lines
+        const bool elIsText = (sysEl->isTextBase() || sysEl->isTextLineBase());
+        if (!elIsText) {
+            continue;
+        }
+        const Score* score = sysEl->score();
+        const Segment* seg = score ? score->tick2segment(sysEl->tick(), false, SegmentType::ChordRest) : nullptr;
+        if (!seg) {
+            continue;
+        }
+        const String sysElText = sysEl->isTextBase() ? toTextBase(sysEl)->plainText() : toTextLineBase(sysEl)->beginText();
         for (EngravingItem* existingEl : seg->annotations()) {
-            const bool bothText = existingEl->isTextBase() && el->isTextBase();
-            if (existingEl && existingEl != el && bothText) {
-                const bool textMatches = toTextBase(existingEl)->plainText() == toTextBase(el)->plainText();
-                const bool placementMatches = existingEl->placement() == el->placement();
+            const bool bothText = (existingEl->isTextBase() || existingEl->isTextLineBase()) && elIsText;
+            if (existingEl && existingEl != sysEl && bothText) {
+                const String existingText
+                    = existingEl->isTextBase() ? toTextBase(existingEl)->plainText() : toTextLineBase(existingEl)->beginText();
+                const bool textMatches = existingText == sysElText;
+                const bool placementMatches = existingEl->placement() == sysEl->placement();
                 if (textMatches && !existingEl->systemFlag() && placementMatches) {
                     m_score->removeElement(existingEl);
                 }
@@ -2089,7 +2099,7 @@ void MusicXMLParserPass2::part()
             hp->score()->addElement(hp);
         }
         for (GradualTempoChange* line : m_inferredTempoLines) {
-            line->score()->addElement(line);
+            addSystemElement(line, line->tick());
         }
     }
 

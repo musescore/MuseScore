@@ -1186,6 +1186,17 @@
               </Note>
             </Chord>
           <endTuplet/>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>1</subtype>
+              <direction>down</direction>
+              </HairPin>
+            <next>
+              <location>
+                <fractions>5/12</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Spanner type="GradualTempoChange">
             <GradualTempoChange>
               <tempoChangeType>ritardando</tempoChangeType>
@@ -1205,17 +1216,6 @@
               <location>
                 </location>
               </prev>
-            </Spanner>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>1</subtype>
-              <direction>down</direction>
-              </HairPin>
-            <next>
-              <location>
-                <fractions>5/12</fractions>
-                </location>
-              </next>
             </Spanner>
           <Tuplet>
             <normalNotes>2</normalNotes>

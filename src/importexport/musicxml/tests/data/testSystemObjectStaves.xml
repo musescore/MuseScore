@@ -198,6 +198,11 @@
           <rehearsal default-x="-13" relative-y="30" font-weight="bold" font-size="14">A</rehearsal>
           </direction-type>
         </direction>
+        <direction placement="above">
+          <direction-type>
+            <words relative-y="10">rit</words>
+            </direction-type>
+          </direction>
       <note default-x="121.14" default-y="-10">
         <rest measure="yes"/>
         <duration>4</duration>
@@ -365,6 +370,11 @@
         <rehearsal default-x="-13" relative-y="30" font-weight="bold" font-size="14">A</rehearsal>
         </direction-type>
       </direction>
+      <direction placement="above">
+        <direction-type>
+          <words relative-y="10">rit</words>
+          </direction-type>
+        </direction>
       <note default-x="121.14" default-y="-437.45">
         <rest measure="yes"/>
         <duration>4</duration>

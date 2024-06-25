@@ -365,6 +365,22 @@
             <linkedMain/>
             <text><font size="14"/><b>A</b></text>
             </RehearsalMark>
+          <Spanner type="GradualTempoChange">
+            <GradualTempoChange>
+              <tempoChangeType>ritardando</tempoChangeType>
+              <beginHookHeight>1.9</beginHookHeight>
+              <endHookType>0</endHookType>
+              <endHookHeight>1.9</endHookHeight>
+              <beginText>rit</beginText>
+              <beginTextOffset x="0" y="0"/>
+              <linkedMain/>
+              </GradualTempoChange>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
@@ -378,6 +394,13 @@
             <linkedMain/>
             <text>Allegro</text>
             </Tempo>
+          <Spanner type="GradualTempoChange">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
@@ -506,6 +529,26 @@
               </linked>
             <text><font size="14"/><b>A</b></text>
             </RehearsalMark>
+          <Spanner type="GradualTempoChange">
+            <GradualTempoChange>
+              <tempoChangeType>ritardando</tempoChangeType>
+              <beginHookHeight>1.9</beginHookHeight>
+              <endHookType>0</endHookType>
+              <endHookHeight>1.9</endHookHeight>
+              <beginText>rit</beginText>
+              <beginTextOffset x="0" y="0"/>
+              <linked>
+                <location>
+                  <staves>-3</staves>
+                  </location>
+                </linked>
+              </GradualTempoChange>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
@@ -523,6 +566,13 @@
               </linked>
             <text>Allegro</text>
             </Tempo>
+          <Spanner type="GradualTempoChange">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
