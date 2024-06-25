@@ -32,7 +32,7 @@
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
-      <footerFontSize>2.3</footerFontSize>
+      <footerFontSize>2.6</footerFontSize>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -120,9 +120,9 @@ copyright copyright</metaTag>
         <height>3.5</height>
         <Text>
           <style>title</style>
-          <size>2.3</size>
+          <size>3</size>
           <align>right,top</align>
-          <text><font size="2.3"/>Title title title title title title title title title title title title title title title title title title title title title title title</text>
+          <text><font size="3"/>Title title title title title title title title title title title title title title title title title title title title title title title</text>
           </Text>
         </VBox>
       <Measure>

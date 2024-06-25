@@ -437,6 +437,8 @@ std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string&
 
     std::vector<GlyphImage> images;
 
+    UNUSED(text);
+
 #ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
     int pixelSize = rf->requireKey.pixelSize;
     double pixelScale = rf->pixelScale();
