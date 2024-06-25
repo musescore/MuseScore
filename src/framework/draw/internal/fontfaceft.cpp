@@ -31,7 +31,9 @@
 #include FT_TRUETYPE_TABLES_H
 #include <hb-ft.h>
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 #include <ext/import-font.h>
+#endif
 
 #include "global/types/bytearray.h"
 #include "global/io/file.h"
@@ -87,7 +89,7 @@ struct muse::draw::SymbolMetrics
 
 struct muse::draw::FData
 {
-    mu::ByteArray fontData;
+    ByteArray fontData;
     FT_Face face = nullptr;
     hb_font_t* hb_font = nullptr;
     std::unordered_map<glyph_idx_t, GlyphMetrics> glyphsMetrics;
@@ -305,6 +307,7 @@ f26dot6_t FontFaceFT::glyphAdvance(glyph_idx_t idx) const
     }
 }
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 const msdfgen::Shape& FontFaceFT::glyphShape(glyph_idx_t idx) const
 {
     static const msdfgen::Shape null;
@@ -331,6 +334,8 @@ const msdfgen::Shape& FontFaceFT::glyphShape(glyph_idx_t idx) const
 
     return m_cache.insert(std::move(v)).first->second;
 }
+
+#endif
 
 f26dot6_t FontFaceFT::leading() const
 {

@@ -28,7 +28,9 @@ struct DummyGlyph {
     f26dot6_t textAdvance = 0;
     FBBox symBbox;
     f26dot6_t symAdvance = 0;
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
     msdfgen::Shape shape;
+#endif
 };
 
 static const DummyGlyph& dummyGlyph()
@@ -40,6 +42,7 @@ static const DummyGlyph& dummyGlyph()
         g.symBbox = FBBox(0, -4011, 2079, 4817);
         g.symAdvance = 2080;
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
         using namespace msdfgen;
 
         g.shape.inverseYAxis = true;
@@ -82,7 +85,9 @@ static const DummyGlyph& dummyGlyph()
             }
         }
         g.shape.contours.push_back(c2);
+#endif
     }
+
     return g;
 }
 
@@ -176,6 +181,7 @@ f26dot6_t FontFaceDU::glyphAdvance(glyph_idx_t idx) const
     return m_origin->glyphAdvance(idx);
 }
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 const msdfgen::Shape& FontFaceDU::glyphShape(glyph_idx_t idx) const
 {
     if (idx == 0) {
@@ -183,3 +189,5 @@ const msdfgen::Shape& FontFaceDU::glyphShape(glyph_idx_t idx) const
     }
     return m_origin->glyphShape(idx);
 }
+
+#endif
