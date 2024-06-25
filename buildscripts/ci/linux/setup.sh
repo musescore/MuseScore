@@ -179,11 +179,11 @@ fi
 
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
-cmake_version="3.16.0"
+cmake_version="3.24.0"
 cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
 if [[ ! -d "$cmake_dir" ]]; then
   mkdir -p "$cmake_dir"
-  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-Linux-x86_64.tar.gz"
+  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz" 
   wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
 fi
 echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
