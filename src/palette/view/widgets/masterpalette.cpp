@@ -126,6 +126,7 @@ MasterPalette::MasterPalette(QWidget* parent)
     addPalette(PaletteCreator::newBagpipeEmbellishmentPalette());
     addPalette(PaletteCreator::newLayoutPalette());
     addPalette(PaletteCreator::newBeamPalette());
+    addPalette(PaletteCreator::newOrganPalette());
 
     m_symbolItem = new QTreeWidgetItem();
     m_idxAllSymbols = stack->count();

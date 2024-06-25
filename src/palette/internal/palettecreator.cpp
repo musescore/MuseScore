@@ -149,6 +149,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newBagpipeEmbellishmentPalette());
     tree->append(newBeamPalette());
     tree->append(newLinesPalette());
+    tree->append(newOrganPalette());
 
     return tree;
 }
@@ -185,6 +186,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
+    defaultPalette->append(newOrganPalette(true));
 
     return defaultPalette;
 }
@@ -1983,6 +1985,18 @@ PalettePtr PaletteCreator::newHarpPalette()
     pedalTextDiagram->setIsDiagram(false);
 
     sp->appendElement(pedalTextDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal text diagram"));
+
+    return sp;
+}
+
+PalettePtr PaletteCreator::newOrganPalette(bool defaultPalette)
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Organ);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Organ"));
+    sp->setMag(1.5);
+    sp->setGridSize(28, 30);
+    sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     return sp;
 }
