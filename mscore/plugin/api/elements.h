@@ -278,7 +278,6 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( timeStretch,             TIME_STRETCH              )
       API_PROPERTY( ornamentStyle,           ORNAMENT_STYLE            )
       API_PROPERTY( timesig,                 TIMESIG                   )
-      API_PROPERTY( timesigGlobal,           TIMESIG_GLOBAL            )
       API_PROPERTY( timesigStretch,          TIMESIG_STRETCH           )
       API_PROPERTY( timesigType,             TIMESIG_TYPE              )
       API_PROPERTY( spannerTick,             SPANNER_TICK              )

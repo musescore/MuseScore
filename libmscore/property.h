@@ -204,7 +204,6 @@ enum class Pid {
       ORNAMENT_STYLE,
 
       TIMESIG,
-      TIMESIG_GLOBAL,
       TIMESIG_STRETCH,
       TIMESIG_TYPE,
       SPANNER_TICK,

@@ -923,8 +923,6 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
             { Pid::SCALE,          0, t.scale,          t.resetScale         },
 //          { Pid::TIMESIG,        0, t.timesigZ,       t.resetTimesig       },
 //          { Pid::TIMESIG,        0, t.timesigN,       t.resetTimesig       },
-//          { Pid::TIMESIG_GLOBAL, 0, t.globalTimesigZ, t.resetGlobalTimesig },
-//          { Pid::TIMESIG_GLOBAL, 0, t.globalTimesigN, t.resetGlobalTimesig }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },

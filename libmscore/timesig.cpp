@@ -449,8 +449,6 @@ QVariant TimeSig::getProperty(Pid propertyId) const
                   return QVariant::fromValue(groups());
             case Pid::TIMESIG:
                   return QVariant::fromValue(_sig);
-            case Pid::TIMESIG_GLOBAL:
-                  return QVariant::fromValue(globalSig());
             case Pid::TIMESIG_STRETCH:
                   return QVariant::fromValue(stretch());
             case Pid::TIMESIG_TYPE:
@@ -486,9 +484,6 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
             case Pid::TIMESIG:
                   setSig(v.value<Fraction>());
                   break;
-            case Pid::TIMESIG_GLOBAL:
-                  setGlobalSig(v.value<Fraction>());
-                  break;
             case Pid::TIMESIG_STRETCH:
                   setStretch(v.value<Fraction>());
                   break;
@@ -523,8 +518,6 @@ QVariant TimeSig::propertyDefault(Pid id) const
                   return QString();
             case Pid::TIMESIG:
                   return QVariant::fromValue(Fraction(4,4));
-            case Pid::TIMESIG_GLOBAL:
-                  return QVariant::fromValue(Fraction(1,1));
             case Pid::TIMESIG_TYPE:
                   return int(TimeSigType::NORMAL);
             case Pid::SCALE:
