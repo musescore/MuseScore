@@ -22,7 +22,7 @@ import MuseScore 3.0
 
 MuseScore {
     version: "1.0"
-    description: "This plugin adds courtesy accidentals"
+    description: qsTr("This plugin adds courtesy accidentals.")
     title: "Add Courtesy Accidentals"
     requiresScore: true
     categoryCode: "composing-arranging-tools"

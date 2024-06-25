@@ -20,7 +20,7 @@ import MuseScore 3.0
 
 MuseScore {
    version: "4.0"
-   description: "This plugin names notes as per your language setting"
+   description: qsTr("This plugin names notes as per your language setting.")
    title: "Note Names"
    categoryCode: "composing-arranging-tools"
    thumbnailName: "note_names.png"
