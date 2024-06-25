@@ -42,6 +42,11 @@ if (APPLE)
     if(POLICY CMP0046)
         cmake_policy(SET CMP0046 OLD)
     endif(POLICY CMP0046)
+
+    # Supress "The ``exec_program()`` command should not be called."
+    if(POLICY CMP0153)
+        cmake_policy(SET CMP0153 OLD)
+    endif(POLICY CMP0153)
 endif (APPLE)
 
 # RPATH settings on macOS do not affect install_name

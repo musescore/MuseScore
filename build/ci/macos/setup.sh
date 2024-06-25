@@ -29,7 +29,7 @@ rm '/usr/local/bin/python3-config'
 rm '/usr/local/bin/python3.11-config'
 
 # additional dependencies
-brew install jack lame
+brew install jack
 
 BREW_CELLAR=$(brew --cellar)
 BREW_PREFIX=$(brew --prefix)
@@ -70,7 +70,7 @@ function fixBrewPath {
 export -f fixBrewPath
 
 function installBottleManually {
-  brew unlink $1
+  brew unlink $1 2>/dev/null  # supress 'error' reg. "No such keg"
   rm -rf /usr/local/Cellar/$1
   tar xzvf bottles/$1*.tar.gz -C $BREW_CELLAR
   find $BREW_CELLAR/$1 -type f -name '*.pc' -exec sed -i '' "s:@@HOMEBREW_CELLAR@@:$BREW_CELLAR:g" {} +
