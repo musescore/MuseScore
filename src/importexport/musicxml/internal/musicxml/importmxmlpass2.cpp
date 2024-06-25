@@ -922,7 +922,8 @@ static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std
 //   addElemOffset
 //---------------------------------------------------------
 
-static void addElemOffset(EngravingItem* el, track_idx_t track, const String& placement, Measure* measure, const Fraction& tick)
+static void addElemOffset(EngravingItem* el, track_idx_t track, const String& placement, Measure* measure, const Fraction& tick,
+                          MusicXMLParserPass2& _pass2)
 {
     if (!measure) {
         return;
@@ -940,7 +941,26 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
     Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-    s->add(el);
+    if (el->systemFlag()) {
+        Score* score = measure->score();
+        Staff* st = score->staff(track2staff(track));
+        if (!score->isSystemObjectStaff(st) && st->idx() != 0) {
+            score->addSystemObjectStaff(st);
+        }
+        bool found = false;
+        for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), tick.ticks())) {
+            if (el->type() == existingEl->type()) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            el->setParent(s);
+            _pass2.addSystemElement(el, tick);
+        }
+    } else {
+        s->add(el);
+    }
 }
 
 //---------------------------------------------------------
@@ -1899,6 +1919,24 @@ void MusicXMLParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(m_e, u"score-partwise"));
 
+    for (EngravingItem* el : muse::values(m_sysElements)) {
+        m_score->undoAddElement(el);
+        LOGI() << "el: " << toTextBase(el)->plainText();
+
+        // Remove potential duplicated text
+        const Segment* seg = toSegment(el->parentItem());
+        for (EngravingItem* existingEl : seg->annotations()) {
+            const bool bothText = existingEl->isTextBase() && el->isTextBase();
+            if (existingEl && existingEl != el && bothText) {
+                const bool textMatches = toTextBase(existingEl)->plainText() == toTextBase(el)->plainText();
+                const bool placementMatches = existingEl->placement() == el->placement();
+                if (textMatches && !existingEl->systemFlag() && placementMatches) {
+                    m_score->removeElement(existingEl);
+                }
+            }
+        }
+    }
+
     // This method relies heavily on text metrics which differ from system to system and can be very volatile
     // To avoid having to update the majority of musicxml tests on every change to engraving, don't run this during testing
     if (!MScore::testMode) {
@@ -2540,7 +2578,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
 
                     m_score->setTempo(tick, tpo);
 
-                    addElemOffset(t, m_pass1.trackForPart(partId), u"above", measure, tick);
+                    addElemOffset(t, m_pass1.trackForPart(partId), u"above", measure, tick, *this);
                 }
             }
             m_e.skipCurrentElement();
@@ -2621,7 +2659,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
     }
               );
     for (MusicXMLDelayedDirectionElement* direction : delayedDirections) {
-        direction->addElem();
+        direction->addElem(*this);
         delete direction;
     }
 
@@ -2976,9 +3014,9 @@ static void preventNegativeTick(const Fraction& tick, Fraction& offset, MxmlLogg
     }
 }
 
-void MusicXMLDelayedDirectionElement::addElem()
+void MusicXMLDelayedDirectionElement::addElem(MusicXMLParserPass2& _pass2)
 {
-    addElemOffset(m_element, m_track, m_placement, m_measure, m_tick);
+    addElemOffset(m_element, m_track, m_placement, m_measure, m_tick, _pass2);
 }
 
 String MusicXMLParserDirection::placement() const
@@ -3098,7 +3136,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
         tt->setVisible(m_visible);
 
-        addElemOffset(tt, track, placement(), measure, tick + m_offset);
+        addElemOffset(tt, track, placement(), measure, tick + m_offset, m_pass2);
     } else if (isLikelySticking() && isPercussionStaff) {
         Sticking* sticking = Factory::createSticking(m_score->dummy()->segment());
         sticking->setXmlText(m_wordsText);
@@ -3116,7 +3154,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 totalY(), sticking, track, placement(), measure, tick + m_offset);
             delayedDirections.push_back(delayedDirection);
         } else {
-            addElemOffset(sticking, track, placement(), measure, tick + m_offset);
+            addElemOffset(sticking, track, placement(), measure, tick + m_offset, m_pass2);
         }
     } else if (isLikelyDynamicRange()) {
         isDynamicRange = true;
@@ -3207,7 +3245,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                         totalY(), t, track, placement(), measure, tick + m_offset);
                     delayedDirections.push_back(delayedDirection);
                 } else {
-                    addElemOffset(t, track, placement(), measure, tick + m_offset);
+                    addElemOffset(t, track, placement(), measure, tick + m_offset, m_pass2);
                 }
             }
         }
@@ -3227,7 +3265,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             // TBD may want ro use tick + _offset if sound is affected
             m_score->setTempo(tick, tpo);
 
-            addElemOffset(t, track, placement(), measure, tick + m_offset);
+            addElemOffset(t, track, placement(), measure, tick + m_offset, m_pass2);
         }
     }
 
@@ -3300,7 +3338,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 totalY(), elem, track, placement(), measure, tick + m_offset);
             delayedDirections.push_back(delayedDirection);
         } else {
-            addElemOffset(elem, track, placement(), measure, tick + m_offset);
+            addElemOffset(elem, track, placement(), measure, tick + m_offset, m_pass2);
         }
     }
 
@@ -6161,7 +6199,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     String instrumentId;
     String tieType;
     MusicXMLParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger };
-    MusicXMLParserNotations notations { m_e, m_score, m_logger, m_pass1 };
+    MusicXMLParserNotations notations { m_e, m_score, m_logger, m_pass1, *this };
 
     MxmlNoteDuration mnd { m_divs, m_logger, &m_pass1 };
     MxmlNotePitch mnp { m_logger };
@@ -8148,8 +8186,9 @@ String Notation::print() const
 //   MusicXMLParserNotations
 //---------------------------------------------------------
 
-MusicXMLParserNotations::MusicXMLParserNotations(XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1)
-    : m_e(e), m_pass1(pass1), m_score(score), m_logger(logger)
+MusicXMLParserNotations::MusicXMLParserNotations(XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1,
+                                                 mu::engraving::MusicXMLParserPass2& pass2)
+    : m_e(e), m_pass1(pass1), m_pass2(pass2), m_score(score), m_logger(logger)
 {
     // nothing
 }
@@ -8301,7 +8340,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     for (const String& d : std::as_const(m_dynamicsList)) {
         Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(d);
-        addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
+        addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick), m_pass2);
     }
 }
 

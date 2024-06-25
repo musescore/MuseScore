@@ -219,6 +219,7 @@ class Trill;
 class MxmlLogger;
 class MusicXMLDelayedDirectionElement;
 class MusicXMLInferredFingering;
+class MusicXMLParserPass2;
 
 using DelayedDirectionsList = std::vector<MusicXMLDelayedDirectionElement*>;
 using InferredFingeringsList = std::vector<MusicXMLInferredFingering*>;
@@ -232,6 +233,7 @@ using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
 using SegnoStack = std::map<int, Marker*>;
+using SystemElements = std::multimap<int, EngravingItem*>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -240,7 +242,8 @@ using SegnoStack = std::map<int, Marker*>;
 class MusicXMLParserNotations
 {
 public:
-    MusicXMLParserNotations(muse::XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1);
+    MusicXMLParserNotations(muse::XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1,
+                            MusicXMLParserPass2& pass2);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
                     MusicXmlSpannerMap& spanners, TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap,
@@ -273,6 +276,7 @@ private:
     void otherNotation();
     muse::XmlStreamReader& m_e;
     MusicXMLParserPass1& m_pass1;
+    MusicXMLParserPass2& m_pass2;
     Score* m_score = nullptr;                         // the score
     MxmlLogger* m_logger = nullptr;                              // the error logger
     String m_errors;                    // errors to present to the user
@@ -317,6 +321,9 @@ public:
 
     void addInferredHairpin(Hairpin* hp);
     InferredHairpinsStack getInferredHairpins();
+
+    void addSystemElement(EngravingItem* el, const Fraction& tick) { m_sysElements.insert({ tick.ticks(), el }); }
+    const SystemElements systemElements() const { return m_sysElements; }
 
 private:
     void addError(const String& error);      // Add an error to be shown in the GUI
@@ -412,6 +419,8 @@ private:
     size_t m_nstaves = 0;                          // Number of staves in current part
     std::vector<int> m_measureRepeatNumMeasures;
     std::vector<int> m_measureRepeatCount;
+
+    SystemElements m_sysElements;
 };
 
 //---------------------------------------------------------
@@ -520,7 +529,7 @@ public:
                                     String placement, Measure* measure, Fraction tick)
         : m_totalY(totalY),  m_element(element), m_track(track), m_placement(placement),
         m_measure(measure), m_tick(tick) {}
-    void addElem();
+    void addElem(MusicXMLParserPass2& _pass2);
     double totalY() const { return m_totalY; }
     const EngravingItem* element() const { return m_element; }
     track_idx_t track() const { return m_track; }

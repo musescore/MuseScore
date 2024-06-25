@@ -241,15 +241,6 @@
           </direction-type>
         <sound tempo="120"/>
         </direction>
-      <direction placement="above">
-        <direction-type>
-          <metronome parentheses="yes">
-            <beat-unit>quarter</beat-unit>
-            <per-minute>126</per-minute>
-            </metronome>
-          </direction-type>
-        <sound tempo="126"/>
-        </direction>
       <note>
         <pitch>
           <step>B</step>

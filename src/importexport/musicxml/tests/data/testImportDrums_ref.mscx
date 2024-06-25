@@ -288,11 +288,6 @@
             <followText>1</followText>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <followText>1</followText>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>

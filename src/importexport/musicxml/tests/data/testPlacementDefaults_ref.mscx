@@ -208,15 +208,15 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Tempo>
-            <tempo>0.583333</tempo>
-            <text><font size="12"/><b>Grave</b></text>
-            </Tempo>
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
             <direction>up</direction>
             </Dynamic>
+          <Tempo>
+            <tempo>0.583333</tempo>
+            <text><font size="12"/><b>Grave</b></text>
+            </Tempo>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
