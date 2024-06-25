@@ -4325,12 +4325,6 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             }
         }
 
-        if (item->ghost()) {
-            const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
-        } else {
-            const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
-        }
-
         double w = item->tabHeadWidth(tab);     // !! use _fretString
         double mags = item->magS();
 
@@ -4365,6 +4359,12 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             ldata->cachedSymNull.set_value(SymId::noSym);
         }
         noteBBox = item->symBbox(nh);
+    }
+
+    if (item->ghost()) {
+        const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+    } else {
+        const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
     }
 
     ldata->setBbox(noteBBox);
