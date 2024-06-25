@@ -627,14 +627,9 @@
               </GradualTempoChange>
             <next>
               <location>
+                <fractions>1/2</fractions>
                 </location>
               </next>
-            </Spanner>
-          <Spanner type="GradualTempoChange">
-            <prev>
-              <location>
-                </location>
-              </prev>
             </Spanner>
           <Chord>
             <durationType>half</durationType>
@@ -653,6 +648,13 @@
           <Fermata>
             <subtype>fermataAbove</subtype>
             </Fermata>
+          <Spanner type="GradualTempoChange">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>

@@ -483,7 +483,7 @@ private:
     bool isLikelyDynamicRange() const;
     PlayingTechniqueType getPlayingTechnique() const;
 
-    void terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick);
+    // void terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick);
 
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 

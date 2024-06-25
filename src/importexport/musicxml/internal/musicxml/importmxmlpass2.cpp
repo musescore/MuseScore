@@ -3061,6 +3061,24 @@ static GradualTempoChangeType getTempoChangeTypeFromString(String txt)
     }
 }
 
+static void terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick, const track_idx_t track)
+{
+    // Check staff and end any lines which are waiting
+    if (configuration()->inferTextType()) {
+        // To avoid extending lines which aren't intended to be terminated by their end markings,
+        // only extend lines to markings within 24 quarter notes
+        static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
+        for (TextLineBase* line : lines) {
+            Fraction diff = tick - line->tick();
+            if (line && line->staffIdx() == track2staff(track)
+                && line->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
+                line->setTrack2(track);
+                line->setTick2(tick);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
@@ -3320,7 +3338,7 @@ void MusicXMLParserDirection::direction(const String& partId,
 
     if (tempoTextAdded) {
         const InferredTempoLineStack& lines = m_pass2.getInferredTempoLine();
-        terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), tick + m_offset);
+        terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), tick + m_offset, m_track);
     }
     addInferredTempoLine(tick + m_offset);
 
@@ -3362,7 +3380,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
 
         const InferredHairpinsStack& hairpins = m_pass2.getInferredHairpins();
-        terminateInferredLine(std::vector<TextLineBase*>(hairpins.begin(), hairpins.end()), tick + m_offset);
+        terminateInferredLine(std::vector<TextLineBase*>(hairpins.begin(), hairpins.end()), tick + m_offset, m_track);
 
         // Add element to score later, after collecting all the others and sorting by default-y
         // This allows default-y to be at least respected by the order of elements
@@ -4487,24 +4505,6 @@ PlayingTechniqueType MusicXMLParserDirection::getPlayingTechnique() const
     return PlayingTechniqueType::Undefined;
 }
 
-void MusicXMLParserDirection::terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick)
-{
-    // Check staff and end any lines which are waiting
-    if (configuration()->inferTextType()) {
-        // To avoid extending lines which aren't intended to be terminated by their end markings,
-        // only extend lines to markings within 24 quarter notes
-        static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
-        for (TextLineBase* line : lines) {
-            Fraction diff = tick - line->tick();
-            if (line && line->staffIdx() == track2staff(m_track)
-                && line->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
-                line->setTrack2(m_track);
-                line->setTick2(tick);
-            }
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   bracket
 //---------------------------------------------------------
@@ -5134,6 +5134,10 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
             } else if (fermataType == u"") {
                 fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
             }
+
+            // Terminate tempo lines
+            const InferredTempoLineStack& lines = getInferredTempoLine();
+            terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), locTick, track);
         } else if (m_e.name() == "repeat") {
             repeat = m_e.attribute("direction");
             count = m_e.attribute("times");
@@ -8389,6 +8393,10 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
     if (notation.symId() != SymId::noSym) {
         if (notation.name() == u"fermata") {
             addFermataToChord(notation, cr);
+
+            // Terminate tempo line
+            const InferredTempoLineStack& lines = m_pass2.getInferredTempoLine();
+            terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), cr->tick(), cr->track());
         } else {
             addArticulationToChord(notation, cr);
         }
