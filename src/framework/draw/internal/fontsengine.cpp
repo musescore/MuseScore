@@ -21,8 +21,10 @@
  */
 #include "fontsengine.h"
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 #include <msdfgen.h>
 #include <ext/import-font.h>
+#endif
 
 #include "global/io/fileinfo.h"
 
@@ -33,6 +35,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::draw;
 
 static const double DEFAULT_PIXEL_SIZE = 100.0;
@@ -352,6 +355,7 @@ double FontsEngine::symAdvance(const Font& f, char32_t ucs4) const
     return from_f26d6(advance) * rf->pixelScale();
 }
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 static void generateSdf(GlyphImage& out, glyph_idx_t glyphIdx, const IFontFace* face)
 {
     struct Bounds
@@ -417,6 +421,8 @@ static void generateSdf(GlyphImage& out, glyph_idx_t glyphIdx, const IFontFace* 
     out.rect.setHeight(height);
 }
 
+#endif
+
 std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string& text) const
 {
     //! NOTE for rendering, all fonts, including symbols fonts, are processed as text
@@ -431,6 +437,7 @@ std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string&
 
     std::vector<GlyphImage> images;
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
     int pixelSize = rf->requireKey.pixelSize;
     double pixelScale = rf->pixelScale();
     double glyphTop = 0;
@@ -473,6 +480,7 @@ std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string&
 
         glyphTop += (pixelSize * TEXT_LINE_SCALE);
     }
+#endif
 
     return images;
 }

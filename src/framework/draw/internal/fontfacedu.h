@@ -49,7 +49,9 @@ public:
     FBBox glyphBbox(glyph_idx_t idx) const override;
     f26dot6_t glyphAdvance(glyph_idx_t idx) const override;
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
     const msdfgen::Shape& glyphShape(glyph_idx_t idx) const override;
+#endif
 
 private:
     IFontFace* m_origin = nullptr;

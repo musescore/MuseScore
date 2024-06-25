@@ -29,6 +29,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::draw;
 
 static int s_fontID = -1;
@@ -138,17 +139,17 @@ void FontsDatabase::addAdditionalFonts(const io::path_t& path)
 
     io::path_t absolutePath = io::Dir(path).absolutePath() + "/";
 
-    mu::ByteArray data = f.readAll();
+    ByteArray data = f.readAll();
     std::string err;
-    mu::JsonDocument json = mu::JsonDocument::fromJson(data, &err);
+    JsonDocument json = JsonDocument::fromJson(data, &err);
     if (!err.empty()) {
         LOGE() << "failed parse: " << f.filePath();
         return;
     }
 
-    mu::JsonArray fontInfos = json.rootArray();
+    JsonArray fontInfos = json.rootArray();
     for (size_t i = 0; i < fontInfos.size(); ++i) {
-        mu::JsonObject infoObj = fontInfos.at(i).toObject();
+        JsonObject infoObj = fontInfos.at(i).toObject();
 
         std::string file = infoObj.value("file").toStdString();
         if (file.empty()) {

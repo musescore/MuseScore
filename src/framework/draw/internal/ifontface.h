@@ -22,7 +22,9 @@
 #ifndef MUSE_DRAW_IFONTFACE_H
 #define MUSE_DRAW_IFONTFACE_H
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 #include <msdfgen.h>
+#endif
 
 #include "global/io/path.h"
 #include "types/fontstypes.h"
@@ -33,7 +35,7 @@ using f26dot6_t = long;         // A signed 26.6 fixed-point type used for vecto
 inline long to_f26d6(float v) { return static_cast<long>(v * 64); }
 inline double from_f26d6(f26dot6_t v) { return static_cast<double>(v) / 64.0; }
 
-using FBBox = mu::RectX<f26dot6_t>;
+using FBBox = RectX<f26dot6_t>;
 
 struct GlyphPos {
     glyph_idx_t idx = 0;
@@ -64,10 +66,13 @@ public:
     virtual FBBox glyphBbox(glyph_idx_t idx) const = 0;
     virtual f26dot6_t glyphAdvance(glyph_idx_t idx) const = 0;
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
     virtual const msdfgen::Shape& glyphShape(glyph_idx_t idx) const = 0;
+#endif
 };
 }
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 inline bool operator==(const msdfgen::Shape& s1, const msdfgen::Shape& s2)
 {
     if (s1.inverseYAxis != s2.inverseYAxis) {
@@ -130,5 +135,7 @@ inline bool operator==(const msdfgen::Shape& s1, const msdfgen::Shape& s2)
 
     return true;
 }
+
+#endif
 
 #endif // MUSE_DRAW_IFONTFACE_H

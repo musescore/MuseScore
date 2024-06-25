@@ -111,14 +111,17 @@ else()
 
         include(cmake/SetupFreeType.cmake)
         add_subdirectory(thirdparty/harfbuzz)
-        add_subdirectory(thirdparty/msdfgen)
+        #add_subdirectory(thirdparty/msdfgen)
 
         set(MODULE_INCLUDE
             ${FREETYPE_INCLUDE_DIRS}
             ${CMAKE_CURRENT_LIST_DIR}/thirdparty/harfbuzz/harfbuzz/src
-            ${CMAKE_CURRENT_LIST_DIR}/thirdparty/msdfgen/msdfgen-1.4
+            #${CMAKE_CURRENT_LIST_DIR}/thirdparty/msdfgen/msdfgen-1.4
         )
-        set(MODULE_LINK ${FREETYPE_LIBRARIES} harfbuzz msdfgen)
+
+        set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_USE_QTTEXTDRAW)
+
+        set(MODULE_LINK ${FREETYPE_LIBRARIES} harfbuzz )#msdfgen)
     endif()
 
 endif()
