@@ -74,3 +74,5 @@ __pycache__/
 *.pyc
 .venv/
 .pdm-python
+
+**/_deps/*
