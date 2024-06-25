@@ -224,7 +224,7 @@ Color EngravingConfiguration::thumbnailBackgroundColor() const
 
 Color EngravingConfiguration::noteBackgroundColor() const
 {
-    return Color::WHITE;
+    return notationConfiguration()->foregroundColor();
 }
 
 Color EngravingConfiguration::fontPrimaryColor() const
