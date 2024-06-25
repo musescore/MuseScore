@@ -39,9 +39,9 @@ public:
     int currentExpressionLevel() const;
     int naturalExpressionLevel() const;
 
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
-                                const mpe::PlaybackParamMap& params) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                const mpe::PlaybackParamLayers& params) override;
 
     async::Channel<midi::channel_t, midi::Program> channelAdded() const;
 
@@ -49,7 +49,7 @@ public:
 
 private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
-    void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& changes);
+    void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& changes);
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                              const int midiControlIdx);

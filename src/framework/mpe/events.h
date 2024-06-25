@@ -28,7 +28,6 @@
 
 #include "async/channel.h"
 #include "realfn.h"
-#include "types/val.h"
 
 #include "mpetypes.h"
 #include "playbacksetupdata.h"
@@ -40,12 +39,16 @@ using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
 
+using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
+using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
+
 struct PlaybackParam;
 using PlaybackParamList = std::vector<PlaybackParam>;
 using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
+using PlaybackParamLayers = std::map<layer_idx_t, PlaybackParamMap>;
 
-using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelMap, PlaybackParamMap>;
-using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamMap>;
+using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamLayers>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamList>;
 
 struct ArrangementContext
 {
@@ -287,27 +290,33 @@ private:
 };
 
 struct PlaybackParam {
-    String code;
-    Val val;
+    enum Type {
+        Undefined = -1,
+        SoundPreset,
+        PlayingTechnique,
+    };
 
-    staff_layer_idx_t staffLayerIndex = 0;
+    using Value = String;
+
+    Type type = Undefined;
+    Value val;
+
+    PlaybackParam(Type t, Value v)
+        : type(t), val(std::move(v))
+    {
+    }
 
     bool operator==(const PlaybackParam& other) const
     {
-        return code == other.code && val == other.val;
+        return type == other.type && val == other.val;
     }
 };
-
-static const String SOUND_PRESET_PARAM_CODE(u"sound_preset");
-static const String PLAY_TECHNIQUE_PARAM_CODE(u"playing_technique");
-
-static const std::string ORDINARY_PLAYING_TECHNIQUE_CODE("ordinary_technique");
 
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
-    DynamicLevelMap dynamicLevelMap;
-    PlaybackParamMap paramMap;
+    DynamicLevelLayers dynamics;
+    PlaybackParamLayers params;
 
     MainStreamChanges mainStream;
     OffStreamChanges offStream;
@@ -316,8 +325,8 @@ struct PlaybackData {
     {
         return originEvents == other.originEvents
                && setupData == other.setupData
-               && dynamicLevelMap == other.dynamicLevelMap
-               && paramMap == other.paramMap;
+               && dynamics == other.dynamics
+               && params == other.params;
     }
 
     bool isValid() const

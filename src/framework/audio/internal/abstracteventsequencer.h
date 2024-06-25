@@ -58,21 +58,21 @@ public:
         m_offStreamChanges = data.offStream;
 
         m_mainStreamChanges.onReceive(this,
-                                      [this](const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
-                                             const mpe::PlaybackParamMap& params) {
+                                      [this](const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                             const mpe::PlaybackParamLayers& params) {
             updateMainStreamEvents(events, dynamics, params);
         });
 
-        m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) {
+        m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) {
             updateOffStreamEvents(events, params);
         });
 
-        updateMainStreamEvents(data.originEvents, data.dynamicLevelMap, data.paramMap);
+        updateMainStreamEvents(data.originEvents, data.dynamics, data.params);
     }
 
-    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) = 0;
-    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
-                                        const mpe::PlaybackParamMap& params) = 0;
+    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) = 0;
+    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                        const mpe::PlaybackParamLayers& params) = 0;
 
     void setActive(const bool active)
     {
@@ -115,22 +115,17 @@ public:
         m_onMainStreamFlushed = flushed;
     }
 
-    muse::mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
+    mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
     {
-        if (m_dynamicLevelMap.empty()) {
-            return muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::Natural);
+        for (const auto& layer : m_dynamicLevelLayers) {
+            const mpe::DynamicLevelMap& dynamics = layer.second;
+            auto it = muse::findLessOrEqual(dynamics, position);
+            if (it != dynamics.end()) {
+                return it->second;
+            }
         }
 
-        if (m_dynamicLevelMap.size() == 1) {
-            return m_dynamicLevelMap.cbegin()->second;
-        }
-
-        auto upper = m_dynamicLevelMap.upper_bound(position);
-        if (upper == m_dynamicLevelMap.cbegin()) {
-            return upper->second;
-        }
-
-        return std::prev(upper)->second;
+        return mpe::dynamicLevelFromType(muse::mpe::DynamicType::Natural);
     }
 
     EventSequence eventsToBePlayed(const msecs_t nextMsecs)
@@ -230,7 +225,7 @@ protected:
     EventSequenceMap m_offStreamEvents;
     EventSequenceMap m_dynamicEvents;
 
-    mpe::DynamicLevelMap m_dynamicLevelMap;
+    mpe::DynamicLevelLayers m_dynamicLevelLayers;
 
     bool m_isActive = false;
 

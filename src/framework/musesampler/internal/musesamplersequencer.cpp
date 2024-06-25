@@ -112,7 +112,7 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
     m_defaultPresetCode = std::move(defaultPresetCode);
 }
 
-void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const PlaybackParamMap& params)
+void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const PlaybackParamList& params)
 {
     m_offStreamEvents.clear();
 
@@ -133,14 +133,16 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
             }
 
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
 
-            ms_Track track = resolveTrack(noteEvent.arrangementCtx().staffLayerIndex);
+            layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, arrangementCtx.voiceLayerIndex);
+            ms_Track track = resolveTrack(layerIdx);
             IF_ASSERT_FAILED(track) {
                 continue;
             }
 
-            timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-            timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+            timestamp_t timestampFrom = arrangementCtx.actualTimestamp;
+            timestamp_t timestampTo = timestampFrom + arrangementCtx.actualDuration;
 
             int pitch{};
             int centsOffset{};
@@ -165,8 +167,8 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
     updateOffSequenceIterator();
 }
 
-void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& events, const DynamicLevelMap& dynamics,
-                                                  const PlaybackParamMap& params)
+void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& events, const DynamicLevelLayers& dynamics,
+                                                  const PlaybackParamLayers& params)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
@@ -174,8 +176,8 @@ void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& event
 
     clearAllTracks();
 
-    loadParams(params);
     loadNoteEvents(events);
+    loadParams(params);
     loadDynamicEvents(dynamics);
 
     finalizeAllTracks();
@@ -197,11 +199,9 @@ void MuseSamplerSequencer::finalizeAllTracks()
     }
 }
 
-ms_Track MuseSamplerSequencer::resolveTrack(staff_layer_idx_t staffLayerIdx)
+ms_Track MuseSamplerSequencer::resolveTrack(layer_idx_t layerIdx)
 {
     const TrackList& tracks = m_tracks->allTracks();
-
-    layer_idx_t layerIdx = staffLayerIdx;
     auto it = m_layerIdxToTrackIdx.find(layerIdx);
 
     // A track has already been assigned to this layer
@@ -210,11 +210,12 @@ ms_Track MuseSamplerSequencer::resolveTrack(staff_layer_idx_t staffLayerIdx)
             return tracks.at(it->second);
         }
 
+        ASSERT_X("Invalid track index");
         m_layerIdxToTrackIdx.erase(it);
     }
 
     // Try to find a free track
-    std::unordered_set<track_idx_t> assignedTracks;
+    std::unordered_set<track_idx_t> assignedTracks(m_layerIdxToTrackIdx.size());
     for (const auto& pair: m_layerIdxToTrackIdx) {
         assignedTracks.insert(pair.second);
     }
@@ -229,7 +230,7 @@ ms_Track MuseSamplerSequencer::resolveTrack(staff_layer_idx_t staffLayerIdx)
     // Add a new track
     ms_Track newTrack = m_tracks->addTrack();
     if (newTrack) {
-        m_layerIdxToTrackIdx.emplace(layerIdx, tracks.size());
+        m_layerIdxToTrackIdx.emplace(layerIdx, tracks.size() - 1);
         return newTrack;
     }
 
@@ -243,6 +244,21 @@ ms_Track MuseSamplerSequencer::resolveTrack(staff_layer_idx_t staffLayerIdx)
     return nullptr;
 }
 
+ms_Track MuseSamplerSequencer::findTrack(layer_idx_t layerIdx) const
+{
+    auto it = m_layerIdxToTrackIdx.find(layerIdx);
+    if (it == m_layerIdxToTrackIdx.end()) {
+        return nullptr;
+    }
+
+    const TrackList& tracks = m_tracks->allTracks();
+    IF_ASSERT_FAILED(it->second < tracks.size()) {
+        return nullptr;
+    }
+
+    return tracks.at(it->second);
+}
+
 const TrackList& MuseSamplerSequencer::allTracks() const
 {
     IF_ASSERT_FAILED(m_tracks) {
@@ -253,35 +269,36 @@ const TrackList& MuseSamplerSequencer::allTracks() const
     return m_tracks->allTracks();
 }
 
-void MuseSamplerSequencer::loadParams(const PlaybackParamMap& params)
+void MuseSamplerSequencer::loadParams(const PlaybackParamLayers& changes)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
-    for (const auto& paramsPair : params) {
-        std::unordered_map<staff_layer_idx_t, std::vector<std::string> > soundPresets;
-
-        for (const PlaybackParam& param : paramsPair.second) {
-            if (param.code == mpe::SOUND_PRESET_PARAM_CODE) {
-                soundPresets[param.staffLayerIndex].emplace_back(param.val.toString());
-            } else if (param.code == mpe::PLAY_TECHNIQUE_PARAM_CODE) {
-                ms_Track track = resolveTrack(param.staffLayerIndex);
-                IF_ASSERT_FAILED(track) {
-                    continue;
-                }
-
-                addTextArticulation(param.val.toString(), paramsPair.first, track);
-            }
+    for (const auto& layer : changes) {
+        ms_Track track = findTrack(layer.first);
+        if (!track) {
+            continue;
         }
 
-        for (const auto& presetsPair : soundPresets) {
-            ms_Track track = resolveTrack(presetsPair.first);
-            IF_ASSERT_FAILED(track) {
-                continue;
+        for (const auto& params : layer.second) {
+            StringList soundPresets;
+
+            for (const PlaybackParam& param : params.second) {
+                switch (param.type) {
+                case PlaybackParam::SoundPreset:
+                    soundPresets.push_back(param.val);
+                    break;
+                case PlaybackParam::PlayingTechnique:
+                    addTextArticulation(param.val, params.first, track);
+                    break;
+                case PlaybackParam::Undefined:
+                    UNREACHABLE;
+                    break;
+                }
             }
 
-            addPresets(presetsPair.second, paramsPair.first, track);
+            addPresets(soundPresets, params.first, track);
         }
     }
 }
@@ -299,17 +316,21 @@ void MuseSamplerSequencer::loadNoteEvents(const PlaybackEventsMap& changes)
             }
 
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-
             addNoteEvent(noteEvent);
         }
     }
 }
 
-void MuseSamplerSequencer::loadDynamicEvents(const DynamicLevelMap& changes)
+void MuseSamplerSequencer::loadDynamicEvents(const DynamicLevelLayers& changes)
 {
-    for (ms_Track track : allTracks()) {
-        for (const auto& pair : changes) {
-            m_samplerLib->addDynamicsEvent(m_sampler, track, pair.first, dynamicLevelRatio(pair.second));
+    for (const auto& layer : changes) {
+        ms_Track track = findTrack(layer.first);
+        if (!track) {
+            continue;
+        }
+
+        for (const auto& dynamic : layer.second) {
+            m_samplerLib->addDynamicsEvent(m_sampler, track, dynamic.first, dynamicLevelRatio(dynamic.second));
         }
     }
 }
@@ -320,12 +341,14 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         return;
     }
 
-    ms_Track track = resolveTrack(noteEvent.arrangementCtx().staffLayerIndex);
+    const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    voice_layer_idx_t voiceIdx = arrangementCtx.voiceLayerIndex;
+    layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, voiceIdx);
+
+    ms_Track track = resolveTrack(layerIdx);
     IF_ASSERT_FAILED(track) {
         return;
     }
-
-    voice_layer_idx_t voiceIdx = noteEvent.arrangementCtx().voiceLayerIndex;
 
     for (const auto& art : noteEvent.expressionCtx().articulations) {
         auto ms_art = convertArticulationType(art.first);
@@ -349,9 +372,9 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     musesampler::NoteEvent event;
     event._voice = voiceIdx;
-    event._location_us = noteEvent.arrangementCtx().nominalTimestamp;
-    event._duration_us = noteEvent.arrangementCtx().nominalDuration;
-    event._tempo = noteEvent.arrangementCtx().bps * 60.0; // API expects BPM
+    event._location_us = arrangementCtx.nominalTimestamp;
+    event._duration_us = arrangementCtx.nominalDuration;
+    event._tempo = arrangementCtx.bps * 60.0; // API expects BPM
     event._articulation = ms_NoteArticulation_None;
     event._notehead = ms_NoteHead_Normal;
 
@@ -385,13 +408,13 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 }
 
-void MuseSamplerSequencer::addTextArticulation(const std::string& articulationCode, long long startUs, ms_Track track)
+void MuseSamplerSequencer::addTextArticulation(const String& articulationCode, long long startUs, ms_Track track)
 {
     ms_TextArticulationEvent evt;
     evt._start_us = startUs;
 
     if (articulationCode != ORDINARY_PLAYING_TECHNIQUE_CODE) {
-        evt._articulation = articulationCode.c_str();
+        evt._articulation = articulationCode.toStdString().c_str();
     } else {
         evt._articulation = ""; // resets the active articulation
     }
@@ -399,7 +422,7 @@ void MuseSamplerSequencer::addTextArticulation(const std::string& articulationCo
     m_samplerLib->addTextArticulationEvent(m_sampler, track, evt);
 }
 
-void MuseSamplerSequencer::addPresets(const std::vector<std::string>& presets, long long startUs, ms_Track track)
+void MuseSamplerSequencer::addPresets(const StringList& presets, long long startUs, ms_Track track)
 {
     if (presets.empty()) {
         return;
@@ -407,8 +430,8 @@ void MuseSamplerSequencer::addPresets(const std::vector<std::string>& presets, l
 
     ms_PresetChange presetChange = m_samplerLib->createPresetChange(m_sampler, track, startUs);
 
-    for (const std::string& presetCode : presets) {
-        m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.c_str());
+    for (const String& presetCode : presets) {
+        m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.toStdString().c_str());
     }
 }
 
@@ -567,7 +590,7 @@ void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulatio
     articulationFlag = static_cast<ms_NoteArticulation>(artFlag);
 }
 
-void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamMap& params, std::string& presets,
+void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params, std::string& presets,
                                                 std::string& textArticulation) const
 {
     if (params.empty()) {
@@ -576,13 +599,17 @@ void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamMap& params, 
 
     StringList presetList;
 
-    for (const auto& pair : params) {
-        for (const PlaybackParam& param : pair.second) {
-            if (param.code == SOUND_PRESET_PARAM_CODE) {
-                presetList.emplace_back(String::fromStdString(param.val.toString()));
-            } else if (param.code == PLAY_TECHNIQUE_PARAM_CODE) {
-                textArticulation = param.val.toString();
-            }
+    for (const PlaybackParam& param : params) {
+        switch (param.type) {
+        case PlaybackParam::SoundPreset:
+            presetList.push_back(param.val);
+            break;
+        case PlaybackParam::PlayingTechnique:
+            textArticulation = param.val.toStdString();
+            break;
+        case PlaybackParam::Undefined:
+            UNREACHABLE;
+            break;
         }
     }
 

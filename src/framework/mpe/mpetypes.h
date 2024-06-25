@@ -67,6 +67,14 @@ using duration_t = usecs_t;
 using duration_percentage_t = percentage_t;
 using voice_layer_idx_t = uint_fast8_t;
 using staff_layer_idx_t = uint_fast16_t;
+using layer_idx_t = size_t;
+
+static constexpr voice_layer_idx_t MAX_VOICES = 4;
+
+constexpr inline layer_idx_t makeLayerIdx(const staff_layer_idx_t staffIdx, const voice_layer_idx_t voiceIdx)
+{
+    return staffIdx * MAX_VOICES + voiceIdx;
+}
 
 constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t timestamp,
                                                           const duration_t overallDuration)
@@ -391,6 +399,8 @@ inline bool isRangedArticulation(const ArticulationType type)
            || type == ArticulationType::Multibend;
 }
 
+static const String ORDINARY_PLAYING_TECHNIQUE_CODE(u"ordinary_technique");
+
 using dynamic_level_t = percentage_t;
 constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENT;
 constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;
@@ -421,8 +431,6 @@ enum class DynamicType {
     fffffffff = MAX_DYNAMIC_LEVEL,
     Last
 };
-
-using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
 
 inline DynamicType approximateDynamicType(const dynamic_level_t dynamicLevel)
 {

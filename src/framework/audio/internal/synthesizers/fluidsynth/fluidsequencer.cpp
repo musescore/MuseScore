@@ -50,7 +50,7 @@ int FluidSequencer::naturalExpressionLevel() const
     return NATURAL_EXP_LVL;
 }
 
-void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamMap&)
+void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamList&)
 {
     m_offStreamEvents.clear();
 
@@ -62,10 +62,10 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events,
     updateOffSequenceIterator();
 }
 
-void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
-                                            const mpe::PlaybackParamMap&)
+void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                            const mpe::PlaybackParamLayers&)
 {
-    m_dynamicLevelMap = dynamics;
+    m_dynamicLevelLayers = dynamics;
 
     m_mainStreamEvents.clear();
     m_dynamicEvents.clear();
@@ -130,14 +130,16 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
     }
 }
 
-void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& changes)
+void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& changes)
 {
-    for (const auto& pair : changes) {
-        midi::Event event(muse::midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
-        event.setIndex(midi::EXPRESSION_CONTROLLER);
-        event.setData(expressionLevel(pair.second));
+    for (const auto& layer : changes) {
+        for (const auto& dynamic : layer.second) {
+            midi::Event event(muse::midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
+            event.setIndex(midi::EXPRESSION_CONTROLLER);
+            event.setData(expressionLevel(dynamic.second));
 
-        destination[pair.first].emplace(std::move(event));
+            destination[dynamic.first].emplace(std::move(event));
+        }
     }
 }
 

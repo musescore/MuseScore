@@ -124,7 +124,7 @@ void PlaybackModel::reload()
     update(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
-        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamicLevelMap, pair.second.paramMap);
+        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamics, pair.second.params);
     }
 
     m_dataChanged.notify();
@@ -266,7 +266,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
                           result);
     }
 
-    PlaybackParamMap params = ctx.playbackParamMap(m_score, minTick, playableItems.front()->staffIdx());
+    PlaybackParamList params = ctx.playbackParams(playableItems.front()->track(), minTick);
     trackPlaybackData.offStream.send(std::move(result), std::move(params));
 }
 
@@ -356,14 +356,15 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     ctx.update(trackId.partId, m_score);
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
-    trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
-    trackData.paramMap = ctx.playbackParamMap(m_score);
+    trackData.dynamics = ctx.dynamicLevelLayers(m_score);
+    trackData.params = ctx.playbackParamLayers(m_score);
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
                                    bool isFirstSegmentOfMeasure, ChangedTrackIdSet* trackChanges)
 {
-    int segmentStartTick = segment->tick().ticks();
+    const int segmentStartTick = segment->tick().ticks();
+    const int segmentStartTickWithOffset = segmentStartTick + tickPositionOffset;
 
     for (const EngravingItem* item : segment->annotations()) {
         if (!item || !item->part()) {
@@ -440,8 +441,8 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             continue;
         }
 
-        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(segmentStartTick + tickPositionOffset),
-                          ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
+        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(item->track(), segmentStartTickWithOffset),
+                          ctx.persistentArticulationType(segmentStartTickWithOffset), std::move(profile),
                           m_playbackDataMap[trackId].originEvents);
 
         collectChangesTracks(trackId, trackChanges);
@@ -750,7 +751,7 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
             continue;
         }
 
-        search->second.mainStream.send(search->second.originEvents, search->second.dynamicLevelMap, search->second.paramMap);
+        search->second.mainStream.send(search->second.originEvents, search->second.dynamics, search->second.params);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {

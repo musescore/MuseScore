@@ -544,7 +544,9 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
-    const DynamicLevelMap& dynamicLevelMap = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamicLevelMap;
+    const DynamicLevelLayers& dynamics = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamics;
+    ASSERT_FALSE(dynamics.empty());
+    const DynamicLevelMap& dynamicLevelMap = dynamics.begin()->second;
 
     // [THEN] Dynamic level map matches expectations
     EXPECT_EQ(dynamicLevelMap.size(), 51);
@@ -842,8 +844,8 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelMap&,
-                                                                   const PlaybackParamMap&) {
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
+                                                                   const PlaybackParamLayers&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
@@ -1097,7 +1099,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
-                                                                         const PlaybackParamMap&) {
+                                                                         const PlaybackParamList&) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
@@ -1161,7 +1163,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamMap&) {
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamList&) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);
