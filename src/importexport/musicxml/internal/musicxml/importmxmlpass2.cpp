@@ -3092,6 +3092,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     handleRepeats(measure, track, tick + m_offset, measureHasCoda, segnos, delayedDirections);
     handleNmiCmi(measure, track, tick + m_offset, delayedDirections);
     handleChordSym(track, tick + m_offset, harmonyMap);
+    handleFraction();
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
     // if necessary, use the value calculated by metronome()
@@ -3486,6 +3487,30 @@ bool MusicXMLParserDirection::isLikelyTempoText(const track_idx_t track) const
         }
     }
     return false;
+}
+
+void MusicXMLParserDirection::handleFraction()
+{
+    if (!configuration()->inferTextType()) {
+        return;
+    }
+
+    String rawWordsText = m_wordsText;
+    static const std::regex re("(<.*?>)");
+    rawWordsText.remove(re);
+    rawWordsText = rawWordsText.simplified();
+    //                         UTF-16 encoding: 0x00BC, 0x00BD, 0x00BE, 0x2150, 0x2151, 0x2152,  etc...
+    static const std::array<String, 18> fracs { u"1/4", u"1/2", u"3/4", u"1/7", u"1/9", u"1/10", u"1/3", u"2/3", u"1/5", u"2/5", u"3/5",
+                                                u"4/5", u"1/6", u"5/6", u"1/8", u"3/8", u"5/8", u"7/8" };
+
+    for (size_t n = 0; n < fracs.size(); n++) {
+        if (rawWordsText.contains(fracs.at(n))) {
+            int p = n <= 2 ? 0x00BC + n : 0x2150 + n - 3;
+            rawWordsText.replace(fracs.at(n), String(char16_t(p)));
+            m_wordsText = rawWordsText;
+            return;
+        }
+    }
 }
 
 Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType)

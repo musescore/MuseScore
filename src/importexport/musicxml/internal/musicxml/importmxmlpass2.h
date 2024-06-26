@@ -468,6 +468,7 @@ private:
     bool isLikelySubtitle(const Fraction& tick) const;
     bool isLikelyLegallyDownloaded(const Fraction& tick) const;
     bool isLikelyTempoText(const track_idx_t track) const;
+    void handleFraction();
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<String> metaTags);
     bool isLikelyFingering(const String& fingeringStr) const;

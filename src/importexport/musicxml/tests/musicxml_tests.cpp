@@ -734,6 +734,9 @@ TEST_F(Musicxml_Tests, inferredDynamicRange) {
 TEST_F(Musicxml_Tests, inferSegnoII) {
     mxmlImportTestRef("testInferSegnoII");
 }
+TEST_F(Musicxml_Tests, inferFraction) {
+    mxmlImportTestRef("testInferFraction");
+}
 TEST_F(Musicxml_Tests, inferredFingerings) {
     mxmlImportTestRef("testInferredFingerings");
 }
