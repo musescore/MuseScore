@@ -479,20 +479,25 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
     part->instrument()->channel(0)->setBank(128);
 }
 
-static std::pair<String, String> separateTransposition(const String& name)
+static std::pair<String, String> processInstrName(const String& name)
 {
+    // Make corrections so instruments match our names, then separate transpositions and remove unneeded info
     String n = name;
     n.replace(u"♭", u"b").replace(u"♯", u"#");
+    n.replace(u"Sax", u"Saxophone");
+    n.replace(u"Bari", u"Baritone");
     std::pair<String, String> ret;
-    static const std::regex re("(^|(?:\\s|\\u00A0))([ABCDEF][b#]?)((?:\\s|\\u00A0)|$)");
-    static const std::regex in("(?:\\s|\\u00A0)in");
+    // Find transposition information
+    static const std::regex transpositionRegex("(^|(?:\\s|\\u00A0))([ABCDEF][b#]?)((?:\\s|\\u00A0)|$)");
+    // Remove: ' in', part numbers '1, 2' which may be bracketed, any text after a slash
+    static const std::regex removeRegex("(?:\\s|\u00A0)in|(\\(?[0-9]([,](?:\\s|\u00A0)?)?)\\)?|\\.|(\\/.*)");
 
-    const StringList results = n.search(re, { 2 });
+    const StringList results = n.search(transpositionRegex, { 2 });
     if (!results.empty()) {
         ret.second = convertPitchStringFlatsAndSharpsToUnicode(results.front());
-        n.remove(re);
-        n.remove(in);
+        n.remove(transpositionRegex);
     }
+    n.remove(removeRegex);
     ret.first = n.simplified();
 
     return ret;
@@ -511,9 +516,9 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
     Instrument instr;
 
     const InstrumentTemplate* it = nullptr;
-    const std::pair<String, String> nameSplit = separateTransposition(mxmlInstr.name);
+    const std::pair<String, String> nameSplit = processInstrName(mxmlInstr.name);
     const String name = nameSplit.first;
-    const int transposition = string2pitch(nameSplit.second + u"5") % 12;
+    const int transposition = nameSplit.second.isEmpty() ? 0 : string2pitch(nameSplit.second + u"5") % 12;
 
     it = combinedTemplateSearch(mxmlInstr.sound, name, transposition, 0, mxmlInstr.midiProgram);
 

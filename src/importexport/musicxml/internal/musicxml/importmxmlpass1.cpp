@@ -2303,6 +2303,11 @@ void MusicXMLParserPass1::scoreInstrument(const String& partId)
                    muPrintable(instrName)
                    );
              */
+
+            // Finale exports all instrument names as 'Grand Piano' - use part name
+            if (m_exporterString.contains(u"finale")) {
+                instrName = m_parts[partId].getName();
+            }
             m_instruments[partId].insert({ instrId, MusicXMLInstrument(instrName) });
             // EngravingItem instrument-name is typically not displayed in the score,
             // but used only internally
