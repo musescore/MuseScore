@@ -640,6 +640,9 @@ TEST_F(Musicxml_Tests, fractionPlus) {
 TEST_F(Musicxml_Tests, fractionTicks) {
     mxmlIoTestRef("testFractionTicks");
 }
+TEST_F(Musicxml_Tests, glissFall) {
+    mxmlImportTestRef("testGlissFall");
+}
 TEST_F(Musicxml_Tests, grace1) {
     mxmlIoTest("testGrace1");
 }

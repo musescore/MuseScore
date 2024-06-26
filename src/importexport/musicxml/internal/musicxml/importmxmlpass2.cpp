@@ -8002,12 +8002,32 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             logger->logError(String(u"glissando/slide number %1 stop without start").arg(glissandoNumber + 1), xmlreader);
         } else if (!note) {
             logger->logError(String(u"no note for glissando/slide number %1 stop").arg(glissandoNumber + 1), xmlreader);
+        } else if (gliss->tick() == tick) {
+            // A gliss starting and ending on the same tick is a fall
+            ChordLine* cl = Factory::createChordLine(note->chord());
+            cl->setChordLineType(ChordLineType::FALL);
+            cl->setWavy(gliss->glissandoType() == GlissandoType::WAVY ? true : false);
+            cl->setStraight(true);
+            cl->setParent(note);
+
+            note->chord()->add(cl);
+            spanners.erase(gliss);
+            delete gliss;
+            gliss = nullptr;
         } else {
-            spanners[gliss].second = tick.ticks() + note->chord()->ticks().ticks();
-            gliss->setEndElement(note);
-            gliss->setTick2(tick);
-            gliss->setTrack2(track);
-            // LOGD("glissando/slide=%p second tick %d", gliss, tick);
+            // Remove glissandos longer than 16 beats
+            if ((tick + note->chord()->ticks()) - gliss->tick() >= Fraction(4, 1)) {
+                logger->logError(String(u"glissando/slide number %1 too long (%2)").arg(glissandoNumber + 1,
+                                                                                        ((tick + note->chord()->ticks())
+                                                                                         - gliss->tick()).ticks()), xmlreader);
+                spanners.erase(gliss);
+            } else {
+                spanners[gliss].second = tick.ticks() + note->chord()->ticks().ticks();
+                gliss->setEndElement(note);
+                gliss->setTick2(tick);
+                gliss->setTrack2(track);
+                // LOGD("glissando/slide=%p second tick %d", gliss, tick);
+            }
             gliss = nullptr;
         }
     } else {
