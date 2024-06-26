@@ -2263,33 +2263,49 @@ size_t TConv::embellishmentsCount()
     return EMBELLISHMENT_TYPES.size();
 }
 
+struct ChordLineNameType {
+    ChordLineType type;
+    bool straight;
+    bool wavy;
+
+    bool operator==(const ChordLineNameType& other) const
+    {
+        return type == other.type && straight == other.straight && wavy == other.wavy;
+    }
+};
+
 //! TODO Add xml names
-static const std::array<Item<std::pair<ChordLineType, bool /*straight*/> >, 10> CHORDLINE_TYPES = { {
-    { { ChordLineType::NOTYPE, false },    "0" },
-    { { ChordLineType::FALL, false },      "1",     muse::TranslatableString("engraving", "Fall") },
-    { { ChordLineType::DOIT, false },      "2",     muse::TranslatableString("engraving", "Doit") },
-    { { ChordLineType::PLOP, false },      "3",     muse::TranslatableString("engraving", "Plop") },
-    { { ChordLineType::SCOOP, false },     "4",     muse::TranslatableString("engraving", "Scoop") },
-    { { ChordLineType::NOTYPE, true },     "0" },
-    { { ChordLineType::FALL, true },       "1",     muse::TranslatableString("engraving", "Slide out down") },
-    { { ChordLineType::DOIT, true },       "2",     muse::TranslatableString("engraving", "Slide out up") },
-    { { ChordLineType::PLOP, true },       "3",     muse::TranslatableString("engraving", "Slide in above") },
-    { { ChordLineType::SCOOP, true },      "4",     muse::TranslatableString("engraving", "Slide in below") }
+static const std::array<Item<ChordLineNameType>, 15> CHORDLINE_TYPES = { {
+    { { ChordLineType::NOTYPE, false, false },    "0" },
+    { { ChordLineType::FALL, false, false },      "1",     muse::TranslatableString("engraving", "Fall") },
+    { { ChordLineType::DOIT, false, false },      "2",     muse::TranslatableString("engraving", "Doit") },
+    { { ChordLineType::PLOP, false, false },      "3",     muse::TranslatableString("engraving", "Plop") },
+    { { ChordLineType::SCOOP, false, false },     "4",     muse::TranslatableString("engraving", "Scoop") },
+    { { ChordLineType::NOTYPE, true, false },     "0" },
+    { { ChordLineType::FALL, true, false },       "1",     muse::TranslatableString("engraving", "Slide out down") },
+    { { ChordLineType::DOIT, true, false },       "2",     muse::TranslatableString("engraving", "Slide out up") },
+    { { ChordLineType::PLOP, true, false },       "3",     muse::TranslatableString("engraving", "Slide in above") },
+    { { ChordLineType::SCOOP, true, false },      "4",     muse::TranslatableString("engraving", "Slide in below") },
+    { { ChordLineType::NOTYPE, true, true },      "0" },
+    { { ChordLineType::FALL, true, true },        "1",     muse::TranslatableString("engraving", "Slide out down (rough)") },
+    { { ChordLineType::DOIT, true, true },        "2",     muse::TranslatableString("engraving", "Slide out up (rough)") },
+    { { ChordLineType::PLOP, true, true },        "3",     muse::TranslatableString("engraving", "Slide in above (rough)") },
+    { { ChordLineType::SCOOP, true, true },       "4",     muse::TranslatableString("engraving", "Slide in below (rough)") }
 } };
 
-const muse::TranslatableString& TConv::userName(ChordLineType v, bool straight)
+const muse::TranslatableString& TConv::userName(ChordLineType v, bool straight, bool wavy)
 {
-    return findUserNameByType<std::pair<ChordLineType, bool> >(CHORDLINE_TYPES, { v, straight });
+    return findUserNameByType<ChordLineNameType>(CHORDLINE_TYPES, { v, straight, wavy });
 }
 
 AsciiStringView TConv::toXml(ChordLineType v)
 {
-    return findXmlTagByType<std::pair<ChordLineType, bool> >(CHORDLINE_TYPES, { v, false });
+    return findXmlTagByType<ChordLineNameType>(CHORDLINE_TYPES, { v, false, false });
 }
 
 ChordLineType TConv::fromXml(const AsciiStringView& tag, ChordLineType def)
 {
-    return findTypeByXmlTag<std::pair<ChordLineType, bool> >(CHORDLINE_TYPES, tag, { def, false }).first;
+    return findTypeByXmlTag<ChordLineNameType>(CHORDLINE_TYPES, tag, { def, false, false }).type;
 }
 
 struct DrumPitchItem {

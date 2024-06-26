@@ -1060,6 +1060,30 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     cl->setStraight(true);
     sp->appendElement(cl, cl->chordLineTypeName());
 
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
+    cl->setChordLineType(ChordLineType::FALL);
+    cl->setStraight(true);
+    cl->setWavy(true);
+    sp->appendElement(cl, cl->chordLineTypeName());
+
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
+    cl->setChordLineType(ChordLineType::DOIT);
+    cl->setStraight(true);
+    cl->setWavy(true);
+    sp->appendElement(cl, cl->chordLineTypeName());
+
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
+    cl->setChordLineType(ChordLineType::PLOP);
+    cl->setStraight(true);
+    cl->setWavy(true);
+    sp->appendElement(cl, cl->chordLineTypeName());
+
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
+    cl->setChordLineType(ChordLineType::SCOOP);
+    cl->setStraight(true);
+    cl->setWavy(true);
+    sp->appendElement(cl, cl->chordLineTypeName());
+
     return sp;
 }
 
