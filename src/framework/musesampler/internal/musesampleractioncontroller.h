@@ -38,10 +38,15 @@ class MuseSamplerActionController : public muse::actions::Actionable, public asy
     INJECT(IMuseSamplerInfo, museSamplerInfo)
 
 public:
-    void init();
+    using ReloadMuseSamplerFunc = std::function<bool ()>;
+
+    void init(const ReloadMuseSamplerFunc& reloadMuseSampler);
 
 private:
     void checkLibraryIsDetected();
+    void reloadMuseSampler();
+
+    ReloadMuseSamplerFunc m_reloadMuseSampler;
 };
 }
 

@@ -35,6 +35,11 @@ const UiActionList MuseSamplerUiActions::m_actions = {
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Check Muse Sampler")
+             ),
+    UiAction("musesampler-reload",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Reload Muse Sampler")
              )
 };
 
