@@ -560,7 +560,6 @@ void AbstractNotationPaintView::hideElementPopup()
 void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const RectF& elementRect)
 {
     if (m_isPopupOpen) {
-        hideElementPopup();
         return;
     }
 

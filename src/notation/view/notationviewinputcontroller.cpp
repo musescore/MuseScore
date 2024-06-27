@@ -781,7 +781,6 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     m_view->hideContextMenu();
-    m_view->hideElementPopup();
 
     PointF logicPos = m_view->toLogical(event->pos());
 
