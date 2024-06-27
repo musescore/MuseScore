@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "textinputfieldmodel.h"
+#include "textinputmodel.h"
 
 #include <QKeySequence>
 
@@ -29,12 +29,12 @@
 using namespace muse::uicomponents;
 using namespace muse::shortcuts;
 
-TextInputFieldModel::TextInputFieldModel(QObject* parent)
+TextInputModel::TextInputModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
-void TextInputFieldModel::init()
+void TextInputModel::init()
 {
     shortcutsRegister()->shortcutsChanged().onNotify(this, [this](){
         loadShortcuts();
@@ -43,7 +43,7 @@ void TextInputFieldModel::init()
     loadShortcuts();
 }
 
-bool TextInputFieldModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const
+bool TextInputModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
     auto [newKey, newModifiers] = correctKeyInput(key, modifiers);
 
@@ -55,7 +55,7 @@ bool TextInputFieldModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardMod
     return !shortcut.isValid();
 }
 
-bool TextInputFieldModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers)
+bool TextInputModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers)
 {
     auto [newKey, newModifiers] = correctKeyInput(key, modifiers);
 
@@ -72,7 +72,7 @@ bool TextInputFieldModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modi
     return found;
 }
 
-void TextInputFieldModel::loadShortcuts()
+void TextInputModel::loadShortcuts()
 {
     //! NOTE: from navigation actions
     static std::vector<std::string> actionCodes {
@@ -96,7 +96,7 @@ void TextInputFieldModel::loadShortcuts()
     }
 }
 
-Shortcut TextInputFieldModel::shortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) const
+Shortcut TextInputModel::shortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
     QKeySequence keySequence(modifiers | key);
     for (const Shortcut& shortcut : m_notAllowedForOverrideShortcuts) {

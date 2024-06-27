@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UICOMPONENTS_TEXTINPUTFIELDMODEL_H
-#define MUSE_UICOMPONENTS_TEXTINPUTFIELDMODEL_H
+#ifndef MUSE_UICOMPONENTS_TEXTINPUTMODEL_H
+#define MUSE_UICOMPONENTS_TEXTINPUTMODEL_H
 
 #include <QObject>
 
@@ -31,7 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
-class TextInputFieldModel : public QObject, public muse::Injectable, public async::Asyncable
+class TextInputModel : public QObject, public muse::Injectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class TextInputFieldModel : public QObject, public muse::Injectable, public asyn
     muse::Inject<actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    explicit TextInputFieldModel(QObject* parent = nullptr);
+    explicit TextInputModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
     Q_INVOKABLE bool isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const;
@@ -53,4 +53,4 @@ private:
 };
 }
 
-#endif // MUSE_UICOMPONENTS_TEXTINPUTFIELDMODEL_H
+#endif // MUSE_UICOMPONENTS_TEXTINPUTMODEL_H

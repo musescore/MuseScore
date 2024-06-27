@@ -118,7 +118,7 @@ Rectangle {
                 Qt.callLater(privateProperties.hide)
             }
 
-            onEscapted: {
+            onEscaped: {
                 Qt.callLater(privateProperties.hide)
             }
         }

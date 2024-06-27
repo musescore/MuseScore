@@ -54,6 +54,7 @@ StyledTextLabel 1.0 StyledTextLabel.qml
 StyledToolTip 1.0 StyledToolTip.qml
 TableViewColumn 1.0 treeview/TableViewColumn.qml
 TextInputField 1.0 TextInputField.qml
+TextInputArea 1.0 TextInputArea.qml
 TimeInputField 1.0 TimeInputField.qml
 ToggleButton 1.0 ToggleButton.qml
 TreeView 1.0 treeview/TreeView.qml
