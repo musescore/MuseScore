@@ -26,7 +26,7 @@
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
-        <midi-program>1</midi-program>
+        <midi-program>28</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>
@@ -39,8 +39,8 @@
         </score-instrument>
       <midi-device id="P2-I1" port="1"></midi-device>
       <midi-instrument id="P2-I1">
-        <midi-channel>2</midi-channel>
-        <midi-program>34</midi-program>
+        <midi-channel>7</midi-channel>
+        <midi-program>35</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>

@@ -720,7 +720,7 @@ const InstrumentTemplate* searchTemplate(const String& name)
 const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
                                                  int program)
 {
-    if (mxmlId.empty() && name.empty() && transposition == -1 && bank == 0 && program == -1) {
+    if (mxmlId.empty() && name.empty() && bank == 0 && program == -1) {
         // No instrument information provided
         return nullptr;
     }

@@ -136,9 +136,9 @@ public:
     void defaults();
     void pageLayout(PageFormat& pf, const double conversion);
     void partList(MusicXmlPartGroupList& partGroupList);
-    void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
-    void scorePart();
-    void scoreInstrument(const String& partId);
+    void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups, String& curPartGroupName);
+    void scorePart(const String& curPartGroupName);
+    void scoreInstrument(const String& partId, const String& curPartGroupName);
     void setStyle(const String& type, const double val);
     void midiInstrument(const String& partId);
     void part();
