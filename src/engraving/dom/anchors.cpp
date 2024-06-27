@@ -112,7 +112,10 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
         }
 
         Staff* linkedStaff = toStaff(linkedObj);
-        Measure* linkedMeasure = linkedStaff->score()->tick2measureMM(measure->tick());
+        Measure* linkedMeasure = linkedObj == staff ? measure : linkedStaff->score()->tick2measureMM(measure->tick());
+        if (!linkedMeasure) {
+            continue;
+        }
 
         Segment* segment = linkedMeasure->getSegmentR(SegmentType::TimeTick, relTick);
         track_idx_t track = staff2track(linkedStaff->idx());
