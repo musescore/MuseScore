@@ -348,9 +348,9 @@
         <bracket type="0" span="4" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bb Clarinet 1</trackName>
+      <trackName>B♭ Clarinet 1</trackName>
       <Instrument id="bb-clarinet">
-        <longName>Bb Clarinet 1</longName>
+        <longName>B♭ Clarinet 1</longName>
         <shortName>Cl. 1</shortName>
         <trackName>Bb Clarinet 1</trackName>
         <minPitchP>50</minPitchP>
@@ -415,9 +415,9 @@
         <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bb Clarinet 2, 3</trackName>
+      <trackName>B♭ Clarinet 2, 3</trackName>
       <Instrument id="bb-clarinet">
-        <longName>Bb Clarinet 2, 3</longName>
+        <longName>B♭ Clarinet 2, 3</longName>
         <shortName>Cl. 2, 3</shortName>
         <trackName>Bb Clarinet 2, 3</trackName>
         <minPitchP>50</minPitchP>
@@ -482,9 +482,9 @@
         <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Eb Alto Clarinet</trackName>
+      <trackName>E♭ Alto Clarinet</trackName>
       <Instrument id="alto-clarinet">
-        <longName>Eb Alto Clarinet</longName>
+        <longName>E♭ Alto Clarinet</longName>
         <shortName>A. Cl.</shortName>
         <trackName>Eb Alto Clarinet</trackName>
         <minPitchP>43</minPitchP>
@@ -548,9 +548,9 @@
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Bb Bass Clarinet</trackName>
+      <trackName>B♭ Bass Clarinet</trackName>
       <Instrument id="bb-bass-clarinet">
-        <longName>Bb Bass Clarinet</longName>
+        <longName>B♭ Bass Clarinet</longName>
         <shortName>Bs. Cl.</shortName>
         <trackName>Bb Bass Clarinet</trackName>
         <minPitchP>34</minPitchP>
@@ -618,9 +618,9 @@
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Eb Alto Sax. 1, 2</trackName>
+      <trackName>E♭ Alto Sax. 1, 2</trackName>
       <Instrument id="alto-saxophone">
-        <longName>Eb Alto Sax. 1, 2</longName>
+        <longName>E♭ Alto Sax. 1, 2</longName>
         <shortName>A. Sx. 1, 2</shortName>
         <trackName>Eb Alto Sax. 1, 2</trackName>
         <minPitchP>49</minPitchP>
@@ -685,9 +685,9 @@
         <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bb Tenor Sax.</trackName>
+      <trackName>B♭ Tenor Sax.</trackName>
       <Instrument id="tenor-saxophone">
-        <longName>Bb Tenor Sax.</longName>
+        <longName>B♭ Tenor Sax.</longName>
         <shortName>T. Sx.</shortName>
         <trackName>Bb Tenor Sax.</trackName>
         <minPitchP>44</minPitchP>
@@ -753,9 +753,9 @@
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Eb Bari. Sax.</trackName>
+      <trackName>E♭ Bari. Sax.</trackName>
       <Instrument id="baritone-saxophone">
-        <longName>Eb Bari. Sax.</longName>
+        <longName>E♭ Bari. Sax.</longName>
         <shortName>B. Sx.</shortName>
         <trackName>Eb Bari. Sax.</trackName>
         <minPitchP>36</minPitchP>
@@ -823,9 +823,9 @@
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bb Trumpet 1</trackName>
+      <trackName>B♭ Trumpet 1</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Bb Trumpet 1</longName>
+        <longName>B♭ Trumpet 1</longName>
         <shortName>Tpt. 1</shortName>
         <trackName>Bb Trumpet 1</trackName>
         <minPitchP>52</minPitchP>
@@ -895,9 +895,9 @@
         <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Bb Trumpet 2, 3</trackName>
+      <trackName>B♭ Trumpet 2, 3</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Bb Trumpet 2, 3</longName>
+        <longName>B♭ Trumpet 2, 3</longName>
         <shortName>Tpt. 2, 3</shortName>
         <trackName>Bb Trumpet 2, 3</trackName>
         <minPitchP>52</minPitchP>
