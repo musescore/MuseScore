@@ -190,6 +190,7 @@
             <HairPin>
               <subtype>3</subtype>
               <lineVisible>0</lineVisible>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>
@@ -708,6 +709,7 @@
             <HairPin>
               <subtype>2</subtype>
               <lineVisible>0</lineVisible>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>
@@ -1311,6 +1313,7 @@
             <HairPin>
               <subtype>3</subtype>
               <lineVisible>0</lineVisible>
+              <direction>down</direction>
               </HairPin>
             <next>
               <location>

@@ -229,6 +229,7 @@ using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using InferredHairpinsStack = std::vector<Hairpin*>;
+using InferredTempoLineStack = std::vector<GradualTempoChange*>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
@@ -319,8 +320,11 @@ public:
     SLine* delayedOttava() { return m_delayedOttava; }
     void setDelayedOttava(SLine* ottava) { m_delayedOttava = ottava; }
 
-    void addInferredHairpin(Hairpin* hp);
-    InferredHairpinsStack getInferredHairpins();
+    void addInferredHairpin(Hairpin* hp) { m_inferredHairpins.push_back(hp); }
+    const InferredHairpinsStack& getInferredHairpins() { return m_inferredHairpins; }
+
+    void addInferredTempoLine(GradualTempoChange* hp) { m_inferredTempoLines.push_back(hp); }
+    const InferredTempoLineStack& getInferredTempoLine() { return m_inferredTempoLines; }
 
     void addSystemElement(EngravingItem* el, const Fraction& tick) { m_sysElements.insert({ tick.ticks(), el }); }
     const SystemElements systemElements() const { return m_sysElements; }
@@ -392,6 +396,7 @@ private:
     OttavasStack m_ottavas;                // Current ottavas
     HairpinsStack m_hairpins;              // Current hairpins
     InferredHairpinsStack m_inferredHairpins;
+    InferredTempoLineStack m_inferredTempoLines;
     MusicXmlExtendedSpannerDesc m_dummyNewMusicXmlSpannerDesc;
 
     Glissando* m_glissandi[MAX_NUMBER_LEVEL][2];     // Current slides ([0]) / glissandi ([1])
@@ -451,30 +456,34 @@ private:
     void sound();
     void dynamics();
     void otherDirection();
-    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
+    void handleRepeats(Measure* measure, const Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
                        DelayedDirectionsList& delayedDirections);
     Marker* findMarker(const String& repeat) const;
     Jump* findJump(const String& repeat) const;
-    void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
-    void handleChordSym(const track_idx_t track, const Fraction tick, HarmonyMap& harmonyMap);
+    void handleNmiCmi(Measure* measure, const Fraction& tick, DelayedDirectionsList& delayedDirections);
+    void handleChordSym(const Fraction& tick, HarmonyMap& harmonyMap);
     void handleTempo();
     String matchRepeat(const String& plainWords) const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     void textToDynamic(String& text);
     void textToCrescLine(String& text);
-    void addInferredCrescLine(const track_idx_t track, const Fraction& tick, const bool isVocalStaff);
+    void addInferredHairpin(const Fraction& tick, const bool isVocalStaff);
+    void addInferredTempoLine(const Fraction& tick);
     bool isLyricBracket() const;
     bool isLikelySubtitle(const Fraction& tick) const;
     bool isLikelyLegallyDownloaded(const Fraction& tick) const;
     bool isLikelyTempoText(const track_idx_t track) const;
     void handleFraction();
+    bool isLikelyTempoLine(const track_idx_t track) const;
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<String> metaTags);
     bool isLikelyFingering(const String& fingeringStr) const;
     bool isLikelySticking();
     bool isLikelyDynamicRange() const;
     PlayingTechniqueType getPlayingTechnique() const;
+
+    // void terminateInferredLine(const std::vector<TextLineBase*> lines, const Fraction& tick);
 
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 
@@ -486,6 +495,7 @@ private:
 
     Color m_color;
     Hairpin* m_inferredHairpinStart = nullptr;
+    GradualTempoChange* m_inferredTempoLineStart = nullptr;
     StringList m_dynamicsList;
     String m_enclosure;
     String m_wordsText;
@@ -513,6 +523,7 @@ private:
     bool m_systemDirection = false;
     std::vector<EngravingItem*> m_elems;
     Fraction m_offset;
+    track_idx_t m_track;
 };
 
 //---------------------------------------------------------
