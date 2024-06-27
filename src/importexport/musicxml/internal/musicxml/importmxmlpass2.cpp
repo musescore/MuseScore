@@ -2010,6 +2010,20 @@ static void createTimeTick(const Score* score, const Fraction& tick, const staff
     }
 }
 
+static String replacePartNameAccidentals(const String& partName)
+{
+    String name = partName;
+    static const std::regex re("((^|\\s|\\u00A0)[ABCDEF][b#]($|\\s|\u00A0))");
+    StringList res = name.search(re, { 1 }, SplitBehavior::SkipEmptyParts);
+
+    if (!res.empty()) {
+        String transp = res.at(0).replace(u"b", u"♭").replace(u"#", u"♯");
+        name.replace(re, transp);
+        return name;
+    }
+    return partName;
+}
+
 //---------------------------------------------------------
 //   part
 //---------------------------------------------------------
@@ -2039,9 +2053,11 @@ void MusicXMLParserPass2::part()
 
     // set the part name
     MusicXmlPart mxmlPart = m_pass1.getMusicXmlPart(id);
-    part->setPartName(mxmlPart.getName());
-    if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(mxmlPart.getName())) {
-        part->setLongNameAll(mxmlPart.getName());
+    String partName = mxmlPart.getName();
+    partName = replacePartNameAccidentals(partName);
+    part->setPartName(partName);
+    if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(partName)) {
+        part->setLongNameAll(partName);
     } else {
         m_pass1.getPart(id)->setLongNameAll(u"");
     }
