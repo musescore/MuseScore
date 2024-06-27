@@ -822,17 +822,9 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
         height = r.height();
         ldata->setBbox(x1, y1, width, height);
     } else {
-        RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
-        double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
+        RectF r = ctx.engravingFont()->bbox(item->waveSym(), item->magS());
 
-        r.setHeight(r.height() + r.width() * sin(angle));
-
-        /// TODO: calculate properly the rect for wavy type
-        if (item->chordLineType() == ChordLineType::DOIT) {
-            r.setY(item->y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
-        }
-
-        item->setbbox(r);
+        ldata->setBbox(r);
     }
 }
 

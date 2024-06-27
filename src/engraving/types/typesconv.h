@@ -188,7 +188,7 @@ public:
     static StringList embellishmentNotes(EmbellishmentType v);
     static size_t embellishmentsCount();
 
-    static const TranslatableString& userName(ChordLineType v, bool straight);
+    static const TranslatableString& userName(ChordLineType v, bool straight, bool wavy);
     static AsciiStringView toXml(ChordLineType v);
     static ChordLineType fromXml(const AsciiStringView& tag, ChordLineType def);
 

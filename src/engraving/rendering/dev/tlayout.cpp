@@ -1602,6 +1602,7 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     }
 
     Note* note = nullptr;
+    const double spatium = item->spatium();
 
     if (item->note()) {
         note = item->chord()->findNote(item->note()->pitch());
@@ -1624,7 +1625,7 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     if (!item->modified()) {
         double x2 = 0;
         double y2 = 0;
-        double baseLength = item->spatium() * item->chord()->intrinsicMag();
+        double baseLength = spatium * item->chord()->intrinsicMag();
         double horBaseLength = 1.2 * baseLength;     // let the symbols extend a bit more horizontally
         x2 += item->isToTheLeft() ? -horBaseLength : horBaseLength;
         y2 += item->isBelow() ? baseLength : -baseLength;
@@ -1649,8 +1650,8 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
 
     double x = 0.0;
     double y = noteLD->pos().y();
-    double horOffset = 0.33 * item->spatium();         // one third of a space away from the note
-    double vertOffset = 0.25 * item->spatium();         // one quarter of a space from the center line
+    double horOffset = 0.33 * spatium;         // one third of a space away from the note
+    double vertOffset = 0.25 * spatium;         // one quarter of a space from the center line
     // Get chord shape
     Shape chordShape = item->chord()->shape();
     // ...but remove from the shape items that the chordline shouldn't try to avoid
@@ -1668,12 +1669,6 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     x += item->isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
     y += item->isBelow() ? vertOffset : -vertOffset;
 
-    /// TODO: calculate properly the position for wavy type
-    if (item->isWavy()) {
-        bool upDir = item->chordLineType() == ChordLineType::DOIT;
-        y += noteLD->bbox().height() * (upDir ? 0.8 : -0.3);
-    }
-
     ldata->setPos(x, y);
 
     if (!item->isWavy()) {
@@ -1686,14 +1681,17 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
         height = r.height();
         ldata->setBbox(x1, y1, width, height);
     } else {
-        RectF r = conf.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
-        double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
+        RectF r = conf.engravingFont()->bbox(item->waveSym(), item->magS());
 
-        r.setHeight(r.height() + r.width() * sin(angle));
+        // Align an eighth space above/below the centre of the note
+        if (item->isBelow()) {
+            ldata->moveY(r.height() - spatium * 0.125);
+        } else {
+            ldata->moveY(spatium * 0.075);
+        }
 
-        /// TODO: calculate properly the rect for wavy type
-        if (item->chordLineType() == ChordLineType::DOIT) {
-            r.setY(ldata->pos().y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
+        if (item->isToTheLeft()) {
+            ldata->moveX(-r.width());
         }
 
         ldata->setBbox(r);

@@ -1638,8 +1638,8 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
         height = r.height();
         ldata->setBbox(x1, y1, width, height);
     } else {
-        RectF r = conf.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
-        double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
+        RectF r = conf.engravingFont()->bbox({ SymId::wiggleVIbratoMediumSlower, SymId::wiggleVIbratoMediumSlower }, item->magS());
+        double angle = 20 * M_PI / 180;
 
         r.setHeight(r.height() + r.width() * sin(angle));
 
