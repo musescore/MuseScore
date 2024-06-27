@@ -1,7 +1,5 @@
 #include "gpconverter.h"
 
-#include <chrono>
-
 #include "translation.h"
 
 #include "../importgtp.h"
@@ -25,7 +23,6 @@
 #include "engraving/dom/fretcircle.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
-#include "engraving/dom/hairpin.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/keysig.h"
@@ -49,7 +46,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
-#include "engraving/dom/trill.h"
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
