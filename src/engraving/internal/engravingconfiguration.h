@@ -90,6 +90,8 @@ public:
     bool isAccessibleEnabled() const override;
 
     bool guitarProImportExperimental() const override;
+    bool useStretchedBends() const override;
+    bool shouldAddParenthesisOnStandardStaff() const override;
     bool negativeFretsAllowed() const override;
     bool crossNoteHeadAlwaysBlack() const override;
     bool enableExperimentalFretCircle() const override;
