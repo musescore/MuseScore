@@ -206,6 +206,22 @@ void ReadContext::addLink(Staff* staff, LinkedObjects* link, const Location& loc
     doAddLink(staff, link, location);
 }
 
+void ReadContext::removeLink(staff_idx_t staffIdx, EngravingObject* object)
+{
+    if (!object) {
+        return;
+    }
+
+    auto it = m_staffLinkedElements.find(staffIdx);
+    if (it == m_staffLinkedElements.end()) {
+        return;
+    }
+
+    for (std::pair<LinkedObjects*, Location>& pair : it->second) {
+        pair.first->remove(object);
+    }
+}
+
 void ReadContext::doAddLink(Staff* staff, LinkedObjects* link, const Location& location)
 {
     int staffIndex = static_cast<int>(staff->idx());

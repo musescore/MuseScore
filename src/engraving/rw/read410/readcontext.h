@@ -172,6 +172,7 @@ public:
     rw::ReadLinks readLinks() const;
     void initLinks(const rw::ReadLinks& l);
     void addLink(Staff* staff, LinkedObjects* link, const Location& location);
+    void removeLink(staff_idx_t staffIdx, EngravingObject* object);
     LinkedObjects* getLink(bool isMasterScore, const Location& location, int localIndexDiff);
     std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
     std::map<int, LinkedObjects*>& linkIds();
