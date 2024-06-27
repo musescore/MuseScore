@@ -211,18 +211,18 @@ StyledFlickable {
         }
 
         Component.onCompleted: {
-            textInputFieldModel.init()
+            textInputModel.init()
         }
 
-        TextInputFieldModel {
-            id: textInputFieldModel
+        TextInputModel {
+            id: textInputModel
         }
 
         Keys.onPressed: {
             if (event.key === Qt.Key_Tab) {
                 //! NOTE: We need to handle Tab key here because https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html#tab-focus
                 //!       and we don't use qt navigation system
-                if (textInputFieldModel.handleShortcut(Qt.Key_Tab, Qt.NoModifier)) {
+                if (textInputModel.handleShortcut(Qt.Key_Tab, Qt.NoModifier)) {
                     brailleTextArea.focus = false;
                     event.accepted = true;
                     return;

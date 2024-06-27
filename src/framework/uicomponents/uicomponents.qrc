@@ -91,5 +91,6 @@
         <file>qml/Muse/UiComponents/treeview/images/header.png</file>
         <file>qml/Muse/UiComponents/StyledToolBarView.qml</file>
         <file>qml/Muse/UiComponents/StyledToolBarItem.qml</file>
+        <file>qml/Muse/UiComponents/TextInputArea.qml</file>
     </qresource>
 </RCC>

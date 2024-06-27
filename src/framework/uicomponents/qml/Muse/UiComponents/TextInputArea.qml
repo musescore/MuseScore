@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,7 +21,6 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
@@ -29,24 +28,13 @@ import Muse.UiComponents 1.0
 FocusScope {
     id: root
 
-    property bool isIndeterminate: false
-    readonly property string indeterminateText: "--"
     property var currentText: ""
-    property alias validator: valueInput.validator
-    property alias maximumLength: valueInput.maximumLength
-    property alias measureUnitsSymbol: measureUnitsLabel.text
 
     property alias hint: valueInput.placeholderText
-    property alias hintIcon: hintIcon.iconCode
-    property bool clearTextButtonVisible: false
 
-    property alias textHorizontalAlignment: valueInput.horizontalAlignment
-    property alias textVerticalAlignment: valueInput.verticalAlignment
     property bool hasText: valueInput.text.length > 0
-    property alias readOnly: valueInput.readOnly
 
     property real textSidePadding: 12
-    property real accessoriesPadding: 4
 
     readonly property alias inputField: valueInput
     readonly property alias background: background
@@ -57,23 +45,13 @@ FocusScope {
     readonly property alias navigation: navCtrl
     readonly property alias accessible: navCtrl.accessible
 
-    readonly property alias clearTextButton: clearTextButtonItem
-
     signal textChanged(var newTextValue)
-    signal textEdited(var newTextValue)
-    signal textCleared()
     signal textEditingFinished(var newTextValue)
     signal accepted()
     signal escaped()
 
     function selectAll() {
         valueInput.selectAll()
-    }
-
-    function clear() {
-        valueInput.text = ""
-        currentText = ""
-        textCleared()
     }
 
     function ensureActiveFocus() {
@@ -88,7 +66,7 @@ FocusScope {
         }
     }
 
-    implicitHeight: 30
+    implicitHeight: parent.height
     implicitWidth: parent.width
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
@@ -99,11 +77,11 @@ FocusScope {
 
     NavigationControl {
         id: navCtrl
-        name: root.objectName !== "" ? root.objectName : "TextInputField"
+        name: root.objectName !== "" ? root.objectName : "TextInputArea"
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.EditableText
-        accessible.name: Boolean(valueInput.text) ? valueInput.text + " " + measureUnitsLabel.text : valueInput.placeholderText
+        accessible.name: valueInput.text
         accessible.visualItem: root
         accessible.text: valueInput.text
         accessible.selectedText: valueInput.selectedText
@@ -130,31 +108,15 @@ FocusScope {
         radius: 3
     }
 
-    RowLayout {
+    ScrollView {
         anchors.fill: parent
-        anchors.leftMargin: hintIcon.visible ? 0 : root.textSidePadding
-        anchors.rightMargin: clearTextButtonItem.visible ? 0 : root.textSidePadding
 
-        spacing: 0
-
-        StyledIconLabel {
-            id: hintIcon
-
-            Layout.fillHeight: true
-            Layout.preferredWidth: height
-            Layout.margins: root.accessoriesPadding
-
-            visible: !isEmpty
-        }
-
-        TextField {
+        TextArea {
             id: valueInput
 
-            objectName: "TextField"
+            objectName: "TextArea"
 
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: !measureUnitsLabel.visible
-            padding: 0
+            padding: root.textSidePadding
 
             color: ui.theme.fontPrimaryColor
             font: ui.theme.bodyFont
@@ -167,7 +129,7 @@ FocusScope {
             selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
             selectedTextColor: ui.theme.fontPrimaryColor
             placeholderTextColor: ui.theme.fontPrimaryColor
-            visible: !root.isIndeterminate || activeFocus
+            visible: true
 
             text: root.currentText === undefined ? "" : root.currentText
 
@@ -184,8 +146,7 @@ FocusScope {
                     return
                 }
 
-                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
-                        || event.key === Qt.Key_Escape) {
+                if (event.key === Qt.Key_Escape) {
                     event.accepted = true
                     return
                 }
@@ -201,18 +162,9 @@ FocusScope {
             }
 
             Keys.onPressed: function(event) {
-                var isAcceptKey = event.key === Qt.Key_Enter || event.key === Qt.Key_Return
-                var isEscapeKey = event.key === Qt.Key_Escape
-                if (isAcceptKey || isEscapeKey) {
+                if (event.key === Qt.Key_Escape) {
                     root.focus = false
                     root.textEditingFinished(valueInput.text)
-                }
-
-                if (isAcceptKey) {
-                    root.accepted()
-                }
-
-                if (isEscapeKey) {
                     root.escaped()
                 }
             }
@@ -228,69 +180,9 @@ FocusScope {
             }
 
             onTextChanged: {
-                if (!acceptableInput) {
-                    return
-                }
-
                 root.textChanged(text)
             }
-
-            onTextEdited: {
-                if (!acceptableInput) {
-                    return
-                }
-
-                root.textEdited(text)
-            }
         }
-
-        StyledTextLabel {
-            id: measureUnitsLabel
-
-            Layout.alignment: Qt.AlignVCenter
-
-            color: ui.theme.fontPrimaryColor
-            visible: !root.isIndeterminate && !isEmpty
-        }
-
-        FlatButton {
-            id: clearTextButtonItem
-
-            Layout.fillHeight: true
-            Layout.preferredWidth: height
-            Layout.margins: root.accessoriesPadding
-
-            toolTipTitle: qsTrc("global", "Clear")
-            icon: IconCode.CLOSE_X_ROUNDED
-            visible: root.clearTextButtonVisible
-
-            transparent: true
-            accentButton: true
-
-            navigation.panel: navCtrl.panel
-            navigation.order: navCtrl.order + 1
-
-            onClicked: {
-                root.clear()
-                navCtrl.requestActive()
-            }
-        }
-
-        Item {
-            Layout.fillWidth: measureUnitsLabel.visible
-        }
-    }
-
-    StyledTextLabel {
-        id: undefinedValueLabel
-
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 12
-
-        text: root.indeterminateText
-        color: ui.theme.fontPrimaryColor
-        visible: root.isIndeterminate && valueInput.activeFocus === false
     }
 
     states: [
@@ -310,15 +202,11 @@ FocusScope {
     MouseArea {
         id: clickableArea
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-
-        height: parent.height
-        width: clearTextButtonItem.visible ? parent.width - clearTextButtonItem.width : parent.width
+        anchors.fill: parent
 
         propagateComposedEvents: true
         hoverEnabled: true
-        cursorShape: root.readOnly ? Qt.ArrowCursor : Qt.IBeamCursor
+        cursorShape: Qt.IBeamCursor
 
         onPressed: function(mouse) {
             root.ensureActiveFocus()
