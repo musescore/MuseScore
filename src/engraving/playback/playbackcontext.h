@@ -36,6 +36,7 @@ class PlayTechAnnotation;
 class SoundFlag;
 class Score;
 class MeasureRepeat;
+class TextBase;
 
 class PlaybackContext
 {
@@ -66,11 +67,14 @@ private:
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void updatePlaybackParams(const SoundFlag* flag, const int segmentPositionTick);
+    void updatePlaybackParamsForSoundFlag(const SoundFlag* flag, const int segmentPositionTick);
+    void updatePlaybackParamsForText(const TextBase* text, const int segmentPositionTick);
 
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
                         const int tickPositionOffset);
-    void handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
+    void handleSegmentAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
+    void handleSegmentElements(const Segment* segment, const int segmentPositionTick,
+                               std::vector<const MeasureRepeat*>& foundMeasureRepeats);
     void handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset);
 
     void copyDynamicsInRange(const int rangeStartTick, const int rangeEndTick, const int newDynamicsOffsetTick);
@@ -81,6 +85,8 @@ private:
 
     track_idx_t m_partStartTrack = 0;
     track_idx_t m_partEndTrack = 0;
+
+    bool m_playbleSoundFlagFound = false;
 
     DynamicsByTrack m_dynamicsByTrack;
     ParamsByTrack m_playbackParamByTrack;

@@ -120,11 +120,11 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
         m_onOffStreamFlushed();
     }
 
-    m_offStreamCache.clear();
-    parseOffStreamParams(params, m_offStreamCache.presets, m_offStreamCache.textArticulation);
+    parseOffStreamParams(params, m_offStreamCache);
 
     const char* presets_cstr = m_offStreamCache.presets.empty() ? m_defaultPresetCode.c_str() : m_offStreamCache.presets.c_str();
     const char* textArticulation_cstr = m_offStreamCache.textArticulation.c_str();
+    const char* syllable = m_offStreamCache.syllable.c_str();
 
     for (const auto& pair : events) {
         for (const auto& event : pair.second) {
@@ -153,7 +153,7 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
             parseArticulations(noteEvent.expressionCtx().articulations, articulationFlag, notehead);
 
             AuditionStartNoteEvent noteOn;
-            noteOn.msEvent = { pitch, centsOffset, articulationFlag, notehead, 0.5, presets_cstr, textArticulation_cstr };
+            noteOn.msEvent = { pitch, centsOffset, articulationFlag, notehead, 0.5, presets_cstr, textArticulation_cstr, syllable };
             noteOn.msTrack = track;
             m_offStreamEvents[timestampFrom].emplace(std::move(noteOn));
 
@@ -291,6 +291,10 @@ void MuseSamplerSequencer::loadParams(const PlaybackParamLayers& changes)
                     break;
                 case PlaybackParam::PlayingTechnique:
                     addTextArticulation(param.val, params.first, track);
+                    break;
+                case PlaybackParam::Syllable:
+                case PlaybackParam::Sticking:
+                    addSyllable(param.val, params.first, track);
                     break;
                 case PlaybackParam::Undefined:
                     UNREACHABLE;
@@ -433,6 +437,19 @@ void MuseSamplerSequencer::addPresets(const StringList& presets, long long start
     for (const String& presetCode : presets) {
         m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.toStdString().c_str());
     }
+}
+
+void MuseSamplerSequencer::addSyllable(const String& syllable, long long positionUs, ms_Track track)
+{
+    if (syllable.empty()) {
+        return;
+    }
+
+    ms_SyllableEvent evt;
+    evt._position_us = positionUs;
+    evt._text = syllable.toStdString().c_str();
+
+    m_samplerLib->addSyllableEvent(m_sampler, track, evt);
 }
 
 void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
@@ -590,9 +607,10 @@ void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulatio
     articulationFlag = static_cast<ms_NoteArticulation>(artFlag);
 }
 
-void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params, std::string& presets,
-                                                std::string& textArticulation) const
+void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params, OffStreamParams& out) const
 {
+    out.clear();
+
     if (params.empty()) {
         return;
     }
@@ -605,7 +623,11 @@ void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params,
             presetList.push_back(param.val);
             break;
         case PlaybackParam::PlayingTechnique:
-            textArticulation = param.val.toStdString();
+            out.textArticulation = param.val.toStdString();
+            break;
+        case PlaybackParam::Syllable:
+        case PlaybackParam::Sticking:
+            out.syllable = param.val.toStdString();
             break;
         case PlaybackParam::Undefined:
             UNREACHABLE;
@@ -613,5 +635,5 @@ void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params,
         }
     }
 
-    presets = presetList.join(u"|").toStdString();
+    out.presets = presetList.join(u"|").toStdString();
 }
