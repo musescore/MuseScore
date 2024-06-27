@@ -214,6 +214,13 @@
           <name>Ride Cymbal 2</name>
           <stem>1</stem>
           </Drum>
+        <Drum pitch="81">
+          <head>normal</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>drum</name>
+          <stem>1</stem>
+          </Drum>
         <clef>PERC</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
@@ -354,9 +361,8 @@
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <pitch>49</pitch>
-              <tpc>21</tpc>
-              <head>cross</head>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           </voice>

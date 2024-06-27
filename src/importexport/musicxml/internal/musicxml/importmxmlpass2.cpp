@@ -1623,6 +1623,7 @@ void MusicXMLParserPass2::initPartState(const String& partId)
     m_graceNoteLyrics.clear();
     m_inferredHairpins.clear();
     m_inferredTempoLines.clear();
+    m_inferredPerc.clear();
 
     m_nstaves = m_pass1.getPart(partId)->nstaves();
     m_measureRepeatNumMeasures.assign(m_nstaves, 0);
@@ -3176,6 +3177,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     handleNmiCmi(measure, tick + m_offset, delayedDirections);
     handleFraction();
     handleChordSym(tick + m_offset, harmonyMap);
+    handleDrumInstrument(isPercussionStaff, tick + m_offset);
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
     // if necessary, use the value calculated by metronome()
@@ -4536,6 +4538,36 @@ PlayingTechniqueType MusicXMLParserDirection::getPlayingTechnique() const
     return PlayingTechniqueType::Undefined;
 }
 
+void MusicXMLParserDirection::handleDrumInstrument(bool isPerc, Fraction tick) const
+{
+    if (!configuration()->inferTextType() || m_wordsText.empty() || !m_rehearsalText.empty() || !m_metroText.empty() || m_tpoSound > 0.1
+        || !isPerc) {
+        return;
+    }
+
+    String plainWords = m_wordsText;
+
+    static const std::regex to("to ", std::regex_constants::icase);
+    static const std::regex brackets("\\(.*\\)");
+    plainWords.remove(to);
+    plainWords.remove(brackets);
+
+    plainWords = MScoreTextToMXML::toPlainText(plainWords.simplified());
+
+    const InstrumentTemplate* it = searchTemplateForInstrNameList({ plainWords }, true, false);
+
+    // Ignore marching percussion, as these won't map correctly to the standard drumkit
+    if (it && it->familyId() != u"batterie") {
+        int pitch = it->useDrumset && it->drumset ? it->drumset->nextPitch(0) : 0;
+
+        // Text under the staff will be for voice 2 and 4 even if it's in voice 1
+        track_idx_t track = placement() == u"below" && !(m_track & 1) ? m_track + 1 : m_track;
+
+        InferredPercInstr instr = InferredPercInstr(pitch, track, it->id, tick);
+        m_pass2.addInferredPercInstr(instr);
+    }
+}
+
 //---------------------------------------------------------
 //   bracket
 //---------------------------------------------------------
@@ -4956,6 +4988,23 @@ void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
 {
     muse::remove(m_spanners, spanner);
     delete spanner;
+}
+
+InferredPercInstr MusicXMLParserPass2::inferredPercInstr(const Fraction& tick, const track_idx_t trackIdx)
+{
+    InferredPercInstr instr = InferredPercInstr();
+
+    for (InferredPercList::iterator iter = m_inferredPerc.begin(); iter != m_inferredPerc.end();) {
+        if (iter->tick == tick && iter->track == trackIdx) {
+            instr = *iter;
+            iter = m_inferredPerc.erase(iter);
+            break;
+        } else {
+            ++iter;
+        }
+    }
+
+    return instr;
 }
 
 //---------------------------------------------------------
@@ -6239,10 +6288,10 @@ static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const String& partI
     pass1.setDrumsetDefault(partId, instrumentId, headGroup, line, overruledStemDir);
 }
 
-static void xmlSetDrumsetPitch(Note* note, const Chord* chord, const Staff* staff, int step, int octave,
-                               NoteHeadGroup headGroup, DirectionV& stemDir, const Instrument* instrument)
+void MusicXMLParserPass2::xmlSetDrumsetPitch(Note* note, const Chord* chord, const Staff* staff, int step, int octave,
+                                             NoteHeadGroup headGroup, DirectionV& stemDir, Instrument* instrument)
 {
-    const Drumset* ds = instrument->drumset();
+    Drumset* ds = instrument->drumset();
     // get line
     // determine staff line based on display-step / -octave and clef type
     const ClefType clef = staff->clef(chord->tick());
@@ -6259,26 +6308,45 @@ static void xmlSetDrumsetPitch(Note* note, const Chord* chord, const Staff* staf
 
     const int firstDrum = ds->nextPitch(0);
     int curDrum = firstDrum;
-    // if line matches but not headgroup, set pitch anyway
-    int lineMatch = pitch;
     int newPitch = pitch;
+    bool matchFound = false;
     do {
         if (ds->line(curDrum) == line) {
-            lineMatch = curDrum;
             if (ds->noteHead(curDrum) == headGroup) {
                 newPitch = curDrum;
+                matchFound = true;
                 break;
             }
         }
         curDrum = ds->nextPitch(curDrum);
     } while (curDrum != firstDrum);
 
-    // If there is no exact match, fall back to correct line but different head
-    if (newPitch == pitch) {
-        newPitch = lineMatch;
+    // Find inferred instruments at this tick
+    if (configuration()->inferTextType()) {
+        InferredPercInstr instr = inferredPercInstr(chord->tick(), chord->track());
+        if (instr.track != muse::nidx) {
+            // Clear old instrument
+            ds->drum(newPitch) = DrumInstrument();
+
+            newPitch = instr.pitch;
+            ds->drum(newPitch) = ds->drum(newPitch) = DrumInstrument(
+                instr.name.toStdString().c_str(), headGroup, line, stemDir, chord->voice());
+        }
     }
 
-    if (stemDir == DirectionV::AUTO) {
+    // If there is no exact match add an entry to the drumkit with the XML line and notehead
+    if (!matchFound) {
+        // Create new instrument in drumkit
+        if (stemDir == DirectionV::AUTO) {
+            if (line > 4) {
+                stemDir = DirectionV::DOWN;
+            } else {
+                stemDir = DirectionV::UP;
+            }
+        }
+
+        ds->drum(newPitch) = DrumInstrument("drum", headGroup, line, stemDir, chord->voice());
+    } else if (stemDir == DirectionV::AUTO) {
         stemDir = ds->stemDirection(newPitch);
     }
 
@@ -6501,8 +6569,8 @@ Note* MusicXMLParserPass2::note(const String& partId,
 
     TDuration duration = determineDuration(rest, type, mnd.dots(), dura, measure->ticks());
 
-    const Part* part = m_pass1.getPart(partId);
-    const Instrument* instrument = part->instrument(noteStartTime);
+    Part* part = m_pass1.getPart(partId);
+    Instrument* instrument = part->instrument(noteStartTime);
     const MusicXMLInstruments& instruments = m_pass1.getInstruments(partId);
     isSingleDrumset = instrument->drumset() && instruments.size() == 1;
     // begin allocation
