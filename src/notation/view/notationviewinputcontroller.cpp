@@ -105,7 +105,7 @@ void NotationViewInputController::init()
 
         dispatcher()->reg(this, "notation-popup-menu", [this]() {
             if (auto selection = viewInteraction()->selection()) {
-                togglePopupForItemIfSupports(selection->element());
+                openPopupForItemIfSupports(selection->element());
             }
         });
 
@@ -785,7 +785,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     m_view->hideContextMenu();
-    m_view->hideElementPopup();
+    if (!viewInteraction()->isTextEditingStarted()) {
+        m_view->hideElementPopup();
+    }
 
     PointF logicPos = m_view->toLogical(event->pos());
 
@@ -916,7 +918,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     }
 
     if (m_shouldTogglePopupOnLeftClickRelease) {
-        togglePopupForItemIfSupports(ctx.element);
+        openPopupForItemIfSupports(ctx.element);
     }
 
     if (ctx.element != m_prevHitElement) {
@@ -1188,7 +1190,7 @@ muse::PointF NotationViewInputController::selectionElementPos() const
     return muse::PointF();
 }
 
-void NotationViewInputController::togglePopupForItemIfSupports(const EngravingItem* item)
+void NotationViewInputController::openPopupForItemIfSupports(const EngravingItem* item)
 {
     if (!item) {
         return;
@@ -1197,7 +1199,7 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     ElementType type = item->type();
 
     if (inspectorController()->supportsPopup(type)) {
-        m_view->toggleElementPopup(type, item->canvasBoundingRect());
+        m_view->showElementPopup(type, item->canvasBoundingRect());
     }
 }
 
