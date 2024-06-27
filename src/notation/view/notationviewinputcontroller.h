@@ -166,7 +166,7 @@ private:
 
     void startDragElements(ElementType elementsType, const muse::PointF& elementsOffset);
 
-    void togglePopupForItemIfSupports(const EngravingItem* item);
+    void openPopupForItemIfSupports(const EngravingItem* item);
 
     float hitWidth() const;
 
