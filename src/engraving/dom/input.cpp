@@ -35,6 +35,7 @@
 #include "select.h"
 #include "staff.h"
 #include "stem.h"
+#include "tie.h"
 
 using namespace mu;
 
@@ -310,14 +311,30 @@ void InputState::setSegment(Segment* s)
 //   nextInputPos
 //---------------------------------------------------------
 
-Segment* InputState::nextInputPos() const
+Segment* InputState::nextInputPos(Segment* seg = nullptr) const
 {
-    Measure* m = m_segment->measure();
-    Segment* s = m_segment->next1(SegmentType::ChordRest);
+    if (!seg) {
+        seg = m_segment;
+    }
+    Measure* m = seg->measure();
+    Segment* s = seg->next1(SegmentType::ChordRest);
     for (; s; s = s->next1(SegmentType::ChordRest)) {
         if (s->element(m_track)) {
             if (s->element(m_track)->isRest() && toRest(s->element(m_track))->isGap()) {
                 m = s->measure();
+            } else if (seg->element(m_track)->isChord()) {
+                Chord* chord = toChord(seg->element(m_track));
+                bool allTied = true;
+                for (Note* n : chord->notes()) {
+                    if (!n->tieFor()) {
+                        allTied = false;
+                        break;
+                    }
+                }
+                if (allTied && !chord->notes().empty()) {
+                    return nextInputPos(chord->upNote()->tieFor()->endNote()->chord()->segment());
+                }
+                return s;
             } else {
                 return s;
             }
@@ -330,7 +347,6 @@ Segment* InputState::nextInputPos() const
 
 //---------------------------------------------------------
 //   moveToNextInputPos
-//   TODO: special case: note is first note of tie: goto to last note of tie
 //---------------------------------------------------------
 
 void InputState::moveToNextInputPos()
