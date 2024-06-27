@@ -54,7 +54,12 @@ public:
     bool hasSoundFlags() const;
 
 private:
-    using DynamicMap = std::map<int /*nominalPositionTick*/, muse::mpe::dynamic_level_t>;
+    struct DynamicInfo {
+        muse::mpe::dynamic_level_t level = 0;
+        int priority = -1;
+    };
+
+    using DynamicMap = std::map<int /*nominalPositionTick*/, DynamicInfo>;
     using DynamicsByTrack = std::unordered_map<track_idx_t, DynamicMap>;
 
     using ParamMap = std::map<int /*nominalPositionTick*/, muse::mpe::PlaybackParamList>;
