@@ -3580,7 +3580,7 @@ void MusicXMLParserDirection::handleFraction()
 
     for (size_t n = 0; n < fracs.size(); n++) {
         if (rawWordsText.contains(fracs.at(n))) {
-            int p = n <= 2 ? 0x00BC + n : 0x2150 + n - 3;
+            size_t p = n <= 2 ? 0x00BC + n : 0x2150 + n - 3;
             rawWordsText.replace(fracs.at(n), String(char16_t(p)));
             m_wordsText = rawWordsText;
             return;
