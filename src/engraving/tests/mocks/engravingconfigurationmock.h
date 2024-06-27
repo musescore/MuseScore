@@ -78,6 +78,8 @@ public:
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
+    MOCK_METHOD(bool, useStretchedBends, (), (const, override));
+    MOCK_METHOD(bool, shouldAddParenthesisOnStandardStaff, (), (const, override));
     MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
     MOCK_METHOD(bool, crossNoteHeadAlwaysBlack, (), (const, override));
     MOCK_METHOD(bool, enableExperimentalFretCircle, (), (const, override));

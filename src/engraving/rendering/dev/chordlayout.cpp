@@ -3042,7 +3042,7 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
 
 void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
 {
-    if (!chord->configuration()->guitarProImportExperimental()) {
+    if (!chord->configuration()->useStretchedBends()) {
         return;
     }
 
