@@ -11,10 +11,8 @@
 #include "../continiouselementsbuilder.h"
 #include "types/fraction.h"
 
-#include "engraving/dom/vibrato.h"
-#include "engraving/dom/ottava.h"
-
 #include "iengravingconfiguration.h"
+#include "iguitarproconfiguration.h"
 
 namespace mu::iex::guitarpro {
 class GPScore;
@@ -24,6 +22,7 @@ class GPDomModel;
 class GPConverter
 {
     INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration);
+    INJECT(mu::iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
 
 public:
     GPConverter(mu::engraving::Score* score, std::unique_ptr<GPDomModel>&& gpDom);

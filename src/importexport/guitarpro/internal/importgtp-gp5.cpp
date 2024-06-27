@@ -28,7 +28,6 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
-#include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
@@ -37,7 +36,6 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/glissando.h"
-#include "engraving/dom/harmony.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/lyrics.h"
@@ -58,12 +56,9 @@
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/stretchedbend.h"
 #include "types/symid.h"
-#include "engraving/dom/tempotext.h"
-#include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
-#include "engraving/dom/tremolobar.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/fretcircle.h"
@@ -643,7 +638,7 @@ bool GuitarPro5::readTracks()
             staff->setDefaultClefType(ClefTypeList(clefId, clefId));
         }
 
-        if (capo > 0 && !engravingConfiguration()->guitarProImportExperimental()) {
+        if (capo > 0 && !guitarProConfiguration()->experimental()) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             st->setPlainText(u"Capo. fret " + String::number(capo));

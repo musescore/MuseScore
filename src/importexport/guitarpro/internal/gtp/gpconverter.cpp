@@ -1,7 +1,5 @@
 #include "gpconverter.h"
 
-#include <chrono>
-
 #include "translation.h"
 
 #include "../importgtp.h"
@@ -25,7 +23,6 @@
 #include "engraving/dom/fretcircle.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
-#include "engraving/dom/hairpin.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/keysig.h"
@@ -49,7 +46,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
-#include "engraving/dom/trill.h"
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
@@ -549,7 +545,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
     if (cr) {
         curSegment->setTicks(cr->ticks());
     }
-    if (engravingConfiguration()->guitarProImportExperimental() && beat->deadSlapped() && cr->isRest()) {
+    if (guitarProConfiguration()->experimental() && beat->deadSlapped() && cr->isRest()) {
         Rest* rest = toRest(cr);
         curSegment->add(rest);
         DeadSlapped* dc = Factory::createDeadSlapped(rest);
@@ -753,7 +749,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                 Fraction fr = { 0, 1 };
                 int capo = staff->capo(fr).fretPosition;
 
-                if (capo != 0 && !engravingConfiguration()->guitarProImportExperimental()) {
+                if (capo != 0 && !guitarProConfiguration()->experimental()) {
                     StaffText* st = Factory::createStaffText(s);
                     st->setTrack(curTrack);
                     String capoText = String(u"Capo fret %1").arg(capo);
@@ -1011,7 +1007,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     bool createTitleField
         = std::any_of(fieldNames.begin(), fieldNames.end(), [](const String& fieldName) { return !fieldName.isEmpty(); });
 
-    if (!createTitleField && !engravingConfiguration()->guitarProImportExperimental()) {
+    if (!createTitleField && !guitarProConfiguration()->experimental()) {
         return;
     }
 
@@ -1030,13 +1026,13 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         }
     }
 
-    if (!gpscore->title().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
+    if (!gpscore->title().isEmpty() || guitarProConfiguration()->experimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::TITLE);
         s->setPlainText(gpscore->title());
         m->add(s);
     }
     if (!gpscore->subTitle().isEmpty() || !gpscore->artist().isEmpty() || !gpscore->album().isEmpty()
-        || engravingConfiguration()->guitarProImportExperimental()) {
+        || guitarProConfiguration()->experimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::SUBTITLE);
         String str;
         if (!gpscore->subTitle().isEmpty()) {
@@ -1063,7 +1059,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         m->add(s);
     }
 
-    if (!gpscore->poet().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
+    if (!gpscore->poet().isEmpty() || guitarProConfiguration()->experimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
         s->setPlainText(mu::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
         m->add(s);
@@ -1985,7 +1981,7 @@ void GPConverter::collectContinuousSlide(const GPNote* gpnote, Note* note)
 void GPConverter::addPickScrape(const GPNote* gpnote, Note* note)
 {
     if (gpnote->pickScrape() != GPNote::PickScrape::None && m_currentGPBeat) {
-        if (engravingConfiguration()->guitarProImportExperimental()) {
+        if (guitarProConfiguration()->experimental()) {
             ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy()->chord());
             cl->setChordLineType(gpnote->pickScrape() == GPNote::PickScrape::Down ? ChordLineType::FALL : ChordLineType::DOIT);
             cl->setWavy(true);
@@ -2075,7 +2071,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         return;
     }
 
-    if (engravingConfiguration()->guitarProImportExperimental()) {
+    if (guitarProConfiguration()->experimental()) {
         Chord* chord = toChord(note->parent());
         StretchedBend* stretchedBend = Factory::createStretchedBend(chord);
         stretchedBend->setPitchValues(pitchValues);
@@ -2130,7 +2126,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     }
 
     bool hasDrumStaff = note->part()->hasDrumStaff();
-    if (!engravingConfiguration()->guitarProImportExperimental() && hasDrumStaff) {
+    if (!guitarProConfiguration()->experimental() && hasDrumStaff) {
         auto it = _drumExtension.find(pitch);
         if (it != _drumExtension.end()) {
             pitch =  it->second;

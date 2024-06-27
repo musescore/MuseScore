@@ -289,19 +289,24 @@ bool EngravingConfiguration::isAccessibleEnabled() const
     return accessibilityConfiguration() ? accessibilityConfiguration()->enabled() : false;
 }
 
-bool EngravingConfiguration::guitarProImportExperimental() const
+bool EngravingConfiguration::useStretchedBends() const
+{
+    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
+}
+
+bool EngravingConfiguration::shouldAddParenthesisOnStandardStaff() const
 {
     return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }
 
 bool EngravingConfiguration::negativeFretsAllowed() const
 {
-    return guitarProImportExperimental();
+    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }
 
 bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
 {
-    return guitarProImportExperimental();
+    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }
 
 bool EngravingConfiguration::enableExperimentalFretCircle() const
@@ -321,10 +326,10 @@ bool EngravingConfiguration::guitarProMultivoiceEnabled() const
 
 bool EngravingConfiguration::minDistanceForPartialSkylineCalculated() const
 {
-    return guitarProImportExperimental();
+    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }
 
 bool EngravingConfiguration::specificSlursLayoutWorkaround() const
 {
-    return guitarProImportExperimental();
+    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }

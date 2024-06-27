@@ -38,6 +38,7 @@
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
+#include "iguitarproconfiguration.h"
 
 namespace mu::engraving {
 class Chord;
@@ -191,7 +192,9 @@ inline mu::engraving::Drumset* gpSurdoSet = nullptr;
 
 class GuitarPro
 {
-    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration);
+public:
+    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(mu::iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
 
 protected:
 

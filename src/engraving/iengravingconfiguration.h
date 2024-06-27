@@ -108,7 +108,8 @@ public:
     virtual bool isAccessibleEnabled() const = 0;
 
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
-    virtual bool guitarProImportExperimental() const = 0;
+    virtual bool useStretchedBends() const = 0;
+    virtual bool shouldAddParenthesisOnStandardStaff() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;
     virtual bool enableExperimentalFretCircle() const = 0;
