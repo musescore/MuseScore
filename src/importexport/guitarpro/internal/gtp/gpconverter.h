@@ -11,9 +11,6 @@
 #include "../continiouselementsbuilder.h"
 #include "types/fraction.h"
 
-#include "engraving/dom/vibrato.h"
-#include "engraving/dom/ottava.h"
-
 #include "iengravingconfiguration.h"
 
 namespace mu::iex::guitarpro {

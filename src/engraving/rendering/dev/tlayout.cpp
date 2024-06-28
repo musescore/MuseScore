@@ -4246,6 +4246,15 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         } else if (item->harmonic()) {
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
+
+        if (item->configuration()->shouldAddParenthesisOnStandardStaff()) {
+            if (item->ghost()) {
+                const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+            } else {
+                const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
+            }
+        }
+
         SymId nh = item->noteHead();
         if (item->configuration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
             nh = SymId::noteheadXBlack;
