@@ -866,7 +866,7 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
 
 static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
                             const int pageNr, const Size& pageSize,
-                            const bool top)
+                            const bool top, const bool isSibeliusScore)
 {
     VBox* vbox = nullptr;
 
@@ -889,7 +889,7 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
         // frame with the title on top of the page.
         // Sibelius (direct export) typically exports no header
         // and puts the title etc. in the footer
-        const bool doSwap = footerWords.size() > headerWords.size();
+        const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
         if (top) {
             words = doSwap ? footerWords : headerWords;
         } else {
@@ -1011,7 +1011,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
         // add a header vbox if the this measure is the first in the score or the first on a new page
         if (pageStartMeasureNrs.count(int(i)) || i == 0) {
             ++pageNr;
-            vbox = addCreditWords(score, crWords, pageNr, pageSize, true);
+            vbox = addCreditWords(score, crWords, pageNr, pageSize, true, m_exporterString.contains(u"sibelius"));
             if (i == 0 && vbox) {
                 vbox->setExcludeFromOtherParts(false);
             }
@@ -1037,7 +1037,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
         if (pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) {
-            addCreditWords(score, crWords, pageNr, pageSize, false);
+            addCreditWords(score, crWords, pageNr, pageSize, false, m_exporterString.contains(u"sibelius"));
         }
     }
 }

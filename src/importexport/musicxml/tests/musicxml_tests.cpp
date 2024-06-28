@@ -1163,6 +1163,12 @@ TEST_F(Musicxml_Tests, timesig3) {
 TEST_F(Musicxml_Tests, timeTick) {
     mxmlImportTestRef("testTimeTick");
 }
+TEST_F(Musicxml_Tests, titleSwapMu) {
+    mxmlImportTestRef("testTitleSwapMu");
+}
+TEST_F(Musicxml_Tests, titleSwapSib) {
+    mxmlImportTestRef("testTitleSwapSib");
+}
 TEST_F(Musicxml_Tests, trackHandling) {
     mxmlIoTest("testTrackHandling");
 }
