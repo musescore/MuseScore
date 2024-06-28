@@ -143,7 +143,7 @@ bool SoundProfilesModel::askAboutChangingSounds()
         return true;
     }
 
-    if (!notationPlayback()->hasSoundFlags()) {
+    if (!notationPlayback()->hasSoundFlags(notationPlayback()->existingTrackIdSet())) {
         return true;
     }
 

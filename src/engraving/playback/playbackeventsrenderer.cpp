@@ -61,17 +61,8 @@ static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr
     return articulations;
 }
 
-void PlaybackEventsRenderer::render(const EngravingItem* item, const dynamic_level_t nominalDynamicLevel,
-                                    const ArticulationType persistentArticulationApplied,
-                                    const ArticulationsProfilePtr profile,
-                                    PlaybackEventsMap& result) const
-{
-    render(item, 0, nominalDynamicLevel, persistentArticulationApplied, profile, result);
-}
-
 void PlaybackEventsRenderer::render(const EngravingItem* item, const int tickPositionOffset,
-                                    const dynamic_level_t nominalDynamicLevel,
-                                    const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
+                                    const ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
                                     PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(item->isChordRest()) {
@@ -79,7 +70,7 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const int tickPos
     }
 
     if (item->type() == ElementType::CHORD) {
-        renderNoteEvents(toChord(item), tickPositionOffset, nominalDynamicLevel, persistentArticulationApplied, profile, result);
+        renderNoteEvents(toChord(item), tickPositionOffset, profile, playbackCtx, result);
     } else if (item->type() == ElementType::REST) {
         renderRestEvents(toRest(item), tickPositionOffset, result);
     }
@@ -247,9 +238,8 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
 }
 
 void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tickPositionOffset,
-                                              const mpe::dynamic_level_t nominalDynamicLevel,
-                                              const ArticulationType persistentArticulationApplied,
-                                              const mpe::ArticulationsProfilePtr profile, PlaybackEventsMap& result) const
+                                              const mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
+                                              PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(chord) {
         return;
@@ -257,6 +247,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
 
     int chordPosTick = chord->tick().ticks();
     int chordDurationTicks = chord->actualTicks().ticks();
+    int chordPosTickWithOffset = chordPosTick + tickPositionOffset;
 
     const Score* score = chord->score();
 
@@ -269,15 +260,16 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
 
     RenderingContext ctx(chordTnD.timestamp,
                          chordTnD.duration,
-                         nominalDynamicLevel,
-                         chord->tick().ticks(),
+                         playbackCtx->appliableDynamicLevel(chord->track(), chordPosTickWithOffset),
+                         chordPosTick,
                          tickPositionOffset,
                          chordDurationTicks,
                          bps,
                          timeSignatureFraction,
-                         persistentArticulationApplied,
+                         playbackCtx->persistentArticulationType(chordPosTickWithOffset),
                          articulations,
-                         profile);
+                         profile,
+                         playbackCtx);
 
     if (!ChordFilter::isItemPlayable(chord, ctx)) {
         return;
@@ -295,6 +287,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                                                   const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
 {
     static const ArticulationMap articulations;
+    static const PlaybackContextPtr dummyCtx = std::make_shared<PlaybackContext>();
 
     RenderingContext ctx(actualTimestamp,
                          actualDuration,
@@ -306,7 +299,8 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                          TimeSigMap::DEFAULT_TIME_SIGNATURE,
                          persistentArticulationApplied,
                          articulations,
-                         profile);
+                         profile,
+                         dummyCtx);
 
     NoteArticulationsParser::buildNoteArticulationMap(note, ctx, ctx.commonArticulations);
     NominalNoteCtx noteCtx(note, ctx);

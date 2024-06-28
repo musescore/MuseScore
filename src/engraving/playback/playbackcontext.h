@@ -86,6 +86,8 @@ private:
     ParamsByTrack m_playbackParamByTrack;
     PlayTechniquesMap m_playTechniquesMap;
 };
+
+using PlaybackContextPtr = std::shared_ptr<PlaybackContext>;
 }
 
 #endif // MU_ENGRAVING_PLAYBACKCONTEXT_H

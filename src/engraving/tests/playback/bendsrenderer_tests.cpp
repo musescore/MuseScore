@@ -99,6 +99,8 @@ protected:
         BeatsPerSecond bps = m_score->tempomap()->tempo(chordPosTick);
         TimeSigFrac timeSignatureFraction = m_score->sigmap()->timesig(chordPosTick).timesig();
 
+        PlaybackContextPtr dummyCtx = std::make_shared<PlaybackContext>();
+
         RenderingContext ctx(tnd.timestamp,
                              tnd.duration,
                              5000,
@@ -109,7 +111,8 @@ protected:
                              timeSignatureFraction,
                              persistentArticulationType,
                              ArticulationMap(),
-                             profile);
+                             profile,
+                             dummyCtx);
 
         return ctx;
     }
@@ -135,14 +138,14 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Distortion, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(startChord, profile, ArticulationType::Distortion);
+    RenderingContext startChordCtx = buildCtx(startChord, profile, ArticulationType::Distortion);
 
     // [THEN] BendsRenderer can render the multibend articulation
     EXPECT_TRUE(BendsRenderer::isAbleToRender(ArticulationType::Multibend));
 
     // [WHEN] Render the chord
     PlaybackEventList events;
-    BendsRenderer::render(startChord, ArticulationType::Multibend, ctx, events);
+    BendsRenderer::render(startChord, ArticulationType::Multibend, startChordCtx, events);
 
     // [THEN] Render the multibend as a single NoteEvent
     ASSERT_EQ(events.size(), 1);
@@ -175,7 +178,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
         ASSERT_TRUE(note);
 
         const Chord* chord = note->chord();
-        ctx = buildCtx(chord, profile);
+        RenderingContext ctx = buildCtx(chord, profile);
 
         events.clear();
         BendsRenderer::render(chord, ArticulationType::Multibend, ctx, events);

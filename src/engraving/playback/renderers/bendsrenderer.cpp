@@ -217,7 +217,8 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
                          initialCtx.timeSignatureFraction,
                          initialCtx.persistentArticulation,
                          initialCtx.commonArticulations,
-                         initialCtx.profile);
+                         initialCtx.profile,
+                         initialCtx.playbackCtx);
 
     if (note->isGrace()) {
         GraceNotesMetaParser::parse(note->chord(), ctx, ctx.commonArticulations);

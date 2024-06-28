@@ -34,7 +34,7 @@ namespace muse::audio {
 class FluidSequencer : public AbstractEventSequencer<midi::Event>
 {
 public:
-    void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride);
+    void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride, bool useDynamicEvents);
 
     int currentExpressionLevel() const;
     int naturalExpressionLevel() const;
@@ -65,6 +65,7 @@ private:
     int pitchBendLevel(const mpe::pitch_level_t pitchLevel) const;
 
     mutable ChannelMap m_channels;
+    bool m_useDynamicEvents = false;
 };
 }
 

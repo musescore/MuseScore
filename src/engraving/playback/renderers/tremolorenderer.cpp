@@ -134,19 +134,25 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
                                            const int startTick, const RenderingContext& context,
                                            mpe::PlaybackEventList& result)
 {
-    for (size_t noteIdx = 0; noteIdx < chord->notes().size(); ++noteIdx) {
-        const Note* note = chord->notes().at(noteIdx);
+    const Score* score = chord->score();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
 
+    for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note, context.commonArticulations)) {
             continue;
         }
 
         auto noteTnD = timestampAndDurationFromStartAndDurationTicks(
-            chord->score(), startTick, stepDurationTicks, context.positionTickOffset);
+            score, startTick, stepDurationTicks, context.positionTickOffset);
 
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = noteTnD.duration;
         noteCtx.timestamp = noteTnD.timestamp;
+
+        int utick = timestampToTick(score, noteCtx.timestamp);
+        noteCtx.dynamicLevel = context.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.chordCtx.commonArticulations);
         updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
