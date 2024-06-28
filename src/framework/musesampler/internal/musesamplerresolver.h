@@ -37,6 +37,7 @@ class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver
 
 public:
     void init();
+    bool reloadMuseSampler();
 
     muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
                                                      const muse::audio::AudioInputParams& params) const override;

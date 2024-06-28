@@ -92,6 +92,15 @@ void MuseSamplerResolver::init()
     doInit(configuration()->fallbackLibraryPath());
 }
 
+bool MuseSamplerResolver::reloadMuseSampler()
+{
+    if (!m_libHandler) {
+        return false;
+    }
+
+    return m_libHandler->reloadAllInstruments() == ms_Result_OK;
+}
+
 bool MuseSamplerResolver::doInit(const io::path_t& libPath)
 {
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(libPath);
@@ -106,6 +115,7 @@ bool MuseSamplerResolver::doInit(const io::path_t& libPath)
         m_libHandler.reset();
     }
 
+    LOGI() << "MuseSampler successfully inited: " << libPath;
     return ok;
 }
 

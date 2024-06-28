@@ -101,6 +101,8 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_process process = nullptr;
     ms_MuseSampler_all_notes_off allNotesOff = nullptr;
 
+    ms_reload_all_instruments reloadAllInstruments = nullptr;
+
 private:
     ms_init initLib = nullptr;
     ms_disable_reverb disableReverb = nullptr;
@@ -258,6 +260,12 @@ public:
         setPlaying = (ms_MuseSampler_set_playing)muse::getLibFunc(m_lib, "ms_MuseSampler_set_playing");
         process = (ms_MuseSampler_process)muse::getLibFunc(m_lib, "ms_MuseSampler_process");
         allNotesOff = (ms_MuseSampler_all_notes_off)muse::getLibFunc(m_lib, "ms_MuseSampler_all_notes_off");
+
+        if (at_least_v_0_7) {
+            reloadAllInstruments = (ms_reload_all_instruments)muse::getLibFunc(m_lib, "ms_reload_all_instruments");
+        } else {
+            reloadAllInstruments = []() { return ms_Result_Error; };
+        }
     }
 
     ~MuseSamplerLibHandler()

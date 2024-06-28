@@ -308,6 +308,9 @@ typedef ms_Result (* ms_MuseSampler_add_track_text_articulation_event)(ms_MuseSa
 typedef const char*(* ms_get_drum_mapping)(int instrument_id);
 // ------------------------------------------------------------
 
+// Added in 0.7
+typedef ms_Result (* ms_reload_all_instruments)(); // Useful for sound developers
+
 namespace muse::musesampler {
 using track_idx_t = size_t;
 using TrackList = std::vector<ms_Track>;

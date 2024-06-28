@@ -362,6 +362,10 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
         makeMenuItem("musesampler-check"),
     };
 
+    if (globalConfiguration()->devModeEnabled()) {
+        museSamplerItems << makeMenuItem("musesampler-reload");
+    }
+
     items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
 #endif
 
