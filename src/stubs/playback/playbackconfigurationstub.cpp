@@ -148,20 +148,25 @@ void PlaybackConfigurationStub::setSoundPresetsMultiSelectionEnabled(bool)
 {
 }
 
-bool mu::playback::PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangeSoundWarning() const
+bool PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangeSoundWarning() const
 {
     return false;
 }
 
-void mu::playback::PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool)
+void PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool)
 {
 }
 
-bool mu::playback::PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const
+bool PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const
 {
     return false;
 }
 
-void mu::playback::PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool)
+void PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool)
 {
+}
+
+bool PlaybackConfigurationStub::shouldMeasureInputLag() const
+{
+    return false;
 }

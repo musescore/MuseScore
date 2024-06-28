@@ -27,6 +27,8 @@
 #include "engraving/dom/utils.h"
 
 #include "audio/audioutils.h"
+#include "audio/devtools/inputlag.h"
+
 #include "containers.h"
 #include "defer.h"
 #include "log.h"
@@ -131,6 +133,8 @@ void PlaybackController::init()
 
         updateLoop();
     });
+
+    m_measureInputLag = configuration()->shouldMeasureInputLag();
 }
 
 void PlaybackController::updateCurrentTempo()
@@ -307,6 +311,10 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
 
     if (!configuration()->playNotesWhenEditing()) {
         return;
+    }
+
+    if (m_measureInputLag) {
+        START_INPUT_LAG_TIMER;
     }
 
     std::vector<const notation::EngravingItem*> elementsForPlaying;

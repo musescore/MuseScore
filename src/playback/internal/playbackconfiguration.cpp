@@ -295,6 +295,11 @@ void PlaybackConfiguration::setNeedToShowResetSoundFlagsWhenChangePlaybackProfil
     settings()->setSharedValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(show));
 }
 
+bool PlaybackConfiguration::shouldMeasureInputLag() const
+{
+    return audioConfiguration()->shouldMeasureInputLag();
+}
+
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const
 {
     if (musesamplerInfo() && musesamplerInfo()->isInstalled()) {

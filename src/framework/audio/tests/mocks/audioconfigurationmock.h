@@ -61,6 +61,8 @@ public:
     MOCK_METHOD(async::Channel<io::paths_t>, soundFontDirectoriesChanged, (), (const, override));
 
     MOCK_METHOD(io::path_t, knownAudioPluginsFilePath, (), (const, override));
+
+    MOCK_METHOD(bool, shouldMeasureInputLag, (), (const, override));
 };
 }
 

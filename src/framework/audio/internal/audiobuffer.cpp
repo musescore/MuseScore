@@ -207,6 +207,11 @@ void AudioBuffer::reset()
     m_data = SILENT_FRAMES;
 }
 
+audioch_t AudioBuffer::audioChannelCount() const
+{
+    return m_audioChannelsCount;
+}
+
 size_t AudioBuffer::incrementWriteIndex(const size_t writeIdx, const samples_t samplesPerChannel)
 {
     size_t result = writeIdx;

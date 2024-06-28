@@ -242,6 +242,8 @@ private:
     bool m_isRangeSelection = false;
 
     DrumsetLoader m_drumsetLoader;
+
+    bool m_measureInputLag = false;
 };
 }
 

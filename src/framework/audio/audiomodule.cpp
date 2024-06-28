@@ -51,6 +51,7 @@
 #include "internal/fx/musefxresolver.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
+#include "devtools/inputlag.h"
 
 #include "log.h"
 
@@ -84,6 +85,18 @@ using namespace muse::audio::fx;
 #ifdef Q_OS_WASM
 #include "internal/platform/web/webaudiodriver.h"
 #endif
+
+static void measureInputLag(const float* buf, const size_t size)
+{
+    if (INPUT_LAG_TIMER_STARTED) {
+        for (size_t i = 0; i < size; ++i) {
+            if (!RealIsNull(buf[i])) {
+                STOP_INPUT_LAG_TIMER;
+                return;
+            }
+        }
+    }
+}
 
 static void audio_init_qrc()
 {
@@ -258,14 +271,21 @@ void AudioModule::onDestroy()
 
 void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 {
+    const bool shouldMeasureInputLag = m_configuration->shouldMeasureInputLag();
+
     IAudioDriver::Spec requiredSpec;
     requiredSpec.sampleRate = m_configuration->sampleRate();
     requiredSpec.format = IAudioDriver::Format::AudioF32;
     requiredSpec.channels = m_configuration->audioChannelsCount();
     requiredSpec.samples = m_configuration->driverBufferSize();
-    requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
+    requiredSpec.callback = [this, shouldMeasureInputLag](void* /*userdata*/, uint8_t* stream, int byteCount) {
         auto samplesPerChannel = byteCount / (2 * sizeof(float));
-        m_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
+        float* dest = reinterpret_cast<float*>(stream);
+        m_audioBuffer->pop(dest, samplesPerChannel);
+
+        if (shouldMeasureInputLag) {
+            measureInputLag(dest, samplesPerChannel * m_audioBuffer->audioChannelCount());
+        }
     };
 
     if (mode == IApplication::RunMode::GuiApp) {

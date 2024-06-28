@@ -58,6 +58,8 @@ public:
 
     void reset();
 
+    audioch_t audioChannelCount() const;
+
 private:
     size_t reservedFrames(const size_t writeIdx, const size_t readIdx) const;
     size_t incrementWriteIndex(const size_t writeIdx, const samples_t samplesPerChannel);
