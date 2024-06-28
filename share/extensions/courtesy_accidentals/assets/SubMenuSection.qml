@@ -17,17 +17,45 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //==============================================
 
-import QtQuick 2.0
-import MuseScore 3.0
-import "assets/accidentals.js" as Accidentals
+import QtQuick 2.9
+import MuseScore.UiComponents 1.0 as MU
+import MuseScore.Ui 1.0
 
-MuseScore {
-    title: qsTr("Remove Courtesy Accidentals")
-    version: "4.0"
-    description: qsTr("This plugin removes cautionary accidentals from the score")
-    categoryCode: "composing-arranging-tools"
-    thumbnailName: "assets/accidentals.png"
-    requiresScore: true
+Column {
+	id: root
+	property alias title: menuButton.title
+	property alias isExpanded: menuButton.isExpanded
+	default property alias content: column.children
+	
+	property alias source: dynamicImage.source
+	
+	width: parent.width
+	spacing: 0
+	anchors.margins: 0
+	
+	MenuButton {
+		id: menuButton
+	}
+	StyledFrame {
+		visible: root.isExpanded
+		width: parent.width - 2 * root.parent.padding
+		padding: style.regSpace
+		bottomPadding: 0
 
-    onRun: Accidentals.runPlugin("remove")
+		Column {
+			spacing: 0
+			width: parent.width
+			//height: childrenRect.height
+			
+			DynamicImage {id: dynamicImage}
+			
+			Column {
+				id: column
+				spacing: style.regSpace
+				width: parent.width
+				//height: childrenRect.height
+				padding: style.regSpace
+			}
+		}
+	}
 }
