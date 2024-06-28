@@ -59,6 +59,8 @@ public:
     async::Channel<io::paths_t> soundFontDirectoriesChanged() const override;
 
     io::path_t knownAudioPluginsFilePath() const override;
+
+    bool shouldMeasureInputLag() const override;
 };
 }
 

@@ -124,3 +124,8 @@ io::path_t AudioConfigurationStub::knownAudioPluginsFilePath() const
 {
     return {};
 }
+
+bool AudioConfigurationStub::shouldMeasureInputLag() const
+{
+    return false;
+}

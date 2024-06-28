@@ -41,6 +41,7 @@ static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice");
 static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
 static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
+static const Settings::Key AUDIO_MEASURE_INPUT_LAG("audio", "io/measureInputLag");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -84,6 +85,8 @@ void AudioConfiguration::init()
     for (const auto& path : userSoundFontDirectories()) {
         fileSystem()->makePath(path);
     }
+
+    settings()->setDefaultValue(AUDIO_MEASURE_INPUT_LAG, Val(false));
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const
@@ -204,4 +207,9 @@ async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() co
 io::path_t AudioConfiguration::knownAudioPluginsFilePath() const
 {
     return globalConfiguration()->userAppDataPath() + "/known_audio_plugins.json";
+}
+
+bool AudioConfiguration::shouldMeasureInputLag() const
+{
+    return settings()->value(AUDIO_MEASURE_INPUT_LAG).toBool();
 }

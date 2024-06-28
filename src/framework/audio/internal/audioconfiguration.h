@@ -71,6 +71,8 @@ public:
 
     io::path_t knownAudioPluginsFilePath() const override;
 
+    bool shouldMeasureInputLag() const override;
+
 private:
     async::Channel<io::paths_t> m_soundFontDirsChanged;
 

@@ -196,6 +196,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     Profiler::Options profOpt;
     profOpt.stepTimeEnabled = true;
+    profOpt.timersEnabled = true;
     profOpt.funcsTimeEnabled = true;
     profOpt.funcsTraceEnabled = false;
     profOpt.funcsMaxThreadCount = 100;

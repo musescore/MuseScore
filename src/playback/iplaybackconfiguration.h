@@ -78,6 +78,8 @@ public:
 
     virtual bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const = 0;
     virtual void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) = 0;
+
+    virtual bool shouldMeasureInputLag() const = 0;
 };
 }
 
