@@ -110,6 +110,52 @@ void Profiler::stepTime(const std::string& tag, const std::string& info, bool is
     timer->nextStep();
 }
 
+void Profiler::startTimer(const std::string& tag)
+{
+    std::lock_guard<std::mutex> lock(m_timersData.mutex);
+
+    auto it = m_timersData.timers.find(tag);
+    if (it == m_timersData.timers.end()) {
+        ElapsedTimer* timer = new ElapsedTimer();
+        timer->start();
+        m_timersData.timers.emplace(tag, timer);
+    } else {
+        it->second->start();
+    }
+}
+
+void Profiler::stopTimer(const std::string& tag)
+{
+    std::lock_guard<std::mutex> lock(m_timersData.mutex);
+
+     auto it = m_timersData.timers.find(tag);
+     if (it != m_timersData.timers.end()) {
+         it->second->stop();
+     }
+}
+
+void Profiler::printTimer(const std::string& tag)
+{
+    std::lock_guard<std::mutex> lock(m_timersData.mutex);
+
+    auto it = m_timersData.timers.find(tag);
+    if (it != m_timersData.timers.end()) {
+        printer()->printElapsedTime(tag, it->second->mlsecsElapsed());
+    }
+}
+
+bool Profiler::timerStarted(const std::string& tag) const
+{
+    std::lock_guard<std::mutex> lock(m_timersData.mutex);
+
+    auto it = m_timersData.timers.find(tag);
+    if (it == m_timersData.timers.end()) {
+        return false;
+    }
+
+    return it->second->started();
+}
+
 Profiler::FuncTimer* Profiler::beginFunc(const std::string& func)
 {
     std::thread::id th = std::this_thread::get_id();
@@ -191,11 +237,18 @@ void Profiler::clear()
         m_funcs.lastIndex.store(1);
     }
     {
-        std::lock_guard<std::mutex> lock(m_funcs.mutex);
+        std::lock_guard<std::mutex> lock(m_steps.mutex);
         for (auto& st : m_steps.timers) {
             delete st.second;
         }
         m_steps.timers.clear();
+    }
+    {
+        std::lock_guard<std::mutex> lock(m_timersData.mutex);
+        for (auto& t : m_timersData.timers) {
+            delete t.second;
+        }
+        m_timersData.timers.clear();
     }
 }
 
@@ -359,6 +412,16 @@ void Profiler::ElapsedTimer::restart()
     start();
 }
 
+void Profiler::ElapsedTimer::stop()
+{
+    invalidate();
+}
+
+bool Profiler::ElapsedTimer::started() const
+{
+    return isValid();
+}
+
 double Profiler::ElapsedTimer::mlsecsElapsed() const
 {
     auto end = mclock::now();
@@ -412,6 +475,20 @@ void Profiler::Printer::printStep(const std::string& tag, double beginMs, double
     .append(formatDouble(stepMs, 3))
     .append(MS)
     .append(info);
+
+    printDebug(str);
+}
+
+void Profiler::Printer::printElapsedTime(const std::string& tag, double elapsedTimeMs)
+{
+    std::string str;
+    str.reserve(100);
+
+    str
+    .append(tag)
+    .append(" : ")
+    .append(formatDouble(elapsedTimeMs, 3))
+    .append(" ms");
 
     printDebug(str);
 }
