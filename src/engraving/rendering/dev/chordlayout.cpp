@@ -1084,6 +1084,31 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         }
         if (!a->layoutCloseToNote()) {
             TLayout::layoutItem(a, ctx);
+            if (a->isLaissezVib()) {
+                const Articulation::LayoutData* ldata = a->ldata();
+                const double sp = a->spatium();
+                const Note* note = ldata->up() ? item->upNote() : item->downNote();
+                const int upDir = ldata->up() ? -1 : 1;
+                const double noteHeight = note->height();
+
+                PointF result = note->pos() + item->pos();
+                double center = SlurTieLayout::noteOpticalCenterForTie(note, ldata->up);
+                double visualInsetSp = 0.0;
+                if (note->headGroup() == NoteHeadGroup::HEAD_SLASH || note->shouldHideFret()) {
+                    visualInsetSp = 0.2;
+                } else if (item->up() && ldata->up) {
+                    visualInsetSp = 0.7;
+                } else {
+                    visualInsetSp = 0.1;
+                }
+                double visualInset = visualInsetSp * sp;
+
+                result.rx() += center + visualInset - ldata->bbox().left();
+                result.ry() += (noteHeight / 2 + 0.2 * sp) * upDir;
+
+                a->setPos(result);
+                continue;
+            }
             if (a->up()) {
                 a->setPos(!item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffTopY + kearnHeight - yOffset);
                 if (a->visible()) {
