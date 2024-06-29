@@ -272,22 +272,25 @@ void AudioModule::onDestroy()
 
 void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 {
-    const bool shouldMeasureInputLag = m_configuration->shouldMeasureInputLag();
-
     IAudioDriver::Spec requiredSpec;
     requiredSpec.sampleRate = m_configuration->sampleRate();
     requiredSpec.format = IAudioDriver::Format::AudioF32;
     requiredSpec.channels = m_configuration->audioChannelsCount();
     requiredSpec.samples = m_configuration->driverBufferSize();
-    requiredSpec.callback = [this, shouldMeasureInputLag](void* /*userdata*/, uint8_t* stream, int byteCount) {
-        auto samplesPerChannel = byteCount / (2 * sizeof(float));
-        float* dest = reinterpret_cast<float*>(stream);
-        m_audioBuffer->pop(dest, samplesPerChannel);
 
-        if (shouldMeasureInputLag) {
+    if (m_configuration->shouldMeasureInputLag()) {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            float* dest = reinterpret_cast<float*>(stream);
+            m_audioBuffer->pop(dest, samplesPerChannel);
             measureInputLag(dest, samplesPerChannel * m_audioBuffer->audioChannelCount());
-        }
-    };
+        };
+    } else {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            m_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
+        };
+    }
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_audioDriver->init();

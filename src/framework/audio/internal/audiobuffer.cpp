@@ -212,18 +212,20 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
 #endif
 
     size_t newReadIdx = currentReadIdx;
+    const size_t totalSampleCount = sampleCount * m_audioChannelsCount;
 
     size_t from = newReadIdx;
     auto memStep = sizeof(float);
-    size_t to = from + sampleCount * m_audioChannelsCount;
+    size_t to = from + totalSampleCount;
     if (to > DEFAULT_SIZE) {
         to = DEFAULT_SIZE;
     }
+
     auto count = to - from;
     std::memcpy(dest, m_data.data() + from, count * memStep);
     newReadIdx += count;
 
-    size_t left = sampleCount * m_audioChannelsCount - count;
+    size_t left = totalSampleCount - count;
     if (left > 0) {
         std::memcpy(dest + count, m_data.data(), left * memStep);
         newReadIdx = left;
