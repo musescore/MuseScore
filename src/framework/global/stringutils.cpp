@@ -145,3 +145,21 @@ bool muse::strings::lessThanCaseInsensitive(const String& lhs, const String& rhs
 
     return lhsLower < rhsLower;
 }
+
+QString muse::strings::buildSeparatedString(std::vector<QString> stringVector)
+{
+    QString s;
+    QTextStream stream(&s);
+    bool ltr = true;
+    if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft) {
+        ltr = false;
+    }
+    for (size_t i = 0; i < stringVector.size(); ++i) {
+        const size_t x = ltr ? i : (stringVector.size() - 1) - i;
+        if (i && !stringVector[x].isEmpty()) {
+            stream << "; ";
+        }
+        stream << stringVector[x];
+    }
+    return stream.readAll();
+}

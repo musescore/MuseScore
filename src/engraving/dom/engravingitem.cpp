@@ -31,6 +31,7 @@
 
 #include "containers.h"
 #include "io/buffer.h"
+#include "global/stringutils.h"
 #include "translation.h"
 #include "types/translatablestring.h"
 
@@ -2480,22 +2481,22 @@ void EngravingItem::doInitAccessible()
 
 String EngravingItem::formatBarsAndBeats() const
 {
-    String result;
+    std::vector<QString> rawStrings;
     EngravingItem::BarBeat barbeat = this->barbeat();
 
     if (barbeat.bar != 0) {
-        result = muse::mtrc("engraving", "Measure: %1").arg(barbeat.bar);
+        rawStrings.push_back(muse::mtrc("engraving", "Measure: %1").arg(barbeat.bar));
 
         if (barbeat.displayedBar != barbeat.bar) {
-            result += u"; " + muse::mtrc("engraving", "Displayed measure: %1").arg(barbeat.displayedBar);
+            rawStrings.push_back(muse::mtrc("engraving", "Displayed measure: %1").arg(barbeat.displayedBar));
         }
 
         if (!muse::RealIsNull(barbeat.beat)) {
-            result += u"; " + muse::mtrc("engraving", "Beat: %1").arg(barbeat.beat);
+            rawStrings.push_back(muse::mtrc("engraving", "Beat: %1").arg(barbeat.beat));
         }
     }
 
-    return result;
+    return muse::strings::buildSeparatedString(rawStrings);
 }
 
 bool EngravingItem::isPropertyLinkedToMaster(Pid id) const
