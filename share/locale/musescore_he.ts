@@ -2727,7 +2727,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3751"/>
         <source>Show courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>להציג מפתחות משלימים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3764"/>
@@ -2757,7 +2757,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3811"/>
         <source>Show courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>להציג סימני סולם משלימים </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3821"/>
@@ -2767,7 +2767,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
         <source>Show courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>להציג סימני משקל משלימים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3863"/>
@@ -18837,7 +18837,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="53"/>
         <source>Show courtesy clef on previous system</source>
-        <translation>הצגת מפתח משלים בסיסטמה הקודמת</translation>
+        <translation>להציג מפתח משלים בסיסטמה הקודמת</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="61"/>
@@ -19060,7 +19060,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature on previous system</source>
-        <translation>הראה סימני סולם משלימים בסיסטמה הקודמת</translation>
+        <translation>להציג סימני סולם משלימים בסיסטמה הקודמת</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -19634,7 +19634,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature on previous system</source>
-        <translation>הראה סימן משקל משלים בסיסטמה הקודמת</translation>
+        <translation>להציג סימן משקל משלים בסיסטמה הקודמת</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -28373,7 +28373,7 @@ failed.</source>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
-        <translation type="unfinished"/>
+        <translation>יש להשתמש בסביבות עבודה בשביל לשמור הסדרים שונים לממשק MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>

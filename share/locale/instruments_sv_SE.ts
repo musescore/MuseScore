@@ -10639,14 +10639,14 @@
         <source>Dulcimer</source>
         <comment>dulcimer trackName</comment>
         <extracomment>trackName for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dulcimer</translation>
+        <translation>Hackbräde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3543"/>
         <source>Dulcimer</source>
         <comment>dulcimer longName</comment>
         <extracomment>longName for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dulcimer</translation>
+        <translation>Hackbräde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3545"/>
@@ -15385,7 +15385,7 @@
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bass-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Väldigt stort bergs- eller appalachiskt hackbräde, en oktav lägre än ett vanligt hackbräde. (Tabulatur.)</translation>
+        <translation>Mycket stor bergs- eller appalachisk dulcimer, en oktav lägre än en vanlig dulcimer. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
@@ -16834,21 +16834,21 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Staff notation).</source>
         <comment>mtn-dulcimer-std description</comment>
         <extracomment>description for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Även känt som appalachiskt hackbräde, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Notsystem).</translation>
+        <translation>Även känd som appalachisk dulcimer, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Notsystem).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5568"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5570"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std longName</comment>
         <extracomment>longName for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5572"/>
@@ -16862,42 +16862,42 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Tablature).</source>
         <comment>mtn-dulcimer-std-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Även känt som appalachiskt hackbräde, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Tabulatur.)</translation>
+        <translation>Även känd som appalachisk dulcimer, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5577"/>
         <source>Mtn. Dulcimer (tablature)</source>
         <comment>mtn-dulcimer-std-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde (tabulatur)</translation>
+        <translation>Bergsdulcimer (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5579"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5582"/>
         <source>Larger version of the mountain or Appalachian dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-baritone description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Större variant av bergs- eller appalachiskt hackbräde. (Notsystem).</translation>
+        <translation>Större variant av bergs- eller appalachisk dulcimer. (Notsystem).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5584"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5586"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5588"/>
@@ -16911,42 +16911,42 @@
         <source>Larger version of the mountain or Appalachian dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bartn-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Större variant av bergs- eller appalachiskt hackbräde. (Tabulatur.)</translation>
+        <translation>Större variant av bergs- eller appalachisk dulcimer. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5593"/>
         <source>Mtn. Dulcimer - Baritone (tablature)</source>
         <comment>mtn-dulcimer-bartn-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde - baryton (tabulatur)</translation>
+        <translation>Bergsdulcimer - baryton (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5595"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-bartn-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5598"/>
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-bass description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Väldigt stort bergs- eller appalachiskt hackbräde, en oktav lägre än ett vanligt hackbräde. (Notsystem).</translation>
+        <translation>Mycket stor bergs- eller appalachisk dulcimer, en oktav lägre än en vanlig dulcimer. (Notsystem).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5600"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5602"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5604"/>
@@ -16960,14 +16960,14 @@
         <source>Mtn. Dulcimer - Bass (tablature)</source>
         <comment>mtn-dulcimer-bass-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde - bas (tabulatur)</translation>
+        <translation>Bergsdulcimer - bas (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5611"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5614"/>
@@ -19447,7 +19447,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="182"/>
         <source>Mtn. Dulcimers</source>
-        <translation>Mtn. Dulcimers</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
