@@ -297,7 +297,7 @@ public:
     void setTieFor(Tie* t) { m_tieFor = t; }
     void setTieBack(Tie* t) { m_tieBack = t; }
     Note* firstTiedNote() const;
-    const Note* lastTiedNote() const;
+    const Note* lastTiedNote(const int positionTickOffset = 0) const;
     Note* lastTiedNote() { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
     int unisonIndex() const;
     void disconnectTiedNotes();
