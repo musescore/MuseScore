@@ -25654,7 +25654,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="850"/>
         <source>Chords</source>
-        <translation>Akkorde</translation>
+        <translation>Akkordsym</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1169"/>

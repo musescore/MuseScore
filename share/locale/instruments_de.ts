@@ -510,14 +510,14 @@
         <source>A Dizi</source>
         <comment>a-dizi longName</comment>
         <extracomment>longName for Dizi; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A Dizi</translation>
+        <translation>A-Dizi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="371"/>
         <source>A Di.</source>
         <comment>a-dizi shortName</comment>
         <extracomment>shortName for Dizi; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A Di.</translation>
+        <translation>A-Dz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="373"/>
@@ -545,14 +545,14 @@
         <source>G Dizi</source>
         <comment>g-dizi longName</comment>
         <extracomment>longName for Dizi; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G Dizi</translation>
+        <translation>G-Dizi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="382"/>
         <source>G Di.</source>
         <comment>g-dizi shortName</comment>
         <extracomment>shortName for Dizi; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G Di.</translation>
+        <translation>G-Dz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="384"/>
@@ -580,14 +580,14 @@
         <source>F Dizi</source>
         <comment>f-dizi longName</comment>
         <extracomment>longName for Dizi; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F Dizi</translation>
+        <translation>F-Dizi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="393"/>
         <source>F Di.</source>
         <comment>f-dizi shortName</comment>
         <extracomment>shortName for Dizi; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F Di.</translation>
+        <translation>F-Dz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="395"/>
@@ -615,14 +615,14 @@
         <source>E Dizi</source>
         <comment>e-dizi longName</comment>
         <extracomment>longName for Dizi; tuning: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>E Dizi</translation>
+        <translation>E-Dizi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="404"/>
         <source>E Di.</source>
         <comment>e-dizi shortName</comment>
         <extracomment>shortName for Dizi; tuning: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>E Di.</translation>
+        <translation>E-Dz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="406"/>
@@ -650,14 +650,14 @@
         <source>D Dizi</source>
         <comment>d-dizi longName</comment>
         <extracomment>longName for Dizi; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Dizi</translation>
+        <translation>D-Dizi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="415"/>
         <source>D Di.</source>
         <comment>d-dizi shortName</comment>
         <extracomment>shortName for Dizi; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Di.</translation>
+        <translation>D-Dz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="417"/>
@@ -685,14 +685,14 @@
         <source>C Dizi</source>
         <comment>c-dizi longName</comment>
         <extracomment>longName for Dizi; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C Dizi</translation>
+        <translation>C-Dizi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="426"/>
         <source>C Di.</source>
         <comment>c-dizi shortName</comment>
         <extracomment>shortName for Dizi; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C Di.</translation>
+        <translation>C-Dz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="428"/>
@@ -769,21 +769,21 @@
         <source>Tin Whistle</source>
         <comment>d-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tin Whistle</translation>
+        <translation>Tinwhistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="455"/>
         <source>D Tin Whistle</source>
         <comment>d-tin-whistle longName</comment>
         <extracomment>longName for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Tin Whistle</translation>
+        <translation>D-Tinwhistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="457"/>
         <source>D Tin Wh.</source>
         <comment>d-tin-whistle shortName</comment>
         <extracomment>shortName for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Tin Wh.</translation>
+        <translation>D-Twh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="459"/>
@@ -804,21 +804,21 @@
         <source>Tin Whistle</source>
         <comment>c-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tin Whistle</translation>
+        <translation>Tinwhistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="466"/>
         <source>C Tin Whistle</source>
         <comment>c-tin-whistle longName</comment>
         <extracomment>longName for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C Tin Whistle</translation>
+        <translation>C-Tinwhistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="468"/>
         <source>C Tin Wh.</source>
         <comment>c-tin-whistle shortName</comment>
         <extracomment>shortName for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C Tin Wh.</translation>
+        <translation>C-Twh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="470"/>
@@ -839,21 +839,21 @@
         <source>Tin Whistle</source>
         <comment>bflat-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tin Whistle</translation>
+        <translation>Tinwhistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="477"/>
         <source>B♭ Tin Whistle</source>
         <comment>bflat-tin-whistle longName</comment>
         <extracomment>longName for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B Tin Whistle</translation>
+        <translation>B-Tinwhistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="479"/>
         <source>B♭ Tin Wh.</source>
         <comment>bflat-tin-whistle shortName</comment>
         <extracomment>shortName for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B Tin Wh.</translation>
+        <translation>B-Twh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="481"/>
@@ -2918,14 +2918,14 @@
         <source>F Duduk</source>
         <comment>f-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F Duduk</translation>
+        <translation>F-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1146"/>
         <source>F Du.</source>
         <comment>f-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F Du.</translation>
+        <translation>F-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1148"/>
@@ -2953,14 +2953,14 @@
         <source>E Duduk</source>
         <comment>e-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>E Duduk</translation>
+        <translation>E-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1157"/>
         <source>E Du.</source>
         <comment>e-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>E Du.</translation>
+        <translation>E-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1159"/>
@@ -2988,14 +2988,14 @@
         <source>D Duduk</source>
         <comment>d-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Duduk</translation>
+        <translation>D-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1168"/>
         <source>D Du.</source>
         <comment>d-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Du.</translation>
+        <translation>D-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1170"/>
@@ -3023,14 +3023,14 @@
         <source>C Duduk</source>
         <comment>c-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C Duduk</translation>
+        <translation>C-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1179"/>
         <source>C Du.</source>
         <comment>c-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C Du.</translation>
+        <translation>C-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1181"/>
@@ -3058,14 +3058,14 @@
         <source>B Duduk</source>
         <comment>b-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: B; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>H Duduk</translation>
+        <translation>H-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1190"/>
         <source>B Du.</source>
         <comment>b-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: B; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>H Du.</translation>
+        <translation>H-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1192"/>
@@ -3093,14 +3093,14 @@
         <source>B♭ Duduk</source>
         <comment>bb-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B Duduk</translation>
+        <translation>B-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1201"/>
         <source>B♭ Du.</source>
         <comment>bb-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B Du.</translation>
+        <translation>B-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1203"/>
@@ -3135,7 +3135,7 @@
         <source>Du.</source>
         <comment>duduk shortName</comment>
         <extracomment>shortName for Duduk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Du.</translation>
+        <translation>Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1215"/>
@@ -3156,14 +3156,14 @@
         <source>A Duduk</source>
         <comment>a-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A Duduk</translation>
+        <translation>A-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1221"/>
         <source>A Du.</source>
         <comment>a-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A Du.</translation>
+        <translation>A-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1223"/>
@@ -3191,14 +3191,14 @@
         <source>G Duduk</source>
         <comment>g-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G Duduk</translation>
+        <translation>G-Duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1232"/>
         <source>G Du.</source>
         <comment>g-duduk shortName</comment>
         <extracomment>shortName for Duduk; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G Du.</translation>
+        <translation>G-Dd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1234"/>
@@ -3219,21 +3219,21 @@
         <source>Bass Duduk</source>
         <comment>a-bass-duduk trackName</comment>
         <extracomment>trackName for Bass Duduk; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Duduk</translation>
+        <translation>Bassduduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1241"/>
         <source>A Bass Duduk</source>
         <comment>a-bass-duduk longName</comment>
         <extracomment>longName for Bass Duduk; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A Bass Duduk</translation>
+        <translation>A-Bassduduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1243"/>
         <source>A B. Du.</source>
         <comment>a-bass-duduk shortName</comment>
         <extracomment>shortName for Bass Duduk; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A B. Du.</translation>
+        <translation>A-Bdd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1245"/>
@@ -5522,7 +5522,7 @@
         <source>Sus. Cym.</source>
         <comment>crash-cymbal shortName</comment>
         <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hnds.-Bck.</translation>
+        <translation>Hg.-Bck.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4028"/>
@@ -8973,7 +8973,7 @@
         <source>Co.</source>
         <comment>cornettino shortName</comment>
         <extracomment>shortName for Cornettino; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Co.</translation>
+        <translation>Cn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3011"/>
@@ -17779,7 +17779,7 @@
         <source>Bu.</source>
         <comment>bugarija shortName</comment>
         <extracomment>shortName for Bugarija; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hn.</translation>
+        <translation>Bug.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5873"/>
@@ -18899,7 +18899,7 @@
         <source>Eh.</source>
         <comment>erhu shortName</comment>
         <extracomment>shortName for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Eh.</translation>
+        <translation>Erh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6226"/>
@@ -18948,7 +18948,7 @@
         <source>Nyh.</source>
         <comment>nyckelharpa shortName</comment>
         <extracomment>shortName for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nyh.</translation>
+        <translation>Nh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6241"/>

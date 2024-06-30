@@ -11786,7 +11786,7 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1210"/>
         <source>Tab. dulcimer</source>
-        <translation>Tab. dulcimer</translation>
+        <translation>Hackbräde (tabulatur)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1211"/>
