@@ -68,7 +68,8 @@ private:
     static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
     static void layoutTies(Chord* ch, System* system, const Fraction& stick, LayoutContext& ctx);
     static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick, LayoutContext& ctx);
-    static void doLayoutTiesLinear(System* system, LayoutContext& ctx);
+    static void doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx);
+    static void layoutNoteAnchoredSpanners(System* system, Chord* chord);
     static void layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
