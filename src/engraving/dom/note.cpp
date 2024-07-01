@@ -533,7 +533,21 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
         } else if (tpc == Tpc::TPC_B) {
             group = NoteHeadGroup::HEAD_TI_NAME;
         }
+    } else if (scheme == NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3) {
+        if (tpc == Tpc::TPC_C || tpc == Tpc::TPC_C_S || tpc == Tpc::TPC_D_B || tpc == Tpc::TPC_D || tpc == Tpc::TPC_D_S
+            || tpc == Tpc::TPC_E_B || tpc == Tpc::TPC_E || tpc == Tpc::TPC_F) {
+            group = NoteHeadGroup::HEAD_CIRCLED;
+        } else if (tpc == Tpc::TPC_F_S || tpc == Tpc::TPC_G_B || tpc == Tpc::TPC_G || tpc == Tpc::TPC_G_S) {
+            group = NoteHeadGroup::HEAD_PLUS;
+        } else if (tpc == Tpc::TPC_A_B || tpc == Tpc::TPC_A || tpc == Tpc::TPC_A_S) {
+            group = NoteHeadGroup::HEAD_TRIANGLE_UP;
+        } else if (tpc == Tpc::TPC_B_B || tpc == Tpc::TPC_B) {
+            group = NoteHeadGroup::HEAD_DIAMOND;
+        } else {
+            group = NoteHeadGroup::HEAD_SLASH;
+        }
     }
+
     return noteHeads[direction][int(group)][int(t)];
 }
 
@@ -2835,6 +2849,41 @@ void Note::localSpatiumChanged(double oldValue, double newValue)
         }
     }
 }
+
+//---------------------------------------------------------
+//   color
+//---------------------------------------------------------
+/*
+Color Note::color() const
+{
+    NoteHeadScheme scheme = m_headScheme;
+    if (scheme == NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3) {
+        int pitchClass = m_pitch % 12;
+        switch (pitchClass) {
+            case 0:
+            case 1:
+                return Color::RED;
+            case 2:
+            case 3:
+                return Color::BROWN;
+            case 4:
+                return Color::GREY;
+            case 5:
+            case 6:
+                return Color::BLUE;
+            case 7:
+            case 8:
+                return Color::BLACK;
+            case 9:
+            case 10:
+                return Color::YELLOW;
+            case 11:
+                return Color::GREEN;
+        }
+    }
+    return Color::BLACK;
+}
+*/
 
 //---------------------------------------------------------
 //   getProperty

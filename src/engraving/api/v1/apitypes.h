@@ -457,6 +457,7 @@ enum class NoteHeadScheme {
     HEAD_PITCHNAME_GERMAN = int(mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN),
     HEAD_SOLFEGE = int(mu::engraving::NoteHeadScheme::HEAD_SOLFEGE),
     HEAD_SOLFEGE_FIXED = int(mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED),
+    HEAD_FIGURE_NOTES_STAGE_3 = int(mu::engraving::NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3),
     HEAD_SHAPE_NOTE_4 = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4),
     HEAD_SHAPE_NOTE_7_AIKIN = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN),
     HEAD_SHAPE_NOTE_7_FUNK = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK),
