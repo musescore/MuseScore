@@ -62,6 +62,7 @@ private:
     using DynamicMap = std::map<int /*nominalPositionTick*/, DynamicInfo>;
     using DynamicsByTrack = std::unordered_map<track_idx_t, DynamicMap>;
 
+    using SoundFlagMap = std::unordered_map<staff_idx_t, const SoundFlag*>;
     using ParamMap = std::map<int /*nominalPositionTick*/, muse::mpe::PlaybackParamList>;
     using ParamsByTrack = std::unordered_map<track_idx_t, ParamMap>;
 
@@ -71,7 +72,7 @@ private:
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void updatePlaybackParams(const SoundFlag* flag, const int segmentPositionTick);
+    void updatePlaybackParams(const SoundFlagMap& flagsOnSegment, const int segmentPositionTick);
 
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
                         const int tickPositionOffset);

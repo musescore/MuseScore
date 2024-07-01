@@ -43,27 +43,13 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
-static std::vector<track_idx_t> resolveTracksForSoundFlag(const SoundFlag* flag, track_idx_t startTrack, track_idx_t endTrack)
+static bool soundFlagPlayable(const SoundFlag* flag)
 {
-    staff_idx_t staffIdx = flag->staffIdx();
-
-    auto trackAcceptedByStaff = [flag, staffIdx](track_idx_t trackIdx) {
-        if (flag->applyToAllStaves()) {
-            return true;
-        }
-
-        return staffIdx == track2staff(trackIdx);
-    };
-
-    std::vector<track_idx_t> result;
-
-    for (track_idx_t trackIdx = startTrack; trackIdx < endTrack; ++trackIdx) {
-        if (trackAcceptedByStaff(trackIdx)) {
-            result.push_back(trackIdx);
-        }
+    if (flag && flag->play()) {
+        return !flag->soundPresets().empty() || !flag->playingTechnique().empty();
     }
 
-    return result;
+    return false;
 }
 
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const
@@ -282,34 +268,46 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     }
 }
 
-void PlaybackContext::updatePlaybackParams(const SoundFlag* flag, const int segmentPositionTick)
+void PlaybackContext::updatePlaybackParams(const SoundFlagMap& flagsOnSegment, const int segmentPositionTick)
 {
-    if (!flag->play()) {
-        return;
-    }
+    auto trackAccepted = [&flagsOnSegment](const SoundFlag* flag, track_idx_t trackIdx) {
+        staff_idx_t staffIdx = track2staff(trackIdx);
 
-    if (flag->soundPresets().empty() && flag->playingTechnique().empty()) {
-        return;
-    }
+        if (flag->staffIdx() == staffIdx) {
+            return true;
+        }
 
-    std::vector<track_idx_t> trackIdxList = resolveTracksForSoundFlag(flag, m_partStartTrack, m_partEndTrack);
+        if (flag->applyToAllStaves()) {
+            return !muse::contains(flagsOnSegment, staffIdx);
+        }
 
-    for (track_idx_t trackIdx : trackIdxList) {
-        mpe::PlaybackParamList& params = m_playbackParamByTrack[trackIdx][segmentPositionTick];
+        return false;
+    };
 
-        for (const String& soundPreset : flag->soundPresets()) {
-            if (!soundPreset.empty()) {
-                params.emplace_back(PlaybackParam::SoundPreset, soundPreset);
+    for (const auto& pair : flagsOnSegment) {
+        const SoundFlag* flag = pair.second;
+
+        for (track_idx_t trackIdx = m_partStartTrack; trackIdx < m_partEndTrack; ++trackIdx) {
+            if (!trackAccepted(flag, trackIdx)) {
+                continue;
+            }
+
+            mpe::PlaybackParamList& params = m_playbackParamByTrack[trackIdx][segmentPositionTick];
+
+            for (const String& soundPreset : flag->soundPresets()) {
+                if (!soundPreset.empty()) {
+                    params.emplace_back(PlaybackParam::SoundPreset, soundPreset);
+                }
+            }
+
+            if (!flag->playingTechnique().empty()) {
+                params.emplace_back(PlaybackParam::PlayingTechnique, flag->playingTechnique());
             }
         }
 
-        if (!flag->playingTechnique().empty()) {
-            params.emplace_back(PlaybackParam::PlayingTechnique, flag->playingTechnique());
+        if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+            m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
         }
-    }
-
-    if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
-        m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
     }
 }
 
@@ -409,6 +407,8 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
 
 void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick)
 {
+    SoundFlagMap soundFlagsOnSegment;
+
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->part()) {
             continue;
@@ -430,9 +430,15 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
 
         if (annotation->isStaffText()) {
             if (const SoundFlag* flag = toStaffText(annotation)->soundFlag()) {
-                updatePlaybackParams(flag, segmentPositionTick);
+                if (soundFlagPlayable(flag)) {
+                    soundFlagsOnSegment.emplace(flag->staffIdx(), flag);
+                }
             }
         }
+    }
+
+    if (!soundFlagsOnSegment.empty()) {
+        updatePlaybackParams(soundFlagsOnSegment, segmentPositionTick);
     }
 }
 

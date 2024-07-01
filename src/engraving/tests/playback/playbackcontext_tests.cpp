@@ -403,9 +403,9 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags)
         addParamToStaff(sulTasto, staffIdx, timestampFromTicks(score, 1920), expectedParams);
     }
 
-    addParamToStaff(bartok, 0, timestampFromTicks(score, 3840), expectedParams);
-    addParamToStaff(pizz, 1, timestampFromTicks(score, 3840), expectedParams); // "apply to all staves" is off (apply to 1st staff)
-    addParamToStaff(espressivo, 1, timestampFromTicks(score, 7680), expectedParams); // "apply to all staves" is off (apply to 1st staff)
+    addParamToStaff(bartok, 0, timestampFromTicks(score, 3840), expectedParams); // "apply to all staves" is OFF (apply to 1st staff)
+    addParamToStaff(pizz, 1, timestampFromTicks(score, 3840), expectedParams); // "apply to all staves" is ON (apply to 2nd staff)
+    addParamToStaff(espressivo, 1, timestampFromTicks(score, 7680), expectedParams); // "apply to all staves" is OFF (apply to 1st staff)
 
     EXPECT_EQ(actualParams, expectedParams);
 
