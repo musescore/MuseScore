@@ -340,7 +340,7 @@ Segment* Segment::next1ChordRestOrTimeTick() const
     return nextSeg;
 }
 
-Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType)
+Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
 {
     Segment* next = next1(segType);
 
@@ -455,7 +455,7 @@ Segment* Segment::prev1ChordRestOrTimeTick() const
     return prevSeg;
 }
 
-Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType)
+Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
 {
     Segment* prev = prev1(segType);
 
