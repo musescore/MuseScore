@@ -766,7 +766,7 @@ static void inferFromTitle(QString& title, QString& inferredSubtitle, QString& i
 
 static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
                             const int pageNr, const QSize pageSize,
-                            const bool top)
+                            const bool top, const bool isSibeliusScore)
       {
       VBox* vbox = nullptr;
 
@@ -788,7 +788,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
             // frame with the title on top of the page.
             // Sibelius (direct export) typically exports no header
             // and puts the title etc. in the footer
-            const bool doSwap = footerWords.size() > headerWords.size();
+            const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
             if (top) {
                   words = doSwap ? footerWords : headerWords;
                   }
@@ -900,7 +900,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* const score,
             // add a header vbox if the this measure is the first in the score or the first on a new page
             if (pageStartMeasureNrs.count(i) || i == 0) {
                   ++pageNr;
-                  vbox = addCreditWords(score, crWords, pageNr, pageSize, true);
+                  vbox = addCreditWords(score, crWords, pageNr, pageSize, true, _exporterString.contains("sibelius"));
                   }
 
             // create and add the measure
@@ -920,7 +920,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* const score,
 
             // add a footer vbox if the next measure is on a new page or end of score has been reached
             if (pageStartMeasureNrs.count(i+1) || i == (ml.size() - 1))
-                  addCreditWords(score, crWords, pageNr, pageSize, false);
+                  addCreditWords(score, crWords, pageNr, pageSize, false, _exporterString.contains("sibelius"));
             }
       }
 

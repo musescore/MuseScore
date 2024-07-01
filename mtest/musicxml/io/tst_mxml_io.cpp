@@ -312,6 +312,8 @@ private slots:
       void tieTied() { mxmlIoTestRef("testTieTied"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
+      void titleSwapMu() { mxmlImportTestRef("testTitleSwapMu"); }
+      void titleSwapSib() { mxmlImportTestRef("testTitleSwapSib"); }
       void trackHandling() { mxmlIoTest("testTrackHandling"); }
       void tremolo() { mxmlIoTest("testTremolo"); }
       void trills() { mxmlMscxExportTestRef("testTrills"); }

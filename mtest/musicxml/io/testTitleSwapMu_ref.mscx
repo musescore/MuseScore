@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.02">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.26771</pageWidth>
+      <pageHeight>11.6917</pageHeight>
+      <pagePrintableWidth>7.27559</pagePrintableWidth>
+      <pageEvenLeftMargin>0.496061</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.496061</pageOddLeftMargin>
+      <pageEvenTopMargin>0.417323</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.417323</pageEvenBottomMargin>
+      <pageOddTopMargin>0.417323</pageOddTopMargin>
+      <pageOddBottomMargin>0.417323</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <lyricsOddFontSize>14.47</lyricsOddFontSize>
+      <lyricsEvenFontSize>14.47</lyricsEvenFontSize>
+      <bracketWidth>0.44</bracketWidth>
+      <stemWidth>0.11</stemWidth>
+      <staffLineWidth>0.11</staffLineWidth>
+      <pedalLineWidth>0.11</pedalLineWidth>
+      <chordSymbolAFontSize>11.9365</chordSymbolAFontSize>
+      <chordSymbolBFontSize>11.9365</chordSymbolBFontSize>
+      <nashvilleNumberFontSize>11.9365</nashvilleNumberFontSize>
+      <slurEndWidth>0.07</slurEndWidth>
+      <slurMidWidth>0.21</slurMidWidth>
+      <tieEndWidth>0.07</tieEndWidth>
+      <tieMidWidth>0.21</tieMidWidth>
+      <voltaLineWidth>0.11</voltaLineWidth>
+      <ottavaLineWidth>0.11</ottavaLineWidth>
+      <tupletFontSize>11.9365</tupletFontSize>
+      <fingeringFontSize>11.9365</fingeringFontSize>
+      <lhGuitarFingeringFontSize>11.9365</lhGuitarFingeringFontSize>
+      <rhGuitarFingeringFontSize>11.9365</rhGuitarFingeringFontSize>
+      <stringNumberFontSize>11.9365</stringNumberFontSize>
+      <longInstrumentFontSize>11.9365</longInstrumentFontSize>
+      <shortInstrumentFontSize>11.9365</shortInstrumentFontSize>
+      <partInstrumentFontSize>11.9365</partInstrumentFontSize>
+      <dynamicsFontSize>11.9365</dynamicsFontSize>
+      <expressionFontSize>11.9365</expressionFontSize>
+      <tempoFontSize>11.9365</tempoFontSize>
+      <metronomeFontSize>11.9365</metronomeFontSize>
+      <measureNumberFontSize>11.9365</measureNumberFontSize>
+      <mmRestRangeFontSize>11.9365</mmRestRangeFontSize>
+      <translatorFontSize>11.9365</translatorFontSize>
+      <systemFontSize>11.9365</systemFontSize>
+      <staffFontSize>11.9365</staffFontSize>
+      <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
+      <repeatLeftFontSize>11.9365</repeatLeftFontSize>
+      <repeatRightFontSize>11.9365</repeatRightFontSize>
+      <frameFontSize>11.9365</frameFontSize>
+      <glissandoFontSize>11.9365</glissandoFontSize>
+      <bendFontSize>11.9365</bendFontSize>
+      <headerFontSize>11.9365</headerFontSize>
+      <footerFontSize>11.9365</footerFontSize>
+      <instrumentChangeFontSize>11.9365</instrumentChangeFontSize>
+      <stickingFontSize>11.9365</stickingFontSize>
+      <user1FontSize>11.9365</user1FontSize>
+      <user2FontSize>11.9365</user2FontSize>
+      <user3FontSize>11.9365</user3FontSize>
+      <user4FontSize>11.9365</user4FontSize>
+      <user5FontSize>11.9365</user5FontSize>
+      <user6FontSize>11.9365</user6FontSize>
+      <user7FontSize>11.9365</user7FontSize>
+      <user8FontSize>11.9365</user8FontSize>
+      <user9FontSize>11.9365</user9FontSize>
+      <user10FontSize>11.9365</user10FontSize>
+      <user11FontSize>11.9365</user11FontSize>
+      <user12FontSize>11.9365</user12FontSize>
+      <Spatium>1.2192</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright">Copyright ©</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Title</metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Soprano/Tenor</trackName>
+      <Instrument id="piano">
+        <longName>Soprano/Tenor</longName>
+        <shortName>S./T.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Alto</trackName>
+      <Instrument id="piano">
+        <longName>Alto</longName>
+        <shortName>A.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Bass</trackName>
+      <Instrument id="piano">
+        <longName>Bass</longName>
+        <shortName>B.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>0</midiPort>
+          <midiChannel>4</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="4">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="grand-piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano (2)</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano.grand</instrumentId>
+        <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>3.5</height>
+        <Text>
+          <style>Title</style>
+          <offset x="0" y="-0.101194"/>
+          <text><font size="22.0128"/>Title</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      <VBox>
+        <height>19.5</height>
+        <Text>
+          <offset x="0" y="-0.0942"/>
+          <text><font size="10"/>2</text>
+          </Text>
+        </VBox>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
