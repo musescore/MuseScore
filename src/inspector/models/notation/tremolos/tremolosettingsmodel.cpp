@@ -70,6 +70,11 @@ void TremoloSettingsModel::resetProperties()
     m_direction->resetToDefault();
 }
 
+void TremoloSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
+{
+    loadProperties();
+}
+
 PropertyItem* TremoloSettingsModel::style() const
 {
     return m_style;
