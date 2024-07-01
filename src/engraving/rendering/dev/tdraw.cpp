@@ -1274,7 +1274,6 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // Init pen and other values
-    double _spatium = item->spatium() * item->userMag();
     Pen pen(item->curColor());
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setBrush(Brush(Color(painter->pen().color())));
@@ -1283,19 +1282,21 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     double x2 = (item->strings() - 1) * ldata->stringDist;
 
     // Draw the nut
-    pen.setWidthF(ldata->nutLw);
+    pen.setWidthF(ldata->nutLineWidth);
     painter->setPen(pen);
-    painter->drawLine(LineF(-ldata->stringLw * .5, 0.0, x2 + ldata->stringLw * .5, 0.0));
+    double nutY = ldata->nutY;
+    painter->drawLine(LineF(-ldata->stringLineWidth * .5, nutY, x2 + ldata->stringLineWidth * .5, nutY));
 
     // Draw strings and frets
-    pen.setWidthF(ldata->stringLw);
+    pen.setWidthF(ldata->stringLineWidth);
     painter->setPen(pen);
 
     // y2 is the y val of the bottom fretline
-    double y2 = ldata->fretDist * (item->frets() + .5);
+    double y1 = ldata->stringExtendTop;
+    double y2 = ldata->fretDist * item->frets() + 0.5 * ldata->stringLineWidth + ldata->stringExtendBottom;
     for (int i = 0; i < item->strings(); ++i) {
         double x = ldata->stringDist * i;
-        painter->drawLine(LineF(x, item->fretOffset() ? -_spatium * .2 : 0.0, x, y2));
+        painter->drawLine(LineF(x, y1, x, y2));
     }
     for (int i = 1; i <= item->frets(); ++i) {
         double y = ldata->fretDist * i;
@@ -1303,12 +1304,12 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // dotd is the diameter of a dot
-    double dotd = _spatium * .49 * item->style().styleD(Sid::fretDotSize);
+    double dotd = item->style().styleMM(Sid::fretDotSpatiumSize) * item->userMag();
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
-    symPen.setCapStyle(PenCapStyle::RoundCap);
-    double symPenWidth = ldata->stringLw * 1.2;
+    symPen.setCapStyle(PenCapStyle::FlatCap);
+    double symPenWidth = ldata->stringLineWidth * 1.2;
     symPen.setWidthF(symPenWidth);
 
     for (auto const& i : item->dots()) {
@@ -1366,7 +1367,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         }
 
         double x = ldata->stringDist * string - ldata->markerSize * .5;
-        double y = -ldata->fretDist - ldata->markerSize * .5;
+        double y = ldata->markerY;
         if (marker.mtype == FretMarkerType::CIRCLE) {
             painter->drawEllipse(RectF(x, y, ldata->markerSize, ldata->markerSize));
         } else if (marker.mtype == FretMarkerType::CROSS) {
@@ -1384,23 +1385,27 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         double x1    = ldata->stringDist * startString;
         double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
         double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
-        pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
-        pen.setCapStyle(PenCapStyle::RoundCap);
-        painter->setPen(pen);
-        painter->drawLine(LineF(x1, y, newX2, y));
+        if (item->style().styleB(Sid::barreAppearanceSlur)) {
+            pen.setWidthF(0.5 * ldata->stringLineWidth);
+            pen.setCapStyle(PenCapStyle::RoundCap);
+            pen.setJoinStyle(PenJoinStyle::RoundJoin);
+            painter->setPen(pen);
+            painter->setBrush(Brush(pen.color()));
+            painter->drawPath(ldata->slurPath);
+        } else {
+            pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
+            pen.setCapStyle(PenCapStyle::RoundCap);
+            painter->setPen(pen);
+            painter->drawLine(LineF(x1, y, newX2, y));
+        }
     }
 
     // Draw fret offset number
     if (item->fretOffset() > 0) {
-        double fretNumMag = item->style().styleD(Sid::fretNumMag);
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF()
-                                 * item->userMag()
-                                 * (item->spatium() / SPATIUM20)
-                                 * MScore::pixelRatio
-                                 * fretNumMag);
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
         painter->setFont(scaledFont);
-        String text = String::number(item->fretOffset() + 1);
+        String text = ldata->fretText;
 
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
@@ -1409,7 +1414,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             } else {
                 painter->drawText(RectF(x2 + (ldata->stringDist * .4), .0, .0, ldata->fretDist),
                                   muse::draw::AlignVCenter | muse::draw::AlignLeft | muse::draw::TextDontClip,
-                                  String::number(item->fretOffset() + 1));
+                                  text);
             }
         } else if (item->orientation() == Orientation::HORIZONTAL) {
             painter->save();
@@ -1424,7 +1429,23 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             }
             painter->restore();
         }
-        painter->setFont(item->font());
+        painter->setFont(item->fretNumFont());
+    }
+
+    for (FretDiagram::FingeringItem fingeringItem : item->ldata()->fingeringItems) {
+        painter->save();
+
+        Font scaledFont(item->fingeringFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
+        painter->setFont(scaledFont);
+        if (item->orientation() == Orientation::HORIZONTAL) {
+            painter->translate(-translation);
+            painter->rotate(90);
+        }
+
+        painter->drawText(fingeringItem.pos, fingeringItem.fingerNumber);
+
+        painter->restore();
     }
 
     // NOTE:JT possible future todo - draw fingerings

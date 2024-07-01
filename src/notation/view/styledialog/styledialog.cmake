@@ -16,4 +16,6 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tieplacementselector.h
     ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/fretboardspagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fretboardspagemodel.h
     )

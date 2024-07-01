@@ -162,7 +162,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
 
                 PointF pt(system->ldata()->pos().x(), system->ldata()->pos().y() + ss->y());
                 painter.translate(pt);
-                ss->skyline().paint(painter, 0.25 * system->spatium());
+                ss->skyline().paint(painter, 3);
                 painter.translate(-pt);
             }
         }

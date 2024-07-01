@@ -1174,6 +1174,10 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", muse::TranslatableString("engraving", "RH guitar fingering") },
     { TextStyleType::STRING_NUMBER,     "string_number",        muse::TranslatableString("engraving", "String number") },
     { TextStyleType::STRING_TUNINGS,    "string_tunings", muse::TranslatableString("engraving", "String tunings") },
+    { TextStyleType::FRET_DIAGRAM_FINGERING, "fret_diagram_fingering",
+      muse::TranslatableString("engraving", "Fretboard diagram fingering") },
+    { TextStyleType::FRET_DIAGRAM_FRET_NUMBER, "fret_diagram_fret_number",
+      muse::TranslatableString("engraving", "Fretboard diagram fret number") },
     { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  muse::TranslatableString("engraving", "Harp pedal diagram") },
     { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", muse::TranslatableString("engraving", "Harp pedal text diagram") },
 

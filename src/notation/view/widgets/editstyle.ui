@@ -31,11 +31,11 @@
   <property name="windowTitle">
    <string>Style</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_39">
+  <layout class="QVBoxLayout" name="verticalLayout_67">
    <property name="topMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -251,6 +251,9 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
+      <property name="currentIndex">
+       <number>37</number>
+      </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
@@ -284,8 +287,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>712</height>
+                <width>591</width>
+                <height>523</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -985,8 +988,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>623</width>
-                <height>559</height>
+                <width>406</width>
+                <height>374</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2327,8 +2330,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>737</width>
-             <height>733</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3970,8 +3973,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>677</width>
-             <height>722</height>
+             <width>383</width>
+             <height>294</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -4190,8 +4193,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>658</width>
-                <height>882</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -6478,8 +6481,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>578</width>
-                <height>527</height>
+                <width>363</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -11129,8 +11132,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>703</width>
-             <height>748</height>
+             <width>469</width>
+             <height>461</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64">
@@ -12570,8 +12573,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>712</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -13147,365 +13150,130 @@ first note of the system</string>
        </layout>
       </widget>
       <widget class="QWidget" name="PageFretboardDiagrams">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="0">
+             <red>255</red>
+             <green>255</green>
+             <blue>255</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="0">
+             <red>255</red>
+             <green>255</green>
+             <blue>255</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled/>
+        </palette>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout_52">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QGroupBox" name="groupBox_fretboardDiagrams">
-          <property name="baseSize">
-           <size>
-            <width>710</width>
-            <height>316</height>
-           </size>
+         <widget class="QScrollArea" name="scrollArea_2">
+          <property name="widgetResizable">
+           <bool>true</bool>
           </property>
-          <property name="title">
-           <string>Fretboard diagrams</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_471">
-           <item row="9" column="0">
-            <widget class="QLabel" name="label_1451">
-             <property name="text">
-              <string>Maximum shift below:</string>
-             </property>
-             <property name="buddy">
-              <cstring>maxFretShiftBelow</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="1">
-            <widget class="QDoubleSpinBox" name="maxFretShiftAbove">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="2">
-            <widget class="QToolButton" name="resetMaxFretShiftAbove">
-             <property name="text">
-              <string notr="true">…</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QSpinBox" name="fretNumMag">
-             <property name="accessibleName">
-              <string>Fret number font size</string>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string notr="true">%</string>
-             </property>
-             <property name="maximum">
-              <number>500</number>
-             </property>
-             <property name="singleStep">
-              <number>10</number>
-             </property>
-             <property name="value">
-              <number>200</number>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="1">
-            <widget class="QDoubleSpinBox" name="fretFretSpacing">
-             <property name="accessibleName">
-              <string>Fret spacing</string>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="minimum">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>2.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.800000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_17">
-             <property name="text">
-              <string>Relative dot size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>fretDotSize</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>Scale:</string>
-             </property>
-             <property name="buddy">
-              <cstring>fretMag</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="fretMag">
-             <property name="accessibleName">
-              <string>Scale</string>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.200000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_601">
-             <property name="text">
-              <string>Fret number font size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>fretNumMag</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0">
-            <widget class="QLabel" name="label_90">
-             <property name="text">
-              <string>Fret spacing:</string>
-             </property>
-             <property name="buddy">
-              <cstring>fretFretSpacing</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="fretY">
-             <property name="accessibleName">
-              <string>Default vertical position</string>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>2</number>
-             </property>
-             <property name="minimum">
-              <double>-10.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>10.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-             <property name="value">
-              <double>-2.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="accessibleName">
-              <string>Barre line thickness</string>
-             </property>
-             <property name="text">
-              <string>Barre line thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>barreLineWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_54">
-             <property name="text">
-              <string>String spacing:</string>
-             </property>
-             <property name="buddy">
-              <cstring>fretStringSpacing</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="1">
-            <widget class="QDoubleSpinBox" name="maxFretShiftBelow">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="barreLineWidth">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="2">
-            <widget class="QToolButton" name="resetMaxFretShiftBelow">
-             <property name="text">
-              <string notr="true">…</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_6011">
-             <property name="text">
-              <string>Fret number position:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0">
-            <widget class="QLabel" name="label_1191">
-             <property name="text">
-              <string>Maximum shift above:</string>
-             </property>
-             <property name="buddy">
-              <cstring>maxFretShiftAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_602">
-             <property name="text">
-              <string>Default vertical position:</string>
-             </property>
-             <property name="buddy">
-              <cstring>fretY</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
-            <widget class="QDoubleSpinBox" name="fretStringSpacing">
-             <property name="accessibleName">
-              <string>String spacing</string>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="minimum">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>2.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.700000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="4">
-            <spacer name="horizontalSpacer_43">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="5" column="1">
-            <widget class="QDoubleSpinBox" name="fretDotSize">
-             <property name="accessibleName">
-              <string>Relative dot size</string>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>5.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" colspan="3">
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QRadioButton" name="radioFretNumRight">
-               <property name="text">
-                <string>Right</string>
+          <widget class="QWidget" name="scrollAreaWidgetContents_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>98</width>
+             <height>28</height>
+            </rect>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QWidget" name="fretboardsWidget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="palette">
+               <palette>
+                <active>
+                 <colorrole role="WindowText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="0">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                </active>
+                <inactive>
+                 <colorrole role="WindowText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="0">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                </inactive>
+                <disabled/>
+               </palette>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <property name="spacing">
+                <number>0</number>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioFretNumLeft">
-               <property name="text">
-                <string>Left</string>
+               <property name="leftMargin">
+                <number>0</number>
                </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_29">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -13548,8 +13316,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>533</width>
-                <height>654</height>
+                <width>583</width>
+                <height>572</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -14697,7 +14465,7 @@ first note of the system</string>
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item>
     <layout class="QHBoxLayout">
      <property name="spacing">
       <number>6</number>
@@ -15306,19 +15074,6 @@ first note of the system</string>
   <tabstop>maxChordShiftBelow</tabstop>
   <tabstop>resetMaxChordShiftBelow</tabstop>
   <tabstop>capoPosition</tabstop>
-  <tabstop>fretY</tabstop>
-  <tabstop>fretMag</tabstop>
-  <tabstop>radioFretNumRight</tabstop>
-  <tabstop>radioFretNumLeft</tabstop>
-  <tabstop>fretNumMag</tabstop>
-  <tabstop>barreLineWidth</tabstop>
-  <tabstop>fretDotSize</tabstop>
-  <tabstop>fretStringSpacing</tabstop>
-  <tabstop>fretFretSpacing</tabstop>
-  <tabstop>maxFretShiftAbove</tabstop>
-  <tabstop>resetMaxFretShiftAbove</tabstop>
-  <tabstop>maxFretShiftBelow</tabstop>
-  <tabstop>resetMaxFretShiftBelow</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>slurShowTabCommon</tabstop>
   <tabstop>slurShowTabSimple</tabstop>

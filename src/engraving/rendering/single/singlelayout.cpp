@@ -889,8 +889,8 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
 {
     FretDiagram::LayoutData* ldata = item->mutldata();
     double spatium  = item->spatium();
-    ldata->stringLw = (spatium * 0.08);
-    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : spatium * 0.2);
+    ldata->stringLineWidth = (spatium * 0.08);
+    ldata->nutLineWidth = ((item->fretOffset() || !item->showNut()) ? ldata->stringLineWidth : spatium * 0.2);
     ldata->stringDist = (ctx.style().styleMM(Sid::fretStringSpacing));
     ldata->fretDist = (ctx.style().styleMM(Sid::fretFretSpacing));
     ldata->markerSize = (ldata->stringDist * 0.8);
@@ -902,11 +902,9 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(item->fretNumFont().pointSizeF() * item->userMag());
 
-        double fretNumMag = ctx.style().styleD(Sid::fretNumMag);
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         FontMetrics fm2(scaledFont);
         double numw = fm2.width(String::number(item->fretOffset() + 1));
         double xdiff = numw + ldata->stringDist * .4;

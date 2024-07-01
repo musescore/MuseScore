@@ -50,6 +50,7 @@ void FretDiagramSettingsModel::createProperties()
 
     m_stringsCount = buildPropertyItem(mu::engraving::Pid::FRET_STRINGS, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
+        emit fingeringsChanged(fingerings());
         emit fretDiagramChanged(fretDiagram());
     });
 
@@ -72,6 +73,12 @@ void FretDiagramSettingsModel::createProperties()
 
     m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
     m_orientation = buildPropertyItem(mu::engraving::Pid::ORIENTATION);
+
+    m_showFingerings = buildPropertyItem(mu::engraving::Pid::FRET_SHOW_FINGERINGS);
+    m_fingerings = buildPropertyItem(mu::engraving::Pid::FRET_FINGERING, [this](const mu::engraving::Pid pid, const QVariant& newValue){
+        onPropertyValueChanged(pid, newValue);
+        emit fingeringsChanged(fingerings());
+    });
 }
 
 void FretDiagramSettingsModel::requestElements()
@@ -97,6 +104,9 @@ void FretDiagramSettingsModel::loadProperties()
     loadPropertyItem(m_isNutVisible);
     loadPropertyItem(m_placement);
     loadPropertyItem(m_orientation);
+    loadPropertyItem(m_showFingerings);
+    loadPropertyItem(m_fingerings);
+    emit fingeringsChanged(fingerings());
 }
 
 void FretDiagramSettingsModel::resetProperties()
@@ -107,6 +117,7 @@ void FretDiagramSettingsModel::resetProperties()
     m_fretNumber->resetToDefault();
     m_isNutVisible->resetToDefault();
     m_placement->resetToDefault();
+    m_showFingerings->resetToDefault();
 }
 
 PropertyItem* FretDiagramSettingsModel::scale() const
@@ -142,6 +153,37 @@ PropertyItem* FretDiagramSettingsModel::placement() const
 PropertyItem* FretDiagramSettingsModel::orientation() const
 {
     return m_orientation;
+}
+
+PropertyItem* FretDiagramSettingsModel::showFingerings() const
+{
+    return m_showFingerings;
+}
+
+QStringList FretDiagramSettingsModel::fingerings() const
+{
+    QString fingerings = m_fingerings->value().value<QString>();
+    QStringList fingeringList = fingerings.split(',');
+    std::reverse(fingeringList.begin(), fingeringList.end());
+    return fingeringList;
+}
+
+void FretDiagramSettingsModel::setFingering(int string, int finger)
+{
+    finger = std::clamp(finger, 0, 5);
+    QStringList curFingerings = m_fingerings->value().value<QString>().split(',');
+    assert(string < curFingerings.size());
+
+    QString newFinger = QString::number(finger);
+    curFingerings[string] = newFinger;
+    QString newFingerings = curFingerings.join(",");
+    m_fingerings->setValue(newFingerings);
+}
+
+void FretDiagramSettingsModel::resetFingerings()
+{
+    m_fingerings->resetToDefault();
+    emit fingeringsChanged(fingerings());
 }
 
 QVariant FretDiagramSettingsModel::fretDiagram() const
