@@ -225,18 +225,7 @@ void LineSegment::startEditDrag(EditData& ed)
 
 bool LineSegment::isEditAllowed(EditData& ed) const
 {
-    const bool moveStart = ed.curGrip == Grip::START;
-    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
-
-    bool shiftModifier = ed.modifiers & ShiftModifier;
-    bool canMoveStart = isSingleBeginType() && moveStart;
-    bool canMoveEnd = isSingleEndType() && moveEnd;
-
-    if (!shiftModifier && !canMoveStart && !canMoveEnd) {
-        return false;
-    }
-
-    return true;
+    return ed.modifiers & ShiftModifier;
 }
 
 //---------------------------------------------------------
