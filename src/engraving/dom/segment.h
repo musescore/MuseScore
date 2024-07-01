@@ -124,12 +124,12 @@ public:
     Segment* next1MMenabled() const;
     Segment* next1(SegmentType) const;
     Segment* next1ChordRestOrTimeTick() const;
-    Segment* next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest);
+    Segment* next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* next1MM(SegmentType) const;
 
     Segment* prev1() const;
     Segment* prev1ChordRestOrTimeTick() const;
-    Segment* prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest);
+    Segment* prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* prev1enabled() const;
     Segment* prev1MM() const;
     Segment* prev1MMenabled() const;
