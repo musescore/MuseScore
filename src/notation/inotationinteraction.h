@@ -183,6 +183,7 @@ public:
     virtual void addTiedNoteToChord() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
+    virtual void addHairpinToDynamic(engraving::Dynamic* dynamic) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;
     virtual void addAccidentalToSelection(AccidentalType type) = 0;
     virtual void putRestToSelection() = 0;

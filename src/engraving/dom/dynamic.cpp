@@ -730,21 +730,22 @@ void Dynamic::editDrag(EditData& ed)
 {
     EditTimeTickAnchors::updateAnchors(this, track());
 
-    switch (int(ed.curGrip)) {
-    case 0:
+    // Left grip
+    if (int(ed.curGrip) == 0) {
         m_leftDragOffset += ed.evtDelta.x();
-        if (m_leftDragOffset > 0) {
+        if (leftDragOffset() > 0) {
             m_leftDragOffset = 0;
         }
         return;
-    case 1:
+    }
+
+    // Right grip
+    if (int(ed.curGrip) == 1) {
         m_rightDragOffset += ed.evtDelta.x();
-        if (m_rightDragOffset < 0) {
+        if (rightDragOffset() < 0) {
             m_rightDragOffset = 0;
         }
         return;
-    default:
-        break;
     }
 
     KeyboardModifiers km = ed.modifiers;
@@ -977,8 +978,9 @@ std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
 {
     const LayoutData* ldata = this->ldata();
     const PointF pp(pagePos());
-    PointF leftOffset(-ldata->bbox().width() / 2 - 20.0 + m_leftDragOffset, -11.408);
-    PointF rightOffset(ldata->bbox().width() / 2 + 20.0 + m_rightDragOffset, -11.408);
+    double md = score()->style().styleS(Sid::hairpinMinDistance).val() * spatium(); // Minimum distance between dynamic and grip
+    PointF leftOffset(-ldata->bbox().width() / 2 - md + m_leftDragOffset, -11.408);
+    PointF rightOffset(ldata->bbox().width() / 2 + md + m_rightDragOffset, -11.408);
     return { pp + leftOffset, pp + rightOffset };
 }
 }
