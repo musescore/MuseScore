@@ -1260,6 +1260,16 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
                                             PARTS_DATA_DIR + u"partPropertyLinking-part-0.mscx"));
 }
 
+TEST_F(Engraving_PartsTests, partSpanners)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    testPartCreation(u"part-spanners");
+
+    MScore::useRead302InTestMode = useRead302;
+}
+
 //---------------------------------------------------------
 //   staffStyles
 //---------------------------------------------------------
