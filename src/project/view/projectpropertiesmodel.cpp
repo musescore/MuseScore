@@ -45,21 +45,20 @@ void ProjectPropertiesModel::load()
     QVariantMap additionalProperties = m_projectMetaInfo.additionalTags;
 
     m_properties = {
-        { WORK_TITLE_TAG,          muse::qtrc("project", "Work title"),         m_projectMetaInfo.title,                      true },
-        { SUBTITLE_TAG,            muse::qtrc("project", "Subtitle"),           m_projectMetaInfo.subtitle,                   true },
-        { COMPOSER_TAG,            muse::qtrc("project", "Composer"),           m_projectMetaInfo.composer,                   true },
-        { ARRANGER_TAG,            muse::qtrc("project", "Arranger"),           m_projectMetaInfo.arranger,                   true },
-        { LYRICIST_TAG,            muse::qtrc("project", "Lyricist"),           m_projectMetaInfo.lyricist,                   true },
-        { TRANSLATOR_TAG,          muse::qtrc("project", "Translator"),         m_projectMetaInfo.translator,                 true },
-        { COPYRIGHT_TAG,           muse::qtrc("project", "Copyright"),          m_projectMetaInfo.copyright,                  true },
-        { WORK_NUMBER_TAG,         muse::qtrc("project", "Work number"),        additionalProperties[WORK_NUMBER_TAG].toString(), true },
-        { MOVEMENT_TITLE_TAG,      muse::qtrc("project", "Movement title"),     additionalProperties[MOVEMENT_TITLE_TAG].toString(), true },
-        { MOVEMENT_NUMBER_TAG,     muse::qtrc("project", "Movement number"),    additionalProperties[MOVEMENT_NUMBER_TAG].toString(),
-          true },
-        { CREATION_DATE_TAG,       muse::qtrc("project", "Creation date"),      m_projectMetaInfo.creationDate.toString(),    true },
-        { PLATFORM_TAG,            muse::qtrc("project", "Platform"),           m_projectMetaInfo.platform,                   true },
-        { SOURCE_TAG,              muse::qtrc("project", "Source"),             m_projectMetaInfo.source,                     true },
-        { AUDIO_COM_URL_TAG,       muse::qtrc("project", "Audio.com URL"),      m_projectMetaInfo.audioComUrl,                true }
+        { WORK_TITLE_TAG, muse::qtrc("project", "Work title"), m_projectMetaInfo.title, true },
+        { SUBTITLE_TAG, muse::qtrc("project", "Subtitle"), m_projectMetaInfo.subtitle, true },
+        { COMPOSER_TAG, muse::qtrc("project", "Composer"), m_projectMetaInfo.composer, true },
+        { ARRANGER_TAG, muse::qtrc("project", "Arranger"), m_projectMetaInfo.arranger, true },
+        { LYRICIST_TAG, muse::qtrc("project", "Lyricist"), m_projectMetaInfo.lyricist, true },
+        { TRANSLATOR_TAG, muse::qtrc("project", "Translator"), m_projectMetaInfo.translator, true },
+        { COPYRIGHT_TAG, muse::qtrc("project", "Copyright"), m_projectMetaInfo.copyright, /*isStandard*/ true, /*isMultiLineEdit*/ true },
+        { WORK_NUMBER_TAG, muse::qtrc("project", "Work number"), additionalProperties[WORK_NUMBER_TAG].toString(), true },
+        { MOVEMENT_TITLE_TAG, muse::qtrc("project", "Movement title"), additionalProperties[MOVEMENT_TITLE_TAG].toString(), true },
+        { MOVEMENT_NUMBER_TAG, muse::qtrc("project", "Movement number"), additionalProperties[MOVEMENT_NUMBER_TAG].toString(), true },
+        { CREATION_DATE_TAG, muse::qtrc("project", "Creation date"), m_projectMetaInfo.creationDate.toString(), true },
+        { PLATFORM_TAG, muse::qtrc("project", "Platform"), m_projectMetaInfo.platform, true },
+        { SOURCE_TAG, muse::qtrc("project", "Source"), m_projectMetaInfo.source, true },
+        { AUDIO_COM_URL_TAG, muse::qtrc("project", "Audio.com URL"), m_projectMetaInfo.audioComUrl, true }
     };
 
     for (const QString& propertyName : additionalProperties.keys()) {
@@ -86,6 +85,8 @@ QVariant ProjectPropertiesModel::data(const QModelIndex& index, int role) const
         return property.value;
     case IsStandardProperty:
         return property.isStandardProperty;
+    case IsMultiLineEdit:
+        return property.isMultiLineEdit;
     }
 
     return QVariant();
@@ -127,7 +128,8 @@ QHash<int, QByteArray> ProjectPropertiesModel::roleNames() const
     static const QHash<int, QByteArray> roles {
         { PropertyName, "propertyName" },
         { PropertyValue, "propertyValue" },
-        { IsStandardProperty, "isStandardProperty" }
+        { IsStandardProperty, "isStandardProperty" },
+        { IsMultiLineEdit, "isMultiLineEdit" }
     };
 
     return roles;

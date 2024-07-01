@@ -66,7 +66,7 @@ FocusScope {
         }
     }
 
-    implicitHeight: parent.height
+    implicitHeight: 90
     implicitWidth: parent.width
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
@@ -110,6 +110,20 @@ FocusScope {
 
     ScrollView {
         anchors.fill: parent
+
+        ScrollBar.vertical: StyledScrollBar {
+            anchors.margins: 8
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+        }
+
+        ScrollBar.horizontal: StyledScrollBar {
+            anchors.margins: 8
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
 
         TextArea {
             id: valueInput
