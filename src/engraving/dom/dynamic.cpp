@@ -692,6 +692,24 @@ void Dynamic::editDrag(EditData& ed)
 {
     EditTimeTickAnchors::updateAnchors(this, track());
 
+    // Left grip
+    if (int(ed.curGrip) == 0) {
+        m_leftDragOffset += ed.evtDelta.x();
+        if (leftDragOffset() > 0) {
+            m_leftDragOffset = 0;
+        }
+        return;
+    }
+
+    // Right grip
+    if (int(ed.curGrip) == 1) {
+        m_rightDragOffset += ed.evtDelta.x();
+        if (rightDragOffset() < 0) {
+            m_rightDragOffset = 0;
+        }
+        return;
+    }
+
     KeyboardModifiers km = ed.modifiers;
     if (km != (ShiftModifier | ControlModifier)) {
         staff_idx_t si = staffIdx();
@@ -930,5 +948,28 @@ String Dynamic::screenReaderInfo() const
         s = TConv::translatedUserName(dynamicType());
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
+}
+
+//---------------------------------------------------------
+//   drawEditMode
+//---------------------------------------------------------
+
+void Dynamic::drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling)
+{
+    EngravingItem::drawEditMode(p, ed, currentViewScaling);
+}
+
+//---------------------------------------------------------
+//   gripsPositions
+//---------------------------------------------------------
+
+std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
+{
+    const LayoutData* ldata = this->ldata();
+    const PointF pp(pagePos());
+    double md = score()->style().styleS(Sid::hairpinMinDistance).val() * spatium(); // Minimum distance between dynamic and grip
+    PointF leftOffset(-ldata->bbox().width() / 2 - md + m_leftDragOffset, -11.408);
+    PointF rightOffset(ldata->bbox().width() / 2 + md + m_rightDragOffset, -11.408);
+    return { pp + leftOffset, pp + rightOffset };
 }
 }

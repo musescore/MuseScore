@@ -53,6 +53,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveSubchord-ON.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-OFF.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-ON.png</file>
-
+        <file>qml/MuseScore/NotationScene/internal/DynamicPopup.qml</file>
     </qresource>
 </RCC>
