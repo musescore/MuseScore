@@ -135,6 +135,12 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
+    bool hasLeftHairpin = false;
+    bool hasRightHairpin = false;
+
+    double leftDragOffset() { return m_leftDragOffset; }
+    double rightDragOffset() { return m_rightDragOffset; }
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)

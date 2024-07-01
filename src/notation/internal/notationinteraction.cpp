@@ -49,6 +49,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/dynamic.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
@@ -1080,6 +1081,10 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
+
+        if (m_editData.element->isDynamic()) {
+            addHairpinToDynamic(toDynamic(m_editData.element));
+        }
     } else if (m_editData.element && !m_editData.element->hasGrips()) {
         m_dragData.ed.delta = evtDelta;
         m_editData.element->editDrag(m_dragData.ed);
@@ -4136,6 +4141,27 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     startEdit();
     score()->cmdAddOttava(type);
     apply();
+}
+
+void NotationInteraction::addHairpinToDynamic(Dynamic* dynamic)
+{
+    Hairpin* pin = Factory::createHairpin(score()->dummy()->segment());
+    // Right grip
+    if (dynamic->rightDragOffset() >= pin->spatium() * 0.8 && !dynamic->hasRightHairpin) {
+        pin->setHairpinType(engraving::HairpinType::CRESC_HAIRPIN);
+
+        startEdit();
+        score()->addHairpinToDynamic(pin, dynamic);
+        apply();
+
+        dynamic->hasRightHairpin = true;
+
+        LineSegment* segment = pin->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::END);
+    }
+
+    // Left grip - TODO
 }
 
 void NotationInteraction::addHairpinsToSelection(HairpinType type)
