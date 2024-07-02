@@ -29,6 +29,7 @@
 #include "anchors.h"
 #include "barline.h"
 #include "chord.h"
+#include "dynamic.h"
 #include "lyrics.h"
 #include "measure.h"
 #include "mscoreview.h"
@@ -224,15 +225,7 @@ void LineSegment::startEditDrag(EditData& ed)
 
 bool LineSegment::isEditAllowed(EditData& ed) const
 {
-    const bool moveStart = ed.curGrip == Grip::START;
-    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
-
-    if (!((ed.modifiers & ShiftModifier) && ((isSingleBeginType() && moveStart)
-                                             || (isSingleEndType() && moveEnd)))) {
-        return false;
-    }
-
-    return true;
+    return ed.modifiers & ShiftModifier;
 }
 
 //---------------------------------------------------------
@@ -250,8 +243,6 @@ bool LineSegment::edit(EditData& ed)
     SLine* l              = line();
     track_idx_t track = l->track();
     track_idx_t track2 = l->track2();      // assumed to be same as track
-
-    bool allowTimeAnchor = line()->allowTimeAnchor();
 
     if (ed.key == KeyboardKey::Key_Shift) {
         if (ed.isKeyRelease) {
@@ -283,29 +274,16 @@ bool LineSegment::edit(EditData& ed)
             LOGD("LineSegment::edit: no start/end segment");
             return true;
         }
-        if (ed.key == Key_Left) {
-            if (moveStart) {
-                s1 = allowTimeAnchor ? s1->prev1ChordRestOrTimeTick() : s1->prev1WithElemsOnStaff(track2staff(track));
-            } else if (moveEnd) {
-                s2 = allowTimeAnchor ? s2->prev1ChordRestOrTimeTick() : s2->prev1WithElemsOnStaff(track2staff(track2));
-            }
-        } else if (ed.key == Key_Right) {
-            if (moveStart) {
-                s1 = allowTimeAnchor ? s1->next1ChordRestOrTimeTick() : s1->next1WithElemsOnStaff(track2staff(track));
-            } else if (moveEnd) {
-                Segment* ns2 = allowTimeAnchor ? s2->next1ChordRestOrTimeTick() : s2->next1WithElemsOnStaff(track2staff(track2));
-                if (ns2) {
-                    s2 = ns2;
-                } else {
-                    s2 = score()->lastSegment();
-                }
-            }
+        if (moveStart) {
+            s1 = findNewAnchorSegment(ed, s1);
+        } else {
+            s2 = findNewAnchorSegment(ed, s2);
         }
         if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick()) {
             return true;
         }
-        spanner()->undoChangeProperty(Pid::SPANNER_TICK, s1->tick());
-        spanner()->undoChangeProperty(Pid::SPANNER_TICKS, s2->tick() - s1->tick());
+
+        undoMoveStartEndAndSnappedItems(moveStart, moveEnd, s1, s2);
 
         EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
     }
@@ -438,6 +416,38 @@ bool LineSegment::edit(EditData& ed)
 
     triggerLayout();
     return true;
+}
+
+Segment* LineSegment::findNewAnchorSegment(const EditData& ed, const Segment* curSeg)
+{
+    if (!line()->allowTimeAnchor()) {
+        if (ed.key == Key_Left) {
+            return curSeg->prev1WithElemsOnStaff(staffIdx());
+        }
+        if (ed.key == Key_Right) {
+            return curSeg->next1WithElemsOnStaff(staffIdx());
+        }
+    }
+
+    if (ed.modifiers & ControlModifier) {
+        if (ed.key == Key_Left) {
+            Measure* measure = curSeg->rtick().isZero() ? curSeg->measure()->prevMeasure() : curSeg->measure();
+            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
+        }
+        if (ed.key == Key_Right) {
+            Measure* measure = curSeg->measure()->nextMeasure();
+            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
+        }
+    }
+
+    if (ed.key == Key_Left) {
+        return curSeg->prev1ChordRestOrTimeTick();
+    }
+    if (ed.key == Key_Right) {
+        return curSeg->next1ChordRestOrTimeTick();
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -811,6 +821,38 @@ RectF LineSegment::drag(EditData& ed)
     return canvasBoundingRect();
 }
 
+void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2)
+{
+    SLine* thisLine = line();
+    if (moveStart) {
+        Fraction tickDiff = s1->tick() - thisLine->tick();
+        if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
+            if (itemSnappedBefore->isDynamic()) {
+                // Let the dynamic manage the move
+                toDynamic(itemSnappedBefore)->undoMoveSegment(s1, tickDiff);
+            } else if (itemSnappedBefore->isLineSegment()) {
+                toLineSegment(itemSnappedBefore)->line()->undoMoveEnd(tickDiff);
+                thisLine->undoMoveStart(tickDiff);
+            }
+        } else {
+            thisLine->undoMoveStart(tickDiff);
+        }
+    } else if (moveEnd) {
+        Fraction tickDiff = s2->tick() - thisLine->tick2();
+        if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter()) {
+            if (itemSnappedAfter->isDynamic()) {
+                // Let the dynamic manage the move
+                toDynamic(itemSnappedAfter)->undoMoveSegment(s2, tickDiff);
+            } else if (itemSnappedAfter->isLineSegment()) {
+                toLineSegment(itemSnappedAfter)->line()->undoMoveStart(tickDiff);
+                thisLine->undoMoveEnd(tickDiff);
+            }
+        } else {
+            thisLine->undoMoveEnd(tickDiff);
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   SLine
 //---------------------------------------------------------
@@ -997,6 +1039,25 @@ PropertyValue SLine::propertyDefault(Pid pid) const
         return 5.0;
     default:
         return Spanner::propertyDefault(pid);
+    }
+}
+
+void SLine::undoMoveStart(Fraction tickDiff)
+{
+    undoChangeProperty(Pid::SPANNER_TICK, tick() + tickDiff);
+    Fraction newDuration = ticks() - tickDiff;
+    if (newDuration > Fraction(0, 1)) {
+        undoChangeProperty(Pid::SPANNER_TICKS, newDuration);
+    }
+}
+
+void SLine::undoMoveEnd(Fraction tickDiff)
+{
+    Fraction newDuration = ticks() + tickDiff;
+    if (newDuration > Fraction(0, 1)) {
+        undoChangeProperty(Pid::SPANNER_TICKS, newDuration);
+    } else {
+        undoChangeProperty(Pid::SPANNER_TICK, tick() + tickDiff);
     }
 }
 }
