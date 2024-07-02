@@ -22,6 +22,8 @@
 
 #include "bracket.h"
 
+#include "types/typesconv.h"
+
 #include "bracketItem.h"
 #include "measure.h"
 #include "score.h"
@@ -316,6 +318,15 @@ PropertyValue Bracket::propertyDefault(Pid id) const
         v = m_bi->propertyDefault(id);
     }
     return v;
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Bracket::subtypeUserName() const
+{
+    return TConv::userName(bracketType());
 }
 
 //---------------------------------------------------------

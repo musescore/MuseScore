@@ -58,7 +58,7 @@ public:
     void setSymIdAndTimeStretch(SymId id);
     FermataType fermataType() const;
     int subtype() const override;
-    TranslatableString typeUserName() const override;
+    TranslatableString subtypeUserName() const override;
 
     std::vector<LineF> dragAnchorLines() const override;
 

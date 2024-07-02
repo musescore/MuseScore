@@ -24,8 +24,6 @@
 
 #include <cmath>
 
-#include "translation.h"
-
 #include "draw/types/transform.h"
 
 #include "types/typesconv.h"
@@ -79,11 +77,6 @@ static const ElementStyle hairpinStyle {
 HairpinSegment::HairpinSegment(Hairpin* sp, System* parent)
     : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-}
-
-int HairpinSegment::subtype() const
-{
-    return hairpin()->subtype();
 }
 
 bool HairpinSegment::acceptDrop(EditData& data) const
@@ -503,11 +496,6 @@ Hairpin::Hairpin(Segment* parent)
     m_playHairpin           = true;
 }
 
-int Hairpin::subtype() const
-{
-    return static_cast<int>(m_hairpinType);
-}
-
 DynamicType Hairpin::dynamicTypeFrom() const
 {
     muse::ByteArray ba = beginText().toAscii();
@@ -744,18 +732,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
 String Hairpin::accessibleInfo() const
 {
-    String rez = TextLineBase::accessibleInfo();
-    switch (hairpinType()) {
-    case HairpinType::CRESC_HAIRPIN:
-        rez += u": " + muse::mtrc("engraving", "Crescendo");
-        break;
-    case HairpinType::DECRESC_HAIRPIN:
-        rez += u": " + muse::mtrc("engraving", "Decrescendo");
-        break;
-    default:
-        rez += u": " + muse::mtrc("engraving", "Custom");
-    }
-    return rez;
+    return String(u"%1: %2").arg(TextLineBase::accessibleInfo(), translatedSubtypeUserName());
 }
 
 PointF Hairpin::linePos(Grip grip, System** system) const
@@ -793,5 +770,31 @@ void Hairpin::reset()
     undoResetProperty(Pid::DIRECTION);
     undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
     TextLineBase::reset();
+}
+
+muse::TranslatableString Hairpin::subtypeUserName() const
+{
+    switch (hairpinType()) {
+    case HairpinType::CRESC_HAIRPIN:
+        return TranslatableString("engraving/hairpintype", "Crescendo hairpin");
+    case HairpinType::DECRESC_HAIRPIN:
+        return TranslatableString("engraving/hairpintype", "Decrescendo hairpin");
+    case HairpinType::CRESC_LINE:
+        return TranslatableString("engraving/hairpintype", "Crescendo line");
+    case HairpinType::DECRESC_LINE:
+        return TranslatableString("engraving/hairpintype", "Decrescendo line");
+    default:
+        return TranslatableString("engraving/hairpintype", "Custom");
+    }
+}
+
+muse::TranslatableString HairpinSegment::subtypeUserName() const
+{
+    return hairpin()->subtypeUserName();
+}
+
+int HairpinSegment::subtype() const
+{
+    return hairpin()->subtype();
 }
 }

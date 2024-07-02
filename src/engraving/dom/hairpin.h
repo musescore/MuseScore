@@ -50,8 +50,6 @@ class HairpinSegment final : public TextLineBaseSegment
 public:
     HairpinSegment(Hairpin* sp, System* parent);
 
-    int subtype() const override;
-
     HairpinSegment* clone() const override { return new HairpinSegment(*this); }
 
     Hairpin* hairpin() const { return (Hairpin*)spanner(); }
@@ -64,6 +62,9 @@ public:
     void setCircledTip(const PointF& p) { m_circledTip = p; }
 
     EngravingItem* propertyDelegate(Pid) override;
+
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
 
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
@@ -108,8 +109,6 @@ public:
     Hairpin(Segment* parent);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
-
-    int subtype() const override;
 
     DynamicType dynamicTypeFrom() const;
     DynamicType dynamicTypeTo() const;
@@ -181,6 +180,9 @@ public:
     void setSnapToItemBefore(bool v) { m_snapToItemBefore = v; }
     bool snapToItemAfter() const { return m_snapToItemAfter; }
     void setSnapToItemAfter(bool v) { m_snapToItemAfter = v; }
+
+    int subtype() const override { return int(m_hairpinType); }
+    TranslatableString subtypeUserName() const override;
 
 private:
 

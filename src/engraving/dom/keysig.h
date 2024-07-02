@@ -95,6 +95,9 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
+    int subtype() const override { return int(key()) + 7; }
+    muse::TranslatableString subtypeUserName() const override;
+
     struct LayoutData : public EngravingItem::LayoutData {
         std::vector<KeySym> keySymbols;
     };

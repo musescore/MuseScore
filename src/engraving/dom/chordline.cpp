@@ -22,6 +22,8 @@
 
 #include "chordline.h"
 
+#include <functional>
+
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
@@ -264,6 +266,20 @@ String ChordLine::accessibleInfo() const
         rez = String(u"%1: %2").arg(rez, chordLineTypeName().translated());
     }
     return rez;
+}
+
+int ChordLine::subtype() const
+{
+    size_t h1 = std::hash<ChordLineType> {}(m_chordLineType);
+    size_t h2 = std::hash<bool> {}(m_straight);
+    size_t h3 = std::hash<bool> {}(m_wavy);
+
+    return h1 ^ (h2 << 1) ^ (h3 << 2);
+}
+
+muse::TranslatableString ChordLine::subtypeUserName() const
+{
+    return chordLineTypeName();
 }
 
 //---------------------------------------------------------

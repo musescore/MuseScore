@@ -194,6 +194,15 @@ String MeasureRepeat::accessibleInfo() const
 }
 
 //---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString MeasureRepeat::subtypeUserName() const
+{
+    return muse::TranslatableString("engraving", "%n measure(s)", nullptr, numMeasures());
+}
+
+//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
