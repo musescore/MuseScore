@@ -341,9 +341,35 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
-    FluidSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMsecs);
+    const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
+    const FluidSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
+    samples_t sampleOffset = 0;
 
+    for (auto it = sequences.cbegin(); it != sequences.cend(); ++it) {
+        samples_t durationInSamples = samplesPerChannel - sampleOffset;
+
+        auto nextIt = std::next(it);
+        if (nextIt != sequences.cend()) {
+            msecs_t duration = nextIt->first - it->first;
+            durationInSamples = microSecsToSamples(duration, m_sampleRate);
+        }
+
+        IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
+            break;
+        }
+
+        if (!processSequence(it->second, durationInSamples, buffer + sampleOffset * FLUID_AUDIO_CHANNELS_COUNT)) {
+            return 0;
+        }
+
+        sampleOffset += durationInSamples;
+    }
+
+    return samplesPerChannel;
+}
+
+bool FluidSynth::processSequence(const FluidSequencer::EventSequence& sequence, const samples_t samples, float* buffer)
+{
     if (!sequence.empty()) {
         m_tuning.reset();
     }
@@ -354,15 +380,11 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 
     fluid_synth_tune_notes(m_fluid->synth, 0, 0, m_tuning.size(), m_tuning.keys.data(), m_tuning.pitches.data(), true);
 
-    int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
+    int result = fluid_synth_write_float(m_fluid->synth, samples,
                                          buffer, 0, FLUID_AUDIO_CHANNELS_COUNT,
                                          buffer, 1, FLUID_AUDIO_CHANNELS_COUNT);
 
-    if (result != FLUID_OK) {
-        return 0;
-    }
-
-    return samplesPerChannel;
+    return result == FLUID_OK;
 }
 
 async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const
