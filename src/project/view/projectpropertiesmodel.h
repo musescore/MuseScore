@@ -65,12 +65,14 @@ private:
     enum Roles {
         PropertyName = Qt::UserRole + 1,
         PropertyValue,
-        IsStandardProperty
+        IsStandardProperty,
+        IsMultiLineEdit
     };
 
     struct Property {
         QString key, name, value;
         bool isStandardProperty = false;
+        bool isMultiLineEdit = false;
     };
 
     project::ProjectMeta m_projectMetaInfo;

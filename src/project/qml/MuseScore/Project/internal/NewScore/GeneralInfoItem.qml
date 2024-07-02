@@ -28,9 +28,12 @@ Column {
     id: root
 
     property string title: ""
-    property alias info: textField.hint
+    property string defaultText: ""
+    property string info: defaultText
+    property bool isMultiLineEdit: false
 
-    property alias navigation: textField.navigation
+    property NavigationPanel navigationPanel: null
+    property int navigationColumn: 0
 
     spacing: 10
 
@@ -43,13 +46,42 @@ Column {
         text: title
     }
 
-    TextInputField {
-        id: textField
+    Loader {
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-        navigation.accessible.name: root.title + " " + currentText
+        sourceComponent: root.isMultiLineEdit ? textAreaComponent : textFieldComponent
 
-        onTextChanged: function(newTextValue) {
-            root.info = newTextValue
+        Component {
+            id: textAreaComponent
+
+            TextInputArea {
+                hint: root.defaultText
+
+                navigation.panel: root.navigationPanel
+                navigation.column: root.navigationColumn
+                navigation.accessible.name: root.title + " " + currentText
+
+                onTextChanged: function(newTextValue) {
+                    root.info = Boolean(newTextValue) ? newTextValue : root.defaultText
+                }
+            }
+        }
+
+        Component {
+            id: textFieldComponent
+
+            TextInputField {
+                hint: root.defaultText
+
+                navigation.panel: root.navigationPanel
+                navigation.column: root.navigationColumn
+                navigation.accessible.name: root.title + " " + currentText
+
+                onTextChanged: function(newTextValue) {
+                    root.info = Boolean(newTextValue) ? newTextValue : root.defaultText
+                }
+            }
         }
     }
 }
