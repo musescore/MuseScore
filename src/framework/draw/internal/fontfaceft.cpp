@@ -372,6 +372,22 @@ f26dot6_t FontFaceFT::xHeight() const
     return gm->bbox.height();
 }
 
+f26dot6_t FontFaceFT::capHeight() const
+{
+    TT_OS2* os2 = (TT_OS2*)FT_Get_Sfnt_Table(m_data->face, ft_sfnt_os2);
+    if (os2 && os2->sCapHeight) {
+        f26dot6_t result = std::round(os2->sCapHeight * m_data->face->size->metrics.y_ppem * 64.0 / (double)m_data->face->units_per_EM);
+        return result;
+    }
+
+    const glyph_idx_t glyph = glyphIndex('x');
+    GlyphMetrics* gm = glyphMetrics(glyph);
+    IF_ASSERT_FAILED(gm) {
+        return 0;
+    }
+    return gm->bbox.height();
+}
+
 GlyphMetrics* FontFaceFT::glyphMetrics(glyph_idx_t idx) const
 {
     if (m_data->glyphsMetrics.find(idx) != m_data->glyphsMetrics.end()) {

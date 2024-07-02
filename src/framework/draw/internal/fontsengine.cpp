@@ -129,6 +129,16 @@ double FontsEngine::height(const Font& f) const
     return from_f26d6(rf->face->ascent() + rf->face->descent()) * rf->pixelScale();
 }
 
+double FontsEngine::capHeight(const Font &f) const
+{
+    RequireFace* rf = fontFace(f);
+    IF_ASSERT_FAILED(rf && rf->face) {
+        return 0.0;
+    }
+
+    return from_f26d6(rf->face->capHeight()) * rf->pixelScale();
+}
+
 double FontsEngine::ascent(const Font& f) const
 {
     RequireFace* rf = fontFace(f);

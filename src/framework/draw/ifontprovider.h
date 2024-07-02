@@ -45,6 +45,7 @@ public:
     virtual double lineSpacing(const Font& f) const = 0;
     virtual double xHeight(const Font& f) const = 0;
     virtual double height(const Font& f) const = 0;
+    virtual double capHeight(const Font& f) const = 0;
     virtual double ascent(const Font& f) const = 0;
     virtual double descent(const Font& f) const = 0;
 
