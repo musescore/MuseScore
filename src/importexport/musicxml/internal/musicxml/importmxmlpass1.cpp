@@ -1635,7 +1635,8 @@ static void updateStyles(Score* score,
         // and text types used in the title frame
         // Some further tweaking may still be required.
 
-        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN) {
+        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
+            || tid == TextStyleType::FRET_DIAGRAM_FINGERING || tid == TextStyleType::FRET_DIAGRAM_FRET_NUMBER) {
             continue;
         }
 

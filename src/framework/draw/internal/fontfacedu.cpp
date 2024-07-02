@@ -136,6 +136,11 @@ f26dot6_t FontFaceDU::xHeight() const
     return m_origin->xHeight();
 }
 
+f26dot6_t FontFaceDU::capHeight() const
+{
+    return m_origin->capHeight();
+}
+
 std::vector<GlyphPos> FontFaceDU::glyphs(const char32_t* text, int text_length) const
 {
     std::vector<GlyphPos> glyphs = m_origin->glyphs(text, text_length);

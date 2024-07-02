@@ -25,6 +25,7 @@
 #include <QButtonGroup>
 #include <QQuickItem>
 #include <QQuickWidget>
+#include <QQmlContext>
 #include <QSignalMapper>
 
 #include "translation.h"
@@ -74,7 +75,7 @@ static const QStringList ALL_PAGE_CODES {
     "tuplets",
     "arpeggios",
     "slurs-and-ties",
-    "hairpins",
+    "dynamics-hairpins",
     "volta",
     "ottava",
     "pedal",
@@ -88,7 +89,6 @@ static const QStringList ALL_PAGE_CODES {
     "staff-text",
     "tempo-text",
     "lyrics",
-    "dynamics",
     "expression",
     "rehearsal-marks",
     "figured-bass",
@@ -136,6 +136,8 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "rh-guitar-fingering",
     "string-number",
     "string-tunings",
+    "fretboard-diagram-fingering",
+    "fretboard-diagram-fret-number",
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
     "text-line",
@@ -235,10 +237,6 @@ EditStyle::EditStyle(QWidget* parent)
     // create button groups for every set of radio button widgets
     // use this group widgets in list styleWidgets
     // This works for groups which represent an int enumeration.
-
-    QButtonGroup* fretNumGroup = new QButtonGroup(this);
-    fretNumGroup->addButton(radioFretNumLeft, 0);
-    fretNumGroup->addButton(radioFretNumRight, 1);
 
     QButtonGroup* ksng = new QButtonGroup(this);
     ksng->addButton(radioKeySigNatNone, int(KeySigNatural::NONE));
@@ -600,16 +598,6 @@ EditStyle::EditStyle(QWidget* parent)
 
         { StyleId::ottavaNumbersOnly,        false, ottavaNumbersOnly,            resetOttavaNumbersOnly },
         { StyleId::capoPosition,             false, capoPosition,                 0 },
-        { StyleId::fretNumMag,               true,  fretNumMag,                   0 },
-        { StyleId::fretNumPos,               false, fretNumGroup,                 0 },
-        { StyleId::fretY,                    false, fretY,                        0 },
-        { StyleId::barreLineWidth,           false, barreLineWidth,               0 },
-        { StyleId::fretMag,                  false, fretMag,                      0 },
-        { StyleId::fretDotSize,              false, fretDotSize,                  0 },
-        { StyleId::fretStringSpacing,        false, fretStringSpacing,            0 },
-        { StyleId::fretFretSpacing,          false, fretFretSpacing,              0 },
-        { StyleId::maxFretShiftAbove,        false, maxFretShiftAbove,            resetMaxFretShiftAbove },
-        { StyleId::maxFretShiftBelow,        false, maxFretShiftBelow,            resetMaxFretShiftBelow },
         { StyleId::scaleBarlines,            false, scaleBarlines,                resetScaleBarlines },
         { StyleId::crossMeasureValues,       false, crossMeasureValues,           0 },
 
@@ -905,6 +893,20 @@ EditStyle::EditStyle(QWidget* parent)
     accidPlacementSelector->setMinimumSize(224, 440);
     accidPlacementSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBoxAccidentalStacking->layout()->addWidget(accidPlacementSelector);
+
+    // ====================================================
+    // FRETBOARDS STYLE PAGE (QML)
+    // ====================================================
+
+    QQuickWidget* fretboardsPage = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                    /*parent*/ fretboardsWidget);
+    fretboardsPage->setObjectName("fretboardsPage_QQuickWidget");
+    fretboardsPage->setSource(QUrl(QString::fromUtf8(
+                                       "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")));
+    fretboardsPage->setMinimumSize(224, 1000);
+    fretboardsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    connect(fretboardsPage->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    fretboardsWidget->layout()->addWidget(fretboardsPage);
 
     // ====================================================
     // Figured Bass
@@ -1515,7 +1517,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
 
     case ElementType::HAIRPIN:
     case ElementType::HAIRPIN_SEGMENT:
-        return "hairpins";
+        return "dynamics-hairpins";
 
     case ElementType::VOLTA:
     case ElementType::VOLTA_SEGMENT:
@@ -1571,7 +1573,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "expression";
 
     case ElementType::DYNAMIC:
-        return "dynamics";
+        return "dynamics-hairpins";
 
     case ElementType::REHEARSAL_MARK:
         return "rehearsal-marks";
@@ -1819,6 +1821,25 @@ void EditStyle::setCurrentSubPageCode(const QString& code)
     textStyles->setCurrentRow(index);
 
     m_currentSubPageCode = code;
+    emit currentSubPageChanged();
+}
+
+void EditStyle::goToTextStylePage(const QString& code)
+{
+    int index = ALL_PAGE_CODES.indexOf("text-styles");
+
+    int subIndex = ALL_TEXT_STYLE_SUBPAGE_CODES.indexOf(code);
+    IF_ASSERT_FAILED(index >= 0) {
+        return;
+    }
+
+    pageList->setCurrentRow(index);
+    m_currentPageCode = "text-styles";
+
+    textStyles->setCurrentRow(subIndex);
+    m_currentSubPageCode = code;
+
+    emit currentPageChanged();
     emit currentSubPageChanged();
 }
 

@@ -431,7 +431,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     }
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
     case P_TYPE::INT_VEC:
-        return PropertyValue();
+        return PropertyValue(TConv::fromXml(String(e.readText()), std::vector<int>()));
 
     case P_TYPE::PLAYTECH_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PlayingTechniqueType::Natural));
@@ -888,6 +888,8 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
             Harmony* h = new Harmony(d->score()->dummy()->segment());
             read(h, e, ctx);
             d->add(h);
+        } else if (readProperty(d, tag, e, ctx, Pid::FRET_SHOW_FINGERINGS)) {
+        } else if (readProperty(d, tag, e, ctx, Pid::FRET_FINGERING)) {
         } else if (!readItemProperties(d, e, ctx)) {
             e.unknown();
         }

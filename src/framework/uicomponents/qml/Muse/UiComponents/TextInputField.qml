@@ -30,7 +30,7 @@ FocusScope {
     id: root
 
     property bool isIndeterminate: false
-    readonly property string indeterminateText: "--"
+    property string indeterminateText: "--"
     property var currentText: ""
     property alias validator: valueInput.validator
     property alias maximumLength: valueInput.maximumLength

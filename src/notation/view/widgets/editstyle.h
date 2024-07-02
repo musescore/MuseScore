@@ -63,6 +63,7 @@ public slots:
 
     void setCurrentPageCode(const QString& code);
     void setCurrentSubPageCode(const QString& code);
+    void goToTextStylePage(const QString& code);
 
 signals:
     void currentPageChanged();

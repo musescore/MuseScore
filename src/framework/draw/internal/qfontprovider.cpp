@@ -84,6 +84,11 @@ double QFontProvider::height(const Font& f) const
     return QFontMetricsF(f.toQFont(), &device).height();
 }
 
+double QFontProvider::capHeight(const Font& f) const
+{
+    return QFontMetrics(f.toQFont(), &device).capHeight();
+}
+
 double QFontProvider::ascent(const Font& f) const
 {
     return QFontMetricsF(f.toQFont(), &device).ascent();

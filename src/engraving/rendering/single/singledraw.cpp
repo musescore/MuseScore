@@ -1158,7 +1158,6 @@ void SingleDraw::draw(const Fingering* item, Painter* painter)
 void SingleDraw::draw(const FretDiagram* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
     const FretDiagram::LayoutData* ldata = item->ldata();
     PointF translation = -PointF(ldata->stringDist * (item->strings() - 1), 0);
     if (item->orientation() == Orientation::HORIZONTAL) {
@@ -1168,7 +1167,6 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // Init pen and other values
-    double _spatium = item->spatium() * item->userMag();
     Pen pen(item->curColor());
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setBrush(Brush(Color(painter->pen().color())));
@@ -1177,19 +1175,19 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
     double x2 = (item->strings() - 1) * ldata->stringDist;
 
     // Draw the nut
-    pen.setWidthF(ldata->nutLw);
+    pen.setWidthF(ldata->nutLineWidth);
     painter->setPen(pen);
-    painter->drawLine(LineF(-ldata->stringLw * .5, 0.0, x2 + ldata->stringLw * .5, 0.0));
+    painter->drawLine(LineF(-ldata->stringLineWidth * .5, 0.0, x2 + ldata->stringLineWidth * .5, 0.0));
 
     // Draw strings and frets
-    pen.setWidthF(ldata->stringLw);
+    pen.setWidthF(ldata->stringLineWidth);
     painter->setPen(pen);
 
     // y2 is the y val of the bottom fretline
-    double y2 = ldata->fretDist * (item->frets() + .5);
+    double y2 = ldata->fretDist * item->frets();
     for (int i = 0; i < item->strings(); ++i) {
         double x = ldata->stringDist * i;
-        painter->drawLine(LineF(x, item->fretOffset() ? -_spatium * .2 : 0.0, x, y2));
+        painter->drawLine(LineF(x, 0.0, x, y2));
     }
     for (int i = 1; i <= item->frets(); ++i) {
         double y = ldata->fretDist * i;
@@ -1197,12 +1195,12 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // dotd is the diameter of a dot
-    double dotd = _spatium * .49 * item->style().styleD(Sid::fretDotSize);
+    double dotd = item->style().styleMM(Sid::fretDotSpatiumSize);
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
     symPen.setCapStyle(PenCapStyle::RoundCap);
-    double symPenWidth = ldata->stringLw * 1.2;
+    double symPenWidth = ldata->stringLineWidth * 1.2;
     symPen.setWidthF(symPenWidth);
 
     for (auto const& i : item->dots()) {
@@ -1286,13 +1284,8 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
 
     // Draw fret offset number
     if (item->fretOffset() > 0) {
-        double fretNumMag = item->style().styleD(Sid::fretNumMag);
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF()
-                                 * item->userMag()
-                                 * (item->spatium() / SPATIUM20)
-                                 * MScore::pixelRatio
-                                 * fretNumMag);
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
         painter->setFont(scaledFont);
         String text = String::number(item->fretOffset() + 1);
 
@@ -1319,7 +1312,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
             }
             painter->restore();
         }
-        painter->setFont(item->font());
+        painter->setFont(item->fretNumFont());
     }
 
     // NOTE:JT possible future todo - draw fingerings

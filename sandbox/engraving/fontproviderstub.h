@@ -15,6 +15,7 @@ public:
     qreal lineSpacing(const Font& f) const override;
     qreal xHeight(const Font& f) const override;
     qreal height(const Font& f) const override;
+    qreal capHeight(const Font& f) const override;
     qreal ascent(const Font& f) const override;
     qreal descent(const Font& f) const override;
 

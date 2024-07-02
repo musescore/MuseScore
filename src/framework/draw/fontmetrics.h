@@ -41,6 +41,7 @@ public:
     double lineSpacing() const;
     double xHeight() const;
     double height() const;
+    double capHeight() const;
     double ascent() const;
     double descent() const;
 

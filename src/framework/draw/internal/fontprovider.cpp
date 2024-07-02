@@ -68,6 +68,11 @@ double FontProvider::ascent(const muse::draw::Font& f) const
     return fontsEngine()->ascent(f);
 }
 
+double FontProvider::capHeight(const muse::draw::Font& f) const
+{
+    return fontsEngine()->capHeight(f);
+}
+
 double FontProvider::descent(const muse::draw::Font& f) const
 {
     return fontsEngine()->descent(f);

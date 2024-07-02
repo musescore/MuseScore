@@ -2459,8 +2459,8 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
 void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx)
 {
     double spatium  = item->spatium() * item->userMag();
-    ldata->stringLw = spatium * 0.08;
-    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : spatium * 0.2);
+    ldata->stringLineWidth = spatium * 0.08;
+    ldata->nutLineWidth = ((item->fretOffset() || !item->showNut()) ? ldata->stringLineWidth : spatium * 0.2);
     ldata->stringDist = ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag();
     ldata->fretDist = ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag();
     ldata->markerSize = ldata->stringDist * .8;
@@ -2472,8 +2472,8 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->userMag());
 
         double fretNumMag = ctx.conf().styleD(Sid::fretNumMag);
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
@@ -3396,10 +3396,10 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 newPosX = 0.0;
                 break;
             case AlignH::HCENTER:
-                newPosX = fd->centerX();
+                newPosX = 0.5 * fd->mainWidth();
                 break;
             case AlignH::RIGHT:
-                newPosX = fd->rightX();
+                newPosX = fd->mainWidth();
                 break;
             }
         } else {

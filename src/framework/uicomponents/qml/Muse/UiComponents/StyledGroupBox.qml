@@ -35,13 +35,13 @@ GroupBox {
         width: parent.width
         height: parent.height - root.topPadding + root.bottomPadding
 
-        color: "transparent"
+        color: ui.theme.backgroundPrimaryColor
         border.color: ui.theme.strokeColor
-        radius: ui.theme.borderWidth
+        radius: 3 //
     }
 
     label: StyledTextLabel {
-        x: root.leftPadding
+        x: 0
         width: root.availableWidth
 
         text: root.title

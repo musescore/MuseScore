@@ -44,6 +44,7 @@ public:
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
     double height(const Font& f) const override;
+    double capHeight(const Font& f) const override;
     double ascent(const Font& f) const override;
     double descent(const Font& f) const override;
 

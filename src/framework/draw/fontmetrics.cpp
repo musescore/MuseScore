@@ -44,6 +44,11 @@ double FontMetrics::height() const
     return fontProvider()->height(m_font);
 }
 
+double FontMetrics::capHeight() const
+{
+    return fontProvider()->capHeight(m_font);
+}
+
 double FontMetrics::ascent() const
 {
     return fontProvider()->ascent(m_font);

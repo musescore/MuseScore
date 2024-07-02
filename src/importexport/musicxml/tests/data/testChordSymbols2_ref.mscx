@@ -190,9 +190,6 @@
               <string no="0">
                 <marker>cross</marker>
                 </string>
-              <string no="1">
-                <dot fret="1">normal</dot>
-                </string>
               <string no="2">
                 <dot fret="3">normal</dot>
                 </string>
@@ -209,9 +206,6 @@
               </fretDiagram>
             <string no="0">
               <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>1</dot>
               </string>
             <string no="2">
               <dot>3</dot>
