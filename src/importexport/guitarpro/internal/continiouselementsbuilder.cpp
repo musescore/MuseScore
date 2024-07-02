@@ -89,7 +89,7 @@ static mu::engraving::ElementType muTypeFromImportType(ContiniousElementsBuilder
 
 static String harmonicText(ContiniousElementsBuilder::ImportType type)
 {
-    static std::unordered_map<ContiniousElementsBuilder::ImportType, String> names {
+    static const std::unordered_map<ContiniousElementsBuilder::ImportType, String> names {
         { ContiniousElementsBuilder::ImportType::HARMONIC_ARTIFICIAL, u"AH" },
         { ContiniousElementsBuilder::ImportType::HARMONIC_PINCH, u"PH" },
         { ContiniousElementsBuilder::ImportType::HARMONIC_TAP, u"TH" },
@@ -97,8 +97,9 @@ static String harmonicText(ContiniousElementsBuilder::ImportType type)
         { ContiniousElementsBuilder::ImportType::HARMONIC_FEEDBACK, u"Fdbk" },
     };
 
-    if (names.find(type) != names.end()) {
-        return names[type];
+    auto it = names.find(type);
+    if (it != names.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong harmonic type";
@@ -107,15 +108,16 @@ static String harmonicText(ContiniousElementsBuilder::ImportType type)
 
 static mu::engraving::VibratoType vibratoTypeFromImportType(ContiniousElementsBuilder::ImportType type)
 {
-    static std::unordered_map<ContiniousElementsBuilder::ImportType, VibratoType> names {
+    static const std::unordered_map<ContiniousElementsBuilder::ImportType, VibratoType> names {
         { ContiniousElementsBuilder::ImportType::VIBRATO_LEFT_HAND_SLIGHT, VibratoType::GUITAR_VIBRATO },
         { ContiniousElementsBuilder::ImportType::VIBRATO_LEFT_HAND_WIDE, VibratoType::GUITAR_VIBRATO_WIDE },
         { ContiniousElementsBuilder::ImportType::VIBRATO_W_TREM_BAR_SLIGHT, VibratoType::VIBRATO_SAWTOOTH },
         { ContiniousElementsBuilder::ImportType::VIBRATO_W_TREM_BAR_WIDE, VibratoType::VIBRATO_SAWTOOTH_WIDE }
     };
 
-    if (names.find(type) != names.end()) {
-        return names[type];
+    auto it = names.find(type);
+    if (it != names.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong vibrato type";
@@ -124,15 +126,16 @@ static mu::engraving::VibratoType vibratoTypeFromImportType(ContiniousElementsBu
 
 static std::pair<bool, mu::engraving::OttavaType> ottavaType(ContiniousElementsBuilder::ImportType type)
 {
-    static std::unordered_map<ContiniousElementsBuilder::ImportType, mu::engraving::OttavaType> types {
+    static const std::unordered_map<ContiniousElementsBuilder::ImportType, mu::engraving::OttavaType> types {
         { ContiniousElementsBuilder::ImportType::OTTAVA_VA8,  mu::engraving::OttavaType::OTTAVA_8VA },
         { ContiniousElementsBuilder::ImportType::OTTAVA_VB8,  mu::engraving::OttavaType::OTTAVA_8VB },
         { ContiniousElementsBuilder::ImportType::OTTAVA_MA15, mu::engraving::OttavaType::OTTAVA_15MA },
         { ContiniousElementsBuilder::ImportType::OTTAVA_MB15, mu::engraving::OttavaType::OTTAVA_15MB }
     };
 
-    if (types.find(type) != types.end()) {
-        return { true, types.at(type) };
+    auto it = types.find(type);
+    if (it != types.end()) {
+        return { true, it->second };
     }
 
     return { false, mu::engraving::OttavaType::OTTAVA_8VA };

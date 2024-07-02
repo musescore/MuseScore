@@ -2606,7 +2606,7 @@ muse::async::Channel<ActionCodeList> NotationUiActions::actionCheckedChanged() c
 
 DurationType NotationUiActions::actionDurationType(const ActionCode& actionCode)
 {
-    static QMap<ActionCode, DurationType> durations = {
+    static const QMap<ActionCode, DurationType> durations = {
         { "note-longa", DurationType::V_LONG },
         { "note-breve", DurationType::V_BREVE },
         { "pad-note-1", DurationType::V_WHOLE },
@@ -2632,7 +2632,7 @@ DurationType NotationUiActions::actionDurationType(const ActionCode& actionCode)
 
 AccidentalType NotationUiActions::actionAccidentalType(const ActionCode& actionCode)
 {
-    static QMap<ActionCode, AccidentalType> accidentals = {
+    static const QMap<ActionCode, AccidentalType> accidentals = {
         { "flat2", AccidentalType::FLAT2 },
         { "flat", AccidentalType::FLAT },
         { "nat", AccidentalType::NATURAL },
@@ -2650,7 +2650,7 @@ AccidentalType NotationUiActions::actionAccidentalType(const ActionCode& actionC
 
 int NotationUiActions::actionDotCount(const ActionCode& actionCode)
 {
-    static QMap<ActionCode, int> dots = {
+    static const QMap<ActionCode, int> dots = {
         { "pad-dot", 1 },
         { "pad-dot2", 2 },
         { "pad-dot3", 3 },
@@ -2667,7 +2667,7 @@ int NotationUiActions::actionDotCount(const ActionCode& actionCode)
 
 int NotationUiActions::actionVoice(const ActionCode& actionCode)
 {
-    QMap<ActionCode, int> voices {
+    static const QMap<ActionCode, int> voices {
         { "voice-1", 0 },
         { "voice-2", 1 },
         { "voice-3", 2 },
@@ -2684,7 +2684,7 @@ int NotationUiActions::actionVoice(const ActionCode& actionCode)
 
 SymbolId NotationUiActions::actionArticulationSymbolId(const ActionCode& actionCode)
 {
-    static QMap<ActionCode, SymbolId> articulations {
+    static const QMap<ActionCode, SymbolId> articulations {
         { "add-marcato", SymbolId::articMarcatoAbove },
         { "add-sforzato", SymbolId::articAccentAbove },
         { "add-tenuto", SymbolId::articTenutoAbove },

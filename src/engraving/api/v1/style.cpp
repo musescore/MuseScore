@@ -41,7 +41,7 @@ MStyle* mu::engraving::apiv1::styleWrap(mu::engraving::MStyle* style, mu::engrav
 
 mu::engraving::Sid MStyle::keyToSid(const QString& key)
 {
-    static QMetaEnum sidEnum = QMetaEnum::fromType<Sid>();
+    static const QMetaEnum sidEnum = QMetaEnum::fromType<Sid>();
 
     QByteArray ba = key.toLatin1();
     bool ok;

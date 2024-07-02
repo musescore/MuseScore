@@ -592,7 +592,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         return true;
     }
 
-    static std::set<ElementType> breakSpannerTypes {
+    static const std::set<ElementType> breakSpannerTypes {
         ElementType::VOLTA,
         ElementType::GRADUAL_TEMPO_CHANGE,
         ElementType::TEXTLINE,

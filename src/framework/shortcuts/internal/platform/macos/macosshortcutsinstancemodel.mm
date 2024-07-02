@@ -30,7 +30,7 @@
 
 using namespace muse::shortcuts;
 
-static std::map<UInt32, QString> specialKeysMap = {
+static const std::map<UInt32, QString> specialKeysMap = {
     { kVK_F1, "F1" },
     { kVK_F2, "F2" },
     { kVK_F3, "F3" },
@@ -262,7 +262,7 @@ UInt32 nativeModifiers(Qt::KeyboardModifiers modifiers)
 QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
 {
     if (muse::contains(specialKeysMap, keyNativeCode)) {
-        return specialKeysMap[keyNativeCode];
+        return specialKeysMap.at(keyNativeCode);
     }
 
     static UInt8 (* LMGetKbdType)(void);
@@ -299,7 +299,7 @@ QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
 
 QString keyModifiersToString(UInt32 keyNativeModifiers)
 {
-    static QMap<int, QString> qtModifiers = {
+    static const QMap<int, QString> qtModifiers = {
         { shiftKey, "Shift" },
         { rightShiftKey, "Shift" },
         { controlKey, "Ctrl" },

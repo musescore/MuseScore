@@ -444,7 +444,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "subtype") {
             String text = e.readText();
-            const static std::map<String, AccidentalType> accMap = {
+            static const std::map<String, AccidentalType> accMap = {
                 { u"none",               AccidentalType::NONE },
                 { u"sharp",              AccidentalType::SHARP },
                 { u"flat",               AccidentalType::FLAT },

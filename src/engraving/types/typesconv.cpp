@@ -1347,8 +1347,7 @@ static std::map<int /*tickPosition*/, T> buildEasedValueCurve(const int ticksDur
                                                               const ChangeMethod method)
 {
     if (stepsCount <= 0) {
-        static std::map<int, T> empty;
-        return empty;
+        return {};
     }
 
     std::map<int, T> result;

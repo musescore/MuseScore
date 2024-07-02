@@ -28,6 +28,8 @@
 #include <cassert>
 #include <string>
 
+#include "containers.h"
+
 #ifndef UNUSED
 #define UNUSED(x) (void)x;
 #endif
@@ -831,7 +833,7 @@ struct Event {
     #define opcodeValueMap(o) { o, std::string(#o) \
 }
 
-        static std::map<Opcode, std::string> m = {
+        static const std::map<Opcode, std::string> m = {
             opcodeValueMap(Opcode::RegisteredPerNoteController),
             opcodeValueMap(Opcode::AssignablePerNoteController),
             opcodeValueMap(Opcode::RegisteredController),
@@ -849,7 +851,7 @@ struct Event {
             opcodeValueMap(Opcode::PerNoteManagement)
         };
     #undef opcodeValueMap
-        return m[opcode()];
+        return muse::value(m, opcode());
     }
 
     std::string to_string() const

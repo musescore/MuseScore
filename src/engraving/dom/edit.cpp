@@ -825,12 +825,12 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         harmony->setTrack(track);
         harmony->setParent(newParent);
 
-        static std::map<TextStyleType, HarmonyType> harmonyTypes = {
+        static const std::map<TextStyleType, HarmonyType> harmonyTypes = {
             { TextStyleType::HARMONY_A, HarmonyType::STANDARD },
             { TextStyleType::HARMONY_ROMAN, HarmonyType::ROMAN },
             { TextStyleType::HARMONY_NASHVILLE, HarmonyType::NASHVILLE }
         };
-        harmony->setHarmonyType(harmonyTypes[type]);
+        harmony->setHarmonyType(harmonyTypes.at(type));
 
         textBox = harmony;
         undoAddElement(textBox);

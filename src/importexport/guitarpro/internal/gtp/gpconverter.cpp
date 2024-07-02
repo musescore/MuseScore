@@ -59,7 +59,7 @@ using namespace mu::engraving;
 namespace mu::iex::guitarpro {
 static mu::engraving::JumpType jumpType(const String& typeString)
 {
-    static std::map<String, JumpType> types {
+    static const std::map<String, JumpType> types {
         { u"DaCapo", JumpType::DC },
         { u"DaSegno", JumpType::DS },
         { u"DaCapoAlFine", JumpType::DC_AL_FINE },
@@ -74,8 +74,9 @@ static mu::engraving::JumpType jumpType(const String& typeString)
         { u"DaSegnoSegnoAlFine", JumpType::DSS_AL_FINE },
     };
 
-    if (types.find(typeString) != types.end()) {
-        return types[typeString];
+    auto it = types.find(typeString);
+    if (it != types.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong jump type";
@@ -84,9 +85,7 @@ static mu::engraving::JumpType jumpType(const String& typeString)
 
 static mu::engraving::MarkerType markerType(const String& typeString)
 {
-    using namespace mu::engraving;
-
-    static std::map<String, MarkerType> types {
+    static const std::map<String, MarkerType> types {
         { u"Segno", MarkerType::SEGNO },
         { u"SegnoSegno", MarkerType::VARSEGNO },
         { u"Coda", MarkerType::CODA },
@@ -96,8 +95,9 @@ static mu::engraving::MarkerType markerType(const String& typeString)
         { u"DaDoubleCoda", MarkerType::DA_DBLCODA },
     };
 
-    if (types.find(typeString) != types.end()) {
-        return types[typeString];
+    auto it = types.find(typeString);
+    if (it != types.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong direction marker type";
@@ -106,9 +106,7 @@ static mu::engraving::MarkerType markerType(const String& typeString)
 
 static mu::engraving::TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
 {
-    using namespace mu::engraving;
-
-    static std::map<GPMasterBar::TripletFeelType, TripletFeelType> types {
+    static const std::map<GPMasterBar::TripletFeelType, TripletFeelType> types {
         { GPMasterBar::TripletFeelType::Triplet8th, TripletFeelType::TRIPLET_8TH },
         { GPMasterBar::TripletFeelType::Triplet16th, TripletFeelType::TRIPLET_16TH },
         { GPMasterBar::TripletFeelType::Dotted8th, TripletFeelType::DOTTED_8TH },
@@ -118,8 +116,9 @@ static mu::engraving::TripletFeelType tripletFeelType(GPMasterBar::TripletFeelTy
         { GPMasterBar::TripletFeelType::None, TripletFeelType::NONE }
     };
 
-    if (types.find(tf) != types.end()) {
-        return types[tf];
+    auto it = types.find(tf);
+    if (it != types.end()) {
+        return it->second;
     }
 
     return TripletFeelType::NONE;
@@ -127,17 +126,16 @@ static mu::engraving::TripletFeelType tripletFeelType(GPMasterBar::TripletFeelTy
 
 static std::pair<bool, mu::engraving::OttavaType> ottavaType(GPBeat::OttavaType t)
 {
-    using namespace mu::engraving;
-
-    static std::map<GPBeat::OttavaType, mu::engraving::OttavaType> types {
+    static const std::map<GPBeat::OttavaType, mu::engraving::OttavaType> types {
         { GPBeat::OttavaType::va8,  OttavaType::OTTAVA_8VA },
         { GPBeat::OttavaType::vb8,  OttavaType::OTTAVA_8VB },
         { GPBeat::OttavaType::ma15, OttavaType::OTTAVA_15MA },
         { GPBeat::OttavaType::mb15, OttavaType::OTTAVA_15MB }
     };
 
-    if (types.find(t) != types.end()) {
-        return { true, types[t] };
+    auto it = types.find(t);
+    if (it != types.end()) {
+        return { true, it->second };
     }
 
     return { false, OttavaType::OTTAVA_8VA };
@@ -145,7 +143,7 @@ static std::pair<bool, mu::engraving::OttavaType> ottavaType(GPBeat::OttavaType 
 
 static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
 {
-    static std::map<GPNote::Harmonic::Type, GPBeat::HarmonicMarkType> types {
+    static const std::map<GPNote::Harmonic::Type, GPBeat::HarmonicMarkType> types {
         { GPNote::Harmonic::Type::Artificial, GPBeat::HarmonicMarkType::Artificial },
         { GPNote::Harmonic::Type::Pinch, GPBeat::HarmonicMarkType::Pinch },
         { GPNote::Harmonic::Type::Tap, GPBeat::HarmonicMarkType::Tap },
@@ -153,8 +151,9 @@ static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
         { GPNote::Harmonic::Type::FeedBack, GPBeat::HarmonicMarkType::FeedBack }
     };
 
-    if (types.find(t) != types.end()) {
-        return types[t];
+    auto it = types.find(t);
+    if (it != types.end()) {
+        return it->second;
     }
 
     return GPBeat::HarmonicMarkType::None;
@@ -162,15 +161,16 @@ static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
 
 static ContiniousElementsBuilder::ImportType ottavaToImportType(GPBeat::OttavaType t)
 {
-    static std::map<GPBeat::OttavaType, ContiniousElementsBuilder::ImportType> types {
+    static const std::map<GPBeat::OttavaType, ContiniousElementsBuilder::ImportType> types {
         { GPBeat::OttavaType::ma15, ContiniousElementsBuilder::ImportType::OTTAVA_MA15 },
         { GPBeat::OttavaType::va8, ContiniousElementsBuilder::ImportType::OTTAVA_VA8 },
         { GPBeat::OttavaType::vb8, ContiniousElementsBuilder::ImportType::OTTAVA_VB8 },
         { GPBeat::OttavaType::mb15, ContiniousElementsBuilder::ImportType::OTTAVA_MB15 }
     };
 
-    if (types.find(t) != types.end()) {
-        return types[t];
+    auto it = types.find(t);
+    if (it != types.end()) {
+        return it->second;
     }
 
     return ContiniousElementsBuilder::ImportType::NONE;
@@ -178,13 +178,14 @@ static ContiniousElementsBuilder::ImportType ottavaToImportType(GPBeat::OttavaTy
 
 static ContiniousElementsBuilder::ImportType hairpinToImportType(GPBeat::Hairpin t)
 {
-    static std::map<GPBeat::Hairpin, ContiniousElementsBuilder::ImportType> types {
+    static const std::map<GPBeat::Hairpin, ContiniousElementsBuilder::ImportType> types {
         { GPBeat::Hairpin::Crescendo, ContiniousElementsBuilder::ImportType::HAIRPIN_CRESCENDO },
         { GPBeat::Hairpin::Decrescendo, ContiniousElementsBuilder::ImportType::HAIRPIN_DIMINUENDO }
     };
 
-    if (types.find(t) != types.end()) {
-        return types[t];
+    auto it = types.find(t);
+    if (it != types.end()) {
+        return it->second;
     }
 
     return ContiniousElementsBuilder::ImportType::NONE;

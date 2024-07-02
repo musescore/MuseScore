@@ -76,14 +76,15 @@ using namespace mu::engraving;
 namespace mu::iex::guitarpro {
 static TremoloType tremoloType(int division)
 {
-    static std::map<int, TremoloType> types {
+    static const std::map<int, TremoloType> types {
         { 1, TremoloType::R8 },
         { 2, TremoloType::R16 },
         { 3, TremoloType::R32 }
     };
 
-    if (types.find(division) != types.end()) {
-        return types[division];
+    auto it = types.find(division);
+    if (it != types.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong tremolo type";

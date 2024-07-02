@@ -5697,15 +5697,14 @@ inline std::set<String>& operator<<(std::set<String>& s, const T& v)
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 {
-    static std::set<String> set;   // the valid MusicXML dynamics
-    if (set.empty()) {
-        set << u"f" << u"ff" << u"fff" << u"ffff" << u"fffff" << u"ffffff"
-            << u"fp" << u"fz"
-            << u"mf" << u"mp"
-            << u"p" << u"pp" << u"ppp" << u"pppp" << u"ppppp" << u"pppppp"
-            << u"rf" << u"rfz"
-            << u"sf" << u"sffz" << u"sfp" << u"sfpp" << u"sfz";
-    }
+    static const std::set<String> validMusicXmlDynamics {   // the valid MusicXML dynamics
+        u"f", u"ff", u"fff", u"ffff", u"fffff", u"ffffff",
+        u"fp", u"fz",
+        u"mf", u"mp",
+        u"p", u"pp", u"ppp", u"pppp", u"ppppp", u"pppppp",
+        u"rf", u"rfz",
+        u"sf", u"sffz", u"sfp", u"sfpp", u"sfz"
+    };
 
     directionTag(m_xml, m_attr, dyn);
 
@@ -5718,10 +5717,10 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     const String dynTypeName = String::fromAscii(TConv::toXml(dyn->dynamicType()).ascii());
     bool hasCustomText = dyn->hasCustomText();
 
-    if (muse::contains(set, dynTypeName) && !hasCustomText) {
+    if (muse::contains(validMusicXmlDynamics, dynTypeName) && !hasCustomText) {
         m_xml.tagRaw(dynTypeName);
     } else if (!dynTypeName.empty()) {
-        static std::map<ushort, Char> map = {
+        static const std::map<ushort, Char> map = {
             { 0xE520, u'p' },
             { 0xE521, u'm' },
             { 0xE522, u'f' },
@@ -5757,7 +5756,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                 // found a non-dynamics character
                 if (inDynamicsSym) {
                     if (!text.empty()) {
-                        if (muse::contains(set, text)) {
+                        if (muse::contains(validMusicXmlDynamics, text)) {
                             m_xml.tagRaw(text);
                         } else {
                             m_xml.tag("other-dynamics", text);
@@ -5770,7 +5769,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
             }
         }
         if (!text.empty()) {
-            if (inDynamicsSym && muse::contains(set, text)) {
+            if (inDynamicsSym && muse::contains(validMusicXmlDynamics, text)) {
                 m_xml.tagRaw(text);
             } else {
                 m_xml.tag("other-dynamics", text);

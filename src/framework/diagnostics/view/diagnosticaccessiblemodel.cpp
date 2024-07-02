@@ -316,7 +316,7 @@ QVariant DiagnosticAccessibleModel::makeData(const QAccessibleInterface* iface) 
 {
     QAccessibleInterface* prn = iface->parent();
 
-    static QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
+    static const QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
 
     QVariantMap itemData;
     itemData["role"] = QString(roleEnum.valueToKey(iface->role()));
