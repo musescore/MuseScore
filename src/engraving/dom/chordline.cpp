@@ -22,13 +22,13 @@
 
 #include "chordline.h"
 
+#include <functional>
+
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "chord.h"
 #include "note.h"
-
-#include "hash.h"
 
 #include "log.h"
 
@@ -270,7 +270,11 @@ String ChordLine::accessibleInfo() const
 
 int ChordLine::subtype() const
 {
-    return muse::hash(int(m_chordLineType) + 5, m_straight, m_wavy);
+    size_t h1 = std::hash<ChordLineType> {}(m_chordLineType);
+    size_t h2 = std::hash<bool> {}(m_straight);
+    size_t h3 = std::hash<bool> {}(m_wavy);
+
+    return h1 ^ (h2 << 1) ^ (h3 << 2);
 }
 
 muse::TranslatableString ChordLine::subtypeUserName() const

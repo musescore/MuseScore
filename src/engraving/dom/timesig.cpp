@@ -22,14 +22,13 @@
 
 #include "timesig.h"
 
+#include <functional>
+
 #include "style/style.h"
-#include "translation.h"
 
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-
-#include "hash.h"
 
 #include "log.h"
 
@@ -303,7 +302,11 @@ EngravingItem* TimeSig::prevSegmentElement()
 
 int TimeSig::subtype() const
 {
-    return muse::hash(numerator(), denominator(), static_cast<char>(timeSigType()));
+    size_t h1 = std::hash<int> {}(numerator());
+    size_t h2 = std::hash<int> {}(denominator());
+    size_t h3 = std::hash<TimeSigType> {}(timeSigType());
+
+    return h1 ^ (h2 << 1) ^ (h3 << 2);
 }
 
 //---------------------------------------------------------

@@ -58,7 +58,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utils.h
     ${CMAKE_CURRENT_LIST_DIR}/interpolation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interpolation.h
-    ${CMAKE_CURRENT_LIST_DIR}/hash.h
     ${CMAKE_CURRENT_LIST_DIR}/defer.h
     ${CMAKE_CURRENT_LIST_DIR}/containers.h
     ${CMAKE_CURRENT_LIST_DIR}/icryptographichash.h
