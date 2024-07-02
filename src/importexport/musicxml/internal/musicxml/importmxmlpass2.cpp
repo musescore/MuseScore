@@ -6330,7 +6330,7 @@ void MusicXMLParserPass2::xmlSetDrumsetPitch(Note* note, const Chord* chord, con
 
             newPitch = instr.pitch;
             ds->drum(newPitch) = ds->drum(newPitch) = DrumInstrument(
-                instr.name.toStdString().c_str(), headGroup, line, stemDir, chord->voice());
+                instr.name.toStdString().c_str(), headGroup, line, stemDir, static_cast<int>(chord->voice()));
         }
     }
 
@@ -6345,7 +6345,7 @@ void MusicXMLParserPass2::xmlSetDrumsetPitch(Note* note, const Chord* chord, con
             }
         }
 
-        ds->drum(newPitch) = DrumInstrument("drum", headGroup, line, stemDir, chord->voice());
+        ds->drum(newPitch) = DrumInstrument("drum", headGroup, line, stemDir, static_cast<int>(chord->voice()));
     } else if (stemDir == DirectionV::AUTO) {
         stemDir = ds->stemDirection(newPitch);
     }
