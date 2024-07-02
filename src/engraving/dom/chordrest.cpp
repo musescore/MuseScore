@@ -1012,6 +1012,10 @@ EngravingItem* ChordRest::prevElement()
 
 EngravingItem* ChordRest::lastElementBeforeSegment()
 {
+    Tuplet* tuplet = this->tuplet();
+    if (tuplet && this == tuplet->elements().back()) {
+        return tuplet;
+    }
     if (!m_lyrics.empty()) {
         return m_lyrics.back();
     }

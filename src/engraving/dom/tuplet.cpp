@@ -839,4 +839,28 @@ int Tuplet::computeTupletDenominator(int numerator, Fraction totalDuration)
     }
     return ratio.numerator();
 }
+
+EngravingItem* Tuplet::nextElement()
+{
+    ChordRest* firstElement = toChordRest(elements().front());
+    if (firstElement->type() == ElementType::CHORD) {
+        Chord* chord = toChord(firstElement);
+        return chord->firstNoteOfChord();
+    } else {
+        return toRest(firstElement);
+    }
+    return firstElement;
+}
+
+EngravingItem* Tuplet::prevElement()
+{
+    ChordRest* lastElement = toChordRest(elements().back());
+    if (lastElement) {
+        if (lastElement->isChord()) {
+            return toChord(lastElement)->notes().back();
+        }
+        return toRest(lastElement);
+    }
+    return lastElement;
+}
 } // namespace mu::engraving
