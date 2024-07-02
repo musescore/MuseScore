@@ -167,6 +167,11 @@ void GlobalConfiguration::setMetricUnit(bool metricUnit)
     settings()->setSharedValue(METRIC_UNIT_KEY, Val(metricUnit));
 }
 
+bool GlobalConfiguration::highResolutionTimerActive() const
+{
+    return true;
+}
+
 std::string GlobalConfiguration::museScoreUrl() const
 {
     return MUSESCORE_URL;

@@ -41,7 +41,9 @@ public:
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
+
     void flush();
+    void allNotesOff();
 
     void setBlockSize(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
@@ -51,11 +53,11 @@ public:
 private:
     struct SamplesInfo {
         unsigned int sampleRate = 0;
-        unsigned int samplesPerBlock = 0;
+        unsigned int maxSamplesPerBlock = 0;
 
         bool isValid()
         {
-            return sampleRate > 0 && samplesPerBlock > 0;
+            return sampleRate > 0 && maxSamplesPerBlock > 0;
         }
     };
 

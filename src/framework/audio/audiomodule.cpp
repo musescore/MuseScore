@@ -222,8 +222,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_soundFontRepository->init();
 
-    m_audioBuffer->init(m_configuration->audioChannelsCount(),
-                        m_configuration->renderStep());
+    m_audioBuffer->init(m_configuration->audioChannelsCount());
 
     m_audioOutputController->init();
 
@@ -271,22 +270,25 @@ void AudioModule::onDestroy()
 
 void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 {
-    const bool shouldMeasureInputLag = m_configuration->shouldMeasureInputLag();
-
     IAudioDriver::Spec requiredSpec;
     requiredSpec.sampleRate = m_configuration->sampleRate();
     requiredSpec.format = IAudioDriver::Format::AudioF32;
     requiredSpec.channels = m_configuration->audioChannelsCount();
     requiredSpec.samples = m_configuration->driverBufferSize();
-    requiredSpec.callback = [this, shouldMeasureInputLag](void* /*userdata*/, uint8_t* stream, int byteCount) {
-        auto samplesPerChannel = byteCount / (2 * sizeof(float));
-        float* dest = reinterpret_cast<float*>(stream);
-        m_audioBuffer->pop(dest, samplesPerChannel);
 
-        if (shouldMeasureInputLag) {
+    if (m_configuration->shouldMeasureInputLag()) {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            float* dest = reinterpret_cast<float*>(stream);
+            m_audioBuffer->pop(dest, samplesPerChannel);
             measureInputLag(dest, samplesPerChannel * m_audioBuffer->audioChannelCount());
-        }
-    };
+        };
+    } else {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            m_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
+        };
+    }
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_audioDriver->init();
@@ -305,12 +307,16 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 {
-    auto workerSetup = [this, activeSpec]() {
+    AudioEngine::RenderConstraints consts;
+    consts.minSamplesToReserveWhenIdle = m_configuration->minSamplesToReserve(RenderMode::IdleMode);
+    consts.minSamplesToReserveInRealtime = m_configuration->minSamplesToReserve(RenderMode::RealTimeMode);
+
+    auto workerSetup = [this, activeSpec, consts]() {
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
         // Setup audio engine
-        AudioEngine::instance()->init(m_audioBuffer);
+        AudioEngine::instance()->init(m_audioBuffer, consts);
         AudioEngine::instance()->setAudioChannelsCount(activeSpec.channels);
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
@@ -328,5 +334,5 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_audioBuffer->forward();
     };
 
-    m_audioWorker->run(workerSetup, workerLoopBody);
+    m_audioWorker->run(workerSetup, workerLoopBody, m_configuration->audioWorkerInterval());
 }

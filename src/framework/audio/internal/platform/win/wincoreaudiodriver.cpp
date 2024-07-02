@@ -430,7 +430,7 @@ std::vector<unsigned int> CoreAudioDriver::resolveBufferSizes(unsigned int minBu
 
     unsigned int minimum = std::max(static_cast<int>(minBufferSize), MINIMUM_BUFFER_SIZE);
 
-    unsigned int n = 4096;
+    unsigned int n = MAXIMUM_BUFFER_SIZE;
     while (n >= minimum) {
         result.push_back(n);
         n /= 2;

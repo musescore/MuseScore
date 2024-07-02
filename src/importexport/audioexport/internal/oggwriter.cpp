@@ -34,6 +34,7 @@ Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
     const SoundTrackFormat format {
         SoundTrackType::OGG,
         static_cast<sample_rate_t>(configuration()->exportSampleRate()),
+        configuration()->exportBufferSize(),
         2 /* audioChannelsNumber */,
         128 /* bitRate */
     };

@@ -55,13 +55,11 @@ void VstSynthesiser::init()
     pluginsRegister()->registerInstrPlugin(m_trackId, m_pluginPtr);
     m_pluginPtr->load();
 
-    m_samplesPerChannel = config()->driverBufferSize();
-
     m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr);
 
     auto onPluginLoaded = [this]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
-        m_vstAudioClient->setBlockSize(m_samplesPerChannel);
+        m_vstAudioClient->setBlockSize(config()->samplesToPreallocate());
         m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS), m_useDynamicEvents);
     };
 
@@ -122,13 +120,15 @@ std::string VstSynthesiser::name() const
 void VstSynthesiser::revokePlayingNotes()
 {
     if (m_vstAudioClient) {
-        m_vstAudioClient->flush();
+        m_vstAudioClient->allNotesOff();
     }
 }
 
 void VstSynthesiser::flushSound()
 {
-    revokePlayingNotes();
+    if (m_vstAudioClient) {
+        m_vstAudioClient->flush();
+    }
 }
 
 void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& setupData)

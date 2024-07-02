@@ -139,6 +139,7 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     m_activeSpec = m_desiredSpec;
     m_activeSpec.sampleRate = s_data.wasapiClient->sampleRate();
+    m_activeSpec.samples = std::max(m_activeSpec.samples, static_cast<uint16_t>(minSupportedBufferSize()));
     *activeSpec = m_activeSpec;
 
     m_isOpened = true;
@@ -270,8 +271,10 @@ std::vector<unsigned int> WasapiAudioDriver::availableOutputDeviceBufferSizes() 
 {
     std::vector<unsigned int> result;
 
-    unsigned int n = 4096;
-    while (n >= MINIMUM_BUFFER_SIZE) {
+    unsigned int n = MAXIMUM_BUFFER_SIZE;
+    unsigned int min = minSupportedBufferSize();
+
+    while (n >= min) {
         result.push_back(n);
         n /= 2;
     }
@@ -307,4 +310,20 @@ AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
     }
 
     return result;
+}
+
+unsigned int WasapiAudioDriver::minSupportedBufferSize() const
+{
+    IF_ASSERT_FAILED(s_data.wasapiClient.get()) {
+        return MINIMUM_BUFFER_SIZE;
+    }
+
+    unsigned int minPeriod = s_data.wasapiClient->minPeriodInFrames();
+    unsigned int closestBufferSize = MINIMUM_BUFFER_SIZE;
+
+    while (closestBufferSize < minPeriod) {
+        closestBufferSize *= 2;
+    }
+
+    return closestBufferSize;
 }

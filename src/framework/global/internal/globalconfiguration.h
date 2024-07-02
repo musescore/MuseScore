@@ -60,6 +60,8 @@ public:
     bool metricUnit() const override;
     void setMetricUnit(bool metricUnit) override;
 
+    bool highResolutionTimerActive() const override;
+
     std::string museScoreUrl() const override;
 
 private:

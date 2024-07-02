@@ -71,7 +71,17 @@ async::Notification AudioConfigurationStub::driverBufferSizeChanged() const
     return async::Notification();
 }
 
-samples_t AudioConfigurationStub::renderStep() const
+msecs_t AudioConfigurationStub::audioWorkerInterval() const
+{
+    return 0;
+}
+
+samples_t AudioConfigurationStub::minSamplesToReserve(RenderMode) const
+{
+    return 0;
+}
+
+samples_t AudioConfigurationStub::samplesToPreallocate() const
 {
     return 0;
 }

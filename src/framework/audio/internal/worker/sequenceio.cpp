@@ -144,7 +144,7 @@ Channel<TrackId, AudioOutputParams> SequenceIO::outputParamsChanged() const
     return m_outputParamsChanged;
 }
 
-Channel<audioch_t, AudioSignalVal> SequenceIO::audioSignalChanges(const TrackId id) const
+AudioSignalChanges SequenceIO::audioSignalChanges(const TrackId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -154,7 +154,7 @@ Channel<audioch_t, AudioSignalVal> SequenceIO::audioSignalChanges(const TrackId 
 
     TrackPtr track = m_getTracks->track(id);
     IF_ASSERT_FAILED(track) {
-        return Channel<audioch_t, AudioSignalVal>();
+        return AudioSignalChanges();
     }
 
     return track->outputHandler->audioSignalChanges();

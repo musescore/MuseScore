@@ -59,7 +59,7 @@ void AudioConfiguration::init()
 #ifdef Q_OS_WASM
     defaultBufferSize = 8192;
 #else
-    defaultBufferSize = 1024;
+    defaultBufferSize = 512;
 #endif
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE_KEY, Val(defaultBufferSize));
     settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
@@ -146,9 +146,25 @@ async::Notification AudioConfiguration::driverBufferSizeChanged() const
     return m_driverBufferSizeChanged;
 }
 
-samples_t AudioConfiguration::renderStep() const
+msecs_t AudioConfiguration::audioWorkerInterval() const
 {
-    return 512;
+    return 2;
+}
+
+samples_t AudioConfiguration::minSamplesToReserve(RenderMode mode) const
+{
+    // Idle: render as little as possible for lower latency (assuming the audio thread sleeps for ~2 ms)
+    if (mode == RenderMode::IdleMode) {
+        return 128;
+    }
+
+    // Active: render more for better quality (rendering is usually much heavier in this scenario)
+    return 1024;
+}
+
+samples_t AudioConfiguration::samplesToPreallocate() const
+{
+    return minSamplesToReserve(RenderMode::RealTimeMode);
 }
 
 unsigned int AudioConfiguration::sampleRate() const

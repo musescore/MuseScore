@@ -60,6 +60,8 @@ private:
 
     AudioDeviceID defaultDeviceId() const;
 
+    unsigned int minSupportedBufferSize() const;
+
     bool m_isOpened = false;
 
     AudioDeviceID m_deviceId;

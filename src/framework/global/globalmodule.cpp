@@ -58,6 +58,10 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 #include "log.h"
 
 using namespace muse;
@@ -234,11 +238,29 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_systemInfo->init();
+
+    m_highResolutionTimerActive = m_configuration->highResolutionTimerActive();
+
+#ifdef Q_OS_WIN
+    // Improves the accuracy of Sleep() on Windows
+    // Without it, errors up to 15 ms are possible, which is critical for the audio thread
+    // and can significantly degrade sound quality
+    // However, this approach may result in higher CPU usage as a trade-off
+    if (m_highResolutionTimerActive) {
+        timeBeginPeriod(1);
+    }
+#endif
 }
 
 void GlobalModule::onDeinit()
 {
     invokeQueuedCalls();
+
+#ifdef Q_OS_WIN
+    if (m_highResolutionTimerActive) {
+        timeEndPeriod(1);
+    }
+#endif
 }
 
 void GlobalModule::invokeQueuedCalls()

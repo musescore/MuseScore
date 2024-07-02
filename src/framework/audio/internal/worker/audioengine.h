@@ -39,7 +39,12 @@ public:
 
     static AudioEngine* instance();
 
-    Ret init(std::shared_ptr<AudioBuffer> bufferPtr);
+    struct RenderConstraints {
+        samples_t minSamplesToReserveWhenIdle = 0;
+        samples_t minSamplesToReserveInRealtime = 0;
+    };
+
+    Ret init(std::shared_ptr<AudioBuffer> bufferPtr, const RenderConstraints& consts);
     void deinit();
 
     sample_rate_t sampleRate() const;
@@ -57,12 +62,16 @@ public:
 private:
     AudioEngine();
 
+    void updateBufferConstraints();
+
     bool m_inited = false;
 
     sample_rate_t m_sampleRate = 0;
+    samples_t m_readBufferSize = 0;
 
     MixerPtr m_mixer = nullptr;
     std::shared_ptr<AudioBuffer> m_buffer = nullptr;
+    RenderConstraints m_renderConsts;
 
     RenderMode m_currentMode = RenderMode::Undefined;
     async::Notification m_modeChanges;

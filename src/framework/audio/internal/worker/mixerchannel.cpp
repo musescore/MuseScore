@@ -136,7 +136,7 @@ async::Channel<AudioOutputParams> MixerChannel::outputParamsChanged() const
     return m_paramsChanges;
 }
 
-async::Channel<audioch_t, AudioSignalVal> MixerChannel::audioSignalChanges() const
+AudioSignalChanges MixerChannel::audioSignalChanges() const
 {
     return m_audioSignalNotifier.audioSignalChanges;
 }
@@ -236,9 +236,10 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
         }
 
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesCount);
-
-        notifyAboutAudioSignalChanges(audioChNum, rms);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, rms, dsp::dbFromSample(rms));
     }
+
+    m_audioSignalNotifier.notifyAboutChanges();
 
     if (!m_compressor->isActive()) {
         return;
@@ -253,11 +254,8 @@ void MixerChannel::notifyNoAudioSignal()
     unsigned int channelsCount = audioChannelsCount();
 
     for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
-        notifyAboutAudioSignalChanges(audioChNum, 0.f);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f, dsp::dbFromSample(0.f));
     }
-}
 
-void MixerChannel::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
-{
-    m_audioSignalNotifier.updateSignalValues(audioChannelNumber, linearRms, dsp::dbFromSample(linearRms));
+    m_audioSignalNotifier.notifyAboutChanges();
 }
