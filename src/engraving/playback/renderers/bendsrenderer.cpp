@@ -139,7 +139,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
         }
 
         if (currNote->tieFor()) {
-            currBend = currNote->lastTiedNote()->bendFor();
+            currBend = currNote->lastTiedNote(false)->bendFor();
             appendBendTimeFactors(score, currBend, bendTimeFactorMap);
         }
 

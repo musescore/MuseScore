@@ -23,6 +23,8 @@
 #include "chordfilter.h"
 
 #include "dom/chord.h"
+#include "dom/note.h"
+#include "dom/tie.h"
 
 #include "internal/tremolofilter.h"
 
@@ -32,6 +34,28 @@ using namespace muse;
 bool ChordFilter::isPlayable(const EngravingItem* item, const RenderingContext& ctx)
 {
     return TremoloFilter::isItemPlayable(item, ctx);
+}
+
+static bool containsTieEnd(const Chord* chord)
+{
+    for (const Note* note : chord->notes()) {
+        if ((note->tieBack() && note->tieBack()->playSpanner()) && !(note->tieFor() && note->tieFor()->playSpanner())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static bool containsTieStart(const Chord* chord)
+{
+    for (const Note* note : chord->notes()) {
+        if (!(note->tieBack() && note->tieBack()->playSpanner()) && (note->tieFor() && note->tieFor()->playSpanner())) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void ChordFilter::validateArticulations(const EngravingItem* item, mpe::ArticulationMap& result)
@@ -57,7 +81,7 @@ void ChordFilter::validateArticulations(const EngravingItem* item, mpe::Articula
 
     const Chord* chord = toChord(item);
 
-    if (chord->containsTieEnd()) {
+    if (containsTieEnd(chord)) {
         mpe::ArticulationMap filteredMap;
 
         for (const mpe::ArticulationType type : LAST_TIED_NOTE_ALLOWED_TYPES) {
@@ -72,7 +96,7 @@ void ChordFilter::validateArticulations(const EngravingItem* item, mpe::Articula
         return;
     }
 
-    if (chord->containsTieStart()) {
+    if (containsTieStart(chord)) {
         for (const mpe::ArticulationType type : LAST_TIED_NOTE_ALLOWED_TYPES) {
             auto search = result.find(type);
 

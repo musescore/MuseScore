@@ -1167,7 +1167,7 @@ static Trill* findFirstTrill(Chord* chord)
             continue;
         }
         Trill* trill = toTrill(i.value);
-        if (trill->playArticulation() == false) {
+        if (!trill->playSpanner()) {
             continue;
         }
         return trill;

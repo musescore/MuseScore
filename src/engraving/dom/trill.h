@@ -94,8 +94,6 @@ public:
     TrillType trillType() const { return m_trillType; }
     void setOrnamentStyle(OrnamentStyle val) { m_ornamentStyle = val; }
     OrnamentStyle ornamentStyle() const { return m_ornamentStyle; }
-    void setPlayArticulation(bool val) { m_playArticulation = val; }
-    bool playArticulation() const { return m_playArticulation; }
     String trillTypeUserName() const;
     Accidental* accidental() const { return m_accidental; }
     void setAccidental(Accidental* a) { m_accidental = a; }
@@ -124,7 +122,6 @@ private:
     Accidental* m_accidental = nullptr;
     Chord* m_cueNoteChord = nullptr;
     OrnamentStyle m_ornamentStyle = OrnamentStyle::DEFAULT;   // for use in ornaments such as trill
-    bool m_playArticulation = true;
     Ornament* m_ornament = nullptr;
 };
 } // namespace mu::engraving

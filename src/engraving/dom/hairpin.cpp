@@ -232,7 +232,6 @@ EngravingItem* HairpinSegment::propertyDelegate(Pid pid)
         || pid == Pid::HAIRPIN_CONT_HEIGHT
         || pid == Pid::DYNAMIC_RANGE
         || pid == Pid::LINE_STYLE
-        || pid == Pid::PLAY
         || pid == Pid::APPLY_TO_VOICE
         || pid == Pid::DIRECTION
         || pid == Pid::CENTER_BETWEEN_STAVES
@@ -500,7 +499,6 @@ Hairpin::Hairpin(Segment* parent)
     m_dynRange              = DynamicRange::PART;
     m_singleNoteDynamics    = true;
     m_veloChangeMethod      = ChangeMethod::NORMAL;
-    m_playHairpin           = true;
 }
 
 int Hairpin::subtype() const
@@ -573,8 +571,6 @@ PropertyValue Hairpin::getProperty(Pid id) const
         return m_singleNoteDynamics;
     case Pid::VELO_CHANGE_METHOD:
         return m_veloChangeMethod;
-    case Pid::PLAY:
-        return m_playHairpin;
     case Pid::APPLY_TO_VOICE:
         return applyToVoice();
     case Pid::CENTER_BETWEEN_STAVES:
@@ -621,9 +617,6 @@ bool Hairpin::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::VELO_CHANGE_METHOD:
         m_veloChangeMethod = v.value<ChangeMethod>();
-        break;
-    case Pid::PLAY:
-        setPlayHairpin(v.toBool());
         break;
     case Pid::APPLY_TO_VOICE:
         setApplyToVoice(v.value<VoiceApplication>());
@@ -715,9 +708,6 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::PLACEMENT:
         return style().styleV(Sid::hairpinPlacement);
-
-    case Pid::PLAY:
-        return true;
 
     case Pid::APPLY_TO_VOICE:
         return VoiceApplication::ALL_VOICE_IN_INSTRUMENT;

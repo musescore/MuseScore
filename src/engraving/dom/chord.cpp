@@ -2695,28 +2695,6 @@ Chord* Chord::nextTiedChord(bool backwards, bool sameSize) const
     return next;   // all notes in this chord are tied to notes in next chord
 }
 
-bool Chord::containsTieEnd() const
-{
-    for (const Note* note : m_notes) {
-        if (note->tieBack() && !note->tieFor()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool Chord::containsTieStart() const
-{
-    for (const Note* note : m_notes) {
-        if (!note->tieBack() && note->tieFor()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 //---------------------------------------------------------
 //   setNoteType
 //---------------------------------------------------------

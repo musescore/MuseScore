@@ -86,7 +86,6 @@ EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
     case Pid::GLISS_SHIFT:
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
-    case Pid::PLAY:
     case Pid::FONT_FACE:
     case Pid::FONT_SIZE:
     case Pid::FONT_STYLE:
@@ -110,7 +109,6 @@ Glissando::Glissando(EngravingItem* parent)
     initElementStyle(&glissandoElementStyle);
 
     resetProperty(Pid::GLISS_SHOW_TEXT);
-    resetProperty(Pid::PLAY);
     resetProperty(Pid::GLISS_STYLE);
     resetProperty(Pid::GLISS_SHIFT);
     resetProperty(Pid::GLISS_TYPE);
@@ -131,7 +129,6 @@ Glissando::Glissando(const Glissando& g)
     _easeIn         = g._easeIn;
     _easeOut        = g._easeOut;
     _showText       = g._showText;
-    _playGlissando  = g._playGlissando;
     _fontStyle      = g._fontStyle;
     m_isHarpGliss   = g.m_isHarpGliss;
 }
@@ -191,7 +188,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
         return false;
     }
     const Glissando* glissando = toGlissando(spanner);
-    if (!glissando->playGlissando()) {
+    if (!glissando->playSpanner()) {
         return false;
     }
     GlissandoStyle glissandoStyle = glissando->glissandoStyle();
@@ -466,8 +463,6 @@ PropertyValue Glissando::getProperty(Pid propertyId) const
         return easeIn();
     case Pid::GLISS_EASEOUT:
         return easeOut();
-    case Pid::PLAY:
-        return bool(playGlissando());
     case Pid::FONT_FACE:
         return _fontFace;
     case Pid::FONT_SIZE:
@@ -515,9 +510,6 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::GLISS_EASEOUT:
         setEaseOut(v.toInt());
         break;
-    case Pid::PLAY:
-        setPlayGlissando(v.toBool());
-        break;
     case Pid::FONT_FACE:
         setFontFace(v.value<String>());
         break;
@@ -555,8 +547,6 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
         return 0;
-    case Pid::PLAY:
-        return true;
     default:
         break;
     }

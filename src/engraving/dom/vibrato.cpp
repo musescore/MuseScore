@@ -93,7 +93,7 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 EngravingItem* VibratoSegment::propertyDelegate(Pid pid)
 {
-    if (pid == Pid::VIBRATO_TYPE || pid == Pid::PLACEMENT || pid == Pid::PLAY) {
+    if (pid == Pid::VIBRATO_TYPE || pid == Pid::PLACEMENT) {
         return spanner();
     }
     return LineSegment::propertyDelegate(pid);
@@ -117,7 +117,6 @@ Vibrato::Vibrato(EngravingItem* parent)
 {
     initElementStyle(&vibratoStyle);
     m_vibratoType = VibratoType::GUITAR_VIBRATO;
-    setPlayArticulation(true);
 }
 
 Vibrato::~Vibrato()
@@ -180,8 +179,6 @@ PropertyValue Vibrato::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::VIBRATO_TYPE:
         return int(vibratoType());
-    case Pid::PLAY:
-        return bool(playArticulation());
     default:
         break;
     }
@@ -197,9 +194,6 @@ bool Vibrato::setProperty(Pid propertyId, const PropertyValue& val)
     switch (propertyId) {
     case Pid::VIBRATO_TYPE:
         setVibratoType(VibratoType(val.toInt()));
-        break;
-    case Pid::PLAY:
-        setPlayArticulation(val.toBool());
         break;
     case Pid::COLOR:
         setColor(val.value<Color>());
@@ -223,8 +217,6 @@ PropertyValue Vibrato::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::VIBRATO_TYPE:
         return 0;
-    case Pid::PLAY:
-        return true;
     case Pid::PLACEMENT:
         return style().styleV(Sid::vibratoPlacement);
     default:

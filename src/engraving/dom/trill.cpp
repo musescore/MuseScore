@@ -145,7 +145,7 @@ void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*)
 
 EngravingItem* TrillSegment::propertyDelegate(Pid pid)
 {
-    if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT || pid == Pid::PLAY) {
+    if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT) {
         return spanner();
     }
     return LineSegment::propertyDelegate(pid);
@@ -183,7 +183,6 @@ Trill::Trill(EngravingItem* parent)
     m_accidental = nullptr;
     m_cueNoteChord = nullptr;
     m_ornamentStyle = OrnamentStyle::DEFAULT;
-    setPlayArticulation(true);
     initElementStyle(&trillStyle);
 }
 
@@ -193,7 +192,6 @@ Trill::Trill(const Trill& t)
     m_trillType = t.m_trillType;
     m_ornament = t.m_ornament ? t.m_ornament->clone() : nullptr;
     m_ornamentStyle = t.m_ornamentStyle;
-    m_playArticulation = t.m_playArticulation;
     initElementStyle(&trillStyle);
 }
 
@@ -281,8 +279,6 @@ PropertyValue Trill::getProperty(Pid propertyId) const
         return int(trillType());
     case Pid::ORNAMENT_STYLE:
         return ornamentStyle();
-    case Pid::PLAY:
-        return bool(playArticulation());
     default:
         break;
     }
@@ -298,9 +294,6 @@ bool Trill::setProperty(Pid propertyId, const PropertyValue& val)
     switch (propertyId) {
     case Pid::TRILL_TYPE:
         setTrillType(TrillType(val.toInt()));
-        break;
-    case Pid::PLAY:
-        setPlayArticulation(val.toBool());
         break;
     case Pid::ORNAMENT_STYLE:
         setOrnamentStyle(val.value<OrnamentStyle>());
@@ -329,8 +322,6 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
         return 0;
     case Pid::ORNAMENT_STYLE:
         return OrnamentStyle::DEFAULT;
-    case Pid::PLAY:
-        return true;
     case Pid::PLACEMENT:
         return style().styleV(Sid::trillPlacement);
 

@@ -387,7 +387,7 @@ void RepeatList::collectRepeatListElements()
     // so we will pre-process them into cloned versions that handle those overlaps.
     // This assumes that spanners are ordered from first to last tick-wise
     for (const auto& spannerEntry : m_score->spanner()) {
-        if (!spannerEntry.second->isVolta()) {
+        if (!spannerEntry.second->isVolta() || !spannerEntry.second->playSpanner()) {
             continue;
         }
 

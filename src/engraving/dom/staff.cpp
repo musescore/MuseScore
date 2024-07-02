@@ -1259,8 +1259,8 @@ void Staff::updateOttava()
     m_pitchOffsets.clear();
     for (auto i : score()->spanner()) {
         const Spanner* s = i.second;
-        if (s->type() == ElementType::OTTAVA && s->staffIdx() == staffIdx) {
-            const Ottava* o = static_cast<const Ottava*>(s);
+        if (s->isOttava() && s->staffIdx() == staffIdx && s->playSpanner()) {
+            const Ottava* o = toOttava(s);
             m_pitchOffsets.setPitchOffset(o->tick().ticks(), o->pitchShift());
             m_pitchOffsets.setPitchOffset(o->tick2().ticks(), 0);
         }

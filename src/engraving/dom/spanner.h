@@ -180,6 +180,9 @@ public:
     bool broken() const { return m_broken; }
     void setBroken(bool v) { m_broken = v; }
 
+    bool playSpanner() const { return m_playSpanner; }
+    void setPlaySpanner(bool p) { m_playSpanner = p; }
+
     Anchor anchor() const { return m_anchor; }
     void setAnchor(Anchor a) { m_anchor = a; }
 
@@ -276,6 +279,8 @@ private:
 
     EngravingItem* m_startElement = nullptr;
     EngravingItem* m_endElement = nullptr;
+
+    bool m_playSpanner = true;
 
     Anchor m_anchor = Anchor::SEGMENT;
     Fraction m_tick = Fraction(-1, 1);

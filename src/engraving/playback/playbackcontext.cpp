@@ -350,7 +350,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
 
-        if (!spanner->isHairpin() || !toHairpin(spanner)->playHairpin()) {
+        if (!spanner->isHairpin() || !spanner->playSpanner()) {
             continue;
         }
 

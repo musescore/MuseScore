@@ -2195,7 +2195,7 @@ void Read206::readTrill206(XmlReader& e, ReadContext& ctx, Trill* t)
         } else if (tag == "ornamentStyle") {
             read400::TRead::readProperty(t, e, ctx, Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
-            t->setPlayArticulation(e.readBool());
+            t->setPlaySpanner(e.readBool());
         } else if (!TRead::readProperties(static_cast<SLine*>(t), e, ctx)) {
             e.unknown();
         }

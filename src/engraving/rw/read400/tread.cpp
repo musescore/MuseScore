@@ -2692,8 +2692,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
             g->setEaseIn(e.readInt());
         } else if (tag == "easeOutSpin") {
             g->setEaseOut(e.readInt());
-        } else if (tag == "play") {
-            g->setPlayGlissando(e.readBool());
         } else if (TRead::readStyledProperty(g, tag, e, ctx)) {
         } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();
@@ -3609,13 +3607,16 @@ void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
-    if (ctx.pasteMode()) {
-        if (tag == "ticks_f") {
-            s->setTicks(e.readFraction());
-            return true;
-        }
+    if (ctx.pasteMode() && (tag == "ticks_f")) {
+        s->setTicks(e.readFraction());
+        return true;
+    } else if (tag == "play") {
+        s->setPlaySpanner(e.readBool());
+        return true;
+    } else if (!readItemProperties(s, e, ctx)) {
+        return false;
     }
-    return readItemProperties(s, e, ctx);
+    return true;
 }
 
 void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
@@ -4314,8 +4315,6 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "ornamentStyle") {
             readProperty(t, e, ctx, Pid::ORNAMENT_STYLE);
-        } else if (tag == "play") {
-            t->setPlayArticulation(e.readBool());
         } else if (!readProperties(static_cast<SLine*>(t), e, ctx)) {
             e.unknown();
         }
@@ -4330,8 +4329,6 @@ void TRead::read(Vibrato* v, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             v->setVibratoType(TConv::fromXml(e.readAsciiText(), VibratoType::GUITAR_VIBRATO));
-        } else if (tag == "play") {
-            v->setPlayArticulation(e.readBool());
         } else if (!readProperties(static_cast<SLine*>(v), e, ctx)) {
             e.unknown();
         }

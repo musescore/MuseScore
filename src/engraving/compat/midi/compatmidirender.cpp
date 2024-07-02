@@ -599,10 +599,8 @@ void CompatMidiRender::renderGlissando(NoteEventList* events, Note* notestart, d
 {
     std::vector<int> empty = {};
     std::vector<int> body;
-    for (Spanner* spanner : notestart->spannerFor()) {
-        if (spanner->type() == ElementType::GLISSANDO
-            && toGlissando(spanner)->playGlissando()
-            && Glissando::pitchSteps(spanner, body)) {
+    for (Spanner* s : notestart->spannerFor()) {
+        if (s->isGlissando() && s->playSpanner() && Glissando::pitchSteps(s, body)) {
             CompatMidiRender::renderNoteArticulation(events, notestart, true, Constants::DIVISION, empty, body, false, true, empty, 16, 0,
                                                      graceOnBeatProportion, tremoloBefore);
         }
@@ -974,7 +972,7 @@ Trill* CompatMidiRender::findFirstTrill(Chord* chord)
             continue;
         }
         Trill* trill = toTrill(i.value);
-        if (!trill->playArticulation()) {
+        if (!trill->playSpanner()) {
             continue;
         }
         return trill;
