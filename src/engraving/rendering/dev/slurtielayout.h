@@ -57,6 +57,7 @@ public:
 
     static void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF());
     static void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF());
+    static double noteOpticalCenterForTie(const Note* note, bool up);
 
 private:
 
@@ -70,7 +71,6 @@ private:
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
-    static double noteOpticalCenterForTie(const Note* note, bool up);
     static void correctForCrossStaff(Tie* tie, SlurTiePos& sPos, SpannerSegmentType type);
     static void forceHorizontal(Tie* tie, SlurTiePos& sPos);
     static void adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip startOrEnd);

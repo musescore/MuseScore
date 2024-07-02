@@ -577,6 +577,8 @@ void Articulation::computeCategories()
                          m_symId == SymId::stringsThumbPosition || m_symId == SymId::luteFingeringRHThumb
                          || m_symId == SymId::luteFingeringRHFirst || m_symId == SymId::luteFingeringRHSecond
                          || m_symId == SymId::luteFingeringRHThird);
+    m_categories.setFlag(ArticulationCategory::LAISSEZ_VIB,
+                         m_symId == SymId::articLaissezVibrerAbove || m_symId == SymId::articLaissezVibrerBelow);
 }
 
 bool Articulation::isBasicArticulation() const
