@@ -58,39 +58,6 @@ TieSegment::TieSegment(const TieSegment& s)
 {
 }
 
-bool TieSegment::isEditAllowed(EditData& ed) const
-{
-    if (ed.key == Key_Home && !ed.modifiers) {
-        return true;
-    }
-
-    return false;
-}
-
-//---------------------------------------------------------
-//   edit
-//    return true if event is accepted
-//---------------------------------------------------------
-
-bool TieSegment::edit(EditData& ed)
-{
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
-    SlurTie* sl = tie();
-
-    if (ed.key == Key_Home && !ed.modifiers) {
-        if (ed.hasCurrentGrip()) {
-            ups(ed.curGrip).off = PointF();
-            renderer()->layoutItem(sl);
-            triggerLayout();
-        }
-        return true;
-    }
-    return false;
-}
-
 //---------------------------------------------------------
 //   changeAnchor
 //---------------------------------------------------------
