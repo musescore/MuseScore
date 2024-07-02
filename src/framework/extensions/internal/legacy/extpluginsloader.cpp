@@ -119,14 +119,45 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     String uiCtx = DEFAULT_UI_CONTEXT;
     int needProperties = 6; // title, description, pluginType, category, thumbnail, requiresScore
     int propertiesFound = 0;
+    bool insideMuseScoreItem = false;
     String content = String::fromUtf8(data);
     size_t current, previous = 0;
     current = content.indexOf(u"\n");
+
+    //! NOTE Supposed structure
+    //! // comments
+    //! import ...
+    //! import ...
+    //!
+    //! MuseScore {
+    //!
+    //!     prop1: ...
+    //!     prop2: ...
+    //!     ...
+    //!
+    //!     As soon as the first open bracket is encountered,
+    //!     we consider that the properties have ended.
+    //!     Technically, there may be properties further down,
+    //!     we just need to ask to move them up.
+    //!
+    //!     onRun: {..
+    //!     function applyMirrorIntervals() {..
+    //!     Item { ...
+    //!
+
     while (current != std::string::npos) {
         String line = content.mid(previous, current - previous).trimmed();
 
         if (line.startsWith(u'/')) { // comment
             // noop
+        } else if (line.endsWith(u'{')) {
+            if (insideMuseScoreItem) {
+                break;
+            }
+
+            if (!insideMuseScoreItem) {
+                insideMuseScoreItem = true;
+            }
         } else if (line.startsWith(u"title:")) {
             m.title = dropQuotes(line.mid(6).trimmed());
             ++propertiesFound;
