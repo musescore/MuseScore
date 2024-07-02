@@ -43,57 +43,13 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
-static std::vector<track_idx_t> resolveTracksForDynamic(const EngravingItem* dynamicItem, track_idx_t startTrack, track_idx_t endTrack)
+static bool soundFlagPlayable(const SoundFlag* flag)
 {
-    VoiceApplication applyToVoice = dynamicItem->getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
-    voice_idx_t voiceIdx = dynamicItem->voice();
-    staff_idx_t staffIdx = dynamicItem->staffIdx();
-
-    auto trackAcceptedByVoice = [applyToVoice, staffIdx, voiceIdx](track_idx_t trackIdx) {
-        switch (applyToVoice) {
-        case VoiceApplication::ALL_VOICE_IN_INSTRUMENT:
-            return true;
-        case VoiceApplication::ALL_VOICE_IN_STAFF:
-            return staffIdx == track2staff(trackIdx);
-        case VoiceApplication::CURRENT_VOICE_ONLY:
-            return voiceIdx == track2voice(trackIdx);
-        }
-
-        return false;
-    };
-
-    std::vector<track_idx_t> result;
-
-    for (track_idx_t trackIdx = startTrack; trackIdx < endTrack; ++trackIdx) {
-        if (trackAcceptedByVoice(trackIdx)) {
-            result.push_back(trackIdx);
-        }
+    if (flag && flag->play()) {
+        return !flag->soundPresets().empty() || !flag->playingTechnique().empty();
     }
 
-    return result;
-}
-
-static std::vector<track_idx_t> resolveTracksForSoundFlag(const SoundFlag* flag, track_idx_t startTrack, track_idx_t endTrack)
-{
-    staff_idx_t staffIdx = flag->staffIdx();
-
-    auto trackAcceptedByStaff = [flag, staffIdx](track_idx_t trackIdx) {
-        if (flag->applyToAllStaves()) {
-            return true;
-        }
-
-        return staffIdx == track2staff(trackIdx);
-    };
-
-    std::vector<track_idx_t> result;
-
-    for (track_idx_t trackIdx = startTrack; trackIdx < endTrack; ++trackIdx) {
-        if (trackAcceptedByStaff(trackIdx)) {
-            result.push_back(trackIdx);
-        }
-    }
-
-    return result;
+    return false;
 }
 
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const
@@ -109,7 +65,7 @@ dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackId
         return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
     }
 
-    return it->second;
+    return it->second.level;
 }
 
 ArticulationType PlaybackContext::persistentArticulationType(const int nominalPositionTick) const
@@ -161,7 +117,7 @@ DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const Score* score) const
     for (const auto& dynamics : m_dynamicsByTrack) {
         DynamicLevelMap dynamicLevelMap;
         for (const auto& dynamic : dynamics.second) {
-            dynamicLevelMap.emplace(timestampFromTicks(score, dynamic.first), dynamic.second);
+            dynamicLevelMap.emplace(timestampFromTicks(score, dynamic.first), dynamic.second.level);
         }
 
         result.emplace(static_cast<layer_idx_t>(dynamics.first), std::move(dynamicLevelMap));
@@ -239,7 +195,12 @@ dynamic_level_t PlaybackContext::nominalDynamicLevel(const track_idx_t trackIdx,
     }
 
     const DynamicMap& dynamics = dynamicsIt->second;
-    return muse::value(dynamics, positionTick, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    auto it = dynamics.find(positionTick);
+    if (it == dynamics.end()) {
+        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    }
+
+    return it->second.level;
 }
 
 void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick)
@@ -307,34 +268,46 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     }
 }
 
-void PlaybackContext::updatePlaybackParams(const SoundFlag* flag, const int segmentPositionTick)
+void PlaybackContext::updatePlaybackParams(const SoundFlagMap& flagsOnSegment, const int segmentPositionTick)
 {
-    if (!flag->play()) {
-        return;
-    }
+    auto trackAccepted = [&flagsOnSegment](const SoundFlag* flag, track_idx_t trackIdx) {
+        staff_idx_t staffIdx = track2staff(trackIdx);
 
-    if (flag->soundPresets().empty() && flag->playingTechnique().empty()) {
-        return;
-    }
+        if (flag->staffIdx() == staffIdx) {
+            return true;
+        }
 
-    std::vector<track_idx_t> trackIdxList = resolveTracksForSoundFlag(flag, m_partStartTrack, m_partEndTrack);
+        if (flag->applyToAllStaves()) {
+            return !muse::contains(flagsOnSegment, staffIdx);
+        }
 
-    for (track_idx_t trackIdx : trackIdxList) {
-        mpe::PlaybackParamList& params = m_playbackParamByTrack[trackIdx][segmentPositionTick];
+        return false;
+    };
 
-        for (const String& soundPreset : flag->soundPresets()) {
-            if (!soundPreset.empty()) {
-                params.emplace_back(PlaybackParam::SoundPreset, soundPreset);
+    for (const auto& pair : flagsOnSegment) {
+        const SoundFlag* flag = pair.second;
+
+        for (track_idx_t trackIdx = m_partStartTrack; trackIdx < m_partEndTrack; ++trackIdx) {
+            if (!trackAccepted(flag, trackIdx)) {
+                continue;
+            }
+
+            mpe::PlaybackParamList& params = m_playbackParamByTrack[trackIdx][segmentPositionTick];
+
+            for (const String& soundPreset : flag->soundPresets()) {
+                if (!soundPreset.empty()) {
+                    params.emplace_back(PlaybackParam::SoundPreset, soundPreset);
+                }
+            }
+
+            if (!flag->playingTechnique().empty()) {
+                params.emplace_back(PlaybackParam::PlayingTechnique, flag->playingTechnique());
             }
         }
 
-        if (!flag->playingTechnique().empty()) {
-            params.emplace_back(PlaybackParam::PlayingTechnique, flag->playingTechnique());
+        if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+            m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
         }
-    }
-
-    if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
-        m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
     }
 }
 
@@ -434,6 +407,8 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
 
 void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick)
 {
+    SoundFlagMap soundFlagsOnSegment;
+
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->part()) {
             continue;
@@ -455,9 +430,15 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
 
         if (annotation->isStaffText()) {
             if (const SoundFlag* flag = toStaffText(annotation)->soundFlag()) {
-                updatePlaybackParams(flag, segmentPositionTick);
+                if (soundFlagPlayable(flag)) {
+                    soundFlagsOnSegment.emplace(flag->staffIdx(), flag);
+                }
             }
         }
+    }
+
+    if (!soundFlagsOnSegment.empty()) {
+        updatePlaybackParams(soundFlagsOnSegment, segmentPositionTick);
     }
 }
 
@@ -561,9 +542,34 @@ void PlaybackContext::copyPlayTechniquesInRange(const int rangeStartTick, const 
 
 void PlaybackContext::applyDynamic(const EngravingItem* dynamicItem, const dynamic_level_t dynamicLevel, const int positionTick)
 {
-    std::vector<track_idx_t> trackIdxList = resolveTracksForDynamic(dynamicItem, m_partStartTrack, m_partEndTrack);
+    const VoiceApplication applyToVoice = dynamicItem->getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+    const track_idx_t dynamicTrackIdx = dynamicItem->track();
+    const staff_idx_t dynamicStaffIdx = dynamicItem->staffIdx();
+    const int dynamicPriority = static_cast<int>(applyToVoice);
 
-    for (track_idx_t trackIdx : trackIdxList) {
-        m_dynamicsByTrack[trackIdx].insert_or_assign(positionTick, dynamicLevel);
+    //! See: https://github.com/musescore/MuseScore/issues/23355
+    auto trackAccepted = [applyToVoice, dynamicTrackIdx, dynamicStaffIdx](const track_idx_t trackIdx) {
+        switch (applyToVoice) {
+        case VoiceApplication::CURRENT_VOICE_ONLY:
+            return dynamicTrackIdx == trackIdx;
+        case VoiceApplication::ALL_VOICE_IN_STAFF:
+            return dynamicStaffIdx == track2staff(trackIdx);
+        case VoiceApplication::ALL_VOICE_IN_INSTRUMENT:
+            return true;
+        }
+
+        return false;
+    };
+
+    for (track_idx_t trackIdx = m_partStartTrack; trackIdx < m_partEndTrack; ++trackIdx) {
+        if (!trackAccepted(trackIdx)) {
+            continue;
+        }
+
+        DynamicInfo& dynamic = m_dynamicsByTrack[trackIdx][positionTick];
+        if (dynamic.priority < dynamicPriority) {
+            dynamic.level = dynamicLevel;
+            dynamic.priority = dynamicPriority;
+        }
     }
 }

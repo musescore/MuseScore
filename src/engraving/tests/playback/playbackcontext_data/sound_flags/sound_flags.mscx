@@ -432,7 +432,7 @@
             <text>pizzicato</text>
             <SoundFlag>
               <playingTechnique>pizzicato</playingTechnique>
-              <applyToAllStaves>0</applyToAllStaves>
+              <applyToAllStaves>1</applyToAllStaves>
               </SoundFlag>
             </StaffText>
           <Chord>

@@ -2,7 +2,7 @@
 <museScore version="4.40">
   <programVersion>4.4.0</programVersion>
   <programRevision></programRevision>
-  <LastEID>4081</LastEID>
+  <LastEID>4934</LastEID>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -814,6 +814,11 @@
         </Measure>
       <Measure>
         <voice>
+          <Dynamic>
+            <subtype>p</subtype>
+            <velocity>49</velocity>
+            <eid>13387413061668</eid>
+            </Dynamic>
           <Chord>
             <eid>9564892168307</eid>
             <durationType>quarter</durationType>
@@ -826,7 +831,7 @@
           <StaffText>
             <eid>13503377178672</eid>
             <offset x="0.316952" y="-1.23771"/>
-            <text>2nd voice</text>
+            <text>all voices</text>
             </StaffText>
           <Chord>
             <eid>9801115369587</eid>
@@ -857,12 +862,6 @@
             </Chord>
           </voice>
         <voice>
-          <Dynamic>
-            <subtype>p</subtype>
-            <velocity>49</velocity>
-            <applyToVoice>currentVoiceOnly</applyToVoice>
-            <eid>13387413061668</eid>
-            </Dynamic>
           <Chord>
             <eid>9603546873971</eid>
             <durationType>quarter</durationType>
