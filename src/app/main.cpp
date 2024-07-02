@@ -116,10 +116,6 @@ int main(int argc, char** argv)
 
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
 
-    // Necessary for QQuickWidget, but potentially suboptimal for performance.
-    // Remove as soon as possible.
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-
     //! Needs to be set because we use transparent windows for PopupView.
     //! Needs to be called before any QQuickWindows are shown.
     QQuickWindow::setDefaultAlphaBuffer(true);
