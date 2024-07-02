@@ -2122,6 +2122,8 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
              slurSeg->slur()->tick().ticks(), slurSeg->slur()->ticks().ticks());
         slurSeg->slur()->setBroken(true);
         return;
+    } else {
+        slurSeg->slur()->setBroken(false);
     }
 
     // Set up coordinate transforms
