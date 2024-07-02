@@ -24,7 +24,8 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.NotationScene 1.0
+
+import MuseScore.Inspector 1.0
 
 StyledPopupView {
     id: root
@@ -53,7 +54,7 @@ StyledPopupView {
 
         spacing: 12
 
-        StringTuningsSettingsModel {
+        StringTuningsPopupModel {
             id: stringTuningsModel
 
             onItemRectChanged: function(rect) {
@@ -71,13 +72,13 @@ StyledPopupView {
             direction: NavigationPanel.Vertical
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
-            accessible.name: qsTrc("notation", "String tunings settings")
+            accessible.name: qsTrc("inspector", "String tunings settings")
         }
 
         StyledTextLabel {
             id: titleLabel
 
-            text: qsTrc("notation", "Presets")
+            text: qsTrc("inspector", "Presets")
             horizontalAlignment: Text.AlignLeft
         }
 
@@ -113,7 +114,7 @@ StyledPopupView {
                 navigation.name: "StringsNumber"
                 navigation.panel: navPanel
                 navigation.row: 2
-                navigation.accessible.name: qsTrc("notation", "Number of strings:") + " " + currentText
+                navigation.accessible.name: qsTrc("inspector", "Number of strings:") + " " + currentText
 
                 model: stringTuningsModel.numbersOfStrings
 
@@ -131,7 +132,7 @@ StyledPopupView {
             direction: NavigationPanel.Vertical
             section: root.notationViewNavigationSection
             order: navPanel.order + 1
-            accessible.name: qsTrc("notation", "Strings")
+            accessible.name: qsTrc("inspector", "Strings")
         }
 
         GridLayout {
@@ -165,7 +166,7 @@ StyledPopupView {
                     navigation.panel: stringsNavPanel
                     navigation.row: index
                     navigation.column: 1
-                    navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("notation", "Value %1").arg(valueControl.currentValue)
+                    navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("inspector", "Value %1").arg(valueControl.currentValue)
 
                     RowLayout {
                         anchors.fill: parent
@@ -178,7 +179,7 @@ StyledPopupView {
                             navigation.panel: stringsNavPanel
                             navigation.row: index
                             navigation.column: 2
-                            accessibleText: qsTrc("notation", "String %1").arg(numberLabel.text)
+                            accessibleText: qsTrc("inspector", "String %1").arg(numberLabel.text)
 
                             onVisibleToggled: {
                                 stringTuningsModel.toggleString(index)

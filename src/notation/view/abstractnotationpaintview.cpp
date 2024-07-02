@@ -543,7 +543,7 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
 {
     TRACEFUNC;
 
-    PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+    int modelType = inspectorController()->popupModelTypeByElementType(elementType);
 
     emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRectF());
 }
@@ -560,7 +560,6 @@ void AbstractNotationPaintView::hideElementPopup()
 void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const RectF& elementRect)
 {
     if (m_isPopupOpen) {
-        hideElementPopup();
         return;
     }
 

@@ -20,19 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_HARPPEDALPOPUPMODEL_H
-#define MU_NOTATION_HARPPEDALPOPUPMODEL_H
+#ifndef MU_INSPECTOR_HARPPEDALPOPUPMODEL_H
+#define MU_INSPECTOR_HARPPEDALPOPUPMODEL_H
 
 #include <QObject>
+
+#include "../abstractelementpopupmodel.h"
 
 #include "context/iglobalcontext.h"
 
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/undo.h"
 
-#include "view/abstractelementpopupmodel.h"
-
-namespace mu::notation {
+namespace mu::inspector {
 class HarpPedalPopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
@@ -41,7 +41,7 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
 
     Q_PROPERTY(bool isDiagram READ isDiagram WRITE setIsDiagram NOTIFY isDiagramChanged)
     Q_PROPERTY(
-        QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
+        QVector<mu::inspector::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
     Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
 
 public:
@@ -66,11 +66,11 @@ public:
 
 public slots:
     void setIsDiagram(bool isDiagram);
-    void setDiagramPedalState(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
+    void setDiagramPedalState(QVector<mu::inspector::HarpPedalPopupModel::Position> pedalState);
 
 signals:
     void isDiagramChanged(bool isDiagram);
-    void pedalStateChanged(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
+    void pedalStateChanged(QVector<mu::inspector::HarpPedalPopupModel::Position> pedalState);
 
 private:
     void load();
@@ -86,10 +86,10 @@ private:
 
     std::array<Position, mu::engraving::HARP_STRING_NO> m_pedalState;
 };
-} //namespace mu::notation
+}
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::notation::HarpPedalPopupModel::Position)
+Q_DECLARE_METATYPE(mu::inspector::HarpPedalPopupModel::Position)
 #endif
 
-#endif // MU_NOTATION_HARPPEDALPOPUPMODEL_H
+#endif // MU_INSPECTOR_HARPPEDALPOPUPMODEL_H

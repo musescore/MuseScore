@@ -37,6 +37,7 @@
 #include "notation/inotationconfiguration.h"
 
 #include "playback/iplaybackcontroller.h"
+#include "inspector/iinspectorcontroller.h"
 
 #include "global/iglobalconfiguration.h"
 
@@ -91,6 +92,7 @@ public:
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    INJECT(inspector::IInspectorController, inspectorController)
 
 public:
     NotationViewInputController(IControlledView* view);
