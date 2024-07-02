@@ -125,7 +125,7 @@ int NotationConfigurationStub::borderWidth() const
     return 1;
 }
 
-QColor NotationConfigurationStub::anchorLineColor() const
+QColor NotationConfigurationStub::anchorColor() const
 {
     return QColor();
 }
