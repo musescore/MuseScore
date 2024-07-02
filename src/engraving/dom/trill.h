@@ -50,6 +50,9 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     void remove(EngravingItem*) override;
 
     const SymIdList& symbols() const { return m_symbols; }
@@ -92,6 +95,8 @@ public:
 
     void setTrillType(TrillType tt);
     TrillType trillType() const { return m_trillType; }
+    int subtype() const override { return int(m_trillType); }
+    TranslatableString subtypeUserName() const override;
     void setOrnamentStyle(OrnamentStyle val) { m_ornamentStyle = val; }
     OrnamentStyle ornamentStyle() const { return m_ornamentStyle; }
     void setPlayArticulation(bool val) { m_playArticulation = val; }

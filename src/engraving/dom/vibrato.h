@@ -46,6 +46,9 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     const SymIdList& symbols() const { return m_symbols; }
     void setSymbols(const SymIdList& s) { m_symbols = s; }
 
@@ -88,6 +91,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
     String accessibleInfo() const override;
+
+    int subtype() const override { return int(m_vibratoType); }
+    TranslatableString subtypeUserName() const override;
 
 private:
 

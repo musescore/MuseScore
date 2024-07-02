@@ -63,6 +63,9 @@ public:
 
     TimeSigType timeSigType() const { return m_timeSigType; }
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     bool operator==(const TimeSig&) const;
     bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 

@@ -22,6 +22,8 @@
 
 #include "ottava.h"
 
+#include "types/translatablestring.h"
+
 #include "chordrest.h"
 #include "score.h"
 #include "staff.h"
@@ -371,6 +373,25 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
 String Ottava::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(ottavaDefault[static_cast<int>(ottavaType())].name));
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Ottava::subtypeUserName() const
+{
+    return ottavaDefault[int(ottavaType())].userName;
+}
+
+muse::TranslatableString OttavaSegment::subtypeUserName() const
+{
+    return ottava()->subtypeUserName();
+}
+
+int OttavaSegment::subtype() const
+{
+    return ottava()->subtype();
 }
 
 //---------------------------------------------------------

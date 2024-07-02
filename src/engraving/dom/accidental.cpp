@@ -252,7 +252,7 @@ Accidental::Accidental(EngravingItem* parent)
 
 TranslatableString Accidental::subtypeUserName() const
 {
-    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
+    return SymNames::userNameForSymId(symId());
 }
 
 //---------------------------------------------------------

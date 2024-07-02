@@ -55,6 +55,7 @@ public:
     Jump* clone() const override { return new Jump(*this); }
 
     int subtype() const override { return int(jumpType()); }
+    TranslatableString subtypeUserName() const override;
 
     Measure* measure() const { return toMeasure(explicitParent()); }
 

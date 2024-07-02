@@ -310,7 +310,7 @@ String BarLine::translatedUserTypeName(BarLineType t)
 {
     for (const auto& i : barLineTable) {
         if (i.type == t) {
-            return muse::mtrc("engraving/sym", i.userName);
+            return i.userName.translated();
         }
     }
     return String();
@@ -1135,6 +1135,20 @@ EngravingItem* BarLine::nextSegmentElement()
 EngravingItem* BarLine::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());       //score()->inputState().prevTrack() / VOICES);
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString BarLine::subtypeUserName() const
+{
+    for (const auto& i : barLineTable) {
+        if (i.type == barLineType()) {
+            return i.userName;
+        }
+    }
+    return TranslatableString();
 }
 
 //---------------------------------------------------------

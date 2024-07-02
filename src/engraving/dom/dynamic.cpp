@@ -483,12 +483,16 @@ int Dynamic::dynamicVelocity(DynamicType t)
 
 TranslatableString Dynamic::subtypeUserName() const
 {
-    return TranslatableString::untranslatable(TConv::toXml(dynamicType()).ascii());
-}
-
-String Dynamic::translatedSubtypeUserName() const
-{
-    return String::fromAscii(TConv::toXml(dynamicType()).ascii());
+    if (dynamicType() == DynamicType::OTHER) {
+        String s = plainText().simplified();
+        if (s.size() > 20) {
+            s.truncate(20);
+            s += u"…";
+        }
+        return TranslatableString::untranslatable(s);
+    } else {
+        return TConv::userName(dynamicType());
+    }
 }
 
 void Dynamic::startEdit(EditData& ed)
@@ -902,18 +906,7 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
 
 String Dynamic::accessibleInfo() const
 {
-    String s;
-
-    if (dynamicType() == DynamicType::OTHER) {
-        s = plainText().simplified();
-        if (s.size() > 20) {
-            s.truncate(20);
-            s += u"…";
-        }
-    } else {
-        s = TConv::translatedUserName(dynamicType());
-    }
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 
 //---------------------------------------------------------
