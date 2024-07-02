@@ -70,6 +70,8 @@ class MenuItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(QList<MenuItem*> subitems READ subitems NOTIFY subitemsChanged)
 
+    Q_PROPERTY(QString nativeMenuBarIconPath READ nativeMenuBarIconPath NOTIFY actionChanged)
+
 public:
     MenuItem(QObject* parent = nullptr);
     MenuItem(const ui::UiAction& action, QObject* parent = nullptr);
@@ -94,6 +96,9 @@ public:
 
     QString shortcutsTitle() const;
     QString portableShortcuts() const;
+
+    QString nativeMenuBarIconPath() const;
+    void setNativeMenuBarIconPath(const QString& path);
 
 public slots:
     void setId(const QString& id);
@@ -145,6 +150,8 @@ private:
     QList<MenuItem*> m_subitems;
 
     ui::UiAction m_action;
+
+    QString m_nativeMenuBarIconPath = QString();
 };
 using MenuItemList = QList<MenuItem*>;
 
