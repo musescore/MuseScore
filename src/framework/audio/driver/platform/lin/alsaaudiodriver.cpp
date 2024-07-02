@@ -70,10 +70,14 @@ static void* alsaThread(void* aParam)
 
         data->callback(stream, len);
 
-        snd_pcm_sframes_t pcm = snd_pcm_writei(data->alsaDeviceHandle, data->buffer, data->samples);
-        if (pcm != -EPIPE) {
-        } else {
-            snd_pcm_prepare(data->alsaDeviceHandle);
+        snd_pcm_uframes_t frames = data->samples;
+        while (frames > 0) {
+            auto ret = snd_pcm_writei(data->alsaDeviceHandle, data->buffer, frames);
+            if (ret == -EPIPE) {
+                snd_pcm_prepare(data->alsaDeviceHandle);
+                break;
+            }
+            frames -= ret;
         }
     }
 
