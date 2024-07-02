@@ -473,6 +473,7 @@ String TempoText::accessibleInfo() const
 
 void TempoText::added()
 {
+    updateTempo();
     updateScore();
 }
 
