@@ -619,6 +619,9 @@ TEST_F(Musicxml_Tests, figuredBass3) {
 TEST_F(Musicxml_Tests, figuredBassDivisions) {
     mxmlIoTest("testFiguredBassDivisions");
 }
+TEST_F(Musicxml_Tests, finaleDingbat) {
+    mxmlImportTestRef("testFinaleDingbat");
+}
 TEST_F(Musicxml_Tests, finaleDynamics) {
     mxmlImportTestRef("testFinaleDynamics");
 }
