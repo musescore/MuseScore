@@ -2179,7 +2179,10 @@ void Score::cmdFlip()
     };
 
     for (EngravingItem* e : el) {
-        if (e->isNote() || e->isStem() || e->isHook()) {
+        if (e->hasVoiceApplicationProperties()) {
+            PlacementV curPlacement = e->getProperty(Pid::PLACEMENT).value<PlacementV>();
+            e->undoChangeProperty(Pid::DIRECTION, curPlacement == PlacementV::ABOVE ? DirectionV::DOWN : DirectionV::UP);
+        } else if (e->isNote() || e->isStem() || e->isHook()) {
             Chord* chord = nullptr;
             if (e->isNote()) {
                 chord = toNote(e)->chord();
