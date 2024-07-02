@@ -98,3 +98,21 @@ body:
         * For engraving: sample score (MuseScore project), screenshots
         * For UI issues: Screenshots, screen recordings, system information, GPU drivers
         * For regressions: The last MuseScore version (or even better: commit) that worked well. 
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: "Before submitting your bug report, please make sure the following requirements are met:"
+      options:
+        - label: "This report follows the [guidelines](https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues) for reporting bugs and issues"
+          required: true
+        - label: "I have verified that this issue has not been logged before, by searching the [issue tracker](https://github.com/musescore/MuseScore/issues) for similar issues"
+          required: true
+        - label: "I have attached all requested files and information to this report"
+          required: true
+        - label: "I have attempted to identify the root problem as concisely as possible, and have used minimum reproducible examples where possible"
+          required: true
+  - type: markdown
+    attributes:
+      value: If an issue does not meet these requirements, it may be closed without investigation.
