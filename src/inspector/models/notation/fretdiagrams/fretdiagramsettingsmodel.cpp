@@ -50,6 +50,7 @@ void FretDiagramSettingsModel::createProperties()
 
     m_stringsCount = buildPropertyItem(mu::engraving::Pid::FRET_STRINGS, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
+        loadPropertyItem(m_fingerings);
         emit fingeringsChanged(fingerings());
         emit fretDiagramChanged(fretDiagram());
     });

@@ -903,7 +903,7 @@ EditStyle::EditStyle(QWidget* parent)
     fretboardsPage->setObjectName("fretboardsPage_QQuickWidget");
     fretboardsPage->setSource(QUrl(QString::fromUtf8(
                                        "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")));
-    fretboardsPage->setMinimumSize(224, 922);
+    fretboardsPage->setMinimumSize(224, 1000);
     fretboardsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
     connect(fretboardsPage->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     fretboardsWidget->layout()->addWidget(fretboardsPage);

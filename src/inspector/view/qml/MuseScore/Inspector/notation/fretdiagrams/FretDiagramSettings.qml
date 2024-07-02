@@ -90,6 +90,7 @@ Item {
                 visible: root.model ? root.model.areSettingsAvailable && root.model.showFingerings.value : false
                 width: parent.width
                 columns: 6
+                rowSpacing: 12
                 Repeater {
                     id: rep
                     model: root.model ? root.model.fingerings : 0

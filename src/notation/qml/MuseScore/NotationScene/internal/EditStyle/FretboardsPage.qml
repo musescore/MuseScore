@@ -125,7 +125,7 @@ Rectangle {
                             }
                             StyledTextLabel {
                                 horizontalAlignment: Text.AlignLeft
-                                text: qsTrc("notation", "Left")
+                                text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Left") : qsTrc("notation", "Bottom")
                             }
                         }
                         RowLayout {
@@ -136,7 +136,7 @@ Rectangle {
                             }
                             StyledTextLabel {
                                 horizontalAlignment: Text.AlignLeft
-                                text: qsTrc("notation", "Right")
+                                text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Right") : qsTrc("notation", "Top")
                             }
                         }
                     }
