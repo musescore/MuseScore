@@ -172,9 +172,17 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    rc = snd_pcm_hw_params_set_buffer_size_near(handle, params, &s_alsaData->samples);
+    snd_pcm_uframes_t ringBufferSize = s_alsaData->samples * 2;
+    rc = snd_pcm_hw_params_set_buffer_size_near(handle, params, &ringBufferSize);
     if (rc < 0) {
-        LOGE() << "Unable to set buffer size: " << s_alsaData->samples << ", err code: " << rc;
+        LOGE() << "Unable to set ring buffer size, err code: " << rc;
+        return false;
+    }
+
+    rc = snd_pcm_hw_params_set_period_size_near(handle, params, &s_alsaData->samples, 0);
+    if (rc < 0) {
+        LOGE() << "Unable to set period buffer size, err code: " << rc;
+        return false;
     }
 
     rc = snd_pcm_hw_params(handle, params);
