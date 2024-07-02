@@ -122,6 +122,12 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
                 painter->translate(-pageRect.topLeft());
             }
 
+            if (painter->hasClipping() && (drawRect.top() < pageRect.top() || drawRect.bottom() > pageRect.bottom()
+                                           || drawRect.left() < pageRect.left() || drawRect.right() > pageRect.right())) {
+                // prevent elements from being drawn off the edge of the page (e.g. too many staves)
+                painter->setClipRect(pageRect);
+            }
+
             // Draw page sheet
             if (opt.onPaintPageSheet) {
                 opt.onPaintPageSheet(painter, page, pageRect);
