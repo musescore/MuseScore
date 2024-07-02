@@ -41,36 +41,36 @@ InfoPanel {
 
         spacing: 19
 
-        StyledDropdown {
-            id: execPoints
+        // StyledDropdown {
+        //     id: execPoints
 
-            property string text: currentText
+        //     property string text: currentText
 
-            Component.onCompleted: {
-                root.mainButton = execPoints
-            }
+        //     Component.onCompleted: {
+        //         root.mainButton = execPoints
+        //     }
 
-            Layout.alignment: Qt.AlignLeft
+        //     Layout.alignment: Qt.AlignLeft
 
-            width: 280
+        //     width: 280
 
-            navigation.name: "ExecPointSelector"
-            navigation.panel: root.contentNavigation
-            navigation.column: 3
+        //     navigation.name: "ExecPointSelector"
+        //     navigation.panel: root.contentNavigation
+        //     navigation.column: 3
 
-            currentIndex: root.currentExecPointIndex
-            model: root.execPointsModel
+        //     currentIndex: root.currentExecPointIndex
+        //     model: root.execPointsModel
 
-            onActivated: function(index, value) {
-                currentIndex = index
-                root.execPointSelected(index)
-            }
-        }
+        //     onActivated: function(index, value) {
+        //         currentIndex = index
+        //         root.execPointSelected(index)
+        //     }
+        // }
 
         FlatButton {
             id: neutralButton
 
-            Layout.alignment: Qt.AlignRight
+            Layout.alignment: Qt.AlignLeft
 
             navigation.name: "EditShortcutButton"
             navigation.panel: root.contentNavigation
@@ -86,29 +86,36 @@ InfoPanel {
 
 
 
-        // FlatButton {
-        //     id: mainButton
-        //     Layout.alignment: Qt.AlignRight
+        FlatButton {
+            id: mainButton
+            Layout.alignment: Qt.AlignRight
 
-        //     navigation.name: text + "Button"
-        //     navigation.panel: root.contentNavigation
-        //     navigation.column: 3
-        //     accessible.ignored: true
-        //     navigation.onActiveChanged: {
-        //         if (!navigation.active) {
-        //             accessible.ignored = false
-        //         }
-        //     }
+            navigation.name: text + "Button"
+            navigation.panel: root.contentNavigation
+            navigation.column: 3
+            accessible.ignored: true
+            navigation.onActiveChanged: {
+                if (!navigation.active) {
+                    accessible.ignored = false
+                }
+            }
 
-        //     text: !root.isEnabled ? qsTrc("extensions", "Enable") : qsTrc("extensions", "Disable")
+            text: !root.isEnabled ? qsTrc("extensions", "Enable") : qsTrc("extensions", "Disable")
 
-        //     Component.onCompleted: {
-        //         root.mainButton = mainButton
-        //     }
+            Component.onCompleted: {
+                root.mainButton = mainButton
+            }
 
-        //     onClicked: {
-        //         root.enabledChanged(!root.isEnabled)
-        //     }
-        // }
+            onClicked: {
+                //! NOTE temporary
+                // The function with the choice of the call point is not ready yet.
+                // Therefore, here is the previous solution with the button,
+                // but in fact the choice is made from the list
+                // 0 - disabled
+                // 1 - enabled (manual call)
+                // (here we switch to the opposite state)
+                root.execPointSelected(root.isEnabled ? 0 : 1)
+            }
+        }
     }
 }
