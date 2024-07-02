@@ -2662,6 +2662,10 @@ void Note::verticalDrag(EditData &ed)
                   Interval interval = staff()->part()->instrument(_tick)->transpose();
                   newPitch += interval.chromatic;
                   }
+            if (!pitchIsValid(newPitch)) {
+                  qDebug("bad pitch %d - dragged too far", newPitch);
+                  return;
+                  }
 
             int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
             int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
