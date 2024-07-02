@@ -37,7 +37,7 @@ using namespace muse::ui;
 using namespace mu::engraving;
 
 PageSettings::PageSettings(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName("PageSettings");
     setupUi(this);

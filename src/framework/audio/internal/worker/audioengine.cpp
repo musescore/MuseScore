@@ -30,19 +30,6 @@
 using namespace muse;
 using namespace muse::audio;
 
-AudioEngine* AudioEngine::instance()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    static AudioEngine e;
-    return &e;
-}
-
-AudioEngine::AudioEngine()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-}
-
 AudioEngine::~AudioEngine()
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
@@ -60,7 +47,7 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr)
         return make_ret(Ret::Code::InternalError);
     }
 
-    m_mixer = std::make_shared<Mixer>();
+    m_mixer = std::make_shared<Mixer>(iocContext());
 
     m_buffer = std::move(bufferPtr);
     setMode(RenderMode::IdleMode);

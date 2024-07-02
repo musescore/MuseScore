@@ -28,34 +28,34 @@
 #include "global/async/notification.h"
 #include "global/types/ret.h"
 
-#include "internal/worker/mixer.h"
+#include "iaudioengine.h"
+#include "mixer.h"
 
 namespace muse::audio {
 class AudioBuffer;
-class AudioEngine : public async::Asyncable
+class AudioEngine : public IAudioEngine, public Injectable, public async::Asyncable
 {
 public:
+    AudioEngine(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
     ~AudioEngine();
-
-    static AudioEngine* instance();
 
     Ret init(std::shared_ptr<AudioBuffer> bufferPtr);
     void deinit();
 
-    sample_rate_t sampleRate() const;
+    sample_rate_t sampleRate() const override;
 
     void setSampleRate(unsigned int sampleRate);
-    void setReadBufferSize(uint16_t readBufferSize);
+    void setReadBufferSize(uint16_t readBufferSize) override;
     void setAudioChannelsCount(const audioch_t count);
 
-    RenderMode mode() const;
-    void setMode(const RenderMode newMode);
-    async::Notification modeChanged() const;
+    RenderMode mode() const override;
+    void setMode(const RenderMode newMode) override;
+    async::Notification modeChanged() const override;
 
-    MixerPtr mixer() const;
+    MixerPtr mixer() const override;
 
 private:
-    AudioEngine();
 
     bool m_inited = false;
 

@@ -31,9 +31,11 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::mpe;
 
-EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData,
-                                   OnOffStreamEventsReceived onOffStreamReceived)
-    : m_trackId(trackId), m_playbackData(playbackData)
+EventAudioSource::EventAudioSource(const TrackId trackId,
+                                   const mpe::PlaybackData& playbackData,
+                                   OnOffStreamEventsReceived onOffStreamReceived,
+                                   const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_trackId(trackId), m_playbackData(playbackData)
 {
     ONLY_AUDIO_WORKER_THREAD;
 

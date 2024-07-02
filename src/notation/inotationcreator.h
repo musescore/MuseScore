@@ -33,7 +33,7 @@ class INotationCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INotationCreator() = default;
 
-    virtual IMasterNotationPtr newMasterNotationPtr() const = 0;
+    virtual IMasterNotationPtr newMasterNotationPtr(const muse::modularity::ContextPtr& iocCtx) const = 0;
 };
 }
 

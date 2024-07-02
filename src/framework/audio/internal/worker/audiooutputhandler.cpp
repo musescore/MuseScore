@@ -252,7 +252,7 @@ void AudioOutputHandler::clearAllFx()
 
 std::shared_ptr<Mixer> AudioOutputHandler::mixer() const
 {
-    return AudioEngine::instance()->mixer();
+    return audioEngine()->mixer();
 }
 
 ITrackSequencePtr AudioOutputHandler::sequence(const TrackSequenceId id) const

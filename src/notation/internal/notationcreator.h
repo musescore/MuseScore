@@ -31,7 +31,7 @@ class NotationCreator : public INotationCreator
 public:
     NotationCreator() = default;
 
-    IMasterNotationPtr newMasterNotationPtr() const override;
+    IMasterNotationPtr newMasterNotationPtr(const muse::modularity::ContextPtr& iocCtx) const override;
 };
 }
 

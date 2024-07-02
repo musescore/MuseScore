@@ -40,8 +40,6 @@ class StringTuningsSettingsModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
-    INJECT(IInstrumentsRepository, instrumentsRepository)
-
     Q_PROPERTY(QVariantList presets READ presets NOTIFY presetsChanged)
     Q_PROPERTY(QString currentPreset READ currentPreset WRITE setCurrentPreset NOTIFY currentPresetChanged)
 
@@ -49,6 +47,8 @@ class StringTuningsSettingsModel : public AbstractElementPopupModel
     Q_PROPERTY(int currentNumberOfStrings READ currentNumberOfStrings WRITE setCurrentNumberOfStrings NOTIFY currentNumberOfStringsChanged)
 
     Q_PROPERTY(QList<StringTuningsItem*> strings READ strings NOTIFY stringsChanged)
+
+    muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
 
 public:
     explicit StringTuningsSettingsModel(QObject* parent = nullptr);

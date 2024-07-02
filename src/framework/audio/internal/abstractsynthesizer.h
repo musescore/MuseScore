@@ -31,15 +31,17 @@
 #include "../audiotypes.h"
 #include "../isynthesizer.h"
 #include "../iaudioconfiguration.h"
+#include "worker/iaudioengine.h"
 
 namespace muse::audio::synth {
-class AbstractSynthesizer : public ISynthesizer, public async::Asyncable
+class AbstractSynthesizer : public ISynthesizer, public Injectable, public async::Asyncable
 {
 public:
-    static inline Inject<IAudioConfiguration> config;
+    muse::Inject<IAudioConfiguration> config = { this };
+    muse::Inject<IAudioEngine> audioEngine = { this };
 
 public:
-    AbstractSynthesizer(const audio::AudioInputParams& params);
+    AbstractSynthesizer(const audio::AudioInputParams& params, const modularity::ContextPtr& iocCtx);
     virtual ~AbstractSynthesizer() = default;
 
     const audio::AudioInputParams& params() const override;

@@ -39,8 +39,10 @@ using namespace mu::notation;
 
 static constexpr int PROCESS_INTERVAL = 20;
 
-NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_notationInteraction(notationInteraction), m_undoStack(undoStack)
+NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction,
+                                     INotationUndoStackPtr undoStack, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_getScore(getScore),
+    m_notationInteraction(notationInteraction), m_undoStack(undoStack)
 {
     QObject::connect(&m_processTimer, &QTimer::timeout, [this]() { doProcessEvents(); });
 

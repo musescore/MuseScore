@@ -49,6 +49,7 @@ Item {
     }
 
     Component.onCompleted: {
+        keyboardView.init()
         contextMenuModel.load()
     }
 

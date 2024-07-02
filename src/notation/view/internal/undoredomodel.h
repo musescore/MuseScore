@@ -30,15 +30,15 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class UndoRedoModel : public QObject, public muse::async::Asyncable
+class UndoRedoModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariant undoItem READ makeUndoItem NOTIFY stackChanged)
     Q_PROPERTY(QVariant redoItem READ makeRedoItem NOTIFY stackChanged)
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit UndoRedoModel(QObject* parent = nullptr);

@@ -31,7 +31,7 @@ static constexpr int DEFAULT_INTERVAL = 4;
 //---------------------------------------------------------
 
 BreaksDialog::BreaksDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);

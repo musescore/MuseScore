@@ -42,8 +42,9 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::async;
 
-NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
+NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack
+                                     , const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
 {
     m_scoreCallbacks = new ScoreCallbacks();
     m_scoreCallbacks->setNotationInteraction(interaction);
@@ -340,7 +341,7 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
 void NotationNoteInput::padNote(const Pad& pad)
@@ -355,7 +356,7 @@ void NotationNoteInput::padNote(const Pad& pad)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
 Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
@@ -369,7 +370,7 @@ Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
     return ret;
 }
@@ -389,7 +390,7 @@ void NotationNoteInput::removeNote(const PointF& pos)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
 Notification NotationNoteInput::noteInputStarted() const
@@ -412,7 +413,7 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
 void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
@@ -427,7 +428,7 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
 void NotationNoteInput::setDrumNote(int note)
@@ -604,7 +605,7 @@ void NotationNoteInput::addTie()
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
 Notification NotationNoteInput::noteAdded() const
@@ -688,7 +689,7 @@ void NotationNoteInput::doubleNoteInputDuration()
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
 void NotationNoteInput::halveNoteInputDuration()
@@ -703,5 +704,5 @@ void NotationNoteInput::halveNoteInputDuration()
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController::checkAndShowMScoreError();
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }

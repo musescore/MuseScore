@@ -59,16 +59,6 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
         m_previousVerticalScrollPosition = startVerticalScrollPosition();
     });
 
-    m_inputController = std::make_unique<NotationViewInputController>(this);
-    m_playbackCursor = std::make_unique<PlaybackCursor>();
-    m_playbackCursor->setVisible(false);
-    m_noteInputCursor = std::make_unique<NoteInputCursor>();
-
-    m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn);
-    m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut);
-
-    m_continuousPanel = std::make_unique<ContinuousPanel>();
-
     m_enableAutoScrollTimer.setSingleShot(true);
     connect(&m_enableAutoScrollTimer, &QTimer::timeout, this, [this]() {
         m_autoScrollEnabled = true;
@@ -88,6 +78,16 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
 void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
+
+    m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
+    m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
+    m_playbackCursor->setVisible(false);
+    m_noteInputCursor = std::make_unique<NoteInputCursor>();
+
+    m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn, iocContext());
+    m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut, iocContext());
+
+    m_continuousPanel = std::make_unique<ContinuousPanel>(iocContext());
 
     //! NOTE For diagnostic tools
     if (!dispatcher()->isReg(this)) {

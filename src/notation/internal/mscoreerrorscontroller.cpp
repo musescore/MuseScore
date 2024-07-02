@@ -27,6 +27,11 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::notation;
 
+MScoreErrorsController::MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 void MScoreErrorsController::checkAndShowMScoreError()
 {
     TRACEFUNC;

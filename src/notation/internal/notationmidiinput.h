@@ -39,14 +39,15 @@ class Score;
 }
 
 namespace mu::notation {
-class NotationMidiInput : public INotationMidiInput
+class NotationMidiInput : public INotationMidiInput, public muse::Injectable
 {
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(INotationConfiguration, configuration)
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
-    NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack);
+    NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack,
+                      const muse::modularity::ContextPtr& iocCtx);
 
     void onMidiEventReceived(const muse::midi::Event& event) override;
     muse::async::Channel<std::vector<const Note*> > notesReceived() const override;

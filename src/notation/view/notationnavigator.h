@@ -29,7 +29,6 @@
 
 #include "draw/types/geometry.h"
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
 #include "inotationconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "ui/iuiconfiguration.h"
@@ -37,11 +36,11 @@
 #include "abstractnotationpaintview.h"
 
 namespace mu::notation {
-class NotationNavigatorCursorView : public QQuickPaintedItem
+class NotationNavigatorCursorView : public QQuickPaintedItem, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(INotationConfiguration, configuration)
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
     NotationNavigatorCursorView(QQuickItem* parent = nullptr);
@@ -58,10 +57,10 @@ class NotationNavigator : public AbstractNotationPaintView
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(INotationConfiguration, configuration)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
 

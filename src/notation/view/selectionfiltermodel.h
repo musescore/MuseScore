@@ -30,13 +30,13 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class SelectionFilterModel : public QAbstractListModel, public muse::async::Asyncable
+class SelectionFilterModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
-
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
+
+    muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit SelectionFilterModel(QObject* parent = nullptr);

@@ -31,7 +31,8 @@ using namespace muse::audio::synth;
 
 static const AudioResourceVendor FLUID_VENDOR_NAME = "Fluid";
 
-FluidResolver::FluidResolver()
+FluidResolver::FluidResolver(const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -51,7 +52,7 @@ ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const Aud
         return nullptr;
     }
 
-    FluidSynthPtr synth = std::make_shared<FluidSynth>(params);
+    FluidSynthPtr synth = std::make_shared<FluidSynth>(params, iocContext());
     synth->addSoundFonts({ search->second.path });
     synth->setPreset(search->second.preset);
 

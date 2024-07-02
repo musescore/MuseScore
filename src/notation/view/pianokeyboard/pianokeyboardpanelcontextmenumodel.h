@@ -38,11 +38,11 @@ class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMe
 {
     Q_OBJECT
 
-    INJECT(INotationConfiguration, configuration)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-
     Q_PROPERTY(int numberOfKeys READ numberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setKeyWidthScaling NOTIFY keyWidthScalingChanged)
+
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit PianoKeyboardPanelContextMenuModel(QObject* parent = nullptr);

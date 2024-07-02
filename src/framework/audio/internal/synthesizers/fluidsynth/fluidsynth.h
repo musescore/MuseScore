@@ -37,10 +37,10 @@ namespace muse::audio::synth {
 struct Fluid;
 class FluidSynth : public AbstractSynthesizer
 {
-    Inject<midi::IMidiOutPort> midiOutPort;
+    Inject<midi::IMidiOutPort> midiOutPort = { this };
 
 public:
-    FluidSynth(const audio::AudioSourceParams& params);
+    FluidSynth(const audio::AudioSourceParams& params, const modularity::ContextPtr& iocCtx);
 
     Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
     void setPreset(const std::optional<midi::Program>& preset);

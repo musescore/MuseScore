@@ -35,7 +35,8 @@ using namespace muse::async;
 
 static constexpr size_t DEFAULT_AUX_BUFFER_SIZE = 1024;
 
-Mixer::Mixer()
+Mixer::Mixer(const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -65,7 +66,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
         return result;
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, std::move(source), m_sampleRate);
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, std::move(source), m_sampleRate, iocContext());
     std::weak_ptr<MixerChannel> channelWeakPtr = channel;
 
     m_nonMutedTrackCount++;
@@ -103,7 +104,9 @@ RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate, configuration()->audioChannelsCount());
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate,
+                                                             configuration()->audioChannelsCount(),
+                                                             iocContext());
 
     AuxChannelInfo aux;
     aux.channel = channel;

@@ -33,11 +33,15 @@
 #include "vstsynthesiser.h"
 
 namespace muse::vst {
-class VstiResolver : public muse::audio::synth::ISynthResolver::IResolver
+class VstiResolver : public audio::synth::ISynthResolver::IResolver, public Injectable
 {
-    INJECT(IVstModulesRepository, pluginModulesRepo)
-    INJECT(IVstPluginsRegister, pluginsRegister)
+    Inject<IVstModulesRepository> pluginModulesRepo = { this };
+    Inject<IVstPluginsRegister> pluginsRegister = { this };
 public:
+
+    VstiResolver(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
                                                      const muse::audio::AudioInputParams& params) const override;
     bool hasCompatibleResources(const muse::audio::PlaybackSetupData& setup) const override;

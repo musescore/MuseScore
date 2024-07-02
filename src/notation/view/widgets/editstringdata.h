@@ -35,11 +35,11 @@ namespace mu::notation {
 //   EditStringData
 //---------------------------------------------------------
 
-class EditStringData : public QDialog, private Ui::EditStringDataBase
+class EditStringData : public QDialog, private Ui::EditStringDataBase, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
+    muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     EditStringData(QWidget* parent = nullptr, const std::vector<engraving::instrString>& strings = {}, int frets = 0);

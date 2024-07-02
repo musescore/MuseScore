@@ -213,7 +213,8 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
         m_midiInputOutputController->init();
     }
 
-    Notation::init();
+    bool isVertical = m_configuration->canvasOrientation().val == muse::Orientation::Vertical;
+    mu::engraving::MScore::setVerticalOrientation(isVertical);
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {

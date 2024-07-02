@@ -25,15 +25,20 @@
 
 #include "global/async/asyncable.h"
 
+#include "modularity/ioc.h"
+#include "iaudioengine.h"
+
 #include "isequenceplayer.h"
 #include "igettracks.h"
 #include "iclock.h"
 
 namespace muse::audio {
-class SequencePlayer : public ISequencePlayer, public async::Asyncable
+class SequencePlayer : public ISequencePlayer, public Injectable, public async::Asyncable
 {
+    Inject<IAudioEngine> audioEngine = { this };
+
 public:
-    explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock);
+    explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);
 
     void play() override;
     void seek(const secs_t newPosition) override;

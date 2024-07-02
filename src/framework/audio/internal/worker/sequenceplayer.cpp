@@ -23,7 +23,6 @@
 #include "sequenceplayer.h"
 
 #include "internal/audiosanitizer.h"
-#include "audioengine.h"
 
 #include "log.h"
 
@@ -31,8 +30,8 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock)
-    : m_getTracks(getTracks), m_clock(clock)
+SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_getTracks(getTracks), m_clock(clock)
 {
     m_clock->seekOccurred().onNotify(this, [this]() {
         seekAllTracks(m_clock->currentTime());
@@ -47,7 +46,7 @@ void SequencePlayer::play()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
+    audioEngine()->setMode(RenderMode::RealTimeMode);
     m_clock->start();
     setAllTracksActive(true);
 }
@@ -65,7 +64,7 @@ void SequencePlayer::stop()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    AudioEngine::instance()->setMode(RenderMode::IdleMode);
+    audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->stop();
     setAllTracksActive(false);
 }
@@ -74,7 +73,7 @@ void SequencePlayer::pause()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    AudioEngine::instance()->setMode(RenderMode::IdleMode);
+    audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->pause();
     setAllTracksActive(false);
 }
@@ -83,7 +82,7 @@ void SequencePlayer::resume()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
+    audioEngine()->setMode(RenderMode::RealTimeMode);
     m_clock->resume();
     setAllTracksActive(true);
 }

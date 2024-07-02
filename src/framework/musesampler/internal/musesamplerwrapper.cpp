@@ -34,8 +34,9 @@ static constexpr int AUDIO_CHANNELS_COUNT = 2;
 
 MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
                                        const InstrumentInfo& instrument,
-                                       const AudioSourceParams& params)
-    : AbstractSynthesizer(params), m_samplerLib(samplerLib), m_instrument(instrument)
+                                       const AudioSourceParams& params,
+                                       const modularity::ContextPtr& iocCtx)
+    : AbstractSynthesizer(params, iocCtx), m_samplerLib(samplerLib), m_instrument(instrument)
 {
     if (!m_samplerLib || !m_samplerLib->isValid()) {
         return;

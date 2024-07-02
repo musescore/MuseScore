@@ -73,7 +73,7 @@ public:
 private:
 
     friend class NotationCreator;
-    explicit MasterNotation();
+    explicit MasterNotation(const muse::modularity::ContextPtr& iocCtx);
 
     void initAfterSettingScore(const engraving::MasterScore* score);
 

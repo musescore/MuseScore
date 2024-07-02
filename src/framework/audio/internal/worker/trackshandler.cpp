@@ -33,8 +33,8 @@
 using namespace muse::audio;
 using namespace muse::async;
 
-TracksHandler::TracksHandler(IGetTrackSequence* getSequence)
-    : m_getSequence(getSequence)
+TracksHandler::TracksHandler(IGetTrackSequence* getSequence, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_getSequence(getSequence)
 {
 }
 

@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace muse::uicomponents;
 
 UndoRedoModel::UndoRedoModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
