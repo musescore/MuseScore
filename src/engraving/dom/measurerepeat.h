@@ -65,7 +65,6 @@ public:
 
     int subtype() const override { return m_numMeasures; }
     muse::TranslatableString subtypeUserName() const override;
-    String translatedSubtypeUserName() const override;
 
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 

@@ -199,12 +199,7 @@ String MeasureRepeat::accessibleInfo() const
 
 muse::TranslatableString MeasureRepeat::subtypeUserName() const
 {
-    return muse::TranslatableString("engraving", "%n measure(s)", nullptr);
-}
-
-String MeasureRepeat::translatedSubtypeUserName() const
-{
-    return subtypeUserName().translated(numMeasures());
+    return muse::TranslatableString("engraving", "%n measure(s)", nullptr, numMeasures());
 }
 
 //---------------------------------------------------------
