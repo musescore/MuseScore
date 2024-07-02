@@ -407,15 +407,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::fretDotSize,             "fretDotSize",             PropertyValue(1.0) }, // DEPRECATED
     { Sid::fretDotSpatiumSize,      "fretDotSpatiumSize",      Spatium(0.5) },
     { Sid::fretStringSpacing,       "fretStringSpacing",       Spatium(0.7) },
-    { Sid::fretFretSpacing,         "fretFretSpacing",         Spatium(0.8) },
+    { Sid::fretFretSpacing,         "fretFretSpacing",         Spatium(0.7) },
     { Sid::fretOrientation,         "fretOrientation",         int(Orientation::VERTICAL) },
     { Sid::maxFretShiftAbove,       "maxFretShiftAbove",       Spatium(0.0) },
     { Sid::maxFretShiftBelow,       "maxFretShiftBelow",       Spatium(0.0) },
-    { Sid::fretNutThickness,        "fretNutThickness",        Spatium(0.2) },
+    { Sid::fretNutThickness,        "fretNutThickness",        Spatium(0.3) },
     { Sid::fretUseCustomSuffix,     "fretUseCustomSuffix",     false },
     { Sid::fretCustomSuffix,        "fretCustomSuffix",        "fr" },
     { Sid::barreAppearanceSlur,     "barreAppearanceSlur",     false },
-    { Sid::barreLineWidth,          "barreLineWidth",          PropertyValue(1.0) },
+    { Sid::barreLineWidth,          "barreLineWidth",          PropertyValue(0.85) },
     { Sid::fretShowFingerings,      "fretShowFingerings",      false },
     { Sid::fretStyleExtended,       "fretStyleExtended",       false },
 
@@ -1133,7 +1133,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::staffTextFrameBgColor,         "staffFrameBgColor",            PropertyValue::fromValue(Color::transparent) },
 
     { Sid::fretDiagramFingeringFontFace,             "fretDiagramFingeringFontFace",           "FreeSans" },
-    { Sid::fretDiagramFingeringFontSize,             "fretDiagramFingeringFontSize",           6.5 },
+    { Sid::fretDiagramFingeringFontSize,             "fretDiagramFingeringFontSize",           6.0 },
     { Sid::fretDiagramFingeringLineSpacing,          "fretDiagramFingeringLineSpacing",        1.0 },
     { Sid::fretDiagramFingeringFontSpatiumDependent, "fretDiagramFingeringFontSpatiumDependent", true },
     { Sid::fretDiagramFingeringFontStyle,            "fretDiagramFingeringFontStyle",          int(FontStyle::Normal) },
@@ -1148,7 +1148,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::fretDiagramFingeringFrameBgColor, "fretDiagramFingeringFrameBgColor", PropertyValue::fromValue(Color::transparent) },
 
     { Sid::fretDiagramFretNumberFontFace,             "fretDiagramFretNumberFontFace",           "FreeSans" },
-    { Sid::fretDiagramFretNumberFontSize,             "fretDiagramFretNumberFontSize",           8.0 },
+    { Sid::fretDiagramFretNumberFontSize,             "fretDiagramFretNumberFontSize",           6.0 },
     { Sid::fretDiagramFretNumberLineSpacing,          "fretDiagramFretNumberLineSpacing",        1.0 },
     { Sid::fretDiagramFretNumberFontSpatiumDependent, "fretDiagramFretNumberFontSpatiumDependent", true },
     { Sid::fretDiagramFretNumberFontStyle,            "fretDiagramFretNumberFontStyle",          int(FontStyle::Normal) },

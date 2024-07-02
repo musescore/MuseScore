@@ -248,6 +248,8 @@ public:
         double markerY = 0.0;
         double stringExtendTop = 0.0;
         double stringExtendBottom = 0.0;
+        double dotDiameter = 0.0;
+        double fretNumPadding = 0.0;
         std::vector<FingeringItem> fingeringItems;
         PainterPath slurPath = PainterPath();
         String fretText = String();

@@ -1304,7 +1304,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // dotd is the diameter of a dot
-    double dotd = item->style().styleMM(Sid::fretDotSpatiumSize) * item->userMag();
+    double dotd = ldata->dotDiameter;
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
@@ -1356,7 +1356,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // Draw markers
-    symPen.setWidthF(symPenWidth * 1.2);
+    symPen.setWidthF(ldata->stringLineWidth * 1.2);
     painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(symPen);
     for (auto const& i : item->markers()) {
@@ -1386,7 +1386,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
         double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
         if (item->style().styleB(Sid::barreAppearanceSlur)) {
-            pen.setWidthF(0.5 * ldata->stringLineWidth);
+            pen.setWidthF(0.25 * ldata->stringLineWidth);
             pen.setCapStyle(PenCapStyle::RoundCap);
             pen.setJoinStyle(PenJoinStyle::RoundJoin);
             painter->setPen(pen);
@@ -1409,10 +1409,10 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
 
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
-                painter->drawText(RectF(-ldata->stringDist * .4, .0, .0, ldata->fretDist),
+                painter->drawText(RectF(-ldata->fretNumPadding, .0, .0, ldata->fretDist),
                                   muse::draw::AlignVCenter | muse::draw::AlignRight | muse::draw::TextDontClip, text);
             } else {
-                painter->drawText(RectF(x2 + (ldata->stringDist * .4), .0, .0, ldata->fretDist),
+                painter->drawText(RectF(x2 + ldata->fretNumPadding, .0, .0, ldata->fretDist),
                                   muse::draw::AlignVCenter | muse::draw::AlignLeft | muse::draw::TextDontClip,
                                   text);
             }

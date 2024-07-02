@@ -2516,20 +2516,34 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     ldata->stringDist = ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag();
     ldata->fretDist = ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag();
     ldata->markerSize = ldata->stringDist * .8;
-    ldata->markerY = ldata->nutY - 0.5 * ldata->nutLineWidth - ldata->markerSize - 0.5 * ldata->stringDist;
+    ldata->markerY = ldata->nutY - 0.5 * ldata->nutLineWidth - ldata->markerSize - 0.20 * spatium;
     bool extendedStyle = item->style().styleB(Sid::fretStyleExtended);
     ldata->stringExtendTop = item->fretOffset() && extendedStyle ? -spatium * .2 : 0.0;
     ldata->stringExtendBottom = extendedStyle ? 0.5 * ldata->fretDist : 0.0;
+    ldata->dotDiameter = ctx.conf().styleMM(Sid::fretDotSpatiumSize) * item->userMag();
 
+    double shapeMarginAboveDiagram = ldata->fretDist * 1.5;
     double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
-    double h = -ldata->markerY + (item->frets()) * ldata->fretDist + ldata->stringExtendBottom;
-    double y = ldata->markerY;
+    double h = item->frets() * ldata->fretDist + ldata->stringExtendBottom + shapeMarginAboveDiagram;
+    double y = -shapeMarginAboveDiagram;
     double x = -(ldata->markerSize * .5);
 
     bool isVertical = item->orientation() == Orientation::VERTICAL;
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
+        double padding = 0.4 * ldata->stringDist;
+        for (auto i : item->barres()) {
+            FretItem::Barre barre = i.second;
+            if (!barre.exists()) {
+                continue;
+            }
+            if ((barre.startString == 0 && item->numPos() == 0)
+                || (barre.endString == -1 && item->numPos() == 1)) {
+                padding += 0.20 * ldata->dotDiameter * ctx.conf().styleD(Sid::barreLineWidth);
+                break;
+            }
+        }
         Font scaledFont(item->fretNumFont());
         FontMetrics fm2(scaledFont);
         String fretText = String::number(item->fretOffset() + 1);
@@ -2538,9 +2552,10 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         }
         ldata->fretText = fretText;
         double numw = isVertical ? fm2.width(fretText) : fm2.tightBoundingRect(fretText).height();
-        double xdiff = numw + ldata->stringDist * .4;
+        double xdiff = numw + padding;
         w += xdiff;
         x += (item->numPos() == 0) == isVertical ? -xdiff : 0;
+        ldata->fretNumPadding = padding;
     }
 
     if (!isVertical) {
@@ -2561,19 +2576,20 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         const double padding = 0.2 * spatium;
         Font fingeringFont = item->fingeringFont();
         FontMetrics fontMetrics(fingeringFont);
+        double fontHeight = fontMetrics.capHeight();
         for (int i = 0; i < item->fingering().size(); ++i) {
             int finger = item->fingering()[i];
             if (finger == 0) {
                 continue;
             }
             String fingerS = String::number(finger);
-            RectF boundingRect = fontMetrics.tightBoundingRect(fingerS);
-            double xOff = -0.5 * boundingRect.width() - boundingRect.x();
+            double width = fontMetrics.width(fingerS);
+            double digitHeight = fontMetrics.tightBoundingRect(fingerS).height();
+            double xOff = -0.5 * width;
             double fingerX = isVertical ? (item->strings() - i - 1) * ldata->stringDist + xOff : x + w + padding;
-            double fingerY = isVertical ? y + h + boundingRect.height() + padding : (item->strings() - i - 1) * ldata->stringDist - 0.5
-                             * boundingRect.height();
+            double fingerY = isVertical ? y + h + fontHeight + padding : i * ldata->stringDist + 0.5 * digitHeight;
             ldata->fingeringItems.push_back(FretDiagram::FingeringItem(fingerS, PointF(fingerX, fingerY)));
-            shape.add(ShapeElement(boundingRect.translated(PointF(fingerX, fingerY)), item));
+            shape.add(ShapeElement(fontMetrics.tightBoundingRect(fingerS).translated(PointF(fingerX, fingerY)), item));
         }
     }
 
