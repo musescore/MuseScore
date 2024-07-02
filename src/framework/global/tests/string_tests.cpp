@@ -21,11 +21,13 @@
  */
 #include <gtest/gtest.h>
 
+#include <QApplication>
 #include <QString>
 #include <QRegularExpression>
 #include <regex>
 
 #include "types/string.h"
+#include "global/stringutils.h"
 
 #include "log.h"
 
@@ -961,5 +963,34 @@ TEST_F(Global_Types_StringTests, String_FromUtf16LE)
         String str = String::fromUtf16LE(ba);
         //! CHECK
         EXPECT_EQ(str, u"< xml");
+    }
+}
+
+TEST_F(Global_Types_StringTests, buildSeparatedString)
+{
+    {
+        qApp->setLayoutDirection(Qt::LayoutDirection::LeftToRight);
+
+        //! GIVEN String:
+        std::vector<QString> rawStrings { "a", "b", "c" };
+
+        //! DO
+        QString ret = muse::strings::buildSeparatedString(rawStrings);
+
+        //! CHECK
+        EXPECT_EQ(ret, "a; b; c");
+    }
+
+    {
+        qApp->setLayoutDirection(Qt::LayoutDirection::RightToLeft);
+
+        //! GIVEN String:
+        std::vector<QString> rawStrings { "a", "b", "c" };
+
+        //! DO
+        QString ret = muse::strings::buildSeparatedString(rawStrings);
+
+        //! CHECK
+        EXPECT_EQ(ret, "c; b; a");
     }
 }

@@ -21,6 +21,7 @@
  */
 #include "spanner.h"
 
+#include "global/stringutils.h"
 #include "translation.h"
 
 #include "anchors.h"
@@ -1511,16 +1512,30 @@ String SpannerSegment::formatBarsAndBeats() const
 
 String SpannerSegment::formatStartBarsAndBeats(const Segment* segment) const
 {
-    std::pair<int, float> barbeat = segment->barbeat();
-    return muse::mtrc("engraving", "Start measure: %1; Start beat: %2")
-           .arg(String::number(barbeat.first), String::number(barbeat.second));
+    EngravingItem::BarBeat barbeat = segment->barbeat();
+    std::vector<QString> rawStrings;
+    rawStrings.push_back(muse::mtrc("engraving", "Start measure: %1").arg(String::number(barbeat.bar)));
+
+    if (barbeat.displayedBar != barbeat.bar) {
+        rawStrings.push_back(muse::mtrc("engraving", "Start displayed measure: %1").arg(barbeat.displayedBar));
+    }
+
+    rawStrings.push_back(muse::mtrc("engraving", "Start beat: %1").arg(barbeat.beat));
+    return muse::strings::buildSeparatedString(rawStrings);
 }
 
 String SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
 {
-    std::pair<int, float> barbeat = segment->barbeat();
-    return muse::mtrc("engraving", "End measure: %1; End beat: %2")
-           .arg(String::number(barbeat.first), String::number(barbeat.second));
+    EngravingItem::BarBeat barbeat = segment->barbeat();
+    std::vector<QString> rawStrings;
+    rawStrings.push_back(muse::mtrc("engraving", "End measure: %1").arg(String::number(barbeat.bar)));
+
+    if (barbeat.displayedBar != barbeat.bar) {
+        rawStrings.push_back(muse::mtrc("engraving", "End displayed measure: %1").arg(barbeat.displayedBar));
+    }
+
+    rawStrings.push_back(muse::mtrc("engraving", "End beat: %1").arg(barbeat.beat));
+    return muse::strings::buildSeparatedString(rawStrings);
 }
 
 //---------------------------------------------------------

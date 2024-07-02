@@ -21,6 +21,7 @@
  */
 #include "notationaccessibility.h"
 
+#include "global/stringutils.h"
 #include "translation.h"
 
 #include "igetscore.h"
@@ -165,19 +166,28 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
         endSegment = endSegment->prev1MM();
     }
 
-    std::pair<int, float> startBarbeat = selection()->startSegment()->barbeat();
-    QString start =  muse::qtrc("notation", "Start measure: %1; Start beat: %2")
-                    .arg(startBarbeat.first)
-                    .arg(startBarbeat.second);
+    EngravingItem::BarBeat startBarbeat = selection()->startSegment()->barbeat();
+    std::vector<QString> startStringsRaw;
+    startStringsRaw.push_back(muse::qtrc("engraving", "Start measure: %1").arg(String::number(startBarbeat.bar)));
+    if (startBarbeat.displayedBar != startBarbeat.bar) {
+        startStringsRaw.push_back(muse::qtrc("engraving", "Start displayed measure: %1").arg(startBarbeat.displayedBar));
+    }
+    startStringsRaw.push_back(muse::qtrc("engraving", "Start beat: %1").arg(startBarbeat.beat));
 
-    std::pair<int, float> endBarbeat = endSegment->barbeat();
-    QString end =  muse::qtrc("notation", "End measure: %1; End beat: %2")
-                  .arg(endBarbeat.first)
-                  .arg(endBarbeat.second);
+    EngravingItem::BarBeat endBarbeat = endSegment->barbeat();
+    std::vector<QString> endStringsRaw;
+    endStringsRaw.push_back(muse::qtrc("engraving", "End measure: %1").arg(String::number(endBarbeat.bar)));
+    if (endBarbeat.displayedBar != endBarbeat.bar) {
+        endStringsRaw.push_back(muse::qtrc("engraving", "End displayed measure: %1").arg(endBarbeat.displayedBar));
+    }
+    endStringsRaw.push_back(muse::qtrc("engraving", "End beat: %1").arg(endBarbeat.beat));
+
+    String startSeparatedString = muse::strings::buildSeparatedString(startStringsRaw);
+    String endSeparatedString = muse::strings::buildSeparatedString(endStringsRaw);
 
     return muse::qtrc("notation", "Range selection; %1; %2")
-           .arg(start)
-           .arg(end);
+           .arg(startSeparatedString)
+           .arg(endSeparatedString);
 }
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const

@@ -54,6 +54,9 @@ std::string toString(const T& t)
 
 bool lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs);
 bool lessThanCaseInsensitive(const String& lhs, const String& rhs);
+
+// Build semicolon separated string for RTL or LTR languages
+QString buildSeparatedString(std::vector<QString> stringVector);
 }
 
 #endif // MUSE_GLOBAL_STRINGUTILS_H
