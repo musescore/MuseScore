@@ -465,6 +465,16 @@ void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
 {
 }
 
+ValCh<bool> NotationConfigurationStub::pianoKeyboardPitchState() const
+{
+    static ValCh<bool> vch;
+    return vch;
+}
+
+void NotationConfigurationStub::setPianoKeyboardPitchState(bool)
+{
+}
+
 muse::io::path_t NotationConfigurationStub::styleFileImportPath() const
 {
     return muse::io::path_t();

@@ -35,6 +35,7 @@ using namespace muse::uicomponents;
 
 static const ActionCode SET_KEY_WIDTH_SCALING_CODE("piano-keyboard-set-key-width-scaling");
 static const ActionCode SET_NUMBER_OF_KEYS_CODE("piano-keyboard-set-number-of-keys");
+static const ActionCode SET_NOTATED_PITCH_CODE("piano-keyboard-toggle-notated-pitch");
 
 PianoKeyboardPanelContextMenuModel::PianoKeyboardPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -44,7 +45,8 @@ PianoKeyboardPanelContextMenuModel::PianoKeyboardPanelContextMenuModel(QObject* 
 void PianoKeyboardPanelContextMenuModel::load()
 {
     MenuItemList items {
-        makeViewMenu()
+        makeViewMenu(),
+        makePitchMenu(),
     };
 
     setItems(items);
@@ -69,6 +71,40 @@ void PianoKeyboardPanelContextMenuModel::setKeyWidthScaling(qreal scaling)
 int PianoKeyboardPanelContextMenuModel::numberOfKeys() const
 {
     return configuration()->pianoKeyboardNumberOfKeys().val;
+}
+
+bool PianoKeyboardPanelContextMenuModel::pianoKeyboardPitchState() const
+{
+    return configuration()->pianoKeyboardPitchState().val;
+}
+
+MenuItem* PianoKeyboardPanelContextMenuModel::makePitchMenu()
+{
+    MenuItemList items;
+
+    std::vector<std::pair<muse::TranslatableString, bool> > possibleNotationStates {
+        { muse::TranslatableString("notation", "Use notated pitch"), true },
+        { muse::TranslatableString("notation", "Use playback pitch"), false },
+    };
+
+    for (auto [title, notationState] : possibleNotationStates) {
+        items << makeToggleNotatedPitchItem(title, notationState);
+    }
+
+    configuration()->pianoKeyboardPitchState().ch.onReceive(this, [this](bool) {
+        emit pianoKeyboardPitchStateChanged();
+    });
+
+    dispatcher()->reg(this, SET_NOTATED_PITCH_CODE, [this](const ActionData& args) {
+        IF_ASSERT_FAILED(args.count() > 0) {
+            return;
+        }
+
+        configuration()->setPianoKeyboardPitchState(args.arg<bool>(0));
+        emit pianoKeyboardPitchStateChanged();
+    });
+
+    return makeMenu(muse::TranslatableString("notation", "Pitch mode for transposing instruments"), items);
 }
 
 MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
@@ -163,6 +199,31 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeNumberOfKeysItem(const muse::T
     });
 
     item->setArgs(ActionData::make_arg1<int>(numberOfKeys));
+
+    return item;
+}
+
+MenuItem* PianoKeyboardPanelContextMenuModel::makeToggleNotatedPitchItem(const muse::TranslatableString& title, bool isNotatedPitch)
+{
+    UiAction action;
+    action.title = title;
+    action.code = SET_NOTATED_PITCH_CODE;
+    action.checkable = Checkable::Yes;
+
+    MenuItem* item = new MenuItem(action, this);
+    item->setId(QString::fromStdString(SET_NOTATED_PITCH_CODE) + (isNotatedPitch ? "-notated" : "-playback"));
+
+    ValCh<bool> currentState = configuration()->pianoKeyboardPitchState();
+
+    bool checked = !(isNotatedPitch ^ currentState.val);
+    item->setState(UiActionState::make_enabled(checked));
+
+    currentState.ch.onReceive(item, [item, isNotatedPitch](bool s) {
+        bool checked = !(isNotatedPitch ^ s);
+        item->setState(UiActionState::make_enabled(checked));
+    });
+
+    item->setArgs(ActionData::make_arg1<bool>(isNotatedPitch));
 
     return item;
 }
