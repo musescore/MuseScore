@@ -29,9 +29,12 @@
 #include "style/style.h"
 
 #include "dom/audio.h"
+#include "dom/chord.h"
+#include "dom/drumset.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
 #include "dom/masterscore.h"
+#include "dom/note.h"
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/scoreorder.h"
@@ -248,6 +251,159 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         CompatUtils::assignInitialPartToExcerpts(score->masterScore()->excerpts());
     }
 
+    for (Part* part : score->parts()) {
+        const track_idx_t startTrack = part->startTrack();
+        const track_idx_t endTrack = part->endTrack();
+        const InstrumentList& instruments = part->instruments();
+
+        // First instrument in list is the "default instrument".
+        // It's at tick -1 but we must start at tick 0.
+        auto it = instruments.cbegin();
+        for (Fraction startTick(0, 1), endTick; it != instruments.cend(); startTick = endTick) {
+            Instrument* instr = it->second;
+            ++it; // careful, iterator now points to next instrument in the list
+            endTick = (it == instruments.cend())
+                      ? score->endTick()
+                      : Fraction::fromTicks(it->first);
+
+            if (!instr->useDrumset() || !instr->musicXmlId().startsWith(u"mdl.")) {
+                continue;
+            }
+
+            const Drumset* oldDrumset = instr->drumset();
+            const InstrChannel* channel = instr->channel(0);
+
+            if (!oldDrumset || !channel || channel->synti() != u"Zerberus") {
+                continue;
+            }
+
+            const int program = channel->program();
+            std::function<int(int)> repitchFunc;
+
+            if (instr->musicXmlId() == u"mdl.drum.snare-drum" && (program == 5 || program == 6)) {
+                // MDL Snare Line     (id="mdl-snareline")
+                // MDL Snare Line A   (id="mdl-snareline-a")
+                // MDL Snare          (id="mdl-snaresolo")
+                // MDL Snare A        (id="mdl-snaresolo-a")
+                repitchFunc = [](int pitch) {
+                    switch (pitch) {
+                    case 23: return 55;
+                    case 27: return 25;
+                    case 29: return 92;
+                    case 30: return 91;
+                    case 31: return 89;
+                    case 32: return 58;
+                    case 33: return 71;
+                    case 36: return 76;
+                    case 38: return 40;
+                    case 39: return 38;
+                    case 40: return 36;
+                    case 60: return 50;
+                    case 61: return 51;
+                    case 62: return 56;
+                    case 63: return 53;
+                    case 64: return 49;
+                    case 65: return 57;
+                    case 67: return 60;
+                    case 68: return 60;
+                    case 72: return 65;
+                    case 73: return 67;
+                    case 74: return 59;
+                    case 77: return 24;
+                    default: return pitch;
+                    }
+                };
+            } else if (instr->musicXmlId() == u"mdl.drum.tenor-drum" && (program == 7 || program == 8)) {
+                // MDL Tenor Line   (id="mdl-tenorline")
+                // MDL Tenors       (id="mdl-tenorsolo")
+                repitchFunc = [](int pitch) {
+                    switch (pitch) {
+                    case 47: return 40;
+                    case 60: return 36;
+                    case 61: return 48;
+                    case 62: return 60;
+                    case 63: return 72;
+                    case 64: return 84;
+                    case 65: return 96;
+                    case 72: return 41;
+                    case 73: return 53;
+                    case 74: return 65;
+                    case 75: return 77;
+                    case 76: return 89;
+                    case 77: return 101;
+                    case 78: return 37;
+                    case 79: return 49;
+                    case 80: return 61;
+                    case 81: return 73;
+                    case 82: return 85;
+                    case 83: return 97;
+                    case 96: return 37;
+                    case 97: return 49;
+                    case 98: return 61;
+                    case 107: return 36;
+                    default: return pitch;
+                    }
+                };
+            } else if (instr->musicXmlId() == u"mdl.drum.bass-drum" && !oldDrumset->isValid(61)) {
+                // MDL Bass Line (5)    (id="mdl-bassline-5")
+                repitchFunc = [](int pitch) {
+                    switch (pitch) {
+                    case 60: return 90;
+                    case 62: return 37;
+                    case 64: return 49;
+                    case 67: return 61;
+                    case 68: return 73;
+                    case 70: return 85;
+                    case 72: return 92;
+                    case 74: return 39;
+                    case 76: return 51;
+                    case 79: return 63;
+                    case 80: return 75;
+                    case 82: return 87;
+                    default: return pitch;
+                    }
+                };
+            } else {
+                continue;
+            }
+
+            Drumset newDrumset;
+            newDrumset.clear();
+            for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
+                if (oldDrumset->isValid(i)) {
+                    newDrumset.setDrum(repitchFunc(i), oldDrumset->drum(i));
+                }
+            }
+            // Note: newDrumset may have fewer drums than oldDrumset.
+            // This happens if there were two pitches X and Y for which
+            // repitchFunc(X) == repitchFunc(Y), and oldDrumset had drums
+            // on both X and Y. In this situation, drum Y wins (if Y > X).
+            instr->setDrumset(&newDrumset);
+
+            auto repitchChord = [repitchFunc](Chord* ch) {
+                for (Note* n : ch->notes()) {
+                    n->setPitch(repitchFunc(n->pitch()));
+                }
+            };
+
+            for (Segment* s = score->tick2segment(startTick, true, SegmentType::ChordRest);
+                 s && s->tick() < endTick;
+                 s = s->next1(SegmentType::ChordRest)) {
+                for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                    EngravingItem* el = s->element(track);
+                    if (!el || !el->isChord()) {
+                        continue;
+                    }
+                    Chord* ch = toChord(el);
+                    repitchChord(ch);
+                    for (Chord* g : ch->graceNotes()) {
+                        repitchChord(g);
+                    }
+                }
+            }
+        }
+    }
+
     return true;
 }
 
@@ -316,6 +472,19 @@ void Read302::fixInstrumentId(Instrument* instrument)
         id = u"marching-cymbals";
     } else if (id == u"bass-drum" && trackName == u"bass drums") {
         id = u"marching-bass-drums";
+    } else if (id.startsWith(u"mdl-")) {
+        // See https://github.com/musescore/mdl/blob/master/resources/instruments/mdl_1_3_0.xml
+        if (id == u"mdl-snareline" || id == u"mdl-snareline-a" || id == u"mdl-snaresolo" || id == u"mdl-snaresolo-a") {
+            id = u"marching-snare";
+        } else if (id == u"mdl-tenorline" || id == u"mdl-tenorsolo" || id == u"mdl-flubs") {
+            id = u"marching-tenor-drums";
+        } else if (id == u"mdl-bassline-10" || id == u"mdl-bassline-5") {
+            id = u"marching-bass-drums";
+        } else if (id == u"mdl-cymballine") {
+            id = u"marching-cymbals";
+        } else if (id == u"mdl-showtenorline" || id == u"mdl-rail" || id == u"mdl-drumset" || id == u"mdl-sampler") {
+            id = u"drumset";
+        }
     }
 
     instrument->setId(id);
