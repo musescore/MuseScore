@@ -634,7 +634,8 @@ static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
     const std::multimap<int, Spanner*>& spanners = score->spanner();
 
     for (auto it = spanners.cbegin(); it != spanners.cend(); ++it) {
-        if (it->second->links()->contains(spanner)) {
+        const Spanner* curSpanner = it->second;
+        if (curSpanner->links() && curSpanner->links()->contains(spanner)) {
             return true;
         }
     }
