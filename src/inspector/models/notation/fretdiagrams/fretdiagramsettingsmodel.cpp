@@ -165,7 +165,6 @@ QStringList FretDiagramSettingsModel::fingerings() const
 {
     QString fingerings = m_fingerings->value().value<QString>();
     QStringList fingeringList = fingerings.split(',');
-    std::reverse(fingeringList.begin(), fingeringList.end());
     return fingeringList;
 }
 

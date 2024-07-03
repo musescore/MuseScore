@@ -93,11 +93,20 @@ Item {
                 rowSpacing: 12
 
                 Repeater {
-                    id: rep
-                    model: root.model ? root.model.fingerings : 0
+                    id: repeater
+
+                    //! NOTE: If we put `root.model.fingerings` here, the repeater would destroy all generated items
+                    //! whenever one of the fingerings is changed. This results in focus being lost when clicking
+                    //! on a second TextInputField after editing one, instead of focussing that second TextInputField.
+                    //! By giving the repeater only an integer value, that happens only when the number of items changes,
+                    //! which is less problematic.
+                    model: root.model ? root.model.fingerings.length : 0
 
                     Column {
-                        property int string: rep.count - index - 1
+                        id: repeaterItem
+
+                        property int string: repeater.count - index - 1
+                        property string finger: root.model ? root.model.fingerings[string] : 0
 
                         Layout.preferredWidth: 40
                         spacing: 8
@@ -115,7 +124,7 @@ Item {
                             StyledTextLabel {
                                 id: numberLabel
                                 anchors.centerIn: parent
-                                text: string + 1
+                                text: repeaterItem.string + 1
                             }
                         }
 
@@ -124,23 +133,23 @@ Item {
 
                             textHorizontalAlignment: Qt.AlignHCenter
                             indeterminateText: '-'
-                            isIndeterminate: modelData == '0'
-                            currentText: modelData == '0' ? '' : modelData
+                            isIndeterminate: {
+                                const fingerInt = parseInt(repeaterItem.finger)
+                                return isNaN(fingerInt) || fingerInt < 1 || fingerInt > 5
+                            }
 
-                            onTextChanged: function (newTextValue) {
-                                var newFinger = parseInt(newTextValue)
-                                if (isNaN(newFinger)) {
-                                    fingerInput.currentText = ''
-                                    return;
-                                }
+                            currentText: isIndeterminate ? '' : repeaterItem.finger
+
+                            validator: IntInputValidator {
+                                top: 5
+                                bottom: 0
                             }
 
                             onTextEditingFinished: function (newTextValue) {
                                 var newFinger = parseInt(newTextValue)
                                 if (root.model) {
-                                    root.model.setFingering(string, newFinger)
+                                    root.model.setFingering(repeaterItem.string, newFinger)
                                 }
-                                currentText = modelData
                             }
                         }
                     }
