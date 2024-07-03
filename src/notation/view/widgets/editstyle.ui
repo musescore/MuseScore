@@ -251,9 +251,6 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
-      <property name="currentIndex">
-       <number>37</number>
-      </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
