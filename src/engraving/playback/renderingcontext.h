@@ -138,7 +138,7 @@ inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& a
 
     const Tie* tie = note->tieBack();
 
-    if (tie) {
+    if (tie && tie->playSpanner()) {
         if (!tie->startNote() || !tie->endNote()) {
             return false;
         }

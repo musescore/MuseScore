@@ -81,8 +81,6 @@ public:
     void undoSetVibratoType(VibratoType val);
     void setVibratoType(VibratoType tt) { m_vibratoType = tt; }
     VibratoType vibratoType() const { return m_vibratoType; }
-    void setPlayArticulation(bool val) { m_playArticulation = val; }
-    bool playArticulation() const { return m_playArticulation; }
     String vibratoTypeUserName() const;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
@@ -100,7 +98,6 @@ private:
     Sid getPropertyStyle(Pid) const override;
 
     VibratoType m_vibratoType = VibratoType::GUITAR_VIBRATO;
-    bool m_playArticulation = false;
 };
 } // namespace mu::engraving
 

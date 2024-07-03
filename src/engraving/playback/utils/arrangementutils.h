@@ -108,10 +108,13 @@ inline muse::mpe::duration_t tiedNotesTotalDuration(const Score* score, const No
     IF_ASSERT_FAILED(secondNote) {
         return firstNoteDuration;
     }
+    if (!firstNote->tieFor()->playSpanner()) {
+        return firstNoteDuration;
+    }
 
     int startTick = secondNote->tick().ticks();
 
-    const Note* lastNote = firstNote->lastTiedNote();
+    const Note* lastNote = firstNote->lastTiedNote(false);
 
     int endTick = lastNote
                   ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()

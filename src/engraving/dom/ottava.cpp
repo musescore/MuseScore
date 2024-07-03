@@ -303,6 +303,11 @@ PropertyValue Ottava::getProperty(Pid propertyId) const
 bool Ottava::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        setPlaySpanner(val.toBool());
+        staff()->updateOttava();
+        break;
+
     case Pid::OTTAVA_TYPE:
         setOttavaType(OttavaType(val.toInt()));
         break;

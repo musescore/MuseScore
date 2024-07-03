@@ -135,6 +135,7 @@ muse::ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
 {
     switch (pid) {
+    case Pid::PLAY:
     case Pid::COLOR:
     case Pid::VISIBLE:
     case Pid::PLACEMENT:
@@ -431,6 +432,7 @@ Spanner::Spanner(const ElementType& type, EngravingItem* parent, ElementFlags f)
 Spanner::Spanner(const Spanner& s)
     : EngravingItem(s)
 {
+    m_playSpanner  = s.m_playSpanner;
     m_anchor       = s.m_anchor;
     m_startElement = s.m_startElement;
     m_endElement   = s.m_endElement;
@@ -630,6 +632,8 @@ void Spanner::setScore(Score* s)
 PropertyValue Spanner::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        return m_playSpanner;
     case Pid::SPANNER_TICK:
         return m_tick;
     case Pid::SPANNER_TICKS:
@@ -661,6 +665,9 @@ PropertyValue Spanner::getProperty(Pid propertyId) const
 bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        setPlaySpanner(v.toBool());
+        break;
     case Pid::SPANNER_TICK:
         triggerLayout();           // spanner may have moved to another system
         setTick(v.value<Fraction>());
@@ -716,6 +723,8 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Spanner::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        return true;
     case Pid::ANCHOR:
         return int(Anchor::SEGMENT);
     default:

@@ -1453,7 +1453,7 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
         xml.tagProperty("isHarpGliss", PropertyValue(item->isHarpGliss().value()));
     }
 
-    for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
+    for (auto id : { Pid::GLISS_TYPE, Pid::GLISS_STYLE, Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
         writeProperty(item, xml, id);
     }
     for (const StyledProperty& spp : *item->styledProperties()) {
@@ -1553,6 +1553,7 @@ void TWrite::writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& 
     if (ctx.clipboardmode()) {
         xml.tagFraction("ticks_f", item->ticks());
     }
+    writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
 }
 
@@ -1603,7 +1604,6 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::LINE_VISIBLE);
     writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
     writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
-    writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::BEGIN_TEXT_OFFSET);
     writeProperty(item, xml, Pid::CONTINUE_TEXT_OFFSET);
     writeProperty(item, xml, Pid::END_TEXT_OFFSET);
@@ -3075,7 +3075,6 @@ void TWrite::write(const Trill* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("subtype", TConv::toXml(item->trillType()));
-    writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ORNAMENT_STYLE);
     writeProperty(item, xml, Pid::PLACEMENT);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
@@ -3119,7 +3118,6 @@ void TWrite::write(const Vibrato* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("subtype", TConv::toXml(item->vibratoType()));
-    writeProperty(item, xml, Pid::PLAY);
     for (const StyledProperty& spp : *item->styledProperties()) {
         writeProperty(item, xml, spp.pid);
     }

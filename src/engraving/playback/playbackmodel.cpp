@@ -843,8 +843,8 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
                 continue;
             }
 
-            const Note* firstTiedNote = startNote->firstTiedNote();
-            const Note* lastTiedNote = endNote->lastTiedNote();
+            const Note* firstTiedNote = startNote->firstTiedNote(false);
+            const Note* lastTiedNote = endNote->lastTiedNote(false);
 
             IF_ASSERT_FAILED(firstTiedNote && lastTiedNote) {
                 continue;
