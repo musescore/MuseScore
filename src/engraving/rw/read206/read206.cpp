@@ -69,6 +69,7 @@
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 #include "dom/mmrest.h"
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 #include "dom/page.h"
@@ -272,6 +273,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         { "Fingering",               TextStyleType::FINGERING },
         { "LH Guitar Fingering",     TextStyleType::LH_GUITAR_FINGERING },
         { "RH Guitar Fingering",     TextStyleType::RH_GUITAR_FINGERING },
+        { "OrganPedalMark",          TextStyleType::ORGAN_PEDAL_MARK },
         { "String Number",           TextStyleType::STRING_NUMBER },
         { "Instrument Name (Long)",  TextStyleType::INSTRUMENT_LONG },
         { "Instrument Name (Short)", TextStyleType::INSTRUMENT_SHORT },
@@ -1022,6 +1024,11 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         f->setTrack(note->track());
         readText206(e, ctx, f, note);
         note->add(f);
+    } else if (tag == "OrganPedalMark") {
+        OrganPedalMark* pm = Factory::createOrganPedalMark(note);
+        pm->setTrack(note->track());
+        readText206(e, ctx, pm, note);
+        note->add(pm);
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(note);
         s->setTrack(note->track());

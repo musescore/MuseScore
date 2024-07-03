@@ -207,6 +207,24 @@ const TextStyle rhGuitarFingeringTextStyle { {
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
+const TextStyle organPedalMarkTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::organPedalMarkFontFace,                 Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::organPedalMarkFontSize,                 Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::organPedalMarkLineSpacing,              Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::organPedalMarkFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::organPedalMarkFontStyle,                Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::organPedalMarkColor,                    Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::organPedalMarkAlign,                    Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::organPedalMarkOffset,                   Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::organPedalMarkFrameType,                Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::organPedalMarkFramePadding,             Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::organPedalMarkFrameWidth,               Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::organPedalMarkFrameRound,               Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::organPedalMarkFrameFgColor,             Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::organPedalMarkFrameBgColor,             Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    } };
+
 const TextStyle stringNumberTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::stringNumberFontFace,                   Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::stringNumberFontSize,                   Pid::FONT_SIZE },
@@ -1206,6 +1224,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::FINGERING: return &fingeringTextStyle;
     case TextStyleType::LH_GUITAR_FINGERING: return &lhGuitarFingeringTextStyle;
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;
+    case TextStyleType::ORGAN_PEDAL_MARK: return &organPedalMarkTextStyle;
     case TextStyleType::STRING_NUMBER: return &stringNumberTextStyle;
     case TextStyleType::STRING_TUNINGS: return &stringTuningsStyle; // todo
     case TextStyleType::FRET_DIAGRAM_FINGERING: return &fretDiagramFingeringStyle;

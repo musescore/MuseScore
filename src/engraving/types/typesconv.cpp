@@ -209,6 +209,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::MARKER,               "Marker",               muse::TranslatableString("engraving", "Marker") },
     { ElementType::JUMP,                 "Jump",                 muse::TranslatableString("engraving", "Jump") },
     { ElementType::FINGERING,            "Fingering",            muse::TranslatableString("engraving", "Fingering") },
+    { ElementType::ORGAN_PEDAL_MARK,     "OrganPedalMark",       muse::TranslatableString("engraving", "Organ pedal mark") },
     { ElementType::TUPLET,               "Tuplet",               muse::TranslatableString("engraving", "Tuplet") },
     { ElementType::TEMPO_TEXT,           "Tempo",                muse::TranslatableString("engraving", "Tempo") },
     { ElementType::STAFF_TEXT,           "StaffText",            muse::TranslatableString("engraving", "Staff text") },
@@ -1172,6 +1173,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::FINGERING,         "fingering",            muse::TranslatableString("engraving", "Fingering") },
     { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", muse::TranslatableString("engraving", "LH guitar fingering") },
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", muse::TranslatableString("engraving", "RH guitar fingering") },
+    { TextStyleType::ORGAN_PEDAL_MARK,  "organ_pedal_mark",       muse::TranslatableString("engraving", "Organ pedal mark") },
     { TextStyleType::STRING_NUMBER,     "string_number",        muse::TranslatableString("engraving", "String number") },
     { TextStyleType::STRING_TUNINGS,    "string_tunings", muse::TranslatableString("engraving", "String tunings") },
     { TextStyleType::FRET_DIAGRAM_FINGERING, "fret_diagram_fingering",
@@ -1272,6 +1274,7 @@ TextStyleType TConv::fromXml(const AsciiStringView& tag, TextStyleType def)
         { "Fingering", TextStyleType::FINGERING },
         { "LH Guitar Fingering", TextStyleType::LH_GUITAR_FINGERING },
         { "RH Guitar Fingering", TextStyleType::RH_GUITAR_FINGERING },
+        { "OrganPedalMark", TextStyleType::ORGAN_PEDAL_MARK },
         { "String Number", TextStyleType::STRING_NUMBER },
 
         { "Text Line", TextStyleType::TEXTLINE },

@@ -117,6 +117,7 @@ class Note;
 class NoteDot;
 class NoteHead;
 class NoteLine;
+class OrganPedalMark;
 class Ornament;
 class Ottava;
 class OttavaSegment;
@@ -442,6 +443,7 @@ public:
     CONVERT(FretCircle, FRET_CIRCLE)
     CONVERT(StringTunings, STRING_TUNINGS)
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
+    CONVERT(OrganPedalMark,  ORGAN_PEDAL_MARK)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -815,6 +817,7 @@ CONVERT(DeadSlapped)
 CONVERT(StringTunings)
 CONVERT(SoundFlag)
 CONVERT(TimeTickAnchor)
+CONVERT(OrganPedalMark)
 #undef CONVERT
 }
 

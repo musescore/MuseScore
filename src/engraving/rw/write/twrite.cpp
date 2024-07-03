@@ -104,6 +104,8 @@
 #include "dom/note.h"
 #include "dom/notedot.h"
 #include "dom/noteline.h"
+
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -270,6 +272,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::NOTEHEAD:     write(item_cast<const NoteHead*>(item), xml, ctx);
         break;
     case ElementType::NOTELINE:     write(item_cast<const NoteLine*>(item), xml, ctx);
+        break;
+    case ElementType::ORGAN_PEDAL_MARK: write(item_cast<const OrganPedalMark*>(item), xml, ctx);
         break;
     case ElementType::ORNAMENT:     write(item_cast<const Ornament*>(item), xml, ctx);
         break;
@@ -2297,6 +2301,16 @@ void TWrite::write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const OrganPedalMark* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 

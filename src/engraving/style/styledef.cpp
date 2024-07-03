@@ -843,6 +843,21 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::rhGuitarFingeringFrameBgColor, "rhGuitarFingeringFrameBgColor", PropertyValue::fromValue(Color::transparent) },
     { Sid::rhGuitarFingeringOffset,       "rhGuitarFingeringOffset",       PointF() },
 
+    { Sid::organPedalMarkFontFace,        "organPedalMarkFontFace",        "Edwin" },
+    { Sid::organPedalMarkFontSize,        "organPedalMarkFontSize",        20.0 },
+    { Sid::organPedalMarkLineSpacing,     "organPedalMarkLineSpacing",     1.0 },
+    { Sid::organPedalMarkFontSpatiumDependent, "organPedalMarkFontSpatiumDependent", true },
+    { Sid::organPedalMarkFontStyle,       "organPedalMarkFontStyle",       int(FontStyle::Normal) },
+    { Sid::organPedalMarkColor,           "organPedalMarkColor",           PropertyValue::fromValue(Color::BLACK) },
+    { Sid::organPedalMarkAlign,           "organPedalMarkAlign",           Align(AlignH::HCENTER, AlignV::VCENTER) },
+    { Sid::organPedalMarkFrameType,       "organPedalMarkFrameType",       int(FrameType::NO_FRAME) },
+    { Sid::organPedalMarkFramePadding,    "organPedalMarkFramePadding",    0.2 },
+    { Sid::organPedalMarkFrameWidth,      "organPedalMarkFrameWidth",      0.1 },
+    { Sid::organPedalMarkFrameRound,      "organPedalMarkFrameRound",      0 },
+    { Sid::organPedalMarkFrameFgColor,    "organPedalMarkFrameFgColor",    PropertyValue::fromValue(Color::BLACK) },
+    { Sid::organPedalMarkFrameBgColor,    "organPedalMarkFrameBgColor",    PropertyValue::fromValue(Color::transparent) },
+    { Sid::organPedalMarkOffset,          "organPedalMarkOffset",          PointF() },
+
     { Sid::stringNumberFontFace,          "stringNumberFontFace",          "Edwin" },
     { Sid::stringNumberFontSize,          "stringNumberFontSize",          8.0 },
     { Sid::stringNumberLineSpacing,       "stringNumberLineSpacing",       1.0 },
@@ -1622,9 +1637,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::fermataMinDistance,            "fermataMinDistance",            Spatium(0.4) },
 
     { Sid::fingeringPlacement,            "fingeringPlacement",            PlacementV::ABOVE },
+    { Sid::organPedalMarkPlacement,       "organPedalMarkPlacement",       PlacementV::ABOVE },
 
     { Sid::articulationMinDistance,       "articulationMinDistance",       Spatium(0.4) },
     { Sid::fingeringMinDistance,          "fingeringMinDistance",          Spatium(0.5) },
+    { Sid::organPedalMarkMinDistance,     "organPedalMarkMinDistance",     Spatium(0.5) },
     { Sid::hairpinMinDistance,            "hairpinMinDistance",            Spatium(0.7) },
     { Sid::letRingMinDistance,            "letRingMinDistance",            Spatium(0.7) },
     { Sid::ottavaMinDistance,             "ottavaMinDistance",             Spatium(0.7) },

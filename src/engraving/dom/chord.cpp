@@ -2846,6 +2846,7 @@ EngravingItem* Chord::nextElement()
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::TEXT:
     case ElementType::BEND: {
         Note* n = toNote(e->explicitParent());

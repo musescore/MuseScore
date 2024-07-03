@@ -214,6 +214,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteline.h
     ${CMAKE_CURRENT_LIST_DIR}/notifier.h
+    ${CMAKE_CURRENT_LIST_DIR}/organpedalmark.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/organpedalmark.h
     ${CMAKE_CURRENT_LIST_DIR}/ornament.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ornament.h
     ${CMAKE_CURRENT_LIST_DIR}/ottava.cpp

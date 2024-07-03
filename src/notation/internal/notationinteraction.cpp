@@ -1322,6 +1322,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::ACCIDENTAL:
     case ElementType::TEXT:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::TEMPO_TEXT:
     case ElementType::ORNAMENT:
     case ElementType::EXPRESSION:
@@ -1449,6 +1450,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::ACCIDENTAL:
     case ElementType::TEXT:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::TEMPO_TEXT:
     case ElementType::ORNAMENT:
     case ElementType::EXPRESSION:
@@ -1920,7 +1922,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 }
                 selectAndStartEditIfNeeded(spanner);
             }
-        } else if (element->isTextBase() && !element->isFingering() && !element->isSticking()) {
+        } else if (element->isTextBase() && !element->isFingering() && !element->isSticking() && !element->isOrganPedalMark()) {
             mu::engraving::Segment* firstSegment = sel.startSegment();
             staff_idx_t firstStaffIndex = sel.staffStart();
             staff_idx_t lastStaffIndex = sel.staffEnd();
@@ -4458,6 +4460,7 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         TextStyleType::FINGERING,
         TextStyleType::LH_GUITAR_FINGERING,
         TextStyleType::RH_GUITAR_FINGERING,
+        TextStyleType::ORGAN_PEDAL_MARK,
         TextStyleType::STRING_NUMBER,
         TextStyleType::STICKING,
         TextStyleType::HARMONY_A,

@@ -98,6 +98,7 @@
 #include "dom/note.h"
 #include "dom/notedot.h"
 
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -327,6 +328,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::NOTEHEAD:
         layoutSymbol(item_cast<const NoteHead*>(item), static_cast<NoteHead::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::ORGAN_PEDAL_MARK:
+        layoutOrganPedalMark(item_cast<const OrganPedalMark*>(item), static_cast<OrganPedalMark::LayoutData*>(ldata));
         break;
     case ElementType::ORNAMENT:
         layoutOrnament(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
@@ -2456,6 +2460,149 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
     Autoplace::setOffsetChanged(item, ldata, false);
 }
 
+void TLayout::layoutOrganPedalMark(const OrganPedalMark* item, OrganPedalMark::LayoutData* ldata)
+{
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
+    }
+
+    ldata->setIsSkipDraw(false);
+
+    TLayout::layoutBaseTextBase(item, ldata);
+    ldata->setPosY(0.0); // handle placement below
+
+    if (item->autoplace()) {
+        const Note* note  = item->note();
+        const Chord* chord = note->chord();
+
+        bool voices  = chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
+        bool tight   = voices && chord->notes().size() == 1 && !chord->beam();
+
+        double headWidth = note->bboxRightPos();
+
+        // update offset after drag
+        double rebase = 0.0;
+        if (ldata->offsetChanged() != OffsetChange::NONE && !tight) {
+            rebase = Autoplace::rebaseOffset(item, ldata);
+        }
+
+        // temporarily exclude self from chord shape
+        const_cast<OrganPedalMark*>(item)->setAutoplace(false);
+
+        if (item->layoutType() == ElementType::CHORD) {
+            bool above = item->placeAbove();
+            const Stem* stem = chord->stem();
+            const Segment* segment = chord->segment();
+            const Measure* measure = segment->measure();
+            double sp = item->spatium();
+            double md = item->minDistance().val() * sp;
+            const SysStaff* ss = measure->system()->staff(chord->vStaffIdx());
+            const Staff* vStaff = chord->staff();           // TODO: use current height at tick
+
+            LD_CONDITION(measure->ldata()->isSetPos());
+            LD_CONDITION(segment->ldata()->isSetPos());
+            LD_CONDITION(chord->ldata()->isSetPos());
+            LD_CONDITION(note->ldata()->isSetPos());
+            LD_CONDITION(note->ldata()->isSetBbox());
+            //! NOTE A lot of spam
+            // LD_CONDITION(note->ldata()->mirror.has_value());
+            if (stem) {
+                LD_CONDITION(stem->ldata()->isSetPos());
+                LD_CONDITION(stem->ldata()->isSetBbox());
+            }
+            LD_CONDITION(chord->upNote()->ldata()->isSetBbox());
+            LD_CONDITION(chord->upNote()->ldata()->isSetPos());
+            LD_CONDITION(chord->downNote()->ldata()->isSetBbox());
+            LD_CONDITION(chord->downNote()->ldata()->isSetPos());
+
+            if (note->ldata()->mirror.value(LD_ACCESS::BAD)) {
+                ldata->moveX(-note->ldata()->pos().x());
+            }
+            ldata->moveX(headWidth * .5);
+            if (above) {
+                if (tight) {
+                    if (chord->stem()) {
+                        ldata->moveX(-0.8 * sp);
+                    }
+                    ldata->moveY(-1.5 * sp);
+                } else {
+                    RectF r = ldata->bbox().translated(measure->pos() + segment->pos() + chord->pos() + note->pos() + item->pos());
+                    SkylineLine sk(false);
+                    sk.add(r, const_cast<OrganPedalMark*>(item));
+                    double d = sk.minDistance(ss->skyline().north());
+                    double yd = 0.0;
+                    if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
+                        yd -= d + item->ldata()->bbox().height() * .25;
+                    }
+                    // force extra space above staff & chord (but not other organ pedal marks)
+                    double top = 0.0;
+                    if (chord->up() && chord->beam() && stem) {
+                        top = stem->y() + stem->ldata()->bbox().top();
+                    } else {
+                        const Note* un = chord->upNote();
+                        top = std::min(0.0, un->y() + un->ldata()->bbox().top());
+                    }
+                    top -= md;
+                    double diff = (ldata->bbox().bottom() + ldata->pos().y() + yd + note->y()) - top;
+                    if (diff > 0.0) {
+                        yd -= diff;
+                    }
+                    if (ldata->offsetChanged() != OffsetChange::NONE) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight();
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                    }
+                    ldata->moveY(yd);
+                }
+            } else {
+                if (tight) {
+                    if (chord->stem()) {
+                        ldata->moveX(0.8 * sp);
+                    }
+                    ldata->moveY(1.5 * sp);
+                } else {
+                    RectF r = ldata->bbox().translated(measure->pos() + segment->pos() + chord->pos() + note->pos() + item->pos());
+                    SkylineLine sk(true);
+                    sk.add(r, const_cast<OrganPedalMark*>(item));
+                    double d = ss->skyline().south().minDistance(sk);
+                    double yd = 0.0;
+                    if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
+                        yd += d + item->ldata()->bbox().height() * .25;
+                    }
+                    // force extra space below staff & chord (but not other organPedalMarks)
+                    double bottom;
+                    if (!chord->up() && chord->beam() && stem) {
+                        bottom = stem->y() + stem->ldata()->bbox().bottom();
+                    } else {
+                        const Note* dn = chord->downNote();
+                        bottom = std::max(vStaff->staffHeight(), dn->y() + dn->ldata()->bbox().bottom());
+                    }
+                    bottom += md;
+                    double diff = bottom - (ldata->bbox().top() + ldata->pos().y() + yd + note->y());
+                    if (diff > 0.0) {
+                        yd += diff;
+                    }
+                    if (ldata->offsetChanged() != OffsetChange::NONE) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight();
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                    }
+                    ldata->moveY(yd);
+                }
+            }
+        }
+
+        // restore autoplace
+        const_cast<OrganPedalMark*>(item)->setAutoplace(true);
+    } else if (ldata->offsetChanged() != OffsetChange::NONE) {
+        // rebase horizontally too, as autoplace may have adjusted it
+        Autoplace::rebaseOffset(item, ldata, false);
+    }
+    Autoplace::setOffsetChanged(item, ldata, false);
+}
+
 void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx)
 {
     double spatium  = item->spatium() * item->userMag();
@@ -4292,7 +4439,8 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
     }
     for (auto e : item->el()) {
         if (e->addToSkyline()) {
-            if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
+            if ((e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE)
+                || (e->isOrganPedalMark() && toOrganPedalMark(e)->layoutType() != ElementType::NOTE)) {
                 continue;
             }
             shape.add(e->ldata()->bbox().translated(e->pos()), e);

@@ -60,6 +60,7 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "note.h"
+#include "organpedalmark.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "part.h"
@@ -795,6 +796,17 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
 
         textBox = Factory::createFingering(toNote(destinationElement), type);
+        textBox->setTrack(destinationElement->track());
+        textBox->setParent(destinationElement);
+        undoAddElement(textBox);
+        break;
+    }
+    case TextStyleType::ORGAN_PEDAL_MARK: {
+        if (!destinationElement || !destinationElement->isNote()) {
+            break;
+        }
+
+        textBox = Factory::createOrganPedalMark(toNote(destinationElement), type);
         textBox->setTrack(destinationElement->track());
         textBox->setParent(destinationElement);
         undoAddElement(textBox);
@@ -2297,6 +2309,9 @@ void Score::cmdFlip()
                    || e->isStringTunings()
                    || e->isSticking()
                    || e->isFingering()
+                   || e->isOrganPedalMark()
+                   || e->isDynamic()
+                   || e->isExpression()
                    || e->isHarmony()
                    || e->isFretDiagram()
                    || e->isOttava()
@@ -5827,6 +5842,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::GLISSANDO
         || et == ElementType::GUITAR_BEND
         || et == ElementType::BEND
+        || et == ElementType::ORGAN_PEDAL_MARK
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         ) {
         const EngravingItem* parent = element->parentItem();

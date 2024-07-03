@@ -254,6 +254,7 @@ enum class ElementType {
     MARKER                = int(mu::engraving::ElementType::MARKER),
     JUMP                  = int(mu::engraving::ElementType::JUMP),
     FINGERING             = int(mu::engraving::ElementType::FINGERING),
+    ORGAN_PEDAL_MARK      = int(mu::engraving::ElementType::ORGAN_PEDAL_MARK),
     TUPLET                = int(mu::engraving::ElementType::TUPLET),
     TEMPO_TEXT            = int(mu::engraving::ElementType::TEMPO_TEXT),
     STAFF_TEXT            = int(mu::engraving::ElementType::STAFF_TEXT),

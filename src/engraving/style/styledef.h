@@ -854,6 +854,21 @@ enum class Sid {
     rhGuitarFingeringFrameBgColor,
     rhGuitarFingeringOffset,
 
+    organPedalMarkFontFace,
+    organPedalMarkFontSize,
+    organPedalMarkLineSpacing,
+    organPedalMarkFontSpatiumDependent,
+    organPedalMarkFontStyle,
+    organPedalMarkColor,
+    organPedalMarkAlign,
+    organPedalMarkFrameType,
+    organPedalMarkFramePadding,
+    organPedalMarkFrameWidth,
+    organPedalMarkFrameRound,
+    organPedalMarkFrameFgColor,
+    organPedalMarkFrameBgColor,
+    organPedalMarkOffset,
+
     stringNumberFontFace,
     stringNumberFontSize,
     stringNumberLineSpacing,
@@ -1629,9 +1644,11 @@ enum class Sid {
     fermataMinDistance,
 
     fingeringPlacement,
+    organPedalMarkPlacement,
 
     articulationMinDistance,
     fingeringMinDistance,
+    organPedalMarkMinDistance,
     hairpinMinDistance,
     letRingMinDistance,
     ottavaMinDistance,

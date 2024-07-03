@@ -63,6 +63,7 @@
 #include "engraving/dom/measurenumber.h"
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/organpedalmark.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/palmmute.h"
@@ -116,6 +117,8 @@ MAKE_ELEMENT(MeasureNumber, score->dummy()->measure())
 
 MAKE_ELEMENT(Fingering, score->dummy()->note())
 MAKE_ELEMENT(NoteHead, score->dummy()->note())
+
+MAKE_ELEMENT(OrganPedalMark, score->dummy()->note())
 
 PaletteTreePtr PaletteCreator::newMasterPaletteTree()
 {
@@ -1993,10 +1996,40 @@ PalettePtr PaletteCreator::newOrganPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Organ);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Organ"));
-    sp->setMag(1.5);
-    sp->setGridSize(28, 30);
+    sp->setMag(1.2);
+    sp->setGridSize(30, 35);
     sp->setDrawGrid(true);
     sp->setVisible(false);
+
+    static const SymIdList defaultOrganPedalMarks {
+        SymId::keyboardPedalToe2,
+        SymId::keyboardPedalHeel1,
+        SymId::keyboardPedalHeel3,
+        SymId::keyboardPedalParensLeft,
+        SymId::keyboardPedalParensRight,
+        SymId::keyboardPedalToeToHeel,
+        SymId::keyboardPedalHeelToToe
+    };
+
+    static const SymIdList masterOrganPedalMarks {
+        SymId::keyboardPedalToe2,
+        SymId::keyboardPedalHeel1,
+        SymId::keyboardPedalHeel3,
+        SymId::keyboardPedalParensLeft,
+        SymId::keyboardPedalParensRight,
+        SymId::keyboardPedalToeToHeel,
+        SymId::keyboardPedalHeelToToe,
+        SymId::keyboardPedalToe1,
+        SymId::keyboardPedalHeel2,
+        SymId::keyboardPedalHeelToe,
+    };
+
+    for (auto mark : defaultPalette ? defaultOrganPedalMarks : masterOrganPedalMarks) {
+        auto pm = makeElement<OrganPedalMark>(gpaletteScore);
+        pm->setXmlText(u"<sym>" + String::fromAscii(SymNames::nameForSymId(mark).ascii()) + u"</sym>");
+        pm->setSymId(mark);
+        sp->appendElement(pm, pm->typeUserName());
+    }
 
     return sp;
 }

@@ -47,7 +47,9 @@
 #include "dom/navigate.h"
 #include "dom/note.h"
 
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
+
 #include "dom/part.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -152,13 +154,21 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             lll = std::max(lll, -x);
         }
 
-        // clear layout for note-based fingerings
+        // clear layout for note-based fingerings and organ pedal marks
         for (EngravingItem* e : note->el()) {
             if (e->isFingering()) {
                 Fingering* f = toFingering(e);
                 if (f->layoutType() == ElementType::NOTE) {
                     f->setPos(PointF());
                     f->setbbox(RectF());
+                }
+            }
+
+            if (e->isOrganPedalMark()) {
+                OrganPedalMark* pm = toOrganPedalMark(e);
+                if (pm->layoutType() == ElementType::NOTE) {
+                    pm->setPos(PointF());
+                    pm->setbbox(RectF());
                 }
             }
         }
@@ -321,6 +331,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             }
         }
     }
+
     for (Fingering* f : alignNote) {
         f->mutldata()->setPosX(xNote);
     }
@@ -3040,6 +3051,50 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     }
 }
 
+void ChordLayout::layoutChordBaseOrganPedalMark(Chord* chord, System* system, LayoutContext&)
+{
+    std::set<staff_idx_t> shapesToRecreate;
+    std::list<Note*> notes;
+    Segment* segment = chord->segment();
+    for (auto gc : chord->graceNotes()) {
+        for (auto n : gc->notes()) {
+            notes.push_back(n);
+        }
+    }
+    for (auto n : chord->notes()) {
+        notes.push_back(n);
+    }
+    std::list<OrganPedalMark*> organPedalMark;
+    for (Note* note : notes) {
+        for (EngravingItem* el : note->el()) {
+            if (el->isOrganPedalMark()) {
+                OrganPedalMark* pm = toOrganPedalMark(el);
+                if (pm->layoutType() == ElementType::CHORD && !pm->isOnCrossBeamSide()) {
+                    // Organ pedal mark on top of cross-staff beams must be laid out later
+                    if (pm->placeAbove()) {
+                        organPedalMark.push_back(pm);
+                    } else {
+                        organPedalMark.push_front(pm);
+                    }
+                }
+            }
+        }
+    }
+    for (OrganPedalMark* pm : organPedalMark) {
+        TLayout::layoutOrganPedalMark(pm, pm->mutldata());
+        if (pm->addToSkyline()) {
+            Note* n = pm->note();
+            RectF r
+                = pm->ldata()->bbox().translated(pm->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
+            system->staff(pm->note()->chord()->vStaffIdx())->skyline().add(r, pm);
+        }
+        shapesToRecreate.insert(pm->staffIdx());
+    }
+    for (staff_idx_t staffIdx : shapesToRecreate) {
+        segment->createShape(staffIdx);
+    }
+}
+
 void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
 {
     if (!chord->configuration()->useStretchedBends()) {
@@ -3220,6 +3275,17 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             // fingerings placed relative to chord will be laid out later
             if (f->layoutType() == ElementType::NOTE) {
                 TLayout::layoutFingering(f, f->mutldata());
+            }
+        } else if (e->isOrganPedalMark()) {
+            // don't set mag; organ pedal marks should not scale with note
+            OrganPedalMark* pm = toOrganPedalMark(e);
+            if (pm->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED) {
+                pm->setPlacement(pm->calculatePlacement());
+            }
+            // layout organ pedal marks that are placed relative to notehead
+            // organ pedal marks placed relative to chord will be laid out later
+            if (pm->layoutType() == ElementType::NOTE) {
+                TLayout::layoutOrganPedalMark(pm, pm->mutldata());
             }
         } else {
             e->mutldata()->setMag(item->mag());

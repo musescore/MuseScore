@@ -291,6 +291,8 @@ public:
     static StringTunings* copyStringTunings(const StringTunings& src);
     static std::shared_ptr<StringTunings> makeStringTunings(Segment* parent);
 
+    static OrganPedalMark* createOrganPedalMark(Note* parent, bool isAccessibleEnabled = true);
+    static OrganPedalMark* createOrganPedalMark(Note* parent, TextStyleType textStyleType, bool isAccessibleEnabled = true);
 private:
     static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);
 };
