@@ -2509,32 +2509,56 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 {
     LAYOUT_CALL_ITEM(item);
     double spatium  = item->spatium() * item->userMag();
-    ldata->stringLw = spatium * 0.08;
-    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : spatium * 0.2);
+    ldata->stringLineWidth = spatium * 0.08;
+    ldata->nutLineWidth = ((item->fretOffset() || !item->showNut()) ? ldata->stringLineWidth
+                           : ctx.conf().styleMM(Sid::fretNutThickness) * item->userMag());
+    ldata->nutY = -0.5 * (ldata->nutLineWidth - ldata->stringLineWidth);
     ldata->stringDist = ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag();
     ldata->fretDist = ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag();
     ldata->markerSize = ldata->stringDist * .8;
+    ldata->markerY = ldata->nutY - 0.5 * ldata->nutLineWidth - ldata->markerSize - 0.20 * spatium;
+    bool extendedStyle = item->style().styleB(Sid::fretStyleExtended);
+    ldata->stringExtendTop = item->fretOffset() && extendedStyle ? -spatium * .2 : 0.0;
+    ldata->stringExtendBottom = extendedStyle ? 0.5 * ldata->fretDist : 0.0;
+    ldata->dotDiameter = ctx.conf().styleMM(Sid::fretDotSpatiumSize) * item->userMag();
 
+    double shapeMarginAboveDiagram = ldata->fretDist * 1.5;
     double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
-    double h = (item->frets() + 1) * ldata->fretDist + ldata->markerSize;
-    double y = -(ldata->markerSize * .5 + ldata->fretDist);
+    double h = item->frets() * ldata->fretDist + ldata->stringExtendBottom + shapeMarginAboveDiagram;
+    double y = -shapeMarginAboveDiagram;
     double x = -(ldata->markerSize * .5);
+
+    bool isVertical = item->orientation() == Orientation::VERTICAL;
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
-
-        double fretNumMag = ctx.conf().styleD(Sid::fretNumMag);
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
+        double padding = 0.4 * ldata->stringDist;
+        for (auto i : item->barres()) {
+            FretItem::Barre barre = i.second;
+            if (!barre.exists()) {
+                continue;
+            }
+            if ((barre.startString == 0 && item->numPos() == 0)
+                || (barre.endString == -1 && item->numPos() == 1)) {
+                padding += 0.20 * ldata->dotDiameter * ctx.conf().styleD(Sid::barreLineWidth);
+                break;
+            }
+        }
+        Font scaledFont(item->fretNumFont());
         FontMetrics fm2(scaledFont);
-        double numw = fm2.width(String::number(item->fretOffset() + 1));
-        double xdiff = numw + ldata->stringDist * .4;
+        String fretText = String::number(item->fretOffset() + 1);
+        if (ctx.conf().styleB(Sid::fretUseCustomSuffix)) {
+            fretText += ctx.conf().styleSt(Sid::fretCustomSuffix);
+        }
+        ldata->fretText = fretText;
+        double numw = isVertical ? fm2.width(fretText) : fm2.tightBoundingRect(fretText).height();
+        double xdiff = numw + padding;
         w += xdiff;
-        x += (item->numPos() == 0) == (item->orientation() == Orientation::VERTICAL) ? -xdiff : 0;
+        x += (item->numPos() == 0) == isVertical ? -xdiff : 0;
+        ldata->fretNumPadding = padding;
     }
 
-    if (item->orientation() == Orientation::HORIZONTAL) {
+    if (!isVertical) {
         double tempW = w,
                tempX = x;
         w = h;
@@ -2544,7 +2568,32 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     }
 
     // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
-    ldata->setBbox(x, y, w, h);
+    Shape shape;
+    shape.add(RectF(x, y, w, h), item);
+
+    ldata->fingeringItems.clear();
+    if (item->showFingering()) {
+        const double padding = 0.2 * spatium;
+        Font fingeringFont = item->fingeringFont();
+        FontMetrics fontMetrics(fingeringFont);
+        double fontHeight = fontMetrics.capHeight();
+        for (int i = 0; i < item->fingering().size(); ++i) {
+            int finger = item->fingering()[i];
+            if (finger == 0) {
+                continue;
+            }
+            String fingerS = String::number(finger);
+            double width = fontMetrics.width(fingerS);
+            double digitHeight = fontMetrics.tightBoundingRect(fingerS).height();
+            double xOff = -0.5 * width;
+            double fingerX = isVertical ? (item->strings() - i - 1) * ldata->stringDist + xOff : x + w + padding;
+            double fingerY = isVertical ? y + h + fontHeight + padding : i * ldata->stringDist + 0.5 * digitHeight;
+            ldata->fingeringItems.push_back(FretDiagram::FingeringItem(fingerS, PointF(fingerX, fingerY)));
+            shape.add(ShapeElement(fontMetrics.tightBoundingRect(fingerS).translated(PointF(fingerX, fingerY)), item));
+        }
+    }
+
+    ldata->setShape(shape);
 
     if (!item->explicitParent()->isSegment()) {
         ldata->setPos(PointF());
@@ -2570,13 +2619,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         }
     }
 
-    double mainWidth = 0.0;
-    if (item->orientation() == Orientation::VERTICAL) {
-        mainWidth = ldata->stringDist * (item->strings() - 1);
-    } else if (item->orientation() == Orientation::HORIZONTAL) {
-        mainWidth = ldata->fretDist * (item->frets() + 0.5);
-    }
-    ldata->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
+    ldata->setPos((noteheadWidth - item->mainWidth()) / 2, -(ldata->shape().bottom() + item->styleP(Sid::fretY)));
 
     if (item->autoplace()) {
         const Segment* s = toSegment(item->explicitParent());
@@ -2614,6 +2657,45 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         if (harmony->addToSkyline()) {
             ss->skyline().add(r, harmony);
         }
+    }
+
+    for (auto i : item->barres()) {
+        FretItem::Barre barre = i.second;
+        if (!barre.exists()) {
+            continue;
+        }
+        int startString = barre.startString;
+        int endString = barre.endString != -1 ? barre.endString : item->strings();
+        int fret = i.first;
+        if (!ctx.conf().styleB(Sid::barreAppearanceSlur)) {
+            for (int string = startString; string < endString; ++string) {
+                const_cast<FretDiagram*>(item)->removeDotForDotStyleBarre(string, fret);
+            }
+            break;
+        }
+        for (int string = startString; string < endString; ++string) {
+            const_cast<FretDiagram*>(item)->addDotForDotStyleBarre(string, fret);
+        }
+        double insetX = 2 * ldata->stringLineWidth;
+        double insetY = fret == 1 ? ldata->nutLineWidth + ldata->stringLineWidth : insetX;
+        double startX = startString * ldata->stringDist + insetX;
+        double endX = (endString - 1) * ldata->stringDist - insetX;
+        double shoulderXoffset = 0.2 * (endX - startX);
+        double startEndY = (fret - 1) * ldata->fretDist - insetY;
+        double shoulderY = startEndY - 0.5 * ldata->fretDist;
+        double slurThickness = 0.1 * item->spatium() * item->userMag();
+        double shoulderYfor = shoulderY - slurThickness;
+        double shoulderYback = shoulderY + slurThickness;
+        PointF bezier1for = PointF(startX + shoulderXoffset, shoulderYfor);
+        PointF bezier2for = PointF(endX - shoulderXoffset, shoulderYfor);
+        PointF bezier1back = PointF(startX + shoulderXoffset, shoulderYback);
+        PointF bezier2back = PointF(endX - shoulderXoffset, shoulderYback);
+        PainterPath slurPath = PainterPath();
+        slurPath.moveTo(startX, startEndY);
+        slurPath.cubicTo(bezier1for, bezier2for, PointF(endX, startEndY));
+        slurPath.cubicTo(bezier2back, bezier1back, PointF(startX, startEndY));
+        ldata->slurPath = slurPath;
+        break;
     }
 }
 
@@ -3370,10 +3452,10 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 newPosX = 0.0;
                 break;
             case AlignH::HCENTER:
-                newPosX = fd->centerX();
+                newPosX = 0.5 * fd->mainWidth();
                 break;
             case AlignH::RIGHT:
-                newPosX = fd->rightX();
+                newPosX = fd->mainWidth();
                 break;
             }
         } else {

@@ -57,6 +57,7 @@ public:
     virtual f26dot6_t ascent() const = 0;
     virtual f26dot6_t descent() const = 0;
     virtual f26dot6_t xHeight() const = 0;
+    virtual f26dot6_t capHeight() const = 0;
 
     virtual std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const = 0;
     virtual glyph_idx_t glyphIndex(char32_t ucs4) const = 0;

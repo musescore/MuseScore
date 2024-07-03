@@ -1268,7 +1268,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
 
-    static const std::array<Pid, 8> pids { {
+    static const std::array<Pid, 10> pids { {
         Pid::MIN_DISTANCE,
         Pid::FRET_OFFSET,
         Pid::FRET_FRETS,
@@ -1276,7 +1276,9 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         Pid::FRET_NUT,
         Pid::MAG,
         Pid::FRET_NUM_POS,
-        Pid::ORIENTATION
+        Pid::ORIENTATION,
+        Pid::FRET_SHOW_FINGERINGS,
+        Pid::FRET_FINGERING,
     } };
 
     // Write properties first and only once

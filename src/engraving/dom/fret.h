@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_FRET_H
 #define MU_ENGRAVING_FRET_H
 
+#include <vector>
+
 #include "engravingitem.h"
 #include "harmony.h"
 
@@ -159,8 +161,7 @@ public:
 
     std::vector<LineF> dragAnchorLines() const override;
     PointF pagePos() const override;
-    double centerX() const;
-    double rightX() const;
+    double mainWidth() const;
 
     int  strings() const { return m_strings; }
     int  frets()   const { return m_frets; }
@@ -168,6 +169,8 @@ public:
     void setFrets(int n) { m_frets = n; }
 
     void setDot(int string, int fret, bool add = false, FretDotType dtype = FretDotType::NORMAL);
+    void addDotForDotStyleBarre(int string, int fret);
+    void removeDotForDotStyleBarre(int string, int fret);
     void setBarre(int startString, int endString, int fret);
     void setBarre(int string, int fret, bool add = false);
     void setMarker(int string, FretMarkerType marker);
@@ -201,7 +204,8 @@ public:
     const DotMap& dots() const { return m_dots; }
     const MarkerMap& markers() const { return m_markers; }
 
-    const muse::draw::Font& font() const { return m_font; }
+    muse::draw::Font fretNumFont() const;
+    muse::draw::Font fingeringFont() const;
 
     void init(StringData*, Chord*);
     void add(EngravingItem*) override;
@@ -220,14 +224,35 @@ public:
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
 
+    bool showFingering() const { return m_showFingering; }
+    void setShowFingering(bool v) { m_showFingering = v; }
+    const std::vector<int>& fingering() const { return m_fingering; }
+    void setFingering(std::vector<int> v);
+
     friend class FretUndoData;
 
+    struct FingeringItem {
+        String fingerNumber;
+        PointF pos;
+        FingeringItem(String s, PointF p)
+            : fingerNumber(s), pos(p) {}
+    };
+
     struct LayoutData : public EngravingItem::LayoutData {
-        double stringLw = 0.0;
-        double nutLw = 0.0;
+        double stringLineWidth = 0.0;
+        double nutLineWidth = 0.0;
+        double nutY = 0.0;
         double stringDist = 0.0;
         double fretDist = 0.0;
         double markerSize = 0.0;
+        double markerY = 0.0;
+        double stringExtendTop = 0.0;
+        double stringExtendBottom = 0.0;
+        double dotDiameter = 0.0;
+        double fretNumPadding = 0.0;
+        std::vector<FingeringItem> fingeringItems;
+        PainterPath slurPath = PainterPath();
+        String fretText = String();
     };
     DECLARE_LAYOUTDATA_METHODS(FretDiagram)
 
@@ -261,9 +286,11 @@ private:
 
     Harmony* m_harmony = nullptr;
 
-    muse::draw::Font m_font;
     double m_userMag = 1.0;                 // allowed 0.1 - 10.0
     int m_numPos = 0;
+
+    bool m_showFingering = false;
+    std::vector<int> m_fingering = std::vector<int>(m_strings, 0);
 };
 } // namespace mu::engraving
 

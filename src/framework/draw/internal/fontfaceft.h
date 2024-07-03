@@ -44,6 +44,7 @@ public:
     f26dot6_t ascent() const override;
     f26dot6_t descent() const override;
     f26dot6_t xHeight() const override;
+    f26dot6_t capHeight() const override;
 
     std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const override;
     glyph_idx_t glyphIndex(char32_t ucs4) const override;

@@ -50,6 +50,8 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
 
     Q_PROPERTY(QVariant fretDiagram READ fretDiagram NOTIFY fretDiagramChanged)
+    Q_PROPERTY(PropertyItem * showFingerings READ showFingerings CONSTANT)
+    Q_PROPERTY(QStringList fingerings READ fingerings NOTIFY fingeringsChanged)
 
 public:
     explicit FretDiagramSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -66,6 +68,11 @@ public:
     PropertyItem* isNutVisible() const;
     PropertyItem* placement() const;
     PropertyItem* orientation() const;
+    PropertyItem* showFingerings() const;
+    QStringList fingerings() const;
+
+    Q_INVOKABLE void setFingering(int string, int finger);
+    Q_INVOKABLE void resetFingerings();
 
     QVariant fretDiagram() const;
 
@@ -88,6 +95,7 @@ signals:
     void currentFretDotTypeChanged(int currentFretDotType);
 
     void areSettingsAvailableChanged(bool areSettingsAvailable);
+    void fingeringsChanged(QStringList fingerings);
 
 private:
     PropertyItem* m_scale = nullptr;
@@ -97,6 +105,8 @@ private:
     PropertyItem* m_isNutVisible = nullptr;
     PropertyItem* m_placement = nullptr;
     PropertyItem* m_orientation = nullptr;
+    PropertyItem* m_showFingerings = nullptr;
+    PropertyItem* m_fingerings = nullptr;
 
     mu::engraving::FretDiagram* m_fretDiagram = nullptr;
 
