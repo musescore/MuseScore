@@ -227,38 +227,36 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
         }
     };
 
-    auto addDynToVoice = [score, part, &expectedLayers](mpe::DynamicType dyn, voice_idx_t voiceIdx, int tick) {
-        staff_idx_t firstStaffIdx = part->staves().front()->idx();
-        staff_idx_t lastStaffIdx = firstStaffIdx + part->nstaves();
-
-        for (staff_idx_t staffIdx = firstStaffIdx; staffIdx < lastStaffIdx; ++staffIdx) {
-            layer_idx_t layerIdx = static_cast<layer_idx_t>(staff2track(staffIdx, voiceIdx));
-            expectedLayers[layerIdx][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
-        }
-    };
-
     auto addDynToStaffAndVoice = [score, &expectedLayers](mpe::DynamicType dyn, staff_idx_t staffIdx, voice_idx_t voiceIdx, int tick) {
         layer_idx_t layerIdx = static_cast<layer_idx_t>(staff2track(staffIdx, voiceIdx));
         expectedLayers[layerIdx][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
     };
 
     // 1st measure
-    addDynToAllStavesAndVoices(mpe::DynamicType::ppp, 0);
+    addDynToAllStavesAndVoices(mpe::DynamicType::ppp, 0); // "Apply to all voices"
 
     // 2nd measure
-    addDynToVoice(mpe::DynamicType::pp, 1, 1920); // 2nd voice (all staves)
+    addDynToStaffAndVoice(mpe::DynamicType::pp, 0, 1, 1920); // 1st staff & 2nd voice ("Apply to 2nd voice")
 
     // 3rd measure
-    addDynToVoice(mpe::DynamicType::mf, 0, 3840); // 1st voice (all staves)
-    addDynToVoice(mpe::DynamicType::p, 1, 3840); // 2nd voice (all staves)
+    addDynToStaffAndVoice(mpe::DynamicType::mf, 0, 0, 3840); // 1st staff & 1st voice ("Apply to 1st voice")
+
+    for (voice_idx_t voiceIdx = 0; voiceIdx < VOICES; ++voiceIdx) {
+        // "Apply to all voices" is on but there is the mf on the 1st staff & 1st at the same tick
+        if (voiceIdx != 0) {
+            addDynToStaffAndVoice(mpe::DynamicType::p, 0, voiceIdx, 3840);
+        }
+
+        addDynToStaffAndVoice(mpe::DynamicType::p, 1, voiceIdx, 3840);
+    }
 
     // 4th measure
     for (voice_idx_t voiceIdx = 0; voiceIdx < VOICES; ++voiceIdx) {
-        addDynToStaffAndVoice(mpe::DynamicType::f, 0, voiceIdx, 5760); // 1st staff only
+        addDynToStaffAndVoice(mpe::DynamicType::f, 0, voiceIdx, 5760); // 1st staff only ("All voices on this staff")
     }
 
     // 5th measure
-    addDynToAllStavesAndVoices(mpe::DynamicType::ff, 7680);
+    addDynToAllStavesAndVoices(mpe::DynamicType::ff, 7680); // "Apply to all voices"
 
     EXPECT_EQ(actualLayers, expectedLayers);
 
@@ -405,9 +403,9 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags)
         addParamToStaff(sulTasto, staffIdx, timestampFromTicks(score, 1920), expectedParams);
     }
 
-    addParamToStaff(bartok, 0, timestampFromTicks(score, 3840), expectedParams);
-    addParamToStaff(pizz, 1, timestampFromTicks(score, 3840), expectedParams); // "apply to all staves" is off (apply to 1st staff)
-    addParamToStaff(espressivo, 1, timestampFromTicks(score, 7680), expectedParams); // "apply to all staves" is off (apply to 1st staff)
+    addParamToStaff(bartok, 0, timestampFromTicks(score, 3840), expectedParams); // "apply to all staves" is OFF (apply to 1st staff)
+    addParamToStaff(pizz, 1, timestampFromTicks(score, 3840), expectedParams); // "apply to all staves" is ON (apply to 2nd staff)
+    addParamToStaff(espressivo, 1, timestampFromTicks(score, 7680), expectedParams); // "apply to all staves" is OFF (apply to 1st staff)
 
     EXPECT_EQ(actualParams, expectedParams);
 
