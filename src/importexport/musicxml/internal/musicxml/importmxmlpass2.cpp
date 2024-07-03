@@ -3270,7 +3270,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 String rawWordsText = m_wordsText;
                 static const std::regex re("(<.*?>)");
                 rawWordsText.remove(re);
-                String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : String();
+                String sep = !m_metroText.empty() && !rawWordsText.empty() && rawWordsText.back() != ' ' ? u" " : String();
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
                 if (t->plainText().contains('=')) {
