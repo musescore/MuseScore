@@ -258,7 +258,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
         }
         return true;
     }
-    static std::vector<bool> whiteNotes = { true, false, true, false, true, true, false, true, false, true, false, true };
+    static const std::vector<bool> whiteNotes = { true, false, true, false, true, true, false, true, false, true, false, true };
     int Cnote = 60;   // pitch of middle C
     bool notePick = glissandoStyle == GlissandoStyle::WHITE_KEYS;
     for (int pitch = pitchStart; pitch != pitchEnd; pitch += direction) {

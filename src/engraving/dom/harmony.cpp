@@ -1776,7 +1776,7 @@ String Harmony::generateScreenReaderInfo() const
             rez = String(u"%1 %2").arg(rez, muse::mtrc("engraving", "lower case"));
         }
         aux = aux.toLower();
-        static std::vector<std::pair<String, String> > rnaReplacements {
+        static const std::vector<std::pair<String, String> > rnaReplacements {
             { u"vii", u"7" },
             { u"vi", u"6" },
             { u"iv", u"4" },
@@ -1785,7 +1785,7 @@ String Harmony::generateScreenReaderInfo() const
             { u"ii", u"2" },
             { u"i", u"1" },
         };
-        static std::vector<std::pair<String, String> > symbolReplacements {
+        static const std::vector<std::pair<String, String> > symbolReplacements {
             { u"bb", u"𝄫" },
             { u"##", u"𝄪" },
             { u"h", u"♮" },

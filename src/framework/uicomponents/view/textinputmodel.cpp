@@ -75,7 +75,7 @@ bool TextInputModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers
 void TextInputModel::loadShortcuts()
 {
     //! NOTE: from navigation actions
-    static std::vector<std::string> actionCodes {
+    static const std::vector<std::string> actionCodes {
         "nav-next-section",
         "nav-prev-section",
         "nav-next-panel",

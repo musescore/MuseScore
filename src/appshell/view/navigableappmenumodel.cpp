@@ -336,7 +336,7 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
 
 bool NavigableAppMenuModel::isNavigateKey(int key) const
 {
-    static QList<Qt::Key> keys {
+    static const QList<Qt::Key> keys {
         Qt::Key_Left,
         Qt::Key_Right,
         Qt::Key_Down,

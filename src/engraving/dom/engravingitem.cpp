@@ -121,12 +121,12 @@ void EngravingItem::setupAccessible()
         return;
     }
 
-    static std::list<ElementType> accessibleDisabled = {
+    static const std::set<ElementType> accessibleDisabled = {
         ElementType::LEDGER_LINE
     };
 
     if (score() && !score()->isPaletteScore()) {
-        if (std::find(accessibleDisabled.begin(), accessibleDisabled.end(), type()) == accessibleDisabled.end()) {
+        if (!muse::contains(accessibleDisabled, type())) {
             m_accessible = createAccessible();
             m_accessible->setup();
         }

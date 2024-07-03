@@ -436,7 +436,7 @@ static void readAccidental(Accidental* a, XmlReader& e, ReadContext& ctx)
                 }
                 a->setAccidentalType(at);
             } else {
-                const static std::map<String, AccidentalType> accMap = {
+                static const std::map<String, AccidentalType> accMap = {
                     { u"none", AccidentalType::NONE }, { u"sharp", AccidentalType::SHARP },
                     { u"flat", AccidentalType::FLAT }, { u"natural", AccidentalType::NATURAL },
                     { u"double sharp", AccidentalType::SHARP2 }, { u"double flat", AccidentalType::FLAT2 },

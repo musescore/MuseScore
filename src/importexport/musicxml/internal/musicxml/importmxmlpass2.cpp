@@ -1272,33 +1272,34 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
 static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
 {
-    static std::map<String, SymId> map;         // map MusicXML articulation name to MuseScore symbol
-    if (map.empty()) {
-        map[u"accent"]           = SymId::articAccentAbove;
-        map[u"staccatissimo"]    = SymId::articStaccatissimoWedgeAbove;
-        map[u"staccato"]         = SymId::articStaccatoAbove;
-        map[u"tenuto"]           = SymId::articTenutoAbove;
-        map[u"strong-accent"]    = SymId::articMarcatoAbove;
-        map[u"delayed-turn"]     = SymId::ornamentTurn;
-        map[u"turn"]             = SymId::ornamentTurn;
-        map[u"inverted-turn"]    = SymId::ornamentTurnInverted;
-        map[u"stopped"]          = SymId::brassMuteClosed;
-        map[u"up-bow"]           = SymId::stringsUpBow;
-        map[u"down-bow"]         = SymId::stringsDownBow;
-        map[u"detached-legato"]  = SymId::articTenutoStaccatoAbove;
-        map[u"spiccato"]         = SymId::articStaccatissimoAbove;
-        map[u"snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
-        map[u"schleifer"]        = SymId::ornamentPrecompSlide;
-        map[u"open"]             = SymId::brassMuteOpen;
-        map[u"open-string"]      = SymId::brassMuteOpen;
-        map[u"thumb-position"]   = SymId::stringsThumbPosition;
-        map[u"soft-accent"]      = SymId::articSoftAccentAbove;
-        map[u"stress"]           = SymId::articStressAbove;
-        map[u"unstress"]         = SymId::articUnstressAbove;
-    }
+    // map MusicXML articulation name to MuseScore symbol
+    static const std::map<String, SymId> map {
+        { u"accent",          SymId::articAccentAbove },
+        { u"staccatissimo",   SymId::articStaccatissimoWedgeAbove },
+        { u"staccato",        SymId::articStaccatoAbove },
+        { u"tenuto",          SymId::articTenutoAbove },
+        { u"strong-accent",   SymId::articMarcatoAbove },
+        { u"delayed-turn",    SymId::ornamentTurn },
+        { u"turn",            SymId::ornamentTurn },
+        { u"inverted-turn",   SymId::ornamentTurnInverted },
+        { u"stopped",         SymId::brassMuteClosed },
+        { u"up-bow",          SymId::stringsUpBow },
+        { u"down-bow",        SymId::stringsDownBow },
+        { u"detached-legato", SymId::articTenutoStaccatoAbove },
+        { u"spiccato",        SymId::articStaccatissimoAbove },
+        { u"snap-pizzicato",  SymId::pluckedSnapPizzicatoAbove },
+        { u"schleifer",       SymId::ornamentPrecompSlide },
+        { u"open",            SymId::brassMuteOpen },
+        { u"open-string",     SymId::brassMuteOpen },
+        { u"thumb-position",  SymId::stringsThumbPosition },
+        { u"soft-accent",     SymId::articSoftAccentAbove },
+        { u"stress",          SymId::articStressAbove },
+        { u"unstress",        SymId::articUnstressAbove }
+    };
 
-    if (muse::contains(map, mxmlName)) {
-        id = map.at(mxmlName);
+    auto it = map.find(mxmlName);
+    if (it != map.end()) {
+        id = it->second;
         return true;
     } else {
         id = SymId::noSym;
@@ -1316,21 +1317,23 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
 
 static SymId convertFermataToSymId(const String& mxmlName)
 {
-    static std::map<String, SymId> map; // map MusicXML fermata name to MuseScore symbol
-    if (map.empty()) {
-        map[u"normal"]           = SymId::fermataAbove;
-        map[u"angled"]           = SymId::fermataShortAbove;
-        map[u"square"]           = SymId::fermataLongAbove;
-        map[u"double-angled"]    = SymId::fermataVeryShortAbove;
-        map[u"double-square"]    = SymId::fermataVeryLongAbove;
-        map[u"double-dot"]       = SymId::fermataLongHenzeAbove;
-        map[u"half-curve"]       = SymId::fermataShortHenzeAbove;
-        map[u"curlew"]           = SymId::curlewSign;
+    // map MusicXML fermata name to MuseScore symbol
+    static const std::map<String, SymId> map {
+        { u"normal",        SymId::fermataAbove },
+        { u"angled",        SymId::fermataShortAbove },
+        { u"square",        SymId::fermataLongAbove },
+        { u"double-angled", SymId::fermataVeryShortAbove },
+        { u"double-square", SymId::fermataVeryLongAbove },
+        { u"double-dot",    SymId::fermataLongHenzeAbove },
+        { u"half-curve",    SymId::fermataShortHenzeAbove },
+        { u"curlew",        SymId::curlewSign },
+    };
+
+    auto it = map.find(mxmlName);
+    if (it != map.end()) {
+        return it->second;
     }
 
-    if (muse::contains(map, mxmlName)) {
-        return map.at(mxmlName);
-    }
     return SymId::fermataAbove;
 }
 
@@ -1344,33 +1347,35 @@ static SymId convertFermataToSymId(const String& mxmlName)
 
 static NoteHeadGroup convertNotehead(String mxmlName)
 {
-    static std::map<String, int> map;   // map MusicXML notehead name to a MuseScore headgroup
-    if (map.empty()) {
-        map[u"slash"] = int(NoteHeadGroup::HEAD_SLASH);
-        map[u"triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_UP);
-        map[u"diamond"] = int(NoteHeadGroup::HEAD_DIAMOND);
-        map[u"cross"] = int(NoteHeadGroup::HEAD_PLUS);
-        map[u"x"] = int(NoteHeadGroup::HEAD_CROSS);
-        map[u"circle-x"] = int(NoteHeadGroup::HEAD_XCIRCLE);
-        map[u"inverted triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_DOWN);
-        map[u"slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
-        map[u"back slashed"] = int(NoteHeadGroup::HEAD_SLASHED2);
-        map[u"normal"] = int(NoteHeadGroup::HEAD_NORMAL);
-        map[u"do"] = int(NoteHeadGroup::HEAD_DO);
-        map[u"re"] = int(NoteHeadGroup::HEAD_RE);
-        map[u"mi"] = int(NoteHeadGroup::HEAD_MI);
-        map[u"fa"] = int(NoteHeadGroup::HEAD_FA);
-        map[u"fa up"] = int(NoteHeadGroup::HEAD_FA);
-        map[u"so"] = int(NoteHeadGroup::HEAD_SOL);
-        map[u"la"] = int(NoteHeadGroup::HEAD_LA);
-        map[u"ti"] = int(NoteHeadGroup::HEAD_TI);
-    }
+    // map MusicXML notehead name to a MuseScore headgroup
+    static const std::map<String, NoteHeadGroup> map {
+        { u"slash", NoteHeadGroup::HEAD_SLASH },
+        { u"triangle", NoteHeadGroup::HEAD_TRIANGLE_UP },
+        { u"diamond", NoteHeadGroup::HEAD_DIAMOND },
+        { u"cross", NoteHeadGroup::HEAD_PLUS },
+        { u"x", NoteHeadGroup::HEAD_CROSS },
+        { u"circle-x", NoteHeadGroup::HEAD_XCIRCLE },
+        { u"inverted triangle", NoteHeadGroup::HEAD_TRIANGLE_DOWN },
+        { u"slashed", NoteHeadGroup::HEAD_SLASHED1 },
+        { u"back slashed", NoteHeadGroup::HEAD_SLASHED2 },
+        { u"normal", NoteHeadGroup::HEAD_NORMAL },
+        { u"do", NoteHeadGroup::HEAD_DO },
+        { u"re", NoteHeadGroup::HEAD_RE },
+        { u"mi", NoteHeadGroup::HEAD_MI },
+        { u"fa", NoteHeadGroup::HEAD_FA },
+        { u"fa up", NoteHeadGroup::HEAD_FA },
+        { u"so", NoteHeadGroup::HEAD_SOL },
+        { u"la", NoteHeadGroup::HEAD_LA },
+        { u"ti", NoteHeadGroup::HEAD_TI }
+    };
 
-    if (muse::contains(map, mxmlName)) {
-        return NoteHeadGroup(map.at(mxmlName));
+    auto it = map.find(mxmlName);
+    if (it != map.end()) {
+        return it->second;
     } else {
         LOGD("unknown notehead %s", muPrintable(mxmlName));      // TODO
     }
+
     // default: return 0
     return NoteHeadGroup::HEAD_NORMAL;
 }

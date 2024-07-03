@@ -522,7 +522,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
     sp->setGridSize(42, 36);
     sp->setDrawGrid(true);
 
-    static std::vector<LayoutBreakType> layoutBreaks  {
+    static const std::vector<LayoutBreakType> layoutBreaks  {
         LayoutBreakType::LINE,
         LayoutBreakType::PAGE,
         LayoutBreakType::SECTION,
@@ -535,7 +535,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
         cell->mag = 1.2;
     }
 
-    static std::vector<SpacerType> spacers  {
+    static const std::vector<SpacerType> spacers  {
         SpacerType::DOWN,
         SpacerType::UP,
         SpacerType::FIXED
@@ -920,7 +920,7 @@ PalettePtr PaletteCreator::newBracketsPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    std::array<std::pair<BracketType, const char*>, 4> types { {
+    const std::array<std::pair<BracketType, const char*>, 4> types { {
         { BracketType::NORMAL, QT_TRANSLATE_NOOP("palette", "Bracket") },
         { BracketType::BRACE,  QT_TRANSLATE_NOOP("palette", "Brace") },
         { BracketType::SQUARE, QT_TRANSLATE_NOOP("palette", "Square") },
@@ -929,11 +929,11 @@ PalettePtr PaletteCreator::newBracketsPalette()
 
     static Part* bracketItemOwnerPart = new Part(gpaletteScore);
     static Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
-    bracketItemOwner->setBracketType(static_cast<int>(types.size()) - 1, BracketType::NORMAL);
+    bracketItemOwner->setBracketType(types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = Factory::makeBracket(gpaletteScore->dummy());
-        auto bi1 = bracketItemOwner->brackets()[static_cast<int>(i)];
+        auto bi1 = bracketItemOwner->brackets()[i];
         const auto& type = types[i];
         bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);
@@ -1011,7 +1011,7 @@ PalettePtr PaletteCreator::newArpeggioPalette()
 
     //fall and doits
 
-    static std::vector<ChordLineType> chordLineTypes {
+    static const std::vector<ChordLineType> chordLineTypes {
         ChordLineType::FALL,
         ChordLineType::DOIT,
         ChordLineType::PLOP,
@@ -1050,12 +1050,12 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setYOffset(1.0);
 
-    static std::vector<ClefType> clefsDefault  {
+    static const std::vector<ClefType> clefsDefault  {
         ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB,    ClefType::C3,
         ClefType::C4, ClefType::F,   ClefType::F_8VA,
         ClefType::F8_VB, ClefType::PERC, ClefType::TAB, ClefType::TAB4
     };
-    static std::vector<ClefType> clefsMaster  {
+    static const std::vector<ClefType> clefsMaster  {
         ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
         ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
         ClefType::C4,    ClefType::C4_8VB,    ClefType::C5,  ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
@@ -1128,7 +1128,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
-    static std::vector<HairpinType> hairpins {
+    static const std::vector<HairpinType> hairpins {
         HairpinType::CRESC_HAIRPIN,
         HairpinType::DECRESC_HAIRPIN,
         HairpinType::CRESC_LINE,
@@ -1189,12 +1189,12 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     volta->setEndings(il);
     sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Seconda volta, open"));
 
-    static std::vector<OttavaType> ottavasDefault {
+    static const std::vector<OttavaType> ottavasDefault {
         OttavaType::OTTAVA_8VA,
         OttavaType::OTTAVA_8VB,
         OttavaType::OTTAVA_15MA
     };
-    static std::vector<OttavaType> ottavasMaster {
+    static const std::vector<OttavaType> ottavasMaster {
         OttavaType::OTTAVA_8VA,
         OttavaType::OTTAVA_8VB,
         OttavaType::OTTAVA_15MA,
@@ -1660,7 +1660,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
     sp->setGridSize(42, 38);
     sp->setDrawGrid(true);
 
-    static std::vector<TS> defaultTimeSignatureList = {
+    static const std::vector<TS> defaultTimeSignatureList = {
         { 2,  4, TimeSigType::NORMAL, "2/4" },
         { 3,  4, TimeSigType::NORMAL, "3/4" },
         { 4,  4, TimeSigType::NORMAL, "4/4" },
@@ -1679,7 +1679,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         { 3,  2, TimeSigType::NORMAL, "3/2" }
     };
 
-    static std::vector<TS> masterTimeSignatureList = {
+    static const std::vector<TS> masterTimeSignatureList = {
         { 2,  4, TimeSigType::NORMAL, "2/4" },
         { 3,  4, TimeSigType::NORMAL, "3/4" },
         { 4,  4, TimeSigType::NORMAL, "4/4" },
@@ -1724,7 +1724,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
         muse::TranslatableString userName;
     };
 
-    static std::vector<FretDiagramInfo> fretboardDiagrams = {
+    static const std::vector<FretDiagramInfo> fretboardDiagrams = {
         { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
         { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
         { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
@@ -1859,7 +1859,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         PlayingTechniqueType playTechType;
     };
 
-    static std::vector<PlayTechAnnotationInfo> playTechAnnotations = {
+    static const std::vector<PlayTechAnnotationInfo> playTechAnnotations = {
         { muse::TranslatableString("palette", "distort"),   PlayingTechniqueType::Distortion, },
         { muse::TranslatableString("palette", "overdrive"), PlayingTechniqueType::Overdrive, },
         { muse::TranslatableString("palette", "harmonics"), PlayingTechniqueType::Harmonics, },
@@ -1950,14 +1950,14 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setMag(0.8);
 
-    static std::vector<OttavaType> ottavasDefault {
+    static const std::vector<OttavaType> ottavasDefault {
         OttavaType::OTTAVA_8VA,
         OttavaType::OTTAVA_8VB,
         OttavaType::OTTAVA_15MA,
         OttavaType::OTTAVA_15MB
     };
 
-    static std::vector<OttavaType> ottavasMaster {
+    static const std::vector<OttavaType> ottavasMaster {
         OttavaType::OTTAVA_8VA,
         OttavaType::OTTAVA_8VB,
         OttavaType::OTTAVA_15MA,
