@@ -726,10 +726,10 @@ void Dynamic::editDrag(EditData& ed)
     KeyboardModifiers km = ed.modifiers;
     if (km != (ShiftModifier | ControlModifier)) {
         staff_idx_t si = staffIdx();
-        Segment* seg = segment();
-        static constexpr double spacingFactor = 1.0;
+        Segment* seg = nullptr; // don't prefer any segment while dragging, just snap to the closest
+        static constexpr double spacingFactor = 0.5;
         score()->dragPosition(canvasPos(), &si, &seg, spacingFactor, allowTimeAnchor());
-        if (seg != segment() || staffIdx() != si) {
+        if (seg && seg != segment() || staffIdx() != si) {
             const PointF oldOffset = offset();
             PointF pos1(canvasPos());
             score()->undoChangeParent(this, seg, staffIdx());
