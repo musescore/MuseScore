@@ -1710,6 +1710,12 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::STRING_TUNINGS:
             return "string-tunings";
 
+        case TextStyleType::FRET_DIAGRAM_FINGERING:
+            return "fretboard-diagram-fingering";
+
+        case TextStyleType::FRET_DIAGRAM_FRET_NUMBER:
+            return "fretboard-diagram-fret-number";
+
         case TextStyleType::HARP_PEDAL_DIAGRAM:
             return "harp-pedal-diagram";
 
