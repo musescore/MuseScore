@@ -676,8 +676,30 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
     }
     break;
     case Grip::MIDDLE: {
-        // The middle grip is used for vertical movement 99% of the time, so don't try to rebase anchors.
-        return;
+        if (!isSingleType()) {
+            return;
+        }
+
+        SLine* l = line();
+
+        // If dragging middle grip (or the entire hairpin), mouse position
+        // does not directly correspond to any sensible position, so use
+        // actual line coordinates instead. This method doesn't allow for
+        // system changes, but that seems OK when dragging the entire line:
+        // the line will just push away other systems according to autoplacement
+        // rules if necessary.
+        PointF cpos = canvasPos();
+        cpos.setY(system()->staffCanvasYpage(l->staffIdx()));           // prevent cross-system move
+
+        Segment* seg1 = findSegmentForGrip(Grip::START, cpos);
+        Segment* seg2 = findSegmentForGrip(Grip::END, cpos + pos2());
+
+        if (!(seg1 && seg2 && seg1->system() == seg2->system() && seg1->system() == system())) {
+            return;
+        }
+
+        rebaseAnchor(Grip::START, seg1);
+        rebaseAnchor(Grip::END, seg2);
     }
     default:
         break;
@@ -753,10 +775,9 @@ void LineSegment::editDrag(EditData& ed)
 
 void LineSegment::updateAnchors(EditData& ed) const
 {
-    if (ed.curGrip != Grip::START && ed.curGrip != Grip::END) {
-        return;
+    if (line()->allowTimeAnchor()) {
+        EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->track() : line()->track2());
     }
-    EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->track() : line()->track2());
 }
 
 //---------------------------------------------------------
