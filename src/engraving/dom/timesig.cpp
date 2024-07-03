@@ -306,7 +306,7 @@ int TimeSig::subtype() const
     size_t h2 = std::hash<int> {}(denominator());
     size_t h3 = std::hash<TimeSigType> {}(timeSigType());
 
-    return h1 ^ (h2 << 1) ^ (h3 << 2);
+    return static_cast<int>(h1 ^ (h2 << 1) ^ (h3 << 2));
 }
 
 //---------------------------------------------------------
