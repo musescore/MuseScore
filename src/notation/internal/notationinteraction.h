@@ -136,6 +136,8 @@ public:
     void moveChordRestToStaff(MoveDirection d) override;
     void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
+    void toggleSnapToPrevious() override;
+    void toggleSnapToNext() override;
 
     // Text edit
     bool isTextSelected() const override;

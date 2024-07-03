@@ -55,6 +55,7 @@
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/image.h"
 #include "engraving/dom/instrchange.h"
+#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/lasso.h"
 #include "engraving/dom/layoutbreak.h"
@@ -2889,6 +2890,85 @@ void NotationInteraction::swapChordRest(MoveDirection direction)
                  && toChord(cr1)->tremoloTwoChord() != toChord(cr2)->tremoloTwoChord())) {
             score()->undo(new mu::engraving::SwapCR(cr1, cr2));
         }
+    }
+    apply();
+}
+
+void NotationInteraction::toggleSnapToPrevious()
+{
+    bool newSnapValue = false;
+
+    // Collect items to toggle...
+    std::unordered_set<Hairpin*> hairpins;
+    for (EngravingItem* e : score()->selection().elements()) {
+        if (e->isHairpinSegment()) {
+            Hairpin* h = toHairpinSegment(e)->hairpin();
+            // If any item in the selection has a false snapping value, then we should
+            // toggle all to true (handles mixed/indeterminate state)
+            if (!h->snapToItemBefore() && !newSnapValue) {
+                newSnapValue = true;
+            }
+            hairpins.emplace(h);
+        }
+    }
+    if (hairpins.empty()) {
+        return;
+    }
+
+    // Do toggle...
+    startEdit();
+    for (Hairpin* h : hairpins) {
+        if (h->snapToItemBefore() == newSnapValue) {
+            continue;
+        }
+        h->undoChangeProperty(Pid::SNAP_BEFORE, PropertyValue(newSnapValue));
+    }
+    apply();
+}
+
+void NotationInteraction::toggleSnapToNext()
+{
+    bool newSnapValue = false;
+
+    // Collect items to toggle...
+    std::unordered_set<Hairpin*> hairpins;
+    std::unordered_set<GradualTempoChange*> gradualTempoChanges;
+    for (EngravingItem* e : score()->selection().elements()) {
+        if (e->isHairpinSegment()) {
+            Hairpin* h = toHairpinSegment(e)->hairpin();
+            // If any item in the selection has a false snapping value, then we should
+            // toggle all to true (handles mixed/indeterminate state)
+            if (!h->snapToItemAfter() && !newSnapValue) {
+                newSnapValue = true;
+            }
+            hairpins.emplace(h);
+        }
+        if (e->isGradualTempoChangeSegment()) {
+            GradualTempoChange* gtc = toGradualTempoChangeSegment(e)->tempoChange();
+            // Same here (see above)
+            if (!gtc->snapToItemAfter() && !newSnapValue) {
+                newSnapValue = true;
+            }
+            gradualTempoChanges.emplace(gtc);
+        }
+    }
+    if (hairpins.empty() && gradualTempoChanges.empty()) {
+        return;
+    }
+
+    // Do toggle...
+    startEdit();
+    for (Hairpin* h : hairpins) {
+        if (h->snapToItemAfter() == newSnapValue) {
+            continue;
+        }
+        h->undoChangeProperty(Pid::SNAP_AFTER, PropertyValue(newSnapValue));
+    }
+    for (GradualTempoChange* gtc : gradualTempoChanges) {
+        if (gtc->snapToItemAfter() == newSnapValue) {
+            continue;
+        }
+        gtc->undoChangeProperty(Pid::SNAP_AFTER, PropertyValue(newSnapValue));
     }
     apply();
 }

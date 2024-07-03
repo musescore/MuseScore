@@ -27,6 +27,8 @@
 
 #include "view/widgets/editstyle.h"
 
+#include "engraving/dom/gradualtempochange.h"
+
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
@@ -62,6 +64,10 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeVerticalBoxItems();
     case ElementType::HBOX:
         return makeHorizontalBoxItems();
+    case ElementType::HAIRPIN_SEGMENT:
+        return makeHairpinItems();
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
+        return makeGradualTempoChangeItems();
     default:
         break;
     }
@@ -276,6 +282,51 @@ MenuItemList NotationContextMenuModel::makeHorizontalBoxItems()
     MenuItemList items = makeElementItems();
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Add"), addMenuItems);
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeHairpinItems()
+{
+    MenuItemList items = makeElementItems();
+
+    const EngravingItem* hitElement = hitElementContext().element;
+    if (!hitElement || !hitElement->isHairpinSegment() || !isSingleSelection()) {
+        return items;
+    }
+
+    items << makeSeparator();
+
+    const engraving::Hairpin* h = toHairpinSegment(hitElement)->hairpin();
+    ui::UiActionState snapPrevState = { true, h->snapToItemBefore() };
+    MenuItem* snapPrev = makeMenuItem("toggle-snap-to-previous");
+    snapPrev->setState(snapPrevState);
+    items << snapPrev;
+
+    ui::UiActionState snapNextState = { true, h->snapToItemAfter() };
+    MenuItem* snapNext = makeMenuItem("toggle-snap-to-next");
+    snapNext->setState(snapNextState);
+    items << snapNext;
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
+{
+    MenuItemList items = makeElementItems();
+
+    const EngravingItem* hitElement = hitElementContext().element;
+    if (!hitElement || !hitElement->isGradualTempoChangeSegment() || !isSingleSelection()) {
+        return items;
+    }
+
+    items << makeSeparator();
+
+    const engraving::GradualTempoChange* gtc = toGradualTempoChangeSegment(hitElement)->tempoChange();
+    ui::UiActionState snapNextState = { true, gtc->snapToItemAfter() };
+    MenuItem* snapNext = makeMenuItem("toggle-snap-to-next");
+    snapNext->setState(snapNextState);
+    items << snapNext;
 
     return items;
 }
