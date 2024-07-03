@@ -91,20 +91,24 @@ Item {
                 width: parent.width
                 columns: 6
                 rowSpacing: 12
+
                 Repeater {
                     id: rep
                     model: root.model ? root.model.fingerings : 0
+
                     Column {
                         property int string: rep.count - index - 1
+
                         Layout.preferredWidth: 40
                         spacing: 8
+
                         Rectangle {
                             anchors.horizontalCenter: parent.horizontalCenter
                             height: numberLabel.height + 4
                             width: height
 
                             color: "transparent"
-                            radius: 180
+                            radius: height / 2
                             border.color: ui.theme.fontPrimaryColor
                             border.width: 1
 
@@ -114,20 +118,24 @@ Item {
                                 text: string + 1
                             }
                         }
+
                         TextInputField {
                             id: fingerInput
+
                             textHorizontalAlignment: Qt.AlignHCenter
                             indeterminateText: '-'
                             isIndeterminate: modelData == '0'
                             currentText: modelData == '0' ? '' : modelData
-                            onTextChanged: {
+
+                            onTextChanged: function (newTextValue) {
                                 var newFinger = parseInt(newTextValue)
                                 if (isNaN(newFinger)) {
                                     fingerInput.currentText = ''
                                     return;
                                 }
                             }
-                            onTextEditingFinished: {
+
+                            onTextEditingFinished: function (newTextValue) {
                                 var newFinger = parseInt(newTextValue)
                                 if (root.model) {
                                     root.model.setFingering(string, newFinger)
