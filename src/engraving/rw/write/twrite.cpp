@@ -1618,7 +1618,7 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
             writeProperty(item, xml, spp.pid);
         }
     }
-    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
 
