@@ -264,6 +264,7 @@ private:
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
 
+    bool m_readonly = false;
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
     bool m_isMainView = false;

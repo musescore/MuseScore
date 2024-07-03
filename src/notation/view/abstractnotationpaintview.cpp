@@ -96,6 +96,7 @@ void AbstractNotationPaintView::load()
         });
     }
 
+    m_inputController->setReadonly(m_readonly);
     m_inputController->init();
 
     onNotationSetup();
@@ -1251,7 +1252,10 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
 
 void AbstractNotationPaintView::setReadonly(bool readonly)
 {
-    m_inputController->setReadonly(readonly);
+    m_readonly = readonly;
+    if (m_inputController) {
+        m_inputController->setReadonly(m_readonly);
+    }
 }
 
 void AbstractNotationPaintView::clear()
