@@ -255,17 +255,6 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         sp->appendElement(hairpin, pair.second, mag, offset);
     }
 
-    if (!defaultPalette) {
-        auto gabel = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-        gabel->setHairpinType(HairpinType::CRESC_HAIRPIN);
-        gabel->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
-        gabel->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-        gabel->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
-        gabel->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
-        gabel->setLen(w);
-        sp->appendElement(gabel, QT_TRANSLATE_NOOP("palette", "Dynamic + hairpin"));
-    }
-
     return sp;
 }
 
