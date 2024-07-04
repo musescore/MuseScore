@@ -288,7 +288,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>673</width>
-                <height>712</height>
+                <height>710</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -989,7 +989,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>673</width>
-                <height>712</height>
+                <height>710</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2331,7 +2331,7 @@
              <x>0</x>
              <y>0</y>
              <width>737</width>
-             <height>733</height>
+             <height>731</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3974,7 +3974,7 @@
              <x>0</x>
              <y>0</y>
              <width>677</width>
-             <height>722</height>
+             <height>720</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -5046,398 +5046,417 @@
       <widget class="QWidget" name="PageBarlines">
        <layout class="QVBoxLayout" name="verticalLayout_17">
         <item>
-         <widget class="QGroupBox" name="groupBox_barlines">
-          <property name="title">
-           <string>Barlines</string>
+         <widget class="QScrollArea" name="scrollArea_3">
+          <property name="widgetResizable">
+           <bool>true</bool>
           </property>
-          <layout class="QGridLayout" name="gridLayout_42">
-           <item row="7" column="0">
-            <widget class="QLabel" name="label_85">
-             <property name="text">
-              <string>Double barline thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>doubleBarWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="barWidth">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="2">
-            <widget class="QToolButton" name="resetEndBarWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Thin barline thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="2">
-            <widget class="QToolButton" name="resetRepeatBarlineDotSeparation">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Show repeat barline tips (“winged” repeats)' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_82">
-             <property name="text">
-              <string>Thin barline thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>barWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="2">
-            <widget class="QToolButton" name="resetDoubleBarWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Barline at start of multiple staves' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="2">
-            <widget class="QCheckBox" name="showStartBarlineMultiple">
-             <property name="text">
-              <string>Barline at start of multiple staves</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="1">
-            <widget class="QDoubleSpinBox" name="doubleBarWidth">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="1">
-            <widget class="QDoubleSpinBox" name="doubleBarDistance">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_48">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="9" column="1">
-            <widget class="QDoubleSpinBox" name="repeatBarlineDotSeparation">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetShowRepeatBarTips">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Repeat barline to dots distance' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0" colspan="2">
-            <widget class="QCheckBox" name="showRepeatBarTips">
-             <property name="text">
-              <string>Show repeat barline tips (“winged” repeats)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetScaleBarlines">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Thick barline distance' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
-            <widget class="QDoubleSpinBox" name="endBarDistance">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_84">
-             <property name="text">
-              <string>Thick barline distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>endBarDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0" colspan="2">
-            <widget class="QCheckBox" name="scaleBarlines">
-             <property name="text">
-              <string>Scale barlines to staff size</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetShowStartBarlineSingle">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Double barline distance' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="2">
-            <widget class="QToolButton" name="resetDoubleBarDistance">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Barline at start of single staff' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="2">
-            <widget class="QToolButton" name="resetEndBarDistance">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Scale barlines to staff size' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="1">
-            <widget class="QDoubleSpinBox" name="endBarWidth">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetShowStartBarlineMultiple">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Double barline thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_83">
-             <property name="text">
-              <string>Thick barline thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>endBarWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="repeatBarlineDotSeparationLbl">
-             <property name="text">
-              <string>Repeat barline to dots distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>repeatBarlineDotSeparation</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0">
-            <widget class="QLabel" name="label_86">
-             <property name="text">
-              <string>Double barline distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>doubleBarDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QToolButton" name="resetBarWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Thick barline thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" colspan="2">
-            <widget class="QCheckBox" name="showStartBarlineSingle">
-             <property name="text">
-              <string>Barline at start of single staff</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QWidget" name="scrollAreaWidgetContents_4">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>677</width>
+             <height>720</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_38">
+            <item>
+             <widget class="QGroupBox" name="groupBox_barlines">
+              <property name="title">
+               <string>Barlines</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_42">
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_85">
+                 <property name="text">
+                  <string>Double barline thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>doubleBarWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QDoubleSpinBox" name="barWidth">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="2">
+                <widget class="QToolButton" name="resetEndBarWidth">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Thin barline thickness' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="2">
+                <widget class="QToolButton" name="resetRepeatBarlineDotSeparation">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Show repeat barline tips (“winged” repeats)' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_82">
+                 <property name="text">
+                  <string>Thin barline thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>barWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="2">
+                <widget class="QToolButton" name="resetDoubleBarWidth">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Barline at start of multiple staves' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QCheckBox" name="showStartBarlineMultiple">
+                 <property name="text">
+                  <string>Barline at start of multiple staves</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QDoubleSpinBox" name="doubleBarWidth">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="1">
+                <widget class="QDoubleSpinBox" name="doubleBarDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <spacer name="horizontalSpacer_48">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="9" column="1">
+                <widget class="QDoubleSpinBox" name="repeatBarlineDotSeparation">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="resetShowRepeatBarTips">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Repeat barline to dots distance' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" colspan="2">
+                <widget class="QCheckBox" name="showRepeatBarTips">
+                 <property name="text">
+                  <string>Show repeat barline tips (“winged” repeats)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QToolButton" name="resetScaleBarlines">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Thick barline distance' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QDoubleSpinBox" name="endBarDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_84">
+                 <property name="text">
+                  <string>Thick barline distance:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>endBarDistance</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0" colspan="2">
+                <widget class="QCheckBox" name="scaleBarlines">
+                 <property name="text">
+                  <string>Scale barlines to staff size</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QToolButton" name="resetShowStartBarlineSingle">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Double barline distance' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="2">
+                <widget class="QToolButton" name="resetDoubleBarDistance">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Barline at start of single staff' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2">
+                <widget class="QToolButton" name="resetEndBarDistance">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Scale barlines to staff size' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QDoubleSpinBox" name="endBarWidth">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QToolButton" name="resetShowStartBarlineMultiple">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Double barline thickness' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_83">
+                 <property name="text">
+                  <string>Thick barline thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>endBarWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="0">
+                <widget class="QLabel" name="repeatBarlineDotSeparationLbl">
+                 <property name="text">
+                  <string>Repeat barline to dots distance:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>repeatBarlineDotSeparation</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="QLabel" name="label_86">
+                 <property name="text">
+                  <string>Double barline distance:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>doubleBarDistance</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QToolButton" name="resetBarWidth">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Thick barline thickness' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QCheckBox" name="showStartBarlineSingle">
+                 <property name="text">
+                  <string>Barline at start of single staff</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="keySigCourtesyBarlineGroup">
+              <property name="title">
+               <string>Use double barlines before key signatures</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_611">
+               <item>
+                <widget class="QRadioButton" name="radioKeySigCourtesyBarlineAlwaysDouble">
+                 <property name="text">
+                  <string>Always</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioKeySigCourtesyBarlineAlwaysSingle">
+                 <property name="text">
+                  <string>Never</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioKeySigCourtesyBarlineDoubleBeforeNewSystem">
+                 <property name="text">
+                  <string>Only before courtesy key signatures</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="timeSigCourtesyBarlineGroup">
+              <property name="title">
+               <string>Use double barlines before time signatures</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_62">
+               <item>
+                <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineAlwaysDouble">
+                 <property name="text">
+                  <string>Always</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineAlwaysSingle">
+                 <property name="text">
+                  <string>Never</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineDoubleBeforeNewSystem">
+                 <property name="text">
+                  <string>Only before courtesy time signatures</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_12">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
          </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="keySigCourtesyBarlineGroup">
-          <property name="title">
-           <string>Use double barlines before key signatures</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_611">
-           <item>
-            <widget class="QRadioButton" name="radioKeySigCourtesyBarlineAlwaysDouble">
-             <property name="text">
-              <string>Always</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioKeySigCourtesyBarlineAlwaysSingle">
-             <property name="text">
-              <string>Never</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioKeySigCourtesyBarlineDoubleBeforeNewSystem">
-             <property name="text">
-              <string>Only before courtesy key signatures</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="timeSigCourtesyBarlineGroup">
-          <property name="title">
-           <string>Use double barlines before time signatures</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_62">
-           <item>
-            <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineAlwaysDouble">
-             <property name="text">
-              <string>Always</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineAlwaysSingle">
-             <property name="text">
-              <string>Never</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineDoubleBeforeNewSystem">
-             <property name="text">
-              <string>Only before courtesy time signatures</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_12">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -6481,8 +6500,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>712</height>
+                <width>578</width>
+                <height>527</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -7866,8 +7885,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>677</width>
-             <height>720</height>
+             <width>611</width>
+             <height>708</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -8412,6 +8431,12 @@
              <spacer name="verticalSpacer_22">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
               </property>
              </spacer>
             </item>
@@ -11158,8 +11183,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>703</width>
-             <height>746</height>
+             <width>682</width>
+             <height>665</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -12066,6 +12091,12 @@ first note of the system</string>
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
                    </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                   </spacer>
                  </item>
                 </layout>
@@ -12077,6 +12108,12 @@ first note of the system</string>
              <spacer name="verticalSpacer_17">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
               </property>
              </spacer>
             </item>
@@ -12587,8 +12624,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>710</height>
+                <width>568</width>
+                <height>551</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
@@ -13133,12 +13170,24 @@ first note of the system</string>
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
                 </spacer>
                </item>
                <item row="3" column="1" colspan="2">
                 <spacer name="verticalSpacer_3411">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
                  </property>
                 </spacer>
                </item>
@@ -13211,8 +13260,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>701</width>
-             <height>744</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -13318,8 +13367,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>671</width>
-                <height>708</height>
+                <width>533</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -13765,6 +13814,12 @@ first note of the system</string>
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                   </spacer>
                  </item>
                 </layout>
@@ -13840,6 +13895,12 @@ first note of the system</string>
                 <spacer name="verticalSpacer_29">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
                  </property>
                 </spacer>
                </item>
