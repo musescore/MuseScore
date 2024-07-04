@@ -32,7 +32,7 @@ endif ()
 
 
 if (NOT OPUS_FOUND)
-    set(OPUS_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../opus)
+    set(OPUS_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../opus/opus-1.4)
     add_subdirectory(${OPUS_LIB_DIR} opus)
 
     set(OPUS_INCLUDE_DIRS ${OPUS_LIB_DIR}/include)
