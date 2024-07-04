@@ -693,6 +693,11 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
             return;
         }
 
+        System* sys = system();
+        if (!sys) {
+            return;
+        }
+
         SLine* l = line();
 
         // If dragging middle grip (or the entire hairpin), mouse position
@@ -711,7 +716,6 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
             return;
         }
 
-        System* sys = system();
         PointF oldStartPos = line()->linePos(Grip::START, &sys);
         PointF oldEndPos = line()->linePos(Grip::END, &sys);
 
@@ -1085,7 +1089,10 @@ PropertyValue SLine::propertyDefault(Pid pid) const
 
 void SLine::undoMoveStart(Fraction tickDiff)
 {
-    undoChangeProperty(Pid::SPANNER_TICK, tick() + tickDiff);
+    Fraction newTick = tick() + tickDiff;
+    if (newTick >= Fraction(0, 1)) {
+        undoChangeProperty(Pid::SPANNER_TICK, newTick);
+    }
     Fraction newDuration = ticks() - tickDiff;
     if (newDuration > Fraction(0, 1)) {
         undoChangeProperty(Pid::SPANNER_TICKS, newDuration);
@@ -1098,7 +1105,10 @@ void SLine::undoMoveEnd(Fraction tickDiff)
     if (newDuration > Fraction(0, 1)) {
         undoChangeProperty(Pid::SPANNER_TICKS, newDuration);
     } else {
-        undoChangeProperty(Pid::SPANNER_TICK, tick() + tickDiff);
+        Fraction newTick = tick() + tickDiff;
+        if (newTick >= Fraction(0, 1)) {
+            undoChangeProperty(Pid::SPANNER_TICK, tick() + tickDiff);
+        }
     }
 }
 }
