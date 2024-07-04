@@ -198,7 +198,7 @@ void FretCanvas::draw(QPainter* painter)
         const double padding = 0.2 * _spatium;
         muse::draw::FontMetrics fontMetrics(muse::draw::Font::fromQFont(font, muse::draw::Font::Type::Text));
         double fontHeight = fontMetrics.capHeight();
-        for (int i = 0; i < m_diagram->fingering().size(); ++i) {
+        for (size_t i = 0; i < m_diagram->fingering().size(); ++i) {
             int finger = m_diagram->fingering()[i];
             if (finger == 0) {
                 continue;
