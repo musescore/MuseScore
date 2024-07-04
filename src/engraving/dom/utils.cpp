@@ -169,7 +169,7 @@ Segment* Score::tick2segment(const Fraction& t, bool first, SegmentType st, bool
     }
 
     if (m == 0) {
-        LOGD("no measure for tick %s", tick.toString());
+        LOGD() << "no measure for tick" << tick.ticks();
         return 0;
     }
     for (Segment* segment   = m->first(st); segment;) {
