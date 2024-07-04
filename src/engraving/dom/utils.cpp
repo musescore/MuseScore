@@ -169,7 +169,7 @@ Segment* Score::tick2segment(const Fraction& t, bool first, SegmentType st, bool
     }
 
     if (m == 0) {
-        LOGD("no measure for tick %d", tick.ticks());
+        LOGD("no measure for tick %d", tick.toString());
         return 0;
     }
     for (Segment* segment   = m->first(st); segment;) {
@@ -186,7 +186,6 @@ Segment* Score::tick2segment(const Fraction& t, bool first, SegmentType st, bool
         }
         segment = nsegment;
     }
-    LOGD("no segment for tick %d (start search at %d (measure %d))", tick.ticks(), t.ticks(), m->tick().ticks());
     return 0;
 }
 
