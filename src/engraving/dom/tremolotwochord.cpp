@@ -103,7 +103,7 @@ double TremoloTwoChord::chordMag() const
 
 double TremoloTwoChord::minHeight() const
 {
-    const double sw = style().styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+    const double sw = style().styleS(Sid::tremoloLineWidth).val() * chordMag();
     const double td = style().styleS(Sid::tremoloDistance).val() * chordMag();
     return (lines() - 1) * td + sw;
 }
@@ -602,7 +602,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
 
     // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
     double w2  = sp * style().styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
-    double lw  = sp * style().styleS(Sid::tremoloStrokeWidth).val();
+    double lw  = sp * style().styleS(Sid::tremoloLineWidth).val();
     double td  = sp * style().styleS(Sid::tremoloDistance).val();
 
     PainterPath ppath;

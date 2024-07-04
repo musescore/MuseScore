@@ -1390,12 +1390,12 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
         xml.tag("line-width", { { "type", "leger" } }, s.styleS(Sid::ledgerLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "pedal" } }, s.styleS(Sid::pedalLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "octave shift" } }, s.styleS(Sid::ottavaLineWidth).val() * 10);
-        xml.tag("line-width", { { "type", "slur middle" } }, s.styleS(Sid::SlurMidWidth).val() * 10);
-        xml.tag("line-width", { { "type", "slur tip" } }, s.styleS(Sid::SlurEndWidth).val() * 10);
+        xml.tag("line-width", { { "type", "slur middle" } }, s.styleS(Sid::slurMidWidth).val() * 10);
+        xml.tag("line-width", { { "type", "slur tip" } }, s.styleS(Sid::slurEndWidth).val() * 10);
         xml.tag("line-width", { { "type", "staff" } }, s.styleS(Sid::staffLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "stem" } }, s.styleS(Sid::stemWidth).val() * 10);
-        xml.tag("line-width", { { "type", "tie middle" } }, s.styleS(Sid::TieMidWidth).val() * 10);
-        xml.tag("line-width", { { "type", "tie tip" } }, s.styleS(Sid::TieEndWidth).val() * 10);
+        xml.tag("line-width", { { "type", "tie middle" } }, s.styleS(Sid::tieMidWidth).val() * 10);
+        xml.tag("line-width", { { "type", "tie tip" } }, s.styleS(Sid::tieEndWidth).val() * 10);
         xml.tag("line-width", { { "type", "tuplet bracket" } }, s.styleS(Sid::tupletBracketWidth).val() * 10);
         xml.tag("line-width", { { "type", "wedge" } }, s.styleS(Sid::hairpinLineWidth).val() * 10);
         // note size values in percent
@@ -1410,7 +1410,7 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
     // for music, words and lyrics, use Tid STAFF (typically used for words)
     // and LYRIC1 to get MusicXML defaults
 
-    xml.tag("music-font", { { "font-family", s.styleSt(Sid::MusicalSymbolFont) } });
+    xml.tag("music-font", { { "font-family", s.styleSt(Sid::musicalSymbolFont) } });
     xml.tag("word-font", { { "font-family", s.styleSt(Sid::staffTextFontFace) }, { "font-size", s.styleD(Sid::staffTextFontSize) } });
     xml.tag("lyric-font",
             { { "font-family", s.styleSt(Sid::lyricsOddFontFace) }, { "font-size", s.styleD(Sid::lyricsOddFontSize) } });
@@ -1442,7 +1442,7 @@ static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr
         return;
     }
 
-    const String mtf = s.styleSt(Sid::MusicalTextFont);
+    const String mtf = s.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(s);
 
     // export formatted
@@ -4901,7 +4901,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     std::list<TextFragment> wordsRight;         // words right of metronome
 
     // set the default words format
-    const String mtf = s.styleSt(Sid::MusicalTextFont);
+    const String mtf = s.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(s);
 
     if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
@@ -5091,7 +5091,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
 
     // set the default words format
     const MStyle& style = m_score->style();
-    const String mtf = style.styleSt(Sid::MusicalTextFont);
+    const String mtf = style.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(style);
 
     m_xml.startElement("direction", { { "placement", (relativePosition.y() < 0) ? "above" : "below" } });
@@ -5136,7 +5136,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     attr += positioningAttributes(rmk);
     // set the default words format
     const MStyle& style = m_score->style();
-    const String mtf = style.styleSt(Sid::MusicalTextFont);
+    const String mtf = style.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(style);
     // write formatted
     MScoreTextToMXML mttm(u"rehearsal", attr, defFmt, mtf);
@@ -5864,7 +5864,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 m_xml.tag("syllabic", s);
                 String attr;         // TODO TBD
                 // set the default words format
-                const String mtf = m_score->style().styleSt(Sid::MusicalTextFont);
+                const String mtf = m_score->style().styleSt(Sid::musicalTextFont);
                 CharFormat defFmt;
                 defFmt.setFontFamily(m_score->style().styleSt(Sid::lyricsEvenFontFace));
                 defFmt.setFontSize(m_score->style().styleD(Sid::lyricsOddFontSize));

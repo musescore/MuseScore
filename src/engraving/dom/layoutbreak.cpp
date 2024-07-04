@@ -38,7 +38,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 static const ElementStyle sectionBreakStyle {
-    { Sid::SectionPause, Pid::PAUSE }
+    { Sid::sectionPause, Pid::PAUSE }
 };
 
 //---------------------------------------------------------
@@ -267,7 +267,7 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     case Pid::LAYOUT_BREAK:
         return PropertyValue();           // LAYOUT_BREAK_LINE;
     case Pid::PAUSE:
-        return style().styleD(Sid::SectionPause);
+        return style().styleD(Sid::sectionPause);
     case Pid::START_WITH_LONG_NAMES:
         return true;
     case Pid::START_WITH_MEASURE_ONE:

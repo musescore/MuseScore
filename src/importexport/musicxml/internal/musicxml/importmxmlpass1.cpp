@@ -1917,13 +1917,13 @@ void MusicXMLParserPass1::setStyle(const String& type, const double val)
     } else if (type == u"wedge") {
         m_score->style().set(Sid::hairpinLineWidth, Spatium(val / 10));
     } else if (type == u"slur middle") {
-        m_score->style().set(Sid::SlurMidWidth, Spatium(val / 10));
+        m_score->style().set(Sid::slurMidWidth, Spatium(val / 10));
     } else if (type == u"slur tip") {
-        m_score->style().set(Sid::SlurEndWidth, Spatium(val / 10));
+        m_score->style().set(Sid::slurEndWidth, Spatium(val / 10));
     } else if (type == u"tie middle") {
-        m_score->style().set(Sid::TieMidWidth, Spatium(val / 10));
+        m_score->style().set(Sid::tieMidWidth, Spatium(val / 10));
     } else if (type == u"tie tip") {
-        m_score->style().set(Sid::TieEndWidth, Spatium(val / 10));
+        m_score->style().set(Sid::tieEndWidth, Spatium(val / 10));
     } else if ((type == u"cue")) {
         m_score->style().set(Sid::smallNoteMag, val / 100);
     } else if ((type == u"grace")) {

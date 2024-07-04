@@ -450,7 +450,7 @@ void SingleLayout::layout(Arpeggio* item, const Context& ctx)
     } break;
 
     case ArpeggioType::BRACKET: {
-        double w  = ctx.style().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        double w  = ctx.style().styleS(Sid::arpeggioHookLen).val() * item->spatium();
         ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
     } break;
     }

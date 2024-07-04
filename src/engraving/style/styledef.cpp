@@ -495,33 +495,33 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::staccatoGateTime,        "staccatoGateTime",        PropertyValue(50) },
     { Sid::slurGateTime,            "slurGateTime",            PropertyValue(100) },
 
-    { Sid::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.4) },
-    { Sid::ArpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.3) },
-    { Sid::ArpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(0.33) },
-    { Sid::ArpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
-    { Sid::ArpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
-    { Sid::ArpeggioHiddenInStdIfTab, "ArpeggioHiddenInStdIfTab", false },
-    { Sid::SlurEndWidth,            "slurEndWidth",            Spatium(.05) },
-    { Sid::SlurMidWidth,            "slurMidWidth",            Spatium(.21) },
-    { Sid::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
-    { Sid::TieEndWidth,             "tieEndWidth",             Spatium(.05) },
-    { Sid::TieMidWidth,             "tieMidWidth",             Spatium(.21) },
-    { Sid::TieDottedWidth,          "tieDottedWidth",          Spatium(.10) },
-    { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
-    { Sid::MinStraightGlissandoLength, "minStraightGlissandoLength", Spatium(1.2) },
-    { Sid::MinWigglyGlissandoLength, "minWigglyGlissandoLength", Spatium(2.0) },
-    { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
-    { Sid::TieMinDistance,          "tieMinDistance",          Spatium(0.5) },
-    { Sid::HeaderToLineStartDistance,   "headerSlurTieDistance",   Spatium(1.0) },
+    { Sid::arpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.4) },
+    { Sid::arpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.3) },
+    { Sid::arpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(0.33) },
+    { Sid::arpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
+    { Sid::arpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
+    { Sid::arpeggioHiddenInStdIfTab, "ArpeggioHiddenInStdIfTab", false },
+    { Sid::slurEndWidth,            "slurEndWidth",            Spatium(.05) },
+    { Sid::slurMidWidth,            "slurMidWidth",            Spatium(.21) },
+    { Sid::slurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
+    { Sid::tieEndWidth,             "tieEndWidth",             Spatium(.05) },
+    { Sid::tieMidWidth,             "tieMidWidth",             Spatium(.21) },
+    { Sid::tieDottedWidth,          "tieDottedWidth",          Spatium(.10) },
+    { Sid::minTieLength,            "minTieLength",            Spatium(1.0) },
+    { Sid::minStraightGlissandoLength, "minStraightGlissandoLength", Spatium(1.2) },
+    { Sid::minWigglyGlissandoLength, "minWigglyGlissandoLength", Spatium(2.0) },
+    { Sid::slurMinDistance,         "slurMinDistance",         Spatium(0.5) },
+    { Sid::tieMinDistance,          "tieMinDistance",          Spatium(0.5) },
+    { Sid::headerToLineStartDistance,   "headerSlurTieDistance",   Spatium(1.0) },
 
     { Sid::tiePlacementSingleNote,   "tiePlacementSingleNote", TiePlacement::OUTSIDE },
     { Sid::tiePlacementChord,        "tiePlacementChord",      TiePlacement::OUTSIDE },
     { Sid::tieMinShoulderHeight,     "tieMinShoulderHeight",   Spatium(0.3) },
     { Sid::tieMaxShoulderHeight,     "tieMaxShoulderHeight",   Spatium(2.0) },
 
-    { Sid::SectionPause,            "sectionPause",            PropertyValue(double(3.0)) },
-    { Sid::MusicalSymbolFont,       "musicalSymbolFont",       PropertyValue(String(u"Leland")) },
-    { Sid::MusicalTextFont,         "musicalTextFont",         PropertyValue(String(u"Leland Text")) },
+    { Sid::sectionPause,            "sectionPause",            PropertyValue(double(3.0)) },
+    { Sid::musicalSymbolFont,       "musicalSymbolFont",       PropertyValue(String(u"Leland")) },
+    { Sid::musicalTextFont,         "musicalTextFont",         PropertyValue(String(u"Leland Text")) },
 
     { Sid::showHeader,              "showHeader",              true },
     { Sid::headerFirstPage,         "headerFirstPage",         false },
@@ -626,7 +626,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: notehead width
     { Sid::tremoloBoxHeight,        "tremoloBoxHeight",        Spatium(0.65) },
-    { Sid::tremoloStrokeWidth,      "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
+    { Sid::tremoloLineWidth,        "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
     { Sid::tremoloDistance,         "tremoloDistance",         Spatium(0.8) },
     { Sid::tremoloStyle,            "tremoloStrokeStyle",      int(TremoloStyle::DEFAULT) },
     { Sid::tremoloStrokeLengthMultiplier, "tremoloStrokeLengthMultiplier", 0.62 },
@@ -1679,5 +1679,5 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::dummyMusicalSymbolsScale, "dummyMusicalSymbolsScale", 1.0 },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-    { Sid::defaultsVersion,               "defaultsVersion",               Constants::MSC_VERSION }
+    { Sid::defaultsVersion,               "defaultsVersion",               Constants::MSC_VERSION },
 } };

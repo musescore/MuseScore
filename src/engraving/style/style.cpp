@@ -380,17 +380,17 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             // When opening older scores, use the same values for both.
             double _val = e.readDouble();
             if (tag == "slurEndWidth") {
-                set(Sid::TieEndWidth,     Spatium(_val));
-                set(Sid::SlurEndWidth,    Spatium(_val));
+                set(Sid::tieEndWidth,     Spatium(_val));
+                set(Sid::slurEndWidth,    Spatium(_val));
             } else if (tag == "slurMidWidth") {
-                set(Sid::TieMidWidth,     Spatium(_val));
-                set(Sid::SlurMidWidth,    Spatium(_val));
+                set(Sid::tieMidWidth,     Spatium(_val));
+                set(Sid::slurMidWidth,    Spatium(_val));
             } else if (tag == "slurDottedWidth") {
-                set(Sid::TieDottedWidth,  Spatium(_val));
-                set(Sid::SlurDottedWidth, Spatium(_val));
+                set(Sid::tieDottedWidth,  Spatium(_val));
+                set(Sid::slurDottedWidth, Spatium(_val));
             } else if (tag == "slurMinDistance") {
-                set(Sid::TieMinDistance,  Spatium(_val));
-                set(Sid::SlurMinDistance, Spatium(_val));
+                set(Sid::tieMinDistance,  Spatium(_val));
+                set(Sid::slurMinDistance, Spatium(_val));
             }
         } else if (tag == "defaultFontSpatiumDependent") {
             e.skipCurrentElement(); // obsolete

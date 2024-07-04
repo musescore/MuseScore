@@ -2551,7 +2551,7 @@ void Score::cmdResetToDefaultLayout()
         Sid::tenutoGateTime,
         Sid::staccatoGateTime,
         Sid::slurGateTime,
-        Sid::SectionPause,
+        Sid::sectionPause,
         Sid::showHeader,
         Sid::headerFirstPage,
         Sid::headerOddEven,

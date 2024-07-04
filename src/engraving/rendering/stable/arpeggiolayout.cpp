@@ -100,12 +100,12 @@ double ArpeggioLayout::insetWidth(const Arpeggio* item)
     case ArpeggioType::UP_STRAIGHT:
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        return (item->width() - item->style().styleMM(Sid::ArpeggioLineWidth)) / 2;
+        return (item->width() - item->style().styleMM(Sid::arpeggioLineWidth)) / 2;
     }
 
     case ArpeggioType::BRACKET:
     {
-        return item->width() - item->style().styleMM(Sid::ArpeggioLineWidth) / 2;
+        return item->width() - item->style().styleMM(Sid::arpeggioLineWidth) / 2;
     }
     }
     return 0.0;
@@ -182,7 +182,7 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
                 return true;
             }
             if (shapeElement.item()->type() == ElementType::ACCIDENTAL) {
-                // Pad accidentals with Sid::ArpeggioAccidentalDistance either side
+                // Pad accidentals with Sid::arpeggioAccidentalDistance either side
                 shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - arpeggioAccidentalDistance, shapeElement.topLeft().y()));
                 shapeElement.setWidth(shapeElement.width() + 2 * arpeggioAccidentalDistance);
             } else if (shapeElement.item()->type() == ElementType::LEDGER_LINE) {
@@ -290,7 +290,7 @@ double ArpeggioLayout::insetDistance(const Arpeggio* item, const LayoutContext& 
     }
 
     double maximumInset = (paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL)
-                           - ctx.conf().styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
+                           - ctx.conf().styleMM(Sid::arpeggioAccidentalDistanceMin)) * mag_;
 
     RectF bbox = item->symBbox(furthestAccidental->symId());
     double center = furthestAccidental->note()->pos().y() * mag_;

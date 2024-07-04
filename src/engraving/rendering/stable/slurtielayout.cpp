@@ -2430,10 +2430,10 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
 void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp)
 {
     const double mag = slurTieSeg->staff() ? slurTieSeg->staff()->staffMag(slurTieSeg->slurTie()->tick()) : 1.0;
-    const double minTieLength = mag * slurTieSeg->style().styleS(Sid::MinTieLength).val();
+    const double minTieLength = mag * slurTieSeg->style().styleS(Sid::minTieLength).val();
     const double shortTieLimit = mag * 4.0;
-    const double minTieThickness = mag * (0.15 * slurTieSeg->spatium() - slurTieSeg->style().styleMM(Sid::SlurEndWidth));
-    const double normalThickness = mag * (slurTieSeg->style().styleMM(Sid::SlurMidWidth) - slurTieSeg->style().styleMM(Sid::SlurEndWidth));
+    const double minTieThickness = mag * (0.15 * slurTieSeg->spatium() - slurTieSeg->style().styleMM(Sid::slurEndWidth));
+    const double normalThickness = mag * (slurTieSeg->style().styleMM(Sid::slurMidWidth) - slurTieSeg->style().styleMM(Sid::slurEndWidth));
 
     bool invalid = muse::RealIsEqualOrMore(minTieLength, shortTieLimit);
 
