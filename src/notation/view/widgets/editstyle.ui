@@ -13211,8 +13211,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>701</width>
+             <height>744</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -13318,8 +13318,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>533</width>
-                <height>654</height>
+                <width>671</width>
+                <height>708</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -13340,475 +13340,430 @@ first note of the system</string>
                 </widget>
                </item>
                <item>
-                <layout class="QGridLayout" name="gridLayout_36">
+                <layout class="QGridLayout" name="gridLayout_60">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
                  <property name="topMargin">
                   <number>0</number>
                  </property>
-                 <property name="rightMargin">
+                 <property name="horizontalSpacing">
                   <number>0</number>
                  </property>
-                 <item row="0" column="0">
-                  <layout class="QVBoxLayout" name="verticalLayout_38" stretch="0,0">
-                   <property name="leftMargin">
-                    <number>12</number>
+                 <property name="verticalSpacing">
+                  <number>6</number>
+                 </property>
+                 <item row="8" column="0">
+                  <widget class="QCheckBox" name="accentShowTabCommon">
+                   <property name="text">
+                    <string/>
                    </property>
-                   <property name="topMargin">
-                    <number>8</number>
+                   <property name="checked">
+                    <bool>false</bool>
                    </property>
-                   <property name="rightMargin">
-                    <number>12</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>12</number>
-                   </property>
-                   <item>
-                    <layout class="QGridLayout" name="gridLayout_60">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="horizontalSpacing">
-                      <number>0</number>
-                     </property>
-                     <property name="verticalSpacing">
-                      <number>6</number>
-                     </property>
-                     <item row="14" column="2">
-                      <widget class="QCheckBox" name="mordentShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="16" column="2">
-                      <widget class="QCheckBox" name="wahShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="0">
-                      <widget class="QCheckBox" name="slurShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="16" column="0">
-                      <widget class="QCheckBox" name="wahShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="0">
-                      <widget class="QCheckBox" name="dynamicsShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="14" column="0">
-                      <widget class="QCheckBox" name="mordentShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="2">
-                      <widget class="QCheckBox" name="staccatoShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="17" column="4">
-                      <widget class="QLabel" name="label_215">
-                       <property name="text">
-                        <string>Golpe</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="13" column="2">
-                      <widget class="QCheckBox" name="rasgueadoShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="8" column="4">
-                      <widget class="QLabel" name="label_182">
-                       <property name="text">
-                        <string>Accent and marcato marks</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <spacer name="horizontalSpacer_63">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeType">
-                        <enum>QSizePolicy::Minimum</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>80</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item row="17" column="2">
-                      <widget class="QCheckBox" name="golpeShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="4">
-                      <widget class="QLabel" name="label_175">
-                       <property name="text">
-                        <string>Dynamics</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="10" column="4">
-                      <widget class="QLabel" name="label_59">
-                       <property name="text">
-                        <string>Harmonic marks</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="4">
-                      <widget class="QLabel" name="label_181">
-                       <property name="text">
-                        <string>Crescendo and diminuendo lines</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="13" column="0">
-                      <widget class="QCheckBox" name="rasgueadoShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="10" column="2">
-                      <widget class="QCheckBox" name="harmonicMarkShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="8" column="2">
-                      <widget class="QCheckBox" name="accentShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="2">
-                      <widget class="QCheckBox" name="slurShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="12" column="0">
-                      <widget class="QCheckBox" name="palmMuteShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="15" column="0">
-                      <widget class="QCheckBox" name="turnShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="2">
-                      <widget class="QCheckBox" name="fermataShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_4">
-                       <property name="text">
-                        <string>Common</string>
-                       </property>
-                       <property name="margin">
-                        <number>0</number>
-                       </property>
-                       <property name="indent">
-                        <number>0</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="8" column="0">
-                      <widget class="QCheckBox" name="accentShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="0">
-                      <widget class="QCheckBox" name="hairpinShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="0">
-                      <widget class="QCheckBox" name="fermataShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="4">
-                      <widget class="QLabel" name="label_63">
-                       <property name="text">
-                        <string>Slurs</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="2">
-                      <spacer name="verticalSpacer_37">
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                       <property name="sizeType">
-                        <enum>QSizePolicy::Fixed</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>20</width>
-                         <height>8</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item row="12" column="4">
-                      <widget class="QLabel" name="label_192">
-                       <property name="text">
-                        <string>Palm mute (P.M.)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="14" column="4">
-                      <widget class="QLabel" name="label_199">
-                       <property name="text">
-                        <string>Mordents</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="2">
-                      <widget class="QCheckBox" name="dynamicsShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="2">
-                      <widget class="QCheckBox" name="hairpinShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="15" column="2">
-                      <widget class="QCheckBox" name="turnShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="15" column="4">
-                      <widget class="QLabel" name="label_200">
-                       <property name="text">
-                        <string>Turns</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="11" column="0">
-                      <widget class="QCheckBox" name="letRingShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="11" column="4">
-                      <widget class="QLabel" name="label_190">
-                       <property name="text">
-                        <string>Let ring</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="2">
-                      <widget class="QLabel" name="label_57">
-                       <property name="text">
-                        <string>Simple</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="17" column="0">
-                      <widget class="QCheckBox" name="golpeShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="16" column="4">
-                      <widget class="QLabel" name="label_201">
-                       <property name="text">
-                        <string>Wah open/close</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="4">
-                      <widget class="QLabel" name="label_183">
-                       <property name="text">
-                        <string>Staccato</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="10" column="0">
-                      <widget class="QCheckBox" name="harmonicMarkShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="13" column="4">
-                      <widget class="QLabel" name="label_197">
-                       <property name="text">
-                        <string>Rasgueado</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="0">
-                      <widget class="QCheckBox" name="staccatoShowTabCommon">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="12" column="2">
-                      <widget class="QCheckBox" name="palmMuteShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="4">
-                      <widget class="QLabel" name="label_174">
-                       <property name="text">
-                        <string>Fermatas</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="11" column="2">
-                      <widget class="QCheckBox" name="letRingShowTabSimple">
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="3">
-                      <spacer name="horizontalSpacer_661">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeType">
-                        <enum>QSizePolicy::Minimum</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>80</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <spacer name="verticalSpacer_39">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>1</width>
-                       <height>2</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                  </layout>
+                  </widget>
                  </item>
-                 <item row="0" column="1">
-                  <spacer name="horizontalSpacer_32">
+                 <item row="15" column="0">
+                  <widget class="QCheckBox" name="turnShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QCheckBox" name="slurShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="17" column="2">
+                  <widget class="QCheckBox" name="golpeShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="2">
+                  <widget class="QCheckBox" name="palmMuteShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="0">
+                  <widget class="QCheckBox" name="letRingShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="2">
+                  <widget class="QCheckBox" name="hairpinShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="14" column="2">
+                  <widget class="QCheckBox" name="mordentShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="4">
+                  <widget class="QLabel" name="label_182">
+                   <property name="text">
+                    <string>Accent and marcato marks</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="13" column="4">
+                  <widget class="QLabel" name="label_197">
+                   <property name="text">
+                    <string>Rasgueado</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="17" column="0">
+                  <widget class="QCheckBox" name="golpeShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <spacer name="horizontalSpacer_63">
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Minimum</enum>
+                   </property>
                    <property name="sizeHint" stdset="0">
                     <size>
-                     <width>40</width>
+                     <width>60</width>
                      <height>20</height>
                     </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="14" column="4">
+                  <widget class="QLabel" name="label_199">
+                   <property name="text">
+                    <string>Mordents</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QLabel" name="label_57">
+                   <property name="text">
+                    <string>Simple</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="4">
+                  <widget class="QLabel" name="label_63">
+                   <property name="text">
+                    <string>Slurs</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QCheckBox" name="hairpinShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="17" column="4">
+                  <widget class="QLabel" name="label_215">
+                   <property name="text">
+                    <string>Golpe</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="2">
+                  <widget class="QCheckBox" name="accentShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="14" column="0">
+                  <widget class="QCheckBox" name="mordentShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="4">
+                  <widget class="QLabel" name="label_192">
+                   <property name="text">
+                    <string>Palm mute (P.M.)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QCheckBox" name="fermataShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="15" column="4">
+                  <widget class="QLabel" name="label_200">
+                   <property name="text">
+                    <string>Turns</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="15" column="2">
+                  <widget class="QCheckBox" name="turnShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="4">
+                  <widget class="QLabel" name="label_174">
+                   <property name="text">
+                    <string>Fermatas</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="16" column="2">
+                  <widget class="QCheckBox" name="wahShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="4">
+                  <widget class="QLabel" name="label_59">
+                   <property name="text">
+                    <string>Harmonic marks</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="2">
+                  <widget class="QCheckBox" name="dynamicsShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="13" column="2">
+                  <widget class="QCheckBox" name="rasgueadoShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QCheckBox" name="dynamicsShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>Common</string>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>0</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="3">
+                  <spacer name="horizontalSpacer_661">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Minimum</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>60</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="7" column="4">
+                  <widget class="QLabel" name="label_181">
+                   <property name="text">
+                    <string>Crescendo and diminuendo lines</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="16" column="4">
+                  <widget class="QLabel" name="label_201">
+                   <property name="text">
+                    <string>Wah open/close</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QCheckBox" name="slurShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="0">
+                  <widget class="QCheckBox" name="palmMuteShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="2">
+                  <widget class="QCheckBox" name="staccatoShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <spacer name="verticalSpacer_37">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Fixed</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>8</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="11" column="4">
+                  <widget class="QLabel" name="label_190">
+                   <property name="text">
+                    <string>Let ring</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="13" column="0">
+                  <widget class="QCheckBox" name="rasgueadoShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="4">
+                  <widget class="QLabel" name="label_175">
+                   <property name="text">
+                    <string>Dynamics</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="0">
+                  <widget class="QCheckBox" name="staccatoShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="2">
+                  <widget class="QCheckBox" name="letRingShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="2">
+                  <widget class="QCheckBox" name="fermataShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="4">
+                  <widget class="QLabel" name="label_183">
+                   <property name="text">
+                    <string>Staccato</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="0">
+                  <widget class="QCheckBox" name="harmonicMarkShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="16" column="0">
+                  <widget class="QCheckBox" name="wahShowTabCommon">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="2">
+                  <widget class="QCheckBox" name="harmonicMarkShowTabSimple">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="5">
+                  <spacer name="horizontalSpacer_68">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
                    </property>
                   </spacer>
                  </item>
@@ -13880,6 +13835,13 @@ first note of the system</string>
                   </item>
                  </layout>
                 </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_29">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </widget>
