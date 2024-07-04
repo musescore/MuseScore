@@ -12587,11 +12587,11 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>568</width>
-                <height>551</height>
+                <width>673</width>
+                <height>710</height>
                </rect>
               </property>
-              <layout class="QGridLayout" name="gridLayout_55">
+              <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
                <item row="2" column="1">
                 <widget class="QLabel" name="label_60">
                  <property name="text">
@@ -13133,24 +13133,12 @@ first note of the system</string>
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
                 </spacer>
                </item>
                <item row="3" column="1" colspan="2">
                 <spacer name="verticalSpacer_3411">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
                  </property>
                 </spacer>
                </item>
