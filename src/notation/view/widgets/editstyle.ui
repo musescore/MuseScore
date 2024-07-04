@@ -4192,7 +4192,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-170</y>
+                <y>0</y>
                 <width>658</width>
                 <height>882</height>
                </rect>
@@ -6481,11 +6481,11 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>578</width>
-                <height>527</height>
+                <width>673</width>
+                <height>712</height>
                </rect>
               </property>
-              <layout class="QGridLayout" name="gridLayout_54">
+              <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
                <item row="1" column="0" colspan="2">
                 <widget class="QGroupBox" name="verticalDistance">
                  <property name="title">
@@ -6836,7 +6836,7 @@
                  <property name="title">
                   <string>Brackets</string>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout_21">
+                 <layout class="QGridLayout" name="gridLayout_21" rowstretch="0,0,1">
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_6">
                     <property name="text">
