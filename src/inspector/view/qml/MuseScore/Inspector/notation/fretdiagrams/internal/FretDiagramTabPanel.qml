@@ -34,6 +34,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
+    readonly property int navigationRowEnd: navigationRowStart + 10000
 
     property bool isGeneralTabOpen: tabBar.currentIndex == 0
 

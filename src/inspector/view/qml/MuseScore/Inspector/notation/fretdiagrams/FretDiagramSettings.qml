@@ -77,13 +77,21 @@ Item {
                 color: ui.theme.fontPrimaryColor
 
                 width: parent.width
+
+                // TODO: keyboard navigation
             }
 
             PropertyToggle {
-                visible: root.model ? root.model.areSettingsAvailable : false
                 id: showFingerings
+
+                visible: root.model ? root.model.areSettingsAvailable : false
+
                 text: qsTrc("inspector", "Show fingerings")
                 propertyItem: root.model ? root.model.showFingerings : null
+
+                navigation.name: "Show fingerings toggle"
+                navigation.panel: root.navigationPanel
+                navigation.row: fretDiagramTabPanel.navigationRowEnd + 1
             }
 
             GridLayout {
@@ -91,48 +99,73 @@ Item {
                 width: parent.width
                 columns: 6
                 rowSpacing: 12
+
                 Repeater {
-                    id: rep
-                    model: root.model ? root.model.fingerings : 0
+                    id: repeater
+
+                    readonly property int navigationRowStart: showFingerings.navigation.row + 1
+                    readonly property int navigationRowEnd: navigationRowStart + repeater.count - 1
+
+                    //! NOTE: If we put `root.model.fingerings` here, the repeater would destroy all generated items
+                    //! whenever one of the fingerings is changed. This results in focus being lost when clicking
+                    //! on a second TextInputField after editing one, instead of focussing that second TextInputField.
+                    //! By giving the repeater only an integer value, that happens only when the number of items changes,
+                    //! which is less problematic.
+                    model: root.model ? root.model.fingerings.length : 0
+
                     Column {
-                        property int string: rep.count - index - 1
+                        id: repeaterItem
+
+                        property int string: repeater.count - index - 1
+                        property string finger: root.model ? root.model.fingerings[string] : 0
+
                         Layout.preferredWidth: 40
                         spacing: 8
+
                         Rectangle {
                             anchors.horizontalCenter: parent.horizontalCenter
                             height: numberLabel.height + 4
                             width: height
 
                             color: "transparent"
-                            radius: 180
+                            radius: height / 2
                             border.color: ui.theme.fontPrimaryColor
                             border.width: 1
 
                             StyledTextLabel {
                                 id: numberLabel
                                 anchors.centerIn: parent
-                                text: string + 1
+                                text: repeaterItem.string + 1
                             }
                         }
+
                         TextInputField {
                             id: fingerInput
+
                             textHorizontalAlignment: Qt.AlignHCenter
                             indeterminateText: '-'
-                            isIndeterminate: modelData == '0'
-                            currentText: modelData == '0' ? '' : modelData
-                            onTextChanged: {
-                                var newFinger = parseInt(newTextValue)
-                                if (isNaN(newFinger)) {
-                                    fingerInput.currentText = ''
-                                    return;
-                                }
+                            isIndeterminate: {
+                                const fingerInt = parseInt(repeaterItem.finger)
+                                return isNaN(fingerInt) || fingerInt < 1 || fingerInt > 5
                             }
-                            onTextEditingFinished: {
+
+                            currentText: isIndeterminate ? '' : repeaterItem.finger
+
+                            validator: IntInputValidator {
+                                top: 5
+                                bottom: 0
+                            }
+
+                            navigation.name: `Finger ${repeaterItem.string + 1} text input`
+                            navigation.panel: root.navigationPanel
+                            navigation.row: repeater.navigationRowStart + index
+                            navigation.accessible.name: qsTrc("inspector", "Finger for string %1").arg(repeaterItem.string + 1)
+
+                            onTextEditingFinished: function (newTextValue) {
                                 var newFinger = parseInt(newTextValue)
                                 if (root.model) {
-                                    root.model.setFingering(string, newFinger)
+                                    root.model.setFingering(repeaterItem.string, newFinger)
                                 }
-                                currentText = modelData
                             }
                         }
                     }
@@ -149,7 +182,7 @@ Item {
 
                 navigation.name: "Clear"
                 navigation.panel: root.navigationPanel
-                navigation.row: 10000
+                navigation.row: repeater.navigationRowEnd + 1
 
                 onClicked: {
                     fretCanvas.clear()
