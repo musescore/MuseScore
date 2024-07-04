@@ -2180,8 +2180,10 @@ void Score::cmdFlip()
 
     for (EngravingItem* e : el) {
         if (e->hasVoiceApplicationProperties()) {
-            PlacementV curPlacement = e->getProperty(Pid::PLACEMENT).value<PlacementV>();
-            e->undoChangeProperty(Pid::DIRECTION, curPlacement == PlacementV::ABOVE ? DirectionV::DOWN : DirectionV::UP);
+            flipOnce(e, [e]() {
+                PlacementV curPlacement = e->getProperty(Pid::PLACEMENT).value<PlacementV>();
+                e->undoChangeProperty(Pid::DIRECTION, curPlacement == PlacementV::ABOVE ? DirectionV::DOWN : DirectionV::UP);
+            });
         } else if (e->isNote() || e->isStem() || e->isHook()) {
             Chord* chord = nullptr;
             if (e->isNote()) {
@@ -2295,12 +2297,8 @@ void Score::cmdFlip()
                    || e->isStringTunings()
                    || e->isSticking()
                    || e->isFingering()
-                   || e->isDynamic()
-                   || e->isExpression()
                    || e->isHarmony()
                    || e->isFretDiagram()
-                   || e->isHairpin()
-                   || e->isHairpinSegment()
                    || e->isOttava()
                    || e->isOttavaSegment()
                    || e->isTrill()
