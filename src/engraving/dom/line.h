@@ -85,6 +85,7 @@ private:
     static PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg);
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
+    void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys);
     void rebaseAnchors(EditData&, Grip);
 };
 
