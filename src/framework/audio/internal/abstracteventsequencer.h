@@ -148,12 +148,6 @@ public:
         return mpe::dynamicLevelFromType(muse::mpe::DynamicType::Natural);
     }
 
-    EventSequence eventsToBePlayed(const msecs_t)
-    {
-        EventSequence result;
-        return result;
-    }
-
     EventSequenceMap movePlaybackForward(const msecs_t nextMsecs)
     {
         ONLY_AUDIO_WORKER_THREAD;

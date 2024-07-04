@@ -36,8 +36,8 @@ public:
 
     void init(muse::audio::AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t audioChannelsCount = 2);
 
-    bool handleEvent(const VstEvent& event);
-    bool handleParamChange(const ParamChangeEvent& param);
+    bool handleEvent(const VstEvent& event, const audio::samples_t sampleOffset);
+    bool handleParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
@@ -76,7 +76,7 @@ private:
     void flushBuffers();
 
     void loadAllNotesOffParam();
-    void addParamChange(const ParamChangeEvent& param);
+    void addParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
 
     bool m_isActive = false;
     muse::audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0

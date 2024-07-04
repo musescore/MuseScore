@@ -74,6 +74,7 @@ public:
 
 private:
     void toggleVolumeGain(const bool isActive);
+    void handleSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t sampleOffset);
 
     VstPluginPtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;

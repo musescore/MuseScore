@@ -49,25 +49,24 @@ void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, audioch_t a
     m_audioChannelsCount = audioChannelsCount;
 }
 
-bool VstAudioClient::handleEvent(const VstEvent& event)
+bool VstAudioClient::handleEvent(const VstEvent& event, const samples_t sampleOffset)
 {
     ensureActivity();
 
-    if (m_eventList.addEvent(const_cast<VstEvent&>(event)) == Steinberg::kResultTrue) {
+    VstEvent& ev = const_cast<VstEvent&>(event);
+    ev.sampleOffset = sampleOffset;
+
+    if (m_eventList.addEvent(ev) == Steinberg::kResultTrue) {
         return true;
     }
 
     return false;
 }
 
-bool VstAudioClient::handleParamChange(const ParamChangeEvent& param)
+bool VstAudioClient::handleParamChange(const ParamChangeEvent& param, const samples_t sampleOffset)
 {
-    IF_ASSERT_FAILED(m_pluginPtr) {
-        return false;
-    }
-
     ensureActivity();
-    addParamChange(param);
+    addParamChange(param, sampleOffset);
 
     return true;
 }
@@ -131,7 +130,7 @@ void VstAudioClient::flush()
     m_paramChanges.clearQueue();
 
     if (m_allNotesOffParam.has_value()) {
-        addParamChange(m_allNotesOffParam.value());
+        addParamChange(m_allNotesOffParam.value(), 0);
     }
 }
 
@@ -462,11 +461,11 @@ void VstAudioClient::loadAllNotesOffParam()
     m_allNotesOffParam = ParamChangeEvent { mapping.begin()->second, 1 };
 }
 
-void VstAudioClient::addParamChange(const ParamChangeEvent& param)
+void VstAudioClient::addParamChange(const ParamChangeEvent& param, const samples_t sampleOffset)
 {
     Steinberg::int32 dummyIdx = 0;
     Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.paramId, dummyIdx);
     if (queue) {
-        queue->addPoint(0, param.value, dummyIdx);
+        queue->addPoint(sampleOffset, param.value, dummyIdx);
     }
 }
