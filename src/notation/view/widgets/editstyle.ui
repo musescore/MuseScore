@@ -7867,7 +7867,7 @@
              <x>0</x>
              <y>0</y>
              <width>677</width>
-             <height>722</height>
+             <height>720</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -11158,11 +11158,11 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>682</width>
-             <height>665</height>
+             <width>703</width>
+             <height>746</height>
             </rect>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_64">
+           <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
             <item>
              <widget class="QGroupBox" name="groupBox_4">
               <property name="title">
@@ -11921,7 +11921,7 @@ first note of the system</string>
                 <property name="title">
                  <string>Underscore line</string>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_66">
+                <layout class="QVBoxLayout" name="verticalLayout_66" stretch="0,0,1">
                  <property name="topMargin">
                   <number>10</number>
                  </property>
@@ -12066,12 +12066,6 @@ first note of the system</string>
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
                    </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
                   </spacer>
                  </item>
                 </layout>
@@ -12083,12 +12077,6 @@ first note of the system</string>
              <spacer name="verticalSpacer_17">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
               </property>
              </spacer>
             </item>
