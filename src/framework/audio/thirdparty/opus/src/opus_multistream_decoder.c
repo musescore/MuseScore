@@ -251,8 +251,11 @@ int opus_multistream_decode_native(
       }
       packet_offset = 0;
       ret = opus_decode_native(dec, data, len, buf, frame_size, decode_fec, s!=st->layout.nb_streams-1, &packet_offset, soft_clip);
-      data += packet_offset;
-      len -= packet_offset;
+      if (!do_plc)
+      {
+        data += packet_offset;
+        len -= packet_offset;
+      }
       if (ret <= 0)
       {
          RESTORE_STACK;

@@ -118,6 +118,10 @@ void silk_CNG(
         /* Smooth gains */
         for( i = 0; i < psDec->nb_subfr; i++ ) {
             psCNG->CNG_smth_Gain_Q16 += silk_SMULWB( psDecCtrl->Gains_Q16[ i ] - psCNG->CNG_smth_Gain_Q16, CNG_GAIN_SMTH_Q16 );
+            /* If the smoothed gain is 3 dB greater than this subframe's gain, use this subframe's gain to adapt faster. */
+            if( silk_SMULWW( psCNG->CNG_smth_Gain_Q16, CNG_GAIN_SMTH_THRESHOLD_Q16 ) > psDecCtrl->Gains_Q16[ i ] ) {
+                psCNG->CNG_smth_Gain_Q16 = psDecCtrl->Gains_Q16[ i ];
+            }
         }
     }
 

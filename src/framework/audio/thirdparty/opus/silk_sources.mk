@@ -77,15 +77,19 @@ silk/stereo_find_predictor.c \
 silk/stereo_quant_pred.c \
 silk/LPC_fit.c
 
-SILK_SOURCES_SSE4_1 =  \
+SILK_SOURCES_X86_RTCD = \
+silk/x86/x86_silk_map.c
+
+SILK_SOURCES_SSE4_1 = \
 silk/x86/NSQ_sse4_1.c \
 silk/x86/NSQ_del_dec_sse4_1.c \
-silk/x86/x86_silk_map.c \
 silk/x86/VAD_sse4_1.c \
 silk/x86/VQ_WMat_EC_sse4_1.c
 
+SILK_SOURCES_ARM_RTCD = \
+silk/arm/arm_silk_map.c
+
 SILK_SOURCES_ARM_NEON_INTR = \
-silk/arm/arm_silk_map.c \
 silk/arm/biquad_alt_neon_intr.c \
 silk/arm/LPC_inv_pred_gain_neon_intr.c \
 silk/arm/NSQ_del_dec_neon_intr.c \

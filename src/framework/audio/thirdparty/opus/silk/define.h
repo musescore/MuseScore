@@ -225,6 +225,7 @@ extern "C"
 /* Defines for CN generation */
 #define CNG_BUF_MASK_MAX                        255     /* 2^floor(log2(MAX_FRAME_LENGTH))-1    */
 #define CNG_GAIN_SMTH_Q16                       4634    /* 0.25^(1/4)                           */
+#define CNG_GAIN_SMTH_THRESHOLD_Q16             46396   /* -3 dB                                */
 #define CNG_NLSF_SMTH_Q16                       16348   /* 0.25                                 */
 
 #ifdef __cplusplus

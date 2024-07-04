@@ -1,8 +1,7 @@
-#[[Cmake helper function to parse source files from make files
-this is to avoid breaking existing make and auto make support
-but still have the option to use CMake with only lists at one place]]
-
-cmake_minimum_required(VERSION 3.1)
+if(__opus_functions)
+  return()
+endif()
+set(__opus_functions INCLUDED)
 
 function(get_library_version OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
   file(STRINGS configure.ac opus_lt_current_string
@@ -40,60 +39,6 @@ function(get_library_version OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
     "${OPUS_LIBRARY_VERSION_MAJOR}.${OPUS_LIBRARY_VERSION_MINOR}.${OPUS_LIBRARY_VERSION_PATCH}"
     PARENT_SCOPE)
   set(OPUS_LIBRARY_VERSION_MAJOR ${OPUS_LIBRARY_VERSION_MAJOR} PARENT_SCOPE)
-endfunction()
-
-function(get_package_version PACKAGE_VERSION)
-  find_package(Git)
-  if(GIT_FOUND)
-    execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --match "v*"
-                    OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
-    if(OPUS_PACKAGE_VERSION)
-      string(STRIP ${OPUS_PACKAGE_VERSION}, OPUS_PACKAGE_VERSION)
-      string(REPLACE \n
-                     ""
-                     OPUS_PACKAGE_VERSION
-                     ${OPUS_PACKAGE_VERSION})
-      string(REPLACE ,
-                     ""
-                     OPUS_PACKAGE_VERSION
-                     ${OPUS_PACKAGE_VERSION})
-
-      string(SUBSTRING ${OPUS_PACKAGE_VERSION}
-                       1
-                       -1
-                       OPUS_PACKAGE_VERSION)
-      set(PACKAGE_VERSION ${OPUS_PACKAGE_VERSION} PARENT_SCOPE)
-      return()
-    endif()
-  endif()
-
-  if(EXISTS "${CMAKE_SOURCE_DIR}/package_version")
-    # Not a git repo, lets' try to parse it from package_version file if exists
-    file(STRINGS package_version opus_package_version_string
-         LIMIT_COUNT 1
-         REGEX "PACKAGE_VERSION=")
-    string(REPLACE "PACKAGE_VERSION="
-                   ""
-                   opus_package_version_string
-                   ${opus_package_version_string})
-    string(REPLACE "\""
-                   ""
-                   opus_package_version_string
-                   ${opus_package_version_string})
-    set(PACKAGE_VERSION ${opus_package_version_string} PARENT_SCOPE)
-    return()
-  endif()
-
-  # if all else fails set to 0
-  set(PACKAGE_VERSION 0 PARENT_SCOPE)
-endfunction()
-
-function(check_and_set_flag NAME FLAG)
-  include(CheckCCompilerFlag)
-  check_c_compiler_flag(${FLAG} ${NAME}_SUPPORTED)
-  if(${NAME}_SUPPORTED)
-    add_definitions(${FLAG})
-  endif()
 endfunction()
 
 function(check_flag NAME FLAG)
@@ -187,7 +132,7 @@ function(opus_detect_sse COMPILER_SUPPORT_SIMD)
 endfunction()
 
 function(opus_detect_neon COMPILER_SUPPORT_NEON)
-  if(CMAKE_SYSTEM_PROCESSOR MATCHES "(armv7-a|aarch64)")
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "(arm|aarch64)")
     message(STATUS "Check NEON support by compiler")
     check_include_file(arm_neon.h HAVE_ARM_NEON_H)
     if(HAVE_ARM_NEON_H)
@@ -197,13 +142,33 @@ function(opus_detect_neon COMPILER_SUPPORT_NEON)
 endfunction()
 
 function(opus_supports_cpu_detection RUNTIME_CPU_CAPABILITY_DETECTION)
-  if(MSVC)
-    check_include_file(intrin.h HAVE_INTRIN_H)
-  else()
-    check_include_file(cpuid.h HAVE_CPUID_H)
-  endif()
-  if(HAVE_INTRIN_H OR HAVE_CPUID_H)
-    set(RUNTIME_CPU_CAPABILITY_DETECTION 1 PARENT_SCOPE)
+  set(RUNTIME_CPU_CAPABILITY_DETECTION 0 PARENT_SCOPE)
+  if(OPUS_CPU_X86 OR OPUS_CPU_X64)
+    if(MSVC)
+      check_include_file(intrin.h HAVE_INTRIN_H)
+      if(HAVE_INTRIN_H)
+        # if intrin.h is available we assume __cpuid is there
+        set(RUNTIME_CPU_CAPABILITY_DETECTION 1 PARENT_SCOPE)
+      endif()
+    else()
+      include(CFeatureCheck)
+      c_feature_check(CPU_INFO_BY_ASM)
+      set(CPU_INFO_BY_ASM_SUPPORTED ${CPU_INFO_BY_ASM_SUPPORTED} PARENT_SCOPE)
+      check_include_file(cpuid.h HAVE_CPUID_H)
+      if(HAVE_CPUID_H)
+        c_feature_check(CPU_INFO_BY_C)
+        set(CPU_INFO_BY_C_SUPPORTED ${CPU_INFO_BY_C_SUPPORTED} PARENT_SCOPE)
+      endif()
+      if(CPU_INFO_BY_ASM_SUPPORTED OR CPU_INFO_BY_C_SUPPORTED)
+        set(RUNTIME_CPU_CAPABILITY_DETECTION 1 PARENT_SCOPE)
+      endif()
+    endif()
+  elseif(OPUS_CPU_ARM)
+    # ARM cpu detection is implemented for Windows and anything
+    # using a Linux kernel (such as Android).
+    if (CMAKE_SYSTEM_NAME MATCHES "(Windows|Linux|Android)")
+      set(RUNTIME_CPU_CAPABILITY_DETECTION 1 PARENT_SCOPE)
+    endif ()
   else()
     set(RUNTIME_CPU_CAPABILITY_DETECTION 0 PARENT_SCOPE)
   endif()

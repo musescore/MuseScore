@@ -22,9 +22,9 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # For libtool.
 dnl Please update these for releases.
-OPUS_LT_CURRENT=8
+OPUS_LT_CURRENT=9
 OPUS_LT_REVISION=0
-OPUS_LT_AGE=8
+OPUS_LT_AGE=9
 
 AC_SUBST(OPUS_LT_CURRENT)
 AC_SUBST(OPUS_LT_REVISION)
@@ -195,6 +195,7 @@ AC_ARG_ENABLE([intrinsics],
 
 rtcd_support=no
 cpu_arm=no
+cpu_x86=no
 
 AS_IF([test x"${enable_asm}" = x"yes"],[
     inline_optimization="No inline ASM for your platform, please send patches"
@@ -535,6 +536,7 @@ AS_IF([test x"$enable_intrinsics" = x"yes"],[
    ],
    [i?86|x86_64],
    [
+      cpu_x86=yes
       OPUS_CHECK_INTRINSICS(
          [SSE],
          [$X86_SSE_CFLAGS],
@@ -691,6 +693,18 @@ AS_IF([test x"$enable_intrinsics" = x"yes"],[
                  unsigned int CPUInfo2;
                  unsigned int CPUInfo3;
                  unsigned int InfoType;
+                #if defined(__i386__) && defined(__PIC__)
+                 __asm__ __volatile__ (
+                 "xchg %%ebx, %1\n"
+                 "cpuid\n"
+                 "xchg %%ebx, %1\n":
+                 "=a" (CPUInfo0),
+                 "=r" (CPUInfo1),
+                 "=c" (CPUInfo2),
+                 "=d" (CPUInfo3) :
+                 "a" (InfoType), "c" (0)
+                );
+               #else
                  __asm__ __volatile__ (
                  "cpuid":
                  "=a" (CPUInfo0),
@@ -699,6 +713,7 @@ AS_IF([test x"$enable_intrinsics" = x"yes"],[
                  "=d" (CPUInfo3) :
                  "a" (InfoType), "c" (0)
                 );
+               #endif
             ]])],
             [get_cpuid_by_asm="yes"
              AC_MSG_RESULT([Inline Assembly])
@@ -711,7 +726,7 @@ AS_IF([test x"$enable_intrinsics" = x"yes"],[
                  unsigned int CPUInfo2;
                  unsigned int CPUInfo3;
                  unsigned int InfoType;
-                 __get_cpuid(InfoType, &CPUInfo0, &CPUInfo1, &CPUInfo2, &CPUInfo3);
+                 __get_cpuid_count(InfoType, 0, &CPUInfo0, &CPUInfo1, &CPUInfo2, &CPUInfo3);
             ]])],
             [AC_MSG_RESULT([C method])
                  AC_DEFINE([CPU_INFO_BY_C], [1], [Get CPU Info by c method])],
@@ -731,6 +746,7 @@ AM_CONDITIONAL([HAVE_ARM_NEON_INTR],
     [test x"$OPUS_ARM_MAY_HAVE_NEON_INTR" = x"1"])
 AM_CONDITIONAL([HAVE_ARM_NE10],
     [test x"$HAVE_ARM_NE10" = x"1"])
+AM_CONDITIONAL([CPU_X86], [test "$cpu_x86" = "yes"])
 AM_CONDITIONAL([HAVE_SSE],
     [test x"$OPUS_X86_MAY_HAVE_SSE" = x"1"])
 AM_CONDITIONAL([HAVE_SSE2],
@@ -740,6 +756,8 @@ AM_CONDITIONAL([HAVE_SSE4_1],
 AM_CONDITIONAL([HAVE_AVX],
     [test x"$OPUS_X86_MAY_HAVE_AVX" = x"1"])
 
+AM_CONDITIONAL([HAVE_RTCD],
+ [test x"$enable_rtcd" = x"yes" -a x"$rtcd_support" != x"no"])
 AS_IF([test x"$enable_rtcd" = x"yes"],[
     AS_IF([test x"$rtcd_support" != x"no"],[
         AC_DEFINE([OPUS_HAVE_RTCD], [1],

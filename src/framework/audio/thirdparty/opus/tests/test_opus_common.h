@@ -75,8 +75,11 @@ static OPUS_INLINE void _test_failed(const char *file, int line)
   fprintf(stderr,"Please report this failure and include\n");
   fprintf(stderr,"'make check SEED=%u fails %s at line %d for %s'\n",iseed,file,line,opus_get_version_string());
   fprintf(stderr,"and any relevant details about your system.\n\n");
+#if defined(_MSC_VER)
+   _set_abort_behavior( 0, _WRITE_ABORT_MSG);
+#endif
   abort();
 }
 #define test_failed() _test_failed(__FILE__, __LINE__);
-
+#define opus_test_assert(cond) {if (!(cond)) {test_failed();}}
 void regression_test(void);
