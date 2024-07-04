@@ -38,7 +38,7 @@ VstAudioClient::~VstAudioClient()
     m_pluginComponent->terminate();
 }
 
-void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t&& audioChannelsCount)
+void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, audioch_t audioChannelsCount)
 {
     IF_ASSERT_FAILED(plugin && type != AudioPluginType::Undefined) {
         return;
@@ -60,7 +60,7 @@ bool VstAudioClient::handleEvent(const VstEvent& event)
     return false;
 }
 
-bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
+bool VstAudioClient::handleParamChange(const ParamChangeEvent& param)
 {
     IF_ASSERT_FAILED(m_pluginPtr) {
         return false;
@@ -180,7 +180,7 @@ ParamsMapping VstAudioClient::paramsMapping(const std::set<Steinberg::Vst::CtrlN
                 continue;
             }
 
-            result.emplace(ctrlNum, std::move(id));
+            result.emplace(ctrlNum, id);
         }
     }
 
@@ -459,18 +459,14 @@ void VstAudioClient::loadAllNotesOffParam()
         return;
     }
 
-    PluginParamInfo allNotesOff;
-    allNotesOff.id = mapping.begin()->second;
-    allNotesOff.defaultNormalizedValue = 1;
-
-    m_allNotesOffParam = std::move(allNotesOff);
+    m_allNotesOffParam = ParamChangeEvent { mapping.begin()->second, 1 };
 }
 
-void VstAudioClient::addParamChange(const PluginParamInfo& param)
+void VstAudioClient::addParamChange(const ParamChangeEvent& param)
 {
     Steinberg::int32 dummyIdx = 0;
-    Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.id, dummyIdx);
+    Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.paramId, dummyIdx);
     if (queue) {
-        queue->addPoint(0, param.defaultNormalizedValue, dummyIdx);
+        queue->addPoint(0, param.value, dummyIdx);
     }
 }

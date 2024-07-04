@@ -195,8 +195,8 @@ muse::audio::samples_t VstSynthesiser::process(float* buffer, muse::audio::sampl
     for (const VstSequencer::EventType& event : sequence) {
         if (std::holds_alternative<VstEvent>(event)) {
             m_vstAudioClient->handleEvent(std::get<VstEvent>(event));
-        } else if (std::holds_alternative<PluginParamInfo>(event)) {
-            m_vstAudioClient->handleParamChange(std::get<PluginParamInfo>(event));
+        } else if (std::holds_alternative<ParamChangeEvent>(event)) {
+            m_vstAudioClient->handleParamChange(std::get<ParamChangeEvent>(event));
         } else {
             muse::audio::gain_t newGain = std::get<muse::audio::gain_t>(event);
             m_vstAudioClient->setVolumeGain(newGain);

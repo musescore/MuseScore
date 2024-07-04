@@ -129,16 +129,21 @@ inline PluginModulePtr createModule(const io::path_t& path)
 
     return result;
 }
+
+struct ParamChangeEvent {
+    PluginParamId paramId;
+    PluginParamValue value = 0.;
+};
 }
 
 template<>
-struct std::less<muse::vst::PluginParamInfo>
+struct std::less<muse::vst::ParamChangeEvent>
 {
-    bool operator()(const muse::vst::PluginParamInfo& first,
-                    const muse::vst::PluginParamInfo& second) const
+    bool operator()(const muse::vst::ParamChangeEvent& first,
+                    const muse::vst::ParamChangeEvent& second) const
     {
-        return first.id < second.id
-               && first.defaultNormalizedValue < second.defaultNormalizedValue;
+        return first.paramId < second.paramId
+               && first.value < second.value;
     }
 };
 

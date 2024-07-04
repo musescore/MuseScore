@@ -156,8 +156,11 @@ void VstSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe:
     const mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
     const mpe::ArticulationMeta& articulationMeta = articulationData.meta;
 
-    destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 1 /*on*/));
-    destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
+    const mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+    const mpe::timestamp_t timestampTo = articulationMeta.timestamp + articulationMeta.overallDuration;
+
+    destination[timestampFrom].emplace(ParamChangeEvent { controlIt->second, 1 /*on*/ });
+    destination[timestampTo].emplace(ParamChangeEvent { controlIt->second, 0 /*off*/ });
 }
 
 void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
@@ -185,9 +188,9 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
     mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
     mpe::timestamp_t timestampTo = timestampFrom + duration;
 
-    PluginParamInfo event;
-    event.id = pitchBendIt->second;
-    event.defaultNormalizedValue = 0.5f;
+    ParamChangeEvent event;
+    event.paramId = pitchBendIt->second;
+    event.value = 0.5f;
     destination[timestampTo].insert(event);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
@@ -220,7 +223,7 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
             mpe::timestamp_t time = static_cast<mpe::timestamp_t>(std::round(point.x));
             if (time < timestampTo) {
                 float bendValue = static_cast<float>(point.y);
-                event.defaultNormalizedValue = bendValue;
+                event.value = bendValue;
                 destination[time].insert(event);
             }
         }
@@ -253,15 +256,6 @@ VstEvent VstSequencer::buildEvent(const VstEvent::EventTypes type, const int32_t
     }
 
     return result;
-}
-
-PluginParamInfo VstSequencer::buildParamInfo(const PluginParamId id, const PluginParamValue value) const
-{
-    PluginParamInfo info;
-    info.id = id;
-    info.defaultNormalizedValue = value;
-
-    return info;
 }
 
 int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
