@@ -215,7 +215,7 @@ FocusScope {
                     navigationPanel.section: navSec
                     navigationPanel.order: brailleViewLoader.navigationOrder
 
-                    navigationPanel.onActiveChanged: {
+                    navigationPanel.onActiveChanged: function (active) {
                         if (active) {
                             notationView.navigationPanel.setActive(false);
                             fakeNavCtrl.setActive(false);

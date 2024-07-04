@@ -218,7 +218,7 @@ StyledFlickable {
             id: textInputModel
         }
 
-        Keys.onPressed: {
+        Keys.onPressed: function(event) {
             if (event.key === Qt.Key_Tab) {
                 //! NOTE: We need to handle Tab key here because https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html#tab-focus
                 //!       and we don't use qt navigation system
@@ -271,7 +271,7 @@ StyledFlickable {
             }
         }
 
-        Keys.onReleased: {
+        Keys.onReleased: function(event) {
             if (event.key !== Qt.Key_Shift
                 && event.key !== Qt.Key_Alt
                 && event.key !== Qt.Key_Control

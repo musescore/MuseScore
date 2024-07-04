@@ -783,7 +783,7 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
         setShowFingering(v.toBool());
         break;
     case Pid::FRET_FINGERING:
-        setFingering(std::move(v.value<std::vector<int> >()));
+        setFingering(v.value<std::vector<int> >());
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
