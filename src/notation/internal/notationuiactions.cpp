@@ -239,6 +239,20 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Move chord/rest right"),
              TranslatableString("action", "Move chord/rest right")
              ),
+    UiAction("toggle-snap-to-previous",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Snap to &previous"),
+             TranslatableString("action", "Snap to previous"),
+             Checkable::Yes
+             ),
+    UiAction("toggle-snap-to-next",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Snap to &next"),
+             TranslatableString("action", "Snap to next"),
+             Checkable::Yes
+             ),
     UiAction("pitch-up",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,

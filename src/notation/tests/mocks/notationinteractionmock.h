@@ -97,6 +97,8 @@ public:
     MOCK_METHOD(void, nudge, (MoveDirection, bool), (override));
     MOCK_METHOD(void, moveChordRestToStaff, (MoveDirection), (override));
     MOCK_METHOD(void, swapChordRest, (MoveDirection), (override));
+    MOCK_METHOD(void, toggleSnapToPrevious, (), (override));
+    MOCK_METHOD(void, toggleSnapToNext, (), (override));
 
     MOCK_METHOD(bool, isTextSelected, (), (const, override));
     MOCK_METHOD(bool, isTextEditingStarted, (), (const, override));

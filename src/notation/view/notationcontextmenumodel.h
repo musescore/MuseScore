@@ -55,6 +55,8 @@ private:
     muse::uicomponents::MenuItemList makeChangeInstrumentItems();
     muse::uicomponents::MenuItemList makeVerticalBoxItems();
     muse::uicomponents::MenuItemList makeHorizontalBoxItems();
+    muse::uicomponents::MenuItemList makeHairpinItems();
+    muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;
