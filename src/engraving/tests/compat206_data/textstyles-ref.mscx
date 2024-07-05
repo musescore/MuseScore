@@ -107,15 +107,15 @@
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
-      <systemFontFace>MuseJazz Text</systemFontFace>
-      <systemFontSize>11</systemFontSize>
-      <systemFramePadding>0</systemFramePadding>
-      <systemFrameWidth>0</systemFrameWidth>
-      <staffFontFace>MuseJazz Text</staffFontFace>
-      <staffFontSize>11</staffFontSize>
-      <staffAlign>left,top</staffAlign>
-      <staffFramePadding>0</staffFramePadding>
-      <staffFrameWidth>0</staffFrameWidth>
+      <systemTextFontFace>MuseJazz Text</systemTextFontFace>
+      <systemTextFontSize>11</systemTextFontSize>
+      <systemTextFramePadding>0</systemTextFramePadding>
+      <systemTextFrameWidth>0</systemTextFrameWidth>
+      <staffTextFontFace>MuseJazz Text</staffTextFontFace>
+      <staffTextFontSize>11</staffTextFontSize>
+      <staffTextAlign>left,top</staffTextAlign>
+      <staffTextFramePadding>0</staffTextFramePadding>
+      <staffTextFrameWidth>0</staffTextFrameWidth>
       <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
       <rehearsalMarkFontStyle>0</rehearsalMarkFontStyle>
       <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>

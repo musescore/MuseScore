@@ -52,8 +52,8 @@
       <measureNumberFontFace>Times New Roman</measureNumberFontFace>
       <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
       <translatorFontFace>Times New Roman</translatorFontFace>
-      <systemFontFace>Times New Roman</systemFontFace>
-      <staffFontFace>Times New Roman</staffFontFace>
+      <systemTextFontFace>Times New Roman</systemTextFontFace>
+      <staffTextFontFace>Times New Roman</staffTextFontFace>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
       <repeatRightFontFace>Times New Roman</repeatRightFontFace>

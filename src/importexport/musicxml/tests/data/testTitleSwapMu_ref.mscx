@@ -66,10 +66,10 @@
       <mmRestRangeFontSize>11.9365</mmRestRangeFontSize>
       <translatorFontFace>Plantin MT Std</translatorFontFace>
       <translatorFontSize>11.9365</translatorFontSize>
-      <systemFontFace>Plantin MT Std</systemFontFace>
-      <systemFontSize>11.9365</systemFontSize>
-      <staffFontFace>Plantin MT Std</staffFontFace>
-      <staffFontSize>11.9365</staffFontSize>
+      <systemTextFontFace>Plantin MT Std</systemTextFontFace>
+      <systemTextFontSize>11.9365</systemTextFontSize>
+      <staffTextFontFace>Plantin MT Std</staffTextFontFace>
+      <staffTextFontSize>11.9365</staffTextFontSize>
       <rehearsalMarkFontFace>Plantin MT Std</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
       <repeatLeftFontFace>Plantin MT Std</repeatLeftFontFace>

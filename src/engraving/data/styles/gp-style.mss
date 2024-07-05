@@ -6,7 +6,7 @@
     <fermataShowTabSimple>0</fermataShowTabSimple>
     <fermataShowTabCommon>1</fermataShowTabCommon>
     <dynamicsShowTabSimple>0</dynamicsShowTabSimple>
-    <dymanicsShowTabCommon>1</dymanicsShowTabCommon>
+    <dynamicsShowTabCommon>1</dynamicsShowTabCommon>
     <hairpinShowTabSimple>0</hairpinShowTabSimple>
     <hairpinShowTabCommon>1</hairpinShowTabCommon>
     <accentShowTabSimple>0</accentShowTabSimple>
