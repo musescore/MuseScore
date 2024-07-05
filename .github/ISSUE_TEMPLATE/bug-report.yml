@@ -24,22 +24,16 @@ body:
     validations:
       required: true
   - type: textarea
-    id: desc
+    id: steps
     attributes:
-      label: Bug description
-      description: A more detailed description of the bug
-      placeholder: Context for the bug that didn't fit in the title
-    validations:
-      required: false
-  - type: textarea
-    id: str
-    attributes:
-      label: Steps to reproduce
+      label: Description with steps to reproduce
       description: Please provide step-by-step instructions to reproduce this bug 
       placeholder: |
         1. go to ...
         2. then click on ...
         3. then ...
+        Actual behaviour:
+        Expected behaviour:
     validations:
       required: true
   - type: textarea
