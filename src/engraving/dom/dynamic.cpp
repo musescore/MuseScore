@@ -684,7 +684,7 @@ void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
                 score()->undoChangeParent(expressionAfter, newSeg, expressionAfter->staffIdx());
             }
             EngravingItem* possibleHairpinAfterExpr = expressionAfter->ldata()->itemSnappedAfter();
-            if (!hairpinAfter && possibleHairpinAfterExpr->isHairpinSegment()) {
+            if (!hairpinAfter && possibleHairpinAfterExpr && possibleHairpinAfterExpr->isHairpinSegment()) {
                 hairpinAfter = toHairpinSegment(possibleHairpinAfterExpr)->hairpin();
             }
         }
