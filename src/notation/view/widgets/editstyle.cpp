@@ -209,38 +209,6 @@ static void fillDynamicHairpinComboBox(QComboBox* comboBox)
     comboBox->addItem(muse::qtrc("notation/editstyle", "Below"), int(DirectionV::DOWN));
 }
 
-namespace {
-struct WidgetAndView {
-    QWidget* widget;
-    QQuickView* view;
-};
-}
-
-static WidgetAndView createQmlWidget(QWidget* parent, const QUrl& source, QQmlEngine* engine)
-{
-    QQuickView* view = new QQuickView(engine, nullptr);
-    view->setResizeMode(QQuickView::SizeRootObjectToView);
-    QObject::connect(view, &QQuickView::statusChanged, [source, view](QQuickView::Status status) {
-        if (status == QQuickView::Error) {
-            LOGE() << "Errors while loading QML file from " << source << ":";
-
-            for (const QQmlError& error : view->errors()) {
-                LOGE() << error.toString();
-            }
-        }
-    });
-    QObject::connect(view, &QQuickView::sceneGraphError, [ source](QQuickWindow::SceneGraphError error, const QString& message) {
-        LOGE() << "Scene graph error in QML file from " << source << ": [" << error << "] " << message;
-    });
-    view->setSource(source);
-
-    QWidget* container = QWidget::createWindowContainer(view, parent);
-    container->setMinimumSize(view->size());
-    container->setFocusPolicy(Qt::TabFocus);
-
-    return { container, view };
-}
-
 //---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
@@ -847,8 +815,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto noteFlagsTypeSelector = createQmlWidget(
         groupBox_noteFlags,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml")),
-        uiEngine()->qmlEngine());
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml")));
     noteFlagsTypeSelector.widget->setMinimumSize(224, 70);
     groupBox_noteFlags->layout()->addWidget(noteFlagsTypeSelector.widget);
 
@@ -858,8 +825,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto restOffsetSelector = createQmlWidget(
         groupBox_rests,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml")),
-        uiEngine()->qmlEngine());
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml")));
     restOffsetSelector.widget->setMinimumSize(224, 30);
     groupBox_rests->layout()->addWidget(restOffsetSelector.widget);
 
@@ -877,8 +843,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto beamsPage = createQmlWidget(
         groupBox_beams,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml")),
-        uiEngine()->qmlEngine());
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml")));
     beamsPage.widget->setMinimumSize(224, 418);
     groupBox_beams->layout()->addWidget(beamsPage.widget);
 
@@ -888,8 +853,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto fullBendStyleSelector = createQmlWidget(
         fullBendStyleBoxSelector,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml")),
-        uiEngine()->qmlEngine());
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml")));
     fullBendStyleSelector.widget->setMinimumSize(224, 60);
     fullBendStyleBoxSelector->layout()->addWidget(fullBendStyleSelector.widget);
 
@@ -899,8 +863,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto tiePlacementSelector = createQmlWidget(
         groupBox_ties,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")),
-        uiEngine()->qmlEngine());
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")));
     tiePlacementSelector.widget->setMinimumSize(224, 120);
     groupBox_ties->layout()->addWidget(tiePlacementSelector.widget);
 
@@ -910,8 +873,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto accidPlacementSelector = createQmlWidget(
         groupBoxAccidentalStacking,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml")),
-        uiEngine()->qmlEngine());
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml")));
     accidPlacementSelector.widget->setMinimumSize(224, 440);
     groupBoxAccidentalStacking->layout()->addWidget(accidPlacementSelector.widget);
 
@@ -921,8 +883,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto fretboardsPage = createQmlWidget(
         fretboardsWidget,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")),
-        uiEngine()->qmlEngine());
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")));
     fretboardsPage.widget->setMinimumSize(224, 1000);
     connect(fretboardsPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     fretboardsWidget->layout()->addWidget(fretboardsPage.widget);
@@ -1444,6 +1405,37 @@ void EditStyle::adjustPagesStackSize(int currentPageIndex)
         }
         pageStack->setMinimumSize(currentPage->sizeHint());
     });
+}
+
+EditStyle::WidgetAndView EditStyle::createQmlWidget(QWidget* parent, const QUrl& source)
+{
+    QQuickView* view = new QQuickView(uiEngine()->qmlEngine(), nullptr);
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
+
+    connect(view, &QQuickView::statusChanged, view, [source, view](QQuickView::Status status) {
+        if (status == QQuickView::Error) {
+            LOGE() << "Errors while loading QML file from " << source << ":";
+
+            for (const QQmlError& error : view->errors()) {
+                LOGE() << error.toString();
+            }
+        }
+    });
+
+    connect(view, &QQuickView::sceneGraphError, view, [source](QQuickWindow::SceneGraphError error, const QString& message) {
+        LOGE() << "Scene graph error in QML file from " << source << ": [" << error << "] " << message;
+    });
+
+    QString bgColorStr = uiConfiguration()->currentTheme().values.value(muse::ui::BACKGROUND_PRIMARY_COLOR).toString();
+    view->setColor(QColor(bgColorStr));
+
+    view->setSource(source);
+
+    QWidget* container = QWidget::createWindowContainer(view, parent);
+    container->setMinimumSize(view->size());
+    container->setFocusPolicy(Qt::TabFocus);
+
+    return { container, view };
 }
 
 QString EditStyle::currentPageCode() const
