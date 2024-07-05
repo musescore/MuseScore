@@ -27,7 +27,7 @@ body:
     id: steps
     attributes:
       label: Description with steps to reproduce
-      description: Please provide step-by-step instructions to reproduce this bug 
+      description: Please also describe the actual (current) and expected behaviour 
       placeholder: |
         1. go to ...
         2. then click on ...
@@ -46,8 +46,8 @@ body:
         * For playback issues: 
           * A short screen recording with audio of a minimal reproducible example 
           * A score containing the problem (please upload as a .zip file)
-          * Examples comparing both MS Basic and Muse Sounds where applicable
-        * For UI/interaction and all other issues: a short screen recording (ideally 20sec or less) and files where applicable (please upload as a .zip file).
+          * Examples comparing both MS Basic and Muse Sounds (where applicable)
+        * For UI/interaction and all other issues: a short screen recording (ideally 20sec or less) and files (where applicable; please upload as a .zip file).
       placeholder: |
         Click into this text box and paste your files, videos and screenshots here.
     validations:
@@ -100,7 +100,7 @@ body:
           required: true
         - label: "I have attached all requested files and information to this report"
           required: true
-        - label: "I have attempted to identify the root problem as concisely as possible, and have used minimum reproducible examples where possible"
+        - label: "I have attempted to identify the root problem as concisely as possible, and have used minimal reproducible examples where possible"
           required: true
   - type: markdown
     attributes:
