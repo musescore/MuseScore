@@ -75,6 +75,8 @@ public:
     std::vector<LineF> dragAnchorLines() const override;
     RectF drag(EditData& ed) override;
 private:
+    Segment* findNewAnchorSegment(const EditData& ed, const Segment* curSeg);
+    void undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2);
     PointF leftAnchorPosition(const double& systemPositionY) const;
     PointF rightAnchorPosition(const double& systemPositionY) const;
 
@@ -83,6 +85,7 @@ private:
     static PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg);
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
+    void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys);
     void rebaseAnchors(EditData&, Grip);
 };
 
@@ -130,6 +133,9 @@ public:
 
     virtual PointF linePos(Grip grip, System** system) const;
     virtual bool allowTimeAnchor() const override { return true; }
+
+    void undoMoveStart(Fraction tickDiff);
+    void undoMoveEnd(Fraction tickDiff);
 
 private:
 

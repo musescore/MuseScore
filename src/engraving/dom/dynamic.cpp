@@ -441,6 +441,37 @@ Expression* Dynamic::snappedExpression() const
     return item && item->isExpression() ? toExpression(item) : nullptr;
 }
 
+HairpinSegment* Dynamic::findSnapBeforeHairpinAcrossSystemBreak() const
+{
+    /* Normally it is the hairpin which looks for a snappable dynamic. Except if this dynamic
+     * is on the first beat of next system, in which case it needs to look back for a hairpin. */
+    Segment* seg = segment();
+    Measure* measure = seg ? seg->measure() : nullptr;
+    System* system = measure ? measure->system() : nullptr;
+    bool isOnFirstBeatOfSystem = system && system->firstMeasure() == measure && seg->rtick().isZero();
+    if (!isOnFirstBeatOfSystem) {
+        return nullptr;
+    }
+
+    Measure* prevMeasure = measure->prevMeasure();
+    System* prevSystem = prevMeasure ? prevMeasure->system() : nullptr;
+    if (!prevSystem) {
+        return nullptr;
+    }
+
+    for (SpannerSegment* spannerSeg : prevSystem->spannerSegments()) {
+        if (!spannerSeg->isHairpinSegment() || spannerSeg->track() != track() || spannerSeg->spanner()->tick2() != tick()) {
+            continue;
+        }
+        HairpinSegment* hairpinSeg = toHairpinSegment(spannerSeg);
+        if (hairpinSeg->findElementToSnapAfter() == this) {
+            return hairpinSeg;
+        }
+    }
+
+    return nullptr;
+}
+
 bool Dynamic::acceptDrop(EditData& ed) const
 {
     ElementType droppedType = ed.dropElement->type();
@@ -624,10 +655,15 @@ bool Dynamic::moveSegment(const EditData& ed)
         return false;
     }
 
-    score()->undoChangeParent(this, newSeg, staffIdx());
-    moveSnappedItems(newSeg, newSeg->tick() - curSeg->tick());
+    undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
 
     return true;
+}
+
+void Dynamic::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
+{
+    score()->undoChangeParent(this, newSeg, staffIdx());
+    moveSnappedItems(newSeg, tickDiff);
 }
 
 void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
@@ -635,12 +671,7 @@ void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
     if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
         if (itemSnappedBefore->isHairpinSegment()) {
             Hairpin* hairpinBefore = toHairpinSegment(itemSnappedBefore)->hairpin();
-            Fraction newHairpinDuration = hairpinBefore->ticks() + tickDiff;
-            if (newHairpinDuration > Fraction(0, 1)) {
-                hairpinBefore->undoChangeProperty(Pid::SPANNER_TICKS, newHairpinDuration);
-            } else {
-                hairpinBefore->undoChangeProperty(Pid::SPANNER_TICK, hairpinBefore->tick() + tickDiff);
-            }
+            hairpinBefore->undoMoveEnd(tickDiff);
         }
     }
 
@@ -658,11 +689,7 @@ void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
             }
         }
         if (hairpinAfter) {
-            Fraction newHairpinDuration = hairpinAfter->ticks() - tickDiff;
-            hairpinAfter->undoChangeProperty(Pid::SPANNER_TICK, hairpinAfter->tick() + tickDiff);
-            if (newHairpinDuration > Fraction(0, 1)) {
-                hairpinAfter->undoChangeProperty(Pid::SPANNER_TICKS, newHairpinDuration);
-            }
+            hairpinAfter->undoMoveStart(tickDiff);
         }
     }
 }
@@ -699,10 +726,10 @@ void Dynamic::editDrag(EditData& ed)
     KeyboardModifiers km = ed.modifiers;
     if (km != (ShiftModifier | ControlModifier)) {
         staff_idx_t si = staffIdx();
-        Segment* seg = segment();
-        static constexpr double spacingFactor = 1.0;
+        Segment* seg = nullptr; // don't prefer any segment while dragging, just snap to the closest
+        static constexpr double spacingFactor = 0.5;
         score()->dragPosition(canvasPos(), &si, &seg, spacingFactor, allowTimeAnchor());
-        if (seg != segment() || staffIdx() != si) {
+        if (seg && seg != segment() || staffIdx() != si) {
             const PointF oldOffset = offset();
             PointF pos1(canvasPos());
             score()->undoChangeParent(this, seg, staffIdx());

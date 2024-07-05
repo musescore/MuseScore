@@ -55,8 +55,8 @@ void AlignmentLayout::alignItems(const std::vector<EngravingItem*>& elements, co
             continue;
         }
         firstItem = true;
-        scanConnectedItems(item, computeOutermostY);
-        scanConnectedItems(item, moveElementsToOutermostY);
+        scanConnectedItems(item, system, computeOutermostY);
+        scanConnectedItems(item, system, moveElementsToOutermostY);
     }
 }
 
@@ -91,10 +91,10 @@ void AlignmentLayout::alignStaffCenteredItems(const std::vector<EngravingItem*>&
             continue;
         }
         vecOfCurrentY.clear();
-        scanConnectedItems(item, collectCurrentYandComputeEdges);
+        scanConnectedItems(item, system, collectCurrentYandComputeEdges);
         averageY = computeAverageY(vecOfCurrentY);
-        scanConnectedItems(item, limitAverageYInsideAvailableSpace);
-        scanConnectedItems(item, moveElementsToAverageY);
+        scanConnectedItems(item, system, limitAverageYInsideAvailableSpace);
+        scanConnectedItems(item, system, moveElementsToAverageY);
     }
 }
 
@@ -138,18 +138,18 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
     return curY;
 }
 
-void AlignmentLayout::scanConnectedItems(EngravingItem* item, std::function<void(EngravingItem*)> func)
+void AlignmentLayout::scanConnectedItems(EngravingItem* item, const System* system, std::function<void(EngravingItem*)> func)
 {
     func(item);
 
     EngravingItem* snappedBefore = item->ldata()->itemSnappedBefore();
-    while (snappedBefore) {
+    while (snappedBefore && snappedBefore->findAncestor(ElementType::SYSTEM) == system) {
         func(snappedBefore);
         snappedBefore = snappedBefore->ldata()->itemSnappedBefore();
     }
 
     EngravingItem* snappedAfter = item->ldata()->itemSnappedAfter();
-    while (snappedAfter) {
+    while (snappedAfter && snappedAfter->findAncestor(ElementType::SYSTEM) == system) {
         func(snappedAfter);
         snappedAfter = snappedAfter->ldata()->itemSnappedAfter();
     }
