@@ -1448,8 +1448,6 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         painter->restore();
     }
 
-    // NOTE:JT possible future todo - draw fingerings
-
     if (item->orientation() == Orientation::HORIZONTAL) {
         painter->restore();
     }
