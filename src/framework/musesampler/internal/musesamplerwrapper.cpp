@@ -65,7 +65,7 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 
         samples_t defaultSize = config()->samplesToPreallocate();
 
-        if (m_samplerLib->initSampler(m_sampler, m_sampleRate, defaultSize, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
+        if (!m_samplerLib->initSampler(m_sampler, m_sampleRate, defaultSize, AUDIO_CHANNELS_COUNT)) {
             LOGE() << "Unable to init MuseSampler";
             return;
         } else {

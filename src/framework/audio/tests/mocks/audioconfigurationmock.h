@@ -47,7 +47,9 @@ public:
 
     MOCK_METHOD(msecs_t, audioWorkerInterval, (const samples_t, const sample_rate_t), (const, override));
     MOCK_METHOD(samples_t, minSamplesToReserve, (RenderMode), (const, override));
+
     MOCK_METHOD(samples_t, samplesToPreallocate, (), (const, override));
+    MOCK_METHOD(async::Channel<samples_t>, samplesToPreallocateChanged, (), (const, override));
 
     MOCK_METHOD(unsigned int, sampleRate, (), (const, override));
     MOCK_METHOD(void, setSampleRate, (unsigned int), (override));

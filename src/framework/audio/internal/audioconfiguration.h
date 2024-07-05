@@ -56,7 +56,9 @@ public:
 
     msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t sampleRate) const override;
     samples_t minSamplesToReserve(RenderMode mode) const override;
+
     samples_t samplesToPreallocate() const override;
+    async::Channel<samples_t> samplesToPreallocateChanged() const override;
 
     unsigned int sampleRate() const override;
     void setSampleRate(unsigned int sampleRate) override;
@@ -77,11 +79,16 @@ public:
     bool shouldMeasureInputLag() const override;
 
 private:
+    void updateSamplesToPreallocate();
+
     async::Channel<io::paths_t> m_soundFontDirsChanged;
+    async::Channel<samples_t> m_samplesToPreallocateChanged;
 
     async::Notification m_audioOutputDeviceIdChanged;
     async::Notification m_driverBufferSizeChanged;
     async::Notification m_driverSampleRateChanged;
+
+    samples_t m_samplesToPreallocate = 0;
 };
 }
 

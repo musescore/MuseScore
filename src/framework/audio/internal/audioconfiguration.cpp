@@ -66,6 +66,7 @@ void AudioConfiguration::init()
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE_KEY, Val(defaultBufferSize));
     settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
         m_driverBufferSizeChanged.notify();
+        updateSamplesToPreallocate();
     });
 
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
@@ -89,6 +90,8 @@ void AudioConfiguration::init()
     }
 
     settings()->setDefaultValue(AUDIO_MEASURE_INPUT_LAG, Val(false));
+
+    updateSamplesToPreallocate();
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const
@@ -169,7 +172,12 @@ samples_t AudioConfiguration::minSamplesToReserve(RenderMode mode) const
 
 samples_t AudioConfiguration::samplesToPreallocate() const
 {
-    return minSamplesToReserve(RenderMode::RealTimeMode);
+    return m_samplesToPreallocate;
+}
+
+async::Channel<samples_t> AudioConfiguration::samplesToPreallocateChanged() const
+{
+    return m_samplesToPreallocateChanged;
 }
 
 unsigned int AudioConfiguration::sampleRate() const
@@ -233,4 +241,16 @@ io::path_t AudioConfiguration::knownAudioPluginsFilePath() const
 bool AudioConfiguration::shouldMeasureInputLag() const
 {
     return settings()->value(AUDIO_MEASURE_INPUT_LAG).toBool();
+}
+
+void AudioConfiguration::updateSamplesToPreallocate()
+{
+    samples_t minToReserve = minSamplesToReserve(RenderMode::RealTimeMode);
+    samples_t driverBufSize = driverBufferSize();
+    samples_t newValue = std::max(minToReserve, driverBufSize);
+
+    if (m_samplesToPreallocate != newValue) {
+        m_samplesToPreallocate = newValue;
+        m_samplesToPreallocateChanged.send(newValue);
+    }
 }
