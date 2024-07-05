@@ -1318,7 +1318,7 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
     PlacementV oldPlacement = placement();
     bool offsetIsStyled = isStyled(Pid::OFFSET);
 
-    PlacementV newPlacement;
+    PlacementV newPlacement = PlacementV::BELOW;
 
     DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
     if (internalDirectionProperty != DirectionV::AUTO) {
@@ -1332,6 +1332,26 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
         VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
         if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
             if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
+                newPlacement = PlacementV::ABOVE;
+            } else {
+                newPlacement = PlacementV::BELOW;
+            }
+        } else if (voice() == 0) {
+            // Put above the staff only in case of multiple voices at this tick (similar to stem directions)
+            const Measure* measure = score()->tick2measure(tick());
+            Fraction startTick = Fraction(-1, 1);
+            Fraction endTick = Fraction(-1, 1);
+            if (isSpanner()) {
+                startTick = tick();
+                endTick = toSpanner(this)->tick2();
+            } else if (const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT))) {
+                startTick = segment->tick();
+                endTick = startTick + segment->ticks();
+            } else if (measure) {
+                startTick = measure->tick();
+                endTick = measure->endTick();
+            }
+            if (measure && measure->hasVoices(staffIdx(), startTick, endTick)) {
                 newPlacement = PlacementV::ABOVE;
             } else {
                 newPlacement = PlacementV::BELOW;
