@@ -41,3 +41,6 @@ body:
           required: true
         - label: "I have verified that this feature request has not been logged before, by searching the [issue tracker](https://github.com/musescore/MuseScore/issues) for similar requests"
           required: true
+  - type: markdown
+    attributes:
+      value: If a feature request does not meet these requirements, it may be closed without investigation.
