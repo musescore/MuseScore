@@ -23,9 +23,9 @@
 #include "editstyle.h"
 
 #include <QButtonGroup>
-#include <QQuickItem>
-#include <QQuickWidget>
 #include <QQmlContext>
+#include <QQuickItem>
+#include <QQuickView>
 #include <QSignalMapper>
 
 #include "translation.h"
@@ -44,7 +44,7 @@
 #include "engraving/style/textstyle.h"
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
-#include "engraving/dom/instrumentname.h"
+#include "engraving/types/types.h"
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetutils.h"
@@ -813,27 +813,21 @@ EditStyle::EditStyle(QWidget* parent)
     // Notes (QML)
     // ====================================================
 
-    QQuickWidget* noteFlagsTypeSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
-                                                           /*parent*/ groupBox_noteFlags);
-    noteFlagsTypeSelector->setObjectName("noteFlagsTypeSelector_QQuickWidget");
-    noteFlagsTypeSelector->setSource(
+    auto noteFlagsTypeSelector = createQmlWidget(
+        groupBox_noteFlags,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml")));
-    noteFlagsTypeSelector->setMinimumSize(224, 70);
-    noteFlagsTypeSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    groupBox_noteFlags->layout()->addWidget(noteFlagsTypeSelector);
+    noteFlagsTypeSelector.widget->setMinimumSize(224, 70);
+    groupBox_noteFlags->layout()->addWidget(noteFlagsTypeSelector.widget);
 
     // ====================================================
     // Rests (QML)
     // ====================================================
 
-    QQuickWidget* restOffsetSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
-                                                        /*parent*/ groupBox_rests);
-    restOffsetSelector->setObjectName("restOffsetSelector_QQuickWidget");
-    restOffsetSelector->setSource(
+    auto restOffsetSelector = createQmlWidget(
+        groupBox_rests,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml")));
-    restOffsetSelector->setMinimumSize(224, 30);
-    restOffsetSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    groupBox_rests->layout()->addWidget(restOffsetSelector);
+    restOffsetSelector.widget->setMinimumSize(224, 30);
+    groupBox_rests->layout()->addWidget(restOffsetSelector.widget);
 
     // ====================================================
     // Measure repeats
@@ -847,66 +841,52 @@ EditStyle::EditStyle(QWidget* parent)
     // BEAMS (QML)
     // ====================================================
 
-    QQuickWidget* beamsPage = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
-                                               /*parent*/ groupBox_beams);
-    beamsPage->setObjectName("beamsPage_QQuickWidget");
-    beamsPage->setSource(QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml")));
-    beamsPage->setMinimumSize(224, 418);
-    beamsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    groupBox_beams->layout()->addWidget(beamsPage);
+    auto beamsPage = createQmlWidget(
+        groupBox_beams,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml")));
+    beamsPage.widget->setMinimumSize(224, 418);
+    groupBox_beams->layout()->addWidget(beamsPage.widget);
 
     // ====================================================
     // BENDS (QML)
     // ====================================================
 
-    QQuickWidget* fullBendStyleSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
-                                                           /*parent*/ fullBendStyleBoxSelector);
-    fullBendStyleSelector->setObjectName("bendStyleSelector_QQuickWidget");
-    fullBendStyleSelector->setSource(QUrl(QString::fromUtf8(
-                                              "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml")));
-    fullBendStyleSelector->setMinimumSize(224, 60);
-    fullBendStyleSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    fullBendStyleBoxSelector->layout()->addWidget(fullBendStyleSelector);
+    auto fullBendStyleSelector = createQmlWidget(
+        fullBendStyleBoxSelector,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml")));
+    fullBendStyleSelector.widget->setMinimumSize(224, 60);
+    fullBendStyleBoxSelector->layout()->addWidget(fullBendStyleSelector.widget);
 
     // ====================================================
     // TIE PLACEMENT (QML)
     // ====================================================
 
-    QQuickWidget* tiePlacementSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
-                                                          /*parent*/ groupBox_ties);
-    tiePlacementSelector->setObjectName("tiePlacementSelector_QQuickWidget");
-    tiePlacementSelector->setSource(QUrl(QString::fromUtf8(
-                                             "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")));
-    tiePlacementSelector->setMinimumSize(224, 120);
-    tiePlacementSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    groupBox_ties->layout()->addWidget(tiePlacementSelector);
+    auto tiePlacementSelector = createQmlWidget(
+        groupBox_ties,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")));
+    tiePlacementSelector.widget->setMinimumSize(224, 120);
+    groupBox_ties->layout()->addWidget(tiePlacementSelector.widget);
 
     // ====================================================
     // ACCIDENTAL GROUP PLACEMENT (QML)
     // ====================================================
 
-    QQuickWidget* accidPlacementSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
-                                                            /*parent*/ groupBoxAccidentalStacking);
-    accidPlacementSelector->setObjectName("accidPlacementSelector_QQuickWidget");
-    accidPlacementSelector->setSource(QUrl(QString::fromUtf8(
-                                               "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml")));
-    accidPlacementSelector->setMinimumSize(224, 440);
-    accidPlacementSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    groupBoxAccidentalStacking->layout()->addWidget(accidPlacementSelector);
+    auto accidPlacementSelector = createQmlWidget(
+        groupBoxAccidentalStacking,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml")));
+    accidPlacementSelector.widget->setMinimumSize(224, 440);
+    groupBoxAccidentalStacking->layout()->addWidget(accidPlacementSelector.widget);
 
     // ====================================================
     // FRETBOARDS STYLE PAGE (QML)
     // ====================================================
 
-    QQuickWidget* fretboardsPage = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
-                                                    /*parent*/ fretboardsWidget);
-    fretboardsPage->setObjectName("fretboardsPage_QQuickWidget");
-    fretboardsPage->setSource(QUrl(QString::fromUtf8(
-                                       "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")));
-    fretboardsPage->setMinimumSize(224, 1000);
-    fretboardsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    connect(fretboardsPage->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
-    fretboardsWidget->layout()->addWidget(fretboardsPage);
+    auto fretboardsPage = createQmlWidget(
+        fretboardsWidget,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")));
+    fretboardsPage.widget->setMinimumSize(224, 1000);
+    connect(fretboardsPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    fretboardsWidget->layout()->addWidget(fretboardsPage.widget);
 
     // ====================================================
     // Figured Bass
@@ -1425,6 +1405,37 @@ void EditStyle::adjustPagesStackSize(int currentPageIndex)
         }
         pageStack->setMinimumSize(currentPage->sizeHint());
     });
+}
+
+EditStyle::WidgetAndView EditStyle::createQmlWidget(QWidget* parent, const QUrl& source)
+{
+    QQuickView* view = new QQuickView(uiEngine()->qmlEngine(), nullptr);
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
+
+    connect(view, &QQuickView::statusChanged, view, [source, view](QQuickView::Status status) {
+        if (status == QQuickView::Error) {
+            LOGE() << "Errors while loading QML file from " << source << ":";
+
+            for (const QQmlError& error : view->errors()) {
+                LOGE() << error.toString();
+            }
+        }
+    });
+
+    connect(view, &QQuickView::sceneGraphError, view, [source](QQuickWindow::SceneGraphError error, const QString& message) {
+        LOGE() << "Scene graph error in QML file from " << source << ": [" << error << "] " << message;
+    });
+
+    QString bgColorStr = uiConfiguration()->currentTheme().values.value(muse::ui::BACKGROUND_PRIMARY_COLOR).toString();
+    view->setColor(QColor(bgColorStr));
+
+    view->setSource(source);
+
+    QWidget* container = QWidget::createWindowContainer(view, parent);
+    container->setMinimumSize(view->size());
+    container->setFocusPolicy(Qt::TabFocus);
+
+    return { container, view };
 }
 
 QString EditStyle::currentPageCode() const
