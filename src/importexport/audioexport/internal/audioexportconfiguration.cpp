@@ -77,5 +77,5 @@ const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
 
 samples_t AudioExportConfiguration::exportBufferSize() const
 {
-    return 1024;
+    return 4096;
 }
