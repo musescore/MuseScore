@@ -71,7 +71,7 @@ async::Notification AudioConfigurationStub::driverBufferSizeChanged() const
     return async::Notification();
 }
 
-msecs_t AudioConfigurationStub::audioWorkerInterval() const
+msecs_t AudioConfigurationStub::audioWorkerInterval(const samples_t, const sample_rate_t) const
 {
     return 0;
 }

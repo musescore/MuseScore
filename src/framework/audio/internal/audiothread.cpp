@@ -24,6 +24,8 @@
 #include "global/runtime.h"
 #include "global/async/processevents.h"
 
+#include "internal/audiosanitizer.h"
+
 #ifdef Q_OS_WASM
 #include <emscripten/html5.h>
 #endif
@@ -58,6 +60,13 @@ void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const u
         return EM_TRUE;
     }, 2, this);
 #endif
+}
+
+void AudioThread::setInterval(const uint64_t intervalMsecs)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_intervalMsecs = intervalMsecs;
 }
 
 void AudioThread::stop(const Runnable& onFinished)

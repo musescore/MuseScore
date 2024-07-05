@@ -40,6 +40,7 @@ public:
     using Runnable = std::function<void ()>;
 
     void run(const Runnable& onStart, const Runnable& loopBody, const uint64_t intervalMsecs = 1);
+    void setInterval(const uint64_t intervalMsecs);
     void stop(const Runnable& onFinished = nullptr);
     bool isRunning() const;
 

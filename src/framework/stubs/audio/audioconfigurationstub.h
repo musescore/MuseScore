@@ -43,7 +43,7 @@ public:
     void setDriverBufferSize(unsigned int size) override;
     async::Notification driverBufferSizeChanged() const override;
 
-    msecs_t audioWorkerInterval() const override;
+    msecs_t audioWorkerInterval(const samples_t, const sample_rate_t) const override;
     samples_t minSamplesToReserve(RenderMode mode) const override;
     samples_t samplesToPreallocate() const override;
 

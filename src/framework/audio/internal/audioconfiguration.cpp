@@ -148,20 +148,19 @@ async::Notification AudioConfiguration::driverBufferSizeChanged() const
     return m_driverBufferSizeChanged;
 }
 
-msecs_t AudioConfiguration::audioWorkerInterval() const
+msecs_t AudioConfiguration::audioWorkerInterval(const samples_t samples, const sample_rate_t sampleRate) const
 {
-    return 2;
+    msecs_t interval = float(samples) / 2.f / float(sampleRate) * 1000.f;
+    interval = std::max(interval, msecs_t(1));
+
+    return interval;
 }
 
 samples_t AudioConfiguration::minSamplesToReserve(RenderMode mode) const
 {
-    // Idle: render as little as possible for lower latency (assuming the audio thread sleeps for ~2 ms)
+    // Idle: render as little as possible for lower latency
     if (mode == RenderMode::IdleMode) {
-#ifdef Q_OS_MAC
         return 128;
-#else
-        return 256;
-#endif
     }
 
     // Active: render more for better quality (rendering is usually much heavier in this scenario)

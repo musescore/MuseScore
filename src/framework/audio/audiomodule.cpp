@@ -323,6 +323,11 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_audioEngine->setSampleRate(activeSpec.sampleRate);
         m_audioEngine->setReadBufferSize(activeSpec.samples);
 
+        m_audioEngine->setOnReadBufferChanged([this](const samples_t samples, const sample_rate_t rate) {
+            msecs_t interval = m_configuration->audioWorkerInterval(samples, rate);
+            m_audioWorker->setInterval(interval);
+        });
+
         auto fluidResolver = std::make_shared<FluidResolver>(iocContext());
         m_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
         m_synthResolver->init(m_configuration->defaultAudioInputParams());
@@ -336,5 +341,6 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_audioBuffer->forward();
     };
 
-    m_audioWorker->run(workerSetup, workerLoopBody, m_configuration->audioWorkerInterval());
+    msecs_t interval = m_configuration->audioWorkerInterval(activeSpec.samples, activeSpec.sampleRate);
+    m_audioWorker->run(workerSetup, workerLoopBody, interval);
 }

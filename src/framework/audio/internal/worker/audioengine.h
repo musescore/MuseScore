@@ -48,6 +48,9 @@ public:
     Ret init(std::shared_ptr<AudioBuffer> bufferPtr, const RenderConstraints& consts);
     void deinit();
 
+    using OnReadBufferChanged = std::function<void (const samples_t, const sample_rate_t)>;
+    void setOnReadBufferChanged(const OnReadBufferChanged func);
+
     sample_rate_t sampleRate() const override;
 
     void setSampleRate(unsigned int sampleRate);
@@ -75,6 +78,8 @@ private:
 
     RenderMode m_currentMode = RenderMode::Undefined;
     async::Notification m_modeChanges;
+
+    OnReadBufferChanged m_onReadBufferChanged;
 };
 }
 

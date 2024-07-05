@@ -74,6 +74,13 @@ void AudioEngine::deinit()
     }
 }
 
+void AudioEngine::setOnReadBufferChanged(const OnReadBufferChanged func)
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    m_onReadBufferChanged = func;
+}
+
 sample_rate_t AudioEngine::sampleRate() const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -95,6 +102,10 @@ void AudioEngine::setSampleRate(unsigned int sampleRate)
 
     m_sampleRate = sampleRate;
     m_mixer->mixedSource()->setSampleRate(sampleRate);
+
+    if (m_onReadBufferChanged) {
+        m_onReadBufferChanged(m_readBufferSize, m_sampleRate);
+    }
 }
 
 void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
@@ -107,6 +118,10 @@ void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
 
     m_readBufferSize = readBufferSize;
     updateBufferConstraints();
+
+    if (m_onReadBufferChanged) {
+        m_onReadBufferChanged(m_readBufferSize, m_sampleRate);
+    }
 }
 
 void AudioEngine::setAudioChannelsCount(const audioch_t count)
