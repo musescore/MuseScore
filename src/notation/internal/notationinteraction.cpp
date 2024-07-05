@@ -4968,6 +4968,7 @@ void NotationInteraction::navigateToNextSyllable()
     }
     mu::engraving::Lyrics* lyrics = toLyrics(m_editData.element);
     track_idx_t track = lyrics->track();
+    track_idx_t toLyricTrack = track;
     mu::engraving::Segment* segment = lyrics->segment();
     int verse = lyrics->no();
     mu::engraving::PlacementV placement = lyrics->placement();
@@ -4984,7 +4985,8 @@ void NotationInteraction::navigateToNextSyllable()
             const track_idx_t etrack = strack + VOICES;
             for (track_idx_t t = strack; t < etrack; ++t) {
                 el = nextSegment->element(t);
-                if (el && el->isChord()) {
+                if (el && el->isChord() && toChord(el)->lyrics(verse, placement)) {
+                    toLyricTrack = t;
                     break;
                 }
             }
@@ -5017,7 +5019,7 @@ void NotationInteraction::navigateToNextSyllable()
     }
 
     score()->startCmd();
-    ChordRest* cr = toChordRest(nextSegment->element(track));
+    ChordRest* cr = toChordRest(nextSegment->element(toLyricTrack));
     mu::engraving::Lyrics* toLyrics = cr->lyrics(verse, placement);
 
     // If no lyrics in current track, check others

@@ -215,6 +215,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
                                              item->lyrics()->no(),
                                              item->lyrics()->placement()
                                              ));
+        item->setTrack2(item->nextLyrics() ? item->nextLyrics()->track() : item->track());
 
         item->setTick2(item->nextLyrics() ? item->nextLyrics()->segment()->tick() : item->tick());
     }
