@@ -43,17 +43,20 @@ body:
     validations:
       required: true
   - type: textarea
-    id: screenshot
+    id: evidence
     attributes:
-      label: Screenshots/Screen recordings
-      description: | 
-        Especially for longer or more complicated bugs, screen recordings are highly recommended. 
-
-        If you don't have a screen recording tool installed (OBS, Bandicam, QuickTime, etc.), you can also take a video with your phone.
+      label: Supporting evidence
+      description: |
+        * For crashes: crash logs, system information (OS, CPU, GPU, memory, drive type, etc.)
+        * For playback issues: Is it using MS Basic, MuseSounds or VSTs?
+          * For VSTs in particular: Where did you get the VSTs from? (link)
+        * For engraving: sample score (MuseScore project), screenshots
+        * For UI issues: Screenshots, screen recordings, system information, GPU drivers
+        * For regressions: The last MuseScore version (or even better: commit) that worked well. 
       placeholder: |
-        Click into this text box and paste your video
+        Click into this text box and paste your files or screenshots here.
     validations:
-      required: false
+      required: true
   - type: input
     id: version
     attributes:
@@ -65,11 +68,11 @@ body:
     id: regression
     attributes:
       label: Regression
-      description: Did this work before?
+      description: Did this work before? Older versions of MuseScore Studio can be found [here](https://github.com/musescore/MuseScore/releases).
       options:
         - Choose option...
         - No.
-        - I don't know
+        - I was unable to check
         - Yes, this used to work in MuseScore 3.x and now is broken 
         - Yes, this used to work in a previous version of MuseScore 4.x
     validations: 
@@ -87,17 +90,6 @@ body:
     attributes:
       label: Additional context
       description: Further information which may be relevant to this bug
-      placeholder: Crash log, Screenshots, MuseScore project, build number, etc.
-  - type: markdown
-    attributes:
-      value: |
-        Useful information to include:
-        * For crashes: crash logs, system information (OS, CPU, GPU, memory, drive type, etc.)
-        * For playback issues: Is it using MS Basic, MuseSounds or VSTs?
-          * For VSTs in particular: Where did you get the VSTs from? (link)
-        * For engraving: sample score (MuseScore project), screenshots
-        * For UI issues: Screenshots, screen recordings, system information, GPU drivers
-        * For regressions: The last MuseScore version (or even better: commit) that worked well. 
 
   - type: checkboxes
     id: checklist
