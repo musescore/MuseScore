@@ -5253,15 +5253,16 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                 }
                 for (EngravingObject* linked : note->linkList()) {
                     Note* linkedNote = toNote(linked);
+                    Note* linkedNewNote = linked == note ? newNote : toNote(newNote->findLinkedInStaff(linkedNote->staff()));
                     // reconnect the tie to this note, if any
                     Tie* tie = linkedNote->tieBack();
                     if (tie) {
-                        undoChangeSpannerElements(tie, tie->startNote(), newNote->findLinkedInStaff(linkedNote->staff()));
+                        undoChangeSpannerElements(tie, tie->startNote(), linkedNewNote);
                     }
                     // reconnect the tie from this note, if any
                     tie = linkedNote->tieFor();
                     if (tie) {
-                        undoChangeSpannerElements(tie, newNote->findLinkedInStaff(linkedNote->staff()), tie->endNote());
+                        undoChangeSpannerElements(tie, linkedNewNote, tie->endNote());
                     }
                 }
 
