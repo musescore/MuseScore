@@ -1288,13 +1288,13 @@ bool EngravingItem::appliesToAllVoicesInInstrument() const
            && getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>() == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
 }
 
-void EngravingItem::setInitialTrackAndVoiceAssignment(track_idx_t track)
+void EngravingItem::setInitialTrackAndVoiceApplication(track_idx_t track, bool ctrlModifier)
 {
     IF_ASSERT_FAILED(track != muse::nidx) {
         return;
     }
 
-    if (configuration()->dynamicsApplyToAllVoices()) {
+    if (configuration()->dynamicsApplyToAllVoices() && !ctrlModifier) {
         setTrack(trackZeroVoice(track));
         setProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
     } else {

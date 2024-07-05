@@ -682,9 +682,9 @@ public:
 
     virtual bool hasVoiceAssignmentProperties() const { return false; }
     bool appliesToAllVoicesInInstrument() const;
-    void setInitialTrackAndVoiceAssignment(track_idx_t track);
-    void checkVoiceAssignmentCompatibleWithTrack();
-    void setPlacementBasedOnVoiceAssignment(DirectionV styledDirection);
+    void setInitialTrackAndVoiceApplication(track_idx_t track, bool ctrlModifier);
+    void checkVoiceApplicationCompatibleWithTrack();
+    void setPlacementBasedOnVoiceApplication(DirectionV styledDirection);
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------
