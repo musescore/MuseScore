@@ -3132,7 +3132,17 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "head") {
         TRead::readProperty(n, e, ctx, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
-        n->setUserVelocity(e.readInt());
+        if (n->score()->mscVersion() >= 400) {
+            n->setUserVelocity(e.readInt());
+        } else {
+            // TODO: convert pre-MU4 velocity values to MU4
+            // but doing so is non-trivial,
+            // since MU3 "offset" is based on a percentage of the current dynamic (which is not known at this time)
+            // and MU4 "user" is not raw MIDI velocity like MU3 is
+            // so until a new velocity system is designed for MU4 (or another solution is found),
+            // the best we can do is ignore pre-MU4 velocity values
+            e.skipCurrentElement();
+        }
     } else if (tag == "play") {
         n->setPlay(e.readInt());
     } else if (tag == "tuning") {
