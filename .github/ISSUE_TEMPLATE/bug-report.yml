@@ -69,9 +69,9 @@ body:
       options:
         - Choose option...
         - No.
-        - I was unable to check
         - Yes, this used to work in MuseScore 3.x and now is broken 
         - Yes, this used to work in a previous version of MuseScore 4.x
+        - I was unable to check
     validations: 
       required: true
   - type: input
