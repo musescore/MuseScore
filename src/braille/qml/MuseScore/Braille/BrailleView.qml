@@ -173,14 +173,14 @@ StyledFlickable {
 
         NavigationControl {
             id: fakeNavCtrl
-            name: "Braille" + brailleModel.brailleModeChanged()
+            name: "Braille"
             enabled: brailleTextArea.enabled && brailleTextArea.visible
 
             panel: root.navigationPanel
             order: 1
 
             accessible.role: MUAccessible.EditableText
-            accessible.name: "Braille"
+            accessible.name: brailleModel.brailleModeChanged()
             accessible.visualItem: brailleTextArea
             accessible.text: brailleTextArea.text
             accessible.selectedText: brailleTextArea.selectedText
