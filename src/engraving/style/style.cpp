@@ -421,6 +421,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::measureNumberPosAbove, PointF(e.readPoint()));
         } else if (tag == "measureNumberPosAbove" && m_version < 440) { // pre-4.4 typo
             set(Sid::mmRestRangePosAbove, PointF(e.readPoint()));
+        } else if (tag == "ottavaTextAlign") {
+            // Pre-x.x (?) scores used identical style values for Above and Below
+            // apparently the old default was "VCENTER",
+            // so better ignore and take the new defaults
+            e.skipCurrentElement(); // obsolete
         } else if (tag == "tremoloStrokeStyle") { // pre-4.4 typo
             set(Sid::tremoloStyle, e.readInt());
         } else if (tag == "systemFontFace") { // pre-4.4 typo
@@ -496,7 +501,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::staffTextFrameBgColor, e.readColor());
         } else if (tag == "dymanicsShowTabCommon") { // pre-4.4 typo in gp-style.mss
             set(Sid::dynamicsShowTabCommon, bool(e.readInt()));
-        } else if (tag == "defaultFontSpatiumDependent") {
+        } else if (tag == "pedalBeginTextOffset"
+                   || tag == "letRingBeginTextOffset"
+                   || tag == "palmMuteBeginTextOffset"
+                   || tag == "defaultFontSpatiumDependent"
+                   || tag == "usePre_3_6_defaults") {
             e.skipCurrentElement(); // obsolete
         } else if (!readProperties(e)) {
             e.unknown();
