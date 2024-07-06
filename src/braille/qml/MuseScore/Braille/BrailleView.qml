@@ -173,7 +173,7 @@ StyledFlickable {
 
         NavigationControl {
             id: fakeNavCtrl
-            name: "Braille"
+            name: "Braille" + brailleModel.brailleModeChanged()
             enabled: brailleTextArea.enabled && brailleTextArea.visible
 
             panel: root.navigationPanel
