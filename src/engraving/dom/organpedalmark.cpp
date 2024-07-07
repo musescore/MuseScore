@@ -56,7 +56,7 @@ OrganPedalMark::OrganPedalMark(Note* parent, TextStyleType tid, ElementFlags ef)
 {
     m_symId = SymId::noSym;
 
-    setPlacement(PlacementV::ABOVE);
+    setPlacement(PlacementV::BELOW);
     initElementStyle(&organPedalMarkStyle);
 }
 
