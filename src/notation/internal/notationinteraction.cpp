@@ -2379,8 +2379,8 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
         if (m_dropData.ed.modifiers & Qt::ControlModifier) {
             break;
         }
-        // fall through
     }
+    // fall through
     case ElementType::JUMP:
     case ElementType::LAYOUT_BREAK:
     case ElementType::MARKER:
@@ -2389,6 +2389,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
     case ElementType::STAFF_LIST:
         // Target all staves
         staffIdx = 0;
+    // fall through
     default: break;
     }
 
