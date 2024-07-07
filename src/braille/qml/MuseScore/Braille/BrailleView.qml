@@ -56,19 +56,6 @@ StyledFlickable {
             root.visible = brailleModel.enabled
         }
 
-        onBrailleModeChanged: {
-            switch(brailleModel.mode) {
-                case 1: {
-                    fakeNavCtrl.accessible.setName("Braille: Normal mode");
-                    break;
-                }
-                case 2: {
-                    fakeNavCtrl.accessible.setName("Braille: Note input mode");
-                    break;
-                }
-            }
-        }
-
         Component.onCompleted: {
             root.visible = brailleModel.enabled
         }
@@ -180,7 +167,13 @@ StyledFlickable {
             order: 1
 
             accessible.role: MUAccessible.EditableText
-            accessible.name: brailleModel.brailleModeChanged()
+            accessible.name: {
+                switch (brailleModel.mode) {
+                    case 1: return qsTrc("braille", "Braille: Normal mode")
+                    case 2: return qsTrc("braille", "Braille: Note input mode")
+                }
+            }
+
             accessible.visualItem: brailleTextArea
             accessible.text: brailleTextArea.text
             accessible.selectedText: brailleTextArea.selectedText
