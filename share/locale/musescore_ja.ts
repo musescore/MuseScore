@@ -25780,7 +25780,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
         <source>Modify sound</source>
-        <translation>音を修正</translation>
+        <translation>音を変更</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>

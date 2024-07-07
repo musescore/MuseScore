@@ -6210,7 +6210,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="122"/>
         <source>Until next chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Sas-simbola tal-kordi li jmiss</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="127"/>
@@ -8437,7 +8437,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Tikka tal-awmentazzjoni</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
@@ -11983,7 +11983,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
         <source>Measure repeat</source>
-        <translation type="unfinished"/>
+        <translation>Ripetizzjoni ta&apos; miżura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
@@ -12048,7 +12048,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
         <source>Marker</source>
-        <translation type="unfinished"/>
+        <translation>Marker</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
@@ -14290,7 +14290,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="685"/>
         <source>Tablature Serif</source>
-        <translation>Tablature Serif</translation>
+        <translation>Tablatura Serif</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="686"/>
@@ -16596,7 +16596,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4761"/>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Tikka tal-awmentazzjoni</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4763"/>
@@ -20210,12 +20210,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/markers/markersettingsmodel.cpp" line="32"/>
         <source>Marker</source>
-        <translation type="unfinished"/>
+        <translation>Marker</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp" line="32"/>
         <source>Measure repeat</source>
-        <translation type="unfinished"/>
+        <translation>Ripetizzjoni ta&apos; miżura</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/mmrests/mmrestsettingsmodel.cpp" line="32"/>
@@ -20718,7 +20718,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="67"/>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Tip tal-istaff</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
@@ -22481,7 +22481,7 @@ X&apos;aktarx, Mastering MuseScore għandu komunità sapportiva ta&apos; mużċi
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="878"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1224"/>
         <source>Until next chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Sas-simbola tal-kordi li jmiss</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="880"/>
