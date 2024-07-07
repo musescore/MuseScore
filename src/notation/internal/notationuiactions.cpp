@@ -1323,6 +1323,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "L&yrics"),
              TranslatableString("action", "Add text: lyrics")
              ),
+    UiAction("organ-pedal-mark",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Or&gan pedal mark"),
+             TranslatableString("action", "Add text: organ pedal mark")
+             ),
     UiAction("figured-bass",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,

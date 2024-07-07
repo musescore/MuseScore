@@ -333,6 +333,7 @@ void NotationActionController::init()
     registerAction("nashville-number-text", [this]() { addText(TextStyleType::HARMONY_NASHVILLE); });
     registerAction("lyrics", [this]() { addText(TextStyleType::LYRICS_ODD); });
     registerAction("tempo", [this]() { addText(TextStyleType::TEMPO); });
+    registerAction("organ-pedal-mark", [this]() { addText(TextStyleType::ORGAN_PEDAL_MARK); });
 
     registerAction("figured-bass", [this]() { addFiguredBass(); });
 
@@ -1702,7 +1703,8 @@ bool NotationActionController::resolveTextNavigationAvailable(TextNavigationType
         mu::engraving::ElementType::HARMONY,
         mu::engraving::ElementType::FIGURED_BASS,
         mu::engraving::ElementType::STICKING,
-        mu::engraving::ElementType::FINGERING
+        mu::engraving::ElementType::FINGERING,
+        mu::engraving::ElementType::ORGAN_PEDAL_MARK
     };
 
     static const QList<mu::engraving::ElementType> allowedElementsForBeatsNavigation {
