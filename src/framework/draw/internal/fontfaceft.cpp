@@ -255,10 +255,7 @@ char32_t FontFaceFT::findCharCode(glyph_idx_t idx) const
     char32_t c = findC(idx);
 
     // check
-    {
-        glyph_idx_t i = glyphIndex(c);
-        assert(i == idx);
-    }
+    assert(glyphIndex(c) == idx);
 
     return c;
 }

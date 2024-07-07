@@ -2582,7 +2582,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         Font fingeringFont = item->fingeringFont();
         FontMetrics fontMetrics(fingeringFont);
         double fontHeight = fontMetrics.capHeight();
-        for (int i = 0; i < item->fingering().size(); ++i) {
+        for (size_t i = 0; i < item->fingering().size(); ++i) {
             int finger = item->fingering()[i];
             if (finger == 0) {
                 continue;
