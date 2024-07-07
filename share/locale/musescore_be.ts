@@ -4,7 +4,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="51"/>
         <source>Align left edge of text to reference point</source>
-        <translation>Выраўняць левы край тэксту па зыходнай кропцы</translation>
+        <translation>Выраўняць левы край тэксту па зыходнаму пункту</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="76"/>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="164"/>
         <source>Center text vertical to reference point</source>
-        <translation>Цэнтраваць тэкст па вертыкалі адносна зыходнага пункта</translation>
+        <translation>Цэнтраваць тэкст па вэртыкалі адносна зыходнага пункта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="189"/>
@@ -138,7 +138,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="238"/>
         <source>Default voice:</source>
-        <translation>Голас па-змаўчанні</translation>
+        <translation>Прадвызначаны голас:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="258"/>
@@ -1469,7 +1469,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="494"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="768"/>
         <source>Vertical offset:</source>
-        <translation>Вертыкальны водступ:</translation>
+        <translation>Вэртыкальны водступ:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="532"/>
@@ -2236,12 +2236,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="715"/>
         <source>Min. vertical distance:</source>
-        <translation type="unfinished"/>
+        <translation>Мін. вэртыкальны водступ</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="769"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Скінуць значэнне &quot;Мін. вэртыкальны водступ&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
@@ -3024,7 +3024,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5603"/>
         <source>Rests (multiple voices)</source>
-        <translation type="unfinished"/>
+        <translation>Паўзы (некалькі галасоў)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5609"/>
@@ -6645,7 +6645,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="509"/>
         <source>Continuous view (vertical)</source>
-        <translation>Працяглы выгляд (вертыкальна)</translation>
+        <translation>Працяглы выгляд (вэртыкальна)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="528"/>
@@ -7380,7 +7380,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="510"/>
         <source>Display continuous view (vertical)</source>
-        <translation>Паказваць у працяглым выглядзе (вертыкальна)</translation>
+        <translation>Паказваць у працяглым выглядзе (вэртыкальна)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="516"/>
@@ -8522,7 +8522,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
         <source>Use voice 1</source>
-        <translation type="unfinished"/>
+        <translation>Выкарыстоўваць голас 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
@@ -8532,7 +8532,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
         <source>Use voice 2</source>
-        <translation type="unfinished"/>
+        <translation>Выкарыстоўваць голас 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
@@ -8542,7 +8542,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
         <source>Use voice 3</source>
-        <translation type="unfinished"/>
+        <translation>Выкарыстоўваць голас 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2312"/>
@@ -8944,34 +8944,34 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="567"/>
         <source>Exchange voice 1-2</source>
-        <translation>Абмяняць галасы 1-2</translation>
+        <translation>Памяняць галасы 1-2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="572"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="573"/>
         <source>Exchange voice 1-3</source>
-        <translation>Абмяняць галасы 1-3</translation>
+        <translation>Памяняць галасы 1-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="579"/>
         <source>Exchange voice 1-4</source>
-        <translation>Абмяняць галасы 1-4</translation>
+        <translation>Памяняць галасы 1-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="585"/>
         <source>Exchange voice 2-3</source>
-        <translation>Абмяняць галасы 2-3</translation>
+        <translation>Памяняць галасы 2-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="590"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="591"/>
         <source>Exchange voice 2-4</source>
-        <translation>Абмяняць галасы 2-4</translation>
+        <translation>Памяняць галасы 2-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="597"/>
         <source>Exchange voice 3-4</source>
-        <translation>Абмяняць галасы 3-4</translation>
+        <translation>Памяняць галасы 3-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
@@ -8982,7 +8982,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2313"/>
         <source>Use voice 4</source>
-        <translation type="unfinished"/>
+        <translation>Выкарыстоўваць голас 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2365"/>
@@ -9182,22 +9182,22 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="566"/>
         <source>Exchange voice &amp;1-2</source>
-        <translation type="unfinished"/>
+        <translation>Памяняць галасы &amp;1-2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="578"/>
         <source>Exchange voice 1-&amp;4</source>
-        <translation type="unfinished"/>
+        <translation>Памяняць галасы 1-&amp;4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="584"/>
         <source>Exchange voice &amp;2-3</source>
-        <translation type="unfinished"/>
+        <translation>Памяняць галасы &amp;2-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="596"/>
         <source>Exchange voice &amp;3-4</source>
-        <translation type="unfinished"/>
+        <translation>Памяняць галасы &amp;3-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="620"/>
@@ -13228,12 +13228,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/check.cpp" line="214"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Голас задоўгі&lt;/b&gt;: %1, такт %2, радок %3, голас %4. Знойдзена: %5. Чакалася: &amp;6.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="74"/>
         <source>Voice %1 color</source>
-        <translation type="unfinished"/>
+        <translation>Колер голаса %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -17943,7 +17943,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="352"/>
         <source>Max. voices</source>
-        <translation type="unfinished"/>
+        <translation>Макс. кольк. галасоў</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="380"/>
@@ -20724,7 +20724,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
         <source>Voices visible in the score</source>
-        <translation type="unfinished"/>
+        <translation>Бачныя галасы ў партытуры</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
@@ -21163,7 +21163,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this score</source>
-        <translation type="unfinished"/>
+        <translation>Бачныя галасы ў гэтай партытуры</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -21172,7 +21172,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="167"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="169"/>
         <source>Voice %1</source>
-        <translation type="unfinished"/>
+        <translation>Голас %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NotationToolBar.qml" line="43"/>
@@ -22138,7 +22138,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="118"/>
         <source>Continuous view</source>
-        <translation>Працыглы выгляд</translation>
+        <translation>Працяглы выгляд</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2213"/>

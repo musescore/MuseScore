@@ -9588,7 +9588,7 @@ Par défaut, elles seront placées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1817"/>
         <source>Add accidental: double-sharp</source>
-        <translation>Ajouter une altération : double-dièse </translation>
+        <translation>Ajouter une altération : double-dièse</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1822"/>

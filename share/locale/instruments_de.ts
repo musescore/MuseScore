@@ -5522,7 +5522,7 @@
         <source>Sus. Cym.</source>
         <comment>crash-cymbal shortName</comment>
         <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hg.-Bck.</translation>
+        <translation>Hg. Bck.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4028"/>
@@ -11416,28 +11416,28 @@
         <source>Treble kalimba. A modern interpretation of the traditional Shona mbira.</source>
         <comment>treble-kalimba description</comment>
         <extracomment>description for Treble Kalimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprankalimba. Eine moderne Interpretation der traditionellen Shona Mbira.</translation>
+        <translation>Diskantkalimba. Eine moderne Interpretation der traditionellen Shona Mbira.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3793"/>
         <source>Treble Kalimba</source>
         <comment>treble-kalimba trackName</comment>
         <extracomment>trackName for Treble Kalimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprankalimba</translation>
+        <translation>Diskantkalimba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3795"/>
         <source>Treble Kalimba</source>
         <comment>treble-kalimba longName</comment>
         <extracomment>longName for Treble Kalimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprankalimba</translation>
+        <translation>Diskantkalimba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3797"/>
         <source>Tr. Kal.</source>
         <comment>treble-kalimba shortName</comment>
         <extracomment>shortName for Treble Kalimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Skal.</translation>
+        <translation>Dkal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3803"/>
@@ -18430,7 +18430,7 @@
         <source>Tr. Vl.</source>
         <comment>treble-viol shortName</comment>
         <extracomment>shortName for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dg.</translation>
+        <translation>Dgb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6078"/>
@@ -18479,7 +18479,7 @@
         <source>A. Vl.</source>
         <comment>alto-viol shortName</comment>
         <extracomment>shortName for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Aga.</translation>
+        <translation>Agb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6093"/>
@@ -18528,7 +18528,7 @@
         <source>Pds. v.</source>
         <comment>pardessus-de-viole shortName</comment>
         <extracomment>shortName for Pardessus de viole; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pds. v.</translation>
+        <translation>Pd. de viole</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6108"/>
@@ -18577,7 +18577,7 @@
         <source>T. Vl.</source>
         <comment>tenor-viol shortName</comment>
         <extracomment>shortName for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>T.ga.</translation>
+        <translation>Tgb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6123"/>
@@ -18626,7 +18626,7 @@
         <source>Bary.</source>
         <comment>baryton shortName</comment>
         <extracomment>shortName for Baryton; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bary.</translation>
+        <translation>Bt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6138"/>
@@ -18675,7 +18675,7 @@
         <source>Vla. d. g.</source>
         <comment>viola-da-gamba shortName</comment>
         <extracomment>shortName for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ga.</translation>
+        <translation>Gb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6153"/>
@@ -18724,28 +18724,28 @@
         <source>Vla. d. g.</source>
         <comment>viola-da-gamba-tablature shortName</comment>
         <extracomment>shortName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ga.</translation>
+        <translation>Gb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6169"/>
         <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</source>
         <comment>violone description</comment>
         <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Große Gambe mit der niedrigsten Saite auf G gestimmt. Manchmal auch G Violone oder große Bassgambe genannt.</translation>
+        <translation>Große Gambe mit der niedrigsten Saite auf G gestimmt. Manchmal auch G-Violone oder große Bassgambe genannt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6173"/>
         <source>G Violone</source>
         <comment>violone longName</comment>
         <extracomment>longName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G Violone</translation>
+        <translation>G-Violone</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6175"/>
         <source>G Vne.</source>
         <comment>violone shortName</comment>
         <extracomment>shortName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G Vne.</translation>
+        <translation>G-Vne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6177"/>
@@ -18780,21 +18780,21 @@
         <source>Large viol with the lowest string tuned to D. Sometimes called the D violone.</source>
         <comment>d-violone description</comment>
         <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Große Gambe mit der niedrigsten Saite auf D gestimmt. Manchmal auch D Violone genannt.</translation>
+        <translation>Große Gambe mit der niedrigsten Saite auf D gestimmt. Manchmal auch D-Violone genannt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6190"/>
         <source>D Violone</source>
         <comment>d-violone longName</comment>
         <extracomment>longName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Violone</translation>
+        <translation>D-Violone</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6192"/>
         <source>D Vne.</source>
         <comment>d-violone shortName</comment>
         <extracomment>shortName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D Vne.</translation>
+        <translation>D-Vne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6194"/>
