@@ -3729,6 +3729,10 @@ bool Note::isContinuationOfBend() const
     Tie* tie = tieBack();
     Note* note = nullptr;
     while (tie && tie->startNote()) {
+        if (note == tie->startNote()) {
+            return false;
+        }
+
         note = tie->startNote();
         if (note->bendBack()) {
             return true;
