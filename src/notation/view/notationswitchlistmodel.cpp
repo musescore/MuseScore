@@ -269,7 +269,10 @@ void NotationSwitchListModel::closeOtherNotations(int index)
     INotationPtr notationToKeepOpen = m_notations[index];
     context()->setCurrentNotation(notationToKeepOpen);
 
-    for (INotationPtr notation : m_notations) {
+    // Copy the list to avoid modifying it while iterating
+    QList<INotationPtr> notations = m_notations;
+
+    for (INotationPtr notation : notations) {
         if (!isMasterNotation(notation) && notation != notationToKeepOpen) {
             currentMasterNotation()->setExcerptIsOpen(notation, false);
         }
