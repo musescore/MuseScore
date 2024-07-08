@@ -1861,6 +1861,13 @@ EngravingItem* Note::drop(EditData& data)
         delete e;
         break;
 
+    case ElementType::GUITAR_BEND:
+    {
+        GuitarBend* newGuitarBend = score()->addGuitarBend(toGuitarBend(e)->type(), this);
+        delete e;
+        return newGuitarBend;
+    }
+
     case ElementType::BAGPIPE_EMBELLISHMENT:
     {
         BagpipeEmbellishment* b = toBagpipeEmbellishment(e);
