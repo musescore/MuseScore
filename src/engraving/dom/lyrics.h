@@ -65,7 +65,8 @@ public:
     TranslatableString subtypeUserName() const override;
     void setNo(int n) { m_no = n; }
     int no() const { return m_no; }
-    bool isEven() const { return m_no % 2; }
+    // m_no is 0-based, so 1, 3, 5... are even here, the lowest bit is set, while 0, 2, 4... are odd here
+    bool isEven() const { return m_no & 1; }
     void setSyllabic(LyricsSyllabic s) { m_syllabic = s; }
     LyricsSyllabic syllabic() const { return m_syllabic; }
     void add(EngravingItem*) override;
