@@ -219,7 +219,7 @@ QString Settings::dataPath() const
 #ifdef WIN_PORTABLE
     return QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()));
 #else
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    return QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
 #endif
 }
 
