@@ -30,3 +30,17 @@ body:
       description: Anything else of note
     validations:
       required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: "Before submitting your bug report, please make sure the following requirements are met:"
+      options:
+        - label: "This request follows the [guidelines](https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues) for reporting issues"
+          required: true
+        - label: "I have verified that this feature request has not been logged before, by searching the [issue tracker](https://github.com/musescore/MuseScore/issues) for similar requests"
+          required: true
+  - type: markdown
+    attributes:
+      value: If a feature request does not meet these requirements, it may be closed without investigation.
