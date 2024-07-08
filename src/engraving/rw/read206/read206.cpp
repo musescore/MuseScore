@@ -1000,7 +1000,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "head") {
         read400::TRead::readProperty(note, e, ctx, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
-        note->setUserVelocity(e.readInt());
+        // TODO: convert to MU4
+        e.skipCurrentElement();
     } else if (tag == "play") {
         note->setPlay(e.readInt());
     } else if (tag == "tuning") {
