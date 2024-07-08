@@ -42,9 +42,7 @@ public:
     explicit OrganPedalMarkPopupModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init() override;
-
     Q_INVOKABLE void updatePedalMark(QString PedalMarkName);
-
     Q_INVOKABLE bool isAbove();
 };
 } //namespace mu::notation

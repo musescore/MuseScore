@@ -154,21 +154,13 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             lll = std::max(lll, -x);
         }
 
-        // clear layout for note-based fingerings and organ pedal marks
+        // clear layout for note-based fingerings
         for (EngravingItem* e : note->el()) {
             if (e->isFingering()) {
                 Fingering* f = toFingering(e);
                 if (f->layoutType() == ElementType::NOTE) {
                     f->setPos(PointF());
                     f->setbbox(RectF());
-                }
-            }
-
-            if (e->isOrganPedalMark()) {
-                OrganPedalMark* pm = toOrganPedalMark(e);
-                if (pm->layoutType() == ElementType::NOTE) {
-                    pm->setPos(PointF());
-                    pm->setbbox(RectF());
                 }
             }
         }
@@ -325,7 +317,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             }
         }
     }
-
     for (Fingering* f : alignNote) {
         f->mutldata()->setPosX(xNote);
     }
@@ -3373,7 +3364,7 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     }
 }
 
-void ChordLayout::layoutChordBaseOrganPedalMark(Chord* chord, System* system, LayoutContext&)
+void ChordLayout::layoutOrganPedalMarks(Chord* chord, System* system, LayoutContext&)
 {
     std::set<staff_idx_t> shapesToRecreate;
     std::list<Note*> notes;
@@ -3386,23 +3377,20 @@ void ChordLayout::layoutChordBaseOrganPedalMark(Chord* chord, System* system, La
     for (auto n : chord->notes()) {
         notes.push_back(n);
     }
-    std::list<OrganPedalMark*> organPedalMark;
+    std::list<OrganPedalMark*> organPedalMarks;
     for (Note* note : notes) {
         for (EngravingItem* el : note->el()) {
             if (el->isOrganPedalMark()) {
                 OrganPedalMark* pm = toOrganPedalMark(el);
-                if (pm->layoutType() == ElementType::CHORD && !pm->isOnCrossBeamSide()) {
-                    // OrganPedalMark on top of cross-staff beams must be laid out later
-                    if (pm->placeAbove()) {
-                        organPedalMark.push_back(pm);
-                    } else {
-                        organPedalMark.push_front(pm);
-                    }
+                if (pm->placeAbove()) {
+                    organPedalMarks.push_back(pm);
+                } else {
+                    organPedalMarks.push_front(pm);
                 }
             }
         }
     }
-    for (OrganPedalMark* pm : organPedalMark) {
+    for (OrganPedalMark* pm : organPedalMarks) {
         TLayout::layoutOrganPedalMark(pm, pm->mutldata());
         if (pm->addToSkyline()) {
             Note* n = pm->note();
@@ -3588,12 +3576,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             // don't set mag; organ pedal marks should not scale with note
             OrganPedalMark* pm = toOrganPedalMark(e);
             if (pm->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED) {
-                pm->setPlacement(pm->calculatePlacement());
-            }
-            // layout organ pedal marks that are placed relative to notehead
-            // organ pedal marks placed relative to chord will be laid out later
-            if (pm->layoutType() == ElementType::NOTE) {
-                TLayout::layoutOrganPedalMark(pm, pm->mutldata());
+                pm->setPlacement(PlacementV::BELOW);
             }
         } else {
             e->mutldata()->setMag(item->mag());

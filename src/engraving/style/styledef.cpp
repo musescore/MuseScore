@@ -1637,7 +1637,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::fermataMinDistance,            "fermataMinDistance",            Spatium(0.4) },
 
     { Sid::fingeringPlacement,            "fingeringPlacement",            PlacementV::ABOVE },
-    { Sid::organPedalMarkPlacement,       "organPedalMarkPlacement",       PlacementV::ABOVE },
+    { Sid::organPedalMarkPlacement,       "organPedalMarkPlacement",       PlacementV::BELOW },
 
     { Sid::articulationMinDistance,       "articulationMinDistance",       Spatium(0.4) },
     { Sid::fingeringMinDistance,          "fingeringMinDistance",          Spatium(0.5) },

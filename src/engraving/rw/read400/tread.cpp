@@ -3253,10 +3253,10 @@ void TRead::read(NoteHead* h, XmlReader& xml, ReadContext& ctx)
     read(static_cast<Symbol*>(h), xml, ctx);
 }
 
-void TRead::read(OrganPedalMark* f, XmlReader& e, ReadContext& ctx)
+void TRead::read(OrganPedalMark* pm, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        if (!readProperties(static_cast<TextBase*>(f), e, ctx)) {
+        if (!readProperties(static_cast<TextBase*>(pm), e, ctx)) {
             e.unknown();
         }
     }

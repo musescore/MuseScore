@@ -36,28 +36,21 @@ class OrganPedalMark final : public TextBase
     DECLARE_CLASSOF(ElementType::ORGAN_PEDAL_MARK)
 
 public:
-    OrganPedalMark(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
-    OrganPedalMark(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
+    OrganPedalMark(Note* parent);
 
     OrganPedalMark* clone() const override { return new OrganPedalMark(*this); }
 
     Note* note() const { return toNote(explicitParent()); }
-    ElementType layoutType() const;
-    PlacementV calculatePlacement() const;
 
-    bool isEditAllowed(EditData&) const override;
-
-    PropertyValue propertyDefault(Pid id) const override;
-
-    String accessibleInfo() const override;
-
-    bool isOnCrossBeamSide() const;
-
-    TranslatableString typeUserName() const override;
-    String translatedTypeUserName() const override;
+    bool isEditAllowed(EditData&) const override { return false; }
 
     SymId symId() const { return m_symId; }
-    void setSymId(SymId id);
+    void setSymId(SymId id) { m_symId = id; }
+
+    TranslatableString typeUserName() const override;
+    String accessibleInfo() const override;
+
+    PropertyValue propertyDefault(Pid id) const override;
 
 private:
     SymId m_symId = SymId::noSym;

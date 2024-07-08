@@ -806,7 +806,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             break;
         }
 
-        textBox = Factory::createOrganPedalMark(toNote(destinationElement), type);
+        textBox = Factory::createOrganPedalMark(toNote(destinationElement));
         textBox->setTrack(destinationElement->track());
         textBox->setParent(destinationElement);
         undoAddElement(textBox);

@@ -741,12 +741,4 @@ CREATE_ITEM_IMPL(Capo, ElementType::CAPO, Segment, isAccessibleEnabled)
 CREATE_ITEM_IMPL(TimeTickAnchor, ElementType::TIME_TICK_ANCHOR, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(OrganPedalMark, ElementType::ORGAN_PEDAL_MARK, Note, isAccessibleEnabled)
-
-OrganPedalMark* Factory::createOrganPedalMark(Note * parent, TextStyleType textStyleType,
-                                    bool isAccessibleEnabled)
-{
-    OrganPedalMark* organPedalMark = new OrganPedalMark(parent, textStyleType);
-    organPedalMark->setAccessibleEnabled(isAccessibleEnabled);
-
-    return organPedalMark;
-}
+COPY_ITEM_IMPL(OrganPedalMark)

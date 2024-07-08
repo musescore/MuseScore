@@ -35,7 +35,6 @@
 #include "dom/measure.h"
 #include "dom/measurebase.h"
 #include "dom/note.h"
-#include "dom/organpedalmark.h"
 #include "dom/page.h"
 #include "dom/segment.h"
 #include "dom/slur.h"
@@ -336,34 +335,12 @@ void PageLayout::collectPage(LayoutContext& ctx)
 
                                 for (Note* note : c->notes()) {
                                     for (EngravingItem* e : note->el()) {
-                                        if (!e) {
+                                        if (!e || !e->isFingering()) {
                                             continue;
-                                        } else if (e->isFingering()) {
-                                            Fingering* fingering = toFingering(e);
-                                            if (fingering->isOnCrossBeamSide()) {
-                                                TLayout::layoutFingering(fingering, fingering->mutldata());
-                                                if (fingering->addToSkyline()) {
-                                                    const Note* n = fingering->note();
-                                                    const RectF r
-                                                        = fingering->ldata()->bbox().translated(
-                                                            fingering->pos() + n->pos() + n->chord()->pos() + segment->pos()
-                                                            + segment->measure()->pos());
-                                                    s->staff(fingering->note()->chord()->vStaffIdx())->skyline().add(r, fingering);
-                                                }
-                                            }
-                                        } else if (e->isOrganPedalMark()) {
-                                            OrganPedalMark* pm = toOrganPedalMark(e);
-                                            if (pm->isOnCrossBeamSide()) {
-                                                TLayout::layoutOrganPedalMark(pm, pm->mutldata());
-                                                if (pm->addToSkyline()) {
-                                                    const Note* n = pm->note();
-                                                    const RectF r
-                                                        = pm->ldata()->bbox().translated(
-                                                            pm->pos() + n->pos() + n->chord()->pos() + segment->pos()
-                                                            + segment->measure()->pos());
-                                                    s->staff(pm->note()->chord()->vStaffIdx())->skyline().add(r, pm);
-                                                }
-                                            }
+                                        }
+                                        Fingering* fingering = toFingering(e);
+                                        if (fingering->isOnCrossBeamSide()) {
+                                            TLayout::layoutFingering(fingering, fingering->mutldata());
                                         }
                                     }
                                 }

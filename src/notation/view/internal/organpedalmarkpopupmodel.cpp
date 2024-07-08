@@ -21,7 +21,7 @@
  */
 
 #include "organpedalmarkpopupmodel.h"
-#include "engraving\types\symnames.h"
+#include "engraving/types/symnames.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -42,11 +42,7 @@ void OrganPedalMarkPopupModel::updatePedalMark(QString pedalMarkName)
 
     OrganPedalMark* pm = m_item && m_item->isOrganPedalMark() ? toOrganPedalMark(m_item) : nullptr;
 
-    if (!pm) {
-        return;
-    }
-
-    if (pm->xmlText() == pedalMark) {
+    if (!pm || pm->xmlText() == pedalMark) {
         return;
     }
 
@@ -58,7 +54,8 @@ void OrganPedalMarkPopupModel::updatePedalMark(QString pedalMarkName)
     updateNotation();
 }
 
-bool OrganPedalMarkPopupModel::isAbove() {
+bool OrganPedalMarkPopupModel::isAbove()
+{
     PropertyValue placement = toOrganPedalMark(m_item)->getProperty(Pid::PLACEMENT);
 
     return placement == PlacementV::ABOVE ? true : false;

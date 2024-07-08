@@ -223,7 +223,7 @@ const TextStyle organPedalMarkTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::organPedalMarkFrameFgColor,             Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::organPedalMarkFrameBgColor,             Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
-    } };
+} };
 
 const TextStyle stringNumberTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::stringNumberFontFace,                   Pid::FONT_FACE },
