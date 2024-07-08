@@ -52,6 +52,7 @@
 #include "../compat/midi/compatmidirenderinternal.h"
 
 #include "chordlist.h"
+#include "dynamic.h"
 #include "input.h"
 #include "mscore.h"
 #include "property.h"
@@ -914,6 +915,7 @@ public:
     Hairpin* addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2 = nullptr);
     void addHairpin(Hairpin* hairpin, ChordRest* cr1, ChordRest* cr2 = nullptr);
     void addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic);
+    void addHairpinOnGripDrag(Hairpin* hairpin, Dynamic* dynamic, const PointF& pos, Dynamic::Grip grip);
 
     ChordRest* findCR(Fraction tick, track_idx_t track) const;
     ChordRest* findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const;

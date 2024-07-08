@@ -1083,7 +1083,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_editData.element->editDrag(m_dragData.ed);
 
         if (m_editData.element->isDynamic()) {
-            addHairpinToDynamic(toDynamic(m_editData.element));
+            addHairpinOnGripDrag(toDynamic(m_editData.element));
         }
     } else if (m_editData.element && !m_editData.element->hasGrips()) {
         m_dragData.ed.delta = evtDelta;
@@ -2595,6 +2595,11 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     mu::engraving::EngravingItem* editedElement = m_editData.element;
+
+    if (editedElement && editedElement->isDynamic()) {
+        toDynamic(editedElement)->findAdjacentHaipins();
+    }
+
     int gripsCount = editedElement ? editedElement->gripsCount() : 0;
 
     if (gripsCount == 0) {
@@ -4143,18 +4148,20 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     apply();
 }
 
-void NotationInteraction::addHairpinToDynamic(Dynamic* dynamic)
+void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic)
 {
+    const PointF pos = m_dragData.ed.pos;
     Hairpin* pin = Factory::createHairpin(score()->dummy()->segment());
+
     // Right grip
-    if (dynamic->rightDragOffset() >= pin->spatium() * 0.8 && !dynamic->hasRightHairpin) {
-        pin->setHairpinType(engraving::HairpinType::CRESC_HAIRPIN);
+    if (dynamic->rightDragOffset() >= pin->spatium() * 0.8) {
+        pin->setHairpinType(HairpinType::CRESC_HAIRPIN);
 
         startEdit();
-        score()->addHairpinToDynamic(pin, dynamic);
+        score()->addHairpinOnGripDrag(pin, dynamic, pos, Dynamic::Grip::RIGHT);
         apply();
 
-        dynamic->hasRightHairpin = true;
+        dynamic->resetRightDragOffset(); // Reset grip offset to zero after drawing the hairpin
 
         LineSegment* segment = pin->frontSegment();
         select({ segment });
@@ -4162,6 +4169,19 @@ void NotationInteraction::addHairpinToDynamic(Dynamic* dynamic)
     }
 
     // Left grip - TODO
+    if (abs(dynamic->leftDragOffset()) >= pin->spatium() * 0.8) {
+        pin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
+
+        startEdit();
+        score()->addHairpinOnGripDrag(pin, dynamic, pos, Dynamic::Grip::LEFT);
+        apply();
+
+        dynamic->resetLeftDragOffset(); // Reset grip offset to zero after drawing the hairpin
+
+        LineSegment* segment = pin->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::START);
+    }
 }
 
 void NotationInteraction::addHairpinsToSelection(HairpinType type)
