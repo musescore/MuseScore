@@ -1039,4 +1039,25 @@ Lyrics* prevLyrics(const Lyrics* lyrics)
     }
     return nullptr;
 }
+
+Lyrics* nextLyrics(const Lyrics* lyrics)
+{
+    Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
+    if (!seg) {
+        return nullptr;
+    }
+    Segment* nextSegment = seg;
+    while ((nextSegment = nextSegment->next1(mu::engraving::SegmentType::ChordRest))) {
+        const track_idx_t strack = lyrics->staffIdx() * VOICES;
+        const track_idx_t etrack = strack + VOICES;
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            EngravingItem* el = nextSegment->element(track);
+            Lyrics* nextLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
+            if (nextLyrics) {
+                return nextLyrics;
+            }
+        }
+    }
+    return nullptr;
+}
 }
