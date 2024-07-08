@@ -1340,18 +1340,18 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
             // Put above the staff only in case of multiple voices at this tick (similar to stem directions)
             const Measure* measure = score()->tick2measure(tick());
             Fraction startTick = Fraction(-1, 1);
-            Fraction endTick = Fraction(-1, 1);
+            Fraction length = Fraction(-1, 1);
             if (isSpanner()) {
                 startTick = tick();
-                endTick = toSpanner(this)->tick2();
+                length = toSpanner(this)->ticks();
             } else if (const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT))) {
                 startTick = segment->tick();
-                endTick = startTick + segment->ticks();
+                length = segment->ticks();
             } else if (measure) {
                 startTick = measure->tick();
-                endTick = measure->endTick();
+                length = measure->ticks();
             }
-            if (measure && measure->hasVoices(staffIdx(), startTick, endTick)) {
+            if (measure && measure->hasVoices(staffIdx(), startTick, length)) {
                 newPlacement = PlacementV::ABOVE;
             } else {
                 newPlacement = PlacementV::BELOW;
