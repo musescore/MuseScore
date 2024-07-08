@@ -71,30 +71,6 @@ FocusableControl {
                 root.dropped()
             }
         }
-
-        property var openedPopup: null
-        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
-
-        function openPopup(popup, item) {
-            if (Boolean(popup)) {
-                openedPopup = popup
-                popup.load(item)
-                root.popupOpened(popup.x, popup.y, popup.height)
-                popup.open()
-            }
-        }
-
-        function closeOpenedPopup() {
-            if (isPopupOpened) {
-                openedPopup.close()
-                resetOpenedPopup()
-            }
-        }
-
-        function resetOpenedPopup() {
-            root.popupClosed()
-            openedPopup = null
-        }
     }
 
     anchors.verticalCenter: parent ? parent.verticalCenter : undefined
@@ -154,11 +130,40 @@ FocusableControl {
     Loader {
         id: popupLoader
 
-        function createPopup(comp, btn) {
+        property alias openedPopup: popupLoader.item
+        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
+
+        function openPopup(comp, btn, item) {
             popupLoader.sourceComponent = comp
-            popupLoader.item.parent = btn
-            popupLoader.item.needActiveFirstItem = btn.navigation.highlight
-            return popupLoader.item
+            if (!openedPopup) {
+                return
+            }
+
+            openedPopup.parent = btn
+            openedPopup.needActiveFirstItem = btn.navigation.highlight
+
+            openedPopup.load(item)
+
+            openedPopup.opened.connect(function() {
+                root.popupOpened(popup.x, popup.y, popup.height)
+            })
+
+            openedPopup.closed.connect(function() {
+                root.popupClosed()
+
+                Qt.callLater(function() {
+                    openedPopup = null
+                    popupLoader.sourceComponent = null
+                })
+            })
+
+            openedPopup.open()
+        }
+
+        function closeOpenedPopup() {
+            if (isPopupOpened) {
+                openedPopup.close()
+            }
         }
     }
 
@@ -167,11 +172,6 @@ FocusableControl {
 
         InstrumentSettingsPopup {
             anchorItem: popupAnchorItem
-
-            onClosed: {
-                prv.resetOpenedPopup()
-                popupLoader.sourceComponent = null
-            }
         }
     }
 
@@ -180,11 +180,6 @@ FocusableControl {
 
         StaffSettingsPopup {
             anchorItem: popupAnchorItem
-
-            onClosed: {
-                prv.resetOpenedPopup()
-                popupLoader.sourceComponent = null
-            }
         }
     }
 
@@ -294,29 +289,26 @@ FocusableControl {
             icon: IconCode.SETTINGS_COG
 
             onClicked: {
-                if (prv.isPopupOpened) {
-                    prv.closeOpenedPopup()
+                if (popupLoader.isPopupOpened) {
+                    popupLoader.closeOpenedPopup()
                     return
                 }
 
-                var popup = null
-                var item = {}
+                let comp = null
+                let item = {}
 
                 if (root.type === InstrumentsTreeItemType.PART) {
-
-                    popup = popupLoader.createPopup(instrumentSettingsComp, this)
+                    comp = instrumentSettingsComp
 
                     item["partId"] = model.itemRole.id
                     item["instrumentId"] = model.itemRole.instrumentId()
-
                 } else if (root.type === InstrumentsTreeItemType.STAFF) {
-
-                    popup = popupLoader.createPopup(staffSettingsComp, this)
+                    comp = staffSettingsComp
 
                     item["id"] = model.itemRole.id
                 }
 
-                prv.openPopup(popup, item)
+                popupLoader.openPopup(comp, this, item)
             }
 
             Behavior on opacity {

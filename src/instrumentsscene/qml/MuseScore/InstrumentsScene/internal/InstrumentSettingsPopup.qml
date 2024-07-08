@@ -114,7 +114,8 @@ StyledPopupView {
 
             onClicked: {
                 root.close()
-                Qt.callLater(settingsModel.replaceInstrument)
+
+                settingsModel.replaceInstrument()
             }
         }
 
@@ -130,7 +131,8 @@ StyledPopupView {
 
             onClicked: {
                 root.close()
-                Qt.callLater(settingsModel.resetAllFormatting)
+
+                settingsModel.resetAllFormatting()
             }
         }
     }
