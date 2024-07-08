@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_PLAYBACKPREFERENCESMODEL_H
-#define MU_APPSHELL_PLAYBACKPREFERENCESMODEL_H
+#ifndef MU_APPSHELL_AUDIOMIDIPREFERENCESMODEL_H
+#define MU_APPSHELL_AUDIOMIDIPREFERENCESMODEL_H
 
 #include <QObject>
 
@@ -33,7 +33,7 @@
 #include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
-class PlaybackPreferencesModel : public QObject, public muse::async::Asyncable
+class AudioMidiPreferencesModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -57,7 +57,7 @@ class PlaybackPreferencesModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool muteHiddenInstruments READ muteHiddenInstruments WRITE setMuteHiddenInstruments NOTIFY muteHiddenInstrumentsChanged)
 
 public:
-    explicit PlaybackPreferencesModel(QObject* parent = nullptr);
+    explicit AudioMidiPreferencesModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
 
@@ -108,4 +108,4 @@ private:
 };
 }
 
-#endif // MU_APPSHELL_PLAYBACKPREFERENCESMODEL_H
+#endif // MU_APPSHELL_AUDIOMIDIPREFERENCESMODEL_H

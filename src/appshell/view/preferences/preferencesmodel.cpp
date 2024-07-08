@@ -163,14 +163,14 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("note-input", QT_TRANSLATE_NOOP("appshell/preferences", "Note input"), IconCode::Code::EDIT,
                  "Preferences/NoteInputPreferencesPage.qml"),
 
-        makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("appshell/preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
-                 "Preferences/MidiDeviceMappingPreferencesPage.qml"),
-
         makeItem("score", QT_TRANSLATE_NOOP("appshell/preferences", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),
 
-        makeItem("playback", QT_TRANSLATE_NOOP("appshell/preferences", "Playback"), IconCode::Code::AUDIO,
-                 "Preferences/PlaybackPreferencesPage.qml"),
+        makeItem("audio-midi", QT_TRANSLATE_NOOP("appshell/preferences", "Audio & MIDI"), IconCode::Code::AUDIO,
+                 "Preferences/AudioMidiPreferencesPage.qml"),
+
+        makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("appshell/preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
+                 "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
         makeItem("import", QT_TRANSLATE_NOOP("appshell/preferences", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),

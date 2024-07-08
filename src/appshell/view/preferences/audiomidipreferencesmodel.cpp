@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "playbackpreferencesmodel.h"
+#include "audiomidipreferencesmodel.h"
 
 #include "log.h"
 
@@ -28,18 +28,18 @@ using namespace mu::appshell;
 using namespace muse::audio;
 using namespace muse::midi;
 
-PlaybackPreferencesModel::PlaybackPreferencesModel(QObject* parent)
+AudioMidiPreferencesModel::AudioMidiPreferencesModel(QObject* parent)
     : QObject(parent)
 {
 }
 
-int PlaybackPreferencesModel::currentAudioApiIndex() const
+int AudioMidiPreferencesModel::currentAudioApiIndex() const
 {
     QString currentApi = QString::fromStdString(audioConfiguration()->currentAudioApi());
     return audioApiList().indexOf(currentApi);
 }
 
-void PlaybackPreferencesModel::setCurrentAudioApiIndex(int index)
+void AudioMidiPreferencesModel::setCurrentAudioApiIndex(int index)
 {
     if (index == currentAudioApiIndex()) {
         return;
@@ -54,27 +54,27 @@ void PlaybackPreferencesModel::setCurrentAudioApiIndex(int index)
     emit currentAudioApiIndexChanged(index);
 }
 
-QString PlaybackPreferencesModel::midiInputDeviceId() const
+QString AudioMidiPreferencesModel::midiInputDeviceId() const
 {
     return QString::fromStdString(midiInPort()->deviceID());
 }
 
-void PlaybackPreferencesModel::inputDeviceSelected(const QString& deviceId)
+void AudioMidiPreferencesModel::inputDeviceSelected(const QString& deviceId)
 {
     midiConfiguration()->setMidiInputDeviceId(deviceId.toStdString());
 }
 
-QString PlaybackPreferencesModel::midiOutputDeviceId() const
+QString AudioMidiPreferencesModel::midiOutputDeviceId() const
 {
     return QString::fromStdString(midiOutPort()->deviceID());
 }
 
-void PlaybackPreferencesModel::outputDeviceSelected(const QString& deviceId)
+void AudioMidiPreferencesModel::outputDeviceSelected(const QString& deviceId)
 {
     midiConfiguration()->setMidiOutputDeviceId(deviceId.toStdString());
 }
 
-void PlaybackPreferencesModel::init()
+void AudioMidiPreferencesModel::init()
 {
     midiInPort()->availableDevicesChanged().onNotify(this, [this]() {
         emit midiInputDevicesChanged();
@@ -97,7 +97,7 @@ void PlaybackPreferencesModel::init()
     });
 }
 
-QStringList PlaybackPreferencesModel::audioApiList() const
+QStringList AudioMidiPreferencesModel::audioApiList() const
 {
     QStringList result;
 
@@ -108,12 +108,12 @@ QStringList PlaybackPreferencesModel::audioApiList() const
     return result;
 }
 
-void PlaybackPreferencesModel::restartAudioAndMidiDevices()
+void AudioMidiPreferencesModel::restartAudioAndMidiDevices()
 {
     NOT_IMPLEMENTED;
 }
 
-QVariantList PlaybackPreferencesModel::midiInputDevices() const
+QVariantList AudioMidiPreferencesModel::midiInputDevices() const
 {
     QVariantList result;
 
@@ -129,7 +129,7 @@ QVariantList PlaybackPreferencesModel::midiInputDevices() const
     return result;
 }
 
-QVariantList PlaybackPreferencesModel::midiOutputDevices() const
+QVariantList AudioMidiPreferencesModel::midiOutputDevices() const
 {
     QVariantList result;
 
@@ -145,17 +145,17 @@ QVariantList PlaybackPreferencesModel::midiOutputDevices() const
     return result;
 }
 
-bool PlaybackPreferencesModel::isMIDI20OutputSupported() const
+bool AudioMidiPreferencesModel::isMIDI20OutputSupported() const
 {
     return midiOutPort()->supportsMIDI20Output();
 }
 
-bool PlaybackPreferencesModel::useMIDI20Output() const
+bool AudioMidiPreferencesModel::useMIDI20Output() const
 {
     return midiConfiguration()->useMIDI20Output();
 }
 
-void PlaybackPreferencesModel::setUseMIDI20Output(bool use)
+void AudioMidiPreferencesModel::setUseMIDI20Output(bool use)
 {
     if (use == useMIDI20Output()) {
         return;
@@ -165,18 +165,18 @@ void PlaybackPreferencesModel::setUseMIDI20Output(bool use)
     emit useMIDI20OutputChanged();
 }
 
-void PlaybackPreferencesModel::showMidiError(const MidiDeviceID& deviceId, const std::string& text) const
+void AudioMidiPreferencesModel::showMidiError(const MidiDeviceID& deviceId, const std::string& text) const
 {
     // todo: display error
     LOGE() << "failed connect to device, deviceID: " << deviceId << ", err: " << text;
 }
 
-bool PlaybackPreferencesModel::muteHiddenInstruments() const
+bool AudioMidiPreferencesModel::muteHiddenInstruments() const
 {
     return playbackConfiguration()->muteHiddenInstruments();
 }
 
-void PlaybackPreferencesModel::setMuteHiddenInstruments(bool mute)
+void AudioMidiPreferencesModel::setMuteHiddenInstruments(bool mute)
 {
     if (mute == muteHiddenInstruments()) {
         return;
