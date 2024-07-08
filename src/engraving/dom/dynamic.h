@@ -131,15 +131,25 @@ public:
 
     bool hasVoiceAssignmentProperties() const override { return true; }
 
-    int gripsCount() const override { return 2; }
+    enum class Grip {
+        LEFT,
+        RIGHT,
+    };
+
+    int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
-    bool hasLeftHairpin = false;
-    bool hasRightHairpin = false;
+    bool hasLeftHairpin() const { return m_hasLeftHairpin; }
+    bool hasRightHairpin() const { return m_hasRightHairpin; }
 
-    double leftDragOffset() { return m_leftDragOffset; }
-    double rightDragOffset() { return m_rightDragOffset; }
+    void resetLeftDragOffset() { m_leftDragOffset = 0.0; }
+    void resetRightDragOffset() { m_rightDragOffset = 0.0; }
+
+    double leftDragOffset() const { return m_leftDragOffset; }
+    double rightDragOffset() const { return m_rightDragOffset; }
+
+    void findAdjacentHaipins();
 
 private:
 
@@ -167,6 +177,9 @@ private:
 
     double m_leftDragOffset = 0.0;
     double m_rightDragOffset = 0.0;
+
+    bool m_hasLeftHairpin = false;
+    bool m_hasRightHairpin = false;
 };
 } // namespace mu::engraving
 
