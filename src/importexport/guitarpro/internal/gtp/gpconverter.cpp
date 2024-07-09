@@ -2266,7 +2266,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
     if (gpnote->tieType() == GPNote::TieType::Start) {
         startTie(note, _score, ties, note->track());
     } else if (gpnote->tieType() == GPNote::TieType::Mediate) {
-        endTie(note, _ties, note->track());
+        endTie(note, ties, note->track());
         startTie(note, _score, ties, note->track());
     } else if (gpnote->tieType() == GPNote::TieType::End) {
         endTie(note, ties, note->track());
