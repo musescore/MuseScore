@@ -43,7 +43,7 @@ Column {
     InspectorPropertyView {
         id: applyToVoiceSection
 
-        titleText: qsTrc("inspector", "Apply to voice")
+        titleText: qsTrc("inspector", "Voice assignment")
 
         propertyItem: root.model ? root.model.applyToVoice : null
 
