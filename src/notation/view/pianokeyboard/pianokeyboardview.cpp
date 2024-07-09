@@ -85,8 +85,6 @@ void PianoKeyboardView::init()
         update();
     });
 
-    m_controller->init();
-
     m_controller->keyStatesChanged().onNotify(this, [this]() {
         updateKeyStateColors();
         update();
