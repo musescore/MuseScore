@@ -489,7 +489,13 @@ public:
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
 
-    std::pair<int, float> barbeat() const;
+    struct BarBeat
+    {
+        int bar;
+        int displayedBar;
+        double beat;
+    };
+    BarBeat barbeat() const;
 
     virtual EngravingItem* findLinkedInScore(const Score* score) const;
     EngravingItem* findLinkedInStaff(const Staff* staff) const;

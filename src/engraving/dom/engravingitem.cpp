@@ -2356,20 +2356,23 @@ void EngravingItem::setColorsInverionEnabled(bool enabled)
     m_colorsInversionEnabled = enabled;
 }
 
-std::pair<int, float> EngravingItem::barbeat() const
+EngravingItem::BarBeat EngravingItem::barbeat() const
 {
+    EngravingItem::BarBeat barBeat = { 0, 0, 0.0F };
     const EngravingItem* parent = this;
     while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
         parent = parent->parentItem();
     }
 
     if (!parent) {
-        return std::pair<int, float>(0, 0.0F);
+        return barBeat;
     }
 
     int bar = 0;
+    int displayedBar = 0;
     int beat = 0;
     int ticks = 0;
+    const Measure* measure = nullptr;
 
     const TimeSigMap* timeSigMap = score()->sigmap();
     int ticksB = ticks_beat(timeSigMap->timesig(0).timesig().denominator());
@@ -2378,14 +2381,20 @@ std::pair<int, float> EngravingItem::barbeat() const
         const Segment* segment = static_cast<const Segment*>(parent);
         timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
         ticksB = ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
+        measure = segment->findMeasure();
+        if (measure) {
+            displayedBar = measure->no();
+        }
     } else if (parent->type() == ElementType::MEASURE) {
-        const Measure* measure = static_cast<const Measure*>(parent);
+        measure = static_cast<const Measure*>(parent);
         bar = measure->no();
+        displayedBar = bar;
         beat = -1;
         ticks = 0;
     }
 
-    return std::pair<int, float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
+    barBeat = { bar + 1, displayedBar + 1, beat + 1 + ticks / static_cast<float>(ticksB) };
+    return barBeat;
 }
 
 EngravingItem* EngravingItem::findLinkedInScore(const Score* score) const
@@ -2472,13 +2481,17 @@ void EngravingItem::doInitAccessible()
 String EngravingItem::formatBarsAndBeats() const
 {
     String result;
-    std::pair<int, float> barbeat = this->barbeat();
+    EngravingItem::BarBeat barbeat = this->barbeat();
 
-    if (barbeat.first != 0) {
-        result = muse::mtrc("engraving", "Measure: %1").arg(barbeat.first);
+    if (barbeat.bar != 0) {
+        result = muse::mtrc("engraving", "Measure: %1").arg(barbeat.bar);
 
-        if (!muse::RealIsNull(barbeat.second)) {
-            result += u"; " + muse::mtrc("engraving", "Beat: %1").arg(barbeat.second);
+        if (barbeat.displayedBar != barbeat.bar) {
+            result += u"; " + muse::mtrc("engraving", "Displayed measure: %1").arg(barbeat.displayedBar);
+        }
+
+        if (!muse::RealIsNull(barbeat.beat)) {
+            result += u"; " + muse::mtrc("engraving", "Beat: %1").arg(barbeat.beat);
         }
     }
 
