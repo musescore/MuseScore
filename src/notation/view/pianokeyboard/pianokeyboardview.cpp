@@ -405,18 +405,21 @@ void PianoKeyboardView::moveCanvas(qreal dx)
         return;
     }
 
+    if (qFuzzyIsNull(dx)) {
+        return;
+    }
+
     setScrollOffset(m_scrollOffset + dx);
 }
 
 void PianoKeyboardView::setScrollOffset(qreal offset)
 {
-    qreal oldScrollOffset = m_scrollOffset;
-    m_scrollOffset = offset;
-    adjustKeysAreaPosition();
-
-    if (qFuzzyCompare(m_scrollOffset, oldScrollOffset)) {
+    if (qFuzzyCompare(m_scrollOffset, offset)) {
         return;
     }
+
+    m_scrollOffset = offset;
+    adjustKeysAreaPosition();
 
     update();
 }
