@@ -204,7 +204,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
             item->setMaxMove(std::max(item->maxCRMove(), i));
 
             for (int distance : chord->noteDistances()) {
-                item->notes().push_back(distance);
+                item->notes().push_back(ChordPosition(distance, cr->vStaffIdx()));
             }
         }
     }
@@ -243,8 +243,11 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
             if (const Chord* chord = item->findChordWithCustomStemDirection()) {
                 item->setUp(chord->stemDirection() == DirectionV::UP);
             } else {
-                std::set<int> noteSet(item->notes().begin(), item->notes().end());
-                std::vector<int> notes(noteSet.begin(), noteSet.end());
+                std::set<ChordPosition> noteSet(item->notes().begin(), item->notes().end());
+                std::vector<int> notes;
+                std::transform(std::begin(noteSet), std::end(noteSet), std::back_inserter(notes), [] (const ChordPosition& pos) {
+                    return pos.line;
+                });
                 item->setUp(ChordLayout::computeAutoStemDirection(notes) > 0);
             }
         }
@@ -254,7 +257,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 
     int middleStaffLine = firstNote->staffType()->middleLine();
     for (size_t i = 0; i < item->notes().size(); i++) {
-        item->notes()[i] += middleStaffLine;
+        item->notes()[i].line += middleStaffLine;
     }
 
     bool isEntirelyMoved = false;

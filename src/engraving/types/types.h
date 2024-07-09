@@ -356,6 +356,13 @@ enum class BeamMode : signed char {
     END
 };
 
+enum class CrossStaffBeamPosition : signed char {
+    INVALID,
+    BETWEEN,
+    ABOVE,
+    BELOW
+};
+
 enum class DurationType : signed char {
     V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
     V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
@@ -1133,6 +1140,45 @@ enum class LayoutFlag : char {
 };
 
 typedef muse::Flags<LayoutFlag> LayoutFlags;
+
+struct ChordPosition {
+    int line;
+    staff_idx_t staff;
+    ChordPosition(int note, staff_idx_t staff)
+        : line(note), staff(staff) {}
+    ChordPosition()
+        : line(0), staff(0) {}
+
+    inline bool operator<(const ChordPosition& other) const
+    {
+        return staff < other.staff || (staff == other.staff && line < other.line);
+    }
+
+    inline bool operator>(const ChordPosition& other) const
+    {
+        return other < *this;
+    }
+
+    inline bool operator<=(const ChordPosition& other) const
+    {
+        return !(other < *this);
+    }
+
+    inline bool operator >=(const ChordPosition& other) const
+    {
+        return !(*this < other);
+    }
+
+    inline bool operator==(const ChordPosition& other) const
+    {
+        return line == other.line && staff == other.staff;
+    }
+
+    inline bool operator!=(const ChordPosition& other) const
+    {
+        return line != other.line || staff != other.staff;
+    }
+};
 } // mu::engraving
 
 template<>

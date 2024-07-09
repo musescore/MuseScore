@@ -253,7 +253,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& 
     }
     ldata->setPosY(0.);
     std::vector<ChordRest*> chordRests{ item->chord1(), item->chord2() };
-    std::vector<int> notes;
+    std::vector<ChordPosition> notes;
     double mag = 0.0;
 
     notes.clear();
@@ -267,7 +267,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& 
             //_maxMove = std::max(_maxMove, i);
 
             for (int distance : chord->noteDistances()) {
-                notes.push_back(distance);
+                notes.push_back(ChordPosition(distance, chord->vStaffIdx()));
             }
         }
     }

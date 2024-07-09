@@ -74,9 +74,10 @@ public:
         double beamDist = 0.0;
         double beamWidth = 0.0;
         std::vector<ChordRest*> elements;
-        std::vector<int> notes;
+        std::vector<ChordPosition> notes;
         const StaffType* tab = nullptr;
         bool isBesideTabStaff = false;
+        CrossStaffBeamPosition crossStaffBeamPos = CrossStaffBeamPosition::INVALID;
 
         void setAnchors(PointF startA, PointF endA) { startAnchor = startA; endAnchor = endA; }
         bool isValid() const override { return !(beamType == BeamType::INVALID); }

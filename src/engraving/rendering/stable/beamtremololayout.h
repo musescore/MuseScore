@@ -56,7 +56,7 @@ public:
     static void setupLData(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutContext& ctx);
 
     static bool calculateAnchors(const BeamBase* item, BeamBase::LayoutData* ldata, LayoutContext& ctx,
-                                 const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
+                                 const std::vector<ChordRest*>& chordRests, const std::vector<ChordPosition>& notes);
 
     static double chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* chord, ChordBeamAnchorType anchorType);
     static double chordBeamAnchorY(const BeamBase::LayoutData* ldata, const ChordRest* chord);
@@ -68,9 +68,10 @@ private:
 
     static int getMiddleStaffLine(const BeamBase::LayoutData* ldata, const LayoutConfiguration& conf, ChordRest* startChord,
                                   ChordRest* endChord, int staffLines);
-    static int computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, int startNote, int endNote, int middleLine,
-                                   int dictator, int pointer);
-    static SlopeConstraint getSlopeConstraint(const BeamBase::LayoutData* ldata, int startNote, int endNote);
+    static int computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
+                                   const ChordPosition& endPos, int middleLine, int dictator, int pointer);
+    static SlopeConstraint getSlopeConstraint(const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
+                                              const ChordPosition& endPos);
     static void offsetBeamWithAnchorShortening(const BeamBase::LayoutData* ldata, const LayoutConfiguration& conf,
                                                std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int staffLines,
                                                bool isStartDictator, int stemLengthDictator);
