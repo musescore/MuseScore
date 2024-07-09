@@ -61,7 +61,7 @@ bool CrashHandler::start(const muse::io::path_t& handlerFilePath, const muse::io
 
     // Optional annotations passed via --annotations to the handler
     std::map<std::string, std::string> annotations = {
-        { "sentry[release]", application()->fullVersion().toString().toStdString() }
+        { "sentry[release]", application()->fullVersion().toStdString() + "." + application()->build().toStdString() }
     };
     // Optional arguments to pass to the handler
     std::vector<std::string> arguments;

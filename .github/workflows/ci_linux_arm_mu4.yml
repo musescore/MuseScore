@@ -97,6 +97,10 @@ jobs:
           fi
         fi
 
+        if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly_build"]; then
+          SENTRY_PROJECT="sandbox"
+        fi
+
         if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then 
           DO_UPLOAD_SYMBOLS='true'
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
