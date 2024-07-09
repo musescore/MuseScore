@@ -65,6 +65,8 @@ PianoKeyboardView::~PianoKeyboardView()
 
 void PianoKeyboardView::init()
 {
+    m_isInitialized = true;
+
     calculateKeyRects();
 
     connect(this, &QQuickItem::widthChanged, this, &PianoKeyboardView::calculateKeyRects);
@@ -165,6 +167,10 @@ void PianoKeyboardView::determineOctaveLabelsFont()
 
 void PianoKeyboardView::updateKeyStateColors()
 {
+    if (!m_isInitialized) {
+        return;
+    }
+
     auto themeValues = uiConfiguration()->currentTheme().values;
 
     QColor accentColor = themeValues[muse::ui::ACCENT_COLOR].toString();
@@ -190,6 +196,10 @@ void PianoKeyboardView::updateKeyStateColors()
 
 void PianoKeyboardView::paint(QPainter* painter)
 {
+    if (!m_isInitialized) {
+        return;
+    }
+
     TRACEFUNC;
 
     painter->setRenderHint(QPainter::Antialiasing);
@@ -380,12 +390,21 @@ void PianoKeyboardView::setNumberOfKeys(int number)
     }
 
     emit numberOfKeysChanged();
+
+    if (!m_isInitialized) {
+        return;
+    }
+
     calculateKeyRects();
     update();
 }
 
 void PianoKeyboardView::moveCanvas(qreal dx)
 {
+    if (!m_isInitialized) {
+        return;
+    }
+
     setScrollOffset(m_scrollOffset + dx);
 }
 
@@ -414,6 +433,10 @@ void PianoKeyboardView::scale(qreal factor, qreal x)
 
 void PianoKeyboardView::setScaling(qreal scaling, qreal x)
 {
+    if (!m_isInitialized) {
+        return;
+    }
+
     qreal newScaling = std::clamp(scaling, SMALL_KEY_WIDTH_SCALING, LARGE_KEY_WIDTH_SCALING);
     qreal correctedFactor = newScaling / m_keyWidthScaling;
 
@@ -457,6 +480,10 @@ void PianoKeyboardView::updateScrollBar()
 
 void PianoKeyboardView::setScrollBarPosition(qreal position)
 {
+    if (!m_isInitialized) {
+        return;
+    }
+
     setScrollOffset(-position * m_keysAreaRect.width());
 }
 

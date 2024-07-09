@@ -96,6 +96,8 @@ private:
     static constexpr piano_key_t MIN_KEY = 0;
     static constexpr piano_key_t MAX_NUM_KEYS = 128;
 
+    bool m_isInitialized = false;
+
     piano_key_t m_lowestKey = MIN_KEY;
     piano_key_t m_numberOfKeys = MAX_NUM_KEYS;
 
