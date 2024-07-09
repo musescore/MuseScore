@@ -43,6 +43,10 @@ ScoreAccessibilitySettingsModel::ScoreAccessibilitySettingsModel(QObject* parent
         setAccessibleNoteHead(m_accessibleNoteHead);
     });
 
+    connect(m_accessibleNoteHeadColor, &PropertyItem::valueChanged, this, [this]() {
+        setAccessibleNoteHeadColor(m_accessibleNoteHeadColor);
+    });
+
     globalContext()->currentNotation()->style()->styleChanged().onNotify(this, [this]() {
         if (!m_ignoreStyleChange && m_scoreStylePreset->value().toInt() != static_cast<int>(mu::engraving::ScoreStylePreset::CUSTOM)) {
             m_scoreStylePreset->setValue(static_cast<int>(mu::engraving::ScoreStylePreset::CUSTOM));
@@ -61,6 +65,11 @@ PropertyItem* ScoreAccessibilitySettingsModel::accessibleNoteHead() const
     return m_accessibleNoteHead;
 }
 
+PropertyItem* ScoreAccessibilitySettingsModel::accessibleNoteHeadColor() const
+{
+    return m_accessibleNoteHeadColor;
+}
+
 void ScoreAccessibilitySettingsModel::setScoreStylePreset(PropertyItem* preset)
 {
     m_ignoreStyleChange = true;
@@ -77,14 +86,24 @@ void ScoreAccessibilitySettingsModel::setAccessibleNoteHead(PropertyItem* headSy
     emit accessibleNoteHeadChanged();
 }
 
+void ScoreAccessibilitySettingsModel::setAccessibleNoteHeadColor(PropertyItem* headColor)
+{
+    m_accessibleNoteHeadColor = headColor;
+    loadAccessibleNoteHeadColor(headColor);
+    emit accessibleNoteHeadColorChanged();
+}
+
 void ScoreAccessibilitySettingsModel::createProperties()
 {
     m_scoreStylePreset = buildPropertyItem(mu::engraving::Pid::SCORE_STYLE_PRESET);
     m_accessibleNoteHead = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
+    m_accessibleNoteHeadColor = buildPropertyItem(mu::engraving::Pid::HEAD_COLOR);
     m_scoreStylePreset->setDefaultValue(static_cast<int>(mu::engraving::ScoreStylePreset::DEFAULT));
     m_scoreStylePreset->setValue(static_cast<int>(mu::engraving::ScoreStylePreset::DEFAULT));
     m_accessibleNoteHead->setDefaultValue(static_cast<int>(mu::engraving::NoteHeadScheme::HEAD_NORMAL));
     m_accessibleNoteHead->setValue(static_cast<int>(mu::engraving::NoteHeadScheme::HEAD_NORMAL));
+    m_accessibleNoteHeadColor->setDefaultValue(static_cast<int>(mu::engraving::NoteHeadColor::COLOR_DEFAULT));
+    m_accessibleNoteHeadColor->setValue(static_cast<int>(mu::engraving::NoteHeadColor::COLOR_DEFAULT));
 }
 
 void ScoreAccessibilitySettingsModel::requestElements()
@@ -96,7 +115,8 @@ void ScoreAccessibilitySettingsModel::loadProperties()
 {
     static PropertyIdSet propertyIdSet {
         Pid::SCORE_STYLE_PRESET,
-        Pid::HEAD_SCHEME
+        Pid::HEAD_SCHEME,
+        Pid::HEAD_COLOR
     };
 
     loadProperties(propertyIdSet);
@@ -111,14 +131,20 @@ void ScoreAccessibilitySettingsModel::loadProperties(const mu::engraving::Proper
     if (muse::contains(propertyIdSet, Pid::HEAD_SCHEME)) {
         loadPropertyItem(m_accessibleNoteHead);
     }
+
+    if (muse::contains(propertyIdSet, Pid::HEAD_COLOR)) {
+        loadPropertyItem(m_accessibleNoteHeadColor);
+    }
 }
 
 void ScoreAccessibilitySettingsModel::resetProperties()
 {
     m_scoreStylePreset->resetToDefault();
     m_accessibleNoteHead->resetToDefault();
+    m_accessibleNoteHeadColor->resetToDefault();
     emit scoreStylePresetChanged();
     emit accessibleNoteHeadChanged();
+    emit accessibleNoteHeadColorChanged();
 }
 
 QVariantList ScoreAccessibilitySettingsModel::possibleScoreStylePreset() const
@@ -180,6 +206,28 @@ QVariantList ScoreAccessibilitySettingsModel::possibleAccessibleNoteHeadTypes() 
     return result;
 }
 
+QVariantList ScoreAccessibilitySettingsModel::possibleAccessibleNoteHeadColorTypes() const
+{
+    QMap<mu::engraving::NoteHeadColor, QString> types {
+        { mu::engraving::NoteHeadColor::COLOR_DEFAULT,                  muse::qtrc("inspector", "Default") },
+        { mu::engraving::NoteHeadColor::COLOR_FIGURENOTES_STAGE_3,               muse::qtrc("inspector", "Figurenotes (stage 3)") },
+        { mu::engraving::NoteHeadColor::COLOR_BOOMWHACKERS,     muse::qtrc("inspector", "Boomwhackers") },
+    };
+
+    QVariantList result;
+
+    for (mu::engraving::NoteHeadColor type : types.keys()) {
+        QVariantMap obj;
+
+        obj["text"] = types[type];
+        obj["value"] = static_cast<int>(type);
+
+        result << obj;
+    }
+
+    return result;
+}
+
 void ScoreAccessibilitySettingsModel::loadStyle(PropertyItem* preset)
 {
     int presetValue = preset->value().toInt();
@@ -210,4 +258,12 @@ void ScoreAccessibilitySettingsModel::loadAccessibleNoteHead(PropertyItem* noteH
     mu::engraving::NoteHeadScheme scheme = static_cast<mu::engraving::NoteHeadScheme>(schemeValue);
     globalContext()->currentNotation()->style()->setStyleValue(mu::engraving::Sid::noteHeadScheme, static_cast<int>(scheme));
     emit accessibleNoteHeadChanged();
+}
+
+void ScoreAccessibilitySettingsModel::loadAccessibleNoteHeadColor(PropertyItem* noteHeadColor)
+{
+    int colorValue = noteHeadColor->value().toInt();
+    mu::engraving::NoteHeadColor colorScheme = static_cast<mu::engraving::NoteHeadColor>(colorValue);
+    globalContext()->currentNotation()->style()->setStyleValue(mu::engraving::Sid::noteHeadColor, static_cast<int>(colorScheme));
+    emit accessibleNoteHeadColorChanged();
 }

@@ -177,6 +177,7 @@ public:
     /// Contains mu::engraving::NoteHead::Scheme enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(NoteHeadScheme,   noteHeadSchemeEnum,     mu::engraving::apiv1::enums::NoteHeadScheme)
+    DECLARE_API_ENUM(NoteHeadColor,   noteHeadColorEnum,     mu::engraving::apiv1::enums::NoteHeadColor)
     /// Contains mu::engraving::NoteHead::Group enumeration values
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_TRIANGLE).

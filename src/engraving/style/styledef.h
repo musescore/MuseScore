@@ -1689,6 +1689,7 @@ enum class Sid {
     defaultsVersion,
 
     noteHeadScheme,
+    noteHeadColor,
 
     STYLES
     ///\}

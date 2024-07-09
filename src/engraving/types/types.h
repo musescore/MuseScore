@@ -444,6 +444,12 @@ enum class NoteHeadScheme : signed char {
     HEAD_SCHEMES
 };
 
+enum class NoteHeadColor : signed char {
+    COLOR_DEFAULT = -1,
+    COLOR_FIGURENOTES_STAGE_3,
+    COLOR_BOOMWHACKERS
+};
+
 // P_TYPE::NOTEHEAD_GROUP
 enum class NoteHeadGroup : signed char {
     HEAD_NORMAL = 0,

@@ -91,6 +91,7 @@ enum class P_TYPE {
     BARLINE_TYPE,
     NOTEHEAD_TYPE,
     NOTEHEAD_SCHEME,
+    NOTEHEAD_COLOR,
     NOTEHEAD_GROUP,
     CLEF_TYPE,
     CLEF_TO_BARLINE_POS,
@@ -235,6 +236,8 @@ public:
         : m_type(P_TYPE::NOTEHEAD_TYPE), m_data(make_data<NoteHeadType>(v)) {}
     PropertyValue(NoteHeadScheme v)
         : m_type(P_TYPE::NOTEHEAD_SCHEME), m_data(make_data<NoteHeadScheme>(v)) {}
+    PropertyValue(NoteHeadColor v)
+        : m_type(P_TYPE::NOTEHEAD_COLOR), m_data(make_data<NoteHeadColor>(v)) {}
     PropertyValue(NoteHeadGroup v)
         : m_type(P_TYPE::NOTEHEAD_GROUP), m_data(make_data<NoteHeadGroup>(v)) {}
 

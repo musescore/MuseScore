@@ -35,6 +35,9 @@ class ScoreAccessibilitySettingsModel : public AbstractInspectorModel
     INJECT(mu::context::IGlobalContext, globalContext)
     Q_PROPERTY(PropertyItem * scoreStylePreset READ scoreStylePreset WRITE setScoreStylePreset NOTIFY scoreStylePresetChanged)
     Q_PROPERTY(PropertyItem * accessibleNoteHead READ accessibleNoteHead WRITE setAccessibleNoteHead NOTIFY accessibleNoteHeadChanged)
+    Q_PROPERTY(
+        PropertyItem
+        * accessibleNoteHeadColor READ accessibleNoteHeadColor WRITE setAccessibleNoteHeadColor NOTIFY accessibleNoteHeadColorChanged)
 
 public:
     explicit ScoreAccessibilitySettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -46,22 +49,28 @@ public:
 
     PropertyItem* scoreStylePreset() const;
     PropertyItem* accessibleNoteHead() const;
+    PropertyItem* accessibleNoteHeadColor() const;
     void setScoreStylePreset(PropertyItem* preset);
     void setAccessibleNoteHead(PropertyItem* headSystem);
+    void setAccessibleNoteHeadColor(PropertyItem* headColor);
     Q_INVOKABLE QVariantList possibleScoreStylePreset() const;
     Q_INVOKABLE QVariantList possibleAccessibleNoteHeadTypes() const;
+    Q_INVOKABLE QVariantList possibleAccessibleNoteHeadColorTypes() const;
     void loadStyle(PropertyItem* preset);
     void loadAccessibleNoteHead(PropertyItem* noteHeadScheme);
+    void loadAccessibleNoteHeadColor(PropertyItem* noteHeadColor);
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
 signals:
     void scoreStylePresetChanged();
     void accessibleNoteHeadChanged();
+    void accessibleNoteHeadColorChanged();
 
 private:
     PropertyItem* m_scoreStylePreset = nullptr;
     PropertyItem* m_accessibleNoteHead = nullptr;
+    PropertyItem* m_accessibleNoteHeadColor = nullptr;
     bool m_ignoreStyleChange = false;
 };
 }

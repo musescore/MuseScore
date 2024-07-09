@@ -2866,37 +2866,65 @@ void Note::localSpatiumChanged(double oldValue, double newValue)
 //---------------------------------------------------------
 //   color
 //---------------------------------------------------------
-/*
+
 Color Note::color() const
 {
-    NoteHeadScheme scheme = m_headScheme;
-    if (scheme == NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3) {
+    NoteHeadScheme scheme = style().value(Sid::noteHeadScheme).value<NoteHeadScheme>();
+    NoteHeadColor color = style().value(Sid::noteHeadColor).value<NoteHeadColor>();
+    if (scheme == NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3 && color == NoteHeadColor::COLOR_FIGURENOTES_STAGE_3) {
         int pitchClass = m_pitch % 12;
         switch (pitchClass) {
-            case 0:
-            case 1:
-                return Color::RED;
-            case 2:
-            case 3:
-                return Color::BROWN;
-            case 4:
-                return Color::GREY;
-            case 5:
-            case 6:
-                return Color::BLUE;
-            case 7:
-            case 8:
-                return Color::BLACK;
-            case 9:
-            case 10:
-                return Color::YELLOW;
-            case 11:
-                return Color::GREEN;
+        case 0:
+        case 1:
+            return Color::RED;
+        case 2:
+        case 3:
+            return Color::BROWN;
+        case 4:
+            return Color::GREY;
+        case 5:
+        case 6:
+            return Color::BLUE;
+        case 7:
+        case 8:
+            return Color::BLACK;
+        case 9:
+        case 10:
+            return Color::YELLOW;
+        case 11:
+            return Color::GREEN;
+        }
+    } else if (color == NoteHeadColor::COLOR_BOOMWHACKERS) {
+        int pitchClass = m_pitch % 12;
+        switch (pitchClass) {
+        case 0:
+            return Color::RED;
+        case 1:
+            return Color::ORANGE;
+        case 2:
+            return Color::SAFFRON;
+        case 3:
+            return Color::YELLOW;
+        case 4:
+            return Color::BRIGHT_YELLOW;
+        case 5:
+            return Color::LIME_GREEN;
+        case 6:
+            return Color::GREEN;
+        case 7:
+            return Color::TEAL;
+        case 8:
+            return Color::BLUE;
+        case 9:
+            return Color::INDIGO;
+        case 10:
+            return Color::VIOLET;
+        case 11:
+            return Color::MAGENTA;
         }
     }
     return Color::BLACK;
 }
-*/
 
 //---------------------------------------------------------
 //   getProperty

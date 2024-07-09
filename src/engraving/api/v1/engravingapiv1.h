@@ -62,6 +62,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * PlayEventType READ playEventTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * NoteHeadType READ noteHeadTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * NoteHeadScheme READ noteHeadSchemeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * NoteHeadColor READ noteHeadColorEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * NoteHeadGroup READ noteHeadGroupEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * NoteValueType READ noteValueTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Segment READ segmentTypeEnum CONSTANT)
@@ -105,6 +106,7 @@ public:
     apiv1::Enum* playEventTypeEnum() const { return api()->get_playEventTypeEnum(); }
     apiv1::Enum* noteHeadTypeEnum() const { return api()->get_noteHeadTypeEnum(); }
     apiv1::Enum* noteHeadSchemeEnum() const { return api()->get_noteHeadSchemeEnum(); }
+    apiv1::Enum* noteHeadColorEnum() const { return api()->get_noteHeadColorEnum(); }
     apiv1::Enum* noteHeadGroupEnum() const { return api()->get_noteHeadGroupEnum(); }
     apiv1::Enum* noteValueTypeEnum() const { return api()->get_noteValueTypeEnum(); }
     apiv1::Enum* segmentTypeEnum() const { return api()->get_segmentTypeEnum(); }

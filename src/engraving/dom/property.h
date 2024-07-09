@@ -299,6 +299,7 @@ enum class Pid {
     STAFF_COLOR,
 
     HEAD_SCHEME,
+    HEAD_COLOR,
     STAFF_GEN_CLEF,
     STAFF_GEN_TIMESIG,
     STAFF_GEN_KEYSIG,

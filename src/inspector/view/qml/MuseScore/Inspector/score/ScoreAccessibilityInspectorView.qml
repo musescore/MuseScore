@@ -74,5 +74,23 @@ InspectorSectionView {
                 }
             }
         }
+
+        DropdownPropertyView {
+            id: accessibleNoteHeadColor
+
+            titleText: qsTrc("inspector", "Notehead color")
+            propertyItem: root.model ? root.model.accessibleNoteHeadColor : null
+            visible: true
+            enabled: true
+
+            model: root.model ? root.model.possibleAccessibleNoteHeadColorTypes() : []
+
+            Connections {
+                target: root.model
+                onAccessibleNoteHeadColorChanged: {
+                    accessibleNoteHeadColor.model = root.model ? root.model.possibleAccessibleNoteHeadColorTypes() : [];
+                }
+            }
+        }
     }
 }
