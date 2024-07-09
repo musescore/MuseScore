@@ -66,8 +66,10 @@ Item {
 
             numberOfKeys: contextMenuModel.numberOfKeys
 
-            //! NOTE: bidirectional binding; C++ code should guard against loops
             scrollBarPosition: scrollBar.position
+            onScrollBarPositionChanged: function() {
+                scrollBar.position = scrollBarPosition
+            }
 
             StyledScrollBar {
                 id: scrollBar
@@ -82,7 +84,6 @@ Item {
                 border.color: "white"
                 border.width: 1
 
-                position: keyboardView.scrollBarPosition
                 size: keyboardView.scrollBarSize
 
                 onPositionChanged: {
