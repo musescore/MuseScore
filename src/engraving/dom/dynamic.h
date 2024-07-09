@@ -128,7 +128,7 @@ public:
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
     void checkMeasureBoundariesAndMoveIfNeed();
 
-    bool hasVoiceApplicationProperties() const override { return true; }
+    bool hasVoiceAssignmentProperties() const override { return true; }
 
 private:
 

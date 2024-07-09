@@ -322,7 +322,7 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     }
 
     // Pre-4.4 compatibility: these items now use DIRECTION property
-    if (pid == Pid::PLACEMENT && item->hasVoiceApplicationProperties()) {
+    if (pid == Pid::PLACEMENT && item->hasVoiceAssignmentProperties()) {
         pid = Pid::DIRECTION;
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }

@@ -32,7 +32,7 @@ class InspectorModelWithVoiceAndPositionOptions : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * voiceBasedPosition READ voiceBasedPosition CONSTANT)
-    Q_PROPERTY(PropertyItem * applyToVoice READ applyToVoice CONSTANT)
+    Q_PROPERTY(PropertyItem * voiceAssignment READ voiceAssignment CONSTANT)
     Q_PROPERTY(PropertyItem * voice READ voice CONSTANT)
     Q_PROPERTY(PropertyItem * centerBetweenStaves READ centerBetweenStaves CONSTANT)
     Q_PROPERTY(bool isMultiStaffInstrument READ isMultiStaffInstrument WRITE setIsMultiStaffInstrument NOTIFY isMultiStaffInstrumentChanged)
@@ -49,7 +49,7 @@ public:
     void onNotationChanged(const PropertyIdSet&, const StyleIdSet&) override;
 
     PropertyItem* voiceBasedPosition() const;
-    PropertyItem* applyToVoice() const;
+    PropertyItem* voiceAssignment() const;
     PropertyItem* voice() const;
     PropertyItem* centerBetweenStaves() const;
     bool isMultiStaffInstrument() const;
@@ -71,7 +71,7 @@ private:
 
 private:
     PropertyItem* m_voiceBasedPosition = nullptr;
-    PropertyItem* m_applyToVoice = nullptr;
+    PropertyItem* m_voiceAssignment = nullptr;
     PropertyItem* m_voice = nullptr;
     PropertyItem* m_centerBetweenStaves = nullptr;
     bool m_isMultiStaffInstrument = false;

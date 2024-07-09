@@ -436,20 +436,20 @@ TiePlacement TConv::fromXml(const AsciiStringView& str, TiePlacement def)
     return findTypeByXmlTag<TiePlacement>(TIE_PLACEMENT, str, def);
 }
 
-static const std::vector<Item<VoiceApplication> > VOICE_APPLICATION = {
-    { VoiceApplication::ALL_VOICE_IN_INSTRUMENT, "allInInstrument" },
-    { VoiceApplication::ALL_VOICE_IN_STAFF,      "allInStaff" },
-    { VoiceApplication::CURRENT_VOICE_ONLY,      "currentVoiceOnly" }
+static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {
+    { VoiceAssignment::ALL_VOICE_IN_INSTRUMENT, "allInInstrument" },
+    { VoiceAssignment::ALL_VOICE_IN_STAFF,      "allInStaff" },
+    { VoiceAssignment::CURRENT_VOICE_ONLY,      "currentVoiceOnly" }
 };
 
-AsciiStringView TConv::toXml(VoiceApplication voiceAppl)
+AsciiStringView TConv::toXml(VoiceAssignment voiceAppl)
 {
-    return findXmlTagByType<VoiceApplication>(VOICE_APPLICATION, voiceAppl);
+    return findXmlTagByType<VoiceAssignment>(VOICE_ASSIGNMENT, voiceAppl);
 }
 
-VoiceApplication TConv::fromXml(const AsciiStringView& str, VoiceApplication def)
+VoiceAssignment TConv::fromXml(const AsciiStringView& str, VoiceAssignment def)
 {
-    return findTypeByXmlTag<VoiceApplication>(VOICE_APPLICATION, str, def);
+    return findTypeByXmlTag<VoiceAssignment>(VOICE_ASSIGNMENT, str, def);
 }
 
 static const std::vector<Item<AutoOnOff> > AUTO_ON_OFF = {

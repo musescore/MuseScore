@@ -414,9 +414,9 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
 
     int voice = INVALID_VOICE;
     for (const EngravingItem* element : selectedElements) {
-        if (element->hasVoiceApplicationProperties()) {
-            VoiceApplication appliedVoice = element->getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
-            if (appliedVoice == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || appliedVoice == VoiceApplication::ALL_VOICE_IN_STAFF) {
+        if (element->hasVoiceAssignmentProperties()) {
+            VoiceAssignment voiceAssignment = element->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+            if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
                 return INVALID_VOICE;
             }
         }

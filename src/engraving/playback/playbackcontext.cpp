@@ -542,19 +542,19 @@ void PlaybackContext::copyPlayTechniquesInRange(const int rangeStartTick, const 
 
 void PlaybackContext::applyDynamic(const EngravingItem* dynamicItem, const dynamic_level_t dynamicLevel, const int positionTick)
 {
-    const VoiceApplication applyToVoice = dynamicItem->getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+    const VoiceAssignment voiceAssignment = dynamicItem->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
     const track_idx_t dynamicTrackIdx = dynamicItem->track();
     const staff_idx_t dynamicStaffIdx = dynamicItem->staffIdx();
-    const int dynamicPriority = static_cast<int>(applyToVoice);
+    const int dynamicPriority = static_cast<int>(voiceAssignment);
 
     //! See: https://github.com/musescore/MuseScore/issues/23355
-    auto trackAccepted = [applyToVoice, dynamicTrackIdx, dynamicStaffIdx](const track_idx_t trackIdx) {
-        switch (applyToVoice) {
-        case VoiceApplication::CURRENT_VOICE_ONLY:
+    auto trackAccepted = [voiceAssignment, dynamicTrackIdx, dynamicStaffIdx](const track_idx_t trackIdx) {
+        switch (voiceAssignment) {
+        case VoiceAssignment::CURRENT_VOICE_ONLY:
             return dynamicTrackIdx == trackIdx;
-        case VoiceApplication::ALL_VOICE_IN_STAFF:
+        case VoiceAssignment::ALL_VOICE_IN_STAFF:
             return dynamicStaffIdx == track2staff(trackIdx);
-        case VoiceApplication::ALL_VOICE_IN_INSTRUMENT:
+        case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT:
             return true;
         }
 

@@ -361,7 +361,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SNAP_BEFORE,              false, "snapBefore",           P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "snap before") },     // <
     { Pid::SNAP_AFTER,               false, "snapAfter",            P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "snap after") },      // < for hairpins
 
-    { Pid::APPLY_TO_VOICE,          true,  "applyToVoice",          P_TYPE::VOICE_APPLICATION,  PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "voice assignment") },
+    { Pid::VOICE_ASSIGNMENT,        true,  "voiceAssignment",       P_TYPE::VOICE_ASSIGNMENT,   PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "voice assignment") },
     { Pid::CENTER_BETWEEN_STAVES,   false, "centerBetweenStaves",   P_TYPE::AUTO_ON_OFF,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "center between staves") },
 
     { Pid::POS_ABOVE,               false, "posAbove",              P_TYPE::MILLIMETRE,         PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position above") },

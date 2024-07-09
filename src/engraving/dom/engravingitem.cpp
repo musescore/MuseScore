@@ -645,9 +645,9 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 
     if (selected() || marked) {
         voice_idx_t voiceForColorChoice = track() == muse::nidx ? 0 : voice();
-        if (hasVoiceApplicationProperties()) {
-            VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
-            if (voiceApplication != VoiceApplication::CURRENT_VOICE_ONLY) {
+        if (hasVoiceAssignmentProperties()) {
+            VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+            if (voiceAssignment != VoiceAssignment::CURRENT_VOICE_ONLY) {
                 voiceForColorChoice = VOICES;
             }
         }
@@ -1284,11 +1284,11 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
 
 bool EngravingItem::appliesToAllVoicesInInstrument() const
 {
-    return hasVoiceApplicationProperties()
-           && getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>() == VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+    return hasVoiceAssignmentProperties()
+           && getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>() == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
 }
 
-void EngravingItem::setInitialTrackAndVoiceApplication(track_idx_t track)
+void EngravingItem::setInitialTrackAndVoiceAssignment(track_idx_t track)
 {
     IF_ASSERT_FAILED(track != muse::nidx) {
         return;
@@ -1296,24 +1296,24 @@ void EngravingItem::setInitialTrackAndVoiceApplication(track_idx_t track)
 
     if (configuration()->dynamicsApplyToAllVoices()) {
         setTrack(trackZeroVoice(track));
-        setProperty(Pid::APPLY_TO_VOICE, VoiceApplication::ALL_VOICE_IN_INSTRUMENT);
+        setProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
     } else {
         setTrack(track);
-        setProperty(Pid::APPLY_TO_VOICE, VoiceApplication::CURRENT_VOICE_ONLY);
+        setProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
     }
 }
 
-void EngravingItem::checkVoiceApplicationCompatibleWithTrack()
+void EngravingItem::checkVoiceAssignmentCompatibleWithTrack()
 {
     voice_idx_t currentVoice = voice();
-    VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
+    VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
 
-    if (voiceApplication != VoiceApplication::CURRENT_VOICE_ONLY && currentVoice != 0) {
+    if (voiceAssignment != VoiceAssignment::CURRENT_VOICE_ONLY && currentVoice != 0) {
         setProperty(Pid::TRACK, trackZeroVoice(track()));
     }
 }
 
-void EngravingItem::setPlacementBasedOnVoiceApplication(DirectionV styledDirection)
+void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirection)
 {
     PlacementV oldPlacement = placement();
     bool offsetIsStyled = isStyled(Pid::OFFSET);
@@ -1329,8 +1329,8 @@ void EngravingItem::setPlacementBasedOnVoiceApplication(DirectionV styledDirecti
         bool isOnLastStaffOfInstrument = staffIdx() == part()->staves().back()->idx();
         newPlacement = isOnLastStaffOfInstrument ? PlacementV::ABOVE : PlacementV::BELOW;
     } else {
-        VoiceApplication voiceApplication = getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
-        if (voiceApplication == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || voiceApplication == VoiceApplication::ALL_VOICE_IN_STAFF) {
+        VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
             if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
                 newPlacement = PlacementV::ABOVE;
             } else {

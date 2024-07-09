@@ -54,7 +54,7 @@ public:
 
     Dynamic* snappedDynamic() const;
 
-    bool hasVoiceApplicationProperties() const override { return true; }
+    bool hasVoiceAssignmentProperties() const override { return true; }
 
     void reset() override;
 };

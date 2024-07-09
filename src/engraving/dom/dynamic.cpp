@@ -499,7 +499,7 @@ EngravingItem* Dynamic::drop(EditData& ed)
     if (item->isExpression()) {
         item->setTrack(track());
         item->setParent(segment());
-        toExpression(item)->setApplyToVoice(applyToVoice());
+        toExpression(item)->setVoiceAssignment(voiceAssignment());
         score()->undoAddElement(item);
         return item;
     }

@@ -1747,8 +1747,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             } else {
                 score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
-            if (spanner->hasVoiceApplicationProperties()) {
-                spanner->setInitialTrackAndVoiceApplication(cr1->track());
+            if (spanner->hasVoiceAssignmentProperties()) {
+                spanner->setInitialTrackAndVoiceAssignment(cr1->track());
             } else if (spanner->isVoiceSpecific()) {
                 spanner->setTrack(cr1->track());
             }
@@ -1915,8 +1915,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 spanner->setScore(score);
                 spanner->styleChanged();
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
-                if (spanner->hasVoiceApplicationProperties()) {
-                    spanner->setInitialTrackAndVoiceApplication(staff2track(i));
+                if (spanner->hasVoiceAssignmentProperties()) {
+                    spanner->setInitialTrackAndVoiceAssignment(staff2track(i));
                 }
                 selectAndStartEditIfNeeded(spanner);
             }
@@ -2057,10 +2057,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
             }
         }
 
-        if (el && el->hasVoiceApplicationProperties()) {
-            // If target has voice application properties, dropped element takes those and discards the default
-            if (!target->hasVoiceApplicationProperties()) {
-                el->setInitialTrackAndVoiceApplication(el->track());
+        if (el && el->hasVoiceAssignmentProperties()) {
+            // If target has voice assignment properties, dropped element takes those and discards the default
+            if (!target->hasVoiceAssignmentProperties()) {
+                el->setInitialTrackAndVoiceAssignment(el->track());
             }
         }
 

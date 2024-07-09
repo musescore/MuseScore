@@ -680,11 +680,11 @@ public:
 
     virtual bool allowTimeAnchor() const { return false; }
 
-    virtual bool hasVoiceApplicationProperties() const { return false; }
+    virtual bool hasVoiceAssignmentProperties() const { return false; }
     bool appliesToAllVoicesInInstrument() const;
-    void setInitialTrackAndVoiceApplication(track_idx_t track);
-    void checkVoiceApplicationCompatibleWithTrack();
-    void setPlacementBasedOnVoiceApplication(DirectionV styledDirection);
+    void setInitialTrackAndVoiceAssignment(track_idx_t track);
+    void checkVoiceAssignmentCompatibleWithTrack();
+    void setPlacementBasedOnVoiceAssignment(DirectionV styledDirection);
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------

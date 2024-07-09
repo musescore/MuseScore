@@ -481,8 +481,8 @@ public:
     //! At the moment it's: Text, Jump, Marker
     bool layoutToParentWidth() const { return m_layoutToParentWidth; }
 
-    void setApplyToVoice(VoiceApplication v) { m_applyToVoice = v; }
-    VoiceApplication applyToVoice() const { return m_applyToVoice; }
+    void setVoiceAssignment(VoiceAssignment v) { m_voiceAssignment = v; }
+    VoiceAssignment voiceAssignment() const { return m_voiceAssignment; }
     void setDirection(DirectionV v) { m_direction = v; }
     DirectionV direction() const { return m_direction; }
     void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
@@ -546,7 +546,7 @@ private:
 
     TextCursor* m_cursor = nullptr;
 
-    VoiceApplication m_applyToVoice = VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+    VoiceAssignment m_voiceAssignment = VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
     DirectionV m_direction = DirectionV::AUTO;
     AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
 };

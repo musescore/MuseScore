@@ -936,7 +936,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
     }
 
     if (!placement.empty()) {
-        if (el->hasVoiceApplicationProperties()) {
+        if (el->hasVoiceAssignmentProperties()) {
             el->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
             el->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
         } else {
@@ -1441,7 +1441,7 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
 static void setSLinePlacement(SLine* sli, const String& placement)
 {
     if (placement == u"above" || placement == u"below") {
-        if (sli->hasVoiceApplicationProperties()) {
+        if (sli->hasVoiceAssignmentProperties()) {
             sli->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
             sli->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
         } else {

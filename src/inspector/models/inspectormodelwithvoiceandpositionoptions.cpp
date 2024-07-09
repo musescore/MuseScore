@@ -37,7 +37,7 @@ void InspectorModelWithVoiceAndPositionOptions::createProperties()
         onPropertyValueChanged(pid, newValue);
         updateIsStaveCenteringAvailable();
     });
-    m_applyToVoice = buildPropertyItem(Pid::APPLY_TO_VOICE);
+    m_voiceAssignment = buildPropertyItem(Pid::VOICE_ASSIGNMENT);
     m_voice = buildPropertyItem(Pid::VOICE);
     m_centerBetweenStaves = buildPropertyItem(Pid::CENTER_BETWEEN_STAVES);
     updateIsMultiStaffInstrument();
@@ -47,7 +47,7 @@ void InspectorModelWithVoiceAndPositionOptions::createProperties()
 void InspectorModelWithVoiceAndPositionOptions::loadProperties()
 {
     loadPropertyItem(m_voiceBasedPosition);
-    loadPropertyItem(m_applyToVoice);
+    loadPropertyItem(m_voiceAssignment);
     loadPropertyItem(m_voice);
     loadPropertyItem(m_centerBetweenStaves);
     updateIsMultiStaffInstrument();
@@ -57,7 +57,7 @@ void InspectorModelWithVoiceAndPositionOptions::loadProperties()
 void InspectorModelWithVoiceAndPositionOptions::resetProperties()
 {
     m_voiceBasedPosition->resetToDefault();
-    m_applyToVoice->resetToDefault();
+    m_voiceAssignment->resetToDefault();
     m_voice->setValue(0);
     m_centerBetweenStaves->resetToDefault();
 }
@@ -109,9 +109,9 @@ PropertyItem* InspectorModelWithVoiceAndPositionOptions::voiceBasedPosition() co
     return m_voiceBasedPosition;
 }
 
-PropertyItem* InspectorModelWithVoiceAndPositionOptions::applyToVoice() const
+PropertyItem* InspectorModelWithVoiceAndPositionOptions::voiceAssignment() const
 {
-    return m_applyToVoice;
+    return m_voiceAssignment;
 }
 
 PropertyItem* InspectorModelWithVoiceAndPositionOptions::voice() const
@@ -167,11 +167,11 @@ void InspectorModelWithVoiceAndPositionOptions::changeVoice(int voice)
             continue;
         }
 
-        item->undoChangeProperty(Pid::APPLY_TO_VOICE, VoiceApplication::CURRENT_VOICE_ONLY);
+        item->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
         item->undoChangeProperty(Pid::VOICE, voice);
     }
 
-    loadPropertyItem(m_applyToVoice);
+    loadPropertyItem(m_voiceAssignment);
     loadPropertyItem(m_voice);
 
     updateNotation();

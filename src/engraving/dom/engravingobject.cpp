@@ -510,8 +510,8 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
                 toEngravingItem(this)->manageExclusionFromParts(v.toBool());
             }
         }
-    } else if (id == Pid::APPLY_TO_VOICE) {
-        if (v.value<VoiceApplication>() != VoiceApplication::CURRENT_VOICE_ONLY) {
+    } else if (id == Pid::VOICE_ASSIGNMENT) {
+        if (v.value<VoiceAssignment>() != VoiceAssignment::CURRENT_VOICE_ONLY) {
             changeProperties(this, Pid::VOICE, 0, ps);
         }
     }

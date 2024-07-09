@@ -29,13 +29,13 @@ class VoiceTypes
     Q_GADGET
 
 public:
-    enum class VoiceApplication {
+    enum class VoiceAssignment {
         VOICE_ALL_IN_INSTRUMENT,
         VOICE_ALL_IN_STAFF,
         VOICE_CURRENT_ONLY,
     };
 
-    Q_ENUM(VoiceApplication)
+    Q_ENUM(VoiceAssignment)
 };
 
 #endif // MU_INSPECTOR_VOICETYPES_H
