@@ -35,10 +35,7 @@ class PianoKeyboardController : public muse::Injectable, public muse::async::Asy
     muse::Inject<context::IGlobalContext> context = { this };
 
 public:
-    PianoKeyboardController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
-
-    void init();
+    PianoKeyboardController(const muse::modularity::ContextPtr& iocCtx);
 
     std::optional<piano_key_t> pressedKey() const;
     void setPressedKey(std::optional<piano_key_t> key);
