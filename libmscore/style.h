@@ -1485,6 +1485,7 @@ class MStyle {
       void applyNewDefaults(const MStyle& other, const int defaultsVersion);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
+      void readProperties400(XmlReader& e, int mscVersion);
       bool readStyleValCompat(XmlReader&);
       bool readTextStyleValCompat(XmlReader&);
 
