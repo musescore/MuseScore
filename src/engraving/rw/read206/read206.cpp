@@ -3288,14 +3288,14 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             double sp = score->style().value(Sid::spatium).toReal();
             ReadChordListHook clhook(score);
             readStyle206(&score->style(), e, ctx, clhook);
-            if (score->style().styleSt(Sid::MusicalTextFont) == "MuseJazz") {
-                score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
+            if (score->style().styleSt(Sid::musicalTextFont) == "MuseJazz") {
+                score->style().set(Sid::musicalTextFont, "MuseJazz Text");
             }
             if (ctx.overrideSpatium()) {
                 ctx.setOriginalSpatium(score->style().spatium());
                 score->style().set(Sid::spatium, sp);
             }
-            score->setEngravingFont(score->engravingFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString()));
+            score->setEngravingFont(score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).toStdString()));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);

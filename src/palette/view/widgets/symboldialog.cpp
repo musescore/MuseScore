@@ -83,7 +83,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     int idx = 0;
     int currentIndex = 0;
     Score* score = globalContext()->currentNotation()->elements()->msScore();
-    std::string styleFont = score ? score->style().styleSt(Sid::MusicalSymbolFont).toStdString() : "";
+    std::string styleFont = score ? score->style().styleSt(Sid::musicalSymbolFont).toStdString() : "";
     for (const IEngravingFontPtr& f : engravingFonts()->fonts()) {
         fontList->addItem(QString::fromStdString(f->name()));
         if (!styleFont.empty() && f->name() == styleFont) {

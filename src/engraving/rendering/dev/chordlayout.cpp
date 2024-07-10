@@ -336,7 +336,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     double mag_ = item->staff() ? item->staff()->staffMag(item) : 1.0;    // palette elements do not have a staff
     double dotNoteDistance = ctx.conf().styleMM(Sid::dotNoteDistance) * mag_;
     double minNoteDistance = ctx.conf().styleMM(Sid::minNoteDistance) * mag_;
-    double minTieLength = ctx.conf().styleMM(Sid::MinTieLength) * mag_;
+    double minTieLength = ctx.conf().styleMM(Sid::minTieLength) * mag_;
 
     for (Chord* c : item->graceNotes()) {
         layoutTablature(c, ctx);

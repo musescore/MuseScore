@@ -460,19 +460,19 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::ledgerLineLength,        false, ledgerLineLength,        0 },
         { StyleId::shortestStem,            false, shortestStem,            0 },
         { StyleId::combineVoice,            false, combineVoices,           resetCombineVoices },
-        { StyleId::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
-        { StyleId::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
-        { StyleId::ArpeggioHookLen,         false, arpeggioHookLen,         0 },
-        { StyleId::ArpeggioHiddenInStdIfTab, false, arpeggioHiddenInStdIfTab, 0 },
-        { StyleId::SlurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth },
-        { StyleId::SlurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth },
-        { StyleId::SlurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
-        { StyleId::SlurMinDistance,         false, slurMinDistance,         resetSlurMinDistance },
-        { StyleId::TieEndWidth,             false, tieEndLineWidth,         resetTieEndLineWidth },
-        { StyleId::TieMidWidth,             false, tieMidLineWidth,         resetTieMidLineWidth },
-        { StyleId::TieDottedWidth,          false, tieDottedLineWidth,      resetTieDottedLineWidth },
-        { StyleId::TieMinDistance,          false, tieMinDistance,          resetTieMinDistance },
-        { StyleId::MinTieLength,            false, minTieLength,            resetMinTieLength },
+        { StyleId::arpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
+        { StyleId::arpeggioLineWidth,       false, arpeggioLineWidth,       0 },
+        { StyleId::arpeggioHookLen,         false, arpeggioHookLen,         0 },
+        { StyleId::arpeggioHiddenInStdIfTab, false, arpeggioHiddenInStdIfTab, 0 },
+        { StyleId::slurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth },
+        { StyleId::slurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth },
+        { StyleId::slurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
+        { StyleId::slurMinDistance,         false, slurMinDistance,         resetSlurMinDistance },
+        { StyleId::tieEndWidth,             false, tieEndLineWidth,         resetTieEndLineWidth },
+        { StyleId::tieMidWidth,             false, tieMidLineWidth,         resetTieMidLineWidth },
+        { StyleId::tieDottedWidth,          false, tieDottedLineWidth,      resetTieDottedLineWidth },
+        { StyleId::tieMinDistance,          false, tieMinDistance,          resetTieMinDistance },
+        { StyleId::minTieLength,            false, minTieLength,            resetMinTieLength },
         { StyleId::bracketWidth,            false, bracketWidth,            resetBracketThickness },
         { StyleId::bracketDistance,         false, bracketDistance,         resetBracketDistance },
         { StyleId::akkoladeWidth,           false, akkoladeWidth,           resetBraceThickness },
@@ -601,8 +601,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::scaleBarlines,            false, scaleBarlines,                resetScaleBarlines },
         { StyleId::crossMeasureValues,       false, crossMeasureValues,           0 },
 
-        { StyleId::MusicalSymbolFont,        false, musicalSymbolFont,            0 },
-        { StyleId::MusicalTextFont,          false, musicalTextFont,              0 },
+        { StyleId::musicalSymbolFont,        false, musicalSymbolFont,            0 },
+        { StyleId::musicalTextFont,          false, musicalTextFont,              0 },
         { StyleId::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance,
           resetAutoplaceHairpinDynamicsDistance },
 
@@ -2276,7 +2276,7 @@ void EditStyle::setValues()
     doubleSpinFBVertPos->setValue(styleValue(StyleId::figuredBassYOffset).toDouble());
     spinFBLineHeight->setValue(styleValue(StyleId::figuredBassLineHeight).toDouble() * 100.0);
 
-    QString mfont(styleValue(StyleId::MusicalSymbolFont).value<String>());
+    QString mfont(styleValue(StyleId::musicalSymbolFont).value<String>());
     int idx = 0;
     for (const auto& i : engravingFonts()->fonts()) {
         if (QString::fromStdString(i->name()).toLower() == mfont.toLower()) {
@@ -2308,7 +2308,7 @@ void EditStyle::setValues()
     musicalTextFont->addItem("Petaluma Text", "Petaluma Text");
     musicalTextFont->addItem("Finale Maestro Text", "Finale Maestro Text");
     musicalTextFont->addItem("Finale Broadway Text", "Finale Broadway Text");
-    QString tfont(styleValue(StyleId::MusicalTextFont).value<String>());
+    QString tfont(styleValue(StyleId::musicalTextFont).value<String>());
     idx = musicalTextFont->findData(tfont);
     musicalTextFont->setCurrentIndex(idx);
     musicalTextFont->blockSignals(false);
@@ -2592,7 +2592,7 @@ void EditStyle::valueChanged(int i)
     StyleId idx       = (StyleId)i;
     PropertyValue val  = getValue(idx);
     bool setValue = false;
-    if (idx == StyleId::MusicalSymbolFont) {
+    if (idx == StyleId::musicalSymbolFont) {
         bool overrideDynamicsFont = getValue(StyleId::dynamicsOverrideFont).toBool();
         if (!overrideDynamicsFont) {
             setStyleValue(StyleId::dynamicsFont, val); // Match dynamics font

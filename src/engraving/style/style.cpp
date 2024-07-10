@@ -323,16 +323,16 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         if (tag == "TextStyle") {
             //readTextStyle206(this, e);        // obsolete
             e.readText();
-        } else if (tag == "ottavaHook") {             // obsolete, for 3.0dev bw. compatibility, should be removed in final release
+        } else if (tag == "ottavaHook") {       // obsolete, for 3.0dev bw. compatibility, should be removed in final release
             double y = std::abs(e.readDouble());
             set(Sid::ottavaHookAbove, y);
             set(Sid::ottavaHookBelow, -y);
-        } else if (tag == "Spatium") {
+        } else if (tag == "Spatium" || tag == "spatium") {
             set(Sid::spatium, e.readDouble() * DPMM);
         } else if (tag == "page-layout") {      // obsolete
             compat::readPageFormat206(this, e);
         } else if (tag == "displayInConcertPitch") {
-            set(Sid::concertPitch, bool(e.readInt()));
+            set(Sid::concertPitch, e.readBool());
         } else if (tag == "ChordList") {
             if (readChordListHook) {
                 readChordListHook->read(e);
@@ -341,18 +341,31 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::lyricsDashMaxLength, Spatium(e.readDouble()));
         } else if (tag == "dontHidStavesInFirstSystm") { // pre-3.6.3/4.0 typo
             set(Sid::dontHideStavesInFirstSystem, e.readBool());
+        } else if (tag == "minSpreadSpread") { // pre-4.4 typo
+            set(Sid::minStaffSpread, Spatium(e.readDouble()));
+        } else if (tag == "maxSpreadSpread") { // pre-4.4 typo
+            set(Sid::maxStaffSpread, Spatium(e.readDouble()));
         } else if (tag == "beamDistance") { // beamDistance maps to useWideBeams in 4.0
             set(Sid::useWideBeams, e.readDouble() > 0.75);
+        } else if (tag == "hairpinWidth") { // pre-4.4 typo
+            set(Sid::hairpinLineWidth, Spatium(e.readDouble()));
+        } else if (tag == "chordSymbolPosAbove") { // pre-4.4 typo
+            set(Sid::chordSymbolAPosAbove, e.readPoint());
+        } else if (tag == "chordSymbolPosBelow") { // pre-4.4 typo
+            set(Sid::chordSymbolAPosBelow, e.readPoint());
+        } else if (tag == "measureNumberAllStaffs") { // pre-4.4 typo
+            set(Sid::measureNumberAllStaves, e.readBool());
+        } else if (tag == "dontHidStavesInFirstSystm") { // pre-3.6.3/4.0 typo
+            set(Sid::dontHideStavesInFirstSystem, e.readBool());
+        } else if (tag == "firstSystemInsNameVisibility") { // pre-4.4 typo
+            set(Sid::firstSystemInstNameVisibility, e.readInt());
         } else if ((tag == "articulationMinDistance"
                     || tag == "propertyDistanceHead"
                     || tag == "propertyDistanceStem"
-                    || tag == "propertyDistance")
+                    || tag == "propertyDistance"
+                    || tag == "bracketDistance")
                    && m_version < 400) {
-            // Ignoring pre-4.0 articulation style settings. Using the new defaults instead
-            e.skipCurrentElement();
-        } else if ((tag == "bracketDistance")
-                   && m_version < 400) {
-            // Ignoring pre-4.0 brackets distance settings. Using the new defaults instead.
+            // Ignoring pre-4.0 articulation style and brackets distance settings. Using the new defaults instead
             e.skipCurrentElement();
         } else if (tag == "pedalListStyle") { // pre-3.6.3/4.0 typo
             set(Sid::pedalLineStyle, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
@@ -371,6 +384,18 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             if (!pedContText.empty()) {
                 set(Sid::pedalText, pedContText);
             }
+        } else if (tag == "ArpeggioNoteDistance") { // pre-4.4 typo
+            set(Sid::arpeggioNoteDistance, Spatium(e.readDouble()));
+        } else if (tag == "ArpeggioAccidentalDistance") { // pre-4.4 typo
+            set(Sid::arpeggioAccidentalDistance, Spatium(e.readDouble()));
+        } else if (tag == "ArpeggioAccidentalDistanceMin") { // pre-4.4 typo
+            set(Sid::arpeggioAccidentalDistanceMin, Spatium(e.readDouble()));
+        } else if (tag == "ArpeggioLineWidth") { // pre-x.4 typo
+            set(Sid::arpeggioLineWidth, Spatium(e.readDouble()));
+        } else if (tag == "ArpeggioHookLen") { // pre-x.4 typo
+            set(Sid::arpeggioHookLen, Spatium(e.readDouble()));
+        } else if (tag == "ArpeggioHiddenInStdIfTab") { // pre-x.4 typo
+            set(Sid::arpeggioHiddenInStdIfTab, e.readBool());
         } else if ((tag == "slurEndWidth"
                     || tag == "slurMidWidth"
                     || tag == "slurDottedWidth"
@@ -380,19 +405,107 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             // When opening older scores, use the same values for both.
             double _val = e.readDouble();
             if (tag == "slurEndWidth") {
-                set(Sid::TieEndWidth,     Spatium(_val));
-                set(Sid::SlurEndWidth,    Spatium(_val));
+                set(Sid::tieEndWidth,     Spatium(_val));
+                set(Sid::slurEndWidth,    Spatium(_val));
             } else if (tag == "slurMidWidth") {
-                set(Sid::TieMidWidth,     Spatium(_val));
-                set(Sid::SlurMidWidth,    Spatium(_val));
+                set(Sid::tieMidWidth,     Spatium(_val));
+                set(Sid::slurMidWidth,    Spatium(_val));
             } else if (tag == "slurDottedWidth") {
-                set(Sid::TieDottedWidth,  Spatium(_val));
-                set(Sid::SlurDottedWidth, Spatium(_val));
+                set(Sid::tieDottedWidth,  Spatium(_val));
+                set(Sid::slurDottedWidth, Spatium(_val));
             } else if (tag == "slurMinDistance") {
-                set(Sid::TieMinDistance,  Spatium(_val));
-                set(Sid::SlurMinDistance, Spatium(_val));
+                set(Sid::tieMinDistance,  Spatium(_val));
+                set(Sid::slurMinDistance, Spatium(_val));
             }
-        } else if (tag == "defaultFontSpatiumDependent") {
+        } else if (tag == "measureNumberOffset" && m_version < 440) { // pre-4.4 typo
+            set(Sid::measureNumberPosAbove, PointF(e.readPoint()));
+        } else if (tag == "measureNumberPosAbove" && m_version < 440) { // pre-4.4 typo
+            set(Sid::mmRestRangePosAbove, PointF(e.readPoint()));
+        } else if (tag == "ottavaTextAlign") {
+            // Pre-x.x (?) scores used identical style values for Above and Below
+            // apparently the old default was "VCENTER",
+            // so better ignore and take the new defaults
+            e.skipCurrentElement(); // obsolete
+        } else if (tag == "tremoloStrokeStyle") { // pre-4.4 typo
+            set(Sid::tremoloStyle, e.readInt());
+        } else if (tag == "systemFontFace") { // pre-4.4 typo
+            set(Sid::systemTextFontFace, e.readText());
+        } else if (tag == "systemFontSize") { // pre-4.4 typo
+            set(Sid::systemTextFontSize, e.readDouble());
+        } else if (tag == "systemFontSpatiumDependent") { // pre-4.4 typo
+            set(Sid::systemTextFontSpatiumDependent, bool(e.readInt()));
+        } else if (tag == "systemFontStyle") { // pre-4.4 typo
+            set(Sid::systemTextFontStyle, e.readInt());
+        } else if (tag == "systemAlign") { // pre-4.4 typo
+            set(Sid::systemTextAlign, TConv::fromXml(e.readText(), Align()));
+        } else if (tag == "systemOffsetType") { // pre-4.4 typo
+            set(Sid::systemTextOffsetType, e.readInt());
+        } else if (tag == "systemPlacement") { // pre-4.4 typo
+            set(Sid::systemTextPlacement, PlacementV(e.readText().toInt()));
+        } else if (tag == "systemPosAbove") { // pre-4.4 typo
+            set(Sid::systemTextPosAbove, PointF(e.readPoint()));
+        } else if (tag == "systemPosBelow") { // pre-4.4 typo
+            set(Sid::systemTextPosBelow, PointF(e.readPoint()));
+        } else if (tag == "systemMinDistance") { // pre-4.4 typo
+            set(Sid::systemTextMinDistance, Spatium(e.readDouble()));
+        } else if (tag == "systemFrameType") { // pre-4.4 typo
+            set(Sid::systemTextFrameType, e.readInt());
+        } else if (tag == "systemFramePadding") { // pre-4.4 typo
+            set(Sid::systemTextFramePadding, e.readDouble());
+        } else if (tag == "systemFrameWidth") { // pre-4.4 typo
+            set(Sid::systemTextFrameWidth, e.readDouble());
+        } else if (tag == "systemFrameRound") { // pre-4.4 typo
+            set(Sid::systemTextFrameRound, e.readInt());
+        } else if (tag == "systemFrameFgColor") { // pre-4.4 typo
+            set(Sid::systemTextFrameFgColor, e.readColor());
+        } else if (tag == "systemFrameBgColor") { // pre-4.4 typo
+            set(Sid::systemTextFrameBgColor, e.readColor());
+        } else if (tag == "staffFontFace") { // pre-4.4 typo
+            set(Sid::staffTextFontFace, e.readText());
+        } else if (tag == "staffFontSize") { // pre-4.4 typo
+            set(Sid::staffTextFontSize, e.readDouble());
+        } else if (tag == "staffFontSpatiumDependent") { // pre-4.4 typo
+            set(Sid::staffTextFontSpatiumDependent, e.readBool());
+        } else if (tag == "staffFontStyle") { // pre-4.4 typo
+            set(Sid::staffTextFontStyle, e.readInt());
+        } else if (tag == "staffAlign") { // pre-4.4 typo
+            set(Sid::staffTextAlign, TConv::fromXml(e.readText(), Align()));
+        } else if (tag == "staffOffsetType") { // pre-4.4 typo
+            set(Sid::staffTextOffsetType, e.readInt());
+        } else if (tag == "staffPlacement") { // pre-4.4 typo
+            set(Sid::staffTextPlacement, PlacementV(e.readText().toInt()));
+        } else if (tag == "staffTextPosAbove"  // pre-4.4 typo, certainly before 3.6, even before 3.5
+                   && m_version <= 410) { // so we might test for < 302, however m_version seems set to 410 here?!?
+            double staffTextPosAboveY = e.readDouble();
+            set(Sid::staffTextPosAbove, PointF(0.0, staffTextPosAboveY));
+        } else if (tag == "staffPosAbove") { // pre-4.4 typo
+            set(Sid::staffTextPosAbove, e.readPoint());
+        } else if (tag == "staffPosBelow") { // pre-4.4 typo
+            set(Sid::staffTextPosBelow, e.readPoint());
+        } else if (tag == "staffTextMinDistance" // pre-4.4 typo, certainly before 3.6, even before 3.5
+                   && m_version <= 410) { // so we might test for < 302, however m_version seems set to 410 here?!?
+            set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
+        } else if (tag == "staffMinDistance") { // pre-4.4 typo
+            set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
+        } else if (tag == "staffFrameType") { // pre-4.4 typo
+            set(Sid::staffTextFrameType, e.readInt());
+        } else if (tag == "staffFramePadding") { // pre-4.4 typo
+            set(Sid::staffTextFramePadding, e.readDouble());
+        } else if (tag == "staffFrameWidth") { // pre-4.4 typo
+            set(Sid::staffTextFrameWidth, e.readDouble());
+        } else if (tag == "staffFrameRound") { // pre-4.4 typo
+            set(Sid::staffTextFrameRound, e.readInt());
+        } else if (tag == "staffFrameFgColor") { // pre-4.4 typo
+            set(Sid::staffTextFrameFgColor, e.readColor());
+        } else if (tag == "staffFrameBgColor") { // pre-4.4 typo
+            set(Sid::staffTextFrameBgColor, e.readColor());
+        } else if (tag == "dymanicsShowTabCommon") { // pre-4.4 typo in gp-style.mss
+            set(Sid::dynamicsShowTabCommon, bool(e.readInt()));
+        } else if (tag == "pedalBeginTextOffset"
+                   || tag == "letRingBeginTextOffset"
+                   || tag == "palmMuteBeginTextOffset"
+                   || tag == "defaultFontSpatiumDependent"
+                   || tag == "usePre_3_6_defaults") {
             e.skipCurrentElement(); // obsolete
         } else if (!readProperties(e)) {
             e.unknown();

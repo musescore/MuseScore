@@ -36,14 +36,12 @@
       <lastSystemFillLimit>0.29</lastSystemFillLimit>
       <hairpinHeight>1.3</hairpinHeight>
       <hairpinContHeight>0.6</hairpinContHeight>
-      <hairpinWidth>0.14</hairpinWidth>
       <showPageNumber>0</showPageNumber>
       <showPageNumberOne>1</showPageNumberOne>
       <pageNumberOddEven>0</pageNumberOddEven>
       <showMeasureNumber>0</showMeasureNumber>
       <showMeasureNumberOne>1</showMeasureNumberOne>
       <measureNumberSystem>0</measureNumberSystem>
-      <measureNumberAllStaffs>1</measureNumberAllStaffs>
       <smallNoteMag>0.71</smallNoteMag>
       <graceNoteMag>0.71</graceNoteMag>
       <smallStaffMag>0.71</smallStaffMag>
@@ -60,9 +58,6 @@
       <minMMRestWidth>3</minMMRestWidth>
       <hideEmptyStaves>1</hideEmptyStaves>
       <dontHideStavesInFirstSystem>0</dontHideStavesInFirstSystem>
-      <ArpeggioNoteDistance>0.7</ArpeggioNoteDistance>
-      <ArpeggioLineWidth>0.19</ArpeggioLineWidth>
-      <ArpeggioHookLen>0.9</ArpeggioHookLen>
       <evenFooterL>$P</evenFooterL>
       <oddFooterR>$P</oddFooterR>
       <voltaPosAbove x="0" y="-2"/>

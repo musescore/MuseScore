@@ -23,7 +23,7 @@
       <staffLineWidth>0.0957</staffLineWidth>
       <ledgerLineWidth>0.0957</ledgerLineWidth>
       <beamWidth>0.50391</beamWidth>
-      <hairpinWidth>0.07487</hairpinWidth>
+      <hairpinLineWidth>0.07487</hairpinLineWidth>
       <chordSymbolAFontFace>Times</chordSymbolAFontFace>
       <chordSymbolAFontSize>7.4</chordSymbolAFontSize>
       <chordSymbolBFontFace>Times</chordSymbolBFontFace>
@@ -72,11 +72,11 @@
       <mmRestRangeFontSize>7.4</mmRestRangeFontSize>
       <translatorFontFace>Times</translatorFontFace>
       <translatorFontSize>7.4</translatorFontSize>
-      <systemFontFace>Times</systemFontFace>
-      <systemFontSize>7.4</systemFontSize>
-      <staffFontFace>Times</staffFontFace>
-      <staffFontSize>7.4</staffFontSize>
-      <staffFrameWidth>0.07682</staffFrameWidth>
+      <systemTextFontFace>Times</systemTextFontFace>
+      <systemTextFontSize>7.4</systemTextFontSize>
+      <staffTextFontFace>Times</staffTextFontFace>
+      <staffTextFontSize>7.4</staffTextFontSize>
+      <staffTextFrameWidth>0.07682</staffTextFrameWidth>
       <rehearsalMarkFontFace>Times</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>7.4</rehearsalMarkFontSize>
       <repeatLeftFontFace>Times</repeatLeftFontFace>

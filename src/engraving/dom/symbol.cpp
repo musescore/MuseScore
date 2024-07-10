@@ -155,7 +155,7 @@ PropertyValue Symbol::propertyDefault(Pid propertyId) const
         return 1.0;
     case Pid::SCORE_FONT:
         if (m_scoreFont) {
-            return style().styleSt(Sid::MusicalSymbolFont);
+            return style().styleSt(Sid::musicalSymbolFont);
         } else {
             return String();
         }

@@ -84,7 +84,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
     m_lastStaff = b;
 
     if (bracketType() == BracketType::BRACE
-        && style().styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && style().styleSt(Sid::MusicalSymbolFont) != "Gonville") {
+        && style().styleSt(Sid::musicalSymbolFont) != "Emmentaler" && style().styleSt(Sid::musicalSymbolFont) != "Gonville") {
         int v = static_cast<int>(m_lastStaff - m_firstStaff + 1);
 
         // if staves inner staves are hidden, decrease span
@@ -94,7 +94,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
             }
         }
 
-        if (style().styleSt(Sid::MusicalSymbolFont) == "Leland") {
+        if (style().styleSt(Sid::musicalSymbolFont) == "Leland") {
             v = std::min(4, v);
         }
 

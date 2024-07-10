@@ -171,7 +171,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
             if (!e || !e->isChord()) {
                 continue;
             }
-            double headerTieMargin = f->style().styleMM(Sid::HeaderToLineStartDistance);
+            double headerTieMargin = f->style().styleMM(Sid::headerToLineStartDistance);
             for (Note* note : toChord(e)->notes()) {
                 bool tieOrGlissBack = note->spannerBack().size() || (note->tieBack() && !note->tieBack()->segmentsEmpty());
                 if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
@@ -183,11 +183,11 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
                 }
                 double minLength = 0.0;
                 if (attachedLine->isTie()) {
-                    minLength = f->style().styleMM(Sid::MinTieLength);
+                    minLength = f->style().styleMM(Sid::minTieLength);
                 } else if (attachedLine->isGlissando()) {
                     bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
-                    minLength = straight ? f->style().styleMM(Sid::MinStraightGlissandoLength)
-                                : f->style().styleMM(Sid::MinWigglyGlissandoLength);
+                    minLength = straight ? f->style().styleMM(Sid::minStraightGlissandoLength)
+                                : f->style().styleMM(Sid::minWigglyGlissandoLength);
                 }
                 double tieStartPointX = f->minRight() + headerTieMargin;
                 double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
@@ -423,12 +423,12 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
 
             double minEndPointsDistance = 0.0;
             if (laPoint1.line()->isTie()) {
-                minEndPointsDistance = style.styleMM(Sid::MinTieLength);
+                minEndPointsDistance = style.styleMM(Sid::minTieLength);
             } else if (laPoint1.line()->isGlissando()) {
                 bool straight = toGlissando(laPoint1.line())->glissandoType() == GlissandoType::STRAIGHT;
                 double minGlissandoLength = straight
-                                            ? style.styleMM(Sid::MinStraightGlissandoLength)
-                                            : style.styleMM(Sid::MinWigglyGlissandoLength);
+                                            ? style.styleMM(Sid::minStraightGlissandoLength)
+                                            : style.styleMM(Sid::minWigglyGlissandoLength);
                 minEndPointsDistance = minGlissandoLength;
             } else if (laPoint1.line()->isGuitarBend()) {
                 double minBendLength = 2 * note->spatium(); // TODO: style

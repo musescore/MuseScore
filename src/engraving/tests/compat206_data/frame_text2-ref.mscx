@@ -102,12 +102,12 @@
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
-      <systemAlign>left,top</systemAlign>
-      <systemFramePadding>0</systemFramePadding>
-      <systemFrameWidth>0</systemFrameWidth>
-      <staffAlign>left,top</staffAlign>
-      <staffFramePadding>0</staffFramePadding>
-      <staffFrameWidth>0</staffFrameWidth>
+      <systemTextAlign>left,top</systemTextAlign>
+      <systemTextFramePadding>0</systemTextFramePadding>
+      <systemTextFrameWidth>0</systemTextFrameWidth>
+      <staffTextAlign>left,top</staffTextAlign>
+      <staffTextFramePadding>0</staffTextFramePadding>
+      <staffTextFrameWidth>0</staffTextFrameWidth>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <rehearsalMarkFramePadding>0.1</rehearsalMarkFramePadding>
       <repeatLeftFramePadding>0</repeatLeftFramePadding>

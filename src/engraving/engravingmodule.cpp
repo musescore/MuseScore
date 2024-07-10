@@ -346,7 +346,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
 #ifndef ENGRAVING_NO_INTERNAL
         gpaletteScore->setStyle(DefaultStyle::baseStyle());
-        gpaletteScore->style().set(Sid::MusicalTextFont, String(u"Leland Text"));
+        gpaletteScore->style().set(Sid::musicalTextFont, String(u"Leland Text"));
         IEngravingFontPtr scoreFont = m_engravingfonts->fontByName("Leland");
         gpaletteScore->setEngravingFont(scoreFont);
         gpaletteScore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gpaletteScore->style().spatium()) / SPATIUM20);
