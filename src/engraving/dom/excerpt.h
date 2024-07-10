@@ -31,6 +31,7 @@
 
 namespace mu::engraving {
 class MasterScore;
+class Measure;
 class Part;
 class Score;
 class Staff;
@@ -96,6 +97,8 @@ public:
 
 private:
     friend class MasterScore;
+
+    static void promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx);
 
     void setInited(bool inited);
     void writeNameToMetaTags();
