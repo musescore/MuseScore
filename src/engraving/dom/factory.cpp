@@ -70,6 +70,7 @@
 #include "mmrestrange.h"
 #include "note.h"
 #include "noteline.h"
+#include "organpedalmark.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
@@ -233,6 +234,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FRET_CIRCLE:       return new FretCircle(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::ORGAN_PEDAL_MARK:         return new OrganPedalMark(parent->isNote() ? toNote(parent) : dummy->note());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -737,3 +739,6 @@ PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingT
 CREATE_ITEM_IMPL(Capo, ElementType::CAPO, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TimeTickAnchor, ElementType::TIME_TICK_ANCHOR, Segment, isAccessibleEnabled)
+
+CREATE_ITEM_IMPL(OrganPedalMark, ElementType::ORGAN_PEDAL_MARK, Note, isAccessibleEnabled)
+COPY_ITEM_IMPL(OrganPedalMark)

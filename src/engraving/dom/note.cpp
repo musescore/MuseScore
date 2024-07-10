@@ -49,6 +49,7 @@
 #include "drumset.h"
 #include "factory.h"
 #include "fingering.h"
+#include "organpedalmark.h"
 #include "glissando.h"
 #include "guitarbend.h"
 #include "linkedobjects.h"
@@ -1266,6 +1267,7 @@ void Note::add(EngravingItem* e)
         break;
     case ElementType::BEND:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::IMAGE:
     case ElementType::TEXT:
         m_el.push_back(e);
@@ -1329,6 +1331,7 @@ void Note::remove(EngravingItem* e)
     case ElementType::TEXT:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
         if (!m_el.remove(e)) {
             LOGD("Note::remove(): cannot find %s", e->typeName());
         }
@@ -1671,6 +1674,7 @@ bool Note::acceptDrop(EditData& data) const
            || type == ElementType::TEXT
            || type == ElementType::REHEARSAL_MARK
            || (type == ElementType::FINGERING && (!isTablature || tabFingering))
+           || type == ElementType::ORGAN_PEDAL_MARK
            || type == ElementType::ACCIDENTAL
            || type == ElementType::BREATH
            || type == ElementType::ARPEGGIO
@@ -1745,6 +1749,7 @@ EngravingItem* Note::drop(EditData& data)
 
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
+    case ElementType::ORGAN_PEDAL_MARK:
         e->setParent(this);
         score()->undoAddElement(e);
         return e;
@@ -3359,6 +3364,7 @@ EngravingItem* Note::nextElement()
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::TEXT:
     case ElementType::BEND: {
         EngravingItem* next = nextInEl(e);           // return next element in _el
@@ -3456,6 +3462,7 @@ EngravingItem* Note::prevElement()
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::TEXT:
     case ElementType::BEND: {
         EngravingItem* prev = prevInEl(e);           // return prev element in _el

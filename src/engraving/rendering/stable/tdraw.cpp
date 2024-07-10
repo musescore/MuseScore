@@ -92,6 +92,7 @@
 #include "dom/note.h"
 #include "dom/notedot.h"
 
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -288,6 +289,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::NOTEHEAD:     draw(item_cast<const NoteHead*>(item), painter);
         break;
 
+    case ElementType::ORGAN_PEDAL_MARK: draw(item_cast<const OrganPedalMark*>(item), painter);
+        break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter);
@@ -2319,6 +2322,12 @@ void TDraw::draw(const NoteDot* item, Painter* painter)
 void TDraw::draw(const NoteHead* item, Painter* painter)
 {
     draw(static_cast<const Symbol*>(item), painter);
+}
+
+void TDraw::draw(const OrganPedalMark* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void TDraw::draw(const OttavaSegment* item, Painter* painter)

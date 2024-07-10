@@ -47,7 +47,9 @@
 #include "dom/navigate.h"
 #include "dom/note.h"
 
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
+
 #include "dom/part.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -3086,6 +3088,47 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     }
 }
 
+void ChordLayout::layoutOrganPedalMarks(Chord* chord, System* system, LayoutContext&)
+{
+    std::set<staff_idx_t> shapesToRecreate;
+    std::list<Note*> notes;
+    Segment* segment = chord->segment();
+    for (auto gc : chord->graceNotes()) {
+        for (auto n : gc->notes()) {
+            notes.push_back(n);
+        }
+    }
+    for (auto n : chord->notes()) {
+        notes.push_back(n);
+    }
+    std::list<OrganPedalMark*> organPedalMarks;
+    for (Note* note : notes) {
+        for (EngravingItem* el : note->el()) {
+            if (el->isOrganPedalMark()) {
+                OrganPedalMark* pm = toOrganPedalMark(el);
+                if (pm->placeAbove()) {
+                    organPedalMarks.push_back(pm);
+                } else {
+                    organPedalMarks.push_front(pm);
+                }
+            }
+        }
+    }
+    for (OrganPedalMark* pm : organPedalMarks) {
+        TLayout::layoutOrganPedalMark(pm, pm->mutldata());
+        if (pm->addToSkyline()) {
+            Note* n = pm->note();
+            RectF r
+                = pm->ldata()->bbox().translated(pm->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
+            system->staff(pm->note()->chord()->vStaffIdx())->skyline().add(r, pm);
+        }
+        shapesToRecreate.insert(pm->staffIdx());
+    }
+    for (staff_idx_t staffIdx : shapesToRecreate) {
+        segment->createShape(staffIdx);
+    }
+}
+
 void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
 {
     if (!chord->configuration()->useStretchedBends()) {
@@ -3266,6 +3309,12 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             // fingerings placed relative to chord will be laid out later
             if (f->layoutType() == ElementType::NOTE) {
                 TLayout::layoutFingering(f, f->mutldata());
+            }
+        } else if (e->isOrganPedalMark()) {
+            // don't set mag; organ pedal marks should not scale with note
+            OrganPedalMark* pm = toOrganPedalMark(e);
+            if (pm->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED) {
+                pm->setPlacement(PlacementV::BELOW);
             }
         } else {
             e->mutldata()->setMag(item->mag());

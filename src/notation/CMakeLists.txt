@@ -150,6 +150,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/organpedalmarkpopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/organpedalmarkpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/stringtuningssettingsmodel.cpp

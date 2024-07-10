@@ -598,7 +598,7 @@ bool TextBase::edit(EditData& ed)
             if ((ed.modifiers & TextEditingControlModifier) || currentFormat->fontFamily() == u"ScoreText") {
                 s = String(Char(0xa0)); // non-breaking space
             } else {
-                if (isFingering() && ed.view()) {
+                if (ed.view() && (isFingering() || isOrganPedalMark())) {
                     score()->endCmd();
                     ed.view()->textTab(ed.modifiers & ShiftModifier);
                     return true;

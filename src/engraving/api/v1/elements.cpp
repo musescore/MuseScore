@@ -108,6 +108,7 @@ bool Note::isChildAllowed(mu::engraving::ElementType elementType)
     case ElementType::NOTEHEAD:
     case ElementType::NOTEDOT:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::TEXT:

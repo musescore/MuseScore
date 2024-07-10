@@ -205,6 +205,7 @@ enum class ElementType {
     TREMOLO_TWOCHORD,
     TREMOLO_SINGLECHORD,
     TIME_TICK_ANCHOR,
+    ORGAN_PEDAL_MARK,
 
     ROOT_ITEM,
     DUMMY,
@@ -786,6 +787,7 @@ enum class TextStyleType {
     FRET_DIAGRAM_FRET_NUMBER,
     HARP_PEDAL_DIAGRAM,
     HARP_PEDAL_TEXT_DIAGRAM,
+    ORGAN_PEDAL_MARK,
 
     // Line-oriented styles
     TEXTLINE,

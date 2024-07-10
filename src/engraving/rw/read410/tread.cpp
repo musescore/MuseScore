@@ -93,6 +93,7 @@
 #include "../../dom/noteline.h"
 #include "../../dom/spanner.h"
 #include "../../dom/fingering.h"
+#include "../../dom/organpedalmark.h"
 #include "../../dom/notedot.h"
 #include "../../dom/chordline.h"
 #include "../../dom/timesig.h"
@@ -254,6 +255,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::NOTEHEAD: read(item_cast<NoteHead*>(item), xml, ctx);
         break;
     case ElementType::NOTELINE: read(item_cast<NoteLine*>(item), xml, ctx);
+        break;
+    case ElementType::ORGAN_PEDAL_MARK: read(item_cast<OrganPedalMark*>(item), xml, ctx);
         break;
     case ElementType::PAGE: read(item_cast<Page*>(item), xml, ctx);
         break;
@@ -3470,6 +3473,11 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         f->setTrack(n->track());
         TRead::read(f, e, ctx);
         n->add(f);
+    } else if (tag == "OrganPedalMark") {
+        OrganPedalMark* pm = Factory::createOrganPedalMark(n);
+        pm->setTrack(n->track());
+        TRead::read(pm, e, ctx);
+        n->add(pm);
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(n);
         s->setTrack(n->track());
@@ -3555,6 +3563,15 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
 void TRead::read(NoteHead* h, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<Symbol*>(h), xml, ctx);
+}
+
+void TRead::read(OrganPedalMark* pm, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(static_cast<TextBase*>(pm), e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)

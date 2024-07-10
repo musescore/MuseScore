@@ -134,6 +134,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "fingering",
     "lh-guitar-fingering",
     "rh-guitar-fingering",
+    "organ-pedal-mark",
     "string-number",
     "string-tunings",
     "fretboard-diagram-fingering",
@@ -1714,6 +1715,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::RH_GUITAR_FINGERING:
             return "rh-guitar-fingering";
+
+        case TextStyleType::ORGAN_PEDAL_MARK:
+            return "organ-pedal-mark";
 
         case TextStyleType::STRING_NUMBER:
             return "string-number";

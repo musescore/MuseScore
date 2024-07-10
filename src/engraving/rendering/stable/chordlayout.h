@@ -76,6 +76,7 @@ public:
                                   bool considerBeams = false);
     static void layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx);
     static void layoutStretchedBends(Chord* chord, LayoutContext& ctx);
+    static void layoutOrganPedalMarks(Chord* chord, System* system, LayoutContext& ctx);
 
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
 

@@ -3978,6 +3978,48 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
 }
 
 //---------------------------------------------------------
+//   writeOrganPedalMark
+//---------------------------------------------------------
+
+static void writeOrganPedalMark(XmlWriter& xml, Notations& notations, Technical& technical, const Note* const note)
+{
+    for (const EngravingItem* e : note->el()) {
+        if (!ExportMusicXml::canWrite(e)) {
+            continue;
+        }
+
+        if (e->type() == ElementType::ORGAN_PEDAL_MARK) {
+            const TextBase* pm = toTextBase(e);
+            notations.tag(xml, e);
+            technical.tag(xml);
+            String t = MScoreTextToMXML::toPlainText(pm->xmlText());
+            String attr;
+            if (!pm->isStyled(Pid::PLACEMENT) || pm->placement() == PlacementV::BELOW) {
+                attr = String(u" placement=\"%1\"").arg((pm->placement() == PlacementV::BELOW) ? u"below" : u"above");
+            }
+            if (!pm->isStyled(Pid::FONT_FACE)) {
+                attr += String(u" font-family=\"%1\"").arg(pm->getProperty(Pid::FONT_FACE).value<String>());
+            }
+            if (!pm->isStyled(Pid::FONT_SIZE)) {
+                attr += String(u" font-size=\"%1\"").arg(pm->getProperty(Pid::FONT_SIZE).toReal());
+            }
+            if (!pm->isStyled(Pid::FONT_STYLE)) {
+                attr += fontStyleToXML(static_cast<FontStyle>(pm->getProperty(Pid::FONT_STYLE).toInt()), false);
+            }
+            attr += color2xml(pm);
+
+            if (pm->textStyleType() == TextStyleType::ORGAN_PEDAL_MARK) {
+                xml.tagRaw(u"organPedalMark" + attr, t);
+            } else {
+                LOGD("unknown organ pedal mark style");
+            }
+        } else {
+            // TODO
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   writeNotationSymbols
 //---------------------------------------------------------
 
@@ -4366,6 +4408,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         }
 
         writeFingering(m_xml, notations, technical, note);
+        writeOrganPedalMark(m_xml, notations, technical, note);
         writeNotationSymbols(m_xml, notations, note->el(), true);
 
         // write tablature string / fret
@@ -8489,7 +8532,7 @@ static void writeMusicXML(const FretDiagram* item, XmlWriter& xml)
             xml.startElement("frame-note");
             xml.tag("string", mxmlString);
             xml.tag("fret", d.fret + item->fretOffset());
-            // TODO: write fingerings
+            // TODO: write fingerings and organ pedal marks
 
             // Also write barre if it starts at this dot
             if (std::find(bStarts.begin(), bStarts.end(), d.fret) != bStarts.end()) {

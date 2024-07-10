@@ -600,6 +600,8 @@ Palette::Type Palette::guessType() const
         return Type::Dynamic;
     case ElementType::FINGERING:
         return Type::Fingering;
+    case ElementType::ORGAN_PEDAL_MARK:
+        return Type::Organ;
     case ElementType::MARKER:
     case ElementType::JUMP:
     case ElementType::MEASURE_REPEAT:

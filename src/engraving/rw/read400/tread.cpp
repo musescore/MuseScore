@@ -89,6 +89,7 @@
 #include "../../dom/noteline.h"
 #include "../../dom/spanner.h"
 #include "../../dom/fingering.h"
+#include "../../dom/organpedalmark.h"
 #include "../../dom/notedot.h"
 #include "../../dom/chordline.h"
 #include "../../dom/timesig.h"
@@ -160,7 +161,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Note, NoteDot, NoteHead, NoteLine,
                                  Page, PalmMute, Pedal, PlayTechAnnotation,
                                  Rasgueado, RehearsalMark, Rest,
-                                 Ornament, Ottava,
+                                 OrganPedalMark, Ornament, Ottava,
                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
                                  Symbol, FSymbol, System, SystemDivider, SystemText,
                                  TempoText, Text, TextLine, Tie, TimeSig, TremoloBar, Trill, Tuplet,
@@ -3170,6 +3171,11 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         f->setTrack(n->track());
         TRead::read(f, e, ctx);
         n->add(f);
+    } else if (tag == "OrganPedalMark") {
+        OrganPedalMark* pm = Factory::createOrganPedalMark(n);
+        pm->setTrack(n->track());
+        TRead::read(pm, e, ctx);
+        n->add(pm);
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(n);
         s->setTrack(n->track());
@@ -3255,6 +3261,15 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
 void TRead::read(NoteHead* h, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<Symbol*>(h), xml, ctx);
+}
+
+void TRead::read(OrganPedalMark* pm, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(static_cast<TextBase*>(pm), e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)

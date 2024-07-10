@@ -55,5 +55,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-ON.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/BasicStyleSelectorWithSpinboxAndReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/OrganPedalMarkPopup.qml</file>
     </qresource>
 </RCC>

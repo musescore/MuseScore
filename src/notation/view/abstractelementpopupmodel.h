@@ -50,7 +50,8 @@ public:
         TYPE_HARP_DIAGRAM,
         TYPE_CAPO,
         TYPE_STRING_TUNINGS,
-        TYPE_SOUND_FLAG
+        TYPE_SOUND_FLAG,
+        TYPE_ORGAN_PEDAL_MARK
     };
     Q_ENUM(PopupModelType)
 

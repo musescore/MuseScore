@@ -73,6 +73,7 @@
 #include "view/abstractelementpopupmodel.h"
 #include "view/internal/undoredomodel.h"
 #include "view/internal/harppedalpopupmodel.h"
+#include "view/internal/organpedalmarkpopupmodel.h"
 #include "view/internal/caposettingsmodel.h"
 #include "view/internal/stringtuningssettingsmodel.h"
 
@@ -180,6 +181,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterUncreatableType<AbstractElementPopupModel>("MuseScore.NotationScene", 1, 0, "Notation",
                                                           "Not creatable as it is an enum type");
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
+    qmlRegisterType<OrganPedalMarkPopupModel>("MuseScore.NotationScene", 1, 0, "OrganPedalMarkPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
 
