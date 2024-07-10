@@ -125,7 +125,7 @@ static const int INVALID_LINE = -10000;
 //   @P elements         array[EngravingItem]   list of elements attached to notehead
 //   @P fret             int              fret number in tablature
 //   @P ghost            bool             ghost note (guitar: death note)
-//   @P headScheme       enum (NoteHeadScheme.HEAD_AUTO, .HEAD_NORMAL, .HEAD_PITCHNAME, .HEAD_PITCHNAME_GERMAN, .HEAD_SHAPE_NOTE_4, .HEAD_SHAPE_NOTE_7_AIKIN, .HEAD_SHAPE_NOTE_7_FUNK, .HEAD_SHAPE_NOTE_7_WALKER, .HEAD_SOLFEGE, .HEAD_SOLFEGE_FIXED)
+//   @P headScheme       enum (NoteHeadScheme.HEAD_AUTO, .HEAD_NORMAL, .HEAD_PITCHNAME, .HEAD_PITCHNAME_GERMAN, .HEAD_SHAPE_NOTE_4, .HEAD_SHAPE_NOTE_7_AIKIN, .HEAD_SHAPE_NOTE_7_FUNK, .HEAD_SHAPE_NOTE_7_WALKER, .HEAD_SOLFEGE, .HEAD_SOLFEGE_FIXED, .HEAD_FIGURENOTES_STAGE_3)
 //   @P headGroup        enum (NoteHeadGroup.HEAD_NORMAL, .HEAD_BREVIS_ALT, .HEAD_CROSS, .HEAD_DIAMOND, .HEAD_DO, .HEAD_FA, .HEAD_LA, .HEAD_MI, .HEAD_RE, .HEAD_SLASH, .HEAD_LARGE_DIAMOND, .HEAD_SOL, .HEAD_TI, .HEAD_XCIRCLE, .HEAD_TRIANGLE)
 //   @P headType         enum (NoteHeadType.HEAD_AUTO, .HEAD_BREVIS, .HEAD_HALF, .HEAD_QUARTER, .HEAD_WHOLE)
 //   @P hidden           bool             hidden, not played note (read only)
@@ -381,6 +381,7 @@ public:
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
     void localSpatiumChanged(double oldValue, double newValue) override;
+    // Color color() const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
@@ -393,7 +394,7 @@ public:
     void setHeadHasParentheses(bool hasParentheses, bool addToLinked = true, bool generated = false);
     bool headHasParentheses() const { return m_hasHeadParentheses; }
 
-    static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
+    static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme, int octave);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
     NoteVal noteVal() const;
 

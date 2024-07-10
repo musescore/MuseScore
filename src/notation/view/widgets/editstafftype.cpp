@@ -47,11 +47,13 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
+    mu::engraving::NoteHeadScheme::HEAD_AUTO,
     mu::engraving::NoteHeadScheme::HEAD_NORMAL,
     mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,
     mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
+    mu::engraving::NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
