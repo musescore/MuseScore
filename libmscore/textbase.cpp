@@ -860,7 +860,7 @@ QFont TextFragment::font(const TextBase* t) const
 
       QString family;
       if (format.fontFamily() == "ScoreText") {
-            family = t->score()->styleSt(Sid::MusicalTextFont);
+            family = t->score()->styleSt(Sid::musicalTextFont);
 
             // check if all symbols are available
             font.setFamily(family);

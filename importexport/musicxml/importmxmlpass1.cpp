@@ -1821,13 +1821,13 @@ void MusicXMLParserPass1::setStyle(const QString& type, const double val)
       else if (type == "wedge")
             _score->style().set(Sid::hairpinLineWidth, Spatium(val / 10));
       else if (type == "slur middle")
-            _score->style().set(Sid::SlurMidWidth, Spatium(val / 10));
+            _score->style().set(Sid::slurMidWidth, Spatium(val / 10));
       else if (type == "tie middle")
-            _score->style().set(Sid::TieMidWidth, Spatium(val / 10));
+            _score->style().set(Sid::tieMidWidth, Spatium(val / 10));
       else if (type == "slur tip")
-            _score->style().set(Sid::SlurEndWidth, Spatium(val / 10));
+            _score->style().set(Sid::slurEndWidth, Spatium(val / 10));
       else if (type == "tie tip")
-            _score->style().set(Sid::TieEndWidth, Spatium(val / 10));
+            _score->style().set(Sid::tieEndWidth, Spatium(val / 10));
       else if (type == "cue")
             _score->style().set(Sid::smallNoteMag, val / 100);
       else if (type == "grace")

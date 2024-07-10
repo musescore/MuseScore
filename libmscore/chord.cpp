@@ -1456,7 +1456,7 @@ qreal Chord::minAbsStemLength() const
       if (!_tremolo)
             return 0.0;
 
-      const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+      const qreal sw = score()->styleS(Sid::tremoloLineWidth).val() * chordMag();
       const qreal td = score()->styleS(Sid::tremoloDistance).val() * chordMag();
       int beamLvl = beams();
       const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
@@ -1865,7 +1865,7 @@ void Chord::layoutPitched()
       qreal mag_             = staff() ? staff()->mag(this) : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * mag_;
       qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * mag_;
-      qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
+      qreal minTieLength     = score()->styleP(Sid::minTieLength)     * mag_;
 
       qreal graceMag         = score()->styleD(Sid::graceNoteMag);
       qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
@@ -2011,12 +2011,12 @@ void Chord::layoutPitched()
             _arpeggio->layout();    // only for width() !
             _arpeggio->setHeight(0.0);
 
-            qreal arpeggioNoteDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
+            qreal arpeggioNoteDistance = score()->styleP(Sid::arpeggioNoteDistance) * mag_;
 
             qreal gapSize = arpeggioNoteDistance;
 
             if (chordAccidentals.size()) {
-                  qreal arpeggioAccidentalDistance = score()->styleP(Sid::ArpeggioAccidentalDistance) * mag_;
+                  qreal arpeggioAccidentalDistance = score()->styleP(Sid::arpeggioAccidentalDistance) * mag_;
                   qreal accidentalDistance = score()->styleP(Sid::accidentalDistance) * mag_;
                   gapSize = arpeggioAccidentalDistance - accidentalDistance;
                   gapSize -= _arpeggio->insetDistance(chordAccidentals, mag_);
@@ -2164,7 +2164,7 @@ void Chord::layoutTablature()
       qreal mag_              = staff() ? staff()->mag(this) : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance   = score()->styleP(Sid::dotNoteDistance) * mag_;
       qreal minNoteDistance   = score()->styleP(Sid::minNoteDistance) * mag_;
-      qreal minTieLength      = score()->styleP(Sid::MinTieLength)    * mag_;
+      qreal minTieLength      = score()->styleP(Sid::minTieLength)    * mag_;
 
       for (Chord* c : qAsConst(_graceNotes))
             c->layoutTablature();

@@ -12,10 +12,9 @@
 
 #include "musescore.h"
 
-#include <fenv.h>
-#include <QStyleFactory>
-#include <QStandardPaths>
 #include <QDir>
+#include <QStandardPaths>
+#include <QStyleFactory>
 
 #include "config.h"
 
@@ -97,7 +96,7 @@
 #include "plugin/pluginManager.h"
 #include "plugin/qmlpluginengine.h"
 #endif
-#include "helpBrowser.h"
+//#include "helpBrowser.h"
 #include "drumtools.h"
 #include "editstafftype.h"
 #include "texttools.h"
@@ -113,11 +112,9 @@
 #include "libmscore/measure.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/volta.h"
-#include "libmscore/lasso.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/synthesizerstate.h"
 #include "libmscore/utils.h"
-#include "libmscore/icon.h"
 
 #include "audio/drivers/driver.h"
 
@@ -135,7 +132,6 @@
 #include "toolbuttonmenu.h"
 #include "searchComboBox.h"
 #include "startcenter.h"
-#include "help.h"
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
@@ -8168,7 +8164,7 @@ void MuseScore::init(QStringList& argv)
       gscore->setMovements(new Movements());
       gscore->setStyle(MScore::baseStyle());
 
-      gscore->style().set(Sid::MusicalTextFont, QString("Leland Text"));
+      gscore->style().set(Sid::musicalTextFont, QString("Leland Text"));
       ScoreFont* scoreFont = ScoreFont::fontFactory("Leland");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);

@@ -11,13 +11,13 @@
 //=============================================================================
 
 #include "breath.h"
-#include "sym.h"
-#include "system.h"
-#include "segment.h"
 #include "measure.h"
 #include "score.h"
-#include "xml.h"
+#include "segment.h"
 #include "staff.h"
+#include "sym.h"
+#include "system.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -69,7 +69,7 @@ void Breath::layout()
             int voiceOffset = placeBelow() * (staff()->lines(tick()) - 1) * spatium();
             if (isCaesura())
                   setPos(rxpos(), spatium() + voiceOffset);
-            else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma))
+            else if ((score()->styleSt(Sid::musicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma))
                   setPos(rxpos(), 0.5 * spatium() + voiceOffset);
             else
                   setPos(rxpos(), -0.5 * spatium() + voiceOffset);

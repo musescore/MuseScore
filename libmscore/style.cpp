@@ -448,24 +448,24 @@ static const StyleType styleTypes[] {
       { Sid::staccatoGateTime,        "staccatoGateTime",        QVariant(50) },
       { Sid::slurGateTime,            "slurGateTime",            QVariant(100) },
 
-      { Sid::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
-      { Sid::ArpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.5) },
-      { Sid::ArpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(.33) },
-      { Sid::ArpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
-      { Sid::ArpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
-      { Sid::ArpeggioHiddenInStdIfTab,"ArpeggioHiddenInStdIfTab",QVariant(false)},
-      { Sid::SlurEndWidth,            "slurEndWidth",            Spatium(.07) },
-      { Sid::SlurMidWidth,            "slurMidWidth",            Spatium(.21) },
-      { Sid::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
-      { Sid::TieEndWidth,             "tieEndWidth",             Spatium(.07) },
-      { Sid::TieMidWidth,             "tieMidWidth",             Spatium(.21) },
-      { Sid::TieDottedWidth,          "tieDottedWidth",          Spatium(.10) },
-      { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
-      { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
-      { Sid::TieMinDistance,          "tieMinDistance",          Spatium(0.5) },
-      { Sid::SectionPause,            "sectionPause",            QVariant(qreal(3.0)) },
-      { Sid::MusicalSymbolFont,       "musicalSymbolFont",       QVariant(QString("Leland")) },
-      { Sid::MusicalTextFont,         "musicalTextFont",         QVariant(QString("Leland Text")) },
+      { Sid::arpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
+      { Sid::arpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.5) },
+      { Sid::arpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(.33) },
+      { Sid::arpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
+      { Sid::arpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
+      { Sid::arpeggioHiddenInStdIfTab,"ArpeggioHiddenInStdIfTab",QVariant(false)},
+      { Sid::slurEndWidth,            "slurEndWidth",            Spatium(.07) },
+      { Sid::slurMidWidth,            "slurMidWidth",            Spatium(.21) },
+      { Sid::slurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
+      { Sid::tieEndWidth,             "tieEndWidth",             Spatium(.07) },
+      { Sid::tieMidWidth,             "tieMidWidth",             Spatium(.21) },
+      { Sid::tieDottedWidth,          "tieDottedWidth",          Spatium(.10) },
+      { Sid::minTieLength,            "minTieLength",            Spatium(1.0) },
+      { Sid::slurMinDistance,         "slurMinDistance",         Spatium(0.5) },
+      { Sid::tieMinDistance,          "tieMinDistance",          Spatium(0.5) },
+      { Sid::sectionPause,            "sectionPause",            QVariant(qreal(3.0)) },
+      { Sid::musicalSymbolFont,       "musicalSymbolFont",       QVariant(QString("Leland")) },
+      { Sid::musicalTextFont,         "musicalTextFont",         QVariant(QString("Leland Text")) },
 
       { Sid::showHeader,              "showHeader",              QVariant(true) },
       { Sid::headerFirstPage,         "headerFirstPage",         QVariant(false) },
@@ -565,7 +565,7 @@ static const StyleType styleTypes[] {
 
       { Sid::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: notehead width
       { Sid::tremoloBoxHeight,        "tremoloBoxHeight",        Spatium(0.65) },
-      { Sid::tremoloStrokeWidth,      "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
+      { Sid::tremoloLineWidth,        "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
       { Sid::tremoloDistance,         "tremoloDistance",         Spatium(0.8) },
       { Sid::tremoloStyle,            "tremoloStrokeStyle",      int(TremoloStyle::DEFAULT) },
       { Sid::tremoloStrokeLengthMultiplier, "tremoloStrokeLengthMultiplier", 0.62 },
@@ -3328,28 +3328,28 @@ void MStyle::load(XmlReader& e, int mscVersion)
                       || tag == "ArpeggioAccidentalDistanceMin"))                  // Mu4 only, let's skip
                   e.skipCurrentElement();
             else if (mscVersion >= 420 && tag == "ArpeggioNoteDistance") { // 0.4 (Mu4.2+) -> 0.5 (Mu3.7)
-                  qreal ArpeggioNoteDistance = e.readDouble();
-                  if (qFuzzyCompare(ArpeggioNoteDistance, 0.4)) // 4.2+ default, let's skip, i.e. reset back
+                  qreal arpeggioNoteDistance = e.readDouble();
+                  if (qFuzzyCompare(arpeggioNoteDistance, 0.4)) // 4.2+ default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::ArpeggioNoteDistance, Spatium(ArpeggioNoteDistance));
+                        set(Sid::arpeggioNoteDistance, Spatium(arpeggioNoteDistance));
                   }
             else if (mscVersion >= 420 && tag == "ArpeggioAccidentalDistance") { // 0.3 (Mu4.2+) -> 0.5 (Mu3.7)
-                  qreal ArpeggioAccidentalDistance = e.readDouble();
-                  if (qFuzzyCompare(ArpeggioAccidentalDistance, 0.3)) // 4.2+ default, let's skip, i.e. reset back
+                  qreal arpeggioAccidentalDistance = e.readDouble();
+                  if (qFuzzyCompare(arpeggioAccidentalDistance, 0.3)) // 4.2+ default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::ArpeggioAccidentalDistance, Spatium(ArpeggioAccidentalDistance));
+                        set(Sid::arpeggioAccidentalDistance, Spatium(arpeggioAccidentalDistance));
                   }
             else if (mscVersion >= 400 && tag == "slurEndWidth") // 0.05 -> 0.07, depends on font's `engravingDefaults`! Let's skip.
                   e.skipCurrentElement();
             else if ((mscVersion >= 410 && tag == "minStraightGlissandoLength") // Mu4.1+ only, let's skip
                   || (mscVersion >= 410 && tag == "minWigglyGlissandoLength")   // Mu4.1+ only, let's skip
-                  || (mscVersion >= 400 &&  tag == "headerSlurTieDistance")     // Mu4 only,    let's skip
-                  || (mscVersion >= 420 &&  tag == "tiePlacementSingleNote")    // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 &&  tag == "tiePlacementChord")         // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 &&  tag == "tieMinShoulderHeight")      // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 &&  tag == "tieMaxShoulderHeight"))     // Mu4.2+ only, let's skip
+                  || (mscVersion >= 400 && tag == "headerSlurTieDistance")      // Mu4 only,    let's skip
+                  || (mscVersion >= 420 && tag == "tiePlacementSingleNote")     // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "tiePlacementChord")          // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "tieMinShoulderHeight")       // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "tieMaxShoulderHeight"))      // Mu4.2+ only, let's skip
                   e.skipCurrentElement();
             //else if (mscVersion >= 400 && tag == "evenFooterC") // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
             //else if (mscVersion >= 400 && tag == "oddFooterC")  // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass

@@ -49,23 +49,23 @@ void TieSegment::draw(QPainter* painter) const
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(score()->styleP(Sid::TieEndWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::tieEndWidth) * mag);
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
                   pen.setCapStyle(Qt::RoundCap); // True dots
                   pen.setDashPattern(dotted);
-                  pen.setWidthF(score()->styleP(Sid::TieDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::tieDottedWidth) * mag);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
                   pen.setDashPattern(dashed);
-                  pen.setWidthF(score()->styleP(Sid::TieDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::tieDottedWidth) * mag);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
                   pen.setDashPattern(wideDashed);
-                  pen.setWidthF(score()->styleP(Sid::TieDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::tieDottedWidth) * mag);
                   break;
             }
       painter->setPen(pen);
@@ -237,7 +237,7 @@ void TieSegment::computeBezier(QPointF shoulderOffset)
       QPointF bezier1(bezier1X, -shoulderH);
       QPointF bezier2(bezier2X, -shoulderH);
 
-      qreal w = score()->styleP(Sid::TieMidWidth) - score()->styleP(Sid::TieEndWidth);
+      qreal w = score()->styleP(Sid::tieMidWidth) - score()->styleP(Sid::tieEndWidth);
       if (staff())
             w *= staff()->mag(tie()->tick());
       QPointF tieThickness(0.0, w);
@@ -347,7 +347,7 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             qreal shoulderHeight = bbox.width() * 0.4 * 0.38;
             shoulderHeight = qBound(shoulderHeightMin * spatium(), shoulderHeight, shoulderHeightMax * spatium());
             //////////
-            qreal actualHeight = 2 * (shoulderHeight + styleP(Sid::SlurMidWidth)) / 3;
+            qreal actualHeight = 2 * (shoulderHeight + styleP(Sid::slurMidWidth)) / 3;
 
             bbox.setY(p1.y() - (slurTie()->up() ? actualHeight : 0));
             bbox.setHeight(actualHeight);
@@ -393,7 +393,7 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             qreal staffLineOffset = 0.125; // sp
             staffLineOffset += (styleP(Sid::staffLineWidth) / 2) / ld;
             bool up = slurTie()->up();
-            qreal tieWidth = (styleP(Sid::SlurMidWidth)) / ld;
+            qreal tieWidth = (styleP(Sid::slurMidWidth)) / ld;
             qreal topY = bbox.top() / ld;
             qreal bottomY = bbox.bottom() / ld;
             qreal endpointY = up ? bottomY : topY;
@@ -869,14 +869,13 @@ void Tie::calculateDirection()
                         // determine if this note is in the lower or upper half of this chord
                         int notesAbove = 0, tiesAbove = 0;
                         int notesBelow = 0, tiesBelow = 0;
-                        int unisonNotes = 0, unisonTies = 0;
+                        int unisonTies = 0;
                         for (size_t i = 0; i < n; ++i) {
                               if (notes[i] == startNote())
                                     // skip counting if this note is the current note or if this note doesn't have a tie
                                     continue;
                               int noteDiff = compareNotesPos(startNote(), notes[i]);
                               if (noteDiff == 0) {  // unison
-                                    unisonNotes++;
                                     if (notes[i]->tieFor())
                                           unisonTies++;
                                     }
