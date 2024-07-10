@@ -129,6 +129,8 @@ void AccidentalSettingsModel::updateIsStackingOrderAvailableAndEnabled()
         if (!item->isAccidental()) {
             continue;
         }
+        setIsStackingOrderEnabled(item->addToSkyline());
+
         Segment* segment = toAccidental(item)->note()->chord()->segment();
         track_idx_t startTrack = trackZeroVoice(item->track());
         track_idx_t endTrack = startTrack + VOICES;

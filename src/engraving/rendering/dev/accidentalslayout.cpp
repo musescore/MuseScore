@@ -75,8 +75,9 @@ void AccidentalsLayout::layoutAccidentals(const std::vector<Chord*>& chords, Lay
 {
     std::vector<Accidental*> allAccidentals;
     std::vector<Accidental*> redundantAccidentals;
+    std::vector<Accidental*> invisibleAccidentals;
 
-    collectAccidentals(chords, allAccidentals, redundantAccidentals);
+    collectAccidentals(chords, allAccidentals, redundantAccidentals, invisibleAccidentals);
 
     if (allAccidentals.empty()) {
         return;
@@ -85,6 +86,14 @@ void AccidentalsLayout::layoutAccidentals(const std::vector<Chord*>& chords, Lay
     for (Accidental* acc : redundantAccidentals) {
         acc->setPos(0.0, 0.0);
         acc->setbbox(RectF());
+    }
+
+    for (Accidental* acc : invisibleAccidentals) {
+        acc->computeMag();
+        TLayout::layoutAccidental(acc, acc->mutldata(), ctx.conf());
+        double x = -acc->ldata()->bbox().width();
+        x -= acc->note() ? acc->note()->pos().x() : 0.0;
+        acc->setPos(x, 0.0);
     }
 
     for (Accidental* acc : allAccidentals) {
@@ -98,7 +107,7 @@ void AccidentalsLayout::layoutAccidentals(const std::vector<Chord*>& chords, Lay
 }
 
 void AccidentalsLayout::collectAccidentals(const std::vector<Chord*> chords, std::vector<Accidental*>& allAccidentals,
-                                           std::vector<Accidental*>& redundantAccidentals)
+                                           std::vector<Accidental*>& redundantAccidentals, std::vector<Accidental*>& invisibleAccidentals)
 {
     for (const Chord* chord : chords) {
         for (const Note* note : chord->notes()) {
@@ -108,6 +117,8 @@ void AccidentalsLayout::collectAccidentals(const std::vector<Chord*> chords, std
             }
             if (accidentalIsRedundant(acc, allAccidentals)) {
                 redundantAccidentals.push_back(acc);
+            } else if (!acc->addToSkyline()) {
+                invisibleAccidentals.push_back(acc);
             } else {
                 allAccidentals.push_back(acc);
             }
@@ -262,7 +273,7 @@ void AccidentalsLayout::createChordsShape(AccidentalsLayoutContext& ctx)
             ctx.chordsShape.add(note->symShapeWithCutouts(noteSym).translate(note->pos() + chord->pos()));
         }
         const Stem* stem = chord->stem();
-        if (stem) {
+        if (stem && stem->addToSkyline()) {
             ctx.chordsShape.add(stem->shape().translate(stem->pos() + chord->pos()));
         }
     }
@@ -292,7 +303,6 @@ void AccidentalsLayout::stackAccidental(Accidental* acc, AccidentalsLayoutContex
     setXposRelativeToSegment(acc, -x);
 
     checkZeroColumn(acc, ctx);
-
     ctx.stackedAccidentalsShape.add(accShape);
     ctx.stackedAccidentals.push_back(acc);
 }
