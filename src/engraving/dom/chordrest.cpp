@@ -253,7 +253,7 @@ EngravingItem* ChordRest::drop(EditData& data)
 
     case ElementType::DYNAMIC:
         e->setTrack(track());
-        e->checkVoiceApplicationCompatibleWithTrack();
+        e->checkVoiceAssignmentCompatibleWithTrack();
         e->setParent(segment());
         score()->undoAddElement(e);
         return e;

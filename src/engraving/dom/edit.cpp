@@ -2179,7 +2179,7 @@ void Score::cmdFlip()
     };
 
     for (EngravingItem* e : el) {
-        if (e->hasVoiceApplicationProperties()) {
+        if (e->hasVoiceAssignmentProperties()) {
             flipOnce(e, [e]() {
                 PlacementV curPlacement = e->getProperty(Pid::PLACEMENT).value<PlacementV>();
                 e->undoChangeProperty(Pid::DIRECTION, curPlacement == PlacementV::ABOVE ? DirectionV::DOWN : DirectionV::UP);
@@ -3854,7 +3854,7 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
 
     hairpin->setTick2(endTick);
 
-    hairpin->setApplyToVoice(dynamic->applyToVoice());
+    hairpin->setVoiceAssignment(dynamic->voiceAssignment());
 
     undoAddElement(hairpin);
 }

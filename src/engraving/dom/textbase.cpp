@@ -1706,7 +1706,7 @@ TextBase::TextBase(const TextBase& st)
     m_paddingWidth                = st.m_paddingWidth;
     m_frameRound                  = st.m_frameRound;
 
-    m_applyToVoice = st.m_applyToVoice;
+    m_voiceAssignment = st.m_voiceAssignment;
     m_direction = st.m_direction;
     m_centerBetweenStaves = st.m_centerBetweenStaves;
 
@@ -2791,8 +2791,8 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return direction();
     case Pid::CENTER_BETWEEN_STAVES:
         return centerBetweenStaves();
-    case Pid::APPLY_TO_VOICE:
-        return applyToVoice();
+    case Pid::VOICE_ASSIGNMENT:
+        return voiceAssignment();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -2867,8 +2867,8 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
     case Pid::CENTER_BETWEEN_STAVES:
         setCenterBetweenStaves(v.value<AutoOnOff>());
         break;
-    case Pid::APPLY_TO_VOICE:
-        setApplyToVoice(v.value<VoiceApplication>());
+    case Pid::VOICE_ASSIGNMENT:
+        setVoiceAssignment(v.value<VoiceAssignment>());
         break;
     default:
         rv = EngravingItem::setProperty(pid, v);
@@ -2915,8 +2915,8 @@ PropertyValue TextBase::propertyDefault(Pid id) const
         return DirectionV::AUTO;
     case Pid::CENTER_BETWEEN_STAVES:
         return AutoOnOff::AUTO;
-    case Pid::APPLY_TO_VOICE:
-        return VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+    case Pid::VOICE_ASSIGNMENT:
+        return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
     default:
         for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {

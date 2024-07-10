@@ -371,7 +371,7 @@ enum class Pid {
     SNAP_BEFORE,
     SNAP_AFTER,
 
-    APPLY_TO_VOICE,
+    VOICE_ASSIGNMENT,
     CENTER_BETWEEN_STAVES,
 
     POS_ABOVE,

@@ -271,7 +271,7 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
-            <applyToVoice>currentVoiceOnly</applyToVoice>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
             <eid>13194139533348</eid>
             </Dynamic>
           <Chord>
@@ -317,7 +317,7 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <applyToVoice>currentVoiceOnly</applyToVoice>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
             <eid>13421772800036</eid>
             </Dynamic>
           <Chord>
@@ -406,7 +406,7 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <applyToVoice>allInStaff</applyToVoice>
+            <voiceAssignment>allInStaff</voiceAssignment>
             <eid>13554916786212</eid>
             </Dynamic>
           <StaffText>

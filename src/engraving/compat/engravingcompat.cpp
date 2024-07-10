@@ -112,7 +112,7 @@ void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
                         continue;
                     }
                     for (EngravingItem* item : segment.annotations()) {
-                        if (!item || !item->hasVoiceApplicationProperties()) {
+                        if (!item || !item->hasVoiceAssignmentProperties()) {
                             continue;
                         }
                         if (item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION)) {

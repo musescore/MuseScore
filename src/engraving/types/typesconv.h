@@ -242,8 +242,8 @@ public:
     static AsciiStringView toXml(TiePlacement interval);
     static TiePlacement fromXml(const AsciiStringView& str, TiePlacement def);
 
-    static AsciiStringView toXml(VoiceApplication voiceAppl);
-    static VoiceApplication fromXml(const AsciiStringView& str, VoiceApplication def);
+    static AsciiStringView toXml(VoiceAssignment voiceAppl);
+    static VoiceAssignment fromXml(const AsciiStringView& str, VoiceAssignment def);
 
     static AsciiStringView toXml(AutoOnOff autoOnOff);
     static AutoOnOff fromXml(const AsciiStringView& str, AutoOnOff def);

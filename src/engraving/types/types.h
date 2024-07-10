@@ -332,7 +332,7 @@ enum class AutoOnOff : char {
 };
 
 //! Note: from lowest to highest priority
-enum class VoiceApplication {
+enum class VoiceAssignment {
     ALL_VOICE_IN_INSTRUMENT,
     ALL_VOICE_IN_STAFF,
     CURRENT_VOICE_ONLY
