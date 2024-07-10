@@ -3200,13 +3200,13 @@ void MStyle::load(XmlReader& e, int mscVersion)
             else if (tag == "hairpinLineWidth")  // pre-4.4 typo
                   set(Sid::hairpinLineWidth, Spatium(e.readDouble()));
             else if (mscVersion >= 440 && tag == "chordSymbolAPosAbove")  // pre-4.4 typo
-                  set(Sid::chordSymbolAPosAbove, QVariant(e.readPoint()));
+                  set(Sid::chordSymbolAPosAbove, e.readPoint());
             else if (mscVersion >= 440 && tag == "chordSymbolAPosBelow")  // pre-4.4 typo
-                  set(Sid::chordSymbolAPosBelow, QVariant(e.readPoint()));
+                  set(Sid::chordSymbolAPosBelow, e.readPoint());
             else if (mscVersion >= 440 && tag == "measureNumberAllStaves")  // pre-4.4 typo
-                  set(Sid::measureNumberAllStaves, QVariant(e.readBool()));
+                  set(Sid::measureNumberAllStaves, e.readBool());
             else if (tag == "dontHidStavesInFirstSystem") // pre-3.6.3/4.0 typo
-                  set(Sid::dontHideStavesInFirstSystem, QVariant(e.readBool()));
+                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
             else if (mscVersion >= 440 && tag == "firstSystemInstNameVisibility")  // pre-4.4 typo, doesn't exist in Mu3, so ignore
                   e.skipCurrentElement();
             else if (mscVersion >= 400
@@ -3225,14 +3225,14 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   if (qFuzzyCompare(hairpinLinePosAbove.y(), -1.5)) // 4.2+ default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::hairpinLinePosAbove, QPointF(hairpinLinePosAbove));
+                        set(Sid::hairpinLinePosAbove, hairpinLinePosAbove);
                   }
             else if (mscVersion >= 420 && tag == "hairpinLinePosBelow") { // y: 4 (Mu4.0-4.1), 2.5 (Mu4.2+) -> 4
                   QPointF hairpinLinePosBelow = e.readPoint();
                   if (qFuzzyCompare(hairpinLinePosBelow.y(), 2.5)) // 4.2+ default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::hairpinLinePosBelow, QPointF(hairpinLinePosBelow));
+                        set(Sid::hairpinLinePosBelow, hairpinLinePosBelow);
                   }
             else if (mscVersion >= 400 && tag == "hairpinLineStyle") {
                   int _lineStyle = Qt::SolidLine;
@@ -3241,7 +3241,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "dashed")
                         _lineStyle = Qt::DashLine;
-                  set(Sid::hairpinLineStyle, QVariant(_lineStyle));
+                  set(Sid::hairpinLineStyle, _lineStyle);
                   }
             else if (mscVersion >= 400
                      && (tag == "hairpinDashLineLen"  // Mu4 only, let's skip
@@ -3254,7 +3254,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
-                  set(Sid::hairpinLineLineStyle, QVariant(_lineStyle));
+                  set(Sid::hairpinLineLineStyle, _lineStyle);
                   }
             else if (mscVersion >= 400
                      && (tag == "hairpinLineDashLineLen"  // Mu4 only, let's skip
@@ -3268,7 +3268,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "dashed")
                         _lineStyle = Qt::DashLine;
-                  set(Sid::pedalLineStyle, QVariant(_lineStyle));
+                  set(Sid::pedalLineStyle, _lineStyle);
                   }
             else if (mscVersion >= 400
                      && (tag == "pedalDashLineLen"  // Mu4 only, let's skip
@@ -3294,14 +3294,14 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   if (qFuzzyCompare(chordSymbolAFontSize, 10.0)) // 4.x default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::chordSymbolAFontSize, QVariant(chordSymbolAFontSize));
+                        set(Sid::chordSymbolAFontSize, chordSymbolAFontSize);
                   }
             else if (mscVersion >= 400 && tag == "chordSymbolBFontSize") { // 10 -> 11
                   qreal chordSymbolBFontSize = e.readDouble();
                   if (qFuzzyCompare(chordSymbolBFontSize, 10.0)) // 4.x default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::chordSymbolBFontSize, QVariant(chordSymbolBFontSize));
+                        set(Sid::chordSymbolBFontSize, chordSymbolBFontSize);
                   }
             else if ((mscVersion >= 400 && tag == "graceToMainNoteDist")         // Mu4 only,    let's skip
                   || (mscVersion >= 400 && tag == "graceToGraceNoteDist")        // Mu4 only,    let's skip
@@ -3387,7 +3387,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "dashed")
                         _lineStyle = Qt::DashLine;
-                  set(Sid::ottavaLineStyle, QVariant(_lineStyle));
+                  set(Sid::ottavaLineStyle, _lineStyle);
                   }
             else if (mscVersion >= 400
                      && (tag == "voltaDashLineLen"  // Mu4 only, let's skip
@@ -3400,7 +3400,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
-                  set(Sid::ottavaLineStyle, QVariant(_lineStyle));
+                  set(Sid::ottavaLineStyle, _lineStyle);
                   }
             else if ((mscVersion >= 400 && tag == "ottavaDashLineLen")          // Mu4 only,    let's skip
                   || (mscVersion >= 400 && tag == "ottavaDashGapLen")           // Mu4 only,    let's skip
@@ -3430,7 +3430,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   if (!scaleBarlines) // 4.x default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::scaleBarlines, QVariant(scaleBarlines));
+                        set(Sid::scaleBarlines, scaleBarlines);
                   }
             else if (mscVersion >= 410
                      && (tag == "dynamicsOverrideFont" // Mu4.1+ only, let's skip
@@ -3464,7 +3464,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   if (qFuzzyCompare(measureNumberPosBelow.y(), 1.0)) // 4.x default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::measureNumberPosBelow, QPointF(measureNumberPosBelow));
+                        set(Sid::measureNumberPosBelow, measureNumberPosBelow);
                   }
             else if (mscVersion >= 410
                      && (tag == "expressionPosAbove"       // Mu4.1+ only, let's skip
@@ -3491,7 +3491,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   if (qFuzzyCompare(footerOffset.y(), 0.0)) // 4.x default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::footerOffset, QPointF(footerOffset));
+                        set(Sid::footerOffset, footerOffset);
                   }
             else if (mscVersion >= 400 && tag == "letRingLineWidth") { // 0.11 -> 0.15
                   qreal letRingLineWidth = e.readDouble();
@@ -3507,7 +3507,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
-                  set(Sid::letRingLineStyle, QVariant(_lineStyle));
+                  set(Sid::letRingLineStyle, _lineStyle);
                   }
             else if (mscVersion >= 400
                      && (tag == "letRingDashLineLen" // Mu4 only, let's skip
@@ -3518,14 +3518,14 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   if (qFuzzyCompare(palmMutePosAbove.y(), 0.0)) // 4.1 default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::palmMutePosAbove, QPointF(palmMutePosAbove));
+                        set(Sid::palmMutePosAbove, palmMutePosAbove);
                   }
             else if (mscVersion >= 410 && tag == "palmMutePosBelow") { // y: 4 resp. 0 -> 4
                   QPointF palmMutePosBelow = e.readPoint();
                   if (qFuzzyCompare(palmMutePosBelow.y(), 0.0)) // 4.1 default, let's skip, i.e. reset back
                         continue;
                   else
-                        set(Sid::palmMutePosBelow, QPointF(palmMutePosBelow));
+                        set(Sid::palmMutePosBelow, palmMutePosBelow);
                   }
             else if (mscVersion >= 400 && tag == "palmMuteLineWidth") { // 0.11 -> 0.15
                   qreal palmMuteLineWidth = e.readDouble();
@@ -3541,7 +3541,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
-                  set(Sid::palmMuteLineStyle, QVariant(_lineStyle));
+                  set(Sid::palmMuteLineStyle, _lineStyle);
                   }
             else if (mscVersion >= 400
                      && (tag == "palmMuteDashLineLen"  // Mu4 only, let's skip
@@ -3561,9 +3561,9 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   e.skipCurrentElement();
             //else if (mscVersion >= 400 && tag == "Spatium") { // 1.74978 -> 1.75, rounding issue, has been read further up already
             else if (mscVersion < 400 && tag == "measureNumberOffset") // pre-4.4 typo
-                  set(Sid::measureNumberPosAbove, QVariant(e.readPoint()));
+                  set(Sid::measureNumberPosAbove, e.readPoint());
             else if (mscVersion < 400 && tag == "measureNumberPosAbove") // pre-4.4 typo
-                  set(Sid::mmRestRangePosAbove, QVariant(e.readPoint()));
+                  set(Sid::mmRestRangePosAbove, e.readPoint());
             else if (mscVersion >= 440 && tag == "tremoloStrokeStyle") // pre-4.4 typo
                   set(Sid::tremoloStyle, e.readInt());
             else if (mscVersion >= 440 && tag == "systemTextFontFace") // pre-4.4 typo
@@ -3581,9 +3581,9 @@ void MStyle::load(XmlReader& e, int mscVersion)
             else if (mscVersion >= 440 && tag == "systemTextPlacement") // pre-4.4 typo
                   set(Sid::systemTextPlacement, e.readElementText().toInt());
             else if (mscVersion >= 440 && tag == "systemTextPosAbove") // pre-4.4 typo
-                  set(Sid::systemTextPosAbove, QVariant(e.readPoint()));
+                  set(Sid::systemTextPosAbove, e.readPoint());
             else if (mscVersion >= 440 && tag == "systemPosBelow") // pre-4.4 typo
-                set(Sid::systemTextPosBelow, QVariant(e.readPoint()));
+                set(Sid::systemTextPosBelow, e.readPoint());
             else if (mscVersion >= 440 && tag == "systemMinDistance") // pre-4.4 typo
                   set(Sid::systemTextMinDistance, Spatium(e.readDouble()));
             else if (mscVersion >= 440 && tag == "systemFrameType") // pre-4.4 typo
