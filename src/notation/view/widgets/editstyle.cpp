@@ -1608,7 +1608,7 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         return QString();
     }
 
-    if (element->isTextBase()) {
+    if (pageCodeForElement(element) == "text-styles" && element->isTextBase()) {
         switch (toTextBase(element)->textStyleType()) {
         case TextStyleType::TITLE:
             return "title";
