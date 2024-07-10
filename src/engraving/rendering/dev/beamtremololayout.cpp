@@ -219,7 +219,9 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutDat
     maxDictatorReduce = std::min(std::abs(dictator - middleLine), maxDictatorReduce);
 
     bool isFlat = dictator == pointer;
-    bool isAscending = startChord->line() > endChord->line();
+    const ChordPosition startPos = ChordPosition(startChord->line(), startChord->vStaffIdx());
+    const ChordPosition endPos = ChordPosition(endChord->line(), endChord->vStaffIdx());
+    bool isAscending = startPos > endPos;
     int towardBeam = ldata->up ? -1 : 1;
     int newDictator = dictator;
     int newPointer = pointer;
@@ -597,13 +599,9 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     }
 
     const int closestMove = ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE ? item->minCRMove() : item->maxCRMove();
-    const int furthestMove = ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE ? item->maxCRMove() : item->minCRMove();
     const staff_idx_t closestStaffToBeam = ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE
                                            || ldata->crossStaffBeamPos
                                            == CrossStaffBeamPosition::BELOW ? item->staffIdx() + closestMove : startChord->vStaffIdx();
-    const staff_idx_t furthestStaffFromBeam = ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE
-                                              || ldata->crossStaffBeamPos
-                                              == CrossStaffBeamPosition::BELOW ? item->staffIdx() + furthestMove : startChord->vStaffIdx();
 
     std::vector<Chord*> chordsClosestToBeam;
 
@@ -643,10 +641,10 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     const int middleLine = getMiddleStaffLine(ldata, ctx, startChord, endChord, staffLines, closestStaffToBeam);
 
     int slant
-        = computeDesiredSlant(item, ldata, startPos, endPos, furthestStaffFromBeam, chordsClosestToBeam, middleLine, dictator, pointer);
+        = computeDesiredSlant(item, ldata, startPos, endPos, chordsClosestToBeam, middleLine, dictator, pointer);
     bool isFlat = slant == 0;
     SlopeConstraint specialSlant
-        = isFlat ? getSlopeConstraint(ldata, startPos, endPos, furthestStaffFromBeam) : SlopeConstraint::NO_CONSTRAINT;
+        = isFlat ? getSlopeConstraint(ldata, startPos, endPos) : SlopeConstraint::NO_CONSTRAINT;
     bool forceFlat = specialSlant == SlopeConstraint::FLAT;
     bool smallSlant = specialSlant == SlopeConstraint::SMALL_SLOPE;
     if (isFlat) {
@@ -985,10 +983,8 @@ int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, con
 }
 
 int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
-                                           const ChordPosition& endPos, const staff_idx_t furthestStaff,
-                                           std::vector<Chord*> closestChordsToBeam,
-                                           int middleLine, int dictator,
-                                           int pointer)
+                                           const ChordPosition& endPos, std::vector<Chord*> closestChordsToBeam,
+                                           int middleLine, int dictator, int pointer)
 {
     if (item->isType(ElementType::BEAM) && item_cast<const Beam*>(item)->noSlope()) {
         return 0;
@@ -1008,7 +1004,7 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
     if (startPos == endPos) {
         return 0;
     }
-    SlopeConstraint slopeConstrained = getSlopeConstraint(ldata, startPos, endPos, furthestStaff);
+    SlopeConstraint slopeConstrained = getSlopeConstraint(ldata, startPos, endPos);
     if (slopeConstrained == SlopeConstraint::FLAT) {
         return 0;
     } else if (slopeConstrained == SlopeConstraint::SMALL_SLOPE) {
@@ -1023,10 +1019,11 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
         int beamDir = startPos == endPos ? 0 : (startPos > endPos ? 1 : -1);
 
         // Calculate slant between notes on stave closest to the beam
-        ChordPosition closestStartPos(closestChordsToBeam.front() ? closestChordsToBeam.front()->line() : 0,
-                                      closestChordsToBeam.front() ? closestChordsToBeam.front()->vStaffIdx() : 0);
-        ChordPosition closestEndPos(closestChordsToBeam.back() ? closestChordsToBeam.back()->line() : 0,
-                                    closestChordsToBeam.back() ? closestChordsToBeam.back()->vStaffIdx() : 0);
+        int closestChordsSize = closestChordsToBeam.size();
+        ChordPosition closestStartPos(closestChordsSize > 0 && closestChordsToBeam.front() ? closestChordsToBeam.front()->line() : 0,
+                                      closestChordsSize > 0 && closestChordsToBeam.front() ? closestChordsToBeam.front()->vStaffIdx() : 0);
+        ChordPosition closestEndPos(closestChordsSize > 0 && closestChordsToBeam.back() ? closestChordsToBeam.back()->line() : 0,
+                                    closestChordsSize > 0 && closestChordsToBeam.back() ? closestChordsToBeam.back()->vStaffIdx() : 0);
         int staveClosestToBeamDir = closestStartPos == closestEndPos ? 0 : (closestStartPos > closestEndPos ? 1 : -1);
 
         // Contradiction, beam must be flat
@@ -1037,7 +1034,7 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
         // When the notes on the stave closest to the beam have a neutral direction, set a slant of 1/-1 in the direction of the staff change between first and last chords
         if (staveClosestToBeamDir == 0 && beamDir != 0) {
             if (startPos.staff != endPos.staff) {
-                return beamDir;
+                return std::abs(beamDir) * (ldata->up ? 1 : -1);
             }
         }
     }
@@ -1048,8 +1045,7 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
 }
 
 SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
-                                                      const ChordPosition& endPos,
-                                                      const staff_idx_t furthestStaff)
+                                                      const ChordPosition& endPos)
 {
     if (ldata->notes.empty()) {
         return SlopeConstraint::NO_CONSTRAINT;

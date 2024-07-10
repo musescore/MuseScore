@@ -68,10 +68,10 @@ private:
     static int getMiddleStaffLine(const BeamBase::LayoutData* ldata, const LayoutContext& ctx, const ChordRest* startChord,
                                   const ChordRest* endChord, const int staffLines, const staff_idx_t beamStaffIdx);
     static int computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
-                                   const ChordPosition& endPos, const staff_idx_t furthestStaff, std::vector<Chord*> closestChordsToBeam,
-                                   int middleLine, int dictator, int pointer);
-    static SlopeConstraint getSlopeConstraint(const BeamBase::LayoutData* ldata, const ChordPosition& startPos, const ChordPosition& endPos,
-                                              const staff_idx_t furthestStaff);
+                                   const ChordPosition& endPos, std::vector<Chord*> closestChordsToBeam, int middleLine, int dictator,
+                                   int pointer);
+    static SlopeConstraint getSlopeConstraint(const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
+                                              const ChordPosition& endPos);
     static void offsetBeamWithAnchorShortening(const BeamBase::LayoutData* ldata, const LayoutConfiguration& conf,
                                                const std::vector<ChordRest*>& chordRests, int& dictator, int& pointer, int staffLines,
                                                bool isStartDictator, int stemLengthDictator, const int middleLine);
