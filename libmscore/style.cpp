@@ -3044,7 +3044,7 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   set(Sid::ottavaHookAbove, y);
                   set(Sid::ottavaHookBelow, -y);
                   }
-            else if (tag == "Spatium")
+            else if (tag == "Spatium" || (mscVersion >= 440 && tag == "spatium")) // Mu4.4+
                   set(Sid::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {    // obsolete
                   readPageFormat(this, e);      // from read206.cpp
@@ -3181,6 +3181,10 @@ void MStyle::load(XmlReader& e, int mscVersion)
                       || tag == "keysigAccidentalDistance" // Mu4 only, let's skip
                       || tag == "keysigNaturalDistance"))  // Mu4 only, let's skip
                   e.skipCurrentElement();
+            else if (mscVersion >= 440 && tag == "minStaffSpread") // pre-4.4 typo
+                  set(Sid::minStaffSpread, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "maxStaffSpread") // pre-4.4 typo
+                  set(Sid::maxStaffSpread, Spatium(e.readDouble()));
             else if (mscVersion >= 400 && tag == "useWideBeams") // Mu4 for beamDistance, default depends on font's `engravingDefaults`! Maybe better skip?
                   e.skipCurrentElement();
             else if (mscVersion >= 400 && tag == "beamMinLen") { // 1.1 -> 1.3
@@ -3192,6 +3196,18 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   }
             else if ((mscVersion >= 400 && tag == "snapCustomBeamsToGrid") // Mu4 only, let's skip
                   || (mscVersion >= 440 && tag == "frenchStyleBeams"))     // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "hairpinLineWidth")  // pre-4.4 typo
+                  set(Sid::hairpinLineWidth, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "chordSymbolAPosAbove")  // pre-4.4 typo
+                  set(Sid::chordSymbolAPosAbove, QVariant(e.readPoint()));
+            else if (mscVersion >= 440 && tag == "chordSymbolAPosBelow")  // pre-4.4 typo
+                  set(Sid::chordSymbolAPosBelow, QVariant(e.readPoint()));
+            else if (mscVersion >= 440 && tag == "measureNumberAllStaves")  // pre-4.4 typo
+                  set(Sid::measureNumberAllStaves, QVariant(e.readBool()));
+            else if (tag == "dontHidStavesInFirstSystem") // pre-3.6.3/4.0 typo
+                  set(Sid::dontHideStavesInFirstSystem, QVariant(e.readBool()));
+            else if (mscVersion >= 440 && tag == "firstSystemInstNameVisibility")  // pre-4.4 typo, doesn't exist in Mu3, so ignore
                   e.skipCurrentElement();
             else if (mscVersion >= 400
                      && (tag == "propertyDistanceHead" // 0.4 -> 1,   articulation/ornaments distance, let's skip, i.e. reset back
@@ -3320,27 +3336,37 @@ void MStyle::load(XmlReader& e, int mscVersion)
                       || tag == "mmRestOldStyleMaxMeasures"  // Mu4 only, let's skip
                       || tag == "mmRestOldStyleSpacing"))    // Mu4 only, let's skip
                   e.skipCurrentElement();
-            else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo: "dontHidStavesInFirstSystm"
-                  set(Sid::dontHideStavesInFirstSystem, QVariant(e.readBool()));
             else if (mscVersion >= 400
                      && (tag == "alwaysShowSquareBracketsWhenEmptyStavesAreHidden" // Mu4 only, let's skip
                       || tag == "ArpeggioAccidentalDistance"                       // Mu4 only, let's skip
-                      || tag == "ArpeggioAccidentalDistanceMin"))                  // Mu4 only, let's skip
+                      || tag == "ArpeggioAccidentalDistanceMin"                    // Mu4 only, let's skip
+                      || tag == "arpeggioAccidentalDistance"                       // Mu4.4+ only, let's skip
+                      || tag == "arpeggioAccidentalDistanceMin"))                  // Mu4.4+ only, let's skip
                   e.skipCurrentElement();
-            else if (mscVersion >= 420 && tag == "ArpeggioNoteDistance") { // 0.4 (Mu4.2+) -> 0.5 (Mu3.7)
+            else if ((mscVersion >= 420 && tag == "ArpeggioNoteDistance") ||
+                     (mscVersion >= 440 && tag == "arpeggioNoteDistance")) { // 0.4 (Mu4.2+) -> 0.5 (Mu3.7)
                   qreal arpeggioNoteDistance = e.readDouble();
                   if (qFuzzyCompare(arpeggioNoteDistance, 0.4)) // 4.2+ default, let's skip, i.e. reset back
                         continue;
                   else
                         set(Sid::arpeggioNoteDistance, Spatium(arpeggioNoteDistance));
                   }
-            else if (mscVersion >= 420 && tag == "ArpeggioAccidentalDistance") { // 0.3 (Mu4.2+) -> 0.5 (Mu3.7)
+            else if ((mscVersion >= 420 && tag == "ArpeggioAccidentalDistance") ||
+                     (mscVersion >= 420 && tag == "arpeggioAccidentalDistance")) { // 0.3 (Mu4.2+) -> 0.5 (Mu3.7)
                   qreal arpeggioAccidentalDistance = e.readDouble();
                   if (qFuzzyCompare(arpeggioAccidentalDistance, 0.3)) // 4.2+ default, let's skip, i.e. reset back
                         continue;
                   else
                         set(Sid::arpeggioAccidentalDistance, Spatium(arpeggioAccidentalDistance));
                   }
+            else if (mscVersion >= 400 && tag == "arpeggioAccidentalDistanceMin") // pre-4.4 typo
+                  set(Sid::arpeggioAccidentalDistanceMin, Spatium(e.readDouble()));
+            else if (mscVersion >= 400 && tag == "arpeggioLineWidth") // pre-x.4 typo
+                  set(Sid::arpeggioLineWidth, Spatium(e.readDouble()));
+            else if (mscVersion >= 400 && tag == "arpeggioHookLen") // pre-x.4 typo
+                  set(Sid::arpeggioHookLen, Spatium(e.readDouble()));
+            else if (mscVersion >= 400 && tag == "arpeggioHiddenInStdIfTab") // pre-x.4 typo
+                  set(Sid::arpeggioHiddenInStdIfTab, e.readBool());
             else if (mscVersion >= 400 && tag == "slurEndWidth") // 0.05 -> 0.07, depends on font's `engravingDefaults`! Let's skip.
                   e.skipCurrentElement();
             else if ((mscVersion >= 410 && tag == "minStraightGlissandoLength") // Mu4.1+ only, let's skip
@@ -3534,6 +3560,84 @@ void MStyle::load(XmlReader& e, int mscVersion)
             else if (mscVersion >= 400 && tag == "defaultsVersion") // 4nn -> 302, let's sip, i.e. reset to Mu3
                   e.skipCurrentElement();
             //else if (mscVersion >= 400 && tag == "Spatium") { // 1.74978 -> 1.75, rounding issue, has been read further up already
+            else if (mscVersion < 400 && tag == "measureNumberOffset") // pre-4.4 typo
+                  set(Sid::measureNumberPosAbove, QVariant(e.readPoint()));
+            else if (mscVersion < 400 && tag == "measureNumberPosAbove") // pre-4.4 typo
+                  set(Sid::mmRestRangePosAbove, QVariant(e.readPoint()));
+            else if (mscVersion >= 440 && tag == "tremoloStrokeStyle") // pre-4.4 typo
+                  set(Sid::tremoloStyle, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemTextFontFace") // pre-4.4 typo
+                  set(Sid::systemTextFontFace, e.readElementText());
+            else if (mscVersion >= 440 && tag == "systemTextFontSize") // pre-4.4 typo
+                  set(Sid::systemTextFontSize, e.readDouble());
+            else if (mscVersion >= 440 && tag == "systemTextFontSpatiumDependent") // pre-4.4 typo
+                  set(Sid::systemTextFontSpatiumDependent, QVariant(e.readInt()));
+            else if (mscVersion >= 440 && tag == "systemTextFontStyle") // pre-4.4 typo
+                  set(Sid::systemTextFontStyle, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemTextAlign") // pre-4.4 typo
+                  set(Sid::systemTextAlign, QVariant::fromValue(e.readElementText()));
+            else if (mscVersion >= 440 && tag == "systemTextOffsetType") // pre-4.4 typo
+                  set(Sid::systemTextOffsetType, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemTextPlacement") // pre-4.4 typo
+                  set(Sid::systemTextPlacement, e.readElementText().toInt());
+            else if (mscVersion >= 440 && tag == "systemTextPosAbove") // pre-4.4 typo
+                  set(Sid::systemTextPosAbove, QVariant(e.readPoint()));
+            else if (mscVersion >= 440 && tag == "systemPosBelow") // pre-4.4 typo
+                set(Sid::systemTextPosBelow, QVariant(e.readPoint()));
+            else if (mscVersion >= 440 && tag == "systemMinDistance") // pre-4.4 typo
+                  set(Sid::systemTextMinDistance, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "systemFrameType") // pre-4.4 typo
+                  set(Sid::systemTextFrameType, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemFramePadding") // pre-4.4 typo
+                  set(Sid::systemTextFramePadding, e.readDouble());
+            else if (mscVersion >= 440 && tag == "systemFrameWidth") // pre-4.4 typo
+                  set(Sid::systemTextFrameWidth, e.readDouble());
+            else if (mscVersion >= 440 && tag == "systemFrameRound") // pre-4.4 typo
+                  set(Sid::systemTextFrameRound, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemFrameFgColor") // pre-4.4 typo
+                 set(Sid::systemTextFrameFgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "systemFrameBgColor") // pre-4.4 typo
+                  set(Sid::systemTextFrameBgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "staffTextFontFace") // pre-4.4 typo
+                set(Sid::staffTextFontFace, e.readElementText());
+            else if (mscVersion >= 440 && tag == "staffTextFontSize") // pre-4.4 typo
+                  set(Sid::staffTextFontSize, e.readDouble());
+            else if (mscVersion >= 440 && tag == "staffFontSpatiumDependent") // pre-4.4 typo
+                  set(Sid::staffTextFontSpatiumDependent, e.readBool());
+            else if (mscVersion >= 440 && tag == "staffTextFontStyle") // pre-4.4 typo
+                  set(Sid::staffTextFontStyle, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextAlign") // pre-4.4 typo
+                  set(Sid::staffTextAlign, QVariant::fromValue(e.readElementText()));
+            else if (mscVersion >= 440 && tag == "staffTextOffsetType") // pre-4.4 typo
+                  set(Sid::staffTextOffsetType, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextPlacement") // pre-4.4 typo
+                  set(Sid::staffTextPlacement, e.readElementText().toInt());
+            else if (mscVersion < 302 && tag == "staffTextPosAbove") { // pre-4.4 typo, certainly before 3.6, even before 3.5
+                  double staffTextPosAboveY = e.readDouble();
+                  set(Sid::staffTextPosAbove, QPointF(0.0, staffTextPosAboveY));
+                  }
+            else if (mscVersion >= 440 && tag == "staffTextPosAbove") // pre-4.4 typo
+                  set(Sid::staffTextPosAbove, e.readPoint());
+            else if (mscVersion >= 440 && tag == "staffTextPosBelow") // pre-4.4 typo
+                  set(Sid::staffTextPosBelow, e.readPoint());
+            else if (mscVersion < 302 && tag == "staffTextMinDistance" ) // pre-4.4 typo, certainly before 3.6, even before 3.5
+                  set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "staffTextMinDistance") // pre-4.4 typo
+                  set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "staffTextFrameType") // pre-4.4 typo
+                  set(Sid::staffTextFrameType, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextFramePadding") // pre-4.4 typo
+                  set(Sid::staffTextFramePadding, e.readDouble());
+            else if (mscVersion >= 440 && tag == "staffTextFrameWidth") // pre-4.4 typo
+                set(Sid::staffTextFrameWidth, e.readDouble());
+            else if (mscVersion >= 440 && tag == "staffTextFrameRound") // pre-4.4 typo
+                  set(Sid::staffTextFrameRound, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextFrameFgColor") // pre-4.4 typo
+                  set(Sid::staffTextFrameFgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "staffTextFrameBgColor") // pre-4.4 typo
+                set(Sid::staffTextFrameBgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "dymanicsShowTabCommon") // pre-4.4 typo in gp-style.mss, doesn't exist in Mu3, so ignore
+                  e.skipCurrentElement();
 // end 4.x compat: WARNING: we're reaching MSVC's limit for nesting :-(
             else if (!readProperties(e))
                   e.unknown();
