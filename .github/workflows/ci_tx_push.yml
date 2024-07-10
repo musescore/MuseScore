@@ -31,8 +31,8 @@ jobs:
 
       - name: Setup environment
         run: |
-          bash ./buildscripts/ci/translation/ts_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
+          bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
 
       - name: Push strings to Transifex
         run: |
-          bash ./buildscripts/ci/translation/ts_push.sh
+          bash ./buildscripts/ci/translation/tx_push.sh
