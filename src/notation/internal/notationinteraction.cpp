@@ -1742,8 +1742,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 staff_idx_t targetStaff = firstStaffOnly ? 0 : cr1->staffIdx();
                 score->cmdAddSpanner(spanner, targetStaff, startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
-            if (spanner->hasVoiceApplicationProperties()) {
-                spanner->setInitialTrackAndVoiceApplication(cr1->track(), modifiers & ControlModifier);
+            if (spanner->hasVoiceAssignmentProperties()) {
+                spanner->setInitialTrackAndVoiceAssignment(cr1->track(), modifiers & ControlModifier);
             } else if (spanner->isVoiceSpecific()) {
                 spanner->setTrack(cr1->track());
             }
@@ -1910,8 +1910,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 spanner->setScore(score);
                 spanner->styleChanged();
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
-                if (spanner->hasVoiceApplicationProperties()) {
-                    spanner->setInitialTrackAndVoiceApplication(staff2track(i), modifiers & ControlModifier);
+                if (spanner->hasVoiceAssignmentProperties()) {
+                    spanner->setInitialTrackAndVoiceAssignment(staff2track(i), modifiers & ControlModifier);
                 }
                 selectAndStartEditIfNeeded(spanner);
             }
@@ -2052,10 +2052,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
             }
         }
 
-        if (el && el->hasVoiceApplicationProperties()) {
+        if (el && el->hasVoiceAssignmentProperties()) {
             // If target has voice application properties, dropped element takes those and discards the default
-            if (!target->hasVoiceApplicationProperties()) {
-                el->setInitialTrackAndVoiceApplication(target->track(), modifiers & ControlModifier);
+            if (!target->hasVoiceAssignmentProperties()) {
+                el->setInitialTrackAndVoiceAssignment(target->track(), modifiers & ControlModifier);
             }
         }
 

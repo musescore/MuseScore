@@ -1288,7 +1288,7 @@ bool EngravingItem::appliesToAllVoicesInInstrument() const
            && getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>() == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
 }
 
-void EngravingItem::setInitialTrackAndVoiceApplication(track_idx_t track, bool ctrlModifier)
+void EngravingItem::setInitialTrackAndVoiceAssignment(track_idx_t track, bool ctrlModifier)
 {
     IF_ASSERT_FAILED(track != muse::nidx) {
         return;
