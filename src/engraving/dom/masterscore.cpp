@@ -677,7 +677,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             score->restoreInitialKeySigAndTimeSig();
         }
 
-        if (pm && !options.moveSignaturesClef) {
+        if (pm && !options.moveSignaturesClef && !options.ignoreBarLines) {
             Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
             if (pbs && pbs->enabled()) {
                 for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {

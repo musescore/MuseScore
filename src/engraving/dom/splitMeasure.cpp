@@ -115,6 +115,7 @@ void MasterScore::splitMeasure(const Fraction& tick)
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
+    options.ignoreBarLines = true;
 
     insertMeasure(nm, options);
     Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());

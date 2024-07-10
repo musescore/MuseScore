@@ -103,6 +103,7 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
+    options.ignoreBarLines = true;
     insertMeasure(next, options);
 
     for (Score* s : scoreList()) {

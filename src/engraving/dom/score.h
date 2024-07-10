@@ -872,6 +872,7 @@ public:
         bool needDeselectAll = true;
         bool cloneBoxToAllParts = true;
         bool moveStaffTypeChanges = true;
+        bool ignoreBarLines = false;
     };
 
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
