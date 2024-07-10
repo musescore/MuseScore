@@ -1432,7 +1432,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         painter->setFont(item->fretNumFont());
     }
 
-    for (FretDiagram::FingeringItem fingeringItem : item->ldata()->fingeringItems) {
+    for (const FretDiagram::FingeringItem& fingeringItem : item->ldata()->fingeringItems) {
         painter->save();
 
         Font scaledFont(item->fingeringFont());
@@ -1447,8 +1447,6 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
 
         painter->restore();
     }
-
-    // NOTE:JT possible future todo - draw fingerings
 
     if (item->orientation() == Orientation::HORIZONTAL) {
         painter->restore();
