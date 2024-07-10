@@ -918,6 +918,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
     Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
     auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+    std::sort(spanners.begin(), spanners.end(), [](const auto& sp1, const auto& sp2) {
+        return sp1.value->tick() < sp2.value->tick();
+    });
 
     // ties
     if (ctx.conf().isLinearMode()) {
