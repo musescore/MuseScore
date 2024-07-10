@@ -113,7 +113,7 @@ jobs:
           fi
         fi
 
-        if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly_build"]; then
+        if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly_build" ]; then
           SENTRY_PROJECT="sandbox"
         fi
 
