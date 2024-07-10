@@ -412,6 +412,12 @@
         <voice>5</voice>
         <staff>2</staff>
         </note>
+        <direction placement="above">
+        <direction-type>
+          <rehearsal default-y="20" enclosure="oval" font-size="5.7" font-style="italic" relative-x="-6">m</rehearsal>
+        </direction-type>
+        <offset>10</offset>
+      </direction>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
         </barline>

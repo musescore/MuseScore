@@ -405,6 +405,10 @@
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <RehearsalMark>
+            <linkedMain/>
+            <text><b></b><font size="5.7"/><i>m</i></text>
+            </RehearsalMark>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>
@@ -577,6 +581,14 @@
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <RehearsalMark>
+            <linked>
+              <location>
+                <staves>-3</staves>
+                </location>
+              </linked>
+            <text><b></b><font size="5.7"/><i>m</i></text>
+            </RehearsalMark>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

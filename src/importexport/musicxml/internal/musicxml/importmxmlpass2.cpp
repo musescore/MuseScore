@@ -934,6 +934,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
     if (!measure) {
         return;
     }
+    Fraction elTick = tick;
 
     if (!placement.empty()) {
         if (el->hasVoiceApplicationProperties()) {
@@ -944,9 +945,13 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
             el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         }
     }
+    const Fraction& endTick = measure->score()->endTick();
+    if (elTick > endTick) {
+        elTick = endTick;
+    }
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
-    Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+    Segment* s = measure->getSegment(SegmentType::ChordRest, elTick);
     if (el->systemFlag()) {
         Score* score = measure->score();
         Staff* st = score->staff(track2staff(track));
@@ -954,7 +959,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
             score->addSystemObjectStaff(st);
         }
         bool found = false;
-        for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), tick.ticks())) {
+        for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), elTick.ticks())) {
             if (el->type() == existingEl->type()) {
                 found = true;
                 break;
@@ -962,7 +967,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
         }
         if (!found) {
             el->setParent(s);
-            _pass2.addSystemElement(el, tick);
+            _pass2.addSystemElement(el, elTick);
         }
     } else {
         s->add(el);
