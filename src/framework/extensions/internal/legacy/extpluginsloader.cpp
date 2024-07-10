@@ -148,6 +148,12 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     while (current != std::string::npos) {
         String line = content.mid(previous, current - previous).trimmed();
 
+        //! NOTE Needed for compatibility with 3.6
+        //! We can add properties from 4.4 that are not in 3.6
+        if (line.startsWith(u"//4.4 ")) {
+            line = line.mid(6);
+        }
+
         if (line.startsWith(u'/')) { // comment
             // noop
         } else if (line.endsWith(u'{')) {
