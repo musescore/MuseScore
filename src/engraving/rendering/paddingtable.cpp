@@ -220,4 +220,8 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::ACCIDENTAL][ElementType::NOTE] = style.styleMM(Sid::accidentalNoteDistance);
     table[ElementType::ACCIDENTAL][ElementType::LEDGER_LINE] = 0.18 * spatium;
     table[ElementType::ACCIDENTAL][ElementType::STEM] = table[ElementType::ACCIDENTAL][ElementType::NOTE];
+
+    table[ElementType::ARTICULATION][ElementType::NOTE] = 0.25 * spatium;
+    table[ElementType::ARTICULATION][ElementType::REST] = 0.25 * spatium;
+    table[ElementType::ARTICULATION][ElementType::ACCIDENTAL] = 0.25 * spatium;
 }

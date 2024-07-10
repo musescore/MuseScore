@@ -4917,6 +4917,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
 
     for (const SymId& artic: item->articulationIds()) {
         bool isMarcato = Articulation::symId2ArticulationName(artic).contains(u"marcato");
+        bool isLv = artic == SymId::articLaissezVibrerAbove || artic == SymId::articLaissezVibrerBelow;
         double symH = item->symHeight(artic);
 
         if (!up || isMarcato) {
@@ -4928,6 +4929,10 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
             rectWithArticulations.setTop(topY - symH - _spatium);
         } else {
             rectWithArticulations.setHeight(rectWithArticulations.height() + symH + _spatium);
+        }
+        if (isLv) {
+            const double width = item->symWidth(artic) - item->symWidth(item->noteheadSymbol()) / 2;
+            rectWithArticulations.setWidth(rectWithArticulations.width() + width);
         }
     }
 

@@ -50,6 +50,7 @@ enum class ArticulationCategory : char {
     ACCENT = 0x8,
     MARCATO = 0x10,
     LUTE_FINGERING = 0x20,
+    LAISSEZ_VIB = 0x40,
 };
 DECLARE_FLAGS(ArticulationCategories, ArticulationCategory)
 DECLARE_OPERATORS_FOR_FLAGS(ArticulationCategories)
@@ -164,7 +165,8 @@ public:
     bool isStaccato() const { return m_categories & ArticulationCategory::STACCATO; }
     bool isAccent() const { return m_categories & ArticulationCategory::ACCENT; }
     bool isMarcato() const { return m_categories & ArticulationCategory::MARCATO; }
-    bool isLuteFingering() { return m_categories & ArticulationCategory::LUTE_FINGERING; }
+    bool isLuteFingering() const { return m_categories & ArticulationCategory::LUTE_FINGERING; }
+    bool isLaissezVib() const { return m_categories & ArticulationCategory::LAISSEZ_VIB; }
 
     bool isBasicArticulation() const;
 

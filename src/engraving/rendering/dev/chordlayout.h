@@ -94,6 +94,8 @@ private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);
     static void layoutTablature(Chord* item, LayoutContext& ctx);
 
+    static void layoutLvArticulation(Chord* item, LayoutContext& ctx);
+
     static void layoutNote2(Note* note, LayoutContext& ctx);
 
     static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes);

@@ -325,6 +325,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         f->mutldata()->setPosX(xNote);
     }
 
+    layoutLvArticulation(item, ctx);
+
     fillShape(item, item->mutldata(), ctx.conf());
 }
 
@@ -692,7 +694,51 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutldata(), ctx.conf());
     }
 
+    layoutLvArticulation(item, ctx);
+
     fillShape(item, item->mutldata(), ctx.conf());
+}
+
+void ChordLayout::layoutLvArticulation(Chord* item, LayoutContext& ctx)
+{
+    // Laissez vib ties must be layed out with the rest of the note, as they need to be taken into account for horizontal spacing
+    for (Articulation* a : item->articulations()) {
+        if (a->isLaissezVib()) {
+            // Must set direction before laying out
+            if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
+                a->setUp(item->up());         // if there are voices place articulation at stem
+            } else if (a->anchor() == ArticulationAnchor::AUTO) {
+                a->setUp(!item->up());         // place articulation at note head
+            } else {
+                a->setUp(a->anchor() == ArticulationAnchor::TOP);
+            }
+
+            TLayout::layoutItem(a, ctx);
+
+            const Articulation::LayoutData* ldata = a->ldata();
+            const double sp = a->spatium();
+            const Note* note = ldata->up() ? item->upNote() : item->downNote();
+            const int upDir = ldata->up() ? -1 : 1;
+            const double noteHeight = note->height();
+
+            PointF result = note->pos() + item->pos();
+            double center = SlurTieLayout::noteOpticalCenterForTie(note, ldata->up);
+            double visualInsetSp = 0.0;
+            if (note->headGroup() == NoteHeadGroup::HEAD_SLASH || note->shouldHideFret()) {
+                visualInsetSp = 0.2;
+            } else if (item->up() && ldata->up) {
+                visualInsetSp = 0.7;
+            } else {
+                visualInsetSp = 0.1;
+            }
+            double visualInset = visualInsetSp * sp;
+
+            result.rx() += center + visualInset - ldata->bbox().left();
+            result.ry() += (noteHeight / 2 + 0.2 * sp) * upDir;
+
+            a->setPos(result);
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -1065,7 +1111,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     Articulation* stacc = nullptr;
     for (Articulation* a : item->articulations()) {
         double kearnHeight = 0.0;
-        if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
+        if ((layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) || a->isLaissezVib()) {
             continue;
         }
         if (a->isStaccato()) {
@@ -3420,6 +3466,13 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
             xPos += stem->width();
         }
         shape.add(beamlet->shape().translate(PointF(-xPos, 0.0)));
+    }
+
+    for (const Articulation* a : item->articulations()) {
+        // Only add lv to shape
+        if (a->isLaissezVib()) {
+            shape.add(a->shape().translate(a->pos()));
+        }
     }
 
     ldata->setShape(shape);
