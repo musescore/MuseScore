@@ -34,6 +34,8 @@ function(target_no_warning TARGET WNAME)
 
     elseif(WNAME STREQUAL "-Wno-unknown-pragmas")
 
+    elseif(WNAME STREQUAL "-Wno-truncate")
+        set(MSVC_Warning /wd4310 /wd4311)
     elseif(WNAME STREQUAL "-Wno-uninitialized")
         set(MSVC_Warning /wd4701 /wd4703)
     elseif(WNAME STREQUAL "-Wno-float-conversion")
