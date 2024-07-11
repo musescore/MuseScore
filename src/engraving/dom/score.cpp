@@ -4488,12 +4488,10 @@ ChordRest* Score::findCR(Fraction tick, track_idx_t track) const
     }
     EngravingItem* el = s->element(track);
     if (el && el->isRest() && toRest(el)->isGap()) {
-        s = nullptr;
+        return nullptr;
     }
-    if (s) {
-        return toChordRest(s->element(track));
-    }
-    return nullptr;
+
+    return toChordRest(el);
 }
 
 //---------------------------------------------------------
