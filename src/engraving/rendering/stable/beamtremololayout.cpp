@@ -475,7 +475,7 @@ int BeamTremoloLayout::strokeCount(const BeamBase::LayoutData* ldata, ChordRest*
 
 bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutData* ldata, LayoutContext& ctx,
                                          const std::vector<ChordRest*>& chordRests,
-                                         const std::vector<int>& notes)
+                                         const std::vector<BeamBase::NotePosition>& notes)
 {
     ldata->startAnchor = PointF();
     ldata->endAnchor = PointF();
@@ -528,7 +528,7 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
         return false;
     }
     ldata->isGrace = startChord->isGrace();
-    ldata->notes = notes;
+    ldata->notePositions = notes;
     if (calculateAnchorsCross(ldata, ctx.conf())) {
         return true;
     }
@@ -546,6 +546,10 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
         startNote = ldata->up ? startChord->upString() : startChord->downString();
         endNote = ldata->up ? endChord->upString() : endChord->downString();
     }
+    staff_idx_t startStaff = startChord->vStaffIdx();
+    staff_idx_t endStaff = endChord->vStaffIdx();
+    BeamBase::NotePosition startPos = BeamBase::NotePosition(startNote, startStaff);
+    BeamBase::NotePosition endPos = BeamBase::NotePosition(endNote, endStaff);
     const int interval = std::abs(startNote - endNote);
     const bool isStartDictator = ldata->up ? startNote < endNote : startNote > endNote;
     const double quarterSpace = ldata->spatium / 4;
@@ -557,9 +561,9 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     const int staffLines = startChord->staff()->lines(ldata->tick);
     const int middleLine = getMiddleStaffLine(ldata, ctx.conf(), startChord, endChord, staffLines);
 
-    int slant = computeDesiredSlant(item, ldata, startNote, endNote, middleLine, dictator, pointer);
+    int slant = computeDesiredSlant(item, ldata, startPos, endPos, middleLine, dictator, pointer);
     bool isFlat = slant == 0;
-    SlopeConstraint specialSlant = isFlat ? getSlopeConstraint(ldata, startNote, endNote) : SlopeConstraint::NO_CONSTRAINT;
+    SlopeConstraint specialSlant = isFlat ? getSlopeConstraint(ldata, startPos, endPos) : SlopeConstraint::NO_CONSTRAINT;
     bool forceFlat = specialSlant == SlopeConstraint::FLAT;
     bool smallSlant = specialSlant == SlopeConstraint::SMALL_SLOPE;
     if (isFlat) {
@@ -875,7 +879,8 @@ int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, con
     return std::max(startMiddleLine, endMiddleLine) - 1;
 }
 
-int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, int startNote, int endNote,
+int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, const BeamBase::NotePosition& startPos,
+                                           const BeamBase::NotePosition& endPos,
                                            int middleLine, int dictator,
                                            int pointer)
 {
@@ -894,10 +899,10 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
     if (dictator + dictatorExtension == middleLine && pointer + pointerExtension == middleLine) {
         return 0;
     }
-    if (startNote == endNote) {
+    if (startPos == endPos) {
         return 0;
     }
-    SlopeConstraint slopeConstrained = getSlopeConstraint(ldata, startNote, endNote);
+    SlopeConstraint slopeConstrained = getSlopeConstraint(ldata, startPos, endPos);
     if (slopeConstrained == SlopeConstraint::FLAT) {
         return 0;
     } else if (slopeConstrained == SlopeConstraint::SMALL_SLOPE) {
@@ -908,18 +913,19 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
     int maxSlope = getMaxSlope(ldata);
 
     // calculate max slope based on note interval
-    int interval = std::min(std::abs(endNote - startNote), (int)_maxSlopes.size() - 1);
+    int interval = std::min(std::abs(endPos.line - startPos.line), (int)_maxSlopes.size() - 1);
     return std::min(maxSlope, _maxSlopes[interval]) * (ldata->up ? 1 : -1);
 }
 
-SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData* ldata, int startNote, int endNote)
+SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData* ldata, const BeamBase::NotePosition& startPos,
+                                                      const BeamBase::NotePosition& endPos)
 {
-    if (ldata->notes.empty()) {
+    if (ldata->notePositions.empty()) {
         return SlopeConstraint::NO_CONSTRAINT;
     }
 
     // 0 to constrain to flat, 1 to constrain to 0.25, <0 for no constraint
-    if (startNote == endNote) {
+    if (startPos == endPos) {
         return SlopeConstraint::FLAT;
     } else if (ldata->beamType == BeamType::TREMOLO) {
         // tremolos don't need the small slope constraint since they only have two notes
@@ -929,25 +935,27 @@ SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData
     // p.s. _notes is a sorted vector
     if (ldata->elements.size() > 2) {
         if (ldata->up) {
-            int higherEnd = std::min(startNote, endNote);
-            if (higherEnd > ldata->notes[0]) {
+            BeamBase::NotePosition higherEnd = std::min(startPos, endPos);
+            if (higherEnd > ldata->notePositions[0]) {
                 return SlopeConstraint::FLAT; // a note is higher in the staff than the highest end
             }
-            if (higherEnd == ldata->notes[0] && higherEnd >= ldata->notes[1]) {
-                if (higherEnd > ldata->notes[1]) {
+            if (higherEnd == ldata->notePositions[0] && higherEnd >= ldata->notePositions[1]) {
+                if (higherEnd > ldata->notePositions[1]) {
                     return SlopeConstraint::FLAT; // a note is higher in the staff than the highest end
                 }
                 size_t chordCount = ldata->elements.size();
-                if (chordCount >= 3 && ldata->notes.size() >= 3) {
-                    bool middleNoteHigherThanHigherEnd = higherEnd >= ldata->notes[2];
+                if (chordCount >= 3 && ldata->notePositions.size() >= 3) {
+                    bool middleNoteHigherThanHigherEnd = higherEnd >= ldata->notePositions[2];
                     if (middleNoteHigherThanHigherEnd) {
                         return SlopeConstraint::FLAT; // two notes are the same as the highest end (notes [0] [1] and [2] higher than or same as higherEnd)
                     }
-                    bool secondNoteSameHeightAsHigherEnd = startNote < endNote && ldata->elements[1]->isChord()
-                                                           && toChord(ldata->elements[1])->upLine() == higherEnd;
-                    bool secondToLastNoteSameHeightAsHigherEnd = endNote < startNote && ldata->elements[chordCount - 2]->isChord()
-                                                                 && toChord(
-                        ldata->elements[chordCount - 2])->upLine() == higherEnd;
+                    Chord* secondNote = ldata->elements[1]->isChord() ? toChord(ldata->elements[1]) : nullptr;
+                    Chord* secondToLastNote
+                        = ldata->elements[chordCount - 2]->isChord() ? toChord(ldata->elements[chordCount - 2]) : nullptr;
+                    bool secondNoteSameHeightAsHigherEnd = startPos < endPos && secondNote && BeamBase::NotePosition(
+                        secondNote->upLine(), secondNote->vStaffIdx()) == higherEnd;
+                    bool secondToLastNoteSameHeightAsHigherEnd = endPos.line < startPos.line && secondToLastNote && BeamBase::NotePosition(
+                        secondToLastNote->upLine(), secondToLastNote->vStaffIdx()) == higherEnd;
                     if (!(secondNoteSameHeightAsHigherEnd || secondToLastNoteSameHeightAsHigherEnd)) {
                         return SlopeConstraint::FLAT; // only one note same as higher end, but it is not a neighbor
                     } else {
@@ -961,25 +969,28 @@ SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData
                 }
             }
         } else {
-            int lowerEnd = std::max(startNote, endNote);
-            if (lowerEnd < ldata->notes[ldata->notes.size() - 1]) {
+            BeamBase::NotePosition lowerEnd = std::max(startPos, endPos);
+            if (lowerEnd < ldata->notePositions[ldata->notePositions.size() - 1]) {
                 return SlopeConstraint::FLAT;
             }
-            if (lowerEnd == ldata->notes[ldata->notes.size() - 1] && lowerEnd <= ldata->notes[ldata->notes.size() - 2]) {
-                if (lowerEnd < ldata->notes[ldata->notes.size() - 2]) {
+            if (lowerEnd == ldata->notePositions[ldata->notePositions.size() - 1]
+                && lowerEnd <= ldata->notePositions[ldata->notePositions.size() - 2]) {
+                if (lowerEnd < ldata->notePositions[ldata->notePositions.size() - 2]) {
                     return SlopeConstraint::FLAT;
                 }
                 size_t chordCount = ldata->elements.size();
-                if (chordCount >= 3 && ldata->notes.size() >= 3) {
-                    bool middleNoteLowerThanLowerEnd = lowerEnd <= ldata->notes[ldata->notes.size() - 3];
+                if (chordCount >= 3 && ldata->notePositions.size() >= 3) {
+                    bool middleNoteLowerThanLowerEnd = lowerEnd <= ldata->notePositions[ldata->notePositions.size() - 3];
                     if (middleNoteLowerThanLowerEnd) {
                         return SlopeConstraint::FLAT;
                     }
-                    bool secondNoteSameHeightAsLowerEnd = startNote > endNote && ldata->elements[1]->isChord()
-                                                          && toChord(ldata->elements[1])->downLine() == lowerEnd;
-                    bool secondToLastNoteSameHeightAsLowerEnd = endNote > startNote && ldata->elements[chordCount - 2]->isChord()
-                                                                && toChord(
-                        ldata->elements[chordCount - 2])->downLine() == lowerEnd;
+                    Chord* secondNote = ldata->elements[1]->isChord() ? toChord(ldata->elements[1]) : nullptr;
+                    Chord* secondToLastNote
+                        = ldata->elements[chordCount - 2]->isChord() ? toChord(ldata->elements[chordCount - 2]) : nullptr;
+                    bool secondNoteSameHeightAsLowerEnd = startPos.line > endPos.line && secondNote && BeamBase::NotePosition(
+                        secondNote->downLine(), secondNote->vStaffIdx()) == lowerEnd;
+                    bool secondToLastNoteSameHeightAsLowerEnd = endPos.line > startPos.line && secondNote && BeamBase::NotePosition(
+                        secondToLastNote->downLine(), secondToLastNote->vStaffIdx()) == lowerEnd;
                     if (!(secondNoteSameHeightAsLowerEnd || secondToLastNoteSameHeightAsLowerEnd)) {
                         return SlopeConstraint::FLAT;
                     } else {
