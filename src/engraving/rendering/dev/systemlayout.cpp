@@ -2357,8 +2357,8 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
                 }
             }
             dist = std::max(dist, d + minVerticalDistance);
+            dist = std::max(dist, minVertSpaceForCrossStaffBeams(system, si1, si2, ctx));
         }
-        dist = std::max(dist, minVertSpaceForCrossStaffBeams(system, si1, si2, ctx));
         ss->setYOff(yOffset);
         ss->setbbox(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
         ss->saveLayout();
