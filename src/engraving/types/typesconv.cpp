@@ -1514,7 +1514,7 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::Open,          "open",           muse::TranslatableString("engraving/playtechtype", "Open") },
     { PlayingTechniqueType::Mute,          "mute",           muse::TranslatableString("engraving/playtechtype", "Mute") },
     { PlayingTechniqueType::Tremolo,       "tremolo",        muse::TranslatableString("engraving/playtechtype", "Tremolo") },
-    { PlayingTechniqueType::Detache,       "detache",        muse::TranslatableString("engraving/playtechtype", "Detaché") },
+    { PlayingTechniqueType::Detache,       "detache",        muse::TranslatableString("engraving/playtechtype", "Détaché") },
     { PlayingTechniqueType::Martele,       "martele",        muse::TranslatableString("engraving/playtechtype", "Martelé") },
     { PlayingTechniqueType::ColLegno,      "col_legno",      muse::TranslatableString("engraving/playtechtype", "Col legno") },
     { PlayingTechniqueType::SulPonticello, "sul_ponticello", muse::TranslatableString("engraving/playtechtype", "Sul ponticello") },
