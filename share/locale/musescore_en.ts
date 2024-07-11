@@ -15793,8 +15793,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1518"/>
-        <source>Martèle</source>
-        <translation type="unfinished">Martèle</translation>
+        <source>Martelé</source>
+        <translation type="unfinished">Martelé</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1519"/>
