@@ -47,6 +47,8 @@ class AppUpdateService : public IAppUpdateService, public async::Asyncable
     Inject<IUpdateConfiguration> configuration;
 
 public:
+    void init();
+
     RetVal<ReleaseInfo> checkForUpdate() override;
 
     RetVal<io::path_t> downloadRelease() override;
@@ -55,6 +57,15 @@ public:
 
 private:
     friend class AppUpdateServiceTests;
+
+    struct UpdateRequestHistory {
+        QDate installedWeekBeginning;
+        QDate previousRequestDay;
+        bool isValid() const { return installedWeekBeginning.isValid() && previousRequestDay.isValid(); }
+    };
+
+    RetVal<UpdateRequestHistory> readUpdateRequestHistory(const io::path_t& path) const;
+    Ret writeUpdateRequestHistory(const io::path_t& path, const UpdateRequestHistory& updateRequestHistory);
 
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 
