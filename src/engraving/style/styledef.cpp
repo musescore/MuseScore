@@ -1233,7 +1233,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(textLineSystemFlag,                         false),
 
     styleDef(systemTextLineFontFace,                     "Edwin"),
-    styleDef(systemTextLineFontSize,                     12.0),
+    styleDef(systemTextLineFontSize,                     10.0),
     styleDef(systemTextLineFontSpatiumDependent,         true),
     styleDef(systemTextLineFontStyle,                    int(FontStyle::Normal)),
     styleDef(systemTextLineColor,                        PropertyValue::fromValue(Color::BLACK)),

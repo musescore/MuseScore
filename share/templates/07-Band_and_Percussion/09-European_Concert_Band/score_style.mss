@@ -923,7 +923,6 @@
     <textLineTextAlign>left,center</textLineTextAlign>
     <textLineSystemFlag>0</textLineSystemFlag>
     <systemTextLineFontFace>Edwin</systemTextLineFontFace>
-    <systemTextLineFontSize>12</systemTextLineFontSize>
     <systemTextLineFontSpatiumDependent>1</systemTextLineFontSpatiumDependent>
     <systemTextLineFontStyle>0</systemTextLineFontStyle>
     <systemTextLineColor r="0" g="0" b="0" a="255"/>
