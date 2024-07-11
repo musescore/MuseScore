@@ -109,6 +109,12 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
         return;
     }
 
+    IF_ASSERT_FAILED(!isFlat || (isFlat == (dictator == pointer))) {
+        // This will produce false positives if the pointer & dictator are not flat when they should be
+        LOGE() << "Beam is flat, dictator and pointer should be equal";
+        pointer = dictator;
+    }
+
     // tolerance eliminates all possibilities of floating point rounding errors
     const double tolerance = ldata->beamWidth * 0.25 * (ldata->up ? -1 : 1);
     const bool isSmall = ldata->isGrace || ldata->mag() < 1.;
@@ -265,6 +271,10 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutDat
     }
     dictator = newDictator;
     pointer = newPointer;
+
+    if (isFlat) {
+        pointer = dictator;
+    }
 }
 
 void BeamTremoloLayout::extendStem(const BeamBase::LayoutData* ldata, Chord* chord, double addition)
@@ -638,7 +648,7 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     int pointer = round((isStartDictator ? endAnchor.y() : startAnchor.y()) / quarterSpace);
 
     const int staffLines = ctx.dom().staff(closestStaffToBeam)->lines(ldata->tick);
-    const int middleLine = getMiddleStaffLine(ldata, ctx, startChord, endChord, staffLines, closestStaffToBeam);
+    const int middleLine = getMiddleStaffLine(ldata, ctx, startChord, endChord, staffLines, closestStaffToBeam, item->staffIdx());
 
     int slant
         = computeDesiredSlant(item, ldata, startPos, endPos, chordsClosestToBeam, middleLine, dictator, pointer);
@@ -950,7 +960,7 @@ bool BeamTremoloLayout::noSlope(const Beam* beam)
 
 int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, const LayoutContext& ctx,
                                           const ChordRest* startChord, const ChordRest* endChord,
-                                          const int staffLines, const staff_idx_t beamStaffIdx)
+                                          const int staffLines, const staff_idx_t beamClosestStaffIdx, const staff_idx_t actualBeamStaffIdx)
 {
     bool isFullSize = muse::RealIsEqual(ldata->mag(), 1.0) && !ldata->isGrace;
     bool useWideBeams = ctx.conf().styleB(Sid::useWideBeams);
@@ -961,25 +971,23 @@ int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, con
     int endMiddleLine = Chord::minStaffOverlap(ldata->up, staffLines, endBeams, false,
                                                ldata->beamSpacing / 4.0, useWideBeams, !ldata->isGrace);
 
-    int startDiff = 0;
-    int endDiff = 0;
+    int diff = 0;
+    // Get diff between beam closest staff and actual staff, unless its full cross?
     if (ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE || ldata->crossStaffBeamPos == CrossStaffBeamPosition::BELOW) {
         // Make sure we calculate the distance to the middle line on the stave closest to the beam
-        const staff_idx_t startIdx = startChord->vStaffIdx();
-        const staff_idx_t endIdx = endChord->vStaffIdx();
         const System* curSys = startChord->measure()->system();
-        const int dir = ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE ? 1 : -1;
-        if (curSys) {
-            startDiff = std::round(std::abs(curSys->staffYpage(startIdx) - curSys->staffYpage(beamStaffIdx)) / ldata->spatium * 4 * dir);
-            endDiff = std::round(std::abs(curSys->staffYpage(endIdx) - curSys->staffYpage(beamStaffIdx)) / ldata->spatium * 4 * dir);
+        const int dir = ldata->up ? -1 : 1;
+        if (curSys && beamClosestStaffIdx != actualBeamStaffIdx) {
+            diff = std::round(std::abs(curSys->staffYpage(beamClosestStaffIdx) - curSys->staffYpage(
+                                           actualBeamStaffIdx)) / ldata->spatium * 4 * dir);
         }
     }
     // offset middle line by 1 or -1 since the anchor is at the middle of the beam,
     // not at the tip of the stem
     if (ldata->up) {
-        return std::min(startMiddleLine + startDiff, endMiddleLine + endDiff) + 1;
+        return std::min(startMiddleLine + diff, endMiddleLine + diff) + 1;
     }
-    return std::max(startMiddleLine + startDiff, endMiddleLine + endDiff) - 1;
+    return std::max(startMiddleLine + diff, endMiddleLine + diff) - 1;
 }
 
 int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
