@@ -27,9 +27,10 @@
 #include <QTimer>
 #include <QtMath>
 
-#include "log.h"
 #include "commonscene/commonscenetypes.h"
 #include "abstractelementpopupmodel.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -962,7 +963,11 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
     }
 
     if (!actionCode.empty()) {
-        dispatcher()->dispatch(actionCode, ActionData::make_arg1<PointF>(m_logicalBeginPoint));
+        //! NOTE: call with delay because the action can open dialogs,
+        //! but we need to finish events processing first
+        QTimer::singleShot(100, [this, actionCode]() {
+            dispatcher()->dispatch(actionCode, ActionData::make_arg1<PointF>(m_logicalBeginPoint));
+        });
     }
 }
 
