@@ -154,8 +154,8 @@ void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, i
         *startOffset = m_selectionStart;
         *endOffset = m_selectionEnd;
     } else {
-        *startOffset = 0;
-        *endOffset = 0;
+        *startOffset = -1;
+        *endOffset = -1;
     }
 }
 
