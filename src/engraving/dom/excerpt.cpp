@@ -1485,6 +1485,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             addElement(newEl);
         }
 
+        TremoloTwoChord* tremolo = nullptr;
         for (track_idx_t srcTrack : muse::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = map.at(srcTrack);
@@ -1581,6 +1582,19 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                     LOGD("cloneStaff2: cannot find tie");
                                 }
                             }
+                            // add back spanners (going back from end to start spanner element
+                            // makes sure the 'other' spanner anchor element is already set up)
+                            // 'on' is the old spanner end note and 'nn' is the new spanner end note
+                            for (Spanner* oldSp : on->spannerBack()) {
+                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+                                if (newStart != nullptr) {
+                                    Spanner* newSp = toSpanner(oldSp->linkedClone());
+                                    newSp->setNoteSpan(newStart, nn);
+                                    score->addElement(newSp);
+                                } else {
+                                    LOGD("cloneStaff2: cannot find spanner start note");
+                                }
+                            }
                             GuitarBend* bendBack = on->bendBack();
                             Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
                             if (bendBack && newStartNote) {
@@ -1605,6 +1619,29 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 newBend->setStartElement(nn);
                                 newBend->setEndElement(nn);
                                 nn->addSpannerFor(newBend);
+                            }
+                        }
+                        // two note tremolo
+                        if (och->tremoloTwoChord()) {
+                            if (och == och->tremoloTwoChord()->chord1()) {
+                                if (tremolo) {
+                                    LOGD("cloneStaff2: unconnected two note tremolo");
+                                }
+                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
+                                tremolo->setScore(nch->score());
+                                tremolo->setParent(nch);
+                                tremolo->setTrack(nch->track());
+                                tremolo->setChords(nch, 0);
+                                nch->setTremoloTwoChord(tremolo);
+                            } else if (och == och->tremoloTwoChord()->chord2()) {
+                                if (!tremolo) {
+                                    LOGD("cloneStaff2: first note for two note tremolo missing");
+                                } else {
+                                    tremolo->setChords(tremolo->chord1(), nch);
+                                    nch->setTremoloTwoChord(tremolo);
+                                }
+                            } else {
+                                LOGD("cloneStaff2: inconsistent two note tremolo");
                             }
                         }
                     }
