@@ -251,6 +251,21 @@ void ToolBarItem::setShowTitle(bool show)
     emit showTitleChanged();
 }
 
+bool ToolBarItem::isTitleBold() const
+{
+    return m_isTitleBold;
+}
+
+void ToolBarItem::setIsTitleBold(bool newIsTitleBold)
+{
+    if (m_isTitleBold == newIsTitleBold) {
+        return;
+    }
+
+    m_isTitleBold = newIsTitleBold;
+    emit isTitleBoldChanged();
+}
+
 bool ToolBarItem::isTransparent() const
 {
     return m_isTransparent;

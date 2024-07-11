@@ -40,6 +40,8 @@ FlatButton {
 
     text: Boolean(itemData) && itemData.showTitle ? itemData.title : ""
 
+    textFont: Boolean(itemData) && itemData.isTitleBold ? ui.theme.largeBodyFont : ui.theme.bodyFont
+
     icon: Boolean(itemData) ? itemData.icon : IconCode.NONE
     iconFont: ui.theme.toolbarIconsFont
 

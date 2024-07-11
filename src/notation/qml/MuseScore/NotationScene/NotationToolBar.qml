@@ -30,7 +30,7 @@ StyledToolBarView {
     navigationPanel.name: "NotationToolBar"
     navigationPanel.accessible.name: qsTrc("notation", "Notation toolbar")
 
-    spacing: 8
+    spacing: 2
 
     model: NotationToolBarModel { }
 }

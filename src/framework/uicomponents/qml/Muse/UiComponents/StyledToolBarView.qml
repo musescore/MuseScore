@@ -69,60 +69,63 @@ Rectangle {
         Repeater {
             id: repeater
 
-            Loader {
-                id: loader
+            Item {
+                width: loader.width
+                height: root.rowHeight
 
-                property var itemData: Boolean(model) ? model.itemRole : null
+                Loader {
+                    id: loader
 
-                sourceComponent: {
-                    if (!Boolean(loader.itemData)) {
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    property var itemData: Boolean(model) ? model.itemRole : null
+
+                    sourceComponent: {
+                        if (!Boolean(loader.itemData)) {
+                            return null
+                        }
+
+                        var type = loader.itemData.type
+
+                        var comp = Boolean(root.sourceComponentCallback) ? root.sourceComponentCallback(type) : null
+                        if (Boolean(comp)) {
+                            return comp
+                        }
+
+                        switch(type) {
+                        case ToolBarItemType.ACTION: return actionComp
+                        case ToolBarItemType.SEPARATOR: return separatorComp
+                        }
+
                         return null
                     }
 
-                    var type = loader.itemData.type
-
-                    var comp = Boolean(root.sourceComponentCallback) ? root.sourceComponentCallback(type) : null
-                    if (Boolean(comp)) {
-                        return comp
+                    onLoaded: {
+                        loader.item.itemData = loader.itemData
                     }
 
-                    switch(type) {
-                    case ToolBarItemType.ACTION: return actionComp
-                    case ToolBarItemType.SEPARATOR: return separatorComp
+                    Component {
+                        id: separatorComp
+
+                        SeparatorLine {
+                            property var itemData: loader.itemData
+
+                            width: 1
+                            height: root.rowHeight
+
+                            orientation: Qt.Vertical
+                        }
                     }
 
-                    return null
-                }
+                    Component {
+                        id: actionComp
 
-                onLoaded: {
-                    loader.item.itemData = loader.itemData
+                        StyledToolBarItem {
+                            itemData: loader.itemData
 
-                    loader.item.y = (root.rowHeight - loader.item.height) / 2 // equal to anchors.verticalCenter = parent.verticalCenter
-                }
-
-                Component {
-                    id: separatorComp
-
-                    SeparatorLine {
-                        property var itemData: loader.itemData
-
-                        width: 1
-                        height: root.rowHeight
-
-                        orientation: Qt.Vertical
-                    }
-                }
-
-                Component {
-                    id: actionComp
-
-                    StyledToolBarItem {
-                        id: btn
-
-                        itemData: loader.itemData
-
-                        navigation.panel: root.navigationPanel
-                        navigation.order: model.index
+                            navigation.panel: root.navigationPanel
+                            navigation.order: model.index
+                        }
                     }
                 }
             }
