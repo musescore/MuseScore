@@ -198,10 +198,9 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
     }
 }
 
-void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutData* ldata, const LayoutConfiguration& conf,
-                                                       const std::vector<ChordRest*>& chordRests, int& dictator,
-                                                       int& pointer, int staffLines,
-                                                       bool isStartDictator, int stemLengthDictator, const int middleLine)
+void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutData* ldata, const std::vector<ChordRest*>& chordRests,
+                                                       int& dictator, int& pointer, int staffLines, bool isStartDictator,
+                                                       int stemLengthDictator, const int middleLine)
 {
     const Chord* startChord = nullptr;
     const Chord* endChord = nullptr;
@@ -225,8 +224,8 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutDat
     maxDictatorReduce = std::min(std::abs(dictator - middleLine), maxDictatorReduce);
 
     bool isFlat = dictator == pointer;
-    const ChordPosition startPos = ChordPosition(startChord->line(), startChord->vStaffIdx());
-    const ChordPosition endPos = ChordPosition(endChord->line(), endChord->vStaffIdx());
+    const BeamBase::NotePosition startPos = BeamBase::NotePosition(startChord->line(), startChord->vStaffIdx());
+    const BeamBase::NotePosition endPos = BeamBase::NotePosition(endChord->line(), endChord->vStaffIdx());
     bool isAscending = startPos > endPos;
     int towardBeam = ldata->up ? -1 : 1;
     int newDictator = dictator;
@@ -529,7 +528,7 @@ int BeamTremoloLayout::strokeCount(const BeamBase::LayoutData* ldata, const Chor
 
 bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutContext& ctx,
                                          const std::vector<ChordRest*>& chordRests,
-                                         const std::vector<ChordPosition>& notes)
+                                         const std::vector<BeamBase::NotePosition>& notePositions)
 {
     ldata->startAnchor = PointF();
     ldata->endAnchor = PointF();
@@ -590,17 +589,17 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
         return false;
     }
     ldata->isGrace = startChord->isGrace();
-    ldata->notes = notes;
+    ldata->notePositions = notePositions;
 
     // Set cross staff beam position, above, below or between staves
-    ldata->crossStaffBeamPos = CrossStaffBeamPosition::INVALID;
+    ldata->crossStaffBeamPos = BeamBase::CrossStaffBeamPosition::INVALID;
     if (item->minCRMove() != item->maxCRMove()) {
         if (hasChordAboveBeam && !hasChordBelowBeam) {
-            ldata->crossStaffBeamPos = CrossStaffBeamPosition::BELOW;
+            ldata->crossStaffBeamPos = BeamBase::CrossStaffBeamPosition::BELOW;
         } else if (hasChordBelowBeam && !hasChordAboveBeam) {
-            ldata->crossStaffBeamPos = CrossStaffBeamPosition::ABOVE;
+            ldata->crossStaffBeamPos = BeamBase::CrossStaffBeamPosition::ABOVE;
         } else if (hasChordAboveBeam && hasChordBelowBeam) {
-            ldata->crossStaffBeamPos = CrossStaffBeamPosition::BETWEEN;
+            ldata->crossStaffBeamPos = BeamBase::CrossStaffBeamPosition::BETWEEN;
         }
     }
 
@@ -608,10 +607,11 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
         return true;
     }
 
-    const int closestMove = ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE ? item->minCRMove() : item->maxCRMove();
-    const staff_idx_t closestStaffToBeam = ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE
+    const int closestMove = ldata->crossStaffBeamPos == BeamBase::CrossStaffBeamPosition::ABOVE ? item->minCRMove() : item->maxCRMove();
+    const staff_idx_t closestStaffToBeam = ldata->crossStaffBeamPos == BeamBase::CrossStaffBeamPosition::ABOVE
                                            || ldata->crossStaffBeamPos
-                                           == CrossStaffBeamPosition::BELOW ? item->staffIdx() + closestMove : startChord->vStaffIdx();
+                                           == BeamBase::CrossStaffBeamPosition::BELOW ? item->staffIdx()
+                                           + closestMove : startChord->vStaffIdx();
 
     std::vector<Chord*> chordsClosestToBeam;
 
@@ -636,8 +636,8 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     }
     staff_idx_t startStaff = startChord->vStaffIdx();
     staff_idx_t endStaff = endChord->vStaffIdx();
-    ChordPosition startPos = ChordPosition(startNote, startStaff);
-    ChordPosition endPos = ChordPosition(endNote, endStaff);
+    BeamBase::NotePosition startPos = BeamBase::NotePosition(startNote, startStaff);
+    BeamBase::NotePosition endPos = BeamBase::NotePosition(endNote, endStaff);
 
     const int interval = std::abs(startNote - endNote);
     const bool isStartDictator = ldata->up ? startPos < endPos : startPos > endPos;
@@ -681,8 +681,8 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
          * following function to get stuck in a loop. The if() condition avoids that case. */
         if (!isSmall) {
             // Adjust anchor stems
-            offsetBeamWithAnchorShortening(ldata, ctx.conf(), chordRests, dictator, pointer, staffLines, isStartDictator,
-                                           stemLengthDictator, middleLine);
+            offsetBeamWithAnchorShortening(ldata, chordRests, dictator, pointer, staffLines, isStartDictator, stemLengthDictator,
+                                           middleLine);
         }
         // Adjust inner stems
         offsetBeamToRemoveCollisions(item, ldata, chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
@@ -717,7 +717,7 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
 bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::LayoutData* ldata,
                                               const LayoutConfiguration& conf)
 {
-    if (ldata->crossStaffBeamPos != CrossStaffBeamPosition::BETWEEN) {
+    if (ldata->crossStaffBeamPos != BeamBase::CrossStaffBeamPosition::BETWEEN) {
         // The beam is either not cross or above/below and must be layed out like a non-cross beam
         return false;
     }
@@ -926,11 +926,17 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
                     break;
                 }
             }
-            forceHoriz = forceHoriz || overallDirection == 0
-                         || ((topSlantDir != 0 && topSlantDir != overallDirection)
-                             || (bottomSlantDir != 0 && bottomSlantDir != overallDirection)
-                             || (beamSideSwitchDirection != 0 && beamSideSwitchDirection != overallDirection)
-                             || (staffSwitchDirection != 0 && staffSwitchDirection != overallDirection));
+            const bool overallSlantFlat = overallDirection == 0;
+            const bool topSlantMatchesDirection = (topSlantDir != 0 && topSlantDir != overallDirection);
+            const bool bottomSlantMatchesDirection = (bottomSlantDir != 0 && bottomSlantDir != overallDirection);
+            const bool beamSideSwitchMatchesDirection = (beamSideSwitchDirection != 0 && beamSideSwitchDirection != overallDirection);
+            const bool staffSwitchMatchesDirection = (staffSwitchDirection != 0 && staffSwitchDirection != overallDirection);
+
+            forceHoriz = forceHoriz || overallSlantFlat
+                         || (topSlantMatchesDirection
+                             || bottomSlantMatchesDirection
+                             || beamSideSwitchMatchesDirection
+                             || staffSwitchMatchesDirection);
 
             if (!forceHoriz) {
                 int slant = 0;
@@ -973,7 +979,8 @@ int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, con
 
     int diff = 0;
     // Get diff between beam closest staff and actual staff, unless its full cross?
-    if (ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE || ldata->crossStaffBeamPos == CrossStaffBeamPosition::BELOW) {
+    if (ldata->crossStaffBeamPos == BeamBase::CrossStaffBeamPosition::ABOVE
+        || ldata->crossStaffBeamPos == BeamBase::CrossStaffBeamPosition::BELOW) {
         // Make sure we calculate the distance to the middle line on the stave closest to the beam
         const System* curSys = startChord->measure()->system();
         const int dir = ldata->up ? -1 : 1;
@@ -990,8 +997,8 @@ int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, con
     return std::max(startMiddleLine + diff, endMiddleLine + diff) - 1;
 }
 
-int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
-                                           const ChordPosition& endPos, std::vector<Chord*> closestChordsToBeam,
+int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase::LayoutData* ldata, const BeamBase::NotePosition& startPos,
+                                           const BeamBase::NotePosition& endPos, std::vector<Chord*> closestChordsToBeam,
                                            int middleLine, int dictator, int pointer)
 {
     if (item->isType(ElementType::BEAM) && item_cast<const Beam*>(item)->noSlope()) {
@@ -1022,16 +1029,17 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
     // calculate max slope based on distance between first and last chords
     int maxSlope = getMaxSlope(ldata);
 
-    if (ldata->crossStaffBeamPos == CrossStaffBeamPosition::ABOVE || ldata->crossStaffBeamPos == CrossStaffBeamPosition::BELOW) {
+    if (ldata->crossStaffBeamPos == BeamBase::CrossStaffBeamPosition::ABOVE
+        || ldata->crossStaffBeamPos == BeamBase::CrossStaffBeamPosition::BELOW) {
         // Calculate slant between first and last notes
         int beamDir = startPos == endPos ? 0 : (startPos > endPos ? 1 : -1);
 
         // Calculate slant between notes on stave closest to the beam
         int closestChordsSize = closestChordsToBeam.size();
-        ChordPosition closestStartPos(closestChordsSize > 0 && closestChordsToBeam.front() ? closestChordsToBeam.front()->line() : 0,
-                                      closestChordsSize > 0 && closestChordsToBeam.front() ? closestChordsToBeam.front()->vStaffIdx() : 0);
-        ChordPosition closestEndPos(closestChordsSize > 0 && closestChordsToBeam.back() ? closestChordsToBeam.back()->line() : 0,
-                                    closestChordsSize > 0 && closestChordsToBeam.back() ? closestChordsToBeam.back()->vStaffIdx() : 0);
+        BeamBase::NotePosition closestStartPos(closestChordsSize > 0 ? closestChordsToBeam.front()->line() : 0,
+                                               closestChordsSize > 0 ? closestChordsToBeam.front()->vStaffIdx() : 0);
+        BeamBase::NotePosition closestEndPos(closestChordsSize > 0 ? closestChordsToBeam.back()->line() : 0,
+                                             closestChordsSize > 0 ? closestChordsToBeam.back()->vStaffIdx() : 0);
         int staveClosestToBeamDir = closestStartPos == closestEndPos ? 0 : (closestStartPos > closestEndPos ? 1 : -1);
 
         // Contradiction, beam must be flat
@@ -1052,10 +1060,10 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
     return std::min(maxSlope, _maxSlopes[interval]) * (ldata->up ? 1 : -1);
 }
 
-SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData* ldata, const ChordPosition& startPos,
-                                                      const ChordPosition& endPos)
+SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData* ldata, const BeamBase::NotePosition& startPos,
+                                                      const BeamBase::NotePosition& endPos)
 {
-    if (ldata->notes.empty()) {
+    if (ldata->notePositions.empty()) {
         return SlopeConstraint::NO_CONSTRAINT;
     }
 
@@ -1069,28 +1077,31 @@ SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData
 
     // if a note is more extreme than the endpoints, slope is 0
     // p.s. _notes is a sorted vector
-    if (ldata->elements.size() > 2) {
+    const std::vector<ChordRest*>& elements = ldata->elements;
+    const std::vector<BeamBase::NotePosition>& notePositions = ldata->notePositions;
+
+    if (elements.size() > 2) {
         if (ldata->up) {
-            ChordPosition higherEnd = std::min(startPos, endPos);
-            if (higherEnd > ldata->notes[0]) {
+            BeamBase::NotePosition higherEnd = std::min(startPos, endPos);
+            if (higherEnd > notePositions[0]) {
                 return SlopeConstraint::FLAT; // a note is higher in the staff than the highest end
             }
-            if (higherEnd == ldata->notes[0] && higherEnd >= ldata->notes[1]) {
-                if (higherEnd > ldata->notes[1]) {
+            if (higherEnd == notePositions[0] && higherEnd >= notePositions[1]) {
+                if (higherEnd > notePositions[1]) {
                     return SlopeConstraint::FLAT; // a note is higher in the staff than the highest end
                 }
-                size_t chordCount = ldata->elements.size();
-                if (chordCount >= 3 && ldata->notes.size() >= 3) {
-                    bool middleNoteHigherThanHigherEnd = higherEnd >= ldata->notes[2];
+                size_t chordCount = elements.size();
+                if (chordCount >= 3 && notePositions.size() >= 3) {
+                    bool middleNoteHigherThanHigherEnd = higherEnd >= notePositions[2];
                     if (middleNoteHigherThanHigherEnd) {
                         return SlopeConstraint::FLAT; // two notes are the same as the highest end (notes [0] [1] and [2] higher than or same as higherEnd)
                     }
-                    Chord* secondNote = ldata->elements[1]->isChord() ? toChord(ldata->elements[1]) : nullptr;
+                    Chord* secondNote = elements[1]->isChord() ? toChord(elements[1]) : nullptr;
                     Chord* secondToLastNote
-                        = ldata->elements[chordCount - 2]->isChord() ? toChord(ldata->elements[chordCount - 2]) : nullptr;
-                    bool secondNoteSameHeightAsHigherEnd = startPos < endPos && secondNote && ChordPosition(
+                        = elements[chordCount - 2]->isChord() ? toChord(elements[chordCount - 2]) : nullptr;
+                    bool secondNoteSameHeightAsHigherEnd = startPos < endPos && secondNote && BeamBase::NotePosition(
                         secondNote->upLine(), secondNote->vStaffIdx()) == higherEnd;
-                    bool secondToLastNoteSameHeightAsHigherEnd = endPos.line < startPos.line && secondToLastNote && ChordPosition(
+                    bool secondToLastNoteSameHeightAsHigherEnd = endPos.line < startPos.line && secondToLastNote && BeamBase::NotePosition(
                         secondToLastNote->upLine(), secondToLastNote->vStaffIdx()) == higherEnd;
                     if (!(secondNoteSameHeightAsHigherEnd || secondToLastNoteSameHeightAsHigherEnd)) {
                         return SlopeConstraint::FLAT; // only one note same as higher end, but it is not a neighbor
@@ -1105,27 +1116,31 @@ SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamBase::LayoutData
                 }
             }
         } else {
-            ChordPosition lowerEnd = std::max(startPos, endPos);
-            if (lowerEnd < ldata->notes[ldata->notes.size() - 1]) {
+            BeamBase::NotePosition lowerEnd = std::max(startPos, endPos);
+            if (lowerEnd < notePositions[notePositions.size() - 1]) {
                 return SlopeConstraint::FLAT;
             }
-            if (lowerEnd == ldata->notes[ldata->notes.size() - 1] && lowerEnd <= ldata->notes[ldata->notes.size() - 2]) {
-                if (lowerEnd < ldata->notes[ldata->notes.size() - 2]) {
+            if (lowerEnd == notePositions[notePositions.size() - 1]
+                && lowerEnd <= notePositions[notePositions.size() - 2]) {
+                if (lowerEnd < notePositions[notePositions.size() - 2]) {
                     return SlopeConstraint::FLAT;
                 }
-                size_t chordCount = ldata->elements.size();
-                if (chordCount >= 3 && ldata->notes.size() >= 3) {
-                    bool middleNoteLowerThanLowerEnd = lowerEnd <= ldata->notes[ldata->notes.size() - 3];
+                size_t chordCount = elements.size();
+                if (chordCount >= 3 && notePositions.size() >= 3) {
+                    bool middleNoteLowerThanLowerEnd = lowerEnd <= notePositions[notePositions.size() - 3];
                     if (middleNoteLowerThanLowerEnd) {
                         return SlopeConstraint::FLAT;
                     }
-                    Chord* secondNote = ldata->elements[1]->isChord() ? toChord(ldata->elements[1]) : nullptr;
-                    Chord* secondToLastNote
-                        = ldata->elements[chordCount - 2]->isChord() ? toChord(ldata->elements[chordCount - 2]) : nullptr;
-                    bool secondNoteSameHeightAsLowerEnd = startPos.line > endPos.line && secondNote && ChordPosition(
-                        secondNote->downLine(), secondNote->vStaffIdx()) == lowerEnd;
-                    bool secondToLastNoteSameHeightAsLowerEnd = endPos.line > startPos.line && secondNote && ChordPosition(
-                        secondToLastNote->downLine(), secondToLastNote->vStaffIdx()) == lowerEnd;
+                    const Chord* secondNote = elements[1]->isChord() ? toChord(elements[1]) : nullptr;
+                    const Chord* secondToLastNote
+                        = elements[chordCount - 2]->isChord() ? toChord(elements[chordCount - 2]) : nullptr;
+                    const BeamBase::NotePosition secondNotePos = secondNote ? BeamBase::NotePosition(
+                        secondNote->downLine(), secondNote->vStaffIdx()) : BeamBase::NotePosition(0, muse::nidx);
+                    const BeamBase::NotePosition secondToLastNotePos = secondToLastNote ? BeamBase::NotePosition(
+                        secondToLastNote->downLine(), secondToLastNote->vStaffIdx()) : BeamBase::NotePosition(0, muse::nidx);
+
+                    bool secondNoteSameHeightAsLowerEnd = startPos.line > endPos.line && secondNotePos == lowerEnd;
+                    bool secondToLastNoteSameHeightAsLowerEnd = endPos.line > startPos.line && secondToLastNotePos == lowerEnd;
                     if (!(secondNoteSameHeightAsLowerEnd || secondToLastNoteSameHeightAsLowerEnd)) {
                         return SlopeConstraint::FLAT;
                     } else {

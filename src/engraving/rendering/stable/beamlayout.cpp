@@ -190,7 +190,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     item->setMaxMove(std::numeric_limits<int>::min());
     double mag = 0.0;
 
-    item->notes().clear();
+    item->notePositions().clear();
     staff_idx_t staffIdx = muse::nidx;
     for (ChordRest* cr : item->elements()) {
         double m = cr->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0;
@@ -203,12 +203,12 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
             item->setMaxMove(std::max(item->maxCRMove(), i));
 
             for (int distance : chord->noteDistances()) {
-                item->notes().push_back(ChordPosition(distance, chord->vStaffIdx()));
+                item->notePositions().push_back(BeamBase::NotePosition(distance, chord->vStaffIdx()));
             }
         }
     }
 
-    std::sort(item->notes().begin(), item->notes().end());
+    std::sort(item->notePositions().begin(), item->notePositions().end());
     ldata->setMag(mag);
 
     //
@@ -232,16 +232,16 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
         } else {
             item->setUp(true);
         }
-    } else if (item->notes().size()) {
+    } else if (item->notePositions().size()) {
         if (hasMultipleVoices) {
             item->setUp(firstNote->track() % 2 == 0);
         } else {
             if (const Chord* chord = item->findChordWithCustomStemDirection()) {
                 item->setUp(chord->stemDirection() == DirectionV::UP);
             } else {
-                std::set<ChordPosition> noteSet(item->notes().begin(), item->notes().end());
+                std::set<BeamBase::NotePosition> noteSet(item->notePositions().begin(), item->notePositions().end());
                 std::vector<int> notes;
-                std::transform(std::begin(noteSet), std::end(noteSet), std::back_inserter(notes), [] (const ChordPosition& pos) {
+                std::transform(std::begin(noteSet), std::end(noteSet), std::back_inserter(notes), [] (const BeamBase::NotePosition& pos) {
                     return pos.line;
                 });
                 item->setUp(ChordLayout::computeAutoStemDirection(notes) > 0);
@@ -252,8 +252,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 
     int middleStaffLine = firstNote->staffType()->middleLine();
-    for (size_t i = 0; i < item->notes().size(); i++) {
-        item->notes()[i].line += middleStaffLine;
+    for (size_t i = 0; i < item->notePositions().size(); i++) {
+        item->notePositions()[i].line += middleStaffLine;
     }
 
     item->setCross(item->minCRMove() != item->maxCRMove());
@@ -347,7 +347,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
 
     if (!item->isBesideTabStaff()) {
         BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
-        BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notes());
+        BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notePositions());
         item->setStartAnchor(item->ldata()->startAnchor);
         item->setEndAnchor(item->ldata()->endAnchor);
         item->setSlope(muse::divide(item->endAnchor().y() - item->startAnchor().y(), item->endAnchor().x() - item->startAnchor().x(), 0.0));

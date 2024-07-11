@@ -59,6 +59,52 @@ public:
 
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE) override;
 
+    struct NotePosition {
+        int line;
+        staff_idx_t staff;
+        NotePosition(int note, staff_idx_t staff)
+            : line(note), staff(staff) {}
+        NotePosition()
+            : line(0), staff(0) {}
+
+        inline bool operator<(const NotePosition& other) const
+        {
+            return staff < other.staff || (staff == other.staff && line < other.line);
+        }
+
+        inline bool operator>(const NotePosition& other) const
+        {
+            return other < *this;
+        }
+
+        inline bool operator<=(const NotePosition& other) const
+        {
+            return !(other < *this);
+        }
+
+        inline bool operator >=(const NotePosition& other) const
+        {
+            return !(*this < other);
+        }
+
+        inline bool operator==(const NotePosition& other) const
+        {
+            return line == other.line && staff == other.staff;
+        }
+
+        inline bool operator!=(const NotePosition& other) const
+        {
+            return line != other.line || staff != other.staff;
+        }
+    };
+
+    enum class CrossStaffBeamPosition : signed char {
+        INVALID,
+        BETWEEN,
+        ABOVE,
+        BELOW
+    };
+
     struct LayoutData : public EngravingItem::LayoutData {
         BeamType beamType = BeamType::INVALID;
         const Beam* beam = nullptr;
@@ -74,7 +120,7 @@ public:
         double beamDist = 0.0;
         double beamWidth = 0.0;
         std::vector<ChordRest*> elements;
-        std::vector<ChordPosition> notes;
+        std::vector<NotePosition> notePositions;
         const StaffType* tab = nullptr;
         bool isBesideTabStaff = false;
         CrossStaffBeamPosition crossStaffBeamPos = CrossStaffBeamPosition::INVALID;
