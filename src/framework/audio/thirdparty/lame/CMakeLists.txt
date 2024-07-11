@@ -21,7 +21,7 @@ if(CC_IS_MSVC)
         -D_CRT_SECURE_NO_DEPRECATED
         -DTAKEHIRO_IEEE754_HACK)
 
-    configure_file(${LAME_DIR}/configMS.h ${LAME_DIR}/config.h @ONLY)
+    configure_file(${LAME_DIR}/configMS.h ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
 else()
     list(APPEND LAME_DEFS
         -DSTDC_HEADERS)
