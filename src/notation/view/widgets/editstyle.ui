@@ -11847,7 +11847,7 @@
                     <widget class="QLabel" name="label_196">
                      <property name="text">
                       <string>Vertical position (% of 
-text x-height)</string>
+text x-height):</string>
                      </property>
                      <property name="buddy">
                       <cstring>lyricsDashYposRatio</cstring>
