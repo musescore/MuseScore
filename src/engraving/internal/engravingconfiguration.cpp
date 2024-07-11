@@ -45,6 +45,10 @@ static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/pa
 
 static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
 
+static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
+static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
+static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinkedColor");
+
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
 
 struct VoiceColor {
@@ -88,19 +92,32 @@ void EngravingConfiguration::init()
     }
 
     static constexpr int ALL_VOICES_IDX = VOICES;
-    Settings::Key key("engraving", "engraving/colors/voiceAll");
-    settings()->setDefaultValue(key, Val(DEFAULT_VOICE_COLORS[ALL_VOICES_IDX].toQColor()));
-    settings()->setDescription(key, muse::qtrc("engraving", "All voices color").toStdString());
-    settings()->setCanBeManuallyEdited(key, true);
-    settings()->valueChanged(key).onReceive(this, [&](const Val& val) {
+    settings()->setDefaultValue(ALL_VOICES_COLOR, Val(DEFAULT_VOICE_COLORS[ALL_VOICES_IDX].toQColor()));
+    settings()->setDescription(ALL_VOICES_COLOR, muse::trc("engraving", "All voices color"));
+    settings()->setCanBeManuallyEdited(ALL_VOICES_COLOR, true);
+    settings()->valueChanged(ALL_VOICES_COLOR).onReceive(this, [&](const Val& val) {
         Color color = val.toQColor();
         VOICE_COLORS[ALL_VOICES_IDX].color = color;
         m_voiceColorChanged.send(ALL_VOICES_IDX, color);
     });
-    Color currentColor = settings()->value(key).toQColor();
-    VOICE_COLORS[ALL_VOICES_IDX] = VoiceColor { std::move(key), currentColor };
+    Color currentColor = settings()->value(ALL_VOICES_COLOR).toQColor();
+    VOICE_COLORS[ALL_VOICES_IDX] = VoiceColor { std::move(ALL_VOICES_COLOR), currentColor };
 
     settings()->setDefaultValue(DYNAMICS_APPLY_TO_ALL_VOICES, Val(true));
+
+    settings()->setDefaultValue(FORMATTING_COLOR, Val(Color("#A0A0A4").toQColor()));
+    settings()->setDescription(FORMATTING_COLOR, muse::trc("engraving", "Formatting color"));
+    settings()->setCanBeManuallyEdited(FORMATTING_COLOR, true);
+    settings()->valueChanged(FORMATTING_COLOR).onReceive(nullptr, [this](const Val& val) {
+        m_formattingColorChanged.send(Color::fromQColor(val.toQColor()));
+    });
+
+    settings()->setDefaultValue(UNLINKED_COLOR, Val(Color(UNLINKED_ITEM_COLOR).toQColor()));
+    settings()->setDescription(UNLINKED_COLOR, muse::trc("engraving", "Desynchronized color"));
+    settings()->setCanBeManuallyEdited(UNLINKED_COLOR, true);
+    settings()->valueChanged(UNLINKED_COLOR).onReceive(nullptr, [this](const Val& val) {
+        m_unlinkedColorChanged.send(Color::fromQColor(val.toQColor()));
+    });
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -212,11 +229,6 @@ Color EngravingConfiguration::criticalSelectedColor() const
     return "#8B0000";
 }
 
-Color EngravingConfiguration::formattingMarksColor() const
-{
-    return "#A0A0A4";
-}
-
 Color EngravingConfiguration::thumbnailBackgroundColor() const
 {
     return Color::WHITE;
@@ -244,7 +256,7 @@ double EngravingConfiguration::guiScaling() const
 
 Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const
 {
-    Color color = itemIsUnlinkedFromScore ? UNLINKED_ITEM_COLOR : VOICE_COLORS[voice].color;
+    Color color = itemIsUnlinkedFromScore ? unlinkedColor() : VOICE_COLORS[voice].color;
 
     if (itemVisible) {
         return color;
@@ -295,6 +307,26 @@ void EngravingConfiguration::setDynamicsApplyToAllVoices(bool v)
 muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
 {
     return m_scoreInversionChanged;
+}
+
+Color EngravingConfiguration::formattingColor() const
+{
+    return Color::fromQColor(settings()->value(FORMATTING_COLOR).toQColor());
+}
+
+muse::async::Channel<Color> EngravingConfiguration::formattingColorChanged() const
+{
+    return m_formattingColorChanged;
+}
+
+Color EngravingConfiguration::unlinkedColor() const
+{
+    return Color::fromQColor(settings()->value(UNLINKED_COLOR).toQColor());
+}
+
+muse::async::Channel<Color> EngravingConfiguration::unlinkedColorChanged() const
+{
+    return m_unlinkedColorChanged;
 }
 
 const IEngravingConfiguration::DebuggingOptions& EngravingConfiguration::debuggingOptions() const

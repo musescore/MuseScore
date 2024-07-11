@@ -2525,7 +2525,7 @@ void NotationInteraction::drawAnchorLines(Painter* painter)
         return;
     }
 
-    const auto dropAnchorColor = configuration()->anchorLineColor();
+    const auto dropAnchorColor = configuration()->anchorColor();
     Pen pen(dropAnchorColor, 2.0 / currentScaling(painter), PenStyle::DotLine);
 
     for (const LineF& anchor : m_anchorLines) {

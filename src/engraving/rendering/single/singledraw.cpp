@@ -1924,7 +1924,7 @@ void SingleDraw::draw(const KeySig* item, Painter* painter)
 
     if (!item->explicitParent() && (item->isAtonal() || item->isCustom()) && ldata->keySymbols.empty()) {
         // empty custom or atonal key signature - draw something for palette
-        painter->setPen(item->configuration()->formattingMarksColor());
+        painter->setPen(item->configuration()->formattingColor());
         item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
     }
 }
@@ -2211,7 +2211,7 @@ void SingleDraw::draw(const StaffState* item, Painter* painter)
     const StaffState::LayoutData* ldata = item->ldata();
     auto conf = item->configuration();
 
-    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
             ldata->lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
@@ -2241,7 +2241,7 @@ void SingleDraw::draw(const StaffTypeChange* item, Painter* painter)
     double w  = _spatium * 2.5;
     double lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
-    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
                         item->lw(), PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(0, 0, w, h);
@@ -2260,7 +2260,7 @@ void SingleDraw::draw(const StaffTypeChange* item, Painter* painter)
     }
     // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
     double startY = 1.25 - (lines - 1) * lineDist * 0.5;
-    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
                         2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     for (int i=0; i < lines; i++) {
         int y = (startY + i * lineDist) * _spatium;

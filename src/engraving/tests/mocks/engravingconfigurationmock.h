@@ -50,7 +50,6 @@ public:
     MOCK_METHOD(Color, warningSelectedColor, (), (const, override));
     MOCK_METHOD(Color, criticalColor, (), (const, override));
     MOCK_METHOD(Color, criticalSelectedColor, (), (const, override));
-    MOCK_METHOD(Color, formattingMarksColor, (), (const, override));
     MOCK_METHOD(Color, thumbnailBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, noteBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, fontPrimaryColor, (), (const, override));
@@ -68,6 +67,12 @@ public:
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
+
+    MOCK_METHOD(Color, unlinkedColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, unlinkedColorChanged, (), (const, override));
+
+    MOCK_METHOD(Color, formattingColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, formattingColorChanged, (), (const, override));
 
     MOCK_METHOD(Color, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
 

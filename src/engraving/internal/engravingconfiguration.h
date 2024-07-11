@@ -66,7 +66,6 @@ public:
     Color warningSelectedColor() const override;
     Color criticalColor() const override;
     Color criticalSelectedColor() const override;
-    Color formattingMarksColor() const override;
     Color thumbnailBackgroundColor() const override;
     Color noteBackgroundColor() const override;
     Color fontPrimaryColor() const override;
@@ -88,6 +87,12 @@ public:
 
     muse::async::Notification scoreInversionChanged() const override;
 
+    Color formattingColor() const override;
+    muse::async::Channel<Color> formattingColorChanged() const override;
+
+    Color unlinkedColor() const override;
+    muse::async::Channel<Color> unlinkedColorChanged() const override;
+
     const DebuggingOptions& debuggingOptions() const override;
     void setDebuggingOptions(const DebuggingOptions& options) override;
     muse::async::Notification debuggingOptionsChanged() const override;
@@ -108,6 +113,8 @@ public:
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
+    muse::async::Channel<Color> m_formattingColorChanged;
+    muse::async::Channel<Color> m_unlinkedColorChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 
