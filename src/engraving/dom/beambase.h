@@ -124,6 +124,8 @@ public:
         const StaffType* tab = nullptr;
         bool isBesideTabStaff = false;
         CrossStaffBeamPosition crossStaffBeamPos = CrossStaffBeamPosition::INVALID;
+        const Chord* limitingChordAbove = nullptr; // <-
+        const Chord* limitingChordBelow = nullptr; // <- For cross-staff spacing and centering
 
         void setAnchors(PointF startA, PointF endA) { startAnchor = startA; endAnchor = endA; }
         bool isValid() const override { return !(beamType == BeamType::INVALID); }

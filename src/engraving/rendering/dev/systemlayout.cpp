@@ -65,6 +65,7 @@
 #include "alignmentlayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
+#include "beamtremololayout.h"
 #include "chordlayout.h"
 #include "harmonylayout.h"
 #include "lyricslayout.h"
@@ -2357,7 +2358,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             }
             dist = std::max(dist, d + minVerticalDistance);
         }
-        dist = std::max(dist, minVertSpaceForCrossStaffBeams(system, si1, si2));
+        dist = std::max(dist, minVertSpaceForCrossStaffBeams(system, si1, si2, ctx));
         ss->setYOff(yOffset);
         ss->setbbox(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
         ss->saveLayout();
@@ -2382,7 +2383,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     SystemLayout::layoutInstrumentNames(system, ctx);
 }
 
-double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2)
+double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2, LayoutContext& ctx)
 {
     double minSpace = -DBL_MAX;
     track_idx_t startTrack = staffIdx1 * VOICES;
@@ -2404,30 +2405,50 @@ double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t 
                 if (!beam || !beam->cross() || !beam->autoplace() || beam->elements().front() != item) {
                     continue;
                 }
-                Note* highestOfBottomStaff = nullptr;
-                Note* lowestOfTopStaff = nullptr;
-                for (ChordRest* cr : beam->elements()) {
+                const Chord* limitingChordAbove = nullptr;
+                const Chord* limitingChordBelow = nullptr;
+                double limitFromAbove = -DBL_MAX;
+                double limitFromBelow = DBL_MAX;
+                for (const ChordRest* cr : beam->elements()) {
                     if (!cr->isChord()) {
                         continue;
                     }
-                    Chord* chord = toChord(cr);
+                    const Chord* chord = toChord(cr);
+                    double minStemLength = BeamTremoloLayout::minStemLength(chord, beam->ldata()) * (chord->spatium() / 4);
                     bool isUnderCrossBeam = cr->isBelowCrossBeam(beam);
                     if (isUnderCrossBeam && chord->vStaffIdx() == staffIdx2) {
-                        if (!highestOfBottomStaff || chord->upNote()->line() < highestOfBottomStaff->line()) {
-                            highestOfBottomStaff = chord->upNote();
+                        const Note* topNote = chord->upNote();
+                        double noteLimit = topNote->y() - minStemLength;
+                        if (noteLimit < limitFromBelow) {
+                            limitFromBelow = noteLimit;
+                            limitingChordBelow = chord;
                         }
+                        limitFromBelow = std::min(limitFromBelow, noteLimit);
                     } else if (!isUnderCrossBeam && chord->vStaffIdx() == staffIdx1) {
-                        if (!lowestOfTopStaff || chord->downNote()->line() > lowestOfTopStaff->line()) {
-                            lowestOfTopStaff = chord->downNote();
+                        const Note* bottomNote = chord->downNote();
+                        double noteLimit = bottomNote->y() + minStemLength;
+                        if (noteLimit > limitFromAbove) {
+                            limitFromAbove = noteLimit;
+                            limitingChordAbove = chord;
                         }
                     }
                 }
-                if (!highestOfBottomStaff || !lowestOfTopStaff) {
-                    continue;
+                if (limitingChordAbove && limitingChordBelow) {
+                    double minSpaceRequired = limitFromAbove - limitFromBelow;
+                    beam->mutldata()->limitingChordAbove = limitingChordAbove;
+                    beam->mutldata()->limitingChordBelow = limitingChordBelow;
+
+                    const BeamSegment* topBeamSegmentForChordAbove = beam->topLevelSegmentForElement(limitingChordAbove);
+                    const BeamSegment* topBeamSegmentForChordBelow = beam->topLevelSegmentForElement(limitingChordBelow);
+                    if (topBeamSegmentForChordAbove->above == topBeamSegmentForChordBelow->above) {
+                        // In this case the two opposing stems overlap the beam height, so we must subtract it
+                        int strokeCount = std::min(BeamTremoloLayout::strokeCount(beam->ldata(), limitingChordAbove),
+                                                   BeamTremoloLayout::strokeCount(beam->ldata(), limitingChordBelow));
+                        double beamHeight = ctx.conf().styleMM(Sid::beamWidth).val() + beam->beamDist() * (strokeCount - 1);
+                        minSpaceRequired -= beamHeight;
+                    }
+                    minSpace = std::max(minSpace, minSpaceRequired);
                 }
-                double bottomYOfTopStaff = lowestOfTopStaff->y() + lowestOfTopStaff->chord()->minStemLength();
-                double topYofBottomStaff = highestOfBottomStaff->y() - highestOfBottomStaff->chord()->minStemLength();
-                minSpace = std::max(minSpace, bottomYOfTopStaff - topYofBottomStaff);
             }
         }
     }
