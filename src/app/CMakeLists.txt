@@ -231,6 +231,9 @@ endif()
 # Resources
 ###########################################
 qt_add_resources(APP_RCC_SOURCES app.qrc)
+if (OS_IS_WIN)
+    qt_add_resources(APP_RCC_SOURCES app_win.qrc)
+endif()
 
 ###########################################
 # Executable declaration
@@ -346,7 +349,6 @@ if (OS_IS_WIN)
     list(REMOVE_DUPLICATES QtInstallLibraries)
 
     install(FILES
-            ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/qt.conf
             ${QtInstallLibraries}
             #${QT_INSTALL_BINS}/libEGL.dll
             #${QT_INSTALL_BINS}/libGLESv2.dll
