@@ -3254,13 +3254,6 @@ space unit</extracomment>
         <translation type="unfinished">Min. dash gap:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11849"/>
-        <source>Vertical position (% of 
-text x-height)</source>
-        <translation type="unfinished">Vertical position (% of 
-text x-height)</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11887"/>
         <source>Omit dash when space is limited</source>
         <translation type="unfinished">Omit dash when space is limited</translation>
@@ -4447,6 +4440,13 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14180"/>
         <source>Font:</source>
         <translation type="unfinished">Font:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11849"/>
+        <source>Vertical position (% of 
+text x-height):</source>
+        <translation type="unfinished">Vertical position (% of 
+text x-height):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12515"/>
@@ -15788,8 +15788,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1517"/>
-        <source>Detaché</source>
-        <translation type="unfinished">Detaché</translation>
+        <source>Détaché</source>
+        <translation type="unfinished">Détaché</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1518"/>
