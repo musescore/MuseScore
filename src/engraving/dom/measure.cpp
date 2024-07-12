@@ -3057,7 +3057,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff)
     }
     Segment* seg = toSegment(e);
     Segment* nextSegment = seg ? seg->next() : first();
-    EngravingItem* next = seg->firstElementOfSegment(nextSegment, staff);
+    EngravingItem* next = nextSegment->firstElementOfSegment(staff);
     if (next) {
         return next;
     }

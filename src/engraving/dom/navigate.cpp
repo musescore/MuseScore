@@ -762,7 +762,7 @@ EngravingItem* Score::nextElement()
             if (seg) {
                 Segment* nextSegment = seg->next1();
                 while (nextSegment) {
-                    EngravingItem* nextEl = nextSegment->firstElementOfSegment(nextSegment, staffId);
+                    EngravingItem* nextEl = nextSegment->firstElementOfSegment(staffId);
                     if (nextEl) {
                         return nextEl;
                     }
@@ -925,12 +925,12 @@ EngravingItem* Score::prevElement()
             } else {
                 Segment* startSeg = sp->startSegment();
                 if (!startSeg->annotations().empty()) {
-                    EngravingItem* last = startSeg->lastAnnotation(startSeg, staffId);
+                    EngravingItem* last = startSeg->lastAnnotation(staffId);
                     if (last) {
                         return last;
                     }
                 }
-                EngravingItem* el = startSeg->lastElementOfSegment(startSeg, staffId);
+                EngravingItem* el = startSeg->lastElementOfSegment(staffId);
                 if (stEl->type() == ElementType::CHORD || stEl->type() == ElementType::REST
                     || stEl->type() == ElementType::MEASURE_REPEAT || stEl->type() == ElementType::MMREST
                     || stEl->type() == ElementType::NOTE) {
