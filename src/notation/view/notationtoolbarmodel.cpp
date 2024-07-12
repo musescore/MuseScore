@@ -39,6 +39,7 @@ void NotationToolBarModel::load()
     for (const ActionCode& code : itemsCodes) {
         ToolBarItem* item = makeItem(code);
         item->setShowTitle(true);
+        item->setIsTitleBold(true);
 
         items << item;
     }

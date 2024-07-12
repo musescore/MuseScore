@@ -46,6 +46,7 @@ class ToolBarItem : public QObject, public Injectable, public async::Asyncable
 
     Q_PROPERTY(QString title READ translatedTitle NOTIFY actionChanged)
     Q_PROPERTY(bool showTitle READ showTitle WRITE setShowTitle NOTIFY showTitleChanged)
+    Q_PROPERTY(bool isTitleBold READ isTitleBold WRITE setIsTitleBold NOTIFY isTitleBoldChanged)
 
     Q_PROPERTY(QString description READ description_property NOTIFY actionChanged)
 
@@ -100,6 +101,9 @@ public:
     bool isTransparent() const;
     void setIsTransparent(bool isTransparent);
 
+    bool isTitleBold() const;
+    void setIsTitleBold(bool newIsTitleBold);
+
 public slots:
     void setId(const QString& id);
     void setTitle(const TranslatableString& title);
@@ -121,6 +125,7 @@ signals:
     void actionChanged();
 
     void showTitleChanged();
+    void isTitleBoldChanged();
     void isTransparentChanged();
 
 private:
@@ -141,6 +146,7 @@ private:
     QList<MenuItem*> m_menuItems;
     bool m_isMenuSecondary = false;
     bool m_showTitle = false;
+    bool m_isTitleBold = false;
 
     ui::UiAction m_action;
     bool m_isTransparent = true;
