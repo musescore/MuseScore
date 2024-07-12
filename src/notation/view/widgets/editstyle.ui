@@ -7937,8 +7937,14 @@
                  </item>
                  <item>
                   <widget class="QToolButton" name="resetDynamicsAndHairpinPos">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Position' value</string>
+                   </property>
                    <property name="text">
-                    <string>...</string>
+                    <string notr="true"/>
                    </property>
                   </widget>
                  </item>
@@ -11264,7 +11270,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Y position below:</string>
+                    <string>Position below:</string>
                    </property>
                   </widget>
                  </item>
@@ -11490,7 +11496,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Y position above:</string>
+                    <string>Position above:</string>
                    </property>
                   </widget>
                  </item>
@@ -11694,7 +11700,7 @@
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Dash pad' value</string>
+                      <string>Reset 'Dash gap' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
@@ -11867,7 +11873,7 @@ text x-height):</string>
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Dash Y position ratio' value</string>
+                      <string>Reset 'Vertical position (% of text x-height)' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
@@ -11890,8 +11896,14 @@ text x-height):</string>
                    </item>
                    <item row="1" column="1">
                     <widget class="QToolButton" name="resetLyricsShowDashIfSyllableOnFirstNote">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
+                     </property>
+                     <property name="accessibleName">
+                      <string>Reset 'Omit dash when space is limited' value</string>
+                     </property>
                      <property name="text">
-                      <string>...</string>
+                      <string notr="true"/>
                      </property>
                     </widget>
                    </item>
@@ -11928,8 +11940,14 @@ first note of the system</string>
                    </item>
                    <item row="3" column="1">
                     <widget class="QToolButton" name="resetLyricsDashStartSystemPlacement">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
+                     </property>
+                     <property name="accessibleName">
+                      <string>Reset 'Dash placement at the start of the system' value</string>
+                     </property>
                      <property name="text">
-                      <string>...</string>
+                      <string notr="true"/>
                      </property>
                     </widget>
                    </item>
@@ -11941,7 +11959,7 @@ first note of the system</string>
               <item>
                <widget class="QGroupBox" name="lyricsMelismaBox">
                 <property name="title">
-                 <string>Underscore line</string>
+                 <string>Extension line</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_66" stretch="0,0,1">
                  <property name="topMargin">
@@ -11968,7 +11986,7 @@ first note of the system</string>
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Melisma thickness' value</string>
+                      <string>Reset 'Line thickness' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
@@ -11977,8 +11995,14 @@ first note of the system</string>
                    </item>
                    <item row="0" column="2">
                     <widget class="QToolButton" name="resetMinMelismaLength">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
+                     </property>
+                     <property name="accessibleName">
+                      <string>Reset 'Min. line length' value</string>
+                     </property>
                      <property name="text">
-                      <string>...</string>
+                      <string notr="true"/>
                      </property>
                     </widget>
                    </item>
@@ -12004,14 +12028,14 @@ first note of the system</string>
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_222">
                      <property name="text">
-                      <string>Min. underscore length:</string>
+                      <string>Min. line length:</string>
                      </property>
                     </widget>
                    </item>
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_80">
                      <property name="text">
-                      <string>Underscore thickness:</string>
+                      <string>Line thickness:</string>
                      </property>
                      <property name="buddy">
                       <cstring>lyricsLineThickness</cstring>
@@ -12021,7 +12045,7 @@ first note of the system</string>
                    <item row="2" column="0">
                     <widget class="QLabel" name="label_188">
                      <property name="text">
-                      <string>Underscore gap:</string>
+                      <string>Line gap:</string>
                      </property>
                      <property name="buddy">
                       <cstring>lyricsMelismaPad</cstring>
@@ -12053,7 +12077,7 @@ first note of the system</string>
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Melisma pad' value</string>
+                      <string>Reset 'Line gap' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
@@ -12070,14 +12094,20 @@ first note of the system</string>
                    <item row="0" column="0">
                     <widget class="QCheckBox" name="lyricsMelismaForce">
                      <property name="text">
-                      <string>Omit underscore when space is limited</string>
+                      <string>Omit extension line when space is limited</string>
                      </property>
                     </widget>
                    </item>
                    <item row="0" column="1">
                     <widget class="QToolButton" name="resetLyricsMelismaForce">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
+                     </property>
+                     <property name="accessibleName">
+                      <string>Reset 'Omit extension line when space is limited' value</string>
+                     </property>
                      <property name="text">
-                      <string>...</string>
+                      <string notr="true"/>
                      </property>
                     </widget>
                    </item>

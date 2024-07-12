@@ -243,7 +243,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::TEXTLINE_SEGMENT,     "TextLineSegment",      muse::TranslatableString("engraving", "Text line segment") },
     { ElementType::VOLTA_SEGMENT,        "VoltaSegment",         muse::TranslatableString("engraving", "Volta segment") },
     { ElementType::PEDAL_SEGMENT,        "PedalSegment",         muse::TranslatableString("engraving", "Pedal segment") },
-    { ElementType::LYRICSLINE_SEGMENT,   "LyricsLineSegment",    muse::TranslatableString("engraving", "Melisma line segment") },
+    { ElementType::LYRICSLINE_SEGMENT,   "LyricsLineSegment",    muse::TranslatableString("engraving", "Extension line segment") },
     { ElementType::GLISSANDO_SEGMENT,    "GlissandoSegment",     muse::TranslatableString("engraving", "Glissando segment") },
     { ElementType::LAYOUT_BREAK,         "LayoutBreak",          muse::TranslatableString("engraving", "Layout break") },
     { ElementType::SPACER,               "Spacer",               muse::TranslatableString("engraving", "Spacer") },
@@ -273,7 +273,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::TEXTLINE,             "TextLine",             muse::TranslatableString("engraving", "Text line") },
     { ElementType::TEXTLINE_BASE,        "TextLineBase",         muse::TranslatableString("engraving", "Text line base") },    // remove
     { ElementType::NOTELINE,             "NoteLine",             muse::TranslatableString("engraving", "Note line") },
-    { ElementType::LYRICSLINE,           "LyricsLine",           muse::TranslatableString("engraving", "Melisma line") },
+    { ElementType::LYRICSLINE,           "LyricsLine",           muse::TranslatableString("engraving", "Extension line") },
     { ElementType::GLISSANDO,            "Glissando",            muse::TranslatableString("engraving", "Glissando") },
     { ElementType::BRACKET,              "Bracket",              muse::TranslatableString("engraving", "Bracket") },
     { ElementType::SEGMENT,              "Segment",              muse::TranslatableString("engraving", "Segment") },
