@@ -166,3 +166,8 @@ muse::io::path_t UpdateConfiguration::updateDataPath() const
     return globalConfiguration()->userAppDataPath() + "/update";
 #endif
 }
+
+muse::io::path_t UpdateConfiguration::updateRequestHistoryJsonPath() const
+{
+    return globalConfiguration()->userAppDataPath() + "/update_request_history.json";
+}

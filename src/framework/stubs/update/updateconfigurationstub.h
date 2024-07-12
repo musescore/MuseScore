@@ -52,6 +52,7 @@ public:
     std::string museScorePrivacyPolicyUrl() const override;
 
     io::path_t updateDataPath() const override;
+    io::path_t updateRequestHistoryJsonPath() const override;
 };
 }
 
