@@ -772,7 +772,7 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
         if (c->isBelowCrossBeam(item) == prevBelowBeam) {
             c->vStaffIdx();
             if (prevStaff != c->vStaffIdx()) {
-                int diff = prevStaff - c->vStaffIdx();
+                int diff = static_cast<int>(prevStaff - c->vStaffIdx());
                 staffSwitchDirection = hasStaffSwitch ? 0 : (diff < 0 ? -1 : 1);
                 hasStaffSwitch = true;
             }
@@ -1058,7 +1058,7 @@ int BeamTremoloLayout::computeDesiredSlant(const BeamBase* item, const BeamBase:
         int beamDir = startPos == endPos ? 0 : (startPos > endPos ? 1 : -1);
 
         // Calculate slant between notes on stave closest to the beam
-        int closestChordsSize = closestChordsToBeam.size();
+        size_t closestChordsSize = closestChordsToBeam.size();
         BeamBase::NotePosition closestStartPos(closestChordsSize > 0 ? closestChordsToBeam.front()->line() : 0,
                                                closestChordsSize > 0 ? closestChordsToBeam.front()->vStaffIdx() : 0);
         BeamBase::NotePosition closestEndPos(closestChordsSize > 0 ? closestChordsToBeam.back()->line() : 0,
