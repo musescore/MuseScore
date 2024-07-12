@@ -28,6 +28,13 @@ using namespace muse::vst;
 using namespace muse::mpe;
 using namespace muse::audio;
 
+static size_t noteEventKey(int pitch, int channel)
+{
+    std::size_t h1 = std::hash<int> {}(pitch);
+    std::size_t h2 = std::hash<int> {}(channel);
+    return h1 ^ (h2 << 1);
+}
+
 VstAudioClient::~VstAudioClient()
 {
     if (!m_pluginComponent) {
@@ -49,12 +56,42 @@ void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, audioch_t a
     m_audioChannelsCount = audioChannelsCount;
 }
 
+void VstAudioClient::loadSupportedParams()
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(m_pluginPtr) {
+        return;
+    }
+
+    PluginControllerPtr controller = m_pluginPtr->controller();
+    IF_ASSERT_FAILED(controller) {
+        return;
+    }
+
+    int paramCount = controller->getParameterCount();
+
+    for (int i = 0; i < paramCount; ++i) {
+        PluginParamInfo info;
+        controller->getParameterInfo(i, info);
+        m_pluginParamInfoMap.emplace(info.id, std::move(info));
+    }
+}
+
 bool VstAudioClient::handleEvent(const VstEvent& event, const samples_t sampleOffset)
 {
     ensureActivity();
 
     VstEvent& ev = const_cast<VstEvent&>(event);
     ev.sampleOffset = sampleOffset;
+
+    if (ev.type == VstEvent::kNoteOnEvent) {
+        size_t key = noteEventKey(ev.noteOn.pitch, ev.noteOn.channel);
+        m_playingNotes.insert_or_assign(key, ev);
+    } else if (ev.type == VstEvent::kNoteOffEvent) {
+        size_t key = noteEventKey(ev.noteOff.pitch, ev.noteOff.channel);
+        m_playingNotes.erase(key);
+    }
 
     if (m_eventList.addEvent(ev) == Steinberg::kResultTrue) {
         return true;
@@ -67,6 +104,8 @@ bool VstAudioClient::handleParamChange(const ParamChangeEvent& param, const samp
 {
     ensureActivity();
     addParamChange(param, sampleOffset);
+
+    m_playingParams.insert(param.paramId);
 
     return true;
 }
@@ -122,16 +161,55 @@ muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesP
 
 void VstAudioClient::flush()
 {
-    flushBuffers();
+    allNotesOff();
 
     disableActivity();
+}
+
+void VstAudioClient::allNotesOff()
+{
+    if (m_playingNotes.empty() && m_playingParams.empty()) {
+        return;
+    }
+
+    flushBuffers();
 
     m_eventList.clear();
     m_paramChanges.clearQueue();
 
-    if (m_allNotesOffParam.has_value()) {
-        addParamChange(m_allNotesOffParam.value(), 0);
+    for (const auto& pair : m_playingNotes) {
+        const VstEvent& noteOn = pair.second;
+
+        VstEvent noteOff;
+        noteOff.type = VstEvent::kNoteOffEvent;
+        noteOff.ppqPosition = 0;
+        noteOff.sampleOffset = 0;
+        noteOff.busIndex = noteOn.busIndex;
+        noteOff.flags = noteOn.flags;
+        noteOff.noteOff.noteId = noteOn.noteOn.noteId;
+        noteOff.noteOff.channel = noteOn.noteOn.channel;
+        noteOff.noteOff.pitch = noteOn.noteOn.pitch;
+        noteOff.noteOff.tuning = noteOn.noteOn.tuning;
+        noteOff.noteOff.velocity = noteOn.noteOn.velocity;
+
+        m_eventList.addEvent(noteOff);
     }
+
+    for (PluginParamId id : m_playingParams) {
+        auto intoIt = m_pluginParamInfoMap.find(id);
+        if (intoIt == m_pluginParamInfoMap.end()) {
+            continue;
+        }
+
+        ParamChangeEvent paramOff;
+        paramOff.paramId = id;
+        paramOff.value = intoIt->second.defaultNormalizedValue;
+
+        addParamChange(paramOff, 0);
+    }
+
+    m_playingNotes.clear();
+    m_playingParams.clear();
 }
 
 void VstAudioClient::setMaxSamplesPerBlock(unsigned int samples)
@@ -302,7 +380,6 @@ void VstAudioClient::updateProcessSetup()
 
     setUpProcessData();
     flushBuffers();
-    loadAllNotesOffParam();
 
     ensureActivity();
 }
@@ -445,20 +522,6 @@ void VstAudioClient::flushBuffers()
             }
         }
     }
-}
-
-void VstAudioClient::loadAllNotesOffParam()
-{
-    if (m_allNotesOffParam.has_value()) {
-        return;
-    }
-
-    ParamsMapping mapping = paramsMapping({ Steinberg::Vst::kCtrlAllNotesOff });
-    if (mapping.empty()) {
-        return;
-    }
-
-    m_allNotesOffParam = ParamChangeEvent { mapping.begin()->second, 1 };
 }
 
 void VstAudioClient::addParamChange(const ParamChangeEvent& param, const samples_t sampleOffset)

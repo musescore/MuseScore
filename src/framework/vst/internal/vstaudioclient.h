@@ -36,6 +36,8 @@ public:
 
     void init(muse::audio::AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t audioChannelsCount = 2);
 
+    void loadSupportedParams();
+
     bool handleEvent(const VstEvent& event, const audio::samples_t sampleOffset);
     bool handleParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
@@ -43,6 +45,7 @@ public:
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
 
     void flush();
+    void allNotesOff();
 
     void setMaxSamplesPerBlock(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
@@ -75,7 +78,6 @@ private:
 
     void flushBuffers();
 
-    void loadAllNotesOffParam();
     void addParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
 
     bool m_isActive = false;
@@ -94,12 +96,15 @@ private:
     VstProcessData m_processData;
     VstProcessContext m_processContext;
 
+    std::unordered_map<size_t, VstEvent> m_playingNotes;
+    std::unordered_set<PluginParamId> m_playingParams;
+
+    std::unordered_map<PluginParamId, PluginParamInfo> m_pluginParamInfoMap;
+
     bool m_needUnprepareProcessData = false;
 
     muse::audio::AudioPluginType m_type = muse::audio::AudioPluginType::Undefined;
     muse::audio::audioch_t m_audioChannelsCount = 0;
-
-    std::optional<ParamChangeEvent> m_allNotesOffParam;
 };
 }
 
