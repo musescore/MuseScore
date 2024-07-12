@@ -72,7 +72,7 @@ private:
 
     void setupSource();
     SynthCtx currentSynthCtx() const;
-    void restoreSynthCtx(SynthCtx&& ctx);
+    void restoreSynthCtx(const SynthCtx& ctx);
 
     TrackId m_trackId = -1;
     mpe::PlaybackData m_playbackData;

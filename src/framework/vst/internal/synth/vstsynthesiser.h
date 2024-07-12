@@ -59,6 +59,7 @@ public:
 
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
 
     bool isActive() const override;
     void setIsActive(const bool isActive) override;

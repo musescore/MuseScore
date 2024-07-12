@@ -142,6 +142,11 @@ void VstSynthesiser::setupEvents(const mpe::PlaybackData& playbackData)
     m_sequencer.load(playbackData);
 }
 
+const mpe::PlaybackData& VstSynthesiser::playbackData() const
+{
+    return m_sequencer.playbackData();
+}
+
 bool VstSynthesiser::isActive() const
 {
     return m_sequencer.isActive();

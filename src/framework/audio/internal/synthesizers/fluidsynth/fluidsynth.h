@@ -47,8 +47,11 @@ public:
 
     std::string name() const override;
     AudioSourceType type() const override;
+
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
+
     void flushSound() override;
 
     bool isActive() const override;

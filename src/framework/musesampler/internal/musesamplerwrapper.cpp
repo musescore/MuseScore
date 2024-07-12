@@ -183,6 +183,13 @@ void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
     m_sequencer.load(playbackData);
 }
 
+const mpe::PlaybackData& MuseSamplerWrapper::playbackData() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_sequencer.playbackData();
+}
+
 void MuseSamplerWrapper::updateRenderingMode(const RenderMode mode)
 {
     ONLY_AUDIO_WORKER_THREAD;

@@ -63,6 +63,12 @@ void SynthesizerStub::setup(const mpe::PlaybackData&)
 {
 }
 
+const mpe::PlaybackData& SynthesizerStub::playbackData() const
+{
+    static const mpe::PlaybackData dummyData;
+    return dummyData;
+}
+
 const AudioInputParams& SynthesizerStub::params() const
 {
     return m_params;

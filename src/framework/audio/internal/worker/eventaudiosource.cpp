@@ -42,19 +42,11 @@ EventAudioSource::EventAudioSource(const TrackId trackId,
     m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&, const PlaybackParamList&) {
         onOffStreamReceived(trackId);
     });
-
-    m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& events, const DynamicLevelLayers& dynamics,
-                                                     const PlaybackParamLayers& params) {
-        m_playbackData.originEvents = events;
-        m_playbackData.dynamics = dynamics;
-        m_playbackData.params = params;
-    });
 }
 
 EventAudioSource::~EventAudioSource()
 {
     m_playbackData.offStream.resetOnReceive(this);
-    m_playbackData.mainStream.resetOnReceive(this);
 }
 
 bool EventAudioSource::isActive() const
@@ -151,6 +143,10 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
 
     SynthCtx ctx = currentSynthCtx();
 
+    if (m_synth) {
+        m_playbackData = m_synth->playbackData();
+    }
+
     m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_playbackData.setupData);
 
     if (!m_synth) {
@@ -168,7 +164,7 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
     setupSource();
 
     if (ctx.isValid()) {
-        restoreSynthCtx(std::move(ctx));
+        restoreSynthCtx(ctx);
     } else {
         m_synth->setIsActive(false);
     }
@@ -191,7 +187,7 @@ EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
     return { m_synth->isActive(), m_synth->playbackPosition() };
 }
 
-void EventAudioSource::restoreSynthCtx(SynthCtx&& ctx)
+void EventAudioSource::restoreSynthCtx(const SynthCtx& ctx)
 {
     m_synth->setPlaybackPosition(ctx.playbackPosition);
     m_synth->setIsActive(ctx.isActive);

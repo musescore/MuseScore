@@ -278,6 +278,11 @@ void FluidSynth::setupEvents(const mpe::PlaybackData& playbackData)
     m_sequencer.load(playbackData);
 }
 
+const mpe::PlaybackData& FluidSynth::playbackData() const
+{
+    return m_sequencer.playbackData();
+}
+
 void FluidSynth::revokePlayingNotes()
 {
     IF_ASSERT_FAILED(m_fluid->synth) {

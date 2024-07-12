@@ -48,6 +48,7 @@ public:
     async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
     void setup(const mpe::PlaybackData& playbackData) override;
+
     void revokePlayingNotes() override;
 
 protected:

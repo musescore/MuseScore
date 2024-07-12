@@ -57,6 +57,8 @@ public:
 private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
+
     void updateRenderingMode(const muse::audio::RenderMode mode) override;
 
     // IMuseSamplerTracks
