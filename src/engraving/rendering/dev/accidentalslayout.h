@@ -172,6 +172,8 @@ private:
     static double xPosRelativeToSegment(const Accidental* accidental);
 
     static void sortTopDown(std::vector<Accidental*>& accidentals);
+
+    static bool keepAccidentalsCloseToChord(const Chord* chord);
 };
 }
 
