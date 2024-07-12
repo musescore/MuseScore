@@ -52,7 +52,13 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     bool rangeSelection = selection()->isRange();
     setEnableTransposeKeys(rangeSelection);
     setEnableTransposeToKey(rangeSelection);
-    setEnableTransposeChordNames(rangeSelection);
+
+    const std::vector<EngravingItem*>& elements = selection()->elements();
+    bool hasChordNames = std::any_of(elements.cbegin(), elements.cend(), [](const EngravingItem* item) {
+        return item->isHarmony();
+    });
+    setEnableTransposeChordNames(hasChordNames);
+
     setKey(firstPitchedStaffKey());
 
     connect(this, &TransposeDialog::accepted, this, &TransposeDialog::apply);
