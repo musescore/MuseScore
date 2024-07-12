@@ -260,9 +260,10 @@ void AccidentalsLayout::createChordsShape(AccidentalsLayoutContext& ctx)
     ctx.chordsShape.clear();
 
     for (const Chord* chord : ctx.chords) {
+        PointF chordPos = keepAccidentalsCloseToChord(chord) ? PointF() : chord->pos();
         const LedgerLine* ledger = chord->ledgerLines();
         while (ledger) {
-            ctx.chordsShape.add(ledger->shape().translate(ledger->pos() + chord->pos()));
+            ctx.chordsShape.add(ledger->shape().translate(ledger->pos() + chordPos));
             ledger = ledger->next();
         }
         for (const Note* note : chord->notes()) {
@@ -270,11 +271,11 @@ void AccidentalsLayout::createChordsShape(AccidentalsLayoutContext& ctx)
             if (noteSym == SymId::noSym) {
                 noteSym = note->noteHead();
             }
-            ctx.chordsShape.add(note->symShapeWithCutouts(noteSym).translate(note->pos() + chord->pos()));
+            ctx.chordsShape.add(note->symShapeWithCutouts(noteSym).translate(note->pos() + chordPos));
         }
         const Stem* stem = chord->stem();
         if (stem && stem->addToSkyline()) {
-            ctx.chordsShape.add(stem->shape().translate(stem->pos() + chord->pos()));
+            ctx.chordsShape.add(stem->shape().translate(stem->pos() + chordPos));
         }
     }
 }
@@ -1090,7 +1091,7 @@ void AccidentalsLayout::setXposRelativeToSegment(Accidental* accidental, double 
     if (note) {
         x -= note->pos().x();
     }
-    if (chord) {
+    if (chord && !keepAccidentalsCloseToChord(chord)) {
         x -= chord->pos().x();
     }
     accidental->mutldata()->setPosX(x);
@@ -1122,6 +1123,11 @@ void AccidentalsLayout::sortTopDown(std::vector<Accidental*>& accidentals)
         }
         return line1 < line2;
     });
+}
+
+bool AccidentalsLayout::keepAccidentalsCloseToChord(const Chord* chord)
+{
+    return chord->isTrillCueNote() || chord->isGraceAfter();
 }
 
 double AccidentalsLayout::verticalPadding(const Accidental* acc1, const Accidental* acc2, const AccidentalsLayoutContext& ctx)
