@@ -50,9 +50,8 @@ StyledPopupView {
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        var spacing = 16
-        root.x = root.parent.width + spacing
-        root.y = - (root.parent.height + contentHeight + spacing)
+        root.x = 0
+        root.y = -height
     }
 
     TextStylePopupModel {
