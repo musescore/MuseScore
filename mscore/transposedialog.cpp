@@ -17,23 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "transposedialog.h"
-#include "libmscore/score.h"
 #include "musescore.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/key.h"
-#include "libmscore/staff.h"
-#include "libmscore/harmony.h"
-#include "libmscore/part.h"
-#include "libmscore/pitchspelling.h"
-#include "libmscore/measure.h"
-#include "libmscore/undo.h"
-#include "libmscore/keysig.h"
-#include "libmscore/utils.h"
-#include "libmscore/segment.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/clef.h"
+#include "transposedialog.h"
 
 namespace Ms {
 

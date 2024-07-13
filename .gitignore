@@ -54,8 +54,5 @@ SF_VERSION
 /mscore/data/mscore.aps
 /msvc.*
 
-# Created during (master) build
-thirdparty/lame/config.h
-thirdparty/flac/flac-1.3.4/config.h
-src/braille/thirdparty/liblouis/liblouis/config.h
-src/braille/thirdparty/liblouis/liblouis/liblouis.h
+# Created/used during (master) build
+src/
