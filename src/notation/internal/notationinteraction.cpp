@@ -3740,6 +3740,9 @@ Ret NotationInteraction::canAddBoxes() const
 void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
 {
     int beforeBoxIndex = -1;
+    bool moveSignaturesClefs = (target != AddBoxesTarget::AfterSelection);
+    const EngravingItem* selectedItem = nullptr;
+    const MeasureBase* selectedItemMeasure = nullptr;
 
     switch (target) {
     case AddBoxesTarget::AfterSelection:
@@ -3779,10 +3782,37 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
             if (target == AddBoxesTarget::BeforeSelection) {
                 if (beforeBoxIndex < 0 || itemMeasureIndex < beforeBoxIndex) {
                     beforeBoxIndex = itemMeasureIndex;
+                    selectedItem = item;
+                    selectedItemMeasure = itemMeasure;
                 }
             } else {
                 if (itemMeasureIndex + 1 > beforeBoxIndex) {
                     beforeBoxIndex = itemMeasureIndex + 1;
+                    selectedItem = item;
+                    selectedItemMeasure = itemMeasure;
+                }
+            }
+        }
+
+        // special cases for "between measures elements"
+        if (selectedItem && selectedItemMeasure) { // null check
+            ElementType selectedItemType = selectedItem->type();
+            if (selectedItemType == ElementType::CLEF || selectedItemType == ElementType::BAR_LINE
+                || selectedItemType == ElementType::TIMESIG || selectedItemType == ElementType::KEYSIG) {
+                Fraction itemTick = selectedItem->tick();
+                Fraction measureTick = selectedItemMeasure->tick();
+                Fraction measureLastTick = measureTick + selectedItemMeasure->ticks();
+
+                if (itemTick == measureTick) {
+                    if (target == AddBoxesTarget::AfterSelection) {
+                        beforeBoxIndex -= 1;
+                    }
+                    moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
+                } else if (itemTick == measureLastTick) {
+                    if (target == AddBoxesTarget::BeforeSelection) {
+                        beforeBoxIndex += 1;
+                    }
+                    moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
                 }
             }
         }
@@ -3801,7 +3831,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         break;
     }
 
-    addBoxes(boxType, count, beforeBoxIndex, target != AddBoxesTarget::AfterSelection);
+    addBoxes(boxType, count, beforeBoxIndex, moveSignaturesClefs);
 }
 
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool moveSignaturesClef)
