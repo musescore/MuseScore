@@ -277,6 +277,26 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         }
     });
 
+    interaction->pianoKeyboardShadowNoteChanged().onReceive(this, [this](bool visible) {
+        if (m_shadowNoteRect.isValid()) {
+            scheduleRedraw(m_shadowNoteRect);
+
+            if (!visible) {
+                m_shadowNoteRect = RectF();
+                return;
+            }
+        }
+
+        RectF shadowNoteRect = fromLogical(notationInteraction()->shadowNoteRect());
+
+        if (shadowNoteRect.isValid()) {
+            compensateFloatPart(shadowNoteRect);
+            scheduleRedraw(shadowNoteRect);
+        }
+
+        m_shadowNoteRect = shadowNoteRect;
+    });
+
     updateLoopMarkers();
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoopMarkers();

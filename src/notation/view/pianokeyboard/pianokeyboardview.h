@@ -91,6 +91,8 @@ private:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
 
+    void hoverMoveEvent(QHoverEvent* event) override;
+
     std::optional<piano_key_t> keyAt(const QPointF& position) const;
 
     static constexpr piano_key_t MIN_KEY = 0;

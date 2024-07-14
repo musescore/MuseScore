@@ -78,6 +78,7 @@
 #include "engraving/dom/textedit.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/undo.h"
+#include "engraving/dom/utils.h"
 #include "engraving/compat/dummyelement.h"
 
 #include "engraving/rw/xmlreader.h"
@@ -338,6 +339,65 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
         return false;
     }
 
+    updateShadowNoteProperties(position);
+
+    return true;
+}
+
+void NotationInteraction::showShadowNoteFromPianoKeyboard(const uint8_t key)
+{
+    const mu::engraving::InputState& inputState = score()->inputState();
+    mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
+
+    Segment* inputSegment = inputState.segment();
+    if (!inputSegment) {
+        return;
+    }
+    staff_idx_t staffIdx = inputState.track() / VOICES;
+    const Staff* inputStaff = score()->staff(staffIdx);
+    const Fraction tick = inputSegment->tick();
+    const double mag     = inputStaff->staffMag(tick);
+    double lineDist = inputStaff->staffType(tick)->lineDistance().val()
+                      * (inputStaff->isTabStaff(tick) ? 1 : .5)
+                      * mag
+                      * score()->style().spatium();
+    int rLine = 0;
+    if (inputStaff->isDrumStaff(tick)) {
+        // different behavior? ignoring for now
+        hideShadowNote();
+        m_pianoKeyboardShadowNoteChanged.send(false);
+        return;
+    } else if (inputStaff->isTabStaff(tick)) {
+        // different behavior? ignoring for now
+        hideShadowNote();
+        m_pianoKeyboardShadowNoteChanged.send(false);
+        return;
+    } else {
+        int octave = key / 12;
+        int line = octave * 7 + mu::engraving::pitch2step(key);
+        ClefType clef = inputStaff->clef(tick);
+        rLine = mu::engraving::relStep(line, clef);
+
+        // temp
+        shadowNote.setStaffIdx(staffIdx);
+        shadowNote.setLineIndex(rLine);
+    }
+
+    double xPos = inputSegment->canvasPos().x();
+    double yPos = inputSegment->system()->staffCanvasYpage(staffIdx) + rLine * lineDist;
+
+    PointF p = { xPos, yPos };
+
+    Position position = { inputSegment, staffIdx, rLine, mu::engraving::INVALID_FRET_INDEX, p };
+    updateShadowNoteProperties(position);
+
+    m_pianoKeyboardShadowNoteChanged.send(true);
+}
+
+void NotationInteraction::updateShadowNoteProperties(Position& position)
+{
+    const mu::engraving::InputState& inputState = score()->inputState();
+    mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
     Staff* staff = score()->staff(position.staffIdx);
     const mu::engraving::Instrument* instr = staff->part()->instrument();
 
@@ -410,8 +470,6 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
     score()->renderer()->layoutItem(&shadowNote);
 
     shadowNote.setPos(position.pos);
-
-    return true;
 }
 
 void NotationInteraction::hideShadowNote()
@@ -438,6 +496,11 @@ RectF NotationInteraction::shadowNoteRect() const
     rect.adjust(-penWidth, -penWidth, penWidth, penWidth);
 
     return rect;
+}
+
+muse::async::Channel<bool> NotationInteraction::pianoKeyboardShadowNoteChanged() const
+{
+    return m_pianoKeyboardShadowNoteChanged;
 }
 
 void NotationInteraction::toggleVisible()

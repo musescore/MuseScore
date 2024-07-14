@@ -65,8 +65,10 @@ public:
 
     // Shadow note
     bool showShadowNote(const muse::PointF& pos) override;
+    void showShadowNoteFromPianoKeyboard(const uint8_t note) override;
     void hideShadowNote() override;
     muse::RectF shadowNoteRect() const override;
+    muse::async::Channel<bool> pianoKeyboardShadowNoteChanged() const override;
 
     // Visibility
     void toggleVisible() override;
@@ -393,6 +395,8 @@ private:
     template<typename P>
     void execute(void (mu::engraving::Score::* function)(P), P param);
 
+    void updateShadowNoteProperties(mu::engraving::Position& position);
+
     struct HitMeasureData
     {
         Measure* measure = nullptr;
@@ -443,6 +447,7 @@ private:
     DropData m_dropData;
     muse::async::Notification m_dropChanged;
 
+    muse::async::Channel<bool> m_pianoKeyboardShadowNoteChanged;
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
 
     engraving::BspTree m_droppableTree;

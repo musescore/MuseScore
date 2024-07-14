@@ -33,8 +33,10 @@ public:
     MOCK_METHOD(INotationNoteInputPtr, noteInput, (), (const, override));
 
     MOCK_METHOD(bool, showShadowNote, (const muse::PointF&), (override));
+    MOCK_METHOD(void, showShadowNoteFromPianoKeyboard, (const uint8_t), (override));
     MOCK_METHOD(void, hideShadowNote, (), (override));
     MOCK_METHOD(muse::RectF, shadowNoteRect, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, pianoKeyboardShadowNoteChanged, (), (const, override));
 
     MOCK_METHOD(void, toggleVisible, (), (override));
 

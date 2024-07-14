@@ -39,6 +39,7 @@ public:
 
     std::optional<piano_key_t> pressedKey() const;
     void setPressedKey(std::optional<piano_key_t> key);
+    void setHoveredKey(std::optional<piano_key_t> key);
 
     KeyState keyState(piano_key_t key) const;
     muse::async::Notification keyStatesChanged() const;
@@ -55,6 +56,7 @@ private:
     void sendNoteOff(piano_key_t key);
 
     std::optional<piano_key_t> m_pressedKey = std::nullopt;
+    std::optional<piano_key_t> m_hoveredKey = std::nullopt;
     std::unordered_set<piano_key_t> m_keys;
     std::unordered_set<piano_key_t> m_otherNotesInChord;
 
