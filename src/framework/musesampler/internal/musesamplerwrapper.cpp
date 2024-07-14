@@ -43,7 +43,7 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
     }
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        revokePlayingNotes();
+        m_allNotesOffRequested = true;
     });
 }
 
@@ -97,9 +97,14 @@ samples_t MuseSamplerWrapper::process(float* buffer, samples_t samplesPerChannel
         return 0;
     }
 
-    bool active = isActive();
+    if (m_allNotesOffRequested) {
+        m_samplerLib->allNotesOff(m_sampler);
+        m_allNotesOffRequested = false;
+    }
 
     prepareOutputBuffer(samplesPerChannel);
+
+    bool active = isActive();
 
     if (!active) {
         msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_sampleRate);
@@ -143,13 +148,7 @@ AudioSourceType MuseSamplerWrapper::type() const
 
 void MuseSamplerWrapper::flushSound()
 {
-    IF_ASSERT_FAILED(isValid()) {
-        return;
-    }
-
-    m_samplerLib->allNotesOff(m_sampler);
-
-    LOGD() << "ALL NOTES OFF";
+    m_allNotesOffRequested = true;
 }
 
 bool MuseSamplerWrapper::isValid() const
@@ -391,7 +390,5 @@ void MuseSamplerWrapper::extractOutputSamples(samples_t samples, float* output)
 
 void MuseSamplerWrapper::revokePlayingNotes()
 {
-    if (m_samplerLib) {
-        m_samplerLib->allNotesOff(m_sampler);
-    }
+    m_allNotesOffRequested = true;
 }

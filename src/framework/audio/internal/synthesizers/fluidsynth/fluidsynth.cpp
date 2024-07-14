@@ -130,7 +130,7 @@ Ret FluidSynth::init()
     createFluidInstance();
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        revokePlayingNotes();
+        m_allNotesOffRequested = true;
     });
 
     LOGD() << "synth inited\n";
@@ -145,6 +145,21 @@ void FluidSynth::createFluidInstance()
 
     fluid_sfloader_set_data(sfloader, m_fluid->settings);
     fluid_synth_add_sfloader(m_fluid->synth, sfloader);
+}
+
+void FluidSynth::allNotesOff()
+{
+    IF_ASSERT_FAILED(m_fluid->synth) {
+        return;
+    }
+
+    fluid_synth_all_notes_off(m_fluid->synth, -1);
+
+    int lastChannelIdx = static_cast<int>(m_sequencer.channels().lastIndex());
+    for (int i = 0; i < lastChannelIdx; ++i) {
+        setControllerValue(i, midi::SUSTAIN_PEDAL_CONTROLLER, 0);
+        setPitchBend(i, 8192);
+    }
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -285,17 +300,7 @@ const mpe::PlaybackData& FluidSynth::playbackData() const
 
 void FluidSynth::revokePlayingNotes()
 {
-    IF_ASSERT_FAILED(m_fluid->synth) {
-        return;
-    }
-
-    fluid_synth_all_notes_off(m_fluid->synth, -1);
-
-    int lastChannelIdx = static_cast<int>(m_sequencer.channels().lastIndex());
-    for (int i = 0; i < lastChannelIdx; ++i) {
-        setControllerValue(i, midi::SUSTAIN_PEDAL_CONTROLLER, 0);
-        setPitchBend(i, 8192);
-    }
+    m_allNotesOffRequested = true;
 }
 
 void FluidSynth::flushSound()
@@ -304,7 +309,7 @@ void FluidSynth::flushSound()
         return;
     }
 
-    revokePlayingNotes();
+    allNotesOff();
 
     fluid_synth_all_sounds_off(m_fluid->synth, -1);
     fluid_synth_cc(m_fluid->synth, -1, 121, 127);
@@ -344,6 +349,11 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 {
     IF_ASSERT_FAILED(samplesPerChannel > 0) {
         return 0;
+    }
+
+    if (m_allNotesOffRequested) {
+        allNotesOff();
+        m_allNotesOffRequested = false;
     }
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
