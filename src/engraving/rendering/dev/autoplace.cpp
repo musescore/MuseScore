@@ -206,13 +206,21 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         } else {
             ldata->setIsSkipDraw(false);
         }
+        const System* system = item->system();
+        const Skyline& staffSkyline = system->staff(stfIdx)->skyline();
+        const SkylineLine& skyline = above ? staffSkyline.north() : staffSkyline.south();
+        SkylineLine filteredSkyline = skyline.getFilteredCopy([item](const ShapeElement& shapeEl){
+            const EngravingItem* el = shapeEl.item();
+            return el && (el == item->ldata()->itemSnappedBefore() || el == item->ldata()->itemSnappedAfter());
+        });
+
         if (above) {
-            double d = item->system()->topDistance(stfIdx, sl);
+            double d = sl.minDistance(filteredSkyline);
             if (d > -md) {
                 yd = -(d + md);
             }
         } else {
-            double d = item->system()->bottomDistance(stfIdx, sl);
+            double d =  filteredSkyline.minDistance(sl);
             if (d > -md) {
                 yd = d + md;
             }
