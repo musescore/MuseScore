@@ -137,13 +137,13 @@ void ProjectModule::resolveImports()
     auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(moduleName());
     if (er) {
         er->reg(moduleName(), { EXEC_ONPOST_PROJECT_CREATED,
-                                TranslatableString("project", "On post project created") });
+                                TranslatableString::untranslatable("On post project created") });
         er->reg(moduleName(), { EXEC_ONPOST_PROJECT_OPENED,
-                                TranslatableString("project", "On post project opened") });
+                                TranslatableString::untranslatable("On post project opened") });
         er->reg(moduleName(), { EXEC_ONPRE_PROJECT_SAVE,
-                                TranslatableString("project", "On pre project save") });
+                                TranslatableString::untranslatable("On pre project save") });
         er->reg(moduleName(), { EXEC_ONPOST_PROJECT_SAVED,
-                                TranslatableString("project", "On post project saved") });
+                                TranslatableString::untranslatable("On post project saved") });
     }
 }
 
