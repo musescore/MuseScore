@@ -610,7 +610,12 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, Conver
 void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const QList<EngravingItem*>& elements,
                                               ConvertPropertyValueFunc convertElementPropertyValueFunc)
 {
-    if (!propertyItem || elements.isEmpty()) {
+    if (!propertyItem) {
+        return;
+    }
+
+    if (elements.isEmpty()) {
+        propertyItem->setIsEnabled(false);
         return;
     }
 
