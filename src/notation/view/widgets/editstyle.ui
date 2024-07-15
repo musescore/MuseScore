@@ -284,8 +284,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>710</height>
+                <width>591</width>
+                <height>523</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -985,8 +985,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>710</height>
+                <width>406</width>
+                <height>374</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2327,8 +2327,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>737</width>
-             <height>731</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3970,8 +3970,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>677</width>
-             <height>720</height>
+             <width>383</width>
+             <height>294</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -4190,8 +4190,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>658</width>
-                <height>882</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -5052,8 +5052,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>677</width>
-             <height>720</height>
+             <width>249</width>
+             <height>485</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -6497,8 +6497,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>578</width>
-                <height>527</height>
+                <width>363</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -7882,8 +7882,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>611</width>
-             <height>708</height>
+             <width>469</width>
+             <height>508</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -11180,8 +11180,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>682</width>
-             <height>665</height>
+             <width>619</width>
+             <height>480</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -11941,7 +11941,7 @@ first note of the system</string>
               <item>
                <widget class="QGroupBox" name="lyricsMelismaBox">
                 <property name="title">
-                 <string>Underscore line</string>
+                 <string>Extension line</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_66" stretch="0,0,1">
                  <property name="topMargin">
@@ -12004,14 +12004,14 @@ first note of the system</string>
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_222">
                      <property name="text">
-                      <string>Min. underscore length:</string>
+                      <string>Min. line length:</string>
                      </property>
                     </widget>
                    </item>
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_80">
                      <property name="text">
-                      <string>Underscore thickness:</string>
+                      <string>Line thickness:</string>
                      </property>
                      <property name="buddy">
                       <cstring>lyricsLineThickness</cstring>
@@ -12021,7 +12021,7 @@ first note of the system</string>
                    <item row="2" column="0">
                     <widget class="QLabel" name="label_188">
                      <property name="text">
-                      <string>Underscore gap:</string>
+                      <string>Line gap:</string>
                      </property>
                      <property name="buddy">
                       <cstring>lyricsMelismaPad</cstring>
@@ -12070,7 +12070,7 @@ first note of the system</string>
                    <item row="0" column="0">
                     <widget class="QCheckBox" name="lyricsMelismaForce">
                      <property name="text">
-                      <string>Omit underscore when space is limited</string>
+                      <string>Omit extension line when space is limited</string>
                      </property>
                     </widget>
                    </item>
@@ -12621,8 +12621,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>568</width>
-                <height>551</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
@@ -13364,8 +13364,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>533</width>
-                <height>638</height>
+                <width>363</width>
+                <height>550</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
