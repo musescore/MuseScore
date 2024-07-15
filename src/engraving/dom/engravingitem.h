@@ -682,7 +682,7 @@ public:
 
     virtual bool hasVoiceAssignmentProperties() const { return false; }
     bool appliesToAllVoicesInInstrument() const;
-    void setInitialTrackAndVoiceAssignment(track_idx_t track, bool ctrlModifier);
+    void setInitialTrackAndVoiceAssignment(track_idx_t track, bool curVoiceOnlyOverride);
     void checkVoiceAssignmentCompatibleWithTrack();
     void setPlacementBasedOnVoiceAssignment(DirectionV styledDirection);
 

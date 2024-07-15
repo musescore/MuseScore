@@ -2053,7 +2053,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         }
 
         if (el && el->hasVoiceAssignmentProperties()) {
-            // If target has voice application properties, dropped element takes those and discards the default
+            // If target has voice assignment properties, dropped element takes those and discards the default
             if (!target->hasVoiceAssignmentProperties()) {
                 el->setInitialTrackAndVoiceAssignment(target->track(), modifiers & ControlModifier);
             }
