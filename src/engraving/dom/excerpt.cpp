@@ -1654,6 +1654,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 score->removeElement(&seg);
             }
         }
+        if (!nm->hasVoices(dstStaffIdx, nm->tick(), nm->ticks())) {
+            promoteGapRestsToRealRests(nm, dstStaffIdx);
+        }
     }
 
     for (auto i : oscore->spanner()) {
@@ -1705,6 +1708,23 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         }
 
         score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
+    }
+}
+
+void Excerpt::promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx)
+{
+    track_idx_t startTrack = staff2track(staffIdx);
+    track_idx_t endTrack = startTrack + VOICES;
+    for (const Segment& seg : measure->segments()) {
+        if (!seg.isChordRestType()) {
+            continue;
+        }
+        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+            EngravingItem* item = seg.element(track);
+            if (item && item->isRest() && toRest(item)->isGap()) {
+                toRest(item)->setGap(false);
+            }
+        }
     }
 }
 
