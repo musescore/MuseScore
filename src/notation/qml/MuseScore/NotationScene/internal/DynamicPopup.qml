@@ -168,7 +168,7 @@ StyledPopupView {
                 }
 
                 onClicked: {
-                    dynamicModel.changeDynamic(currentPage, index)
+                    modelData.type === DynamicPopupModel.Dynamic ? dynamicModel.changeDynamic(currentPage, index) : dynamicModel.addHairpinToDynamic(modelData.type);
                 }
             }
         }

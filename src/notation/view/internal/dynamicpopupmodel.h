@@ -34,6 +34,7 @@ public:
 
     Q_INVOKABLE void init() override;
     Q_INVOKABLE void changeDynamic(int page, int index);
+    Q_INVOKABLE void addHairpinToDynamic(ItemType itemType);
 
     QVariantList pages() const;
 
