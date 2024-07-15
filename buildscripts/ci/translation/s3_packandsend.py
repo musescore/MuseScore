@@ -25,7 +25,7 @@ def getS3Url():
     return urlunparse(('s3', *parsedHttpsUrl[1:]))
 
 
-s3Urls = getS3Url()
+s3Url = getS3Url()
 
 
 def processTsFile(prefix, langCode, data):
