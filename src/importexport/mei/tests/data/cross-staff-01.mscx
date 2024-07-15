@@ -79,8 +79,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>48</l1>
-            <l2>48</l2>
+            <l1>51</l1>
+            <l2>51</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -113,8 +113,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>48</l1>
-            <l2>48</l2>
+            <l1>51</l1>
+            <l2>51</l2>
             </Beam>
           <Chord>
             <staffMove>1</staffMove>
@@ -147,8 +147,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>48</l1>
-            <l2>48</l2>
+            <l1>51</l1>
+            <l2>51</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -181,8 +181,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>48</l1>
-            <l2>48</l2>
+            <l1>45</l1>
+            <l2>45</l2>
             </Beam>
           <Chord>
             <staffMove>1</staffMove>
@@ -233,8 +233,8 @@
             <sigD>4</sigD>
             </TimeSig>
           <Beam>
-            <l1>-16</l1>
-            <l2>-8</l2>
+            <l1>-13</l1>
+            <l2>-5</l2>
             </Beam>
           <Chord>
             <staffMove>-1</staffMove>
@@ -267,8 +267,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-16</l1>
-            <l2>-8</l2>
+            <l1>-13</l1>
+            <l2>-5</l2>
             </Beam>
           <Chord>
             <staffMove>-1</staffMove>
@@ -301,8 +301,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-15</l1>
-            <l2>-9</l2>
+            <l1>-12</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <staffMove>-1</staffMove>
@@ -332,8 +332,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>-23</l1>
-            <l2>-21</l2>
+            <l1>-26</l1>
+            <l2>-24</l2>
             </Beam>
           <Chord>
             <staffMove>-1</staffMove>
