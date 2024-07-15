@@ -24,7 +24,7 @@ import Muse.UiComponents 1.0
 MuseScore {
     version: "3.0.2"
     title: "Mirror Intervals"
-    description: "Mirrors (inverts) intervals about a given pivot note"
+    description: qsTr("Mirrors (inverts) intervals about a given pivot note.")
     pluginType: "dialog"
     categoryCode: "composing-arranging-tools"
     thumbnailName: "mirror_intervals.png"
