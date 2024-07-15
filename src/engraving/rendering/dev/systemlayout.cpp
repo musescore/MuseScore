@@ -2402,7 +2402,10 @@ double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t 
                     continue;
                 }
                 Beam* beam = toChord(item)->beam();
-                if (!beam || !beam->cross() || !beam->autoplace() || beam->elements().front() != item) {
+                if (!beam || !beam->autoplace() || beam->elements().front() != item) {
+                    continue;
+                }
+                if (beam->ldata()->crossStaffBeamPos != BeamBase::CrossStaffBeamPosition::BETWEEN) {
                     continue;
                 }
                 const Chord* limitingChordAbove = nullptr;
