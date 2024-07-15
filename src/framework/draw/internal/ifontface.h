@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_IFONTFACE_H
-#define MUSE_DRAW_IFONTFACE_H
+#pragma once
 
 #ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 #include <msdfgen.h>
@@ -138,5 +137,3 @@ inline bool operator==(const msdfgen::Shape& s1, const msdfgen::Shape& s2)
 }
 
 #endif
-
-#endif // MUSE_DRAW_IFONTFACE_H

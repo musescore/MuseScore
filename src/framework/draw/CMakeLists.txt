@@ -81,67 +81,63 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
         )
 
-    if (MUSE_MODULE_DRAW_USE_QTFONTMETRICS)
-        set(MODULE_SRC ${MODULE_SRC}
-            ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
+    # fonts
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontproviderdispatcher.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontproviderdispatcher.h
+
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
+        #${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.cpp
+        #${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
+
+        ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsengine.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsdatabase.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/ifontface.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.h
+    )
+
+    include(cmake/SetupFreeType.cmake)
+
+    # add harfbuzz
+    # in the future this needs to be moved to some function in a separate file
+    set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
+    set(remote_url ${REMOTE_ROOT_URL}/harfbuzz/7.1.0)
+    set(local_path ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz)
+    if (NOT EXISTS ${local_path}/harfbuzz.cmake)
+        file(MAKE_DIRECTORY ${local_path})
+        file(DOWNLOAD ${remote_url}/harfbuzz.cmake ${local_path}/harfbuzz.cmake
+            HTTPHEADER "Cache-Control: no-cache"
         )
-
-        include(cmake/SetupFreeType.cmake)
-        set(MODULE_INCLUDE ${FREETYPE_INCLUDE_DIRS})
-        set(MODULE_LINK ${FREETYPE_LIBRARIES})
-    else()
-        set(MODULE_SRC ${MODULE_SRC}
-            ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsengine.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsdatabase.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/ifontface.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.h
-        )
-
-        include(cmake/SetupFreeType.cmake)
-
-        # add harfbuzz
-        # in the future this needs to be moved to some function in a separate file
-        set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
-        set(remote_url ${REMOTE_ROOT_URL}/harfbuzz/7.1.0)
-        set(local_path ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz)
-        if (NOT EXISTS ${local_path}/harfbuzz.cmake)
-            file(MAKE_DIRECTORY ${local_path})
-            file(DOWNLOAD ${remote_url}/harfbuzz.cmake ${local_path}/harfbuzz.cmake
-                HTTPHEADER "Cache-Control: no-cache"
-            )
-        endif()
-
-        include(${local_path}/harfbuzz.cmake)
-
-        # func from ${name}.cmake)
-        cmake_language(CALL harfbuzz_Populate ${remote_url} ${local_path} "source" "" "")
-
-        add_subdirectory(_deps/harfbuzz/harfbuzz)
-
-        #add_subdirectory(thirdparty/msdfgen)
-
-        set(MODULE_INCLUDE
-            ${FREETYPE_INCLUDE_DIRS}
-            ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz/harfbuzz/harfbuzz/src
-            #${CMAKE_CURRENT_LIST_DIR}/thirdparty/msdfgen/msdfgen-1.4
-        )
-
-        set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_USE_QTTEXTDRAW)
-
-        set(MODULE_LINK ${FREETYPE_LIBRARIES} harfbuzz )#msdfgen)
     endif()
+
+    include(${local_path}/harfbuzz.cmake)
+
+    # func from ${name}.cmake)
+    cmake_language(CALL harfbuzz_Populate ${remote_url} ${local_path} "source" "" "")
+
+    add_subdirectory(_deps/harfbuzz/harfbuzz)
+
+    #add_subdirectory(thirdparty/msdfgen)
+
+    set(MODULE_INCLUDE
+        ${FREETYPE_INCLUDE_DIRS}
+        ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz/harfbuzz/harfbuzz/src
+        #${CMAKE_CURRENT_LIST_DIR}/thirdparty/msdfgen/msdfgen-1.4
+    )
+
+    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_USE_QTTEXTDRAW)
+
+    set(MODULE_LINK ${FREETYPE_LIBRARIES} harfbuzz )#msdfgen)
 
 endif()
 

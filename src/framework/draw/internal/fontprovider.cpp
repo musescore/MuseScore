@@ -23,29 +23,14 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::draw;
 
 int FontProvider::addSymbolFont(const muse::String& family, const io::path_t& path)
 {
-    //! NOTE Adding fonts in the fontsmodule
     UNUSED(family);
     UNUSED(path);
     return 1;
-}
-
-int FontProvider::addTextFont(const io::path_t& path)
-{
-    //! NOTE Adding fonts in the fontsmodule
-    UNUSED(path);
-    return 1;
-}
-
-void FontProvider::insertSubstitution(const muse::String& from, const muse::String& to)
-{
-    //! NOTE Instead of substitution, default fonts are used
-    //! Set in the fontsmodule
-    UNUSED(from);
-    UNUSED(to);
 }
 
 double FontProvider::lineSpacing(const muse::draw::Font& f) const

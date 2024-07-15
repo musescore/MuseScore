@@ -21,7 +21,12 @@
  */
 #include "fontsdatabase.h"
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
 #include <QFontDatabase>
+#include <QFont>
+#endif
 
 #include "global/io/file.h"
 #include "global/io/dir.h"
@@ -37,6 +42,15 @@ static int s_fontID = -1;
 void FontsDatabase::setDefaultFont(Font::Type type, const FontDataKey& key)
 {
     m_defaults[type] = key;
+}
+
+void FontsDatabase::insertSubstitution(const String& familyName, const String& substituteName)
+{
+    UNUSED(familyName);
+    UNUSED(substituteName);
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
+    QFont::insertSubstitution(familyName, substituteName);
+#endif
 }
 
 const FontDataKey& FontsDatabase::defaultFont(Font::Type type) const
@@ -59,7 +73,9 @@ int FontsDatabase::addFont(const FontDataKey& key, const io::path_t& path)
     s_fontID++;
     m_fonts.push_back(FontInfo { s_fontID, key, path });
 
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     QFontDatabase::addApplicationFont(path.toQString());
+#endif
 
     return s_fontID;
 }
