@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_QFONTPROVIDER_H
-#define MUSE_DRAW_QFONTPROVIDER_H
+#pragma once
 
 #include <QHash>
 
@@ -34,8 +33,6 @@ public:
     QFontProvider() = default;
 
     int addSymbolFont(const String& family, const io::path_t& path) override;
-    int addTextFont(const io::path_t& path) override;
-    void insertSubstitution(const String& familyName, const String& substituteName) override;
 
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
@@ -68,5 +65,3 @@ private:
     mutable QHash<QString /*path*/, FontEngineFT*> m_symEngines;
 };
 }
-
-#endif // MUSE_DRAW_QFONTPROVIDER_H

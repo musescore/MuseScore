@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_QIMAGEPAINTERPROVIDER_H
-#define MUSE_DRAW_QIMAGEPAINTERPROVIDER_H
+#pragma once
 
 #include <QImage>
 
@@ -42,5 +41,3 @@ private:
     QImage m_image;
 };
 }
-
-#endif // MUSE_DRAW_QIMAGEPAINTERPROVIDER_H

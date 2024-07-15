@@ -121,7 +121,7 @@
         </backup>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="down" size="8" number="1" default-y="23.97"/>
+          <octave-shift type="down" size="8" number="1" default-y="24.13"/>
           </direction-type>
         <staff>2</staff>
         </direction>
@@ -138,7 +138,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="resume" line="yes" sign="yes" default-y="-83.75"/>
+          <pedal type="resume" line="yes" sign="yes" default-y="-83.77"/>
           </direction-type>
         <staff>2</staff>
         </direction>

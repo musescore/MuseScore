@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_FONTFACEDU_H
-#define MUSE_DRAW_FONTFACEDU_H
+#pragma once
 
 #include "ifontface.h"
 
@@ -58,5 +57,3 @@ private:
     IFontFace* m_origin = nullptr;
 };
 }
-
-#endif // MUSE_DRAW_FONTFACEDU_H

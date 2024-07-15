@@ -177,73 +177,6 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
 #ifndef ENGRAVING_NO_INTERNAL
     // Init fonts
-#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
-    {
-        // Symbols
-        Smufl::init();
-
-        m_engravingfonts->addFont("Leland",     "Leland",      ":/fonts/leland/Leland.otf");
-        m_engravingfonts->addFont("Bravura",    "Bravura",     ":/fonts/bravura/Bravura.otf");
-        m_engravingfonts->addFont("Emmentaler", "MScore",      ":/fonts/mscore/mscore.ttf");
-        m_engravingfonts->addFont("Gonville",   "Gootville",   ":/fonts/gootville/Gootville.otf");
-        m_engravingfonts->addFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/MuseJazz.otf");
-        m_engravingfonts->addFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/Petaluma.otf");
-        m_engravingfonts->addFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/FinaleMaestro.otf");
-        m_engravingfonts->addFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/FinaleBroadway.otf");
-
-        m_engravingfonts->setFallbackFont("Bravura");
-
-        //! NOTE It may be necessary to draw something with these fonts without requesting the fonts themselves
-        //! (for example, simply specifying the family name for painter).
-        //! But if they are not loaded, then they are not added to the font database and,
-        //! accordingly, they are drawn incorrectly
-        m_engravingfonts->loadAllFonts();
-
-        // Text
-        const std::vector<muse::io::path_t> textFonts = {
-            ":/fonts/musejazz/MuseJazzText.otf",
-            ":/fonts/campania/Campania.otf",
-            ":/fonts/edwin/Edwin-Roman.otf",
-            ":/fonts/edwin/Edwin-Bold.otf",
-            ":/fonts/edwin/Edwin-Italic.otf",
-            ":/fonts/edwin/Edwin-BdIta.otf",
-            ":/fonts/FreeSans.ttf",
-            ":/fonts/FreeSerif.ttf",
-            ":/fonts/FreeSerifBold.ttf",
-            ":/fonts/FreeSerifItalic.ttf",
-            ":/fonts/FreeSerifBoldItalic.ttf",
-            ":/fonts/mscoreTab.ttf",
-            ":/fonts/mscore-BC.ttf",
-            ":/fonts/leland/LelandText.otf",
-            ":/fonts/leland/Leland.otf",
-            ":/fonts/bravura/BravuraText.otf",
-            ":/fonts/gootville/GootvilleText.otf",
-            ":/fonts/mscore/MScoreText.ttf",
-            ":/fonts/petaluma/PetalumaText.otf",
-            ":/fonts/petaluma/PetalumaScript.otf",
-            ":/fonts/finalemaestro/FinaleMaestroText.otf",
-            ":/fonts/finalebroadway/FinaleBroadwayText.otf",
-        };
-
-        std::shared_ptr<IFontProvider> fontProvider = ioc()->resolve<IFontProvider>("fonts");
-        for (const muse::io::path_t& font : textFonts) {
-            int loadStatusCode = fontProvider->addTextFont(font);
-            if (loadStatusCode == -1) {
-                LOGE() << "Fatal error: cannot load internal font " << font;
-            }
-        }
-
-        fontProvider->insertSubstitution(u"Leland Text",    u"Bravura Text");
-        fontProvider->insertSubstitution(u"Bravura Text",   u"Leland Text");
-        fontProvider->insertSubstitution(u"MScore Text",    u"Leland Text");
-        fontProvider->insertSubstitution(u"Gootville Text", u"Leland Text");
-        fontProvider->insertSubstitution(u"MuseJazz Text",  u"Leland Text");
-        fontProvider->insertSubstitution(u"Petaluma Text",  u"MuseJazz Text");
-        fontProvider->insertSubstitution(u"Finale Maestro Text", u"Leland Text");
-        fontProvider->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
-        fontProvider->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
-    }
-#else // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     {
         using namespace muse::draw;
 
@@ -294,6 +227,17 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         fdb->setDefaultFont(Font::Type::MusicSymbol, FontDataKey("Bravura"));
         m_engravingfonts->setFallbackFont("Bravura");
 
+        //! NOTE Used for Qt font provider
+        fdb->insertSubstitution(u"Leland Text",    u"Bravura Text");
+        fdb->insertSubstitution(u"Bravura Text",   u"Leland Text");
+        fdb->insertSubstitution(u"MScore Text",    u"Leland Text");
+        fdb->insertSubstitution(u"Gootville Text", u"Leland Text");
+        fdb->insertSubstitution(u"MuseJazz Text",  u"Leland Text");
+        fdb->insertSubstitution(u"Petaluma Text",  u"MuseJazz Text");
+        fdb->insertSubstitution(u"Finale Maestro Text", u"Leland Text");
+        fdb->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
+        fdb->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
+
         // Symbols
         Smufl::init();
 
@@ -303,7 +247,6 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         //! accordingly, they are drawn incorrectly
         m_engravingfonts->loadAllFonts();
     }
-#endif // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
 
     m_configuration->init();
 
