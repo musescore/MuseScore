@@ -846,9 +846,32 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
         }
     }
 
-    // Sets position for beams inbetween staves
-    ldata->startAnchor.setY((maxY + minY) / 2);
-    ldata->endAnchor.setY((maxY + minY) / 2);
+    double yMidPoint = (maxY + minY) / 2;
+    if (item->isBeam()) {
+        // Cross-staff beams may have segments both above and below the midline.
+        // Compute the y-difference between the top and bottom segment and aim for centering in between.
+        const Beam* beam = toBeam(item);
+        const std::vector<BeamSegment*>& beamSegments = beam->beamSegments();
+        const Chord* limitingChordAbove = beam->ldata()->limitingChordAbove;
+        const Chord* limitingChordBelow = beam->ldata()->limitingChordBelow;
+        if (!beamSegments.empty() && limitingChordAbove && limitingChordBelow) {
+            double yCenterSegment = 0.5 * (beamSegments.front()->line.y1() + beamSegments.front()->line.y2());
+
+            const BeamSegment* topBeamSegmentForChordAbove = beam->topLevelSegmentForElement(limitingChordAbove);
+            double yTopSegAbove = 0.5 * (topBeamSegmentForChordAbove->line.y1() + topBeamSegmentForChordAbove->line.y2());
+            double distAbove = yTopSegAbove - yCenterSegment;
+
+            const BeamSegment* topBeamSegmentForChordBelow = beam->topLevelSegmentForElement(limitingChordBelow);
+            double yTopSegBelow = 0.5 * (topBeamSegmentForChordBelow->line.y1() + topBeamSegmentForChordBelow->line.y2());
+            double distBelow = yTopSegBelow - yCenterSegment;
+
+            double averageDist = 0.5 * (distAbove + distBelow);
+            yMidPoint -= 0.5 * averageDist;
+        }
+    }
+
+    ldata->startAnchor.setY(yMidPoint);
+    ldata->endAnchor.setY(yMidPoint);
     ldata->startAnchor.setX(chordBeamAnchorX(ldata, startCr, ChordBeamAnchorType::Start));
     ldata->endAnchor.setX(chordBeamAnchorX(ldata, endCr, ChordBeamAnchorType::End));
 

@@ -228,6 +228,8 @@ public:
 
     const Chord* findChordWithCustomStemDirection() const;
 
+    const BeamSegment* topLevelSegmentForElement(const ChordRest* element) const;
+
     inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
 
 private:

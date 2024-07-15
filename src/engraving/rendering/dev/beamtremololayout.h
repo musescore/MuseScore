@@ -62,6 +62,8 @@ public:
     static PointF chordBeamAnchor(const BeamBase::LayoutData* ldata, const ChordRest* chord, ChordBeamAnchorType anchorType);
     static int getMaxSlope(const BeamBase::LayoutData* ldata);
     static void extendStem(const BeamBase::LayoutData* ldata, Chord* chord, double addition);
+    static int minStemLength(const ChordRest* cr, const BeamBase::LayoutData* ldata);
+    static int strokeCount(const BeamBase::LayoutData* ldata, const ChordRest* cr);
 
 private:
 
@@ -93,10 +95,9 @@ private:
     static void add8thSpaceSlant(BeamBase::LayoutData* ldata, PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                                  int interval, int middleLine, bool Flat);
     static bool noSlope(const Beam* beam);
-    static int strokeCount(const BeamBase::LayoutData* ldata, const ChordRest* cr);
+
     static bool calculateAnchorsCross(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutConfiguration& conf);
     static bool computeTremoloUp(const BeamBase::LayoutData* ldata);
-    static int minStemLength(const ChordRest* cr, const BeamBase::LayoutData* ldata);
 };
 } // namespace mu::engraving
 #endif

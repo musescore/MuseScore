@@ -220,6 +220,32 @@ const Chord* Beam::findChordWithCustomStemDirection() const
     return nullptr;
 }
 
+const BeamSegment* Beam::topLevelSegmentForElement(const ChordRest* element) const
+{
+    size_t segmentsSize = m_beamSegments.size();
+
+    IF_ASSERT_FAILED(segmentsSize > 0) {
+        return nullptr;
+    }
+
+    const BeamSegment* curSegment = m_beamSegments[0];
+    if (segmentsSize == 1) {
+        return curSegment;
+    }
+
+    for (const BeamSegment* segment : m_beamSegments) {
+        if (segment->level <= curSegment->level) {
+            continue;
+        }
+        Fraction elementTick = element->tick();
+        if (segment->startTick <= elementTick && segment->endTick >= elementTick) {
+            curSegment = segment;
+        }
+    }
+
+    return curSegment;
+}
+
 //---------------------------------------------------------
 //   move
 //---------------------------------------------------------
