@@ -2833,11 +2833,9 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
             return false;
         }
     }
-    staff_idx_t nextIdx = item->placeAbove() ? thisIdx - 1 : thisIdx + 1;
 
-    const SysStaff* thisSystemStaff = system->staff(thisIdx);
-    const SysStaff* nextSystemStaff = system->staff(nextIdx);
-    if (!thisSystemStaff->show() || !nextSystemStaff->show()) {
+    staff_idx_t nextIdx = item->placeAbove() ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
+    if (nextIdx == muse::nidx || !muse::contains(partStaves, item->score()->staff(nextIdx))) {
         return false;
     }
 
@@ -2853,7 +2851,10 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
             return;
         }
     }
-    staff_idx_t nextIdx = isAbove ? thisIdx - 1 : thisIdx + 1;
+    staff_idx_t nextIdx = isAbove ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
+    IF_ASSERT_FAILED(nextIdx != muse::nidx) {
+        return;
+    }
 
     SysStaff* thisStaff = system->staff(thisIdx);
     SysStaff* nextStaff = system->staff(nextIdx);
