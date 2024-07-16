@@ -1387,7 +1387,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Othe&r…"),
-             TranslatableString("action", "Enter tuplet: create custom…")
+             TranslatableString("action", "Enter tuplet: other…")
              ),
     UiAction("stretch-",
              mu::context::UiCtxNotationOpened,
@@ -1716,8 +1716,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("add-melisma",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,
-             TranslatableString("action", "Add melisma"),
-             TranslatableString("action", "Lyrics: enter melisma")
+             TranslatableString("action", "Add extension line"),
+             TranslatableString("action", "Lyrics: enter extension line")
              ),
     UiAction("add-lyric-verse",
              mu::context::UiCtxNotationOpened,
