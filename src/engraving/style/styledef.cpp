@@ -190,7 +190,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(combineVoice,                               true),
     styleDef(beginRepeatLeftMargin,                      Spatium(1.0)),
     styleDef(minNoteDistance,                            Spatium(0.5)),
-    styleDef(barNoteDistance,                            Spatium(1.3)),   // was 1.2
+    styleDef(barNoteDistance,                            Spatium(1.25)),   // was 1.2
 
     styleDef(barAccidentalDistance,                      Spatium(0.65)),
     styleDef(noteBarDistance,                            Spatium(1.5)),
@@ -471,7 +471,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minMMRestWidth,                             Spatium(6)),
     styleDef(mmRestNumberPos,                            Spatium(-0.5)),
     styleDef(mmRestNumberMaskHBar,                       true),
-    styleDef(multiMeasureRestMargin,                     Spatium(1.2)),
+    styleDef(multiMeasureRestMargin,                     Spatium(1.25)),
     styleDef(mmRestHBarThickness,                        Spatium(0.7)),
     styleDef(mmRestHBarVStrokeThickness,                 Spatium(0.2)),
     styleDef(mmRestHBarVStrokeHeight,                    Spatium(2.0)),
