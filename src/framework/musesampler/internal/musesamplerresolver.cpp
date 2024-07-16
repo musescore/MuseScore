@@ -235,7 +235,13 @@ std::string MuseSamplerResolver::version() const
         return std::string();
     }
 
-    return String::fromUtf8(m_libHandler->getVersionString()).toStdString();
+    String ver = String::fromUtf8(m_libHandler->getVersionString());
+
+    if (configuration()->shouldShowBuildNumber()) {
+        ver += u"." + String::number(m_libHandler->getBuildNumber());
+    }
+
+    return ver.toStdString();
 }
 
 bool MuseSamplerResolver::isInstalled() const

@@ -37,6 +37,8 @@ public:
 
     virtual io::path_t userLibraryPath() const = 0;
     virtual io::path_t fallbackLibraryPath() const = 0;
+
+    virtual bool shouldShowBuildNumber() const = 0;
 };
 }
 

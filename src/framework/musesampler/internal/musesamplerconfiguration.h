@@ -42,6 +42,8 @@ public:
     // Backup location for system-wide sampler install
     io::path_t fallbackLibraryPath() const override;
 
+    bool shouldShowBuildNumber() const override;
+
 private:
     io::path_t defaultPath() const;
 };
