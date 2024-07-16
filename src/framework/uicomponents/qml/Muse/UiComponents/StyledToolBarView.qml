@@ -102,6 +102,11 @@ Rectangle {
 
                     onLoaded: {
                         loader.item.itemData = loader.itemData
+
+                        if (Boolean(loader.item.navigation)) {
+                            loader.item.navigation.panel = root.navigationPanel
+                            loader.item.navigation.order = model.index
+                        }
                     }
 
                     Component {
@@ -122,9 +127,6 @@ Rectangle {
 
                         StyledToolBarItem {
                             itemData: loader.itemData
-
-                            navigation.panel: root.navigationPanel
-                            navigation.order: model.index
                         }
                     }
                 }
