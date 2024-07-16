@@ -67,6 +67,7 @@ private:
     QString effectiveLanguageCode(QString languageCode) const;
 
     Ret loadLanguage(Language& lang);
+    Ret doLoadLanguage(Language& lang);
 
     void checkUpdateAvailable(const QString& languageCode, std::function<void(const RetVal<bool>&)> finished);
     void updateLanguage(const QString& languageCode, std::function<void(const Ret&)> finished);
