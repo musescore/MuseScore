@@ -71,6 +71,7 @@ body:
         - No.
         - Yes, this used to work in MuseScore 3.x and now is broken 
         - Yes, this used to work in a previous version of MuseScore 4.x
+        - Yes, this works in the latest released version and is broken in the nightly builds
         - I was unable to check
     validations: 
       required: true
