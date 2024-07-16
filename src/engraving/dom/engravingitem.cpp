@@ -1288,13 +1288,13 @@ bool EngravingItem::appliesToAllVoicesInInstrument() const
            && getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>() == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
 }
 
-void EngravingItem::setInitialTrackAndVoiceAssignment(track_idx_t track)
+void EngravingItem::setInitialTrackAndVoiceAssignment(track_idx_t track, bool curVoiceOnlyOverride)
 {
     IF_ASSERT_FAILED(track != muse::nidx) {
         return;
     }
 
-    if (configuration()->dynamicsApplyToAllVoices()) {
+    if (configuration()->dynamicsApplyToAllVoices() && !curVoiceOnlyOverride) {
         setTrack(trackZeroVoice(track));
         setProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
     } else {
@@ -1318,7 +1318,7 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
     PlacementV oldPlacement = placement();
     bool offsetIsStyled = isStyled(Pid::OFFSET);
 
-    PlacementV newPlacement;
+    PlacementV newPlacement = PlacementV::BELOW;
 
     DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
     if (internalDirectionProperty != DirectionV::AUTO) {
@@ -1332,6 +1332,26 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
         VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
         if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
             if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
+                newPlacement = PlacementV::ABOVE;
+            } else {
+                newPlacement = PlacementV::BELOW;
+            }
+        } else if (voice() == 0) {
+            // Put above the staff only in case of multiple voices at this tick (similar to stem directions)
+            const Measure* measure = score()->tick2measure(tick());
+            Fraction startTick = Fraction(-1, 1);
+            Fraction length = Fraction(-1, 1);
+            if (isSpanner()) {
+                startTick = tick();
+                length = toSpanner(this)->ticks();
+            } else if (const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT))) {
+                startTick = segment->tick();
+                length = segment->ticks();
+            } else if (measure) {
+                startTick = measure->tick();
+                length = measure->ticks();
+            }
+            if (measure && measure->hasVoices(staffIdx(), startTick, length)) {
                 newPlacement = PlacementV::ABOVE;
             } else {
                 newPlacement = PlacementV::BELOW;

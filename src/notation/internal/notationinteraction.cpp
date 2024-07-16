@@ -1743,7 +1743,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 score->cmdAddSpanner(spanner, targetStaff, startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
             if (spanner->hasVoiceAssignmentProperties()) {
-                spanner->setInitialTrackAndVoiceAssignment(cr1->track());
+                spanner->setInitialTrackAndVoiceAssignment(cr1->track(), modifiers & ControlModifier);
             } else if (spanner->isVoiceSpecific()) {
                 spanner->setTrack(cr1->track());
             }
@@ -1911,7 +1911,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 spanner->styleChanged();
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
                 if (spanner->hasVoiceAssignmentProperties()) {
-                    spanner->setInitialTrackAndVoiceAssignment(staff2track(i));
+                    spanner->setInitialTrackAndVoiceAssignment(staff2track(i), modifiers & ControlModifier);
                 }
                 selectAndStartEditIfNeeded(spanner);
             }
@@ -2055,7 +2055,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         if (el && el->hasVoiceAssignmentProperties()) {
             // If target has voice assignment properties, dropped element takes those and discards the default
             if (!target->hasVoiceAssignmentProperties()) {
-                el->setInitialTrackAndVoiceAssignment(el->track());
+                el->setInitialTrackAndVoiceAssignment(target->track(), modifiers & ControlModifier);
             }
         }
 
