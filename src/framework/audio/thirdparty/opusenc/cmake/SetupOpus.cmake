@@ -37,4 +37,8 @@ if (NOT OPUS_FOUND)
 
     set(OPUS_INCLUDE_DIRS ${OPUS_LIB_DIR}/include)
     set(OPUS_LIBRARIES opus)
+
+    target_no_warning(opus -Wno-conversion)
+    target_no_warning(opus -Wno-truncate)
+    target_no_warning(opus -Wno-uninitialized)
 endif ()

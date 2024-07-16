@@ -126,6 +126,11 @@ else()
     cmake_language(CALL harfbuzz_Populate ${remote_url} ${local_path} "source" "" "")
 
     add_subdirectory(_deps/harfbuzz/harfbuzz)
+    target_no_warning(harfbuzz -Wno-conversion)
+    target_no_warning(harfbuzz -Wno-unused-parameter)
+    target_no_warning(harfbuzz -Wno-unused-variable)
+    target_no_warning(harfbuzz -WMSVC-no-hides-previous)
+    target_no_warning(harfbuzz -WMSVC-no-unreachable)
 
     #add_subdirectory(thirdparty/msdfgen)
 

@@ -198,7 +198,7 @@ std::vector<GlyphPos> FontFaceFT::glyphs(const char32_t* text, int text_length) 
         hb_buffer_set_segment_properties(hb_buffer, &props);
         hb_buffer_guess_segment_properties(hb_buffer);
 
-        hb_shape(m_data->hb_font, hb_buffer, &HB_FEATURES[0], HB_FEATURES.size());
+        hb_shape(m_data->hb_font, hb_buffer, &HB_FEATURES[0], static_cast<unsigned int>(HB_FEATURES.size()));
         unsigned int len = hb_buffer_get_length(hb_buffer);
         result.reserve(len);
 
