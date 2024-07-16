@@ -7,5 +7,9 @@
         <file>configs/dark.cfg</file>
         <file>configs/high_contrast_black.cfg</file>
         <file>configs/high_contrast_white.cfg</file>
+        <file>configs/shortcuts.cfg</file>
+        <file>configs/data/shortcuts.xml</file>
+        <file>configs/data/shortcuts_mac.xml</file>
+        <file>configs/data/shortcuts_azerty.xml</file>
     </qresource>
 </RCC>
