@@ -266,7 +266,10 @@ Score::~Score()
     imageStore.clearUnused();
 
     delete m_shadowNote;
+    m_shadowNote = nullptr;
+
     delete m_rootItem;
+    m_rootItem = nullptr;
 }
 
 muse::async::Channel<LoopBoundaryType, unsigned> Score::loopBoundaryTickChanged() const

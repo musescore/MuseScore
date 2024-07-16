@@ -137,7 +137,7 @@ EngravingObject::~EngravingObject()
         bool canMoveToDummy = !this->isType(ElementType::ROOT_ITEM)
                               && !this->isType(ElementType::DUMMY)
                               && !this->isType(ElementType::SCORE)
-                              && score()->dummy() != nullptr;
+                              && score()->rootItem() && score()->rootItem()->dummy();
 
         EngravingObjectList children = m_children;
         for (EngravingObject* c : children) {
