@@ -42,6 +42,7 @@ typedef const char*(* ms_get_version_string)();
 typedef int (* ms_get_version_major)();
 typedef int (* ms_get_version_minor)();
 typedef int (* ms_get_version_revision)();
+typedef int (* ms_get_version_build_number)();
 
 /*\\\ TYPES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 

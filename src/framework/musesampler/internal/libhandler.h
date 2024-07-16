@@ -37,6 +37,7 @@ struct MuseSamplerLibHandler
     ms_get_version_major getVersionMajor = nullptr;
     ms_get_version_minor getVersionMinor = nullptr;
     ms_get_version_revision getVersionRevision = nullptr;
+    ms_get_version_build_number getBuildNumber = nullptr;
     ms_get_version_string getVersionString = nullptr;
 
     ms_contains_instrument containsInstrument = nullptr;
@@ -131,6 +132,7 @@ public:
         getVersionMajor = (ms_get_version_major)muse::getLibFunc(m_lib, "ms_get_version_major");
         getVersionMinor = (ms_get_version_minor)muse::getLibFunc(m_lib, "ms_get_version_minor");
         getVersionRevision = (ms_get_version_revision)muse::getLibFunc(m_lib, "ms_get_version_revision");
+        getBuildNumber = (ms_get_version_build_number)muse::getLibFunc(m_lib, "ms_get_version_build_number");
         getVersionString = (ms_get_version_string)muse::getLibFunc(m_lib, "ms_get_version_string");
 
         // Invalid...
@@ -306,6 +308,7 @@ public:
                && getVersionMajor
                && getVersionMinor
                && getVersionRevision
+               && getBuildNumber
                && getVersionString
                && containsInstrument
                && getMatchingInstrumentId
@@ -366,6 +369,7 @@ private:
                << "\n ms_get_version_major -" << reinterpret_cast<uint64_t>(getVersionMajor)
                << "\n ms_get_version_minor -" << reinterpret_cast<uint64_t>(getVersionMinor)
                << "\n ms_get_version_revision -" << reinterpret_cast<uint64_t>(getVersionRevision)
+               << "\n ms_get_version_build_number -" << reinterpret_cast<uint64_t>(getBuildNumber)
                << "\n ms_get_version_string -" << reinterpret_cast<uint64_t>(getVersionString)
                << "\n ms_contains_instrument -" << reinterpret_cast<uint64_t>(containsInstrument)
                << "\n ms_get_matching_instrument_id -" << reinterpret_cast<uint64_t>(getMatchingInstrumentId)

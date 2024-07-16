@@ -87,3 +87,8 @@ muse::io::path_t MuseSamplerConfiguration::fallbackLibraryPath() const
 {
     return FALLBACK_PATH;
 }
+
+bool MuseSamplerConfiguration::shouldShowBuildNumber() const
+{
+    return globalConfig()->devModeEnabled();
+}
