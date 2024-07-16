@@ -38,12 +38,17 @@ StyledPopupView {
     //! Note: the navigation order does not match the order of the components in the file
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
-    property int navigationOrderEnd: textStyleSettingsNavPanel.order
+    readonly property int navigationOrderEnd: textStyleSettingsNavPanel.order
+
+    readonly property int elementSize: 30
+    readonly property int elementSpacing: 4
+    readonly property int controlSpacing: 12
+    readonly property int rowSpacing: 8
 
     contentWidth: contentRow.width
     contentHeight: contentRow.height
 
-    margins: 10
+    margins: controlSpacing
 
     showArrow: false
 
@@ -68,6 +73,7 @@ StyledPopupView {
 
     RowLayout {
         id: contentRow
+        spacing: controlSpacing
 
         NavigationPanel {
             id: textStyleSettingsNavPanel
@@ -79,164 +85,57 @@ StyledPopupView {
         }
 
         ColumnLayout {
-            StyledDropdown { //1
-                id: fontDropdown
+            spacing: rowSpacing
 
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-
-                navigation.name: "fontDropdown"
-                navigation.panel: textStyleSettingsNavPanel
-                navigation.row: 1
-                navigation.accessible.name: qsTrc("inspector", "Font dropdown")
-
-                textRole: "text"
-                valueRole: "text"
-
-                model: {
-                    var resultList = []
-
-                    var fontFamilies = Qt.fontFamilies()
-
-                    for (var i = 0; i < fontFamilies.length; ++i) {
-                        resultList.push({"text" : fontFamilies[i]})
-                    }
-
-                    return resultList
-                }
-
-                currentIndex:  !textStyleModel.textSettingsModel.fontFamily.isUndefined
-                                ? indexOfValue(textStyleModel.textSettingsModel.fontFamily.value)
-                                : -1
-
-                onActivated: function(index, value) {
-                    textStyleModel.textSettingsModel.fontFamily.value = value
-                }
-            }
-
-            RowLayout { //6
-                RadioButtonGroup {
-                    id: textStyleButtonGroup
-
-                    height: 30
-                    width: implicitWidth
-
-                    property int navigationRowStart: textStylePopupButton.navigation.row + 1
-                    property int navigationRowEnd: navigationRowStart + count
-
-                    model: [
-                        {
-                            iconCode: IconCode.TEXT_BOLD,
-                            value: TextTypes.FONT_STYLE_BOLD,
-                            title: qsTrc("inspector", "Bold")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_ITALIC,
-                            value: TextTypes.FONT_STYLE_ITALIC,
-                            title: qsTrc("inspector", "Italic")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_UNDERLINE,
-                            value: TextTypes.FONT_STYLE_UNDERLINE,
-                            title: qsTrc("inspector", "Underline")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_STRIKE,
-                            value: TextTypes.FONT_STYLE_STRIKE,
-                            title: qsTrc("inspector", "Strikethrough")
-                        }
-                    ]
-
-                    delegate: FlatToggleButton {
-                        navigation.name: "textStyleButtonGroup"
-                        navigation.panel: textStyleSettingsNavPanel
-                        navigation.row: textStyleButtonGroup.navigationRowStart + model.index
-                        navigation.accessible.name: qsTrc("inspector", "Text style buttons")
-
-                        toolTipTitle: modelData.title
-
-                        icon: modelData.iconCode
-
-                        checked: !textStyleModel.textSettingsModel.fontStyle.isUndefined
-                                    && (textStyleModel.textSettingsModel.fontStyle.value & modelData.value)
-
-                        onToggled: {
-                            textStyleModel.textSettingsModel.fontStyle.value = checked
-                                ? textStyleModel.textSettingsModel.fontStyle.value & ~modelData.value
-                                : textStyleModel.textSettingsModel.fontStyle.value | modelData.value
-                        }
-                    }
-                }
-
-                RadioButtonGroup { //7
-                    id: horizontalAlignmentButtonList
-
-                    height: 30
-                    width: implicitWidth
-
-                    property int navigationRowStart: textStyleButtonGroup.navigationRowEnd + 1
-                    property int navigationRowEnd: navigationRowStart + count
-
-                    enabled: textStyleModel.textSettingsModel.isHorizontalAlignmentAvailable
-
-                    model: [
-                        {
-                            iconRole: IconCode.TEXT_ALIGN_LEFT,
-                            typeRole: TextTypes.FONT_ALIGN_H_LEFT,
-                            title: qsTrc("inspector", "Align left"),
-                            description: qsTrc("inspector", "Align left edge of text to reference point")
-                        },
-                        {
-                            iconRole: IconCode.TEXT_ALIGN_CENTER,
-                            typeRole: TextTypes.FONT_ALIGN_H_CENTER,
-                            title: qsTrc("inspector", "Align center"),
-                            description: qsTrc("inspector", "Align horizontal center of text to reference point")
-                        },
-                        {
-                            iconRole: IconCode.TEXT_ALIGN_RIGHT,
-                            typeRole: TextTypes.FONT_ALIGN_H_RIGHT,
-                            title: qsTrc("inspector", "Align right"),
-                            description: qsTrc("inspector", "Align right edge of text to reference point")
-                        }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        navigation.name: "horizonalAlignmentButtonList"
-                        navigation.panel: textStyleSettingsNavPanel
-                        navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
-                        navigation.accessible.name: qsTrc("inspector", "Horizontal alignent buttons")
-
-                        width: 30
-
-                        toolTipTitle: modelData.title
-                        toolTipDescription: modelData.description
-
-                        transparent: true
-
-                        iconCode: modelData.iconRole
-
-                        checked: !textStyleModel.textSettingsModel.horizontalAlignment.isUndefined
-                                    && (textStyleModel.textSettingsModel.horizontalAlignment.value === modelData.typeRole)
-
-                        onToggled: {
-                            textStyleModel.textSettingsModel.horizontalAlignment.value = modelData.typeRole
-                        }
-                    }
-                }
-            }
-        }
-        ColumnLayout {
             RowLayout {
+                spacing: controlSpacing
+
+                StyledDropdown { //1
+                    id: fontDropdown
+
+                    Layout.fillWidth: true
+
+                    navigation.name: "fontDropdown"
+                    navigation.panel: textStyleSettingsNavPanel
+                    navigation.row: 1
+                    navigation.accessible.name: qsTrc("inspector", "Font")
+
+                    textRole: "text"
+                    valueRole: "text"
+
+                    model: {
+                        var resultList = []
+
+                        var fontFamilies = Qt.fontFamilies()
+
+                        for (var i = 0; i < fontFamilies.length; ++i) {
+                            resultList.push({"text" : fontFamilies[i]})
+                        }
+
+                        return resultList
+                    }
+
+                    currentIndex:  !textStyleModel.textSettingsModel.fontFamily.isUndefined
+                                    ? indexOfValue(textStyleModel.textSettingsModel.fontFamily.value)
+                                    : -1
+
+                    onActivated: function(index, value) {
+                        textStyleModel.textSettingsModel.fontFamily.value = value
+                    }
+                }
+
                 IncrementalPropertyControl { //2
                     id: fontSizeSpinBox
+
+                    Layout.preferredWidth: 2 * elementSize + elementSpacing
 
                     navigation.name: "fontSizeSpinBox"
                     navigation.panel: textStyleSettingsNavPanel
                     navigation.row: fontDropdown.navigation.row + 1
-                    navigation.accessible.name: qsTrc("inspector", "Font size spinbox")
+                    navigation.accessible.name: qsTrc("inspector", "Font size")
 
-                    Layout.preferredWidth: 60
-
+                    isIndeterminate: textStyleModel.textSettingsModel.fontSize
+                                     ? textStyleModel.textSettingsModel.fontSize.isUndefined : true
                     currentValue: textStyleModel.textSettingsModel.fontSize.value
 
                     measureUnitsSymbol: qsTrc("global", "pt")
@@ -257,7 +156,7 @@ StyledPopupView {
                     property int navigationRowStart: fontSizeSpinBox.navigation.row + 1
                     property int navigationRowEnd: navigationRowStart + count
 
-                    height: 30
+                    height: elementSize
                     width: implicitWidth
 
                     model: [
@@ -288,12 +187,12 @@ StyledPopupView {
                     ]
 
                     delegate: FlatRadioButton {
+                        width: elementSize
+
                         navigation.name: "verticalAlignmentButtonList"
                         navigation.panel: textStyleSettingsNavPanel
                         navigation.row: verticalAlignmentButtonList.navigationRowStart + model.index
                         navigation.accessible.name: qsTrc("inspector", "Vertical alignment buttons")
-
-                        width: 30
 
                         toolTipTitle: modelData.title
                         toolTipDescription: modelData.description
@@ -313,10 +212,123 @@ StyledPopupView {
             }
 
             RowLayout {
+                spacing: controlSpacing
+
+                RadioButtonGroup { //6
+                    id: textStyleButtonGroup
+
+                    property int navigationRowStart: textStylePopupButton.navigation.row + 1
+                    property int navigationRowEnd: navigationRowStart + count
+
+                    height: elementSize
+                    width: implicitWidth
+
+                    model: [
+                        {
+                            iconCode: IconCode.TEXT_BOLD,
+                            value: TextTypes.FONT_STYLE_BOLD,
+                            title: qsTrc("inspector", "Bold")
+                        },
+                        {
+                            iconCode: IconCode.TEXT_ITALIC,
+                            value: TextTypes.FONT_STYLE_ITALIC,
+                            title: qsTrc("inspector", "Italic")
+                        },
+                        {
+                            iconCode: IconCode.TEXT_UNDERLINE,
+                            value: TextTypes.FONT_STYLE_UNDERLINE,
+                            title: qsTrc("inspector", "Underline")
+                        },
+                        {
+                            iconCode: IconCode.TEXT_STRIKE,
+                            value: TextTypes.FONT_STYLE_STRIKE,
+                            title: qsTrc("inspector", "Strikethrough")
+                        }
+                    ]
+
+                    delegate: FlatToggleButton {
+                        navigation.name: "textStyleButtonGroup"
+                        navigation.panel: textStyleSettingsNavPanel
+                        navigation.row: textStyleButtonGroup.navigationRowStart + model.index
+                        navigation.accessible.name: qsTrc("inspector", "Text style buttons")
+
+                        width: elementSize
+
+                        toolTipTitle: modelData.title
+
+                        icon: modelData.iconCode
+
+                        checked: !textStyleModel.textSettingsModel.fontStyle.isUndefined
+                                    && (textStyleModel.textSettingsModel.fontStyle.value & modelData.value)
+
+                        onToggled: {
+                            textStyleModel.textSettingsModel.fontStyle.value = checked
+                                ? textStyleModel.textSettingsModel.fontStyle.value & ~modelData.value
+                                : textStyleModel.textSettingsModel.fontStyle.value | modelData.value
+                        }
+                    }
+                }
+
+                RadioButtonGroup { //7
+                    id: horizontalAlignmentButtonList
+
+                    property int navigationRowStart: textStyleButtonGroup.navigationRowEnd + 1
+                    property int navigationRowEnd: navigationRowStart + count
+
+                    height: elementSize
+                    width: implicitWidth
+
+                    enabled: textStyleModel.textSettingsModel.isHorizontalAlignmentAvailable
+
+                    model: [
+                        {
+                            iconRole: IconCode.TEXT_ALIGN_LEFT,
+                            typeRole: TextTypes.FONT_ALIGN_H_LEFT,
+                            title: qsTrc("inspector", "Align left"),
+                            description: qsTrc("inspector", "Align left edge of text to reference point")
+                        },
+                        {
+                            iconRole: IconCode.TEXT_ALIGN_CENTER,
+                            typeRole: TextTypes.FONT_ALIGN_H_CENTER,
+                            title: qsTrc("inspector", "Align center"),
+                            description: qsTrc("inspector", "Align horizontal center of text to reference point")
+                        },
+                        {
+                            iconRole: IconCode.TEXT_ALIGN_RIGHT,
+                            typeRole: TextTypes.FONT_ALIGN_H_RIGHT,
+                            title: qsTrc("inspector", "Align right"),
+                            description: qsTrc("inspector", "Align right edge of text to reference point")
+                        }
+                    ]
+
+                    delegate: FlatRadioButton {
+                        navigation.name: "horizonalAlignmentButtonList"
+                        navigation.panel: textStyleSettingsNavPanel
+                        navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
+                        navigation.accessible.name: qsTrc("inspector", "Horizontal alignent buttons")
+
+                        width: elementSize
+
+                        toolTipTitle: modelData.title
+                        toolTipDescription: modelData.description
+
+                        transparent: true
+
+                        iconCode: modelData.iconRole
+
+                        checked: !textStyleModel.textSettingsModel.horizontalAlignment.isUndefined
+                                    && (textStyleModel.textSettingsModel.horizontalAlignment.value === modelData.typeRole)
+
+                        onToggled: {
+                            textStyleModel.textSettingsModel.horizontalAlignment.value = modelData.typeRole
+                        }
+                    }
+                }
+
                 RadioButtonGroup { //8
                     id: subscriptOptionsButtonList
 
-                    height: 30
+                    height: elementSize
 
                     property int navigationRowStart: horizontalAlignmentButtonList.navigationRowEnd + 1
                     property int navigationRowEnd: navigationRowStart + count
@@ -332,7 +344,7 @@ StyledPopupView {
                         navigation.row: subscriptOptionsButtonList.navigationRowStart + model.index
                         navigation.accessible.name: qsTrc("inspector", "Subscript buttons")
 
-                        width: 30
+                        width: elementSize
 
                         toolTipTitle: modelData.titleRole
                         iconCode: modelData["iconRole"]
@@ -353,49 +365,55 @@ StyledPopupView {
                     }
                 }
 
-                StyledTextLabel {
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignRight
-                    text: qsTrc("inspector", "Line spacing:")
-                }
+                RowLayout { //9
+                    spacing: elementSpacing
 
-                IncrementalPropertyControl { //9
-                    id: lineSpacingSpinBox
+                    StyledTextLabel {
+                        width: 2 * elementSize + elementSpacing
+                        horizontalAlignment: Text.AlignLeft
 
-                    navigation.name: "lineSpacingSpinBox"
-                    navigation.panel: textStyleSettingsNavPanel
-                    navigation.row: subscriptOptionsButtonList.navigationRowEnd + 1
-                    navigation.accessible.name: qsTrc("inspector", "Line spacing spinbox")
+                        text: qsTrc("inspector", "Line spacing:")
+                    }
 
-                    Layout.preferredWidth: 60
+                    IncrementalPropertyControl {
+                        id: lineSpacingSpinBox
 
-                    currentValue: textStyleModel.textSettingsModel.textLineSpacing.value
+                        navigation.name: "lineSpacingSpinBox"
+                        navigation.panel: textStyleSettingsNavPanel
+                        navigation.row: subscriptOptionsButtonList.navigationRowEnd + 1
+                        navigation.accessible.name: qsTrc("inspector", "Line spacing")
 
-                    measureUnitsSymbol: qsTrc("global", "li")
+                        Layout.preferredWidth: 2 * elementSize + elementSpacing
 
-                    decimals: 1
-                    step: 1
-                    minValue: 1
-                    maxValue: 99
+                        currentValue: textStyleModel.textSettingsModel.textLineSpacing.value
 
-                    onValueEditingFinished: function(newValue) {
-                        textStyleModel.textSettingsModel.textLineSpacing.value = newValue
+                        measureUnitsSymbol: qsTrc("global", "li")
+
+                        decimals: 1
+                        step: 1
+                        minValue: 1
+                        maxValue: 99
+
+                        onValueEditingFinished: function(newValue) {
+                            textStyleModel.textSettingsModel.textLineSpacing.value = newValue
+                        }
                     }
                 }
             }
         }
 
         RowLayout {
+            spacing: rowSpacing
+
             FlatButton { //4
                 id: addSymbolsButton
 
-                Layout.preferredWidth: 90
+                Layout.preferredWidth: 3 * elementSizes
                 Layout.fillHeight: true
 
                 navigation.name: "addSymbolsButton"
                 navigation.panel: textStyleSettingsNavPanel
                 navigation.row: verticalAlignmentButtonList.navigationRowEnd + 1
-                navigation.accessible.name: qsTrc("inspector", "Add symbols button")
 
                 icon: IconCode.FLAT
                 text: qsTrc("inspector", "Add symbols")
@@ -408,7 +426,8 @@ StyledPopupView {
             }
 
             ColumnLayout {
-                Layout.preferredWidth: 90
+                spacing: rowSpacing
+                Layout.preferredWidth: 3 * elementSize
 
                 FlatButton { //5
                     id: textStylePopupButton
@@ -418,7 +437,6 @@ StyledPopupView {
                     navigation.name: "textStylePopupButton"
                     navigation.panel: textStyleSettingsNavPanel
                     navigation.row: addSymbolsButton.navigation.row + 1
-                    navigation.accessible.name: qsTrc("inspector", "Text style options")
 
                     text: qsTrc("inspector", "Text style")
 
@@ -433,7 +451,7 @@ StyledPopupView {
                     }
                 }
 
-                FlatButton {
+                FlatButton { //10
                     id: framePopupButton
 
                     Layout.fillWidth: true
@@ -441,7 +459,6 @@ StyledPopupView {
                     navigation.name: "framePopupButton"
                     navigation.panel: textStyleSettingsNavPanel
                     navigation.row: lineSpacingSpinBox.navigation.row + 1
-                    navigation.accessible.name: qsTrc("inspector", "Frame settings")
 
                     visible: !textStyleModel.textSettingsModel.isDynamicSpecificSettings
 

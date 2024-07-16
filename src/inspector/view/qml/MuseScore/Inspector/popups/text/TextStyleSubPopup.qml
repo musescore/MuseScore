@@ -36,7 +36,7 @@ StyledPopupView {
     required property QtObject textSettingsModel
 
     property int navigationOrderStart: 0
-    property int navigationOrderEnd: textStyleSubSettingsNavPanel.order
+    readonly property int navigationOrderEnd: textStyleSubSettingsNavPanel.order
 
     Column {
         width: parent.width
