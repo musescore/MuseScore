@@ -44,7 +44,7 @@
     <lyricsAlignVerseNumber>1</lyricsAlignVerseNumber>
     <lyricsLineThickness>0.3</lyricsLineThickness>
     <lyricsMelismaAlign>left,baseline</lyricsMelismaAlign>
-    <lyricsMelismaPad>0.1</lyricsMelismaPad>
+    <lyricsMelismaPad>0.2</lyricsMelismaPad>
     <lyricsDashPad>0.05</lyricsDashPad>
     <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
     <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
@@ -165,10 +165,10 @@
     <articulationAnchorOther>0</articulationAnchorOther>
     <lastSystemFillLimit>0.3</lastSystemFillLimit>
     <hairpinPlacement>1</hairpinPlacement>
-    <hairpinPosAbove x="0" y="-2"/>
-    <hairpinPosBelow x="0" y="2"/>
-    <hairpinLinePosAbove x="0" y="-1.5"/>
-    <hairpinLinePosBelow x="0" y="2.5"/>
+    <hairpinPosAbove x="0" y="-1.75"/>
+    <hairpinPosBelow x="0" y="1.75"/>
+    <hairpinLinePosAbove x="0" y="-1.0"/>
+    <hairpinLinePosBelow x="0" y="2.0"/>
     <hairpinHeight>1.15</hairpinHeight>
     <hairpinContHeight>0.5</hairpinContHeight>
     <hairpinWidth>0.2</hairpinWidth>
@@ -507,8 +507,8 @@
     <ornamentStyle>0</ornamentStyle>
     <autoplaceHairpinDynamicsDistance>0.5</autoplaceHairpinDynamicsDistance>
     <dynamicsPlacement>1</dynamicsPlacement>
-    <dynamicsPosAbove x="0" y="-1.5"/>
-    <dynamicsPosBelow x="0" y="2.5"/>
+    <dynamicsPosAbove x="0" y="-1.0"/>
+    <dynamicsPosBelow x="0" y="2.0"/>
     <dynamicsMinDistance>0.5</dynamicsMinDistance>
     <autoplaceVerticalAlignRange>2</autoplaceVerticalAlignRange>
     <textLinePlacement>0</textLinePlacement>
