@@ -332,7 +332,7 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t)
     return noteHeads[direction][int(group)][int(t)];
 }
 
-SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc, Key key, NoteHeadScheme scheme)
+SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc, Key key, NoteHeadScheme scheme, int octave)
 {
     // shortcut
     if (scheme == NoteHeadScheme::HEAD_NORMAL) {
@@ -533,7 +533,22 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
         } else if (tpc == Tpc::TPC_B) {
             group = NoteHeadGroup::HEAD_TI_NAME;
         }
+    } else if (scheme == NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3) {
+        if (octave <= 2) {
+            group = NoteHeadGroup::HEAD_CROSS;
+        } else if (octave == 3) {
+            group = NoteHeadGroup::HEAD_LA;
+        } else if (octave == 4) {
+            group = NoteHeadGroup::HEAD_NORMAL;
+        } else if (octave == 5) {
+            group = NoteHeadGroup::HEAD_TRIANGLE_UP;
+        } else if (octave == 6) {
+            group = NoteHeadGroup::HEAD_DIAMOND_OLD;
+        } else {
+            group = NoteHeadGroup::HEAD_SLASH;
+        }
     }
+
     return noteHeads[direction][int(group)][int(t)];
 }
 
@@ -976,10 +991,15 @@ SymId Note::noteHead() const
             }
         }
     }
+
+    if (scheme == NoteHeadScheme::HEAD_AUTO) {
+        scheme = style().value(Sid::noteHeadScheme).value<NoteHeadScheme>();
+    }
+
     if (scheme == NoteHeadScheme::HEAD_AUTO) {
         scheme = NoteHeadScheme::HEAD_NORMAL;
     }
-    SymId t = noteHead(up, headGroup, ht, tpc(), key, scheme);
+    SymId t = noteHead(up, headGroup, ht, tpc(), key, scheme, octave());
     if (t == SymId::noSym) {
         LOGD("invalid notehead %d/%d", int(headGroup), int(ht));
         t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
@@ -2841,6 +2861,69 @@ void Note::localSpatiumChanged(double oldValue, double newValue)
             k->localSpatiumChanged(oldValue, newValue);
         }
     }
+}
+
+//---------------------------------------------------------
+//   color
+//---------------------------------------------------------
+
+Color Note::color() const
+{
+    NoteHeadScheme scheme = style().value(Sid::noteHeadScheme).value<NoteHeadScheme>();
+    NoteHeadColor color = style().value(Sid::noteHeadColor).value<NoteHeadColor>();
+    if (scheme == NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3 && color == NoteHeadColor::COLOR_FIGURENOTES_STAGE_3) {
+        int pitchClass = m_pitch % 12;
+        switch (pitchClass) {
+        case 0:
+        case 1:
+            return Color::RED;
+        case 2:
+        case 3:
+            return Color::BROWN;
+        case 4:
+            return Color::GREY;
+        case 5:
+        case 6:
+            return Color::BLUE;
+        case 7:
+        case 8:
+            return Color::BLACK;
+        case 9:
+        case 10:
+            return Color::YELLOW;
+        case 11:
+            return Color::GREEN;
+        }
+    } else if (color == NoteHeadColor::COLOR_BOOMWHACKERS) {
+        int pitchClass = m_pitch % 12;
+        switch (pitchClass) {
+        case 0:
+            return Color::RED;
+        case 1:
+            return Color::ORANGE;
+        case 2:
+            return Color::SAFFRON;
+        case 3:
+            return Color::YELLOW;
+        case 4:
+            return Color::BRIGHT_YELLOW;
+        case 5:
+            return Color::LIME_GREEN;
+        case 6:
+            return Color::GREEN;
+        case 7:
+            return Color::TEAL;
+        case 8:
+            return Color::BLUE;
+        case 9:
+            return Color::INDIGO;
+        case 10:
+            return Color::VIOLET;
+        case 11:
+            return Color::MAGENTA;
+        }
+    }
+    return Color::BLACK;
 }
 
 //---------------------------------------------------------

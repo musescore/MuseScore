@@ -1688,6 +1688,9 @@ enum class Sid {
     autoplaceEnabled,
     defaultsVersion,
 
+    noteHeadScheme,
+    noteHeadColor,
+
     STYLES
     ///\}
 };

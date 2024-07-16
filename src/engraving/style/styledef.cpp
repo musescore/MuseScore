@@ -1673,8 +1673,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(dummyMusicalSymbolsScale,                   1.0),
 
-    styleDef(autoplaceEnabled,                           true),
-    styleDef(defaultsVersion,                            Constants::MSC_VERSION),
+    { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
+    { Sid::defaultsVersion,               "defaultsVersion",               Constants::MSC_VERSION },
+    { Sid::noteHeadScheme, "noteHeadScheme",  PropertyValue::fromValue(NoteHeadScheme::HEAD_AUTO) },
+    { Sid::noteHeadColor, "noteHeadColor",  PropertyValue::fromValue(NoteHeadColor::COLOR_DEFAULT) },
 } };
 
 #undef styleDef

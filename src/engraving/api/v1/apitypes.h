@@ -457,6 +457,7 @@ enum class NoteHeadScheme {
     HEAD_PITCHNAME_GERMAN = int(mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN),
     HEAD_SOLFEGE = int(mu::engraving::NoteHeadScheme::HEAD_SOLFEGE),
     HEAD_SOLFEGE_FIXED = int(mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED),
+    HEAD_FIGURE_NOTES_STAGE_3 = int(mu::engraving::NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3),
     HEAD_SHAPE_NOTE_4 = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4),
     HEAD_SHAPE_NOTE_7_AIKIN = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN),
     HEAD_SHAPE_NOTE_7_FUNK = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK),
@@ -464,6 +465,13 @@ enum class NoteHeadScheme {
     HEAD_SCHEMES = int(mu::engraving::NoteHeadScheme::HEAD_SCHEMES),
 };
 Q_ENUM_NS(NoteHeadScheme);
+
+enum class NoteHeadColor {
+    COLOR_DEFAULT = int(mu::engraving::NoteHeadColor::COLOR_DEFAULT),
+    COLOR_FIGURENOTES_STAGE_3 = int(mu::engraving::NoteHeadColor::COLOR_FIGURENOTES_STAGE_3),
+    COLOR_BOOMWHACKERS = int(mu::engraving::NoteHeadColor::COLOR_BOOMWHACKERS)
+};
+Q_ENUM_NS(NoteHeadColor);
 
 enum class NoteHeadGroup {
     HEAD_NORMAL = int(mu::engraving::NoteHeadGroup::HEAD_NORMAL),

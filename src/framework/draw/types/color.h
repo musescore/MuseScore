@@ -95,8 +95,19 @@ public:
     static const Color BLACK;
     static const Color WHITE;
     static const Color RED;
+    static const Color ORANGE;
+    static const Color SAFFRON;
+    static const Color YELLOW;
+    static const Color BRIGHT_YELLOW;
+    static const Color LIME_GREEN;
     static const Color GREEN;
+    static const Color TEAL;
     static const Color BLUE;
+    static const Color INDIGO;
+    static const Color VIOLET;
+    static const Color MAGENTA;
+    static const Color BROWN;
+    static const Color GREY;
 
 private:
 
@@ -110,9 +121,20 @@ private:
 inline const Color Color::transparent = { 255, 255, 255, 0 };
 inline const Color Color::BLACK = { 0, 0, 0, 255 };
 inline const Color Color::WHITE = { 255, 255, 255, 255 };
-inline const Color Color::RED = { 255, 0, 0, 255 };
-inline const Color Color::GREEN = { 0, 255, 0, 255 };
-inline const Color Color::BLUE { 0, 0, 255, 255 };
+inline const Color Color::RED = { 226, 28, 72, 255 };
+inline const Color Color::ORANGE = { 242, 102, 34, 255 };
+inline const Color Color::SAFFRON = { 249, 157, 28, 255 };
+inline const Color Color::YELLOW = { 255, 204, 51, 255 };
+inline const Color Color::BRIGHT_YELLOW = { 255, 243, 43, 255 };
+inline const Color Color::LIME_GREEN = { 188, 216, 95, 255 };
+inline const Color Color::GREEN = { 98, 188, 71, 255 };
+inline const Color Color::TEAL = { 0, 156, 149, 255 };
+inline const Color Color::BLUE = { 0, 113, 187, 255 };
+inline const Color Color::INDIGO = { 94, 80, 161, 255 };
+inline const Color Color::VIOLET = { 141, 91, 166, 255 };
+inline const Color Color::MAGENTA = { 207, 62, 150, 255 };
+inline const Color Color::BROWN = { 148, 97, 51, 255 };
+inline const Color Color::GREY = { 198, 196, 193, 255 };
 
 inline Color blendColors(const Color& c1, const Color& c2)
 {

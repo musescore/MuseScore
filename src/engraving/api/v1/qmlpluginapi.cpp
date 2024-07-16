@@ -59,6 +59,7 @@ Enum* PluginAPI::noteTypeEnum = nullptr;
 Enum* PluginAPI::playEventTypeEnum = nullptr;
 Enum* PluginAPI::noteHeadTypeEnum = nullptr;
 Enum* PluginAPI::noteHeadSchemeEnum = nullptr;
+Enum* PluginAPI::noteHeadColorEnum = nullptr;
 Enum* PluginAPI::noteHeadGroupEnum = nullptr;
 Enum* PluginAPI::noteValueTypeEnum = nullptr;
 Enum* PluginAPI::segmentTypeEnum = nullptr;

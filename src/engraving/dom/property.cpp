@@ -291,7 +291,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STAFF_INVISIBLE,         false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "invisible") },
     { Pid::STAFF_COLOR,             false, "color",                 P_TYPE::COLOR,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "color") },
 
-    { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::NOTEHEAD_SCHEME,    PropertyGroup::APPEARANCE,          DUMMY_QT_TR_NOOP("propertyName", "notehead scheme") },
+    { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::NOTEHEAD_SCHEME,    PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "notehead scheme") },
+    { Pid::HEAD_COLOR,             false, "headColor",            P_TYPE::NOTEHEAD_COLOR,    PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "notehead color") },
     { Pid::STAFF_GEN_CLEF,          false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating clefs") },
     { Pid::STAFF_GEN_TIMESIG,       false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating time signature") },
     { Pid::STAFF_GEN_KEYSIG,        false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating key signature") },
@@ -441,6 +442,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SCORE_FONT,              true,  "scoreFont",             P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "score font") },
     { Pid::SYMBOLS_SIZE,            false, "symbolsSize",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "symbols size") },
     { Pid::SYMBOL_ANGLE,            false, "symbolAngle",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "symbol angle") },
+    { Pid::SCORE_STYLE_PRESET,      false, "scoreStylePreset",      P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "score style preset") },
 
     { Pid::APPLY_TO_ALL_STAVES,     false, "applyToAllStaves",      P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "apply to all staves") },
 
