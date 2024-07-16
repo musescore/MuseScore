@@ -346,7 +346,7 @@
     <minMMRestWidth>6</minMMRestWidth>
     <mmRestNumberPos>-0.5</mmRestNumberPos>
     <mmRestNumberMaskHBar>1</mmRestNumberMaskHBar>
-    <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
+    <multiMeasureRestMargin>1.25</multiMeasureRestMargin>
     <mmRestHBarThickness>0.7</mmRestHBarThickness>
     <mmRestHBarVStrokeThickness>0.2</mmRestHBarVStrokeThickness>
     <mmRestHBarVStrokeHeight>2</mmRestHBarVStrokeHeight>
