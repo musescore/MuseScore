@@ -1233,16 +1233,16 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                     MMRest* mmrest = toMMRest(e);
                     // center multimeasure rest
                     double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
-                    double w = x2 - x1 - 2 * d;
                     bool headerException = m->header() && s.prev() && !s.prev()->isStartRepeatBarLineType();
                     if (headerException) { //needs this exception on header bar
-                        x1 = s1 ? s1->x() + s1->width() : 0;
-                        w = x2 - x1 - d;
+                        // Set x1 to the imaginary barline located the minimum barline->note distance to the left of the rest's segment
+                        x1 = s.x() - ctx.conf().styleMM(Sid::barNoteDistance);
                     }
+                    double w = x2 - x1 - 2 * d;
                     MMRest::LayoutData* mmrestLD = mmrest->mutldata();
                     mmrestLD->restWidth = w;
                     TLayout::layoutMMRest(mmrest, mmrest->mutldata(), ctx);
-                    mmrestLD->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
+                    mmrestLD->setPosX(x1 - s.x() + d);
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
                     // two- or four-measure repeat, center on following barline
                     double measureWidth = x2 - s.x() + .5 * (m->styleP(Sid::barWidth));
