@@ -190,22 +190,16 @@ ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
-# Most nested locations should go first
-CODE_PATHS=(
-    "${VOLUME}/${LONGER_NAME}.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app"
-    "${VOLUME}/${LONGER_NAME}.app"
-)
-
 #codesign
 echo "Codesign"
 # `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
 find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --force --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
 # Sign code in other (more conventional) locations
-codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/MacOS/macosx_entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${CODE_PATHS[@]}"
+codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/MacOS/macosx_entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
 echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"
-codesign --verify --deep --strict --verbose=2 "${CODE_PATHS[@]}"
+codesign --verify --deep --strict --verbose=2 "${VOLUME}/${LONGER_NAME}.app"
 
 echo "Unmount"
 for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do

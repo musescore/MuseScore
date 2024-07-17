@@ -492,10 +492,6 @@
 	<string>public.app-category.music</string>
 	<key>ATSApplicationFontsPath</key>
 	<string>fonts/</string>
-	<key>SUFeedURL</key>
-	<string>${SPARKLE_APPCAST_URL}</string>
-	<key>SUAllowsAutomaticUpdates</key>
-	<false/>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>ar</string>

@@ -116,15 +116,4 @@ wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.
 7z x -y vst_sdk.7z -o"$HOME/vst"
 echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >> $GITHUB_ENV
 
-#install sparkle
-export SPARKLE_VERSION=1.20.0
-mkdir Sparkle-${SPARKLE_VERSION}
-cd Sparkle-${SPARKLE_VERSION}
-wget -nv https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.bz2
-tar jxf Sparkle-${SPARKLE_VERSION}.tar.bz2
-cd ..
-mkdir -p ~/Library/Frameworks
-mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
-rm -rf Sparkle-${SPARKLE_VERSION}
-
 echo "Setup script done"
