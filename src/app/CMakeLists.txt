@@ -73,7 +73,10 @@ elseif(OS_IS_MAC)
     set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2024 MuseScore Limited. Published under the GNU General Public License version 3.")
 
     set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
-
+    if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
+        list(PREPEND CMAKE_INSTALL_RPATH "${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}/lib")
+    endif()
+    
     message("MACOSX_BUNDLE_VERSION: ${MACOSX_BUNDLE_LONG_VERSION_STRING}.${MACOSX_BUNDLE_BUNDLE_VERSION}")
 
 elseif(OS_IS_WASM)

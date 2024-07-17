@@ -97,6 +97,7 @@ option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with t
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
 option(MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
+option(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)" "")
 
 # === System libraries ===
 # Important for the maintainers of Linux distributions
@@ -140,6 +141,10 @@ endif(MUE_COMPILE_USE_CCACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
+
+if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
+    list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}) 
+endif()
 
 set(QT_MIN_VERSION "6.2.4")
 include(FindQt6)
