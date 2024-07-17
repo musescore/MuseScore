@@ -84,15 +84,15 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
     )
 
     set(MODULE_INCLUDE ${MODULE_INCLUDE}
-        ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client
-        ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
+        ${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client
+        ${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
     )
 
     set(MODULE_DEF ${MODULE_DEF}
         -DMUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL="${MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL}"
     )
 
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client google_crashpad_client)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client google_crashpad_client)
 
     set(MODULE_LINK ${MODULE_LINK}
         gcrashpad
