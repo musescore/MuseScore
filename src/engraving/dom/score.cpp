@@ -406,6 +406,45 @@ void Score::setUpTempoMap()
         sigmap()->clear();
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
     }
+    auto findTempoForAnacrusis = [this]() -> std::optional<BeatsPerSecond> {
+        // Find first appearance of tempo text in the score
+        // and use it as a reference for the anacrusis tempo
+        for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+            if (mb->type() != ElementType::MEASURE) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            for (Segment& s : m->segments()) {
+                if (s.isChordRestType()) {
+                    for (EngravingItem* e : s.annotations()) {
+                        if (e->isTempoText()) {
+                            TempoText* tt = toTempoText(e);
+                            return std::optional<BeatsPerSecond>{tt->tempo()};
+                        }
+                    }
+                }
+            }
+        }
+        return std::nullopt;
+    };
+    bool firstMeasureIsAnacrusis = fm->ticks() < fm->timesig();
+    bool anacrusisHasTempoText = false;
+    if (firstMeasureIsAnacrusis) {
+        for (Segment& s : fm->segments()) {
+            if (s.isChordRestType()) {
+                for (EngravingItem* e : s.annotations()) {
+                    if (e->isTempoText()) {
+                        anacrusisHasTempoText = true;
+                    }
+                }
+            }
+        }
+    }
+    std::optional<BeatsPerSecond> anacrusisTempo;
+
+    if (firstMeasureIsAnacrusis && !anacrusisHasTempoText) {
+        anacrusisTempo = findTempoForAnacrusis();
+    }
 
     auto tempoPrimo = std::optional<BeatsPerSecond> {};
 
@@ -464,6 +503,9 @@ void Score::setUpTempoMap()
     }
 
     masterScore()->updateRepeatListTempo();
+    if (anacrusisTempo) {
+        tempomap()->setTempo(0, *anacrusisTempo);
+    }
     m_needSetUpTempoMap = false;
 }
 
