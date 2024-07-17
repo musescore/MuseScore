@@ -5,6 +5,7 @@
 #
 # Modified 2020 MuseScore Limited  
 # Added option --dumpsyms-bin
+# Added option --arch
 
 """A tool to generate symbols for a binary suitable for breakpad.
 
@@ -322,8 +323,13 @@ def GenerateSymbols(options, binaries):
             reason = "Could not locate dump_syms executable."
             break
 
+          dump_syms_command = [dump_syms, '-i']
+          if options.arch:
+            dump_syms_command.extend(['-a', options.arch])
+          dump_syms_command.append(binary)
+
           dump_syms_output = subprocess.check_output(
-              [dump_syms, '-i', binary]).decode('utf-8')
+              dump_syms_command).decode('utf-8')
           header_info = dump_syms_output.splitlines()[0]
           binary_info = GetBinaryInfoFromHeaderInfo(header_info)
           if not binary_info:
@@ -364,7 +370,11 @@ def GenerateSymbols(options, binaries):
 
         CreateSymbolDir(options, output_dir, binary_info.hash)
         with open(output_path, 'wb') as f:
-          subprocess.check_call([dump_syms, '-r', binary], stdout=f)
+          dump_syms_command = [dump_syms, '-r']
+          if options.arch:
+            dump_syms_command.extend(['-a', options.arch])
+          dump_syms_command.append(binary)
+          subprocess.check_call(dump_syms_command, stdout=f)
       except Exception as e:
         with exceptions_lock:
           exceptions.append(traceback.format_exc())
@@ -397,6 +407,8 @@ def main():
                     help='The directory where to write the symbols file.')
   parser.add_option('', '--binary', default='',
                     help='The path of the binary to generate symbols for.')
+  parser.add_option('', '--arch', default='',
+                    help='The architecture of the binary.')
   parser.add_option('', '--clear', default=False, action='store_true',
                     help='Clear the symbols directory before writing new '
                          'symbols.')
