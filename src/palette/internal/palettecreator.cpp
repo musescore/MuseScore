@@ -619,7 +619,7 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
     for (auto i : defaultPalette ? defaultLute : masterLute) {
         auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
-        sp->appendElement(s, s->typeUserName());
+        sp->appendElement(s, s->subtypeUserName());
     }
     return sp;
 }
@@ -654,7 +654,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
     for (auto i : dots) {
         auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
-        sp->appendElement(s, s->typeUserName());
+        sp->appendElement(s, s->subtypeUserName());
     }
     return sp;
 }
@@ -762,7 +762,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     for (SymId articulationType : defaultPalette ? defaultArticulations : masterArticulations) {
         auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         artic->setSymId(articulationType);
-        sp->appendElement(artic, artic->typeUserName());
+        sp->appendElement(artic, artic->subtypeUserName());
     }
 
     if (!defaultPalette) {
@@ -820,7 +820,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         auto ornament = Factory::makeOrnament(gpaletteScore->dummy()->chord());
         ornament->setSymId(ornamentType);
         qreal mag = ornament->symId() == SymId::ornamentTrill ? 1.0 : 1.2;
-        sp->appendElement(ornament, ornament->typeUserName(), mag);
+        sp->appendElement(ornament, ornament->subtypeUserName(), mag);
     }
 
     static const std::vector<TrillType> trillTypes = {
@@ -981,7 +981,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
     for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
         auto f = Factory::makeFermata(gpaletteScore->dummy());
         f->setSymIdAndTimeStretch(i);
-        sp->appendElement(f, f->typeUserName());
+        sp->appendElement(f, f->subtypeUserName());
     }
 
     for (BreathType breath : Breath::BREATH_LIST) {
@@ -1857,7 +1857,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     for (auto i : luteSymbols) {
         auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
-        sp->appendElement(s, s->typeUserName());
+        sp->appendElement(s, s->subtypeUserName());
     }
 
     struct PlayTechAnnotationInfo {
