@@ -21,11 +21,11 @@ corruption:
 "needs review":
     - "Other type of issue"
 
-"regression 3.x → 4.0":
+"regression MS3":
     - "Yes, this used to work in MuseScore 3.x and now is broken"
-"regression 4.x → 4.y":
+"regression MS4":
     - "Yes, this used to work in a previous version of MuseScore 4.x"
-"regression stable → nightly":
+"regression nightly":
     - "Yes, this works in the latest released version and is broken in the nightly builds"
 
 "feature request":
