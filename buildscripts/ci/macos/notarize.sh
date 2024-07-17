@@ -18,7 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-echo "Notarize MacOS .dmg"
+echo "Notarize macOS .dmg"
 trap 'echo Notarize failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"

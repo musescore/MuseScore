@@ -273,7 +273,7 @@ endif (MSCORE_OUTPUT_NAME)
 
 if (OS_IS_MAC)
     set_target_properties(mscore PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/MacOS/MacOSXBundleInfo.plist.in
+        MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/macOS/Info.plist.in
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
 endif (OS_IS_MAC)
 
@@ -440,7 +440,7 @@ elseif(OS_IS_FBSD)
    install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore DESTINATION bin)
 
 ###########################################
-# MacOS
+# macOS
 ###########################################
 elseif(OS_IS_MAC)
 
@@ -475,7 +475,7 @@ elseif(OS_IS_MAC)
     if(MUE_COMPILE_INSTALL_QTQML_FILES)
         install(DIRECTORY
                 ${QT_INSTALL_QML}
-                DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}${Mscore_FRAMEWORKS_NAME}
+                DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
                 REGEX ".*QtWebkit.*" EXCLUDE
                 REGEX ".*QtTest.*" EXCLUDE
                 REGEX ".*QtSensors.*" EXCLUDE
