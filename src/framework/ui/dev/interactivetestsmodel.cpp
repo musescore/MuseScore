@@ -33,6 +33,10 @@ using namespace muse::ui;
 InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
+}
+
+void InteractiveTestsModel::init()
+{
     ValCh<Uri> uri = interactive()->currentUri();
     setCurrentUri(uri.val);
     uri.ch.onReceive(this, [this](const Uri& uri) {
