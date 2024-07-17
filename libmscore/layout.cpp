@@ -2918,6 +2918,28 @@ void Score::createBeams(LayoutContext& lc, Measure* measure)
             }
       }
 
+static bool measureMayHaveBeamsJoinedIntoNext(const Measure* measure)
+      {
+      const MeasureBase* next = measure->next();
+      if (!(next && next->isMeasure()))
+            return false;
+
+      const Measure* nextMeasure = toMeasure(next);
+      const Segment* firstCrSeg = nextMeasure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+      if (!firstCrSeg)
+            return false;
+
+      for (const Element* item : firstCrSeg->elist()) {
+            if (!item)
+                  continue;
+            Beam::Mode beamMode = toChordRest(item)->beamMode();
+            if (beamMode == Beam::Mode::MID || beamMode == Beam::Mode::BEGIN32 || beamMode == Beam::Mode::BEGIN64)
+                  return true;
+            }
+
+      return false;
+      }
+
 //---------------------------------------------------------
 //   breakCrossMeasureBeams
 //---------------------------------------------------------
@@ -2955,7 +2977,7 @@ static void breakCrossMeasureBeams(Measure* measure)
             std::vector<ChordRest*> nextElements;
 
             for (ChordRest* beamCR : beam->elements()) {
-                  if (beamCR->measure() == measure)
+                  if (beamCR->tick() < next->tick())
                         mElements.push_back(beamCR);
                   else
                         nextElements.push_back(beamCR);
@@ -4140,13 +4162,16 @@ System* Score::collectSystem(LayoutContext& lc)
       if (lc.endTick < lc.prevMeasure->tick()) {
             // we've processed the entire range
             // but we need to continue layout until we reach a system whose last measure is the same as previous layout
-            if (lc.prevMeasure == lc.systemOldMeasure) {
+            MeasureBase* curMB = lc.curMeasure;
+            Measure* m = curMB && curMB->isMeasure() ? toMeasure(curMB) : nullptr;
+            bool curMeasureMayHaveJoinedBeams = m && measureMayHaveBeamsJoinedIntoNext(m);
+            if (lc.prevMeasure == lc.systemOldMeasure && !curMeasureMayHaveJoinedBeams) {
+                // If current measure has possible beams joining to the next, we need to continue layout. This needs a better solution in future. [M.S.]
                   // this system ends in the same place as the previous layout
                   // ok to stop
-                  if (lc.curMeasure && lc.curMeasure->isMeasure()) {
+                  if (m) {
                         // we may have previously processed first measure of next system
                         // so now we must restore it to its original state
-                        Measure* m = toMeasure(lc.curMeasure);
                         if (m->repeatStart()) {
                               Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
                               if (!s->enabled())
