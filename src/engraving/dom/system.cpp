@@ -321,6 +321,24 @@ staff_idx_t System::nextVisibleStaff(staff_idx_t staffIdx) const
     return firstVisibleStaffFrom(staffIdx + 1);
 }
 
+staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
+{
+    for (staff_idx_t i = startStaffIdx;; --i) {
+        Staff* s  = score()->staff(i);
+        SysStaff* ss = m_staves[i];
+
+        if (s->show() && ss->show()) {
+            return i;
+        }
+
+        if (i == 0) {
+            break;
+        }
+    }
+
+    return muse::nidx;
+}
+
 //---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------
