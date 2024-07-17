@@ -685,7 +685,7 @@ struct CapBracket {
 class Capella
 {
     static const char* errmsg[];
-    int curPos;
+    qint64 curPos;
 
     QFile* f;
     char* author;

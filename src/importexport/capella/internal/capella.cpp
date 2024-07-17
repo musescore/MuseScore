@@ -155,7 +155,7 @@ static void SetCapGraceDuration(Chord* chord, ChordObj* o)
 static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int track, ChordRest* cr)
 {
     Score* score = s->score();
-    foreach (BasicDrawObj* oo, objects) {
+    for (BasicDrawObj* oo : objects) {
         switch (oo->type) {
         case CapellaType::SIMPLE_TEXT:
         {
@@ -1159,7 +1159,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
 static bool needPart(const int prevInst, const int currInst, const int staffIdx, QList<CapBracket> const& bracketList)
 {
-    foreach (CapBracket cb, bracketList) {
+    for (CapBracket cb : bracketList) {
         if (prevInst == currInst && cb.from < staffIdx && staffIdx <= cb.to && cb.curly) {
             return false;
         }
@@ -1183,7 +1183,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     score->style().set(Sid::minSystemDistance, Spatium(8));
     score->style().set(Sid::maxSystemDistance, Spatium(12));
 
-    foreach (CapSystem* csys, cap->systems) {
+    for (CapSystem* csys : cap->systems) {
         LOGD("System:");
         for (CapStaff* cstaff : csys->staves) {
             CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
@@ -1198,7 +1198,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     // find out the maximum number of staves
     //
     int staves = 0;
-    foreach (CapSystem* csys, cap->systems) {
+    for (CapSystem* csys : cap->systems) {
         staves = qMax(staves, csys->staves.size());
     }
     //
@@ -1271,7 +1271,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         bstaff->setBarLineSpan(span != 0);
     }
 
-    foreach (CapBracket cb, cap->brackets) {
+    for (CapBracket cb : cap->brackets) {
         LOGD("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
         Staff* staff = muse::value(score->staves(), cb.from);
         if (staff == 0) {
@@ -1282,7 +1282,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         staff->setBracketSpan(0, cb.to - cb.from + 1);
     }
     MeasureBase* measure = nullptr;
-    foreach (BasicDrawObj* o, cap->backgroundChord->objects) {
+    for (BasicDrawObj* o : cap->backgroundChord->objects) {
         switch (o->type) {
         case CapellaType::SIMPLE_TEXT:
         {
@@ -1341,7 +1341,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     }
 
     Fraction systemTick = Fraction(0, 1);
-    foreach (CapSystem* csys, cap->systems) {
+    for (CapSystem* csys : cap->systems) {
         LOGD("readCapSystem");
         /*
         if (csys->explLeftIndent > 0) {
@@ -1850,17 +1850,18 @@ void BasicRectObj::read()
 void BasicDurationalObj::read()
 {
     unsigned char b = cap->readByte();
+    Q_ASSERT(!(b & 0x80));
     nDots      = b & 0x03;
     noDuration = b & 0x04;
     postGrace  = b & 0x08;
     bSmall     = b & 0x10;
     invisible  = b & 0x20;
     notBlack   = b & 0x40;
-    Q_ASSERT(!(b & 0x80));
 
     color = notBlack ? cap->readColor() : Qt::black;
 
     unsigned char c = cap->readByte();
+    Q_ASSERT(!(c & 0x80));
     t = TIMESTEP(c & 0x0f);
     horizontalShift = (c & 0x10) ? cap->readInt() : 0;
     count = 0;
@@ -1878,7 +1879,6 @@ void BasicDurationalObj::read()
     if (c & 0x40) {
         objects = cap->readDrawObjectArray();
     }
-    Q_ASSERT(!(c & 0x80));
     LOGD("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d cnt %d trp %d ispro %d",
          nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, count, tripartite, isProlonging
          );
@@ -2139,7 +2139,7 @@ int Capella::readInt()
 char* Capella::readString()
 {
     unsigned len = readUnsigned();
-    char* buffer = new char[len + 1];
+    char* buffer = new char[static_cast<size_t>(len) + 1];
     read(buffer, len);
     buffer[len] = 0;
     return buffer;
@@ -2204,7 +2204,7 @@ QColor Capella::readColor()
 
 QFont Capella::readFont()
 {
-    int index = readUnsigned();
+    unsigned index = readUnsigned();
     if (index == 0) {
         int lfHeight           = readLong();
         /*int lfWidth            =*/ readLong();
@@ -2242,7 +2242,8 @@ QFont Capella::readFont()
     }
     index -= 1;
     if (index >= fonts.size()) {
-        LOGD("illegal font index %d (max %lld)", index, fonts.size() - 1);
+        LOGD("illegal font index %u (max %lld)", index, fonts.size() - 1);
+        return QFont();
     }
     return fonts[index];
 }
@@ -2336,12 +2337,12 @@ void Capella::readLayout()
     LOGD("Capella::readLayout(): topDist %d", topDist);
 
     txtAlign   = readByte();      // Stimmenbezeichnungen 0=links, 1=zentriert, 2=rechts
-    adjustVert = readByte();      // 0=nein, 1=au�er letzte Seite, 3=alle Seiten
+    adjustVert = readByte();      // 0=nein, 1=außer letzte Seite, 3=alle Seiten
 
-    unsigned char b          = readByte();
+    unsigned char b  = readByte();
+    Q_ASSERT((b & 0xFC) == 0);   // bits 2...7 reserviert
     redundantKeys    = b & 1;
     modernDoubleNote = b & 2;
-    Q_ASSERT((b & 0xFC) == 0);   // bits 2...7 reserviert
 
     bSystemSeparators = readByte();
     nUnnamed           = readInt();
