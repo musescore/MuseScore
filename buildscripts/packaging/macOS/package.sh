@@ -122,12 +122,6 @@ for P in $(ls -d $FOLDER_NAME/*.* | awk '{print $1}'); do
     fi
 done
 
-for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*"); do
-    lipo -remove ppc7400 "$f" -output "$f" >/dev/null 2>&1
-    lipo -remove x86 "$f" -output "$f" >/dev/null 2>&1
-    lipo -remove ppc "$f" -output "$f" >/dev/null 2>&1
-done
-
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
