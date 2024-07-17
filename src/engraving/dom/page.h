@@ -27,6 +27,7 @@
 
 #include "engravingitem.h"
 #include "bsp.h"
+#include "text.h"
 
 namespace mu::engraving {
 class RootItem;
@@ -93,7 +94,8 @@ private:
     Page(RootItem* parent);
 
     void doRebuildBspTree();
-    String replaceTextMacros(const String&) const;
+    TextBlock replaceTextMacros(bool isHeader, const String&) const;
+    const CharFormat formatForMacro(const String&) const;
 
     std::vector<System*> m_systems;
     page_idx_t m_no = 0;                        // page number

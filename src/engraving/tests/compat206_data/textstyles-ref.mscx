@@ -146,6 +146,12 @@
       <footerFontFace>MuseJazz Text</footerFontFace>
       <footerFramePadding>0</footerFramePadding>
       <footerFrameWidth>0</footerFrameWidth>
+      <copyrightFontFace>MuseJazz Text</copyrightFontFace>
+      <copyrightFramePadding>0</copyrightFramePadding>
+      <copyrightFrameWidth>0</copyrightFrameWidth>
+      <pageNumberFontFace>MuseJazz Text</pageNumberFontFace>
+      <pageNumberFramePadding>0</pageNumberFramePadding>
+      <pageNumberFrameWidth>0</pageNumberFrameWidth>
       <instrumentChangeFontFace>MuseJazz Text</instrumentChangeFontFace>
       <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <instrumentChangeFramePadding>0</instrumentChangeFramePadding>

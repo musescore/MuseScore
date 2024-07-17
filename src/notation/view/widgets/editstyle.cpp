@@ -111,6 +111,8 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "instrument-change",
     "header",
     "footer",
+    "copyright",
+    "page-number",
     "measure-number",
     "multimeasure-rest-range",
     "tempo",
@@ -1645,6 +1647,12 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::FOOTER:
             return "footer";
+
+        case TextStyleType::COPYRIGHT:
+            return "copyright";
+
+        case TextStyleType::PAGE_NUMBER:
+            return "page-number";
 
         case TextStyleType::MEASURE_NUMBER:
             return "measure-number";

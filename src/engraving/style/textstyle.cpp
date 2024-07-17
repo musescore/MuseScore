@@ -909,6 +909,42 @@ const TextStyle footerTextStyle { {
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
+const TextStyle copyrightTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::copyrightFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::copyrightFontSize,                      Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::copyrightLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::copyrightFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::copyrightFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::copyrightColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::copyrightAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::copyrightOffset,                        Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::copyrightFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::copyrightFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::copyrightFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::copyrightFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::copyrightFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::copyrightFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
+const TextStyle pageNumberTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::pageNumberFontFace,                     Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::pageNumberFontSize,                     Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::pageNumberLineSpacing,                  Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::pageNumberFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::pageNumberFontStyle,                    Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::pageNumberColor,                        Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::pageNumberAlign,                        Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::pageNumberOffset,                       Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::pageNumberFrameType,                    Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::pageNumberFramePadding,                 Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::pageNumberFrameWidth,                   Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::pageNumberFrameRound,                   Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::pageNumberFrameFgColor,                 Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::pageNumberFrameBgColor,                 Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle instrumentChangeTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::instrumentChangeFontFace,               Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::instrumentChangeFontSize,               Pid::FONT_SIZE },
@@ -1178,6 +1214,8 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::INSTRUMENT_CHANGE: return &instrumentChangeTextStyle;
     case TextStyleType::HEADER: return &headerTextStyle;
     case TextStyleType::FOOTER: return &footerTextStyle;
+    case TextStyleType::COPYRIGHT: return &copyrightTextStyle;
+    case TextStyleType::PAGE_NUMBER: return &pageNumberTextStyle;
 
     case TextStyleType::MEASURE_NUMBER: return &measureNumberTextStyle;
     case TextStyleType::MMREST_RANGE: return &mmRestRangeTextStyle;
@@ -1256,6 +1294,8 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::INSTRUMENT_CHANGE,
     TextStyleType::HEADER,
     TextStyleType::FOOTER,
+    TextStyleType::COPYRIGHT,
+    TextStyleType::PAGE_NUMBER,
     TextStyleType::MEASURE_NUMBER,
     TextStyleType::MMREST_RANGE,
     TextStyleType::TEMPO,

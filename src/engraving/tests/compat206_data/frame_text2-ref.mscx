@@ -133,6 +133,13 @@
       <footerFontSize>11</footerFontSize>
       <footerFramePadding>0</footerFramePadding>
       <footerFrameWidth>0</footerFrameWidth>
+      <copyrightFontSize>11</copyrightFontSize>
+      <copyrightFramePadding>0</copyrightFramePadding>
+      <copyrightFrameWidth>0</copyrightFrameWidth>
+      <pageNumberFontSize>11</pageNumberFontSize>
+      <pageNumberOffset x="0" y="0"/>
+      <pageNumberFramePadding>0</pageNumberFramePadding>
+      <pageNumberFrameWidth>0</pageNumberFrameWidth>
       <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <instrumentChangeFramePadding>0</instrumentChangeFramePadding>
       <instrumentChangeFrameWidth>0</instrumentChangeFrameWidth>

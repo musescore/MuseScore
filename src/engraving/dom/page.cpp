@@ -90,16 +90,30 @@ void Page::appendSystem(System* s)
 
 Text* Page::layoutHeaderFooter(int area, const String& ss) const
 {
-    String s = replaceTextMacros(ss);
-    if (s.isEmpty()) {
+    bool isHeader = area < MAX_HEADERS;
+
+    TextBlock tb = replaceTextMacros(isHeader, ss);
+    if (tb.fragmentsWithoutEmpty().empty()) {
         return nullptr;
     }
 
+    //! NOTE: Keep in sync with replaceTextMacros
+    std::wregex copyrightSearch(LR"(\$[cC])");
+    std::wregex pageNumberSearch(LR"(\$[pPnN])");
+    bool containsCopyright = ss.contains(copyrightSearch);
+    bool containsPageNumber = ss.contains(pageNumberSearch);
+
+    // Slight hack - we'll use copyright/page number styling if the string contains copyright or page number
+    // macros (hack because any non-copyright text in the same block will also adopt these style values)
+    TextStyleType style = containsCopyright ? TextStyleType::COPYRIGHT
+                          : (containsPageNumber ? TextStyleType::PAGE_NUMBER
+                             : (isHeader ? TextStyleType::HEADER : TextStyleType::FOOTER));
+
     Text* text;
-    if (area < MAX_HEADERS) {
+    if (isHeader) {
         text = score()->headerText(area);
         if (!text) {
-            text = Factory::createText((Page*)this, TextStyleType::HEADER);
+            text = Factory::createText((Page*)this, style);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);
@@ -108,7 +122,7 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     } else {
         text = score()->footerText(area - MAX_HEADERS);     // because they are 3 4 5
         if (!text) {
-            text = Factory::createText((Page*)this, TextStyleType::FOOTER);
+            text = Factory::createText((Page*)this, style);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);
@@ -116,6 +130,7 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
         }
     }
     text->setParent((Page*)this);
+
     Align align = { AlignH::LEFT, AlignV::TOP };
     switch (area) {
     case 0: align = { AlignH::LEFT, AlignV::TOP };
@@ -132,8 +147,14 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
         break;
     }
     text->setAlign(align);
-    text->setXmlText(s);
+
+    // Generates text from ldata, ensures newlines are formatted properly...
+    text->mutldata()->blocks = { tb };
+    text->genText();
+    text->createBlocks();
+
     renderer()->layoutItem(text);
+
     return text;
 }
 
@@ -326,10 +347,21 @@ void Page::doRebuildBspTree()
 //       workTitle
 //---------------------------------------------------------
 
-String Page::replaceTextMacros(const String& s) const
+TextBlock Page::replaceTextMacros(bool isHeader, const String& s) const
 {
-    String d;
+    // If the string in question consists solely of a "styled macro" (i.e. page number or copyright), we can set the default
+    // format to the associated styling. We'll use this later to prevent the creation of unneccessary fragments...
+    CharFormat defaultFormat = formatForMacro(s);
+    if (defaultFormat == CharFormat()) {
+        // The string isn't just a styled macro, use header/footer styling...
+        defaultFormat.setStyle(style().styleV(isHeader ? Sid::headerFontStyle : Sid::footerFontStyle).value<FontStyle>());
+        defaultFormat.setFontSize(style().styleD(isHeader ? Sid::headerFontSize : Sid::footerFontSize));
+        defaultFormat.setFontFamily(style().styleSt(isHeader ? Sid::headerFontFace : Sid::footerFontFace));
+    }
+
+    std::list<TextFragment> fragments(1);
     for (size_t i = 0, n = s.size(); i < n; ++i) {
+        fragments.back().format = defaultFormat;
         Char c = s.at(i);
         if (c == '$' && (i < (n - 1))) {
             Char nc = s.at(i + 1);
@@ -348,12 +380,22 @@ String Page::replaceTextMacros(const String& s) const
             {
                 int no = static_cast<int>(m_no) + 1 + score()->pageNumberOffset();
                 if (no > 0) {
-                    d += String::number(no);
+                    const String pageNumberString = String::number(no);
+                    const CharFormat pageNumberFormat = formatForMacro(String('$' + nc));
+                    // If the default format equals the format for this macro, we don't need to create a new fragment...
+                    if (defaultFormat == pageNumberFormat) {
+                        fragments.back().text += pageNumberString;
+                        break;
+                    }
+                    TextFragment pageNumberFragment(pageNumberString);
+                    pageNumberFragment.format = pageNumberFormat;
+                    fragments.emplace_back(pageNumberFragment);
+                    fragments.emplace_back(TextFragment());     // Start next fragment
                 }
             }
             break;
             case 'n':
-                d += String::number(score()->npages() + score()->pageNumberOffset());
+                fragments.back().text += String::number(score()->npages() + score()->pageNumberOffset());
                 break;
             case 'i': // not on first page
                 if (!m_no) {
@@ -361,39 +403,43 @@ String Page::replaceTextMacros(const String& s) const
                 }
             // FALLTHROUGH
             case 'I':
-                d += score()->metaTag(u"partName").toXmlEscaped();
+                fragments.back().text += score()->metaTag(u"partName").toXmlEscaped();
                 break;
             case 'f':
-                d += masterScore()->fileInfo()->fileName(false).toString().toXmlEscaped();
+                fragments.back().text += masterScore()->fileInfo()->fileName(false).toString().toXmlEscaped();
                 break;
             case 'F':
-                d += masterScore()->fileInfo()->path().toString().toXmlEscaped();
+                fragments.back().text += masterScore()->fileInfo()->path().toString().toXmlEscaped();
                 break;
             case 'd':
-                d += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
+                fragments.back().text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
                 break;
             case 'D':
             {
                 String creationDate = score()->metaTag(u"creationDate");
                 if (creationDate.isEmpty()) {
-                    d += masterScore()->fileInfo()->birthTime().date().toString(muse::DateFormat::ISODate);
+                    fragments.back().text += masterScore()->fileInfo()->birthTime().date().toString(
+                        muse::DateFormat::ISODate);
                 } else {
-                    d += muse::Date::fromStringISOFormat(creationDate).toString(muse::DateFormat::ISODate);
+                    fragments.back().text += muse::Date::fromStringISOFormat(creationDate).toString(
+                        muse::DateFormat::ISODate);
                 }
             }
             break;
             case 'm':
                 if (score()->dirty() || !masterScore()->saved()) {
-                    d += muse::Time::currentTime().toString(muse::DateFormat::ISODate);
+                    fragments.back().text += muse::Time::currentTime().toString(muse::DateFormat::ISODate);
                 } else {
-                    d += masterScore()->fileInfo()->lastModified().time().toString(muse::DateFormat::ISODate);
+                    fragments.back().text += masterScore()->fileInfo()->lastModified().time().toString(
+                        muse::DateFormat::ISODate);
                 }
                 break;
             case 'M':
                 if (score()->dirty() || !masterScore()->saved()) {
-                    d += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
+                    fragments.back().text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
                 } else {
-                    d += masterScore()->fileInfo()->lastModified().date().toString(muse::DateFormat::ISODate);
+                    fragments.back().text += masterScore()->fileInfo()->lastModified().date().toString(
+                        muse::DateFormat::ISODate);
                 }
                 break;
             case 'C': // only on first page
@@ -402,29 +448,41 @@ String Page::replaceTextMacros(const String& s) const
                 }
             // FALLTHROUGH
             case 'c':
-                d += score()->metaTag(u"copyright").toXmlEscaped();
-                break;
+            {
+                const String copyrightString = score()->metaTag(u"copyright").toXmlEscaped();
+                const CharFormat copyrightFormat = formatForMacro(String('$' + nc));
+                // If the default format equals the format for this macro, we don't need to create a new fragment...
+                if (defaultFormat == copyrightFormat) {
+                    fragments.back().text += copyrightString;
+                    break;
+                }
+                TextFragment copyrightFragment(copyrightString);
+                copyrightFragment.format = copyrightFormat;
+                fragments.emplace_back(copyrightFragment);
+                fragments.emplace_back(TextFragment());     // Start next fragment
+            }
+            break;
             case 'v':
                 if (score()->dirty()) {
-                    d += score()->appVersion();
+                    fragments.back().text += score()->appVersion();
                 } else {
-                    d += score()->mscoreVersion();
+                    fragments.back().text += score()->mscoreVersion();
                 }
                 break;
             case 'r':
                 if (score()->dirty()) {
-                    d += revision;
+                    fragments.back().text += revision;
                 } else {
                     int rev = score()->mscoreRevision();
                     if (rev > 99999) { // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
-                        d += String::number(rev, 16);
+                        fragments.back().text += String::number(rev, 16);
                     } else {
-                        d += String::number(rev, 10);
+                        fragments.back().text += String::number(rev, 10);
                     }
                 }
                 break;
             case '$':
-                d += '$';
+                fragments.back().text += '$';
                 break;
             case ':':
             {
@@ -437,24 +495,46 @@ String Page::replaceTextMacros(const String& s) const
                     tag += s.at(k);
                 }
                 if (k != n) {       // found ':' ?
-                    d += score()->metaTag(tag).toXmlEscaped();
+                    fragments.back().text += score()->metaTag(tag).toXmlEscaped();
                     i = k - 1;
                 }
             }
             break;
             default:
-                d += '$';
-                d += nc;
+                fragments.back().text += '$';
+                fragments.back().text += nc;
                 break;
             }
             ++i;
         } else if (c == '&') {
-            d += u"&amp;";
+            fragments.back().text += u"&amp;";
         } else {
-            d += c;
+            fragments.back().text += c;
         }
     }
-    return d;
+
+    TextBlock tb;
+    tb.fragments() = fragments;
+    return tb;
+}
+
+//---------------------------------------------------------
+//   formatForMacro
+//---------------------------------------------------------
+
+const CharFormat Page::formatForMacro(const String& s) const
+{
+    CharFormat format;
+    if (s == "$c" || s == "$C") {
+        format.setStyle(style().styleV(Sid::copyrightFontStyle).value<FontStyle>());
+        format.setFontSize(style().styleD(Sid::copyrightFontSize));
+        format.setFontFamily(style().styleSt(Sid::copyrightFontFace));
+    } else if (s == "$p" || s == "$P" || s == "$n" || s == "$N") {
+        format.setStyle(style().styleV(Sid::pageNumberFontStyle).value<FontStyle>());
+        format.setFontSize(style().styleD(Sid::pageNumberFontSize));
+        format.setFontFamily(style().styleSt(Sid::pageNumberFontFace));
+    }
+    return format;
 }
 
 //---------------------------------------------------------

@@ -86,6 +86,10 @@
       <headerFontSize>11.9365</headerFontSize>
       <footerFontFace>Plantin MT Std</footerFontFace>
       <footerFontSize>11.9365</footerFontSize>
+      <copyrightFontFace>Plantin MT Std</copyrightFontFace>
+      <copyrightFontSize>11.9365</copyrightFontSize>
+      <pageNumberFontFace>Plantin MT Std</pageNumberFontFace>
+      <pageNumberFontSize>11.9365</pageNumberFontSize>
       <instrumentChangeFontFace>Plantin MT Std</instrumentChangeFontFace>
       <instrumentChangeFontSize>11.9365</instrumentChangeFontSize>
       <stickingFontFace>Plantin MT Std</stickingFontFace>

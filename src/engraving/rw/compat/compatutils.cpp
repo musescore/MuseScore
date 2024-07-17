@@ -41,6 +41,8 @@
 #include "dom/playtechannotation.h"
 #include "dom/capo.h"
 
+#include "engraving/style/textstyle.h"
+
 #include "types/string.h"
 
 #include "log.h"
@@ -97,6 +99,9 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     if (masterScore->mscVersion() < 420) {
         addMissingInitKeyForTransposingInstrument(masterScore);
         resetFramesExclusionFromParts(masterScore);
+    }
+    if (masterScore->mscVersion() < 440) {
+        mapHeaderFooterStyles(masterScore);
     }
 }
 
@@ -667,4 +672,49 @@ void CompatUtils::resetFramesExclusionFromParts(MasterScore* masterScore)
             }
         }
     }
+}
+
+void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
+{
+    // Copyright and page numbers used header/footer styling before 4.4 - after 4.4 these have their own styles. To ensure nothing
+    // changes visually when loading a pre-4.4 score for the first time, we must search the header/footer strings for copyright/page
+    // number macros and set the "defaults" for copyright/page number styles based on where the macros were inserted...
+    const auto doMap = [score](const TextStyleType type, const std::vector<Sid>& headerFooterStringSids) {
+        const TextStyle* headerFooterTextStyle = textStyle(type);
+        const TextStyle* copyrightTextStyle = textStyle(TextStyleType::COPYRIGHT);
+        const TextStyle* pageNumberTextStyle = textStyle(TextStyleType::PAGE_NUMBER);
+
+        //! NOTE: Keep in sync with Page::replaceTextMacros
+        const std::wregex copyrightSearch(LR"(\$[cC])");
+        const std::wregex pageNumberSearch(LR"(\$[pPnN])");
+
+        bool haveMappedCopyright = false;
+        bool haveMappedPageNumber = false;
+        for (const Sid sid : headerFooterStringSids) {
+            const String s = score->style().styleSt(sid);
+            if (!haveMappedCopyright && s.contains(copyrightSearch)) {
+                for (size_t i = 0; i < TEXT_STYLE_SIZE; ++i) {
+                    const Sid headerFooterSid = headerFooterTextStyle->at(i).sid;
+                    const PropertyValue pv = score->style().styleV(headerFooterSid);
+                    const Sid copyrightSid = copyrightTextStyle->at(i).sid;
+                    score->style().set(copyrightSid, pv);
+                }
+                haveMappedCopyright = true;
+            }
+            if (!haveMappedPageNumber && s.contains(pageNumberSearch)) {
+                for (size_t i = 0; i < TEXT_STYLE_SIZE; ++i) {
+                    const Sid headerFooterSid = headerFooterTextStyle->at(i).sid;
+                    const Sid pageNumberSid = pageNumberTextStyle->at(i).sid;
+                    const PropertyValue pv = score->style().styleV(headerFooterSid);
+                    score->style().set(pageNumberSid, pv);
+                }
+                haveMappedPageNumber = true;
+            }
+        }
+    };
+
+    doMap(TextStyleType::HEADER, { Sid::oddHeaderL,  Sid::oddHeaderC,  Sid::oddHeaderR,
+                                   Sid::evenHeaderL, Sid::evenHeaderC, Sid::evenHeaderR });
+    doMap(TextStyleType::FOOTER, { Sid::oddFooterL,  Sid::oddFooterC,  Sid::oddFooterR,
+                                   Sid::evenFooterL, Sid::evenFooterC, Sid::evenFooterR });
 }

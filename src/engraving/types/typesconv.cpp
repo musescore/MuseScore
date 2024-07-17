@@ -1144,6 +1144,8 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::INSTRUMENT_CHANGE, "instrument_change",    muse::TranslatableString("engraving", "Instrument change") },
     { TextStyleType::HEADER,            "header",               muse::TranslatableString("engraving", "Header") },
     { TextStyleType::FOOTER,            "footer",               muse::TranslatableString("engraving", "Footer") },
+    { TextStyleType::COPYRIGHT,         "copyright",            muse::TranslatableString("engraving", "Copyright") },
+    { TextStyleType::PAGE_NUMBER,       "page_number",          muse::TranslatableString("engraving", "Page number") },
 
     { TextStyleType::MEASURE_NUMBER,    "measure_number",       muse::TranslatableString("engraving", "Measure number") },
     { TextStyleType::MMREST_RANGE,      "mmrest_range",         muse::TranslatableString("engraving", "Multimeasure rest range") },
@@ -1245,6 +1247,8 @@ TextStyleType TConv::fromXml(const AsciiStringView& tag, TextStyleType def)
         { "Instrument Change", TextStyleType::INSTRUMENT_CHANGE },
         { "Header", TextStyleType::HEADER },
         { "Footer", TextStyleType::FOOTER },
+        { "Copyright", TextStyleType::COPYRIGHT },
+        { "Page Number", TextStyleType::PAGE_NUMBER },
 
         { "Measure Number", TextStyleType::MEASURE_NUMBER },
         { "Multimeasure Rest Range", TextStyleType::MMREST_RANGE },
