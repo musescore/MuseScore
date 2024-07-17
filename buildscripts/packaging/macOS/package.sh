@@ -51,8 +51,13 @@ VOLUME=$(mount | grep ${DEV} | cut -f 3 -d ' ')
 # copy in the application bundle
 cp -Rp ${APP_PATH} ${VOLUME}/${APPNAME}.app
 
+# Deploy
+echo "otool -L pre-macdeployqt"
+otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
+
 macdeployqt ${VOLUME}/${APPNAME}.app -verbose=2 -qmldir=.
 
+echo "otool -L post-macdeployqt"
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
