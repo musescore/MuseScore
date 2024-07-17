@@ -21,7 +21,7 @@ done
 if [ "$VERSION" = 0 ]; then
     SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
     VERSION=$(cmake -P "$SCRIPT_DIR/../config.cmake" | sed -n -e "s/^.*VERSION  *//p")
-fi    
+fi
 
 echo "LONG_NAME: $LONG_NAME"
 echo "LONGER_NAME: $LONGER_NAME"
@@ -35,70 +35,31 @@ VOLNAME=${LONG_NAME}-${VERSION}
 DMGNAME=${VOLNAME}Uncompressed.dmg
 COMPRESSEDDMGNAME=${VOLNAME}.dmg
 
-
-function set_bundle_display_options() {
-	osascript <<-EOF
-    tell application "Finder"
-        set f to POSIX file ("${1}" as string) as alias
-        tell folder f
-            open
-            tell container window
-                set toolbar visible to false
-                set statusbar visible to false
-                set current view to icon view
-                delay 1 -- sync
-                set the bounds to {0, 0, 720, 524}
-            end tell
-            delay 1 -- sync
-            set icon size of the icon view options of container window to 120
-            set arrangement of the icon view options of container window to not arranged
-            set position of item "${LONGER_NAME}.app" to {184, 320}
-            close
-            set position of item "Applications" to {536, 320}
-            open
-            set background picture of the icon view options of container window to file "background.tiff" of folder "Pictures"
-            set the bounds of the container window to {0, 0, 720, 524}
-            update without registering applications
-            delay 5 -- sync
-            close
-        end tell
-        delay 5 -- sync
-    end tell
-EOF
-
-}
-
 function change_rpath() {
-   for P in `otool -L $1 | awk '{print $1}'`
-   do
-      if [[ "$P" == *@rpath* ]]
-      then
-         if [[ "$P" == *Qt* ]]
-         then
-            PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
-            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-            install_name_tool -change $P $PSLASH $1
-            for P1 in `otool -L $FNAME | awk '{print $1}'`
-            do
-               if [[ "$P1" == *@rpath* ]]
-               then
-                   PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../..,g")
-                   install_name_tool -change $P1 $PSLASH1 $FNAME
-               fi
-            done
-         else
-            PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
-            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-            install_name_tool -change $P $PSLASH $1
-         fi
-      fi
-   done
+    for P in $(otool -L $1 | awk '{print $1}'); do
+        if [[ "$P" == *@rpath* ]]; then
+            if [[ "$P" == *Qt* ]]; then
+                PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
+                FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+                install_name_tool -change $P $PSLASH $1
+                for P1 in $(otool -L $FNAME | awk '{print $1}'); do
+                    if [[ "$P1" == *@rpath* ]]; then
+                        PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../..,g")
+                        install_name_tool -change $P1 $PSLASH1 $FNAME
+                    fi
+                done
+            else
+                PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
+                FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+                install_name_tool -change $P $PSLASH $1
+            fi
+        fi
+    done
 }
-
 
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
-#tip: increase the size if error on copy or macdeployqt
+# Tip: increase the size if error on copy or macdeployqt
 hdiutil create -size 750m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
 
 # Mount the disk image
@@ -107,7 +68,7 @@ hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
 # Obtain device information
 DEVS=$(hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME} | cut -f 1)
 DEV=$(echo $DEVS | cut -f 1 -d ' ')
-VOLUME=$(mount |grep ${DEV} | cut -f 3 -d ' ')
+VOLUME=$(mount | grep ${DEV} | cut -f 3 -d ' ')
 
 # copy in the application bundle
 cp -Rp ${APP_PATH} ${VOLUME}/${APPNAME}.app
@@ -149,14 +110,10 @@ change_rpath $BIN_FILE
 # Workaround:
 # fix Homebrew libraries with hard coded absolute path, see QTBUG-56814
 FOLDER_NAME=${VOLUME}/${APPNAME}.app/Contents/Frameworks
-for P in `ls -d $FOLDER_NAME/*.* | awk '{print $1}'`
-do
-    if [[ "$P" == *.dylib ]]
-    then
-        for P1 in `otool -L $P | awk '{print $1}'`
-        do
-            if [[ "$P1" == /usr/local/Cellar*.dylib ]]
-            then
+for P in $(ls -d $FOLDER_NAME/*.* | awk '{print $1}'); do
+    if [[ "$P" == *.dylib ]]; then
+        for P1 in $(otool -L $P | awk '{print $1}'); do
+            if [[ "$P1" == /usr/local/Cellar*.dylib ]]; then
                 PATHNAME=$(dirname $P1)
                 PSLASH1=$(echo $P1 | sed "s,$PATHNAME,@executable_path/../Frameworks,g")
                 install_name_tool -change $P1 $PSLASH1 $P
@@ -165,11 +122,10 @@ do
     fi
 done
 
-for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*");
-do
-  lipo -remove ppc7400 "$f" -output "$f" > /dev/null 2>&1
-  lipo -remove x86 "$f" -output "$f" > /dev/null 2>&1
-  lipo -remove ppc "$f" -output "$f" > /dev/null 2>&1
+for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*"); do
+    lipo -remove ppc7400 "$f" -output "$f" >/dev/null 2>&1
+    lipo -remove x86 "$f" -output "$f" >/dev/null 2>&1
+    lipo -remove ppc "$f" -output "$f" >/dev/null 2>&1
 done
 
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
@@ -177,20 +133,49 @@ otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
-
+# Copy in background image
 echo "Copy in background image"
-# copy in background image
 mkdir -p ${VOLUME}/Pictures
-# fixme: path
-cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
+cp ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 
-echo "symlink application"
-# nssymlink application
+# Add symlink to Applications folder
+echo "Add symlink to Applications folder"
 ln -s /Applications/ ${VOLUME}/Applications
-set_bundle_display_options ${VOLUME}
+
+# Decorate disk image
+echo "Decorate disk image"
+osascript <<-EOF
+tell application "Finder"
+    set f to POSIX file ("${VOLUME}" as string) as alias
+    tell folder f
+        open
+        tell container window
+            set toolbar visible to false
+            set statusbar visible to false
+            set current view to icon view
+            delay 1 -- sync
+            set the bounds to {0, 0, 720, 524}
+        end tell
+        delay 1 -- sync
+        set icon size of the icon view options of container window to 120
+        set arrangement of the icon view options of container window to not arranged
+        set position of item "${LONGER_NAME}.app" to {184, 320}
+        close
+        set position of item "Applications" to {536, 320}
+        open
+        set background picture of the icon view options of container window to file "background.tiff" of folder "Pictures"
+        set the bounds of the container window to {0, 0, 720, 524}
+        update without registering applications
+        delay 5 -- sync
+        close
+    end tell
+    delay 5 -- sync
+end tell
+EOF
+
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
-#codesign
+# Codesign
 echo "Codesign"
 # `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
 find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --force --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
