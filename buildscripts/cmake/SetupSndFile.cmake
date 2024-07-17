@@ -69,29 +69,36 @@ elseif (OS_IS_WASM)
     setup_module()
 
 else()
-    # Use pkg-config to get hints about paths
-    find_package(PkgConfig)
-    if(PKG_CONFIG_FOUND)
-        pkg_check_modules(LIBSNDFILE_PKGCONF sndfile>=1.0.25 QUIET)
-    endif()
+    find_package(SndFile)
 
-    # Include dir
-    find_path(LIBSNDFILE_INCLUDE_DIR
-        NAMES sndfile.h
-        PATHS ${LIBSNDFILE_PKGCONF_INCLUDEDIR}
-        NO_DEFAULT_PATH
+    if (SNDFILE_FOUND)
+        set(SNDFILE_LIB ${SNDFILE_LIBRARY})
+        set(SNDFILE_INCDIR ${SNDFILE_INCLUDE_DIR})
+    else()
+        # Use pkg-config to get hints about paths
+        find_package(PkgConfig)
+        if(PKG_CONFIG_FOUND)
+            pkg_check_modules(LIBSNDFILE_PKGCONF sndfile>=1.0.25 QUIET)
+        endif()
+
+        # Include dir
+        find_path(LIBSNDFILE_INCLUDE_DIR
+            NAMES sndfile.h
+            PATHS ${LIBSNDFILE_PKGCONF_INCLUDEDIR}
+            NO_DEFAULT_PATH
         )
 
-    # Library
-    find_library(LIBSNDFILE_LIBRARY
-        NAMES sndfile libsndfile-1
-        PATHS ${LIBSNDFILE_PKGCONF_LIBDIR}
-        NO_DEFAULT_PATH
+        # Library
+        find_library(LIBSNDFILE_LIBRARY
+            NAMES sndfile libsndfile-1
+            PATHS ${LIBSNDFILE_PKGCONF_LIBDIR}
+            NO_DEFAULT_PATH
         )
 
-    if (LIBSNDFILE_LIBRARY)
-        set(SNDFILE_LIB ${LIBSNDFILE_LIBRARY})
-        set(SNDFILE_INCDIR ${LIBSNDFILE_INCLUDE_DIR})
+        if (LIBSNDFILE_LIBRARY)
+            set(SNDFILE_LIB ${LIBSNDFILE_LIBRARY})
+            set(SNDFILE_INCDIR ${LIBSNDFILE_INCLUDE_DIR})
+        endif()
     endif()
 endif()
 
