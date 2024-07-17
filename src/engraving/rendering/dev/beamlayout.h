@@ -52,6 +52,7 @@ public:
     static bool notTopBeam(ChordRest* cr);
     static void createBeams(LayoutContext& ctx, Measure* measure);
     static void restoreBeams(Measure* m, LayoutContext& ctx);
+    static bool measureMayHaveBeamsJoinedIntoNext(const Measure* measure);
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
     static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);

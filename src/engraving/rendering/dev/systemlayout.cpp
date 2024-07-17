@@ -379,13 +379,16 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     if (ctx.state().endTick() < ctx.state().prevMeasure()->tick()) {
         // we've processed the entire range
         // but we need to continue layout until we reach a system whose last measure is the same as previous layout
-        if (ctx.state().prevMeasure() == ctx.state().systemOldMeasure()) {
+        MeasureBase* curMB = ctx.mutState().curMeasure();
+        Measure* m = curMB && curMB->isMeasure() ? toMeasure(curMB) : nullptr;
+        bool curMeasureMayHaveJoinedBeams = m && BeamLayout::measureMayHaveBeamsJoinedIntoNext(m);
+        if (ctx.state().prevMeasure() == ctx.state().systemOldMeasure() && !curMeasureMayHaveJoinedBeams) {
+            // If current measure has possible beams joining to the next, we need to continue layout. This needs a better solution in future. [M.S.]
             // this system ends in the same place as the previous layout
             // ok to stop
-            if (ctx.state().curMeasure() && ctx.state().curMeasure()->isMeasure()) {
+            if (m) {
                 // we may have previously processed first measure(s) of next system
                 // so now we must restore to original state
-                Measure* m = toMeasure(ctx.mutState().curMeasure());
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {

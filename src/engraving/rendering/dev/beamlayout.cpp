@@ -463,6 +463,32 @@ void BeamLayout::restoreBeams(Measure* m, LayoutContext& ctx)
     }
 }
 
+bool BeamLayout::measureMayHaveBeamsJoinedIntoNext(const Measure* measure)
+{
+    const MeasureBase* next = measure->next();
+    if (!(next && next->isMeasure())) {
+        return false;
+    }
+
+    const Measure* nextMeasure = toMeasure(next);
+    const Segment* firstCrSeg = nextMeasure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    if (!firstCrSeg) {
+        return false;
+    }
+
+    for (const EngravingItem* item : firstCrSeg->elist()) {
+        if (!item) {
+            continue;
+        }
+        BeamMode beamMode = toChordRest(item)->beamMode();
+        if (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN16 || beamMode == BeamMode::BEGIN32) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   breakCrossMeasureBeams
 //---------------------------------------------------------
