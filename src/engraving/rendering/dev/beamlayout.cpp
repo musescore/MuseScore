@@ -504,7 +504,7 @@ void BeamLayout::breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx)
         std::vector<ChordRest*> nextElements;
 
         for (ChordRest* beamCR : beam->elements()) {
-            if (beamCR->measure() == measure) {
+            if (beamCR->tick() < next->tick()) {
                 mElements.push_back(beamCR);
             } else {
                 nextElements.push_back(beamCR);
