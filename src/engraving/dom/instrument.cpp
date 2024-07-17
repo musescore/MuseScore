@@ -191,25 +191,43 @@ String Instrument::recognizeMusicXmlId() const
 
 String Instrument::recognizeId() const
 {
-    // When reading a score create with pre-3.6, instruments doesn't
-    // have an id define in the instrument. So try to find the instrumentId
-    // based on MusicXMLid.
-    // This requires a hack for instruments using MusicXMLid "strings.group"
-    // because there are multiple instrument using this same id.
-    // For these instruments, use the value of controller 32 of the "arco"
-    // channel to find the correct instrument.
-    // There are some duplicate MusicXML IDs among other instruments too. In
-    // that case we check the pitch range and use the shortest ID that matches.
+    // When reading a score created with pre-3.6, MuseScore's instrument ID
+    // isn't saved in the score file, so we must try to guess the ID based on
+    // the MusicXML ID, which is saved. However, MusicXML IDs are not unique,
+    // so we must also consider other data to find the best match.
+
+    if (m_musicXmlId.startsWith(u"mdl.")) {
+        // Use fixed mapping for MDL1 instruments to ensure we get the
+        // marching versions (e.g. "marching-snare" and not "snare-drum").
+        // See https://github.com/musescore/mdl/blob/master/resources/instruments/mdl_1_3_0.xml
+        if (m_musicXmlId == u"mdl.drum.snare-drum") {
+            return u"marching-snare";
+        } else if (m_musicXmlId == u"mdl.drum.tenor-drum") {
+            return u"marching-tenor-drums";
+        } else if (m_musicXmlId == u"mdl.drum.bass-drum") {
+            return u"marching-bass-drums";
+        } else if (m_musicXmlId == u"mdl.metal.cymbal.crash") {
+            return u"marching-cymbals";
+        } else if (m_musicXmlId == u"mdl.drum.group.set") {
+            return u"drumset";
+        }
+    }
+
+    // Several instruments have MusicXML ID "strings.group". Let's use the
+    // value of controller 32 of the "arco" channel to distinguish them.
     const String arco = String(u"arco");
-    const bool groupHack = musicXmlId() == String(u"strings.group");
+    const bool groupHack = m_musicXmlId == String(u"strings.group");
     const int idxref = channelIdx(arco);
     const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
-    String fallback;
-    int bestMatchStrength = 0;     // higher when fallback ID provides better match for instrument data
+
+    // For other instruments, consider how closely the instrument data
+    // matches each of our templates. Use the ID that gives the best match.
+    String fallback; // ID that gave the best match so far
+    int bestMatchStrength = 0; // higher when ID is a better match
 
     for (const InstrumentGroup* g : instrumentGroups) {
         for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid != musicXmlId()) {
+            if (it->musicXMLid != m_musicXmlId) {
                 continue;
             }
             if (groupHack) {

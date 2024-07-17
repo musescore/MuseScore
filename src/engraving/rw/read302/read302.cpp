@@ -316,6 +316,19 @@ void Read302::fixInstrumentId(Instrument* instrument)
         id = u"marching-cymbals";
     } else if (id == u"bass-drum" && trackName == u"bass drums") {
         id = u"marching-bass-drums";
+    } else if (id.startsWith(u"mdl-")) {
+        // See https://github.com/musescore/mdl/blob/master/resources/instruments/mdl_1_3_0.xml
+        if (id == u"mdl-snareline" || id == u"mdl-snareline-a" || id == u"mdl-snaresolo" || id == u"mdl-snaresolo-a") {
+            id = u"marching-snare";
+        } else if (id == u"mdl-tenorline" || id == u"mdl-tenorsolo" || id == u"mdl-flubs") {
+            id = u"marching-tenor-drums";
+        } else if (id == u"mdl-bassline-10" || id == u"mdl-bassline-5") {
+            id = u"marching-bass-drums";
+        } else if (id == u"mdl-cymballine") {
+            id = u"marching-cymbals";
+        } else if (id == u"mdl-showtenorline" || id == u"mdl-rail" || id == u"mdl-drumset" || id == u"mdl-sampler") {
+            id = u"drumset";
+        }
     }
 
     instrument->setId(id);
