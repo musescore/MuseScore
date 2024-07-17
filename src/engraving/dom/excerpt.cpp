@@ -695,6 +695,13 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         }
     } else if (ns->isTrill()) {
         ns->computeStartElement();
+    } else {
+        if (!ns->startElement()) {
+            ns->computeStartElement();
+        }
+        if (!ns->endElement()) {
+            ns->computeEndElement();
+        }
     }
 
     if (!ns->startElement() || !ns->endElement()) {
@@ -708,6 +715,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
                 toChord(endElement)->removeEndingSpanner(ns);
             }
         }
+        LOGD() << "No start or end element, can't add spanner: " << ns->tick().toString();
         delete ns;
         return;
     }
