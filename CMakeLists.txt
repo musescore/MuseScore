@@ -143,7 +143,11 @@ endif(MUE_COMPILE_USE_CCACHE)
 ###########################################
 
 if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
-    list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}) 
+    list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})
+
+    # These are included in the precompiled dependencies, so let's use them from there
+    set(MUE_COMPILE_USE_SYSTEM_FLAC ON)
+    set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
 endif()
 
 set(QT_MIN_VERSION "6.2.4")
