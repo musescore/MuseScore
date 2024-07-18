@@ -126,7 +126,7 @@ DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const Score* score) const
     return result;
 }
 
-void PlaybackContext::update(const ID partId, const Score* score)
+void PlaybackContext::update(const ID partId, const Score* score, bool expandRepeats)
 {
     const Part* part = score->partById(partId);
     IF_ASSERT_FAILED(part) {
@@ -145,7 +145,7 @@ void PlaybackContext::update(const ID partId, const Score* score)
     m_dynamicsByTrack.reserve(ntracks);
     m_playbackParamByTrack.reserve(ntracks);
 
-    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+    for (const RepeatSegment* repeatSegment : score->repeatList(expandRepeats)) {
         std::vector<const MeasureRepeat*> measureRepeats;
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 

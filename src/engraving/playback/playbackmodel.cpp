@@ -342,7 +342,7 @@ void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t
 void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
 {
     PlaybackContextPtr ctx = playbackCtx(trackId);
-    ctx->update(trackId.partId, m_score);
+    ctx->update(trackId.partId, m_score, m_expandRepeats);
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
     trackData.dynamics = ctx->dynamicLevelLayers(m_score);
