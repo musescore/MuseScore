@@ -93,6 +93,10 @@
       <headerFontSize>8.8</headerFontSize>
       <footerFontFace>Times</footerFontFace>
       <footerFontSize>8.8</footerFontSize>
+      <copyrightFontFace>Times</copyrightFontFace>
+      <copyrightFontSize>8.8</copyrightFontSize>
+      <pageNumberFontFace>Times</pageNumberFontFace>
+      <pageNumberFontSize>8.8</pageNumberFontSize>
       <instrumentChangeFontFace>Times</instrumentChangeFontFace>
       <instrumentChangeFontSize>8.8</instrumentChangeFontSize>
       <stickingFontFace>Times</stickingFontFace>

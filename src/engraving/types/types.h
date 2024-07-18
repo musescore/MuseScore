@@ -748,6 +748,8 @@ enum class TextStyleType {
     INSTRUMENT_CHANGE,
     HEADER,
     FOOTER,
+    COPYRIGHT,
+    PAGE_NUMBER,
 
     // Measure-oriented styles
     MEASURE_NUMBER,

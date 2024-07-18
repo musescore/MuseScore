@@ -487,6 +487,7 @@ public:
     DirectionV direction() const { return m_direction; }
     void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
     AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
+    void genText();
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
@@ -507,7 +508,7 @@ private:
     void drawSelection(muse::draw::Painter*, const RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     String genText(const LayoutData* ldata) const;
-    void genText();
+
     virtual int getPropertyFlagsIdx(Pid id) const override;
     String stripText(bool, bool, bool) const;
     Sid offsetSid() const;
