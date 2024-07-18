@@ -567,3 +567,20 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
 
     delete score;
 }
+
+TEST_F(Engraving_MeasureTests, changeMeasureLen) {
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"changeMeasureLen.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m = score->firstMeasure()->nextMeasure();
+
+    score->startCmd();
+
+    m->adjustToLen(Fraction(2, 4));
+
+    m->adjustToLen(Fraction(6, 4));
+
+    score->setLayoutAll();
+    score->endCmd();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"changeMeasureLen.mscx", MEASURE_DATA_DIR + u"changeMeasureLen-ref.mscx"));
+}
