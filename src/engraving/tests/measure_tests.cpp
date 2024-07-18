@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "dom/engravingitem.h"
+#include "dom/excerpt.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
 #include "dom/measurenumber.h"
@@ -40,7 +41,44 @@ static const String MEASURE_DATA_DIR("measure_data/");
 
 class Engraving_MeasureTests : public ::testing::Test
 {
+public:
+    void createParts(MasterScore* masterScore);
 };
+
+void Engraving_MeasureTests::createParts(MasterScore* masterScore)
+{
+    //
+    // create first part
+    //
+    std::vector<Part*> parts;
+    parts.push_back(masterScore->parts().at(0));
+    Score* nscore = masterScore->createScore();
+
+    Excerpt* ex = new Excerpt(masterScore);
+    ex->setExcerptScore(nscore);
+    ex->setParts(parts);
+    ex->setName(parts.front()->partName());
+    Excerpt::createExcerpt(ex);
+    masterScore->excerpts().push_back(ex);
+    EXPECT_TRUE(nscore);
+
+    //
+    // create second part
+    //
+    parts.clear();
+    parts.push_back(masterScore->parts().at(1));
+    nscore = masterScore->createScore();
+
+    ex = new Excerpt(masterScore);
+    ex->setExcerptScore(nscore);
+    ex->setParts(parts);
+    ex->setName(parts.front()->partName());
+    Excerpt::createExcerpt(ex);
+    masterScore->excerpts().push_back(ex);
+    EXPECT_TRUE(nscore);
+
+    masterScore->setExcerptsChanged(true);
+}
 
 TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change, 72 is wrong surely?
 {
@@ -583,4 +621,24 @@ TEST_F(Engraving_MeasureTests, changeMeasureLen) {
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"changeMeasureLen.mscx", MEASURE_DATA_DIR + u"changeMeasureLen-ref.mscx"));
+}
+
+TEST_F(Engraving_MeasureTests, measureSplit) {
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measureSplit.mscx");
+    EXPECT_TRUE(score);
+
+    createParts(score);
+    score->startCmd();
+
+    Measure* m = score->firstMeasure()->nextMeasure();
+    EXPECT_TRUE(m);
+    ChordRest* cr = m->first(SegmentType::ChordRest)->next()->nextChordRest(0);
+    EXPECT_TRUE(cr);
+
+    score->cmdSplitMeasure(cr);
+
+    score->setLayoutAll();
+    score->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measureSplit.mscx", MEASURE_DATA_DIR + u"measureSplit-ref.mscx"));
 }
