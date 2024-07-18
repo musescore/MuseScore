@@ -57,6 +57,11 @@ using namespace muse::diagnostics;
 using namespace muse;
 using namespace muse::modularity;
 
+static void diagnostics_init_qrc()
+{
+    Q_INIT_RESOURCE(diagnostics);
+}
+
 std::string DiagnosticsModule::moduleName() const
 {
     return "diagnostics";
@@ -86,6 +91,11 @@ void DiagnosticsModule::resolveImports()
     if (ar) {
         ar->reg(std::make_shared<DiagnosticsActions>());
     }
+}
+
+void DiagnosticsModule::registerResources()
+{
+    diagnostics_init_qrc();
 }
 
 void DiagnosticsModule::registerUiTypes()
