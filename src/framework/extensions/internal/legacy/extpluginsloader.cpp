@@ -31,6 +31,34 @@ using namespace muse;
 using namespace muse::extensions;
 using namespace muse::extensions::legacy;
 
+static Uri makeUri(const io::path_t& rootPath, const io::path_t& path)
+{
+    return Uri("muse://extensions/v1" + path.toQString().sliced(rootPath.size()).toLower().toStdString());
+}
+
+std::map<std::string /*codeKey*/, Uri> ExtPluginsLoader::loadCodekeyUriMap(const io::path_t& defPath, const io::path_t& extPath) const
+{
+    std::map<std::string /*codeKey*/, Uri> data;
+
+    auto loadUris = [this](std::map<std::string /*codeKey*/, Uri>& data, const io::path_t& rootPath) {
+        io::paths_t paths = qmlsPaths(rootPath);
+        for (const io::path_t& path : paths) {
+            std::string codeKey = io::completeBasename(path).toStdString();
+            Uri uri = makeUri(rootPath, path);
+            data.insert({ codeKey, uri });
+        }
+    };
+
+    loadUris(data, defPath);
+    loadUris(data, extPath);
+
+    //! NOTE These plugins have been ported to extensions
+    data["colornotes"] = Uri("musescore://extensions/colornotes");
+    data["addCourtesyAccidentals"] = Uri("musescore://extensions/courtesy_accidentals");
+
+    return data;
+}
+
 ManifestList ExtPluginsLoader::loadManifestList(const io::path_t& defPath, const io::path_t& extPath) const
 {
     TRACEFUNC;
@@ -93,7 +121,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     io::FileInfo fi(path);
 
     Manifest m;
-    m.uri = Uri("muse://extensions/v1" + path.toQString().sliced(rootPath.size()).toLower().toStdString());
+    m.uri = makeUri(rootPath, path);
     m.type = Type::Macros;
     m.apiversion = 1;
     m.legacyPlugin = true;
