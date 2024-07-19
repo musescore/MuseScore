@@ -2664,8 +2664,10 @@ void Note::verticalDrag(EditData& ed)
             accOffs = Accidental::subtype2value(AccidentalType::NONE);
         }
         int nStep = absStep(ned->line + lineOffset, score()->staff(idx)->clef(_tick));
+        nStep = std::max(0, nStep);
         int octave = nStep / 7;
         int newPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
+        newPitch = std::clamp(newPitch, 0, 127);
 
         if (!concertPitch()) {
             newPitch += interval.chromatic;
