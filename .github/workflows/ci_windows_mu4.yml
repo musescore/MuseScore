@@ -213,11 +213,6 @@ jobs:
       shell: bash
       run: |
         bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 4
-    - name: AppCast
-      if: env.DO_BUILD == 'true'
-      shell: bash
-      run: |
-        bash ./buildscripts/ci/tools/sparkle_appcast_gen.sh -p windows 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v4

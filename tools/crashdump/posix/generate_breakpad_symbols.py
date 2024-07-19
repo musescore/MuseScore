@@ -5,6 +5,7 @@
 #
 # Modified 2020 MuseScore Limited  
 # Added option --dumpsyms-bin
+# Added option --arch
 
 """A tool to generate symbols for a binary suitable for breakpad.
 
@@ -72,7 +73,7 @@ def GetSharedLibraryDependenciesLinux(binary):
 
   This implementation assumes that we're running on a Linux system."""
   ldd = subprocess.check_output(['ldd', binary]).decode('utf-8')
-  lib_re = re.compile('\t.* => (.+) \(.*\)$')
+  lib_re = re.compile(r'\t.* => (.+) \(.*\)$')
   result = []
   for line in ldd.splitlines():
     m = lib_re.match(line)
@@ -90,7 +91,7 @@ def _GetSharedLibraryDependenciesAndroidOrChromeOS(binary):
   arm64 device), so use that.
   """
   readelf = subprocess.check_output(['readelf', '-d', binary]).decode('utf-8')
-  lib_re = re.compile('Shared library: \[(.+)\]$')
+  lib_re = re.compile(r'Shared library: \[(.+)\]$')
   result = []
   binary_path = os.path.dirname(os.path.abspath(binary))
   for line in readelf.splitlines():
@@ -173,13 +174,13 @@ def GetSharedLibraryDependenciesMac(binary, exe_path):
   dylib_id = None
   for idx, line in enumerate(otool):
     if line.find('cmd LC_RPATH') != -1:
-      m = re.match(' *path (.*) \(offset .*\)$', otool[idx+2])
+      m = re.match(r' *path (.*) \(offset .*\)$', otool[idx+2])
       rpath = m.group(1)
       rpath = rpath.replace('@loader_path', loader_path)
       rpath = rpath.replace('@executable_path', exe_path)
       rpaths.append(rpath)
     elif line.find('cmd LC_ID_DYLIB') != -1:
-      m = re.match(' *name (.*) \(offset .*\)$', otool[idx+2])
+      m = re.match(r' *name (.*) \(offset .*\)$', otool[idx+2])
       dylib_id = m.group(1)
   # `man dyld` says that @rpath is resolved against a stack of LC_RPATHs from
   # all executable images leading to the load of the current module. This is
@@ -189,7 +190,7 @@ def GetSharedLibraryDependenciesMac(binary, exe_path):
 
   otool = subprocess.check_output(
       [otool_path, '-Lm', binary], env=env).decode('utf-8').splitlines()
-  lib_re = re.compile('\t(.*) \(compatibility .*\)$')
+  lib_re = re.compile(r'\t(.*) \(compatibility .*\)$')
   deps = []
   for line in otool:
     m = lib_re.match(line)
@@ -322,8 +323,13 @@ def GenerateSymbols(options, binaries):
             reason = "Could not locate dump_syms executable."
             break
 
+          dump_syms_command = [dump_syms, '-i']
+          if options.arch:
+            dump_syms_command.extend(['-a', options.arch])
+          dump_syms_command.append(binary)
+
           dump_syms_output = subprocess.check_output(
-              [dump_syms, '-i', binary]).decode('utf-8')
+              dump_syms_command).decode('utf-8')
           header_info = dump_syms_output.splitlines()[0]
           binary_info = GetBinaryInfoFromHeaderInfo(header_info)
           if not binary_info:
@@ -364,7 +370,11 @@ def GenerateSymbols(options, binaries):
 
         CreateSymbolDir(options, output_dir, binary_info.hash)
         with open(output_path, 'wb') as f:
-          subprocess.check_call([dump_syms, '-r', binary], stdout=f)
+          dump_syms_command = [dump_syms, '-r']
+          if options.arch:
+            dump_syms_command.extend(['-a', options.arch])
+          dump_syms_command.append(binary)
+          subprocess.check_call(dump_syms_command, stdout=f)
       except Exception as e:
         with exceptions_lock:
           exceptions.append(traceback.format_exc())
@@ -397,6 +407,8 @@ def main():
                     help='The directory where to write the symbols file.')
   parser.add_option('', '--binary', default='',
                     help='The path of the binary to generate symbols for.')
+  parser.add_option('', '--arch', default='',
+                    help='The architecture of the binary.')
   parser.add_option('', '--clear', default=False, action='store_true',
                     help='Clear the symbols directory before writing new '
                          'symbols.')

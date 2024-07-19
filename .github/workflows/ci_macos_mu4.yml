@@ -25,11 +25,11 @@ on:
 
 env:
   # CURRENT_RELEASE_BRANCH: 4.3.2
-  DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
 
 jobs:
   build_mu4:    
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -223,10 +223,6 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 4
-    - name: AppCast
-      if: env.DO_BUILD == 'true'
-      run: |
-        bash ./buildscripts/ci/tools/sparkle_appcast_gen.sh -p macos   
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4

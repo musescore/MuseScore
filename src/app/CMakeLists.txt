@@ -73,7 +73,10 @@ elseif(OS_IS_MAC)
     set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2024 MuseScore Limited. Published under the GNU General Public License version 3.")
 
     set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
-
+    if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
+        list(PREPEND CMAKE_INSTALL_RPATH "${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}/lib")
+    endif()
+    
     message("MACOSX_BUNDLE_VERSION: ${MACOSX_BUNDLE_LONG_VERSION_STRING}.${MACOSX_BUNDLE_BUNDLE_VERSION}")
 
 elseif(OS_IS_WASM)
@@ -270,7 +273,7 @@ endif (MSCORE_OUTPUT_NAME)
 
 if (OS_IS_MAC)
     set_target_properties(mscore PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/MacOS/MacOSXBundleInfo.plist.in
+        MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/macOS/Info.plist.in
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
 endif (OS_IS_MAC)
 
@@ -437,7 +440,7 @@ elseif(OS_IS_FBSD)
    install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore DESTINATION bin)
 
 ###########################################
-# MacOS
+# macOS
 ###########################################
 elseif(OS_IS_MAC)
 
@@ -468,18 +471,6 @@ elseif(OS_IS_MAC)
             ${PROJECT_SOURCE_DIR}/fonts/finalebroadway/FinaleBroadwayText.otf
             DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
     )
-
-    if(MUE_COMPILE_INSTALL_QTQML_FILES)
-        install(DIRECTORY
-                ${QT_INSTALL_QML}
-                DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}${Mscore_FRAMEWORKS_NAME}
-                REGEX ".*QtWebkit.*" EXCLUDE
-                REGEX ".*QtTest.*" EXCLUDE
-                REGEX ".*QtSensors.*" EXCLUDE
-                REGEX ".*QtMultimedia.*" EXCLUDE
-                REGEX ".*QtAudioEngine.*" EXCLUDE
-                REGEX ".*_debug\\.dylib" EXCLUDE)
-    endif()
 
 ###########################################
 # Wasm

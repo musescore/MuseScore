@@ -230,7 +230,7 @@ set(MODULE_SRC
     )
 
 # fluidsynth dependency
-include(FindSndFile)
+include(SetupSndFile)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
 set(FLUIDSYNTH_DIR ${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth/fluidsynth-2.3.3)
