@@ -738,7 +738,7 @@ protected:
 public:
     enum class Error : char {
         CAP_NO_ERROR, BAD_SIG, CAP_EOF, BAD_VOICE_SIG,
-        BAD_STAFF_SIG, BAD_SYSTEM_SIG
+        BAD_STAFF_SIG, BAD_SYSTEM_SIG, BAD_FORMAT,
     };
 
     Capella();
