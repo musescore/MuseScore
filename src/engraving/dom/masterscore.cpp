@@ -569,7 +569,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
 
         std::vector<TimeSig*> timeSigList;
         std::vector<KeySig*> keySigList;
-        std::vector<Clef*> clefList;
+        std::vector<Clef*> initClefList;
         std::vector<Clef*> previousClefList;
         std::list<Clef*> specialCaseClefs;
         std::vector<BarLine*> previousBarLinesList;
@@ -583,6 +583,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         if (measureInsert) {
             // if inserting before first measure, always preserve clefs and signatures
             // at the begining of the score (move them back)
+
             if (pm && !options.moveSignaturesClef && !isBeginning) {
                 Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                 if (ps && ps->enabled()) {
@@ -606,9 +607,11 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             continue;
                         }
                         EngravingItem* e = s->element(staffIdx * VOICES);
-                        // if it's a clef, we only add if it's a header clef
-                        bool moveClef = s->isHeaderClefType() && e && e->isClef() && !toClef(e)->forInstrumentChange();
-                        // otherwise, we only add if e exists and is generated
+                        // if it's a header clef, we only add if it's an init clef
+                        // (other header clefs are handled by undo(new InsertMeasures())
+                        bool initClef = isBeginning && s->isHeaderClefType();
+                        bool moveClef = initClef && e && e->isClef() && !toClef(e)->forInstrumentChange();
+                        // otherwise, we only add if e is not generated
                         bool moveOther = e && !e->isClef() && (!e->generated() || tick.isZero());
                         bool specialCase = false;
                         if (e && e->isClef() && !moveClef && isBeginning
@@ -652,9 +655,9 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         if (specialCase) {
                             specialCaseClefs.push_back(toClef(e));
                             ee = e;
-                        } else if (tick.isZero() && e->isClef()) {
+                        } else if (initClef) {
                             Clef* clef = toClef(e);
-                            clefList.push_back(clef);
+                            initClefList.push_back(clef);
                             ee = e;
                         }
                         if (ee) {
@@ -718,7 +721,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             }
             undoAddElement(nks);
         }
-        for (Clef* clef : clefList) {
+        for (Clef* clef : initClefList) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
             s->setHeader(true);
