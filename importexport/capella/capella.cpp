@@ -69,6 +69,7 @@ const char* Capella::errmsg[] = {
       "bad voice signature",
       "bad staff signature",
       "bad system signature",
+      "bad file content",
       };
 
 //---------------------------------------------------------
@@ -1528,9 +1529,11 @@ void TransposableObj::read()
       if (b != 12 && b != 21)
             qDebug("TransposableObj::read: warning: unknown drawObjectArray size of %d", b);
       variants = cap->readDrawObjectArray();
-      if (variants.size() != b)
-            qDebug("variants.size %d, expected %d", variants.size(), b);
       Q_ASSERT(variants.size() == b);
+      if (variants.size() != b) {
+            qDebug("variants.size %d, expected %d", variants.size(), b);
+            throw Capella::Error::BAD_FORMAT;
+            }
       /*int nRefNote =*/ cap->readInt();
       }
 
@@ -1614,6 +1617,8 @@ void NotelinesObj::read()
             case 2: break; // Standard (5 Linien)
             default: {
                   Q_ASSERT(b == 0);
+                  if (b != 0)
+                        throw Capella::Error::BAD_FORMAT;
                   char lines[11];
                   cap->read(lines, 11);
                   break;
@@ -1787,6 +1792,7 @@ QList<BasicDrawObj*> Capella::readDrawObjectArray()
                         break;
                   default:
                         qFatal("readDrawObjectArray unsupported type %d", int(type));
+                        throw Capella::Error::BAD_FORMAT;
                         break;
                   }
             }
@@ -1833,6 +1839,8 @@ void BasicDurationalObj::read()
       {
       unsigned char b = cap->readByte();
       Q_ASSERT(!(b & 0x80));
+      if (b & 0x80)
+            throw Capella::Error::BAD_FORMAT;
       nDots      = b & 0x03;
       noDuration = b & 0x04;
       postGrace  = b & 0x08;
@@ -1844,6 +1852,8 @@ void BasicDurationalObj::read()
 
       unsigned char c = cap->readByte();
       Q_ASSERT(!(c & 0x80));
+      if (c & 0x80)
+            throw Capella::Error::BAD_FORMAT;
       t = TIMESTEP(c & 0x0f);
       horizontalShift = (c & 0x10) ? cap->readInt() : 0;
       count = 0;
@@ -1926,6 +1936,8 @@ void ChordObj::read()
       beamMode      = (flags & 0x01) ? BeamMode(cap->readByte()) : BeamMode::AUTO;
       notationStave = (flags & 0x02) ? cap->readChar() : 0;
       Q_ASSERT(notationStave >= -1 && notationStave <= 1);
+      if (notationStave < -1 || notationStave > 1)
+             throw Capella::Error::BAD_FORMAT;
 
       if (flags & 0x04) {
             stemDir     = StemDir(cap->readChar());
@@ -2165,6 +2177,8 @@ QColor Capella::readColor()
       unsigned char b = readByte();
       if (b >= 16) {
             Q_ASSERT(b == 255);
+            if (b != 255)
+                throw Capella::Error::BAD_FORMAT;
             int r = readByte();
             int g = readByte();
             int bi = readByte();
@@ -2268,17 +2282,19 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
       sl->bSoundMapOut = b & 4;
       if (sl->bSoundMapIn) {      // Umleitungstabelle für Eingabe vom Keyboard
             uchar iMin = readByte();
-            Q_UNUSED(iMin);
             uchar n    = readByte();
             Q_ASSERT (n > 0 && iMin + n <= 128);
+            if (n <= 0 || iMin + n > 128)
+                throw Capella::Error::BAD_FORMAT;
             f->read(sl->soundMapIn, n);
             curPos += n;
             }
       if (sl->bSoundMapOut) {     // Umleitungstabelle für das Vorspielen
             unsigned char iMin = readByte();
-            Q_UNUSED(iMin);
             unsigned char n    = readByte();
             Q_ASSERT (n > 0 && iMin + n <= 128);
+            if (n <= 0 || iMin + n > 128)
+                throw Capella::Error::BAD_FORMAT;
             f->read(sl->soundMapOut, n);
             curPos += n;
             }
@@ -2475,6 +2491,8 @@ void CapExplicitBarline::read()
       else _type = BarLineType::NORMAL; // default
       _barMode = b >> 4;         // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
       Q_ASSERT(_barMode <= 2);
+      if (_barMode > 2)
+            throw Capella::Error::BAD_FORMAT;
 
       qDebug("         Expl.Barline type %d mode %d", int(_type), _barMode);
       }
