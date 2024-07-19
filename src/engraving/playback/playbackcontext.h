@@ -48,7 +48,7 @@ public:
     muse::mpe::PlaybackParamLayers playbackParamLayers(const Score* score) const;
     muse::mpe::DynamicLevelLayers dynamicLevelLayers(const Score* score) const;
 
-    void update(const ID partId, const Score* score);
+    void update(const ID partId, const Score* score, bool expandRepeats = true);
     void clear();
 
     bool hasSoundFlags() const;
