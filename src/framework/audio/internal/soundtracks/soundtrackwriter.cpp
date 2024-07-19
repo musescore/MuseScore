@@ -66,6 +66,13 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
     });
 }
 
+SoundTrackWriter::~SoundTrackWriter()
+{
+    if (m_encoderPtr) {
+        m_encoderPtr->deinit();
+    }
+}
+
 Ret SoundTrackWriter::write()
 {
     TRACEFUNC;

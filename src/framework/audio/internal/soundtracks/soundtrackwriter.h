@@ -43,6 +43,7 @@ class SoundTrackWriter : public muse::Injectable, public async::Asyncable
 public:
     SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source,
                      const muse::modularity::ContextPtr& iocCtx);
+    ~SoundTrackWriter() override;
 
     Ret write();
     void abort();
