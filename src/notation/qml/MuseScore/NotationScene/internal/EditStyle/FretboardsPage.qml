@@ -164,7 +164,7 @@ Rectangle {
                                 }
                                 StyledTextLabel {
                                     horizontalAlignment: Text.AlignLeft
-                                    text: qsTrc("notation", "Custom suffix")
+                                    text: qsTrc("notation", "Custom suffix:")
                                 }
                                 TextInputField {
                                     enabled: fretboardsPage.fretUseCustomSuffix.value === true
