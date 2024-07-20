@@ -72,8 +72,8 @@ Rectangle {
                     Layout.preferredHeight: 70
 
                     model: [
-                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: "Vertical", value: 0 },
-                        { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: "Horizontal", value: 1 }
+                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
+                        { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: qsTrc("notation", "Horizontal"), value: 1 }
                     ]
 
                     delegate: FlatRadioButton {
@@ -224,8 +224,8 @@ Rectangle {
                             Layout.preferredHeight: 70
 
                             model: [
-                                { iconCode: IconCode.FRETBOARD_BARRE_LINE, text: "Line", value: false },
-                                { iconCode: IconCode.FRETBOARD_BARRE_SLUR, text: "Slur", value: true }
+                                { iconCode: IconCode.FRETBOARD_BARRE_LINE, text: qsTrc("notation", "Line"), value: false },
+                                { iconCode: IconCode.FRETBOARD_BARRE_SLUR, text: qsTrc("notation", "Slur"), value: true }
                             ]
 
                             delegate: FlatRadioButton {
@@ -288,8 +288,8 @@ Rectangle {
                     Layout.preferredHeight: 70
 
                     model: [
-                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: "Trimmed", value: false },
-                        { iconCode: IconCode.FRETBOARD_EXTENDED, text: "Extended", value: true }
+                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
+                        { iconCode: IconCode.FRETBOARD_EXTENDED, text: qsTrc("notation", "Extended"), value: true }
                     ]
 
                     delegate: FlatRadioButton {
