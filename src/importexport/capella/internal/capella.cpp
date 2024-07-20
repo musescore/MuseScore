@@ -1545,10 +1545,9 @@ void TransposableObj::read()
         LOGD("TransposableObj::read: warning: unknown drawObjectArray size of %d", b);
     }
     variants = cap->readDrawObjectArray();
-    if (variants.size() != b) {
-        LOGD("variants.size %lld, expected %d", variants.size(), b);
+    IF_ASSERT_FAILED_X(variants.size() == b, QString::asprintf("variants.size %lld, expected %d", variants.size(), b)) {
+        throw Capella::Error::BAD_FORMAT;
     }
-    Q_ASSERT(variants.size() == b);
     /*int nRefNote =*/ cap->readInt();
 }
 
@@ -1632,7 +1631,9 @@ void NotelinesObj::read()
     case 1: break;         // Einlinienzeile
     case 2: break;         // Standard (5 Linien)
     default: {
-        Q_ASSERT(b == 0);
+        IF_ASSERT_FAILED(b == 0) {
+            throw Capella::Error::BAD_FORMAT;
+        }
         char lines[11];
         cap->read(lines, 11);
         break;
@@ -1952,7 +1953,9 @@ void ChordObj::read()
     unsigned char flags = cap->readByte();
     beamMode      = (flags & 0x01) ? CapBeamMode(cap->readByte()) : CapBeamMode::AUTO;
     notationStave = (flags & 0x02) ? cap->readChar() : 0;
-    Q_ASSERT(notationStave >= -1 && notationStave <= 1);
+    IF_ASSERT_FAILED(notationStave >= -1 && notationStave <= 1) {
+        throw Capella::Error::BAD_FORMAT;
+    }
 
     if (flags & 0x04) {
         stemDir     = StemDir(cap->readChar());
@@ -2351,8 +2354,8 @@ void Capella::readLayout()
     adjustVert = readByte();      // 0=nein, 1=außer letzte Seite, 3=alle Seiten
 
     unsigned char b  = readByte();
-    IF_ASSERT_FAILED((b & 0xFC) == 0) {   // bits 2...7 reserviert
-        //throw Capella::Error::BAD_FORMAT;
+    IF_ASSERT_FAILED(!(b & 0xFC)) {   // bits 2...7 reserviert
+        throw Capella::Error::BAD_FORMAT;
     }
     redundantKeys    = b & 1;
     modernDoubleNote = b & 2;
@@ -2521,7 +2524,9 @@ void CapExplicitBarline::read()
         _type = BarLineType::NORMAL;    // default
     }
     _barMode = b >> 4;           // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
-    Q_ASSERT(_barMode <= 2);
+    IF_ASSERT_FAILED(_barMode <= 2) {
+        throw Capella::Error::BAD_FORMAT;
+    }
 
     LOGD("         Expl.Barline type %d mode %d", int(_type), _barMode);
 }
