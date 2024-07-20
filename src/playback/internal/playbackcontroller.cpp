@@ -215,7 +215,7 @@ void PlaybackController::seek(const midi::tick_t tick)
         return;
     }
 
-    seek(tickToSecs(tick));
+    seek(playedTickToSecs(tick));
 }
 
 void PlaybackController::seek(const audio::secs_t secs)
@@ -643,7 +643,7 @@ secs_t PlaybackController::playbackStartSecs() const
         if (!startTick.ret) {
             return 0;
         }
-        return tickToSecs(startTick.val);
+        return playedTickToSecs(startTick.val);
     }
 
     return 0;
@@ -805,8 +805,8 @@ void PlaybackController::updateLoop()
         return;
     }
 
-    secs_t fromSecs = tickToSecs(playbackTickFrom.val);
-    secs_t toSecs = tickToSecs(playbackTickTo.val);
+    secs_t fromSecs = playedTickToSecs(playbackTickFrom.val);
+    secs_t toSecs = playedTickToSecs(playbackTickTo.val);
     currentPlayer()->setLoop(secsToMilisecs(fromSecs), secsToMilisecs(toSecs));
 
     enableLoop();
@@ -1444,10 +1444,10 @@ secs_t PlaybackController::beatToSecs(int measureIndex, int beatIndex) const
         return 0;
     }
 
-    muse::midi::tick_t rawTick = notationPlayback()->beatToTick(measureIndex, beatIndex);
+    muse::midi::tick_t rawTick = notationPlayback()->beatToRawTick(measureIndex, beatIndex);
     muse::midi::tick_t playedTick = notationPlayback()->playPositionTickByRawTick(rawTick).val;
 
-    return tickToSecs(playedTick);
+    return playedTickToSecs(playedTick);
 }
 
 double PlaybackController::tempoMultiplier() const
@@ -1589,7 +1589,7 @@ bool PlaybackController::canReceiveAction(const ActionCode&) const
     return m_masterNotation != nullptr && m_masterNotation->hasParts();
 }
 
-muse::audio::secs_t PlaybackController::tickToSecs(int tick) const
+muse::audio::secs_t PlaybackController::playedTickToSecs(int tick) const
 {
     return secs_t(notationPlayback()->playedTickToSec(tick));
 }
