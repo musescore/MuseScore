@@ -77,7 +77,7 @@ StyleDialogPage {
     }
 
     ItemWithTitle {
-        title: qsTrc("notation", "Beam thickness")
+        title: qsTrc("notation", "Beam thickness:")
 
         IncrementalPropertyControl {
             width: 106
@@ -97,7 +97,7 @@ StyleDialogPage {
     }
 
     ItemWithTitle {
-        title: qsTrc("notation", "Broken beam minimum length")
+        title: qsTrc("notation", "Broken beam minimum length:")
 
         IncrementalPropertyControl {
             width: 106
