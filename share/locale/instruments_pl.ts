@@ -19535,7 +19535,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Common</source>
-        <translation>Zwykłe</translation>
+        <translation>Podstawowe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
@@ -19744,17 +19744,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="32"/>
         <source>SATB Closed Score</source>
-        <translation>SATB Closed Score</translation>
+        <translation>Partytura zamknięta SATB</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
         <source>SATB Closed Score + Organ</source>
-        <translation>SATB Closed Score + Organy</translation>
+        <translation>Partytura zamknięta SATB + Organy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="34"/>
         <source>SATB Closed Score + Piano</source>
-        <translation>SATB Closed Score + Fortepian</translation>
+        <translation>Partytura zamknięta SATB + Fortepian</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="35"/>
