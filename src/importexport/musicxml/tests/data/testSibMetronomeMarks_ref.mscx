@@ -161,6 +161,9 @@
       <VBox>
         <height>10</height>
         </VBox>
+      <HBox>
+        <width>5</width>
+        </HBox>
       <Measure>
         <voice>
           <Clef>

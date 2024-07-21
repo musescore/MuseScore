@@ -100,6 +100,11 @@
         </note>
       </measure>
     <measure number="5">
+      <print>
+        <measure-layout>
+          <measure-distance>100</measure-distance>
+          </measure-layout>
+        </print>
       <direction placement="above">
         <direction-type>
           <coda/>
