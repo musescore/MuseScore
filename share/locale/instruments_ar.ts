@@ -15700,7 +15700,7 @@
         <source>Guitar</source>
         <comment>guitar-steel-tablature longName</comment>
         <extracomment>longName for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>جيتار</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5208"/>

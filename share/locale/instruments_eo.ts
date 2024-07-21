@@ -4185,7 +4185,7 @@
         <source>Single-reed, conical bore instrument used in Hungarian and Romanian folk music.</source>
         <comment>tarogato description</comment>
         <extracomment>description for Tarogato; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Unuanĉa konusapertura instrumento kiu estas uzita en hungara kaj rumana popolmuziko.</translation>
+        <translation>Unuanĉa konusapertura instrumento uzata en hungara kaj rumana popolmuziko.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1548"/>
@@ -6460,7 +6460,7 @@
         <source>Horn used primarily in Vienna for classical orchestral music.</source>
         <comment>vienna-horn description</comment>
         <extracomment>description for Vienna Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Korno kiu estas uzita ĉefe en Vieno por klasika orkestra muziko.</translation>
+        <translation>Korno uzata ĉefe en Vieno por klasika orkestra muziko.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2271"/>
@@ -7104,7 +7104,7 @@
         <source>Valveless cylindrical horn with cupped mouthpiece.</source>
         <comment>posthorn description</comment>
         <extracomment>description for Posthorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Senvalva cilindra korno kun konusa blovingo.</translation>
+        <translation>Senvalva cilindra korno kun konusa buŝaĵo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2470"/>
@@ -8560,7 +8560,7 @@
         <source>Small flugelhorn in B♭, played using a deep bowled mouthpiece.</source>
         <comment>kuhlohorn description</comment>
         <extracomment>description for Kuhlohorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Malgranda flugilkorno en B♭, ludata per profunda boŭlita buŝpeco.</translation>
+        <translation>Malgranda flugilkorno en B♭, ludata per profunda boŭlita buŝaĵo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2927"/>
@@ -9876,7 +9876,7 @@
         <source>Conch shell, sometimes fitted with a mouthpiece.</source>
         <comment>conch description</comment>
         <extracomment>description for Conch; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Konkoŝelo, foje ekipita per buŝaĵo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3345"/>
@@ -9904,7 +9904,7 @@
         <source>Type of conch shell used as a trumpet in Japan, fitted with a bronze or wooden mouthpiece.</source>
         <comment>horagai description</comment>
         <extracomment>description for Horagai; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Speco de konkoŝelo uzata kiel trumpeto en Japanujo, agordis kun bronza aŭ ligna buŝaĵo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3354"/>
@@ -9932,7 +9932,7 @@
         <source>Long wooden natural horn with conical bore and wooden cup-shaped mouthpiece, originating in the Alpine regions.</source>
         <comment>alphorn description</comment>
         <extracomment>description for Alphorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Longa ligna natura korno kun konusa kalibro kaj ligna tasforma buŝaĵo, originante de la Alpaj regionoj.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3363"/>

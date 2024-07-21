@@ -11501,84 +11501,84 @@
         <source>Drum Kit.</source>
         <comment>drumset description</comment>
         <extracomment>description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3877"/>
         <source>Large Drum Kit</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria Extensa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3879"/>
         <source>Drum Kit</source>
         <comment>drumset longName</comment>
         <extracomment>longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3881"/>
         <source>D. Kit</source>
         <comment>drumset shortName</comment>
         <extracomment>shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bat.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3884"/>
         <source>4 piece drum kit.</source>
         <comment>drum-kit-4 description</comment>
         <extracomment>description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria 4 peças</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3886"/>
         <source>4-Piece Drum Kit</source>
         <comment>drum-kit-4 trackName</comment>
         <extracomment>trackName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria 4 peças</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3888"/>
         <source>Drum Kit</source>
         <comment>drum-kit-4 longName</comment>
         <extracomment>longName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3890"/>
         <source>D. Kit</source>
         <comment>drum-kit-4 shortName</comment>
         <extracomment>shortName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bat.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3893"/>
         <source>5 piece drum kit.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria 5 peças.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3895"/>
         <source>5-Piece Drum Kit</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria 5 peças</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3897"/>
         <source>Drum Kit</source>
         <comment>drum-kit-5 longName</comment>
         <extracomment>longName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3899"/>
         <source>D. Kit</source>
         <comment>drum-kit-5 shortName</comment>
         <extracomment>shortName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bat.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3902"/>
@@ -11928,42 +11928,42 @@
         <source>Suspended Cymbal.</source>
         <comment>crash-cymbal description</comment>
         <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prato Suspenso.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4021"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal trackName</comment>
         <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prato Suspenso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4023"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal longName</comment>
         <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prato Suspenso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4025"/>
         <source>Sus. Cym.</source>
         <comment>crash-cymbal shortName</comment>
         <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pra. Sus.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4028"/>
         <source>Hand Cymbals.</source>
         <comment>cymbal description</comment>
         <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pratos de Orquestra.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4030"/>
         <source>Hand Cymbals</source>
         <comment>cymbal trackName</comment>
         <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pratos de Orquestra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
@@ -15428,7 +15428,7 @@
         <source>Hel.</source>
         <comment>helicon shortName</comment>
         <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
@@ -15449,21 +15449,21 @@
         <source>China cymbal for drum kit.</source>
         <comment>chinese-cymbal description</comment>
         <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pratos Chineses para Bateria.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4003"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal trackName</comment>
         <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pratos Chineses</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4005"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal longName</comment>
         <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pratos Chineses</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
@@ -15491,28 +15491,28 @@
         <source>Marching Snare Drum</source>
         <comment>marching-snare trackName</comment>
         <extracomment>trackName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Caixa de Marcha</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4348"/>
         <source>Marching Tenor Drums</source>
         <comment>marching-tenor-drums trackName</comment>
         <extracomment>trackName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambores Tenores de Marcha</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
         <source>Marching Bass Drums</source>
         <comment>marching-bass-drums trackName</comment>
         <extracomment>trackName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambores Baixos de Marcha</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4366"/>
         <source>Marching Cymbals</source>
         <comment>marching-cymbals trackName</comment>
         <extracomment>trackName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pratos de Marcha</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5141"/>
@@ -19243,7 +19243,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>Cimbassos</source>
-        <translation type="unfinished"/>
+        <translation>Cimbassos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="142"/>

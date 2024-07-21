@@ -6817,7 +6817,7 @@
         <source>Saxhorn</source>
         <comment>saxhorn shortName</comment>
         <extracomment>shortName for Saxhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn</translation>
+        <translation>Saxhn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2381"/>

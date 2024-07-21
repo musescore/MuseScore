@@ -5032,14 +5032,14 @@
         <source>Accordion</source>
         <comment>accordion trackName</comment>
         <extracomment>trackName for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akkordjin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1823"/>
         <source>Accordion</source>
         <comment>accordion longName</comment>
         <extracomment>longName for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akkordjin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1825"/>
@@ -11906,14 +11906,14 @@
         <source>Cowbell</source>
         <comment>cowbell trackName</comment>
         <extracomment>trackName for Cowbell; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Qanpiena tal-baqra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4014"/>
         <source>Cowbell</source>
         <comment>cowbell longName</comment>
         <extracomment>longName for Cowbell; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Qanpiena tal-baqra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4016"/>
@@ -15280,7 +15280,7 @@
         <source>harmonics</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Armoniċi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5123"/>
@@ -16813,14 +16813,14 @@
         <source>Mandocello</source>
         <comment>mandocello trackName</comment>
         <extracomment>trackName for Mandocello; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mandocello</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5561"/>
         <source>Mandocello</source>
         <comment>mandocello longName</comment>
         <extracomment>longName for Mandocello; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mandocello</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5563"/>
@@ -17352,7 +17352,7 @@
         <source>Prima balalaika. The most common balalaika.</source>
         <comment>balalaika description</comment>
         <extracomment>description for Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prima balalaika. L-aktar balalaika komuni.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5736"/>
@@ -17380,21 +17380,21 @@
         <source>Prima balalaika. The most common balalaika.</source>
         <comment>balalaika-prima description</comment>
         <extracomment>description for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prima balalaika. L-aktar balalaika komuni.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5745"/>
         <source>Prima Balalaika</source>
         <comment>balalaika-prima trackName</comment>
         <extracomment>trackName for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prima Balalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5747"/>
         <source>Prima Balalaika</source>
         <comment>balalaika-prima longName</comment>
         <extracomment>longName for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prima Balalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5749"/>
@@ -17415,14 +17415,14 @@
         <source>Secunda Balalaika</source>
         <comment>balalaika-secunda trackName</comment>
         <extracomment>trackName for Secunda Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Secunda Balalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5756"/>
         <source>Secunda Balalaika</source>
         <comment>balalaika-secunda longName</comment>
         <extracomment>longName for Secunda Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Secunda Balalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5758"/>
@@ -19638,7 +19638,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4750"/>
         <source>Electronic</source>
-        <translation type="unfinished"/>
+        <translation>Elettroniku</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5049"/>
@@ -19661,7 +19661,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6249"/>
         <source>Choir</source>
-        <translation type="unfinished"/>
+        <translation>Kor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6250"/>
@@ -19734,7 +19734,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="30"/>
         <source>SATB + Organ</source>
-        <translation type="unfinished"/>
+        <translation>SATB + Organu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="31"/>
