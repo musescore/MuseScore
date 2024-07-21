@@ -2632,7 +2632,24 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
         } else if (m_e.name() == "barline") {
             barline(partId, measure, time + mTime);
         } else if (m_e.name() == "print") {
-            m_e.skipCurrentElement();
+            if (m_score->parts()[0] == m_pass1.getPart(partId)) {
+                // only process for first part
+                while (m_e.readNextStartElement()) {
+                    if (m_e.name() == "page-layout") {
+                        m_e.skipCurrentElement();            // skip but don't log
+                    } else if (m_e.name() == "system-layout") {
+                        m_e.skipCurrentElement();            // skip but don't log
+                    } else if (m_e.name() == "staff-layout") {
+                        m_e.skipCurrentElement();            // skip but don't log
+                    } else if (m_e.name() == "measure-layout") {
+                        measureLayout(measure);
+                    } else {
+                        skipLogCurrElem();
+                    }
+                }
+            } else {
+                m_e.skipCurrentElement();
+            }
         } else {
             skipLogCurrElem();
         }
@@ -2772,6 +2789,25 @@ void MusicXMLParserPass2::setMeasureRepeats(const staff_idx_t scoreRelStaff, Mea
             m_measureRepeatCount[i] = 0;
         }
         measure->setMeasureRepeatCount(m_measureRepeatCount[i], staffIdx);
+    }
+}
+
+//---------------------------------------------------------
+//   measureLayout
+//---------------------------------------------------------
+
+void MusicXMLParserPass2::measureLayout(Measure* measure)
+{
+    while (m_e.readNextStartElement()) {
+        if (m_e.name() == "measure-distance") {
+            const Spatium val(m_e.readText().toDouble() / 10.0);
+            if (!measure->prev()->isHBox()) {
+                MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
+                toHBox(gap)->setBoxWidth(val);
+            }
+        } else {
+            skipLogCurrElem();
+        }
     }
 }
 

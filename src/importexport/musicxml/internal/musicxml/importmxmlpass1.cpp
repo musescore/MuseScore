@@ -1820,7 +1820,7 @@ void MusicXMLParserPass1::defaults()
         } else if (m_e.name() == "staff-layout") {
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "staff-distance") {
-                    Spatium val(m_e.readText().toDouble() / 10.0);
+                    const Spatium val(m_e.readText().toDouble() / 10.0);
                     if (isImportLayout) {
                         m_score->style().set(Sid::staffDistance, val);
                     }
