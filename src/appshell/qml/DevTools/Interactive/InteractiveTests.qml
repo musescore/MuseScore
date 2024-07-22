@@ -47,6 +47,10 @@ Rectangle {
         id: testModel
     }
 
+    Component.onCompleted: {
+        testModel.init()
+    }
+
     StyledTextLabel {
         id: header
         width: parent.width

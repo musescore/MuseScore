@@ -57,8 +57,17 @@ FlatButton {
     drawFocusBorderInsideRect: true
 
     navigation.name: Boolean(itemData) ? itemData.id : ""
-    accessible.name: (Boolean(itemData) && itemData.checkable ? (itemData.checked ? itemData.title + "  " + qsTrc("global", "On") :
-                                                                                    itemData.title + "  " + qsTrc("global", "Off")) : itemData.title)
+    accessible.name: {
+        if (!Boolean(itemData)) {
+            return ""
+        }
+
+        if (itemData.checkable) {
+            return itemData.title + "  " + (itemData.checked ? qsTrc("global", "On") : qsTrc("global", "Off"))
+        }
+
+        return itemData.title
+    }
     isClickOnKeyNavTriggered: false
     navigation.onTriggered: {
         if (menuLoader.isMenuOpened || hasMenu) {
