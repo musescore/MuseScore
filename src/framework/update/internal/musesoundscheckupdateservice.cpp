@@ -45,10 +45,6 @@ muse::Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
 #ifdef Q_OS_WIN
     return true;
 #elif defined(Q_OS_MAC)
-    if (systemInfo()->productVersion() < Version("10.15")) {
-        return false;
-    }
-
     //! NOTE: If there is installed MuseHub, but we can't open it, then we shouldn't check update
     static const std::string MUSEHUB_APP_IDENTIFIER = "com.muse.hub";
     bool isMuseHubExists = interactive()->isAppExists(MUSEHUB_APP_IDENTIFIER);
