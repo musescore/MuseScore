@@ -274,7 +274,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                                 puRests.append(rest);
                             }
                             rest->setScore(_score);
-                            rest->setTicks(d.fraction());
+                            rest->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
                             rest->setTrack(staffIdx * mu::engraving::VOICES);
                             seg->add(rest);
                             ltick += rest->actualTicks();

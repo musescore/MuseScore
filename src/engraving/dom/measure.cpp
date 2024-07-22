@@ -1805,15 +1805,17 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                                                                         score()->sigmap()->timesig(tick().ticks()).nominal(), this, 0);
 
                 // set the existing rest to the first value of the duration list
-                rest->undoChangeProperty(Pid::DURATION, durList[0].fraction());
+                TDuration firstDur = durList[0];
+                rest->undoChangeProperty(Pid::DURATION, firstDur.isMeasure() ? ticks() : firstDur.fraction());
                 rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, durList[0].typeWithDots());
 
                 // add rests for any other duration list value
                 Fraction tickOffset = tick() + rest->actualTicks();
                 for (unsigned i = 1; i < durList.size(); i++) {
                     Rest* newRest = Factory::createRest(s->dummy()->segment());
-                    newRest->setDurationType(durList.at(i));
-                    newRest->setTicks(durList.at(i).fraction());
+                    TDuration dur = durList.at(i);
+                    newRest->setDurationType(dur);
+                    newRest->setTicks(dur.isMeasure() ? ticks() : dur.fraction());
                     newRest->setTrack(rest->track());
                     score()->undoAddCR(newRest, this, tickOffset);
                     tickOffset += newRest->actualTicks();

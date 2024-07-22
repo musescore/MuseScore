@@ -420,7 +420,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
     }
     newcr->mutldata()->setPosX(0.0);
     newcr->setDurationType(d);
-    newcr->setTicks(d.fraction());
+    newcr->setTicks(d.isMeasure() ? cr->measure()->ticks() : d.fraction());
     newcr->setTuplet(cr->tuplet());
     newcr->setSelected(false);
 

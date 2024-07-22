@@ -1114,7 +1114,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 nr = ncr = Factory::createRest(this->dummy()->segment());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
-                ncr->setTicks(d == DurationType::V_MEASURE ? measure->ticks() : d.fraction());
+                ncr->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
             } else {
                 nr = note = Factory::createNote(this->dummy()->chord());
 
