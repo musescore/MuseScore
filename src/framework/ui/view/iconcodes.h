@@ -57,6 +57,7 @@ class IconCode
 
 public:
     enum class Code : char16_t {
+        SMALL_ARROW_LEFT = 0xEF0F,
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,
         SMALL_ARROW_DOWN = 0xEF12,
@@ -438,6 +439,9 @@ public:
         FRETBOARD_HORIZONTAL = 0xF471,
         FRETBOARD_BARRE_LINE = 0xF472,
         FRETBOARD_BARRE_SLUR = 0xF473,
+
+        BPM = 0xF474,
+        CLOCK = 0xF475,
 
         NONE = 0xFFFF
     };
