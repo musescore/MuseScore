@@ -120,11 +120,11 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
         m_onOffStreamFlushed();
     }
 
-    m_offStreamCache.clear();
-    parseOffStreamParams(params, m_offStreamCache.presets, m_offStreamCache.textArticulation);
+    parseOffStreamParams(params, m_offStreamCache);
 
     const char* presets_cstr = m_offStreamCache.presets.empty() ? m_defaultPresetCode.c_str() : m_offStreamCache.presets.c_str();
     const char* textArticulation_cstr = m_offStreamCache.textArticulation.c_str();
+    const char* syllable_cstr = m_offStreamCache.syllable.c_str();
 
     for (const auto& pair : events) {
         for (const auto& event : pair.second) {
@@ -141,25 +141,25 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
                 continue;
             }
 
-            timestamp_t timestampFrom = arrangementCtx.actualTimestamp;
-            timestamp_t timestampTo = timestampFrom + arrangementCtx.actualDuration;
-
-            int pitch{};
-            int centsOffset{};
-            pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, centsOffset);
-
-            ms_NoteArticulation articulationFlag = ms_NoteArticulation_None;
-            ms_NoteHead notehead = ms_NoteHead_Normal;
-            parseArticulations(noteEvent.expressionCtx().articulations, articulationFlag, notehead);
-
             AuditionStartNoteEvent noteOn;
-            noteOn.msEvent = { pitch, centsOffset, articulationFlag, notehead, 0.5, presets_cstr, textArticulation_cstr };
+            pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, noteOn.msEvent._pitch, noteOn.msEvent._offset_cents);
+            parseArticulations(noteEvent.expressionCtx().articulations, noteOn.msEvent._articulation, noteOn.msEvent._notehead);
+            noteOn.msEvent._dynamics = 0.5;
+            noteOn.msEvent._active_presets = presets_cstr;
+            noteOn.msEvent._active_text_articulation = textArticulation_cstr;
+            noteOn.msEvent._active_syllable = syllable_cstr;
+            noteOn.msEvent._articulation_text_starts_at_note = m_offStreamCache.textArticulationStartsAtNote;
+            noteOn.msEvent._syllable_starts_at_note = m_offStreamCache.syllableStartsAtNote;
             noteOn.msTrack = track;
-            m_offStreamEvents[timestampFrom].emplace(std::move(noteOn));
+
+            timestamp_t timestampFrom = arrangementCtx.actualTimestamp;
+            m_offStreamEvents[arrangementCtx.actualTimestamp].emplace(std::move(noteOn));
 
             AuditionStopNoteEvent noteOff;
-            noteOff.msEvent = { pitch };
+            noteOff.msEvent = { noteOn.msEvent._pitch };
             noteOff.msTrack = track;
+
+            timestamp_t timestampTo = timestampFrom + arrangementCtx.actualDuration;
             m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
         }
     }
@@ -292,6 +292,9 @@ void MuseSamplerSequencer::loadParams(const PlaybackParamLayers& changes)
                 case PlaybackParam::PlayingTechnique:
                     addTextArticulation(param.val, params.first, track);
                     break;
+                case PlaybackParam::Syllable:
+                    addSyllable(param.val, params.first, track);
+                    break;
                 case PlaybackParam::Undefined:
                     UNREACHABLE;
                     break;
@@ -375,8 +378,6 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     event._location_us = arrangementCtx.nominalTimestamp;
     event._duration_us = arrangementCtx.nominalDuration;
     event._tempo = arrangementCtx.bps * 60.0; // API expects BPM
-    event._articulation = ms_NoteArticulation_None;
-    event._notehead = ms_NoteHead_Normal;
 
     pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, event._pitch, event._offset_cents);
     parseArticulations(noteEvent.expressionCtx().articulations, event._articulation, event._notehead);
@@ -435,12 +436,21 @@ void MuseSamplerSequencer::addPresets(const StringList& presets, long long start
     }
 }
 
-void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
+void MuseSamplerSequencer::addSyllable(const String& syllable, long long positionUs, ms_Track track)
 {
-    if (!m_samplerLib->addPitchBend) { // added in 0.5
+    if (syllable.empty()) {
         return;
     }
 
+    ms_SyllableEvent evt;
+    evt._position_us = positionUs;
+    evt._text = syllable.toStdString().c_str();
+
+    m_samplerLib->addSyllableEvent(m_sampler, track, evt);
+}
+
+void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
+{
     duration_t duration = noteEvent.arrangementCtx().actualDuration;
     const PitchCurve& pitchCurve = noteEvent.pitchCtx().pitchCurve;
 
@@ -470,10 +480,6 @@ void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long l
 
 void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
-    if (!m_samplerLib->addVibrato) { // added in 0.5
-        return;
-    }
-
     duration_t duration = noteEvent.arrangementCtx().actualDuration;
     // stand-in data before actual mpe support
     constexpr auto MAX_VIBRATO_STARTOFFSET_US = (int64_t)0.1 * 1000000;
@@ -496,15 +502,16 @@ void MuseSamplerSequencer::pitchAndTuning(const pitch_level_t nominalPitch, int&
     static constexpr pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = pitchLevel(PitchClass::C, 8);
     static constexpr int MAX_SUPPORTED_NOTE = 108; // equivalent for C8
 
+    pitch = 0;
+    centsOffset = 0;
+
     if (nominalPitch <= MIN_SUPPORTED_PITCH_LEVEL) {
         pitch = MIN_SUPPORTED_NOTE;
-        centsOffset = 0;
         return;
     }
 
     if (nominalPitch >= MAX_SUPPORTED_PITCH_LEVEL) {
         pitch = MAX_SUPPORTED_NOTE;
-        centsOffset = 0;
         return;
     }
 
@@ -572,6 +579,7 @@ ms_NoteArticulation MuseSamplerSequencer::convertArticulationType(ArticulationTy
 void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulations,
                                               ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const
 {
+    notehead = ms_NoteHead_Normal;
     uint64_t artFlag = 0;
 
     for (const auto& pair : articulations) {
@@ -590,9 +598,10 @@ void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulatio
     articulationFlag = static_cast<ms_NoteArticulation>(artFlag);
 }
 
-void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params, std::string& presets,
-                                                std::string& textArticulation) const
+void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params, OffStreamParams& out) const
 {
+    out.clear();
+
     if (params.empty()) {
         return;
     }
@@ -605,7 +614,12 @@ void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params,
             presetList.push_back(param.val);
             break;
         case PlaybackParam::PlayingTechnique:
-            textArticulation = param.val.toStdString();
+            out.textArticulation = param.val.toStdString();
+            out.textArticulationStartsAtNote = !param.isPersistent.value_or(false);
+            break;
+        case PlaybackParam::Syllable:
+            out.syllable = param.val.toStdString();
+            out.syllableStartsAtNote = !param.isPersistent.value_or(false);
             break;
         case PlaybackParam::Undefined:
             UNREACHABLE;
@@ -613,5 +627,7 @@ void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params,
         }
     }
 
-    presets = presetList.join(u"|").toStdString();
+    if (!presetList.empty()) {
+        out.presets = presetList.join(u"|").toStdString();
+    }
 }

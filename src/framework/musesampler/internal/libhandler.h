@@ -85,7 +85,9 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_add_pitch_bend addPitchBend = nullptr;
     ms_MuseSampler_add_vibrato addVibrato = nullptr;
 
-    std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3)> startAuditionNote = nullptr;
+    ms_MuseSampler_add_track_syllable_event addSyllableEvent = nullptr;
+
+    std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4)> startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
 
     ms_MuseSampler_start_liveplay_mode startLivePlayMode = nullptr;
@@ -111,6 +113,7 @@ private:
     ms_MuseSampler_add_track_pedal_event_2 addPedalEventInternal2 = nullptr;
     ms_MuseSampler_add_track_note_event_5 addNoteEventInternal5 = nullptr;
     ms_MuseSampler_start_audition_note_3 startAuditionNoteInternal3 = nullptr;
+    ms_MuseSampler_start_audition_note_4 startAuditionNoteInternal4 = nullptr;
     ms_MuseSampler_start_liveplay_note_2 startLivePlayNoteInternal2 = nullptr;
 
 public:
@@ -160,7 +163,7 @@ public:
         int versionMajor = getVersionMajor();
         int versionMinor = getVersionMinor();
 
-        bool at_least_v_0_7 = (versionMajor == 0 && versionMinor >= 7) || versionMajor > 0;
+        bool at_least_v_0_100 = (versionMajor == 0 && versionMinor >= 100) || versionMajor > 0;
 
         containsInstrument = (ms_contains_instrument)muse::getLibFunc(m_lib, "ms_contains_instrument");
         getMatchingInstrumentId = (ms_get_matching_instrument_id)muse::getLibFunc(m_lib, "ms_get_matching_instrument_id");
@@ -208,18 +211,20 @@ public:
             return addNoteEventInternal5(ms, track, ev, event_id) == ms_Result_OK;
         };
 
-        if (at_least_v_0_7) {
-            //  TODO
-            startAuditionNoteInternal3 = (ms_MuseSampler_start_audition_note_3)muse::getLibFunc(m_lib,
-                                                                                                "ms_MuseSampler_start_audition_note_3");
-            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 ev) {
-                return startAuditionNoteInternal3(ms, track, ev) == ms_Result_OK;
+        if (at_least_v_0_100) {
+            startAuditionNoteInternal4 = (ms_MuseSampler_start_audition_note_4)muse::getLibFunc(m_lib,
+                                                                                                "ms_MuseSampler_start_audition_note_4");
+            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4 ev) {
+                return startAuditionNoteInternal4(ms, track, ev) == ms_Result_OK;
             };
         } else {
             startAuditionNoteInternal3 = (ms_MuseSampler_start_audition_note_3)muse::getLibFunc(m_lib,
                                                                                                 "ms_MuseSampler_start_audition_note_3");
-            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 ev) {
-                return startAuditionNoteInternal3(ms, track, ev) == ms_Result_OK;
+            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4 ev) {
+                ms_AuditionStartNoteEvent_3 ev3{ ev._pitch, ev._offset_cents, ev._articulation, ev._notehead, ev._dynamics,
+                                                 ev._active_presets, ev._active_text_articulation };
+
+                return startAuditionNoteInternal3(ms, track, ev3) == ms_Result_OK;
             };
         }
 
@@ -238,6 +243,13 @@ public:
         startLivePlayNote = [this](ms_MuseSampler ms, ms_Track track, ms_LivePlayStartNoteEvent_2 evt) {
             return startLivePlayNoteInternal2(ms, track, evt) == ms_Result_OK;
         };
+
+        if (at_least_v_0_100) {
+            addSyllableEvent = (ms_MuseSampler_add_track_syllable_event)muse::getLibFunc(m_lib,
+                                                                                         "ms_MuseSampler_add_track_syllable_event");
+        } else {
+            addSyllableEvent = [](ms_MuseSampler, ms_Track, ms_SyllableEvent) { return ms_Result_Error; };
+        }
 
         getInstrumentVendorName = (ms_Instrument_get_vendor_name)muse::getLibFunc(m_lib, "ms_Instrument_get_vendor_name");
         getInstrumentPackName = (ms_Instrument_get_pack_name)muse::getLibFunc(m_lib, "ms_Instrument_get_pack_name");
@@ -263,7 +275,7 @@ public:
         process = (ms_MuseSampler_process)muse::getLibFunc(m_lib, "ms_MuseSampler_process");
         allNotesOff = (ms_MuseSampler_all_notes_off)muse::getLibFunc(m_lib, "ms_MuseSampler_all_notes_off");
 
-        if (at_least_v_0_7) {
+        if (at_least_v_0_100) {
             reloadAllInstruments = (ms_reload_all_instruments)muse::getLibFunc(m_lib, "ms_reload_all_instruments");
         } else {
             reloadAllInstruments = []() { return ms_Result_Error; };

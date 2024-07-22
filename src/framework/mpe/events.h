@@ -294,12 +294,15 @@ struct PlaybackParam {
         Undefined = -1,
         SoundPreset,
         PlayingTechnique,
+        Syllable,
     };
 
     using Value = String;
 
     Type type = Undefined;
     Value val;
+
+    std::optional<bool> isPersistent;
 
     PlaybackParam(Type t, Value v)
         : type(t), val(std::move(v))
