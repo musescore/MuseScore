@@ -32,8 +32,6 @@ class TextStylePopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-
     Q_PROPERTY(TextSettingsModel * textSettingsModel READ textSettingsModel CONSTANT)
 
 public:
