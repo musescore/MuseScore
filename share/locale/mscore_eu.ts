@@ -12093,20 +12093,24 @@ n-kotxoak konpasa zeharkatuko luke</translation>
 <context>
     <name>MoreElementsPopup</name>
     <message>
+        <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="64"/>
         <source>Add to %1</source>
-        <translation type="vanished">&apos;%1&apos;era gehitu</translation>
+        <translation>&apos;%1&apos;era gehitu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="208"/>
         <source>Custom</source>
-        <translation type="vanished">Pertsonalizatua</translation>
+        <translation>Pertsonalizatua</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="215"/>
         <source>Delete element(s)</source>
-        <translation type="vanished">Elementua(k) ezabatu</translation>
+        <translation>Elementua(k) ezabatu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="272"/>
         <source>Drag items to the palette or directly on your score</source>
-        <translation type="vanished">Elementuak paletara edo zuzenean partiturara eraman</translation>
+        <translation>Elementuak paletara edo zuzenean partiturara eraman</translation>
     </message>
 </context>
 <context>
@@ -13818,7 +13822,7 @@ itxi aurretik?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="289"/>
-        <location filename="../../mscore/file.cpp" line="2580"/>
+        <location filename="../../mscore/file.cpp" line="2579"/>
         <source>All Supported Files</source>
         <translation>Eutsitako fitxategi guztiak</translation>
     </message>
@@ -13889,15 +13893,15 @@ itxi aurretik?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="533"/>
-        <location filename="../../mscore/file.cpp" line="2450"/>
-        <location filename="../../mscore/file.cpp" line="2528"/>
+        <location filename="../../mscore/file.cpp" line="2449"/>
+        <location filename="../../mscore/file.cpp" line="2527"/>
         <source>MuseScore 3 File</source>
         <translation>MuseScore 3 fitxategia</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="534"/>
-        <location filename="../../mscore/file.cpp" line="2451"/>
-        <location filename="../../mscore/file.cpp" line="2529"/>
+        <location filename="../../mscore/file.cpp" line="2450"/>
+        <location filename="../../mscore/file.cpp" line="2528"/>
         <source>Uncompressed MuseScore 3 File</source>
         <translation>Konprimatu gabeko MuseScore 3 fitxategia</translation>
     </message>
@@ -14054,63 +14058,63 @@ itxi aurretik?</translation>
         <translation>MuseScore bateria fitxategia</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2584"/>
+        <location filename="../../mscore/file.cpp" line="2583"/>
         <source>Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2585"/>
+        <location filename="../../mscore/file.cpp" line="2584"/>
         <source>TIFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3507"/>
+        <location filename="../../mscore/file.cpp" line="3506"/>
         <source>Error: Saving scores online is disabled in this unstable prerelease version of MuseScore.</source>
         <translation>Akatsa: Partiturak online gordetzea desgaituta dago MuseScore-ren aurretiko argitaratze ezegonkor honetan.</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3516"/>
+        <location filename="../../mscore/file.cpp" line="3515"/>
         <source>Error: %1</source>
         <translation>Akatsa: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3535"/>
+        <location filename="../../mscore/file.cpp" line="3534"/>
         <source>Error: &apos;%1&apos; tag missing or malformed in %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3541"/>
+        <location filename="../../mscore/file.cpp" line="3540"/>
         <source>Error: You are not the owner of the online score for %1</source>
         <translation>Akatsa: Ez zara &apos;%1&apos;-rako sareko partituraren jabea</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3562"/>
+        <location filename="../../mscore/file.cpp" line="3561"/>
         <source>Uploaded score</source>
         <translation>Igotako partitura</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2583"/>
+        <location filename="../../mscore/file.cpp" line="2582"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG bit-mapa grafikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2581"/>
+        <location filename="../../mscore/file.cpp" line="2580"/>
         <source>Scalable Vector Graphics</source>
         <translation>Scalable Vector Graphics grafikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2510"/>
-        <location filename="../../mscore/file.cpp" line="2556"/>
+        <location filename="../../mscore/file.cpp" line="2509"/>
+        <location filename="../../mscore/file.cpp" line="2555"/>
         <source>Cannot determine file type</source>
         <translation>Ezin da fitxategi mota zehaztu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2894"/>
+        <location filename="../../mscore/file.cpp" line="2893"/>
         <source>Confirm Replace</source>
         <translation>Aldaketa berretsi</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2895"/>
+        <location filename="../../mscore/file.cpp" line="2894"/>
         <source>&quot;%1&quot; already exists.
 Do you want to replace it?
 </source>
@@ -14119,29 +14123,29 @@ Ordezkatu nahi duzu?
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2897"/>
+        <location filename="../../mscore/file.cpp" line="2896"/>
         <source>Replace</source>
         <translation>Ordezkatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2898"/>
+        <location filename="../../mscore/file.cpp" line="2897"/>
         <source>Skip</source>
         <translation>Saltatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2899"/>
+        <location filename="../../mscore/file.cpp" line="2898"/>
         <source>Replace All</source>
         <translation>Dena ordezkatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2900"/>
+        <location filename="../../mscore/file.cpp" line="2899"/>
         <source>Skip All</source>
         <translation>Denak salatu</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1941"/>
-        <location filename="../../mscore/file.cpp" line="2453"/>
-        <location filename="../../mscore/file.cpp" line="2510"/>
+        <location filename="../../mscore/file.cpp" line="2452"/>
+        <location filename="../../mscore/file.cpp" line="2509"/>
         <source>Save As</source>
         <translation>Honela gorde</translation>
     </message>
@@ -14156,45 +14160,45 @@ Ordezkatu nahi duzu?
         <translation>Ezin da %1-(e)n idatzi</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2452"/>
+        <location filename="../../mscore/file.cpp" line="2451"/>
         <source>Save a Copy</source>
         <translation>Kopia bat gorde</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2524"/>
-        <location filename="../../mscore/file.cpp" line="2530"/>
-        <location filename="../../mscore/file.cpp" line="2556"/>
+        <location filename="../../mscore/file.cpp" line="2523"/>
+        <location filename="../../mscore/file.cpp" line="2529"/>
+        <location filename="../../mscore/file.cpp" line="2555"/>
         <source>Save Selection</source>
         <translation>Hautapena gorde</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2524"/>
+        <location filename="../../mscore/file.cpp" line="2523"/>
         <source>Please select one or more measures</source>
         <translation>Mesedez, hautatu konpas bat edo gehiago</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2565"/>
+        <location filename="../../mscore/file.cpp" line="2564"/>
         <source>Save Selected</source>
         <translation>Hautatutakoa gorde</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2578"/>
+        <location filename="../../mscore/file.cpp" line="2577"/>
         <source>Insert Image</source>
         <translation>Irudia txertatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2582"/>
+        <location filename="../../mscore/file.cpp" line="2581"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2836"/>
+        <location filename="../../mscore/file.cpp" line="2835"/>
         <source>Images</source>
         <translation>Irudiak</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2586"/>
-        <location filename="../../mscore/file.cpp" line="2836"/>
+        <location filename="../../mscore/file.cpp" line="2585"/>
+        <location filename="../../mscore/file.cpp" line="2835"/>
         <source>All</source>
         <translation>Denak</translation>
     </message>
@@ -16540,8 +16544,8 @@ Ibilaldi horiek ikusi nahiko zenituzke?</translation>
 <context>
     <name>Ms::TDockWidget</name>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="81"/>
-        <location filename="../../mscore/timeline.cpp" line="103"/>
+        <location filename="../../mscore/timeline.cpp" line="80"/>
+        <location filename="../../mscore/timeline.cpp" line="102"/>
         <source>Timeline</source>
         <translation>Denbora-lerroa</translation>
     </message>
@@ -16549,37 +16553,37 @@ Ibilaldi horiek ikusi nahiko zenituzke?</translation>
 <context>
     <name>Ms::TRowLabels</name>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="614"/>
+        <location filename="../../mscore/timeline.cpp" line="613"/>
         <source>Expand meta rows</source>
         <translation>Meta lerroak zabaldu</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="617"/>
+        <location filename="../../mscore/timeline.cpp" line="616"/>
         <source>Collapse meta rows</source>
         <translation>Meta lerroak uzkurtu</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="620"/>
+        <location filename="../../mscore/timeline.cpp" line="619"/>
         <source>Move meta row down one</source>
         <translation>Meta lerroa beherantz eraman</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="623"/>
+        <location filename="../../mscore/timeline.cpp" line="622"/>
         <source>Move meta row up one</source>
         <translation>Meta lerroa gorantz eraman</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="626"/>
+        <location filename="../../mscore/timeline.cpp" line="625"/>
         <source>Move meta row up/down one</source>
         <translation>Meta lerroa gorantz/beherantz eraman</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="629"/>
+        <location filename="../../mscore/timeline.cpp" line="628"/>
         <source>Hide instrument in score</source>
         <translation>Ezkutatu instrumentua partituran</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="632"/>
+        <location filename="../../mscore/timeline.cpp" line="631"/>
         <source>Show instrument in score</source>
         <translation>Instrumentua partituran erakutsi</translation>
     </message>
@@ -16605,17 +16609,17 @@ Ibilaldi horiek ikusi nahiko zenituzke?</translation>
 <context>
     <name>Ms::TextPalette</name>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="382"/>
+        <location filename="../../mscore/textpalette.cpp" line="379"/>
         <source>Common Symbols</source>
         <translation>Ikur arruntak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="396"/>
+        <location filename="../../mscore/textpalette.cpp" line="393"/>
         <source>Musical Symbols</source>
         <translation>Musika ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="417"/>
+        <location filename="../../mscore/textpalette.cpp" line="414"/>
         <source>Unicode Symbols</source>
         <translation>Unicode ikurrak</translation>
     </message>
@@ -16675,90 +16679,90 @@ Ibilaldi horiek ikusi nahiko zenituzke?</translation>
 <context>
     <name>Ms::Timeline</name>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="792"/>
-        <location filename="../../mscore/timeline.cpp" line="1180"/>
-        <location filename="../../mscore/timeline.cpp" line="2454"/>
+        <location filename="../../mscore/timeline.cpp" line="791"/>
+        <location filename="../../mscore/timeline.cpp" line="1179"/>
+        <location filename="../../mscore/timeline.cpp" line="2453"/>
         <source>Tempo</source>
         <translation>Tempoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="793"/>
-        <location filename="../../mscore/timeline.cpp" line="1208"/>
-        <location filename="../../mscore/timeline.cpp" line="2455"/>
+        <location filename="../../mscore/timeline.cpp" line="792"/>
+        <location filename="../../mscore/timeline.cpp" line="1207"/>
+        <location filename="../../mscore/timeline.cpp" line="2454"/>
         <source>Time Signature</source>
         <translation>Konpas neurria</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="794"/>
-        <location filename="../../mscore/timeline.cpp" line="1245"/>
-        <location filename="../../mscore/timeline.cpp" line="2456"/>
+        <location filename="../../mscore/timeline.cpp" line="793"/>
+        <location filename="../../mscore/timeline.cpp" line="1244"/>
+        <location filename="../../mscore/timeline.cpp" line="2455"/>
         <source>Rehearsal Mark</source>
         <translation>Entsegu marka</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="795"/>
-        <location filename="../../mscore/timeline.cpp" line="1121"/>
-        <location filename="../../mscore/timeline.cpp" line="1125"/>
-        <location filename="../../mscore/timeline.cpp" line="1273"/>
-        <location filename="../../mscore/timeline.cpp" line="2457"/>
+        <location filename="../../mscore/timeline.cpp" line="794"/>
+        <location filename="../../mscore/timeline.cpp" line="1120"/>
+        <location filename="../../mscore/timeline.cpp" line="1124"/>
+        <location filename="../../mscore/timeline.cpp" line="1272"/>
+        <location filename="../../mscore/timeline.cpp" line="2456"/>
         <source>Key Signature</source>
         <translation>Armadura</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="796"/>
-        <location filename="../../mscore/timeline.cpp" line="1376"/>
-        <location filename="../../mscore/timeline.cpp" line="2458"/>
+        <location filename="../../mscore/timeline.cpp" line="795"/>
+        <location filename="../../mscore/timeline.cpp" line="1375"/>
+        <location filename="../../mscore/timeline.cpp" line="2457"/>
         <source>Barlines</source>
         <translation>Zatilerroak</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="797"/>
-        <location filename="../../mscore/timeline.cpp" line="1143"/>
-        <location filename="../../mscore/timeline.cpp" line="1429"/>
-        <location filename="../../mscore/timeline.cpp" line="2459"/>
+        <location filename="../../mscore/timeline.cpp" line="796"/>
+        <location filename="../../mscore/timeline.cpp" line="1142"/>
+        <location filename="../../mscore/timeline.cpp" line="1428"/>
+        <location filename="../../mscore/timeline.cpp" line="2458"/>
         <source>Jumps and Markers</source>
         <translation>Jauziak eta markatzaileak</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="798"/>
-        <location filename="../../mscore/timeline.cpp" line="1504"/>
-        <location filename="../../mscore/timeline.cpp" line="1546"/>
-        <location filename="../../mscore/timeline.cpp" line="2460"/>
-        <location filename="../../mscore/timeline.cpp" line="2757"/>
-        <location filename="../../mscore/timeline.cpp" line="2995"/>
-        <location filename="../../mscore/timeline.cpp" line="3027"/>
+        <location filename="../../mscore/timeline.cpp" line="797"/>
+        <location filename="../../mscore/timeline.cpp" line="1503"/>
+        <location filename="../../mscore/timeline.cpp" line="1545"/>
+        <location filename="../../mscore/timeline.cpp" line="2459"/>
+        <location filename="../../mscore/timeline.cpp" line="2756"/>
+        <location filename="../../mscore/timeline.cpp" line="2994"/>
+        <location filename="../../mscore/timeline.cpp" line="3026"/>
         <source>Measures</source>
         <translation>Konpasak</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="1039"/>
+        <location filename="../../mscore/timeline.cpp" line="1038"/>
         <source>Measure</source>
         <translation>Konpasa</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="1343"/>
+        <location filename="../../mscore/timeline.cpp" line="1342"/>
         <source>Custom Key Signature</source>
         <translation>Armadura pertsonalizatua</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2984"/>
+        <location filename="../../mscore/timeline.cpp" line="2983"/>
         <source>Context menu</source>
         <translation>Laster-menua</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2986"/>
+        <location filename="../../mscore/timeline.cpp" line="2985"/>
         <source>Edit Instruments</source>
         <translation>Instrumentuak editatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="3004"/>
-        <location filename="../../mscore/timeline.cpp" line="3024"/>
+        <location filename="../../mscore/timeline.cpp" line="3003"/>
+        <location filename="../../mscore/timeline.cpp" line="3023"/>
         <source>Hide all</source>
         <translation>Dena ezkutatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="3007"/>
-        <location filename="../../mscore/timeline.cpp" line="3033"/>
+        <location filename="../../mscore/timeline.cpp" line="3006"/>
+        <location filename="../../mscore/timeline.cpp" line="3032"/>
         <source>Show all</source>
         <translation>Dena erakutsi</translation>
     </message>
@@ -18113,7 +18117,7 @@ mesedez, izen ezberdina aukeratu:</translation>
         <translation>Gider diagramak</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1532"/>
+        <location filename="../../mscore/palette.cpp" line="1535"/>
         <location filename="../../mscore/palette/palettetree.cpp" line="483"/>
         <source>Writing Palette File
 %1
@@ -18123,32 +18127,37 @@ paleta fitxategia idazteak
 huts egin du:</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1533"/>
+        <location filename="../../mscore/palette.cpp" line="1536"/>
         <location filename="../../mscore/palette/palettetree.cpp" line="484"/>
         <source>Writing Palette File</source>
         <translation>Paleta fitxategia idazten</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="147"/>
         <source>More</source>
-        <translation type="vanished">Gehiago</translation>
+        <translation>Gehiago</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="321"/>
         <source>Drag and drop any element here
 (Use %1+Shift to add custom element from the score)</source>
-        <translation type="vanished">Edozein elementu eraman eta hemen utzi
+        <translation>Edozein elementu eraman eta hemen utzi
 (%1+Maius erabili partituratik elementu pertsonalizatua gehiteko)</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="322"/>
         <source>No elements</source>
-        <translation type="vanished">Elementurik ez</translation>
+        <translation>Elementurik ez</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="776"/>
         <source>Delete</source>
-        <translation type="vanished">Ezabatu</translation>
+        <translation>Ezabatu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="781"/>
         <source>Properties…</source>
-        <translation type="vanished">Ezaugarriak…</translation>
+        <translation>Ezaugarriak…</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettemodel.cpp" line="758"/>
@@ -18266,85 +18275,118 @@ huts egin du:</translation>
 <context>
     <name>PaletteTree</name>
     <message numerus="yes">
+        <location filename="../../mscore/qml/palettes/PaletteTree.qml" line="29"/>
         <source>Palettes Tree, contains %n palette(s)</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>Paleten zuhaitza, paleta bat dauka:</numerusform>
             <numerusform>Paleten zuhaitza, %n paleta dauka:</numerusform>
         </translation>
     </message>
     <message numerus="yes">
+        <location filename="../../mscore/qml/palettes/PaletteTree.qml" line="511"/>
         <source>%1, contains %n matching element(s)</source>
         <comment>palette</comment>
-        <translation type="vanished">
+        <translation>
             <numerusform>%1, bat etortzen den elementu bat du</numerusform>
             <numerusform>%1, bat etortzen diren %n elementu ditu</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PaletteTree.qml" line="512"/>
         <source>%1 expanded</source>
         <comment>tree item not collapsed</comment>
-        <translation type="vanished">%1 zabaldua</translation>
+        <translation>%1 zabaldua</translation>
     </message>
 </context>
 <context>
     <name>PalettesListPopup</name>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="43"/>
         <source>More palettes</source>
-        <translation type="vanished">Paleta gehiago</translation>
+        <translation>Paleta gehiago</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="52"/>
         <source>Create custom palette</source>
-        <translation type="vanished">Paleta pertsonalizatua sortu</translation>
+        <translation>Paleta pertsonalizatua sortu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="68"/>
         <source>All palettes were added</source>
-        <translation type="vanished">Paleta guztiak gehitu dira</translation>
+        <translation>Paleta guztiak gehitu dira</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="132"/>
         <source>Add</source>
-        <translation type="vanished">Gehitu</translation>
+        <translation>Gehitu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="134"/>
         <source>Add %1 palette</source>
-        <translation type="vanished">%1 paleta gehitu</translation>
+        <translation>%1 paleta gehitu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="157"/>
         <source>%1 Added!</source>
-        <translation type="vanished">%1 gehitua!</translation>
+        <translation>%1 gehitua!</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="157"/>
         <source>%1 removed</source>
-        <translation type="vanished">% ezabatua</translation>
+        <translation>% ezabatua</translation>
     </message>
 </context>
 <context>
     <name>PalettesWidgetHeader</name>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="75"/>
         <source>Add Palettes</source>
-        <translation type="vanished">Paletak gehitu</translation>
+        <translation>Paletak gehitu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="86"/>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="119"/>
         <source>Search</source>
-        <translation type="vanished">Bilatu</translation>
+        <translation>Bilatu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="103"/>
         <source>Options</source>
-        <translation type="vanished">Aukerak</translation>
+        <translation>Aukerak</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="125"/>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="134"/>
         <source>Palette Search</source>
-        <translation type="vanished">Paletak bilatu</translation>
+        <translation>Paletak bilatu</translation>
     </message>
     <message numerus="yes">
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="134"/>
         <source>%n palette(s) match(es)</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>Paleta batek bat etortzen du</numerusform>
             <numerusform>%n paletek bat etortzen dute</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="163"/>
         <source>Stop search</source>
-        <translation type="vanished">Bilaketa gelditu</translation>
+        <translation>Bilaketa gelditu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="204"/>
+        <source>Open only one Palette at a time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="214"/>
+        <source>Collapse all Palettes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="220"/>
+        <source>Expand all Palettes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20631,7 +20673,7 @@ huts egin du: %2</translation>
         <translation>Akorde deskribapena idazteak huts egin du: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="795"/>
+        <location filename="../../libmscore/durationtype.cpp" line="796"/>
         <location filename="../../libmscore/hairpin.cpp" line="904"/>
         <location filename="../../libmscore/jump.cpp" line="95"/>
         <location filename="../../libmscore/scoreOrder.cpp" line="397"/>
@@ -20639,82 +20681,82 @@ huts egin du: %2</translation>
         <translation>Pertsonalizatua</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="797"/>
+        <location filename="../../libmscore/durationtype.cpp" line="798"/>
         <source>Longa</source>
         <translation>Longa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="798"/>
+        <location filename="../../libmscore/durationtype.cpp" line="799"/>
         <source>Breve</source>
         <translation>Karratua</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="799"/>
+        <location filename="../../libmscore/durationtype.cpp" line="800"/>
         <source>Whole</source>
         <translation>Biribila</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="800"/>
+        <location filename="../../libmscore/durationtype.cpp" line="801"/>
         <source>Half</source>
         <translation>Zuria</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="801"/>
+        <location filename="../../libmscore/durationtype.cpp" line="802"/>
         <source>Quarter</source>
         <translation>Beltza</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="802"/>
+        <location filename="../../libmscore/durationtype.cpp" line="803"/>
         <source>Eighth</source>
         <translation>Kortxea</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="803"/>
+        <location filename="../../libmscore/durationtype.cpp" line="804"/>
         <source>16th</source>
         <translation>Kortxeaerdia</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="804"/>
+        <location filename="../../libmscore/durationtype.cpp" line="805"/>
         <source>32nd</source>
         <translation>Fusa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="805"/>
+        <location filename="../../libmscore/durationtype.cpp" line="806"/>
         <source>64th</source>
         <translation>Fusaerdia</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="806"/>
+        <location filename="../../libmscore/durationtype.cpp" line="807"/>
         <source>128th</source>
         <translation>Garrapatea</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="807"/>
+        <location filename="../../libmscore/durationtype.cpp" line="808"/>
         <source>256th</source>
         <translation>Garrapateaerdia</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="808"/>
+        <location filename="../../libmscore/durationtype.cpp" line="809"/>
         <source>512th</source>
         <translation>Garrapatealaurdena</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="809"/>
+        <location filename="../../libmscore/durationtype.cpp" line="810"/>
         <source>1024th</source>
         <translation>Garrapateazortzirena</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="810"/>
+        <location filename="../../libmscore/durationtype.cpp" line="811"/>
         <source>Zero</source>
         <translation>Zero</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="811"/>
+        <location filename="../../libmscore/durationtype.cpp" line="812"/>
         <source>Measure</source>
         <translation>Konpasa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="812"/>
+        <location filename="../../libmscore/durationtype.cpp" line="813"/>
         <source>Invalid</source>
         <translation>Baliogabea</translation>
     </message>
@@ -20932,7 +20974,7 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <translation>Fitxategi hau irekitzen saiatu nahi duzu hala ere?</translation>
     </message>
     <message>
-        <location filename="../../importexport/musicxml/importmxml.cpp" line="166"/>
+        <location filename="../../importexport/musicxml/importmxml.cpp" line="137"/>
         <source>Error(s) found, import may be incomplete.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20982,8 +21024,8 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1210"/>
         <location filename="../../libmscore/chordrest.cpp" line="1220"/>
-        <location filename="../../libmscore/note.cpp" line="3177"/>
-        <location filename="../../libmscore/note.cpp" line="3186"/>
+        <location filename="../../libmscore/note.cpp" line="3184"/>
+        <location filename="../../libmscore/note.cpp" line="3193"/>
         <source>%1 Start of %2</source>
         <translation>%1 %2(r)en hasiera</translation>
     </message>
@@ -20991,8 +21033,8 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1212"/>
         <location filename="../../libmscore/chordrest.cpp" line="1222"/>
-        <location filename="../../libmscore/note.cpp" line="3180"/>
-        <location filename="../../libmscore/note.cpp" line="3193"/>
+        <location filename="../../libmscore/note.cpp" line="3187"/>
+        <location filename="../../libmscore/note.cpp" line="3200"/>
         <source>%1 End of %2</source>
         <translation>%1 %2(r)en amaiera</translation>
     </message>
@@ -21058,25 +21100,25 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="729"/>
-        <location filename="../../libmscore/tempotext.cpp" line="462"/>
+        <location filename="../../libmscore/tempotext.cpp" line="463"/>
         <source>Dotted %1</source>
         <translation>Puntudun %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="732"/>
-        <location filename="../../libmscore/tempotext.cpp" line="464"/>
+        <location filename="../../libmscore/tempotext.cpp" line="465"/>
         <source>Double dotted %1</source>
         <translation>Puntu bikoiztun %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="735"/>
-        <location filename="../../libmscore/tempotext.cpp" line="466"/>
+        <location filename="../../libmscore/tempotext.cpp" line="467"/>
         <source>Triple dotted %1</source>
         <translation>Puntu hirukoiztun %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="738"/>
-        <location filename="../../libmscore/tempotext.cpp" line="468"/>
+        <location filename="../../libmscore/tempotext.cpp" line="469"/>
         <source>Quadruple dotted %1</source>
         <translation>Puntu laukoiztun %1</translation>
     </message>
@@ -21125,76 +21167,76 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2310"/>
+        <location filename="../../libmscore/note.cpp" line="2313"/>
         <source>Acciaccatura</source>
         <translation>Acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2312"/>
+        <location filename="../../libmscore/note.cpp" line="2315"/>
         <source>Appoggiatura</source>
         <translation>Apoiatura</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2316"/>
+        <location filename="../../libmscore/note.cpp" line="2319"/>
         <source>Grace note after</source>
         <translation>Apaindura nota atzetik</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2320"/>
+        <location filename="../../libmscore/note.cpp" line="2323"/>
         <source>Grace note before</source>
         <translation>Apaindura nota aurretik</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2322"/>
+        <location filename="../../libmscore/note.cpp" line="2325"/>
         <source>Note</source>
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3114"/>
-        <location filename="../../libmscore/note.cpp" line="3144"/>
+        <location filename="../../libmscore/note.cpp" line="3121"/>
+        <location filename="../../libmscore/note.cpp" line="3151"/>
         <location filename="../../libmscore/rest.cpp" line="899"/>
         <location filename="../../libmscore/rest.cpp" line="911"/>
         <source>Voice: %1</source>
         <translation>Ahotsa: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3121"/>
+        <location filename="../../libmscore/note.cpp" line="3128"/>
         <source> (on %1‰ off %2‰)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3125"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Beat slash</source>
         <translation>Barra zeiharra (aldia)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3125"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Rhythm slash</source>
         <translation>Barra zeiharra (erritmoa)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3129"/>
-        <location filename="../../libmscore/note.cpp" line="3152"/>
+        <location filename="../../libmscore/note.cpp" line="3136"/>
+        <location filename="../../libmscore/note.cpp" line="3159"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; soka: %2; trastea: %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3132"/>
+        <location filename="../../libmscore/note.cpp" line="3139"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3148"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Beat Slash</source>
         <translation>Barra zeiharra (aldia)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3148"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Rhythm Slash</source>
         <translation>Barra zeiharra (erritmoa)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3156"/>
+        <location filename="../../libmscore/note.cpp" line="3163"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21264,23 +21306,23 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <translation>%1: aldaketak markatu: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="2010"/>
+        <location filename="../../libmscore/segment.cpp" line="2021"/>
         <source>Annotations:</source>
         <translation>Oharrak:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="2032"/>
+        <location filename="../../libmscore/segment.cpp" line="2043"/>
         <source>Start of %1</source>
         <translation>%1-(e)n hasiera</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="2046"/>
+        <location filename="../../libmscore/segment.cpp" line="2057"/>
         <source>End of %1</source>
         <translation>%1-(e)n amaiera</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="501"/>
-        <location filename="../../libmscore/tempotext.cpp" line="504"/>
+        <location filename="../../libmscore/tempotext.cpp" line="502"/>
+        <location filename="../../libmscore/tempotext.cpp" line="505"/>
         <source>note</source>
         <translation>nota</translation>
     </message>
@@ -21385,28 +21427,28 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1982"/>
+        <location filename="../../libmscore/harmony.cpp" line="1983"/>
         <source>Roman numeral</source>
         <translation>Zenbaki erromatarra</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1984"/>
+        <location filename="../../libmscore/harmony.cpp" line="1985"/>
         <source>Nashville number</source>
         <translation>Nashville zenbakia</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2022"/>
+        <location filename="../../libmscore/harmony.cpp" line="2023"/>
         <source>lower case</source>
         <translation>minuskula</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2075"/>
+        <location filename="../../libmscore/harmony.cpp" line="2076"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="281"/>
         <source>♭</source>
         <translation>Bemola</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2070"/>
+        <location filename="../../libmscore/harmony.cpp" line="2071"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="290"/>
         <source>♯</source>
         <translation>Sostenitua</translation>
@@ -21778,17 +21820,17 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/element.cpp" line="2650"/>
+        <location filename="../../libmscore/element.cpp" line="2649"/>
         <source>Measure: %1</source>
         <translation type="unfinished">Konpasa: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/element.cpp" line="2652"/>
+        <location filename="../../libmscore/element.cpp" line="2651"/>
         <source>Beat: %1</source>
         <translation type="unfinished">%1. aldia</translation>
     </message>
     <message>
-        <location filename="../../libmscore/element.cpp" line="2655"/>
+        <location filename="../../libmscore/element.cpp" line="2654"/>
         <source>Staff: %1</source>
         <translation type="unfinished">Pentagrama: %1</translation>
     </message>
@@ -21796,13 +21838,13 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../../importexport/capella/capella.cpp" line="2768"/>
+        <location filename="../../importexport/capella/capella.cpp" line="2789"/>
         <location filename="../../importexport/midiimport/importmidi.cpp" line="1205"/>
         <source>Load failed: %1</source>
         <translation>Kargak huts egin du: %1</translation>
     </message>
     <message>
-        <location filename="../../importexport/capella/capella.cpp" line="2769"/>
+        <location filename="../../importexport/capella/capella.cpp" line="2790"/>
         <location filename="../../importexport/midiimport/importmidi.cpp" line="1206"/>
         <location filename="../../mscore/instrdialog.cpp" line="169"/>
         <location filename="../../mscore/musescore.cpp" line="4197"/>
@@ -21810,39 +21852,39 @@ Bisitatu %1MuseScore-ren webgunea%2 azken bertsioa eskuratzeko.</translation>
         <translation>Irten</translation>
     </message>
     <message>
-        <location filename="../../importexport/capella/capella.cpp" line="2767"/>
+        <location filename="../../importexport/capella/capella.cpp" line="2788"/>
         <source>Import Capella</source>
         <translation>Capella inportatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2258"/>
+        <location filename="../../mscore/file.cpp" line="2257"/>
         <source>Install SoundFont</source>
         <translation>SoundFont-a instalatu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2259"/>
+        <location filename="../../mscore/file.cpp" line="2258"/>
         <source>Do you want to install the SoundFont %1?</source>
         <translation>%1 SoundFont-a instalatzea nahi duzu?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2274"/>
+        <location filename="../../mscore/file.cpp" line="2273"/>
         <source>Overwrite?</source>
         <translation>Gainidatzi?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2275"/>
+        <location filename="../../mscore/file.cpp" line="2274"/>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
         <translation>%1 dagoeneko existitzen da.
 Gainidatzi nahi duzu?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2283"/>
+        <location filename="../../mscore/file.cpp" line="2282"/>
         <source>SoundFont installed</source>
         <translation>SoundFont-a instalatuta</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2283"/>
+        <location filename="../../mscore/file.cpp" line="2282"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
         <translation>SoundFont instalatua. Mesedez, joan Ikusi &gt; Sintetizadorea-ra hau gehitzeko eta Ikusi &gt; Nahasgailua-ra instrumentu soinu bat aukeratzeko.</translation>
     </message>
@@ -22205,24 +22247,55 @@ Gainidatzi nahi duzu?</translation>
 <context>
     <name>ScoreMigrationDialog</name>
     <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="69"/>
+        <source>Would you like to try our improved score style?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="88"/>
+        <source>Our new professional notation font, %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="97"/>
+        <source>Our improved text font, %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="107"/>
+        <source>Automatic placement (spacing changes introduced in V3.0)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="123"/>
         <source>Since this file was created in MuseScore %1, some layout changes may occur.</source>
-        <translation type="vanished">Fitxategi hau MuseScore % 1-en sortu zenez, diseinu-aldaketa batzuk gerta daitezke.</translation>
+        <translation>Fitxategi hau MuseScore % 1-en sortu zenez, diseinu-aldaketa batzuk gerta daitezke.</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="124"/>
         <source>(unknown)</source>
-        <translation type="vanished">(ezezaguna)</translation>
+        <translation>(ezezaguna)</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="136"/>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="137"/>
+        <source>Watch our release video to learn more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="167"/>
         <source>Remember my choice and don&apos;t ask again</source>
-        <translation type="vanished">Gogoratu nire aukera eta ez galdetu berriro</translation>
+        <translation>Gogoratu nire aukera eta ez galdetu berriro</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="183"/>
         <source>Keep old style</source>
-        <translation type="vanished">Lehengo estiloa mantendu</translation>
+        <translation>Lehengo estiloa mantendu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="189"/>
         <source>Apply new style</source>
-        <translation type="vanished">Estilo berria ezarri</translation>
+        <translation>Estilo berria ezarri</translation>
     </message>
 </context>
 <context>
@@ -23084,36 +23157,44 @@ Nota: &quot;Ktrl+Maius+1&quot; tekla konbinazio bakarra da.</translation>
 <context>
     <name>TelemetryPermissionDialog</name>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="72"/>
         <source>Help us improve MuseScore</source>
-        <translation type="vanished">MuseScore hobetzen lagun gaitzazu</translation>
+        <translation>MuseScore hobetzen lagun gaitzazu</translation>
     </message>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="92"/>
         <source>We&apos;d like to collect anonymous telemetry data to help us prioritize improvements. This includes how often you use certain features, statistics on preferred file formats, crashes, number of instruments per score, etc.</source>
-        <translation type="vanished">Hobekuntzei lehentasuna ematen laguntzeko telemetria datu anonimoak biltzea nahiko genuke. Honek hartzen ditu ezaugarri batzuk erabiltzen dituzun maiztasuna, hobetsitako fitxategi formatuak, kraskatzeak, partiturako instrumentu zenbakia, etab.</translation>
+        <translation>Hobekuntzei lehentasuna ematen laguntzeko telemetria datu anonimoak biltzea nahiko genuke. Honek hartzen ditu ezaugarri batzuk erabiltzen dituzun maiztasuna, hobetsitako fitxategi formatuak, kraskatzeak, partiturako instrumentu zenbakia, etab.</translation>
     </message>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="109"/>
         <source>We &lt;u&gt;do not&lt;/u&gt; collect any personal data or sensitive information, such as location, source code, file names, or music</source>
-        <translation type="vanished">&lt;u&gt;Ez dugu&lt;/u&gt; datu pertsonalik edo babestutako informaziorik biltzen, hala nola, kokapena, iturburu-kodea, fitxategi izenak, edo musika</translation>
+        <translation>&lt;u&gt;Ez dugu&lt;/u&gt; datu pertsonalik edo babestutako informaziorik biltzen, hala nola, kokapena, iturburu-kodea, fitxategi izenak, edo musika</translation>
     </message>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="116"/>
         <source>Do you allow MuseScore to send us anonymous reports?</source>
-        <translation type="vanished">MuseScore guri txosten anonimoak bidaltzera baimentzen duzu?</translation>
+        <translation>MuseScore guri txosten anonimoak bidaltzera baimentzen duzu?</translation>
     </message>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="140"/>
         <source>Yes, send anonymous reports</source>
-        <translation type="vanished">Bai, bidali txosten anonimoak</translation>
+        <translation>Bai, bidali txosten anonimoak</translation>
     </message>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="153"/>
         <source>(You can change this behaviour any time in &apos;Preferences… &gt; General &gt; Telemetry&apos;)</source>
-        <translation type="vanished">(Jokabide hau edonoiz alda dezakezu &apos;Hobespenak… &gt; Orokorra &gt; Telemetria&apos;-n)</translation>
+        <translation>(Jokabide hau edonoiz alda dezakezu &apos;Hobespenak… &gt; Orokorra &gt; Telemetria&apos;-n)</translation>
     </message>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="170"/>
         <source>Don&apos;t send</source>
-        <translation type="vanished">Ez bidali</translation>
+        <translation>Ez bidali</translation>
     </message>
     <message>
+        <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="183"/>
         <source>For more information, please take a look at our %1Privacy Policy%2</source>
-        <translation type="vanished">Informazio gehiagorako, mesedez begiratu bat eman gure %1Pribatutasun-politikara%2</translation>
+        <translation>Informazio gehiagorako, mesedez begiratu bat eman gure %1Pribatutasun-politikara%2</translation>
     </message>
 </context>
 <context>
@@ -24150,52 +24231,64 @@ aldi kopurua</translation>
 <context>
     <name>TreePaletteHeader</name>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="62"/>
         <source>Collapse</source>
-        <translation type="vanished">Uzkurtu</translation>
+        <translation>Uzkurtu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="62"/>
         <source>Expand</source>
-        <translation type="vanished">Zabaldu </translation>
+        <translation>Zabaldu </translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="101"/>
         <source>Remove element</source>
-        <translation type="vanished">Ezabatu elementua</translation>
+        <translation>Ezabatu elementua</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="141"/>
         <source>Palette menu</source>
-        <translation type="vanished">Paleten menua</translation>
+        <translation>Paleten menua</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="165"/>
         <source>Hide/Delete Palette</source>
-        <translation type="vanished">Paleta ezkutatu/ezabatu</translation>
+        <translation>Paleta ezkutatu/ezabatu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="165"/>
         <source>Hide Palette</source>
-        <translation type="vanished">Paleta ezkutatu</translation>
+        <translation>Paleta ezkutatu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="169"/>
         <source>Insert New Palette</source>
-        <translation type="vanished">Paleta berria txertatu</translation>
+        <translation>Paleta berria txertatu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="174"/>
         <source>Enable Editing</source>
-        <translation type="vanished">Edizioa gaitu</translation>
+        <translation>Edizioa gaitu</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="181"/>
         <source>Reset Palette</source>
-        <translation type="vanished">Berrezarri Paleta</translation>
+        <translation>Berrezarri Paleta</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="185"/>
         <source>Save Palette…</source>
-        <translation type="vanished">Paleta gorde…</translation>
+        <translation>Paleta gorde…</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="189"/>
         <source>Load Palette…</source>
-        <translation type="vanished">Paleta kargatu…</translation>
+        <translation>Paleta kargatu…</translation>
     </message>
     <message>
+        <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="194"/>
         <source>Palette Properties…</source>
-        <translation type="vanished">Paleta ezaugarriak…</translation>
+        <translation>Paleta ezaugarriak…</translation>
     </message>
 </context>
 <context>
@@ -31845,47 +31938,47 @@ This score already has part scores. Changing local time signatures while part sc
 <context>
     <name>markerType</name>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="32"/>
+        <location filename="../../libmscore/marker.cpp" line="31"/>
         <source>Segno</source>
         <translation>Segno</translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="33"/>
+        <location filename="../../libmscore/marker.cpp" line="32"/>
         <source>Segno variation</source>
         <translation>Segno aldaera</translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="34"/>
+        <location filename="../../libmscore/marker.cpp" line="33"/>
         <source>Coda</source>
         <translation>Koda</translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="35"/>
+        <location filename="../../libmscore/marker.cpp" line="34"/>
         <source>Varied coda</source>
         <translation>Koda aldatua</translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="36"/>
+        <location filename="../../libmscore/marker.cpp" line="35"/>
         <source>Codetta</source>
         <translation>Codetta</translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="37"/>
+        <location filename="../../libmscore/marker.cpp" line="36"/>
         <source>Fine</source>
         <translation>Fine</translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="38"/>
+        <location filename="../../libmscore/marker.cpp" line="37"/>
         <source>To Coda</source>
         <translation>Kodara</translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="39"/>
+        <location filename="../../libmscore/marker.cpp" line="38"/>
         <source>To Coda (Symbol)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/marker.cpp" line="40"/>
+        <location filename="../../libmscore/marker.cpp" line="39"/>
         <source>Custom</source>
         <translation>Pertsonalizatua</translation>
     </message>
@@ -34397,372 +34490,372 @@ This score already has part scores. Changing local time signatures while part sc
 <context>
     <name>textpalette</name>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="46"/>
+        <location filename="../../mscore/textpalette.cpp" line="43"/>
         <source>Basic Latin</source>
         <translation>Oinarrizko latina</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="47"/>
+        <location filename="../../mscore/textpalette.cpp" line="44"/>
         <source>Latin-1 Supplement</source>
         <translation>Latin-1 gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="48"/>
+        <location filename="../../mscore/textpalette.cpp" line="45"/>
         <source>Latin Extended-A</source>
         <translation>Latin hedatua-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="49"/>
+        <location filename="../../mscore/textpalette.cpp" line="46"/>
         <source>Latin Extended-B</source>
         <translation>Latin hedatua-B</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="50"/>
+        <location filename="../../mscore/textpalette.cpp" line="47"/>
         <source>IPA Extensions</source>
         <translation>IPA luzapenak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="51"/>
+        <location filename="../../mscore/textpalette.cpp" line="48"/>
         <source>Spacing Modifier Letters</source>
         <translation>Tartearen letra aldatzaileak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="52"/>
+        <location filename="../../mscore/textpalette.cpp" line="49"/>
         <source>Combining Diacritical Marks</source>
         <translation>Marka diakritiko konbinatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="53"/>
+        <location filename="../../mscore/textpalette.cpp" line="50"/>
         <source>Greek and Coptic</source>
         <translation>Greziera eta koptoera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="54"/>
+        <location filename="../../mscore/textpalette.cpp" line="51"/>
         <source>Cyrillic</source>
         <translation>Zirilikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="55"/>
+        <location filename="../../mscore/textpalette.cpp" line="52"/>
         <source>Cyrillic Supplement</source>
         <translation>Ziriliko gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="56"/>
+        <location filename="../../mscore/textpalette.cpp" line="53"/>
         <source>Armenian</source>
         <translation>Armeniera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="57"/>
+        <location filename="../../mscore/textpalette.cpp" line="54"/>
         <source>Hebrew</source>
         <translation>Hebreera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="58"/>
+        <location filename="../../mscore/textpalette.cpp" line="55"/>
         <source>Arabic</source>
         <translation>Arabiera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="59"/>
+        <location filename="../../mscore/textpalette.cpp" line="56"/>
         <source>Syriac</source>
         <translation>Siriera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="60"/>
+        <location filename="../../mscore/textpalette.cpp" line="57"/>
         <source>Arabic Supplement</source>
         <translation>Arabiar gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="61"/>
+        <location filename="../../mscore/textpalette.cpp" line="58"/>
         <source>Thaana</source>
         <translation>Thana</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="62"/>
+        <location filename="../../mscore/textpalette.cpp" line="59"/>
         <source>NKo</source>
         <translation>NKo</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="63"/>
+        <location filename="../../mscore/textpalette.cpp" line="60"/>
         <source>Samaritan</source>
         <translation>Samariera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="64"/>
+        <location filename="../../mscore/textpalette.cpp" line="61"/>
         <source>Mandaic</source>
         <translation>Mandearra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="65"/>
+        <location filename="../../mscore/textpalette.cpp" line="62"/>
         <source>Syriac Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="66"/>
+        <location filename="../../mscore/textpalette.cpp" line="63"/>
         <source>Arabic Extended-A</source>
         <translation>Arabiera hedatua-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="67"/>
+        <location filename="../../mscore/textpalette.cpp" line="64"/>
         <source>Devanagari</source>
         <translation>Devanagaria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="68"/>
+        <location filename="../../mscore/textpalette.cpp" line="65"/>
         <source>Bengali</source>
         <translation>Bengalera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="69"/>
+        <location filename="../../mscore/textpalette.cpp" line="66"/>
         <source>Gurmukhi</source>
         <translation>Gurmukhia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="70"/>
+        <location filename="../../mscore/textpalette.cpp" line="67"/>
         <source>Gujarati</source>
         <translation>Gujaratera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="71"/>
+        <location filename="../../mscore/textpalette.cpp" line="68"/>
         <source>Oriya</source>
         <translation>Oriya</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="72"/>
+        <location filename="../../mscore/textpalette.cpp" line="69"/>
         <source>Tamil</source>
         <translation>Tamilera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="73"/>
+        <location filename="../../mscore/textpalette.cpp" line="70"/>
         <source>Telugu</source>
         <translation>Teluguera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="74"/>
+        <location filename="../../mscore/textpalette.cpp" line="71"/>
         <source>Kannada</source>
         <translation>Kannadera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="75"/>
+        <location filename="../../mscore/textpalette.cpp" line="72"/>
         <source>Malayalam</source>
         <translation>Malayama</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="76"/>
+        <location filename="../../mscore/textpalette.cpp" line="73"/>
         <source>Sinhala</source>
         <translation>Sinhala</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="77"/>
+        <location filename="../../mscore/textpalette.cpp" line="74"/>
         <source>Thai</source>
         <translation>Thailandiera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="78"/>
+        <location filename="../../mscore/textpalette.cpp" line="75"/>
         <source>Lao</source>
         <translation>Laosera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="79"/>
+        <location filename="../../mscore/textpalette.cpp" line="76"/>
         <source>Tibetan</source>
         <translation>Tibetera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="80"/>
+        <location filename="../../mscore/textpalette.cpp" line="77"/>
         <source>Myanmar</source>
         <translation>Birmaniera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="81"/>
+        <location filename="../../mscore/textpalette.cpp" line="78"/>
         <source>Georgian</source>
         <translation>Georgiera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="82"/>
+        <location filename="../../mscore/textpalette.cpp" line="79"/>
         <source>Hangul Jamo</source>
         <translation>Hangul Jamoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="83"/>
+        <location filename="../../mscore/textpalette.cpp" line="80"/>
         <source>Ethiopic</source>
         <translation>Etiopiera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="84"/>
+        <location filename="../../mscore/textpalette.cpp" line="81"/>
         <source>Ethiopic Supplement</source>
         <translation>Etopiera gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="85"/>
+        <location filename="../../mscore/textpalette.cpp" line="82"/>
         <source>Cherokee</source>
         <translation>Txerokia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="95"/>
+        <location filename="../../mscore/textpalette.cpp" line="92"/>
         <source>Unified Canadian Aboriginal Syllabics Extended</source>
         <translation>Kanadako aborigenen silabako bateratu hedatua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="87"/>
+        <location filename="../../mscore/textpalette.cpp" line="84"/>
         <source>Ogham</source>
         <translation>Oghama</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="88"/>
+        <location filename="../../mscore/textpalette.cpp" line="85"/>
         <source>Runic</source>
         <translation>Errunikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="89"/>
+        <location filename="../../mscore/textpalette.cpp" line="86"/>
         <source>Tagalog</source>
         <translation>Tagaloga</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="90"/>
+        <location filename="../../mscore/textpalette.cpp" line="87"/>
         <source>Hanunoo</source>
         <translation>Hanunooa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="91"/>
+        <location filename="../../mscore/textpalette.cpp" line="88"/>
         <source>Buhid</source>
         <translation>Buhida</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="92"/>
+        <location filename="../../mscore/textpalette.cpp" line="89"/>
         <source>Tagbanwa</source>
         <translation>Tagbanwa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="93"/>
+        <location filename="../../mscore/textpalette.cpp" line="90"/>
         <source>Khmer</source>
         <translation>Khmerera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="94"/>
+        <location filename="../../mscore/textpalette.cpp" line="91"/>
         <source>Mongolian</source>
         <translation>Mongoliera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="86"/>
+        <location filename="../../mscore/textpalette.cpp" line="83"/>
         <source>Unified Canadian Aboriginal Syllabics</source>
         <translation>Kanadako aborigenen silabako bateratuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="96"/>
+        <location filename="../../mscore/textpalette.cpp" line="93"/>
         <source>Limbu</source>
         <translation>Limbua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="97"/>
+        <location filename="../../mscore/textpalette.cpp" line="94"/>
         <source>Tai Le</source>
         <translation>Tail Lea</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="98"/>
+        <location filename="../../mscore/textpalette.cpp" line="95"/>
         <source>New Tai Lue</source>
         <translation>Tai Lea berria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="99"/>
+        <location filename="../../mscore/textpalette.cpp" line="96"/>
         <source>Khmer Symbols</source>
         <translation>Khmererako ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="100"/>
+        <location filename="../../mscore/textpalette.cpp" line="97"/>
         <source>Buginese</source>
         <translation>Bugisera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="101"/>
+        <location filename="../../mscore/textpalette.cpp" line="98"/>
         <source>Tai Tham</source>
         <translation>Tai Tham</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="102"/>
+        <location filename="../../mscore/textpalette.cpp" line="99"/>
         <source>Combining Diacritical Marks Extended</source>
         <translation>Hedatutako marka diakritiko konbinatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="103"/>
+        <location filename="../../mscore/textpalette.cpp" line="100"/>
         <source>Balinese</source>
         <translation>Baliera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="104"/>
+        <location filename="../../mscore/textpalette.cpp" line="101"/>
         <source>Sundanese</source>
         <translation>Sundanera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="105"/>
+        <location filename="../../mscore/textpalette.cpp" line="102"/>
         <source>Batak</source>
         <translation>Batak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="106"/>
+        <location filename="../../mscore/textpalette.cpp" line="103"/>
         <source>Lepcha</source>
         <translation>Lepcha</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="107"/>
+        <location filename="../../mscore/textpalette.cpp" line="104"/>
         <source>Ol Chiki</source>
         <translation>Ol Chiki</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="108"/>
+        <location filename="../../mscore/textpalette.cpp" line="105"/>
         <source>Cyrillic Extended-C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="109"/>
+        <location filename="../../mscore/textpalette.cpp" line="106"/>
         <source>Georgian Extended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="110"/>
+        <location filename="../../mscore/textpalette.cpp" line="107"/>
         <source>Sundanese Supplement</source>
         <translation>Sundanera gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="111"/>
+        <location filename="../../mscore/textpalette.cpp" line="108"/>
         <source>Vedic Extensions</source>
         <translation>Vedic luzapenak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="112"/>
+        <location filename="../../mscore/textpalette.cpp" line="109"/>
         <source>Phonetic Extensions</source>
         <translation>Luzapen fonetikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="113"/>
+        <location filename="../../mscore/textpalette.cpp" line="110"/>
         <source>Phonetic Extensions Supplement</source>
         <translation>Luzapen fonetikoen gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="114"/>
+        <location filename="../../mscore/textpalette.cpp" line="111"/>
         <source>Combining Diacritical Marks Supplement</source>
         <translation>Marka diakritiko konbinatuen gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="115"/>
+        <location filename="../../mscore/textpalette.cpp" line="112"/>
         <source>Latin Extended Additional</source>
         <translation>Latin hedatu gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="116"/>
+        <location filename="../../mscore/textpalette.cpp" line="113"/>
         <source>Greek Extended</source>
         <translation>Greziera hedatua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="117"/>
+        <location filename="../../mscore/textpalette.cpp" line="114"/>
         <source>General Punctuation</source>
         <translation>Puntuazio orokorra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="118"/>
+        <location filename="../../mscore/textpalette.cpp" line="115"/>
         <source>Superscripts and Subscripts</source>
         <translation>Goi-indizeak eta azpiindizeak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="119"/>
+        <location filename="../../mscore/textpalette.cpp" line="116"/>
         <source>Currency Symbols</source>
         <translation>Moneta-ikurrak</translation>
     </message>
@@ -34771,1147 +34864,1147 @@ This score already has part scores. Changing local time signatures while part sc
         <translation type="vanished">Ikurretarako marka diakritiko konbinatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="120"/>
+        <location filename="../../mscore/textpalette.cpp" line="117"/>
         <source>Combining Diacritical Marks for Symbols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="121"/>
+        <location filename="../../mscore/textpalette.cpp" line="118"/>
         <source>Letterlike Symbols</source>
         <translation>Letra-tankerako ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="122"/>
+        <location filename="../../mscore/textpalette.cpp" line="119"/>
         <source>Number Forms</source>
         <translation>Zenbaki-formatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="123"/>
+        <location filename="../../mscore/textpalette.cpp" line="120"/>
         <source>Arrows</source>
         <translation>Geziak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="124"/>
+        <location filename="../../mscore/textpalette.cpp" line="121"/>
         <source>Mathematical Operators</source>
         <translation>Eragile matematikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="125"/>
+        <location filename="../../mscore/textpalette.cpp" line="122"/>
         <source>Miscellaneous Technical</source>
         <translation>Askotariko ikur teknikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="126"/>
+        <location filename="../../mscore/textpalette.cpp" line="123"/>
         <source>Control Pictures</source>
         <translation>Kontrol-irudiak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="127"/>
+        <location filename="../../mscore/textpalette.cpp" line="124"/>
         <source>Optical Character Recognition</source>
         <translation>Karaktereen ezagutze optikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="128"/>
+        <location filename="../../mscore/textpalette.cpp" line="125"/>
         <source>Enclosed Alphanumerics</source>
         <translation>Alfanumeriko inguratuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="129"/>
+        <location filename="../../mscore/textpalette.cpp" line="126"/>
         <source>Box Drawing</source>
         <translation>Koadro-ertzak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="130"/>
+        <location filename="../../mscore/textpalette.cpp" line="127"/>
         <source>Block Elements</source>
         <translation>Blokeko elementuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="131"/>
+        <location filename="../../mscore/textpalette.cpp" line="128"/>
         <source>Geometric Shapes</source>
         <translation>Forma geometrikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="132"/>
+        <location filename="../../mscore/textpalette.cpp" line="129"/>
         <source>Miscellaneous Symbols</source>
         <translation>Askotariko ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="133"/>
+        <location filename="../../mscore/textpalette.cpp" line="130"/>
         <source>Dingbats</source>
         <translation>Dingbatak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="134"/>
+        <location filename="../../mscore/textpalette.cpp" line="131"/>
         <source>Miscellaneous Mathematical Symbols-A</source>
         <translation>Askotariko ikur matematikoak-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="135"/>
+        <location filename="../../mscore/textpalette.cpp" line="132"/>
         <source>Supplemental Arrows-A</source>
         <translation>Gezi gehigarriak-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="136"/>
+        <location filename="../../mscore/textpalette.cpp" line="133"/>
         <source>Braille Patterns</source>
         <translation>Braille ereduak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="137"/>
+        <location filename="../../mscore/textpalette.cpp" line="134"/>
         <source>Supplemental Arrows-B</source>
         <translation>Gezi gehigarriak-B</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="138"/>
+        <location filename="../../mscore/textpalette.cpp" line="135"/>
         <source>Miscellaneous Mathematical Symbols-B</source>
         <translation>Askotariko ikur matematikoak-B</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="139"/>
+        <location filename="../../mscore/textpalette.cpp" line="136"/>
         <source>Supplemental Mathematical Operators</source>
         <translation>Eragile matematiko gehigarriak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="140"/>
+        <location filename="../../mscore/textpalette.cpp" line="137"/>
         <source>Miscellaneous Symbols and Arrows</source>
         <translation>Askotariko ikur eta geziak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="141"/>
+        <location filename="../../mscore/textpalette.cpp" line="138"/>
         <source>Glagolitic</source>
         <translation>Glagolitikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="142"/>
+        <location filename="../../mscore/textpalette.cpp" line="139"/>
         <source>Latin Extended-C</source>
         <translation>Latin hedatua-C</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="143"/>
+        <location filename="../../mscore/textpalette.cpp" line="140"/>
         <source>Coptic</source>
         <translation>Koptoera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="144"/>
+        <location filename="../../mscore/textpalette.cpp" line="141"/>
         <source>Georgian Supplement</source>
         <translation>Georgiera gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="145"/>
+        <location filename="../../mscore/textpalette.cpp" line="142"/>
         <source>Tifinagh</source>
         <translation>Tifinagh</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="146"/>
+        <location filename="../../mscore/textpalette.cpp" line="143"/>
         <source>Ethiopic Extended</source>
         <translation>Etiopiera hedatua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="147"/>
+        <location filename="../../mscore/textpalette.cpp" line="144"/>
         <source>Cyrillic Extended-A</source>
         <translation>Ziriliko hedatua-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="148"/>
+        <location filename="../../mscore/textpalette.cpp" line="145"/>
         <source>Supplemental Punctuation</source>
         <translation>Puntuazio gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="149"/>
+        <location filename="../../mscore/textpalette.cpp" line="146"/>
         <source>CJK Radicals Supplement</source>
         <translation>CJK erradikalen gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="150"/>
+        <location filename="../../mscore/textpalette.cpp" line="147"/>
         <source>Kangxi Radicals</source>
         <translation>Kangxi erradikalak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="151"/>
+        <location filename="../../mscore/textpalette.cpp" line="148"/>
         <source>Ideographic Description Characters</source>
         <translation>Deskribapen ideografikoko karaktereak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="152"/>
+        <location filename="../../mscore/textpalette.cpp" line="149"/>
         <source>CJK Symbols and Punctuation</source>
         <translation>CJK ikurrak eta puntuazioa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="153"/>
+        <location filename="../../mscore/textpalette.cpp" line="150"/>
         <source>Hiragana</source>
         <translation>Hiragana</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="154"/>
+        <location filename="../../mscore/textpalette.cpp" line="151"/>
         <source>Katakana</source>
         <translation>Katakana</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="155"/>
+        <location filename="../../mscore/textpalette.cpp" line="152"/>
         <source>Bopomofo</source>
         <translation>Bopomofoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="156"/>
+        <location filename="../../mscore/textpalette.cpp" line="153"/>
         <source>Hangul Compatibility Jamo</source>
         <translation>Hangul-Jamo bateragarritasuna</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="157"/>
+        <location filename="../../mscore/textpalette.cpp" line="154"/>
         <source>Kanbun</source>
         <translation>Kanbuna</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="158"/>
+        <location filename="../../mscore/textpalette.cpp" line="155"/>
         <source>Bopomofo Extended</source>
         <translation>Bopomofo hedatua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="159"/>
+        <location filename="../../mscore/textpalette.cpp" line="156"/>
         <source>CJK Strokes</source>
         <translation>CJK trazuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="160"/>
+        <location filename="../../mscore/textpalette.cpp" line="157"/>
         <source>Katakana Phonetic Extensions</source>
         <translation>Katakanaren luzapen fonetikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="161"/>
+        <location filename="../../mscore/textpalette.cpp" line="158"/>
         <source>Enclosed CJK Letters and Months</source>
         <translation>CJK gutun eta hilabete inguratuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="162"/>
+        <location filename="../../mscore/textpalette.cpp" line="159"/>
         <source>CJK Compatibility</source>
         <translation>CJK bateragarritasuna</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="163"/>
+        <location filename="../../mscore/textpalette.cpp" line="160"/>
         <source>CJK Unified Ideographs Extension A</source>
         <translation>CJK ideografia bateratuak A hedapena</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="164"/>
+        <location filename="../../mscore/textpalette.cpp" line="161"/>
         <source>Yijing Hexagram Symbols</source>
         <translation>Yijing hexagramaren ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="165"/>
+        <location filename="../../mscore/textpalette.cpp" line="162"/>
         <source>CJK Unified Ideographs</source>
         <translation>CJK ideografia bateratuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="166"/>
+        <location filename="../../mscore/textpalette.cpp" line="163"/>
         <source>Yi Syllables</source>
         <translation>Yi silabak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="167"/>
+        <location filename="../../mscore/textpalette.cpp" line="164"/>
         <source>Yi Radicals</source>
         <translation>Yi erradikalak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="168"/>
+        <location filename="../../mscore/textpalette.cpp" line="165"/>
         <source>Lisu</source>
         <translation>Lisu</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="169"/>
+        <location filename="../../mscore/textpalette.cpp" line="166"/>
         <source>Vai</source>
         <translation>Vaiera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="170"/>
+        <location filename="../../mscore/textpalette.cpp" line="167"/>
         <source>Cyrillic Extended-B</source>
         <translation>Ziriliko hedatua-B</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="171"/>
+        <location filename="../../mscore/textpalette.cpp" line="168"/>
         <source>Bamum</source>
         <translation>Bamum</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="172"/>
+        <location filename="../../mscore/textpalette.cpp" line="169"/>
         <source>Modifier Tone Letters</source>
         <translation>Tonuaren letra aldatzaileak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="173"/>
+        <location filename="../../mscore/textpalette.cpp" line="170"/>
         <source>Latin Extended-D</source>
         <translation>Latin hedatua-D</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="174"/>
+        <location filename="../../mscore/textpalette.cpp" line="171"/>
         <source>Syloti Nagri</source>
         <translation>Syloti Nagri</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="175"/>
+        <location filename="../../mscore/textpalette.cpp" line="172"/>
         <source>Common Indic Number Forms</source>
         <translation>Indiako zenbaki-formatu arrunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="176"/>
+        <location filename="../../mscore/textpalette.cpp" line="173"/>
         <source>Phags-pa</source>
         <translation>Phags-pa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="177"/>
+        <location filename="../../mscore/textpalette.cpp" line="174"/>
         <source>Saurashtra</source>
         <translation>Saurashtra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="178"/>
+        <location filename="../../mscore/textpalette.cpp" line="175"/>
         <source>Devanagari Extended</source>
         <translation>Devanagaria hedatua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="179"/>
+        <location filename="../../mscore/textpalette.cpp" line="176"/>
         <source>Kayah Li</source>
         <translation>Kayah Li</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="180"/>
+        <location filename="../../mscore/textpalette.cpp" line="177"/>
         <source>Rejang</source>
         <translation>Rejang</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="181"/>
+        <location filename="../../mscore/textpalette.cpp" line="178"/>
         <source>Hangul Jamo Extended-A</source>
         <translation>Hangul Jamo hedatua-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="182"/>
+        <location filename="../../mscore/textpalette.cpp" line="179"/>
         <source>Javanese</source>
         <translation>Javera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="183"/>
+        <location filename="../../mscore/textpalette.cpp" line="180"/>
         <source>Myanmar Extended-B</source>
         <translation>Birmaniera hedatua-B</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="184"/>
+        <location filename="../../mscore/textpalette.cpp" line="181"/>
         <source>Cham</source>
         <translation>Cham</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="185"/>
+        <location filename="../../mscore/textpalette.cpp" line="182"/>
         <source>Myanmar Extended-A</source>
         <translation>Birmaniera hedatua-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="186"/>
+        <location filename="../../mscore/textpalette.cpp" line="183"/>
         <source>Tai Viet</source>
         <translation>Tai Viet</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="187"/>
+        <location filename="../../mscore/textpalette.cpp" line="184"/>
         <source>Meetei Mayek Extensions</source>
         <translation>Meetei Mayek hedapenak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="188"/>
+        <location filename="../../mscore/textpalette.cpp" line="185"/>
         <source>Ethiopic Extended-A</source>
         <translation>Etiopiera A hedatua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="189"/>
+        <location filename="../../mscore/textpalette.cpp" line="186"/>
         <source>Latin Extended-E</source>
         <translation>Latin hedatua-E</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="190"/>
+        <location filename="../../mscore/textpalette.cpp" line="187"/>
         <source>Cherokee Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="191"/>
+        <location filename="../../mscore/textpalette.cpp" line="188"/>
         <source>Meetei Mayek</source>
         <translation>Meetei Mayek</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="192"/>
+        <location filename="../../mscore/textpalette.cpp" line="189"/>
         <source>Hangul Syllables</source>
         <translation>Hangul silabak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="193"/>
+        <location filename="../../mscore/textpalette.cpp" line="190"/>
         <source>Hangul Jamo Extended-B</source>
         <translation>Hangul Jamo hedatua-B</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="194"/>
+        <location filename="../../mscore/textpalette.cpp" line="191"/>
         <source>High Surrogates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="195"/>
+        <location filename="../../mscore/textpalette.cpp" line="192"/>
         <source>High Private Use Surrogates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="196"/>
+        <location filename="../../mscore/textpalette.cpp" line="193"/>
         <source>Low Surrogates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="197"/>
+        <location filename="../../mscore/textpalette.cpp" line="194"/>
         <source>Private Use Area</source>
         <translation>Erabilera pribatuko area</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="198"/>
+        <location filename="../../mscore/textpalette.cpp" line="195"/>
         <source>CJK Compatibility Ideographs</source>
         <translation>CJK bateragarritasun-ideografiak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="199"/>
+        <location filename="../../mscore/textpalette.cpp" line="196"/>
         <source>Alphabetic Presentation Forms</source>
         <translation>Aurkezpen alfabetikoaren formatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="200"/>
+        <location filename="../../mscore/textpalette.cpp" line="197"/>
         <source>Arabic Presentation Forms-A</source>
         <translation>Aurkezpen arabiarraren formatuak-A</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="201"/>
+        <location filename="../../mscore/textpalette.cpp" line="198"/>
         <source>Variation Selectors</source>
         <translation>Aldaera-hautatzaileak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="202"/>
+        <location filename="../../mscore/textpalette.cpp" line="199"/>
         <source>Vertical Forms</source>
         <translation>Forma bertikalak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="203"/>
+        <location filename="../../mscore/textpalette.cpp" line="200"/>
         <source>Combining Half Marks</source>
         <translation>Marka-erdi konbinatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="204"/>
+        <location filename="../../mscore/textpalette.cpp" line="201"/>
         <source>CJK Compatibility Forms</source>
         <translation>CJK bateragarritasun-formak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="205"/>
+        <location filename="../../mscore/textpalette.cpp" line="202"/>
         <source>Small Form Variants</source>
         <translation>Forma txikiko aldaerak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="206"/>
+        <location filename="../../mscore/textpalette.cpp" line="203"/>
         <source>Arabic Presentation Forms-B</source>
         <translation>Aurkezpen arabiarraren formatuak-B</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="207"/>
+        <location filename="../../mscore/textpalette.cpp" line="204"/>
         <source>Halfwidth and Fullwidth Forms</source>
         <translation>Zabalera-erdiko eta osoko formatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="208"/>
+        <location filename="../../mscore/textpalette.cpp" line="205"/>
         <source>Specials</source>
         <translation>Bereziak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="209"/>
+        <location filename="../../mscore/textpalette.cpp" line="206"/>
         <source>Linear B Syllabary</source>
         <translation>B silabario lineala</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="210"/>
+        <location filename="../../mscore/textpalette.cpp" line="207"/>
         <source>Linear B Ideograms</source>
         <translation>B ideograma linealak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="211"/>
+        <location filename="../../mscore/textpalette.cpp" line="208"/>
         <source>Aegean Numbers</source>
         <translation>Egeoko zenbakiak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="212"/>
+        <location filename="../../mscore/textpalette.cpp" line="209"/>
         <source>Ancient Greek Numbers</source>
         <translation>Greziar zenbaki zaharrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="213"/>
+        <location filename="../../mscore/textpalette.cpp" line="210"/>
         <source>Ancient Symbols</source>
         <translation>Antzinako ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="214"/>
+        <location filename="../../mscore/textpalette.cpp" line="211"/>
         <source>Phaistos Disc</source>
         <translation>Phaistos diskoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="215"/>
+        <location filename="../../mscore/textpalette.cpp" line="212"/>
         <source>Lycian</source>
         <translation>Likiera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="216"/>
+        <location filename="../../mscore/textpalette.cpp" line="213"/>
         <source>Carian</source>
         <translation>Kariera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="217"/>
+        <location filename="../../mscore/textpalette.cpp" line="214"/>
         <source>Coptic Epact Numbers</source>
         <translation>Koptoeraren Epact zenbakiak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="218"/>
+        <location filename="../../mscore/textpalette.cpp" line="215"/>
         <source>Old Italic</source>
         <translation>Etzan zaharra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="219"/>
+        <location filename="../../mscore/textpalette.cpp" line="216"/>
         <source>Gothic</source>
         <translation>Gotikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="220"/>
+        <location filename="../../mscore/textpalette.cpp" line="217"/>
         <source>Old Permic</source>
         <translation>Permiko zaharra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="221"/>
+        <location filename="../../mscore/textpalette.cpp" line="218"/>
         <source>Ugaritic</source>
         <translation>Ugaritikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="222"/>
+        <location filename="../../mscore/textpalette.cpp" line="219"/>
         <source>Old Persian</source>
         <translation>Persiera zaharra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="223"/>
+        <location filename="../../mscore/textpalette.cpp" line="220"/>
         <source>Deseret</source>
         <translation>Deseret</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="224"/>
+        <location filename="../../mscore/textpalette.cpp" line="221"/>
         <source>Shavian</source>
         <translation>Shaviana</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="225"/>
+        <location filename="../../mscore/textpalette.cpp" line="222"/>
         <source>Osmanya</source>
         <translation>Osmanya</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="226"/>
+        <location filename="../../mscore/textpalette.cpp" line="223"/>
         <source>Osage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="227"/>
+        <location filename="../../mscore/textpalette.cpp" line="224"/>
         <source>Elbasan</source>
         <translation>Elbasan</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="228"/>
+        <location filename="../../mscore/textpalette.cpp" line="225"/>
         <source>Caucasian Albanian</source>
         <translation>Albaniar kaukasikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="229"/>
+        <location filename="../../mscore/textpalette.cpp" line="226"/>
         <source>Linear A</source>
         <translation>A lineala</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="230"/>
+        <location filename="../../mscore/textpalette.cpp" line="227"/>
         <source>Cypriot Syllabary</source>
         <translation>Zipreko silabarioa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="231"/>
+        <location filename="../../mscore/textpalette.cpp" line="228"/>
         <source>Imperial Aramaic</source>
         <translation>Aramaiera inperiala</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="232"/>
+        <location filename="../../mscore/textpalette.cpp" line="229"/>
         <source>Palmyrene</source>
         <translation>Palmyriera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="233"/>
+        <location filename="../../mscore/textpalette.cpp" line="230"/>
         <source>Nabataean</source>
         <translation>Nabatera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="234"/>
+        <location filename="../../mscore/textpalette.cpp" line="231"/>
         <source>Hatran</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="235"/>
+        <location filename="../../mscore/textpalette.cpp" line="232"/>
         <source>Phoenician</source>
         <translation>Feniziera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="236"/>
+        <location filename="../../mscore/textpalette.cpp" line="233"/>
         <source>Lydian</source>
         <translation>Lidiarra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="237"/>
+        <location filename="../../mscore/textpalette.cpp" line="234"/>
         <source>Meroitic Hieroglyphs</source>
         <translation>Hieroglifiko meroitikoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="238"/>
+        <location filename="../../mscore/textpalette.cpp" line="235"/>
         <source>Meroitic Cursive</source>
         <translation>Meroitiko etzana</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="239"/>
+        <location filename="../../mscore/textpalette.cpp" line="236"/>
         <source>Kharoshthi</source>
         <translation>Kharoshithi</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="240"/>
+        <location filename="../../mscore/textpalette.cpp" line="237"/>
         <source>Old South Arabian</source>
         <translation>Hego Arabiar zaharra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="241"/>
+        <location filename="../../mscore/textpalette.cpp" line="238"/>
         <source>Old North Arabian</source>
         <translation>Ipar Arabiar zaharra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="242"/>
+        <location filename="../../mscore/textpalette.cpp" line="239"/>
         <source>Manichaean</source>
         <translation>Manikera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="243"/>
+        <location filename="../../mscore/textpalette.cpp" line="240"/>
         <source>Avestan</source>
         <translation>Avestera</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="244"/>
+        <location filename="../../mscore/textpalette.cpp" line="241"/>
         <source>Inscriptional Parthian</source>
         <translation>Parthia-ko inskripzioak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="245"/>
+        <location filename="../../mscore/textpalette.cpp" line="242"/>
         <source>Inscriptional Pahlavi</source>
         <translation>Pahlavi-ko inskripzioak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="246"/>
+        <location filename="../../mscore/textpalette.cpp" line="243"/>
         <source>Psalter Pahlavi</source>
         <translation>Psalter Pahlavia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="247"/>
+        <location filename="../../mscore/textpalette.cpp" line="244"/>
         <source>Old Turkic</source>
         <translation>Turkiar zaharra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="248"/>
+        <location filename="../../mscore/textpalette.cpp" line="245"/>
         <source>Old Hungarian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="249"/>
+        <location filename="../../mscore/textpalette.cpp" line="246"/>
         <source>Hanifi Rohingya</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="250"/>
+        <location filename="../../mscore/textpalette.cpp" line="247"/>
         <source>Rumi Numeral Symbols</source>
         <translation>Rumi ikur numerikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="251"/>
+        <location filename="../../mscore/textpalette.cpp" line="248"/>
         <source>Yezidi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="252"/>
+        <location filename="../../mscore/textpalette.cpp" line="249"/>
         <source>Old Sogdian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="253"/>
+        <location filename="../../mscore/textpalette.cpp" line="250"/>
         <source>Sogdian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="254"/>
+        <location filename="../../mscore/textpalette.cpp" line="251"/>
         <source>Chorasmian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="255"/>
+        <location filename="../../mscore/textpalette.cpp" line="252"/>
         <source>Elymaic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="256"/>
+        <location filename="../../mscore/textpalette.cpp" line="253"/>
         <source>Brahmi</source>
         <translation>Brahmia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="257"/>
+        <location filename="../../mscore/textpalette.cpp" line="254"/>
         <source>Kaithi</source>
         <translation>Kaithia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="258"/>
+        <location filename="../../mscore/textpalette.cpp" line="255"/>
         <source>Sora Sompeng</source>
         <translation>Sora Sompenga</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="259"/>
+        <location filename="../../mscore/textpalette.cpp" line="256"/>
         <source>Chakma</source>
         <translation>Chakma</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="260"/>
+        <location filename="../../mscore/textpalette.cpp" line="257"/>
         <source>Mahajani</source>
         <translation>Mahajania</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="261"/>
+        <location filename="../../mscore/textpalette.cpp" line="258"/>
         <source>Sharada</source>
         <translation>Sharada</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="262"/>
+        <location filename="../../mscore/textpalette.cpp" line="259"/>
         <source>Sinhala Archaic Numbers</source>
         <translation>Sinhaa-ren zenbaki arkaikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="263"/>
+        <location filename="../../mscore/textpalette.cpp" line="260"/>
         <source>Khojki</source>
         <translation>Khojkia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="264"/>
+        <location filename="../../mscore/textpalette.cpp" line="261"/>
         <source>Multani</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="265"/>
+        <location filename="../../mscore/textpalette.cpp" line="262"/>
         <source>Khudawadi</source>
         <translation>Khudawadia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="266"/>
+        <location filename="../../mscore/textpalette.cpp" line="263"/>
         <source>Grantha</source>
         <translation>Grantha</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="267"/>
+        <location filename="../../mscore/textpalette.cpp" line="264"/>
         <source>Newa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="268"/>
+        <location filename="../../mscore/textpalette.cpp" line="265"/>
         <source>Tirhuta</source>
         <translation>Tirhuta</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="269"/>
+        <location filename="../../mscore/textpalette.cpp" line="266"/>
         <source>Siddham</source>
         <translation>Siddhama</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="270"/>
+        <location filename="../../mscore/textpalette.cpp" line="267"/>
         <source>Modi</source>
         <translation>Modia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="271"/>
+        <location filename="../../mscore/textpalette.cpp" line="268"/>
         <source>Mongolian Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="272"/>
+        <location filename="../../mscore/textpalette.cpp" line="269"/>
         <source>Takri</source>
         <translation>Takria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="273"/>
+        <location filename="../../mscore/textpalette.cpp" line="270"/>
         <source>Ahom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="274"/>
+        <location filename="../../mscore/textpalette.cpp" line="271"/>
         <source>Dogra</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="275"/>
+        <location filename="../../mscore/textpalette.cpp" line="272"/>
         <source>Warang Citi</source>
         <translation>Warang Citia</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="276"/>
+        <location filename="../../mscore/textpalette.cpp" line="273"/>
         <source>Dives Akuru</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="277"/>
+        <location filename="../../mscore/textpalette.cpp" line="274"/>
         <source>Nandinagari</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="278"/>
+        <location filename="../../mscore/textpalette.cpp" line="275"/>
         <source>Zanabazer Square</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="279"/>
+        <location filename="../../mscore/textpalette.cpp" line="276"/>
         <source>Soyombo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="280"/>
+        <location filename="../../mscore/textpalette.cpp" line="277"/>
         <source>Pau Cin Hau</source>
         <translation>Pau Cin Haua</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="281"/>
+        <location filename="../../mscore/textpalette.cpp" line="278"/>
         <source>Bhaiksuki</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="282"/>
+        <location filename="../../mscore/textpalette.cpp" line="279"/>
         <source>Marchen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="283"/>
+        <location filename="../../mscore/textpalette.cpp" line="280"/>
         <source>Masaram Gondi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="284"/>
+        <location filename="../../mscore/textpalette.cpp" line="281"/>
         <source>Gunjala Gondi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="285"/>
+        <location filename="../../mscore/textpalette.cpp" line="282"/>
         <source>Makasar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="286"/>
+        <location filename="../../mscore/textpalette.cpp" line="283"/>
         <source>Lisu Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="287"/>
+        <location filename="../../mscore/textpalette.cpp" line="284"/>
         <source>Tamil Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="288"/>
+        <location filename="../../mscore/textpalette.cpp" line="285"/>
         <source>Cuneiform</source>
         <translation>Kuneiformea</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="289"/>
+        <location filename="../../mscore/textpalette.cpp" line="286"/>
         <source>Cuneiform Numbers and Punctuation</source>
         <translation>Kuneiforme ikurrak eta puntuazioa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="290"/>
+        <location filename="../../mscore/textpalette.cpp" line="287"/>
         <source>Early Dynastic Cuneiform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="291"/>
+        <location filename="../../mscore/textpalette.cpp" line="288"/>
         <source>Egyptian Hieroglyphs</source>
         <translation>Hieroglifiko egiptoarra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="292"/>
+        <location filename="../../mscore/textpalette.cpp" line="289"/>
         <source>Egyptian Hieroglyph Format Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="293"/>
+        <location filename="../../mscore/textpalette.cpp" line="290"/>
         <source>Anatolian Hieroglyphs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="294"/>
+        <location filename="../../mscore/textpalette.cpp" line="291"/>
         <source>Bamum Supplement</source>
         <translation>Bamum gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="295"/>
+        <location filename="../../mscore/textpalette.cpp" line="292"/>
         <source>Mro</source>
         <translation>Mro</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="296"/>
+        <location filename="../../mscore/textpalette.cpp" line="293"/>
         <source>Bassa Vah</source>
         <translation>Bassa Vaha</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="297"/>
+        <location filename="../../mscore/textpalette.cpp" line="294"/>
         <source>Pahawh Hmong</source>
         <translation>Pahawh Hmonga</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="298"/>
+        <location filename="../../mscore/textpalette.cpp" line="295"/>
         <source>Medefaidrin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="299"/>
+        <location filename="../../mscore/textpalette.cpp" line="296"/>
         <source>Miao</source>
         <translation>Miaoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="300"/>
+        <location filename="../../mscore/textpalette.cpp" line="297"/>
         <source>Ideographic Symbols and Punctuation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="301"/>
+        <location filename="../../mscore/textpalette.cpp" line="298"/>
         <source>Tangut Components</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="302"/>
+        <location filename="../../mscore/textpalette.cpp" line="299"/>
         <source>Khitan Small Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="303"/>
+        <location filename="../../mscore/textpalette.cpp" line="300"/>
         <source>Tangut Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="304"/>
+        <location filename="../../mscore/textpalette.cpp" line="301"/>
         <source>Kana Supplement</source>
         <translation>Kana gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="305"/>
+        <location filename="../../mscore/textpalette.cpp" line="302"/>
         <source>Kana Extended-A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="306"/>
+        <location filename="../../mscore/textpalette.cpp" line="303"/>
         <source>Small Kana Extension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="307"/>
+        <location filename="../../mscore/textpalette.cpp" line="304"/>
         <source>Nushu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="308"/>
+        <location filename="../../mscore/textpalette.cpp" line="305"/>
         <source>Duployan</source>
         <translation>Duployana</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="309"/>
+        <location filename="../../mscore/textpalette.cpp" line="306"/>
         <source>Shorthand Format Controls</source>
         <translation>Takigrafia formatu kontrolak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="310"/>
+        <location filename="../../mscore/textpalette.cpp" line="307"/>
         <source>Byzantine Musical Symbols</source>
         <translation>Musika-ikur bizantziarrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="311"/>
+        <location filename="../../mscore/textpalette.cpp" line="308"/>
         <source>Musical Symbols</source>
         <translation>Musika ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="312"/>
+        <location filename="../../mscore/textpalette.cpp" line="309"/>
         <source>Ancient Greek Musical Notation</source>
         <translation>Greziar musika-notazio zaharra</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="313"/>
+        <location filename="../../mscore/textpalette.cpp" line="310"/>
         <source>Tai Xuan Jing Symbols</source>
         <translation>Tai Xuan Jing ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="314"/>
+        <location filename="../../mscore/textpalette.cpp" line="311"/>
         <source>Counting Rod Numerals</source>
         <translation>Rod, zenbatzeko ziriak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="315"/>
+        <location filename="../../mscore/textpalette.cpp" line="312"/>
         <source>Mathematical Alphanumeric Symbols</source>
         <translation>Matematikako ikur alfanumerikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="316"/>
+        <location filename="../../mscore/textpalette.cpp" line="313"/>
         <source>Sutton SignWriting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="317"/>
+        <location filename="../../mscore/textpalette.cpp" line="314"/>
         <source>Glagolitic Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="318"/>
+        <location filename="../../mscore/textpalette.cpp" line="315"/>
         <source>Nyiakeng Puachue Hmong</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="319"/>
+        <location filename="../../mscore/textpalette.cpp" line="316"/>
         <source>Wancho</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="320"/>
+        <location filename="../../mscore/textpalette.cpp" line="317"/>
         <source>Mende Kikakui</source>
         <translation>Mende Kikakui</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="321"/>
+        <location filename="../../mscore/textpalette.cpp" line="318"/>
         <source>Adlam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="322"/>
+        <location filename="../../mscore/textpalette.cpp" line="319"/>
         <source>Indic Siyaq Numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="323"/>
+        <location filename="../../mscore/textpalette.cpp" line="320"/>
         <source>Ottoman Siyaq Numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="324"/>
+        <location filename="../../mscore/textpalette.cpp" line="321"/>
         <source>Arabic Mathematical Alphabetic Symbols</source>
         <translation>Arabiar matematikako ikur alfanumerikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="325"/>
+        <location filename="../../mscore/textpalette.cpp" line="322"/>
         <source>Mahjong Tiles</source>
         <translation>Mahjong fitxak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="326"/>
+        <location filename="../../mscore/textpalette.cpp" line="323"/>
         <source>Domino Tiles</source>
         <translation>Domino fitxak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="327"/>
+        <location filename="../../mscore/textpalette.cpp" line="324"/>
         <source>Playing Cards</source>
         <translation>Jokorako kartak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="328"/>
+        <location filename="../../mscore/textpalette.cpp" line="325"/>
         <source>Enclosed Alphanumeric Supplement</source>
         <translation>Alfanumeriko inguratu gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="329"/>
+        <location filename="../../mscore/textpalette.cpp" line="326"/>
         <source>Enclosed Ideographic Supplement</source>
         <translation>Ideografiko inguratu gehigarria</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="330"/>
+        <location filename="../../mscore/textpalette.cpp" line="327"/>
         <source>Miscellaneous Symbols and Pictographs</source>
         <translation>Askotariko sinbolo eta piktogramak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="331"/>
+        <location filename="../../mscore/textpalette.cpp" line="328"/>
         <source>Emoticons (Emoji)</source>
         <translation>Aurpegierak (Emoji)</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="332"/>
+        <location filename="../../mscore/textpalette.cpp" line="329"/>
         <source>Ornamental Dingbats</source>
         <translation>Dingbat apaingarriak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="333"/>
+        <location filename="../../mscore/textpalette.cpp" line="330"/>
         <source>Transport and Map Symbols</source>
         <translation>Garraio eta mapen ikurrak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="334"/>
+        <location filename="../../mscore/textpalette.cpp" line="331"/>
         <source>Alchemical Symbols</source>
         <translation>Ikur alkimikoak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="335"/>
+        <location filename="../../mscore/textpalette.cpp" line="332"/>
         <source>Geometric Shapes Extended</source>
         <translation>Forma geometriko hedatuak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="336"/>
+        <location filename="../../mscore/textpalette.cpp" line="333"/>
         <source>Supplemental Arrows-C</source>
         <translation>Gezi gehigarriak-C</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="337"/>
+        <location filename="../../mscore/textpalette.cpp" line="334"/>
         <source>Supplemental Symbols and Pictographs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="338"/>
+        <location filename="../../mscore/textpalette.cpp" line="335"/>
         <source>Chess Symbols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="339"/>
+        <location filename="../../mscore/textpalette.cpp" line="336"/>
         <source>Symbols and Pictographs Extended-A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="340"/>
+        <location filename="../../mscore/textpalette.cpp" line="337"/>
         <source>Symbols for Legacy Computing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="341"/>
+        <location filename="../../mscore/textpalette.cpp" line="338"/>
         <source>CJK Unified Ideographs Extension B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="342"/>
+        <location filename="../../mscore/textpalette.cpp" line="339"/>
         <source>CJK Unified Ideographs Extension C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="343"/>
+        <location filename="../../mscore/textpalette.cpp" line="340"/>
         <source>CJK Unified Ideographs Extension D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="344"/>
+        <location filename="../../mscore/textpalette.cpp" line="341"/>
         <source>CJK Compatibility Ideographs Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="345"/>
+        <location filename="../../mscore/textpalette.cpp" line="342"/>
         <source>Tags</source>
         <translation type="unfinished">Etiketak</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="346"/>
+        <location filename="../../mscore/textpalette.cpp" line="343"/>
         <source>Variation Selectors Supplement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="347"/>
+        <location filename="../../mscore/textpalette.cpp" line="344"/>
         <source>Supplementary Private Use Area-A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="348"/>
+        <location filename="../../mscore/textpalette.cpp" line="345"/>
         <source>Supplementary Private Use Area-B</source>
         <translation type="unfinished"></translation>
     </message>
