@@ -148,7 +148,12 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
 
             Manifest::Config c;
             Uri uri = Uri(obj.value("uri").toStdString());
+
             JsonValue actsVal = obj.value("actions");
+            if (!actsVal.isArray()) {
+                LOGE() << "bad format, field `actions` does not exist or is not an array";
+                continue;
+            }
             JsonArray acts = actsVal.toArray();
             for (size_t ai = 0; ai < acts.size(); ++ai) {
                 JsonObject ao = acts.at(ai).toObject();
