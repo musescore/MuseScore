@@ -230,6 +230,22 @@ void Trill::setTrack(track_idx_t n)
     }
 }
 
+void Trill::setScore(Score* s)
+{
+    Spanner::setScore(s);
+    if (m_ornament) {
+        m_ornament->setScore(s);
+    }
+}
+
+void Trill::computeStartElement()
+{
+    Spanner::computeStartElement();
+    if (startElement() && startElement()->isChord() && m_ornament) {
+        m_ornament->setParent(startElement());
+    }
+}
+
 void Trill::setTrillType(TrillType tt)
 {
     m_trillType = tt;
