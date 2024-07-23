@@ -1616,6 +1616,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     }
     Shape chordShape = chord->shape().translate(chordSystemPos);
     bool ignoreDot = start && isOuterTieOfChord;
+    bool ignoreAccidental = !start && isOuterTieOfChord;
     static const std::set<ElementType> IGNORED_TYPES = {
         ElementType::HOOK,
         ElementType::STEM_SLASH,
@@ -1624,7 +1625,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     };
     chordShape.remove_if([&](ShapeElement& s) {
         return !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
-               || (s.item()->isNoteDot() && ignoreDot) || !s.item()->addToSkyline();
+               || (s.item()->isNoteDot() && ignoreDot) || (s.item()->isAccidental() && ignoreAccidental) || !s.item()->addToSkyline();
     });
 
     const double arcSideMargin = 0.3 * spatium;
