@@ -220,7 +220,7 @@
       <attributes>
         <divisions>1</divisions>
         <key>
-          <fifths>2</fifths>
+          <fifths>0</fifths>
           </key>
         <time>
           <beats>4</beats>
@@ -302,6 +302,11 @@
         </direction>
       </measure>
     <measure number="5">
+      <direction placement="below">
+        <direction-type>
+          <words font-family="Edwin" font-size="10" font-style="italic">cresc.</words>
+          </direction-type>
+        </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -311,6 +316,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
+        <accidental>sharp</accidental>
         </note>
       </measure>
     <measure number="6">
@@ -325,6 +331,14 @@
         </note>
       </measure>
     <measure number="7">
+      <direction placement="below">
+        <direction-type>
+          <dynamics>
+            <f/>
+            </dynamics>
+          </direction-type>
+        <sound dynamics="106.67"/>
+        </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -334,6 +348,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
+        <accidental>sharp</accidental>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
