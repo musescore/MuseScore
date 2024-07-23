@@ -339,6 +339,7 @@ void EngravingItem::reset()
     undoResetProperty(Pid::PLACEMENT);
     undoResetProperty(Pid::MIN_DISTANCE);
     undoResetProperty(Pid::OFFSET);
+    undoResetProperty(Pid::LEADING_SPACE);
     setOffsetChanged(false);
     EngravingObject::reset();
 }

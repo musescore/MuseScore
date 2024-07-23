@@ -2309,6 +2309,7 @@ void Note::setTrack(track_idx_t val)
 void Note::reset()
 {
     undoChangeProperty(Pid::OFFSET, PointF());
+    undoResetProperty(Pid::LEADING_SPACE);
     chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
 }
