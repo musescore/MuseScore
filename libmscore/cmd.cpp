@@ -2222,6 +2222,7 @@ static void resetElementPosition(void*, Element* e)
             return;
       e->undoResetProperty(Pid::AUTOPLACE);
       e->undoResetProperty(Pid::OFFSET);
+      e->undoResetProperty(Pid::LEADING_SPACE);
       e->setOffsetChanged(false);
       if (e->isSpanner())
             e->undoResetProperty(Pid::OFFSET2);
