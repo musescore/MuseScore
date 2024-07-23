@@ -272,6 +272,7 @@ public:
     bool negativeFretUsed() const;
     int string() const { return m_string; }
     void setString(int val) { m_string = val; }
+    int stringOrLine() const;
 
     bool ghost() const { return m_ghost; }
     void setGhost(bool val) { m_ghost = val; }

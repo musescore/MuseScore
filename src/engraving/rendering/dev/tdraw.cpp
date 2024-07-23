@@ -2245,7 +2245,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         const StaffType* tab = st->staffTypeForElement(item);
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || item->fretConflict()) {
-            double d  = item->spatium() * .1;
+            double d  = item->style().styleS(Sid::tabFretPadding).val() * item->spatium();
             RectF bb = RectF(ldata->bbox().x() - d,
                              tab->fretMaskY() * item->magS(),
                              ldata->bbox().width() + 2 * d,
@@ -2832,7 +2832,7 @@ void TDraw::draw(const Symbol* item, Painter* painter)
         // Draw background for parentheses on TAB staves
         auto config = item->configuration();
         const Symbol::LayoutData* ldata = item->ldata();
-        double d = item->spatium() * .1;
+        double d = item->style().styleS(Sid::tabFretPadding).val() * item->spatium();
         RectF bb = RectF(ldata->bbox().x() - d,
                          ldata->bbox().y() - d,
                          ldata->bbox().width() + 2 * d,

@@ -1005,6 +1005,10 @@ double Note::bboxRightPos() const
 //---------------------------------------------------------
 double Note::headBodyWidth() const
 {
+    const StaffType* st = staffType();
+    if (st && st->isTabStaff()) {
+        return tabHeadWidth(st);
+    }
     return headWidth() + 2 * bboxXShift();
 }
 
@@ -3817,5 +3821,11 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
 bool Note::negativeFretUsed() const
 {
     return configuration()->negativeFretsAllowed() && m_fret < 0;
+}
+
+int Note::stringOrLine() const
+{
+    // The number string() returns doesn't count spaces.  This should be used where it is expected even numbers are spaces and odd are lines
+    return staff()->staffType(tick())->isTabStaff() ? string() * 2 : line();
 }
 }
