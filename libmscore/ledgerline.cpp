@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "ledgerline.h"
 #include "chord.h"
+#include "ledgerline.h"
 #include "measure.h"
+#include "score.h"
 #include "staff.h"
 #include "system.h"
-#include "score.h"
 #include "xml.h"
 
 namespace Ms {
@@ -62,7 +62,9 @@ qreal LedgerLine::measureXPos() const
 
 void LedgerLine::layout()
       {
-      setLineWidth(score()->styleP(Sid::ledgerLineWidth) * chord()->mag());
+      qreal chordMag = chord()->mag();
+      setMag(chordMag);
+      setLineWidth(score()->styleP(Sid::ledgerLineWidth) * chordMag);
       if (staff())
             setColor(staff()->staffType(tick())->color());
       qreal w2 = _width * .5;
