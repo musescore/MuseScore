@@ -70,6 +70,12 @@ public:
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
+    unsigned int outputDeviceSampleRate() const override;
+    bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
+    async::Notification outputDeviceSampleRateChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+
 private:
     static void OnFillBuffer(void* context, OpaqueAudioQueue* queue, AudioQueueBuffer* buffer);
     static void logError(const std::string message, OSStatus error);

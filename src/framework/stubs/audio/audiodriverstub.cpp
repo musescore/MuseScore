@@ -97,6 +97,26 @@ std::vector<unsigned int> AudioDriverStub::availableOutputDeviceBufferSizes() co
     return {};
 }
 
+unsigned int AudioDriverStub::outputDeviceSampleRate() const
+{
+    return 0;
+}
+
+bool AudioDriverStub::setOutputDeviceSampleRate(unsigned int)
+{
+    return false;
+}
+
+async::Notification AudioDriverStub::outputDeviceSampleRateChanged() const
+{
+    return async::Notification();
+}
+
+std::vector<unsigned int> AudioDriverStub::availableOutputDeviceSampleRates() const
+{
+    return {};
+}
+
 void AudioDriverStub::resume()
 {
 }

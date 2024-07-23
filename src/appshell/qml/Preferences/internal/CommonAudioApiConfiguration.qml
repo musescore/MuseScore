@@ -68,7 +68,7 @@ Item {
         ComboBoxWithTitle {
             id: bufferSize
 
-            title: qsTrc("appshell", "Buffer size:")
+            title: qsTrc("appshell/preferences", "Buffer size:")
             columnWidth: root.columnWidth
 
             currentIndex: indexOfValue(apiModel.bufferSize)
@@ -80,6 +80,24 @@ Item {
 
             onValueEdited: function(newIndex, newValue) {
                 apiModel.bufferSizeSelected(newValue)
+            }
+        }
+
+        ComboBoxWithTitle {
+            id: sampleRate
+
+            title: qsTrc("appshell/preferences", "Sample rate:")
+            columnWidth: root.columnWidth
+
+            currentIndex: indexOfValue(apiModel.sampleRate)
+            model: apiModel.sampleRateList
+
+            navigation.name: "SampleRateBox"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationOrderStart + 2
+
+            onValueEdited: function(newIndex, newValue) {
+                apiModel.sampleRateSelected(newValue)
             }
         }
     }

@@ -365,6 +365,52 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
     return result;
 }
 
+unsigned int OSXAudioDriver::outputDeviceSampleRate() const
+{
+    if (!isOpened()) {
+        return 0;
+    }
+
+    return m_data->format.sampleRate;
+}
+
+bool OSXAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+{
+    if (m_data->format.sampleRate == sampleRate) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    m_data->format.sampleRate = sampleRate;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(m_data->format, &m_data->format);
+    }
+
+    if (ok) {
+        m_sampleRateChanged.notify();
+    }
+
+    return ok;
+}
+
+async::Notification OSXAudioDriver::outputDeviceSampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
+std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceSampleRates() const
+{
+    return {
+        44100,
+        48000,
+        88200,
+        96000,
+    };
+}
+
 bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
 {
     if (deviceId.empty() || deviceId == DEFAULT_DEVICE_ID) {

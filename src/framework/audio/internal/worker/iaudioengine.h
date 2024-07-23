@@ -38,6 +38,7 @@ public:
 
     virtual sample_rate_t sampleRate() const = 0;
 
+    virtual void setSampleRate(sample_rate_t sampleRate) = 0;
     virtual void setReadBufferSize(uint16_t readBufferSize) = 0;
 
     virtual RenderMode mode() const = 0;

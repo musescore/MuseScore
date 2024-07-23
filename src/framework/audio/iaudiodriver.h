@@ -79,6 +79,12 @@ public:
 
     virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
 
+    virtual unsigned int outputDeviceSampleRate() const = 0;
+    virtual bool setOutputDeviceSampleRate(unsigned int bufferSize) = 0;
+    virtual async::Notification outputDeviceSampleRateChanged() const = 0;
+
+    virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
+
     virtual void resume() = 0;
     virtual void suspend() = 0;
 };
