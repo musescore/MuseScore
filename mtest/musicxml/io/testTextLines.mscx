@@ -436,6 +436,17 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>2</subtype>
+              <lineVisible>0</lineVisible>
+              </HairPin>
+            <next>
+              <location>
+                <measures>2</measures>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -460,6 +471,17 @@
         </Measure>
       <Measure>
         <voice>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-2</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>

@@ -302,6 +302,11 @@
         </direction>
       </measure>
     <measure number="5">
+      <direction placement="below">
+        <direction-type>
+          <words font-family="Edwin" font-size="10" font-style="italic">cresc.</words>
+          </direction-type>
+        </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -325,6 +330,14 @@
         </note>
       </measure>
     <measure number="7">
+      <direction placement="below">
+        <direction-type>
+          <dynamics>
+            <f/>
+            </dynamics>
+          </direction-type>
+        <sound dynamics="106.67"/>
+        </direction>
       <note>
         <pitch>
           <step>F</step>

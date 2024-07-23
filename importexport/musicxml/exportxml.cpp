@@ -4851,11 +4851,17 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
 void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction& tick)
       {
       const bool isLineType = hp->isLineType();
+      const bool isStart = hp->tick() == tick;
       int n;
       if (isLineType) {
-            if (!hp->lineVisible() && ((hp->beginText().isEmpty() && hp->tick() == tick)
-                                       || (hp->endText().isEmpty() && hp->tick() != tick)))
+            if (!hp->lineVisible()) {
+                  if ((isStart && hp->beginText().isEmpty()) || (!isStart && hp->endText().isEmpty()))
+                        return;
+                  directionTag(_xml, _attr, hp);
+                  writeHairpinText(_xml, hp, isStart);
+                  directionETag(_xml, staff);
                   return;
+                  }
 
             n = findDashes(hp);
             if (n >= 0)
@@ -4886,17 +4892,16 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             }
 
       directionTag(_xml, _attr, hp);
-      const bool hpTick = hp->tick() == tick;
-      if (hpTick)
-            writeHairpinText(_xml, hp, hp->tick() == tick);
+      if (isStart)
+            writeHairpinText(_xml, hp, isStart);
       if (isLineType) {
             if (hp->lineVisible()) {
-                  if (hpTick) {
+                  if (isStart) {
                         _xml.stag("direction-type");
                         QString tag = "dashes type=\"start\"";
                         tag += QString(" number=\"%1\"").arg(n + 1);
                         tag += color2xml(hp);
-                        tag += positioningAttributes(hp, hpTick);
+                        tag += positioningAttributes(hp, isStart);
                         _xml.tagE(tag);
                         _xml.etag();
                         }
@@ -4910,7 +4915,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
       else {
             _xml.stag("direction-type");
             QString tag = "wedge type=";
-            if (hpTick) {
+            if (isStart) {
                   if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                         tag += "\"crescendo\"";
                         if (hp->hairpinCircledTip()) {
@@ -4921,7 +4926,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                         tag += "\"diminuendo\"";
                         }
                   tag += color2xml(hp);
-                  tag += positioningAttributes(hp, hpTick);
+                  tag += positioningAttributes(hp, isStart);
                   }
             else {
                   tag += "\"stop\"";
@@ -4933,8 +4938,8 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             _xml.tagE(tag);
             _xml.etag();
             }
-      if (!hpTick)
-            writeHairpinText(_xml, hp, hp->tick() == tick);
+      if (!isStart)
+            writeHairpinText(_xml, hp, isStart);
       directionETag(_xml, staff);
       }
 
@@ -5091,9 +5096,15 @@ int ExportMusicXml::findBracket(const TextLineBase* tl) const
 
 void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fraction& tick)
       {
-      if (!tl->lineVisible() && ((tl->beginText().isEmpty() && tl->tick() == tick)
-                                 || (tl->endText().isEmpty() && tl->tick() != tick)))
+      bool isStart = tl->tick() == tick;
+      if (!tl->lineVisible()) {
+            if ((isStart && tl->beginText().isEmpty()) || (!isStart && tl->endText().isEmpty()))
+                  return;
+            directionTag(_xml, _attr, tl);
+            writeHairpinText(_xml, tl, isStart);
+            directionETag(_xml, staff);
             return;
+            }
 
       int n;
       // special case: a dashed line w/o hooks is written as dashes
