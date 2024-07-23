@@ -37,6 +37,13 @@ namespace mu::engraving::rendering::dev {
 class MeasureLayout
 {
 public:
+    struct MeasureStartEndPos {
+        MeasureStartEndPos(double x1, double x2)
+            : x1(x1), x2(x2) {}
+        double x1;
+        double x2;
+    };
+
     MeasureLayout() = default;
 
     static void layout2(Measure* item, LayoutContext& ctx);
@@ -65,6 +72,9 @@ public:
                              bool overrideMinMeasureWidth = false);
 
     static void layoutTimeTickAnchors(Measure* m, LayoutContext& ctx);
+
+    static MeasureStartEndPos getMeasureStartEndPos(const Measure* measure, const Segment* firstCrSeg, const staff_idx_t staffIdx,
+                                                    const bool needsHeaderException, const bool modernMMRest, const LayoutContext& ctx);
 
 private:
 

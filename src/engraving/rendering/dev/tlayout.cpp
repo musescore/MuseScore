@@ -162,6 +162,7 @@
 #include "tremololayout.h"
 #include "tupletlayout.h"
 #include "horizontalspacing.h"
+#include "measurelayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -314,7 +315,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutMarker(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata));
         break;
     case ElementType::MEASURE_NUMBER:
-        layoutMeasureNumber(item_cast<const MeasureNumber*>(item), static_cast<MeasureNumber::LayoutData*>(ldata));
+        layoutMeasureNumber(item_cast<const MeasureNumber*>(item), static_cast<MeasureNumber::LayoutData*>(ldata), ctx);
         break;
     case ElementType::MEASURE_REPEAT:
         layoutMeasureRepeat(item_cast<const MeasureRepeat*>(item), static_cast<MeasureRepeat::LayoutData*>(ldata), ctx);
@@ -323,7 +324,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutMMRest(item_cast<const MMRest*>(item), static_cast<MMRest::LayoutData*>(ldata), ctx);
         break;
     case ElementType::MMREST_RANGE:
-        layoutMMRestRange(item_cast<const MMRestRange*>(item), static_cast<MMRestRange::LayoutData*>(ldata));
+        layoutMMRestRange(item_cast<const MMRestRange*>(item), static_cast<MMRestRange::LayoutData*>(ldata), ctx);
         break;
     case ElementType::NOTE:
         layoutNote(item_cast<const Note*>(item), static_cast<Note::LayoutData*>(ldata));
@@ -4023,15 +4024,15 @@ void TLayout::layoutBaseMeasureBase(const MeasureBase* item, MeasureBase::Layout
     }
 }
 
-void TLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata)
+void TLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     LD_CONDITION(item->measure()->ldata()->isSetBbox()); // layoutMeasureNumberBase
 
-    layoutMeasureNumberBase(item, ldata);
+    layoutMeasureNumberBase(item, ldata, ctx);
 }
 
-void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)
+void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata, const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -4076,34 +4077,15 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumb
         //    x1 - left measure position of free space
         //    x2 - right measure position of free space
 
-        const Measure* mea = item->measure();
+        const Measure* measure = item->measure();
 
         // find first chordrest
-        Segment* chordRest = mea->first(SegmentType::ChordRest);
+        const Segment* crSeg = measure->first(SegmentType::ChordRest);
 
-        Segment* s1 = chordRest->prevActive();
-        // unfortunately, using !s1->header() does not work
-        while (s1 && (s1->isChordRestType()
-                      || s1->isBreathType()
-                      || s1->isClefType()
-                      || s1->isBarLineType()
-                      || !s1->element(item->staffIdx() * VOICES))) {
-            s1 = s1->prevActive();
-        }
-
-        Segment* s2 = chordRest->next();
-        // unfortunately, using !s1->trailer() does not work
-        while (s2 && (s2->isChordRestType()
-                      || s2->isBreathType()
-                      || s2->isClefType()
-                      || s2->isBarLineType()
-                      || !s2->element(item->staffIdx() * VOICES))) {
-            s2 = s2->nextActive();
-        }
-
-        // if s1/s2 does not exist, it means there is no header/trailer segment. Align with start/end of measure.
-        double x1 = s1 ? s1->x() + s1->minRight() : 0;
-        double x2 = s2 ? s2->x() - s2->minLeft() : mea->ldata()->bbox().width();
+        const MeasureLayout::MeasureStartEndPos measureStartEnd = MeasureLayout::getMeasureStartEndPos(measure, crSeg,
+                                                                                                       item->staffIdx(), true, false, ctx);
+        const double x1 = measureStartEnd.x1;
+        const double x2 = measureStartEnd.x2;
 
         ldata->setPosX((x1 + x2) * 0.5);
     } else if (item->hPlacement() == PlacementH::RIGHT) {
@@ -4270,12 +4252,12 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
     ChordLayout::fillShape(item, ldata, ctx.conf());
 }
 
-void TLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata)
+void TLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     LD_CONDITION(item->measure()->ldata()->isSetBbox()); // layoutMeasureNumberBase
 
-    layoutMeasureNumberBase(item, ldata);
+    layoutMeasureNumberBase(item, ldata, ctx);
 }
 
 void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
