@@ -10,61 +10,61 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "xml.h"
-#include "score.h"
-#include "staff.h"
-#include "revisions.h"
-#include "part.h"
-#include "page.h"
-#include "style.h"
-#include "sym.h"
-#include "arpeggio.h"
-#include "audio.h"
-#include "sig.h"
-#include "barline.h"
-#include "measure.h"
 #include "ambitus.h"
-#include "bend.h"
-#include "chordline.h"
-#include "hook.h"
-#include "tuplet.h"
-#include "systemdivider.h"
-#include "spacer.h"
-#include "keysig.h"
-#include "stafftext.h"
-#include "dynamic.h"
-#include "drumset.h"
-#include "timesig.h"
-#include "slur.h"
-#include "tie.h"
-#include "chord.h"
-#include "rest.h"
-#include "breath.h"
-#include "repeat.h"
-#include "utils.h"
-#include "read206.h"
-#include "excerpt.h"
+#include "arpeggio.h"
 #include "articulation.h"
-#include "volta.h"
-#include "pedal.h"
-#include "hairpin.h"
-#include "glissando.h"
-#include "ottava.h"
-#include "trill.h"
-#include "rehearsalmark.h"
+#include "audio.h"
+#include "barline.h"
+#include "bend.h"
+#include "breath.h"
 #include "box.h"
-#include "textframe.h"
-#include "textline.h"
-#include "fingering.h"
+#include "chord.h"
+#include "chordline.h"
+#include "drumset.h"
+#include "dynamic.h"
+#include "excerpt.h"
 #include "fermata.h"
+#include "fingering.h"
+#include "glissando.h"
+#include "hairpin.h"
+#include "hook.h"
 #include "image.h"
+#include "keysig.h"
+#include "lyrics.h"
+#include "marker.h"
+#include "measure.h"
+#include "measurenumber.h"
+#include "ottava.h"
+#include "page.h"
+#include "part.h"
+#include "pedal.h"
+#include "read206.h"
+#include "rehearsalmark.h"
+#include "repeat.h"
+#include "rest.h"
+#include "revisions.h"
+#include "score.h"
+#include "sig.h"
+#include "slur.h"
+#include "spacer.h"
+#include "staff.h"
+#include "stafftext.h"
 #include "stem.h"
 #include "stemslash.h"
-#include "undo.h"
-#include "lyrics.h"
+#include "style.h"
+#include "sym.h"
+#include "systemdivider.h"
 #include "tempotext.h"
-#include "measurenumber.h"
-#include "marker.h"
+#include "textframe.h"
+#include "textline.h"
+#include "tie.h"
+#include "timesig.h"
+#include "trill.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
+#include "xml.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -2195,7 +2195,11 @@ static void readVolta206(XmlReader& e, Volta* volta)
             const QStringRef& tag(e.name());
             if (tag == "endings") {
                   QString s = e.readElementText();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+                  QStringList sl = s.split(",", Qt::SkipEmptyParts);
+#else
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
+#endif
                   volta->endings().clear();
                   for (const QString& l : qAsConst(sl)) {
                         int i = l.simplified().toInt();
@@ -3205,19 +3209,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
 
 static void readBox(Box* b, XmlReader& e)
       {
-      b->setLeftMargin(0.0);
-      b->setRightMargin(0.0);
-      b->setTopMargin(0.0);
-      b->setBottomMargin(0.0);
-      b->setTopGap(0.0);
-      b->setBottomGap(0.0);
-      b->setAutoSizeEnabled(false);
-      b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
-      b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+      b->setAutoSizeEnabled(false);    // didn't exist in Mu2
 
       b->setBoxHeight(Spatium(0));     // override default set in constructor
       b->setBoxWidth(Spatium(0));
-      bool keepMargins = false;        // whether original margins have to be kept when reading old file
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -3225,13 +3220,11 @@ static void readBox(Box* b, XmlReader& e)
                   HBox* hb = new HBox(b->score());
                   hb->read(e);
                   b->add(hb);
-                  keepMargins = true;     // in old file, box nesting used outer box margins
                   }
             else if (tag == "VBox") {
                   VBox* vb = new VBox(b->score());
                   vb->read(e);
                   b->add(vb);
-                  keepMargins = true;     // in old file, box nesting used outer box margins
                   }
             else if (tag == "Text") {
                   Text* t;
@@ -3251,16 +3244,6 @@ static void readBox(Box* b, XmlReader& e)
                   }
             else if (!b->readProperties(e))
                   e.unknown();
-            }
-
-      // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
-      // for backward compatibility set them to 0 in all other cases
-
-      if (b->score()->mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins)  {
-            b->setLeftMargin(0.0);
-            b->setRightMargin(0.0);
-            b->setTopMargin(0.0);
-            b->setBottomMargin(0.0);
             }
       }
 

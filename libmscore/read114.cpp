@@ -10,54 +10,53 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "score.h"
-#include "slur.h"
-#include "staff.h"
-#include "excerpt.h"
-#include "chord.h"
-#include "rest.h"
-#include "keysig.h"
-#include "volta.h"
-#include "measure.h"
+#include "accidental.h"
+#include "barline.h"
 #include "beam.h"
-#include "segment.h"
-#include "ottava.h"
-#include "stafftype.h"
-#include "text.h"
-#include "measurenumber.h"
-#include "part.h"
-#include "sig.h"
 #include "box.h"
-#include "dynamic.h"
+#include "breath.h"
+#include "chord.h"
+#include "clef.h"
 #include "drumset.h"
+#include "dynamic.h"
+#include "excerpt.h"
+#include "fingering.h"
+#include "harmony.h"
+#include "image.h"
+#include "jump.h"
+#include "keysig.h"
+#include "lyrics.h"
+#include "marker.h"
+#include "measure.h"
+#include "measurenumber.h"
+#include "ottava.h"
+#include "part.h"
+#include "pedal.h"
+#include "read206.h"
+#include "repeat.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "slur.h"
+#include "sig.h"
+#include "spacer.h"
+#include "staff.h"
+#include "stafftext.h"
+#include "stafftype.h"
+#include "stringdata.h"
 #include "style.h"
 #include "sym.h"
-#include "xml.h"
-#include "stringdata.h"
 #include "tempo.h"
 #include "tempotext.h"
-#include "clef.h"
-#include "barline.h"
-#include "timesig.h"
-#include "tuplet.h"
-#include "spacer.h"
-#include "stafftext.h"
-#include "repeat.h"
-#include "breath.h"
-#include "tremolo.h"
-#include "utils.h"
-#include "accidental.h"
-#include "fingering.h"
-#include "marker.h"
-#include "read206.h"
-#include "bracketItem.h"
-#include "harmony.h"
-#include "lyrics.h"
-#include "image.h"
+#include "text.h"
 #include "textframe.h"
-#include "jump.h"
 #include "textline.h"
-#include "pedal.h"
+#include "timesig.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "utils.h"
+#include "volta.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -1120,7 +1119,11 @@ static void readVolta114(XmlReader& e, Volta* volta)
             const QStringRef& tag(e.name());
             if (tag == "endings") {
                   QString s = e.readElementText();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+                  QStringList sl = s.split(",", Qt::SkipEmptyParts);
+#else
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
+#endif
                   volta->endings().clear();
                   for (const QString& l : qAsConst(sl)) {
                         int i = l.simplified().toInt();
@@ -2188,13 +2191,11 @@ static bool readBoxProperties(XmlReader& e, Box* b)
 
 static void readBox(XmlReader& e, Box* b)
       {
-      b->setLeftMargin(0.0);
-      b->setRightMargin(0.0);
-      b->setTopMargin(0.0);
-      b->setBottomMargin(0.0);
+      b->setAutoSizeEnabled(false);    // didn't exist in Mu1
+
       b->setBoxHeight(Spatium(0));     // override default set in constructor
       b->setBoxWidth(Spatium(0));
-      b->setAutoSizeEnabled(false);
+      bool keepMargins = false;        // whether original margins have to be kept when reading old file
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -2202,14 +2203,26 @@ static void readBox(XmlReader& e, Box* b)
                   HBox* hb = new HBox(b->score());
                   readBox(e, hb);
                   b->add(hb);
+                  keepMargins = true;     // in old file, box nesting used outer box margins
                   }
             else if (tag == "VBox") {
                   VBox* vb = new VBox(b->score());
                   readBox(e, vb);
                   b->add(vb);
+                  keepMargins = true;     // in old file, box nesting used outer box margins
                   }
             else if (!readBoxProperties(e, b))
                   e.unknown();
+            }
+
+      // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
+      // for backward compatibility set them to 0.0 in all other cases, the Mu1 defaults of 5.0 just look horrible in Mu3
+
+      if (b->score()->mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins)  {
+            b->setLeftMargin(0.0);
+            b->setRightMargin(0.0);
+            b->setTopMargin(0.0); // 2.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
+            b->setBottomMargin(0.0); // 1.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
             }
       }
 
