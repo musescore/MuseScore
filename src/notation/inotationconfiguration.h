@@ -73,7 +73,8 @@ public:
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
 
-    virtual QColor anchorLineColor() const = 0;
+    virtual QColor anchorColor() const = 0;
+    virtual muse::async::Channel<QColor> anchorColorChanged() const = 0;
 
     virtual QColor playbackCursorColor() const = 0;
     virtual QColor loopMarkerColor() const = 0;

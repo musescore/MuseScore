@@ -63,7 +63,7 @@ public:
     QColor borderColor() const override;
     int borderWidth() const override;
 
-    QColor anchorLineColor() const override;
+    QColor anchorColor() const override;
 
     QColor playbackCursorColor() const override;
     QColor loopMarkerColor() const override;
