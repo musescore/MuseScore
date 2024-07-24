@@ -5172,6 +5172,14 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
         }
 
         if (chord->voice() != voice) {
+            Score* score = this;
+            if (excerpt() && !chord->staff()->isVoiceVisible(voice)) {
+                // We are on a linked stave with the desired voice not visible
+                // Get note in main score to continue
+                note = toNote(note->findLinkedInScore(m_masterScore));
+                chord = note->chord();
+                score = m_masterScore;
+            }
             Segment* s       = chord->segment();
             Measure* m       = s->measure();
             size_t notes     = chord->notes().size();
@@ -5179,8 +5187,16 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
             ChordRest* dstCR = toChordRest(s->element(dstTrack));
             Chord* dstChord  = nullptr;
 
-            if (excerpt() && muse::key(excerpt()->tracksMapping(), dstTrack, muse::nidx) == muse::nidx) {
+            if (score->excerpt() && muse::key(score->excerpt()->tracksMapping(), dstTrack, muse::nidx) == muse::nidx) {
                 break;
+            }
+
+            if (score->excerpt()) {
+                const track_idx_t originalTrack = chord->staffIdx() * VOICES + chord->voice();
+                const track_idx_t originalTrackMapped = muse::key(score->excerpt()->tracksMapping(), originalTrack, muse::nidx);
+                if (originalTrackMapped == dstTrack) {
+                    break;
+                }
             }
 
             // set up destination chord
@@ -5200,7 +5216,7 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                 dstChord->setTicks(chord->ticks());
                 dstChord->setTuplet(dstCR->tuplet());
                 dstChord->setParent(s);
-                undoRemoveElement(dstCR);
+                score->undoRemoveElement(dstCR);
             } else if (!chord->tuplet()) {
                 // rests or gap in destination
                 //   insert new chord if the rests / gap are long enough
@@ -5234,9 +5250,9 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                     dstChord->setParent(s);
                     // makeGapVoice will not back-fill an empty voice
                     if (voice && !dstCR) {
-                        expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
+                        score->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
                     }
-                    makeGapVoice(s, dstTrack, chord->actualTicks(), s->tick());
+                    score->makeGapVoice(s, dstTrack, chord->actualTicks(), s->tick());
                 }
             }
 
@@ -5246,11 +5262,11 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                 Note* newNote = Factory::copyNote(*note);
                 newNote->setSelected(false);
                 newNote->setParent(dstChord);
-                undoAddElement(newNote);
+                score->undoAddElement(newNote);
                 el.push_back(newNote);
                 // add new chord if one was created
                 if (dstChord != dstCR) {
-                    undoAddCR(dstChord, m, s->tick());
+                    score->undoAddCR(dstChord, m, s->tick());
                 }
                 for (EngravingObject* linked : note->linkList()) {
                     Note* linkedNote = toNote(linked);
@@ -5258,31 +5274,31 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                     // reconnect the tie to this note, if any
                     Tie* tie = linkedNote->tieBack();
                     if (tie) {
-                        undoChangeSpannerElements(tie, tie->startNote(), linkedNewNote);
+                        score->undoChangeSpannerElements(tie, tie->startNote(), linkedNewNote);
                     }
                     // reconnect the tie from this note, if any
                     tie = linkedNote->tieFor();
                     if (tie) {
-                        undoChangeSpannerElements(tie, linkedNewNote, tie->endNote());
+                        score->undoChangeSpannerElements(tie, linkedNewNote, tie->endNote());
                     }
                 }
 
                 // remove original note
                 if (notes > 1) {
-                    undoRemoveElement(note);
+                    score->undoRemoveElement(note);
                 } else if (notes == 1) {
                     // take care of slurs
                     int currentTick = chord->tick().ticks();
-                    for (auto it : score()->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
+                    for (auto it : score->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
                         Spanner* spanner = it.value;
                         if (!spanner->isSlur()) {
                             continue;
                         }
                         Slur* slur = toSlur(spanner);
                         if (slur->startElement() == chord) {
-                            undoChangeSpannerElements(slur, dstChord, slur->endElement());
+                            score->undoChangeSpannerElements(slur, dstChord, slur->endElement());
                         } else if (slur->endElement() == chord) {
-                            undoChangeSpannerElements(slur, slur->startElement(), dstChord);
+                            score->undoChangeSpannerElements(slur, slur->startElement(), dstChord);
                         }
                     }
                     // create rest to leave behind
@@ -5296,14 +5312,14 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                     while (!chord->graceNotes().empty()) {
                         Chord* gc = chord->graceNotes().front();
                         Chord* ngc = Factory::copyChord(*gc);
-                        undoRemoveElement(gc);
+                        score->undoRemoveElement(gc);
                         ngc->setParent(dstChord);
                         ngc->setTrack(dstChord->track());
-                        undoAddElement(ngc);
+                        score->undoAddElement(ngc);
                     }
                     // remove chord, replace with rest
-                    undoRemoveElement(chord);
-                    undoAddCR(r, m, s->tick());
+                    score->undoRemoveElement(chord);
+                    score->undoAddCR(r, m, s->tick());
                 }
             }
         }

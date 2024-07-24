@@ -30,6 +30,7 @@
 #include "chord.h"
 #include "clef.h"
 #include "cleflist.h"
+#include "excerpt.h"
 #include "factory.h"
 #include "instrtemplate.h"
 #include "linkedobjects.h"
@@ -122,6 +123,71 @@ Staff* Staff::findLinkedInScore(const Score* score) const
     }
 
     return nullptr;
+}
+
+std::vector<track_idx_t> Staff::getLinkedTracksInStaff(const Staff* linkedStaff, const track_idx_t originalTrack) const
+{
+    // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
+    const bool linked = staffList().size() > 1;
+
+    staff_idx_t staffIdx = linkedStaff->idx();
+
+    std::vector<track_idx_t> linkedTracks;
+    if (!linkedStaff->score()->excerpt()) {
+        // On masterScore.
+        track_idx_t track = staffIdx * VOICES + (originalTrack % VOICES);
+        linkedTracks.push_back(track);
+    } else {
+        const TracksMap& mapping = linkedStaff->score()->excerpt()->tracksMapping();
+        if (mapping.empty()) {
+            // This can happen during reading the score and there is
+            // no Tracklist tag specified.
+            // TODO solve this in read302.cpp.
+            linkedTracks.push_back(originalTrack);
+        } else {
+            std::vector<track_idx_t> mappedTracks = muse::values(mapping, originalTrack);
+            if (mappedTracks.empty()) {
+                // This is a linked staff in a part and the element has been added to a linked staff in the main score
+                track_idx_t track = staffIdx * VOICES + (originalTrack % VOICES);
+                track_idx_t mappedTrack = muse::value(mapping, track, muse::nidx);
+                mappedTrack = (mappedTrack != muse::nidx) ? mappedTrack : track;
+                if (linkedStaff->isVoiceVisible(originalTrack % VOICES)) {
+                    mappedTracks.push_back(mappedTrack);
+                }
+            }
+            for (track_idx_t track : mappedTracks) {
+                const bool isLinkedWithinSameScore  = linked && (linkedStaff != this) && (linkedStaff->score() == this->score());
+                const bool isLinkedToDifferentScore = linked && (linkedStaff != this) && (linkedStaff->score() != this->score());
+                if (isLinkedWithinSameScore && !isLinkedToDifferentScore) {
+                    track_idx_t mappedTrack = muse::value(mapping, track, muse::nidx);
+                    if (mappedTrack == muse::nidx) {
+                        continue;
+                    }
+                    track_idx_t linkedTrack = staffIdx * VOICES + mappedTrack % VOICES;
+                    if (!linkedStaff->isVoiceVisible(originalTrack % VOICES)) {
+                        continue;
+                    }
+                    linkedTracks.push_back(linkedTrack);
+                } else if (!isLinkedWithinSameScore && isLinkedToDifferentScore) {
+                    // Staff in linked score
+                    const staff_idx_t trackStaff = track2staff(track);
+                    if (trackStaff != staffIdx) {
+                        // Element on linked staff in linked part
+                        track += (staffIdx - trackStaff) * VOICES;
+                        if (!linkedStaff->isVoiceVisible(originalTrack % VOICES)) {
+                            continue;
+                        }
+                    }
+                    linkedTracks.push_back(track);
+                } else {
+                    // Staff in part edit was performed on
+                    linkedTracks.push_back(track);
+                }
+            }
+        }
+    }
+
+    return linkedTracks;
 }
 
 //---------------------------------------------------------

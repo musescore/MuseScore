@@ -1270,6 +1270,37 @@ TEST_F(Engraving_PartsTests, partSpanners)
     MScore::useRead302InTestMode = useRead302;
 }
 
+TEST_F(Engraving_PartsTests, partVisibleTracks) {
+    Score* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-visible-tracks.mscx");
+    EXPECT_TRUE(score);
+
+    Score* part = nullptr;
+    for (Score* s : score->scoreList()) {
+        if (!s->isMaster()) {
+            part = s;
+            break;
+        }
+    }
+    EXPECT_TRUE(part);
+    Measure* m = part->firstMeasure();
+    EXPECT_TRUE(m);
+    Chord* c = m->findChord(Fraction(0, 1), 0);
+    EXPECT_TRUE(c);
+    Note* n = c->downNote();
+    EXPECT_TRUE(n);
+
+    part->startCmd();
+    part->select(n);
+    part->changeSelectedNotesVoice(1);
+    part->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(part, u"part-visible-tracks-part.mscx",
+                                            PARTS_DATA_DIR + u"part-visible-tracks-part-ref.mscx"));
+    // score->undoRedo(true, 0);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-visible-tracks-score.mscx",
+                                            PARTS_DATA_DIR + u"part-visible-tracks-score-ref.mscx"));
+}
+
 //---------------------------------------------------------
 //   staffStyles
 //---------------------------------------------------------
