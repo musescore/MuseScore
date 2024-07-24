@@ -58,10 +58,17 @@ public:
         void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
     };
 
+    struct Params
+    {
+        Params() {}
+
+        bool forceSampleRate = false; // override the device's sample rate
+    };
+
     virtual void init() = 0;
 
     virtual std::string name() const = 0;
-    virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
+    virtual bool open(const Spec& spec, Spec* activeSpec, const Params& params = Params()) = 0;
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
 

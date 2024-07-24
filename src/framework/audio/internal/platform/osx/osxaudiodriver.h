@@ -49,7 +49,7 @@ public:
     void init() override;
 
     std::string name() const override;
-    bool open(const Spec& spec, Spec* activeSpec) override;
+    bool open(const Spec& spec, Spec* activeSpec, const Params& params = Params()) override;
     void close() override;
     bool isOpened() const override;
     void resume() override;
@@ -79,6 +79,7 @@ private:
 
     AudioDeviceID defaultDeviceId() const;
     UInt32 osxDeviceId() const;
+    Float64 deviceSampleRate() const;
 
     struct Data;
 

@@ -87,7 +87,7 @@ std::string WasapiAudioDriver::name() const
     return "WASAPI_driver";
 }
 
-bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
+bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params&)
 {
     if (!s_data.wasapiClient.get()) {
         s_data.wasapiClient

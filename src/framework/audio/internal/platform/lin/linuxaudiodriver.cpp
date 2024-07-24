@@ -133,7 +133,7 @@ std::string LinuxAudioDriver::name() const
     return "MUAUDIO(ALSA)";
 }
 
-bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
+bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params& params)
 {
     s_alsaData = new ALSAData();
     s_alsaData->samples = spec.samples;

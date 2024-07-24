@@ -33,7 +33,7 @@ std::string AudioDriverStub::name() const
     return std::string();
 }
 
-bool AudioDriverStub::open(const IAudioDriver::Spec&, IAudioDriver::Spec*)
+bool AudioDriverStub::open(const IAudioDriver::Spec&, IAudioDriver::Spec*, const Params&)
 {
     return false;
 }

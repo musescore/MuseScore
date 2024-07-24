@@ -70,7 +70,7 @@ std::string OSXAudioDriver::name() const
     return "MUAUDIO(OSX)";
 }
 
-bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
+bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params& params)
 {
     if (!m_data) {
         return 0;
@@ -80,17 +80,23 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return 0;
     }
 
-    *activeSpec = spec;
-    activeSpec->format = Format::AudioF32;
-    m_data->format = *activeSpec;
+    m_data->format = spec;
+    m_data->format.format = Format::AudioF32;
+
+    if (!params.forceSampleRate) {
+        Float64 actualSampleRate = deviceSampleRate();
+        if (!RealIsNull(actualSampleRate)) {
+            m_data->format.sampleRate = actualSampleRate;
+        }
+    }
 
     AudioStreamBasicDescription audioFormat;
-    audioFormat.mSampleRate = spec.sampleRate;
+    audioFormat.mSampleRate = m_data->format.sampleRate;
     audioFormat.mFormatID = kAudioFormatLinearPCM;
     audioFormat.mFramesPerPacket = 1;
     audioFormat.mChannelsPerFrame = spec.channels;
     audioFormat.mReserved = 0;
-    switch (activeSpec->format) {
+    switch (m_data->format.format) {
     case Format::AudioF32:
         audioFormat.mBitsPerChannel = 32;
         audioFormat.mFormatFlags = kLinearPCMFormatFlagIsFloat;
@@ -143,16 +149,18 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
+    m_data->format.samples = bufferSizeOut;
+
     // Allocate 3 audio buffers. At the same time one used for writing, one for reading and one for reserve
     for (unsigned int i = 0; i < 3; ++i) {
         AudioQueueBufferRef buffer;
-        result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.samples * audioFormat.mBytesPerFrame, &buffer);
+        result = AudioQueueAllocateBuffer(m_data->audioQueue, bufferSizeOut * audioFormat.mBytesPerFrame, &buffer);
         if (result != noErr) {
             logError("Failed to allocate Audio Buffer, err: ", result);
             return false;
         }
 
-        buffer->mAudioDataByteSize = spec.samples * audioFormat.mBytesPerFrame;
+        buffer->mAudioDataByteSize = bufferSizeOut * audioFormat.mBytesPerFrame;
 
         memset(buffer->mAudioData, 0, buffer->mAudioDataByteSize);
 
@@ -166,7 +174,12 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    LOGD() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.sampleRate;
+    if (activeSpec) {
+        *activeSpec = m_data->format;
+    }
+
+    LOGI() << "Connected to " << outputDevice() << " with bufferSize " << m_data->format.samples
+           << ", sampleRate " << m_data->format.sampleRate;
 
     return true;
 }
@@ -432,6 +445,28 @@ UInt32 OSXAudioDriver::osxDeviceId() const
     }
 
     return QString::fromStdString(deviceId).toInt();
+}
+
+Float64 OSXAudioDriver::deviceSampleRate() const
+{
+    AudioObjectPropertyAddress actualSamplerRateAddress = {
+        .mSelector = kAudioDevicePropertyActualSampleRate,
+        .mScope = kAudioObjectPropertyScopeGlobal,
+        .mElement = kAudioObjectPropertyElementMaster
+    };
+
+    Float64 actualSampleRate = 0.;
+    UInt32 actualSampleRateSize = sizeof(actualSampleRate);
+
+    OSStatus result = AudioObjectGetPropertyData(
+        osxDeviceId(), &actualSamplerRateAddress, 0, 0, &actualSampleRateSize, (void*)&actualSampleRate);
+
+    if (result != noErr) {
+        logError("Failed to get device sample rate", result);
+        return 0.;
+    }
+
+    return actualSampleRate;
 }
 
 bool OSXAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId /*, unsigned int bufferSize*/)
