@@ -63,7 +63,7 @@ FocusableItem {
             text: qsTrc("inspector", "Alignment with adjacent dynamics")
         }
 
-        PropertyToggle {
+        PropertyCheckBox {
             id: snapBefore
             text: qsTrc("inspector", "Snap to previous")
             propertyItem: root.model ? root.model.snapBefore : null
@@ -72,7 +72,7 @@ FocusableItem {
             navigation.row: voicesAndPositionSection.navigationRowEnd + 1
         }
 
-        PropertyToggle {
+        PropertyCheckBox {
             id: snapAfter
             text: qsTrc("inspector", "Snap to next")
             propertyItem: root.model ? root.model.snapAfter : null

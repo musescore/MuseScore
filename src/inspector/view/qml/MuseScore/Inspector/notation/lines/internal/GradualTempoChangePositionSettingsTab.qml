@@ -63,7 +63,7 @@ FocusableItem {
             text: qsTrc("inspector", "Alignment with adjacent tempo text")
         }
 
-        PropertyToggle {
+        PropertyCheckBox {
             id: snapAfter
             text: qsTrc("inspector", "Snap to next")
             propertyItem: root.model ? root.model.snapAfter : null
