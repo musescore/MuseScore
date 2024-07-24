@@ -1537,7 +1537,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     int upVoices       = 0;
     int downVoices     = 0;
     // Fret width plus white background box for TAB
-    const double fretBackground = ctx.conf().styleS(Sid::tabFretPadding).val() * staff->spatium(tick);
+    //const double fretBackground = ctx.conf().styleS(Sid::tabFretPadding).val() * staff->spatium(tick);
     // double nominalWidth = !isTab ? ctx.conf().noteHeadWidth() * staff->staffMag(tick)
     //                       : (ctx.conf().fretWidth(staffType) + 2 * fretBackground) * staff->staffMag(tick);
     double nominalWidth = ctx.conf().noteHeadWidth() * staff->staffMag(tick);
