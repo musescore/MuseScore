@@ -133,7 +133,7 @@ std::string LinuxAudioDriver::name() const
     return "MUAUDIO(ALSA)";
 }
 
-bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params& params)
+bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params& openParams)
 {
     s_alsaData = new ALSAData();
     s_alsaData->samples = spec.samples;
@@ -161,9 +161,13 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params& pa
     unsigned int aSamplerate = spec.sampleRate;
     unsigned int val = aSamplerate;
     int dir = 0;
-    rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
-    if (rc < 0) {
-        return false;
+
+    if (openParams.forceSampleRate) {
+        rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
+        if (rc < 0) {
+            LOGE() << "Could not set sample rate " << val << ", err: " << rc;
+            return false;
+        }
     }
 
     snd_pcm_hw_params_set_buffer_size_near(handle, params, &s_alsaData->samples);
@@ -173,7 +177,12 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params& pa
         return false;
     }
 
-    snd_pcm_hw_params_get_rate(params, &val, &dir);
+    rc = snd_pcm_hw_params_get_rate(params, &val, &dir);
+    if (rc < 0) {
+        LOGE() << "Could not get sample rate, err: " << rc;
+        return false;
+    }
+
     aSamplerate = val;
 
     s_alsaData->buffer = new float[s_alsaData->samples * s_alsaData->channels];
@@ -193,7 +202,9 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec, const Params& pa
         return false;
     }
 
-    LOGD() << "Connected to " << outputDevice();
+    LOGI() << "Connected to " << outputDevice() << " with bufferSize " << s_format.samples
+           << ", sampleRate " << s_format.sampleRate;
+
     return true;
 }
 
