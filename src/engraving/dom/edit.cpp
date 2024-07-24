@@ -5968,9 +5968,6 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         return;
     }
 
-    // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
-    const bool linked = ostaff->staffList().size() > 1;
-
     std::list<Staff*> staves;
     if (addToLinkedStaves) {
         staves = ostaff->staffList();
@@ -5986,61 +5983,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         Score* score = staff->score();
         staff_idx_t staffIdx = staff->idx();
 
-        std::vector<track_idx_t> tr;
-        if (!staff->score()->excerpt()) {
-            // On masterScore.
-            track_idx_t track = staffIdx * VOICES + (strack % VOICES);
-            tr.push_back(track);
-        } else {
-            const TracksMap& mapping = staff->score()->excerpt()->tracksMapping();
-            if (mapping.empty()) {
-                // This can happen during reading the score and there is
-                // no Tracklist tag specified.
-                // TODO solve this in read302.cpp.
-                tr.push_back(strack);
-            } else {
-                std::vector<track_idx_t> mappedTracks = muse::values(mapping, strack);
-                if (mappedTracks.empty()) {
-                    // This is a linked staff in a part and the element has been added to a linked staff in the main score
-                    track_idx_t track = staffIdx * VOICES + (strack % VOICES);
-                    track_idx_t mappedTrack = muse::value(mapping, track, muse::nidx);
-                    mappedTrack = (mappedTrack != muse::nidx) ? mappedTrack : track;
-                    if (staff->isVoiceVisible(strack % VOICES)) {
-                        mappedTracks.push_back(mappedTrack);
-                    }
-                }
-                for (track_idx_t track : mappedTracks) {
-                    // linkedPart : linked staves within same part/instrument.
-                    // linkedScore: linked staves over different scores via excerpts.
-                    const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
-                    const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
-                    if (linkedPart && !linkedScore) {
-                        track_idx_t mappedTrack = muse::value(mapping, track, muse::nidx);
-                        if (mappedTrack == muse::nidx) {
-                            continue;
-                        }
-                        track_idx_t linkedTrack = staffIdx * VOICES + mappedTrack % VOICES;
-                        if (!staff->isVoiceVisible(strack % VOICES)) {
-                            continue;
-                        }
-                        tr.push_back(linkedTrack);
-                    } else if (!linkedPart && linkedScore) {
-                        // Staff in linked score
-                        if ((track >> 2) != staffIdx) {
-                            // Element on linked staff in linked part
-                            track += (staffIdx - (track >> 2)) * VOICES;
-                            if (!staff->isVoiceVisible(strack % VOICES)) {
-                                continue;
-                            }
-                        }
-                        tr.push_back(track);
-                    } else {
-                        // Staff in part edit was performed on
-                        tr.push_back(track);
-                    }
-                }
-            }
-        }
+        std::vector<track_idx_t> linkedTracks = ostaff->getLinkedTracksInStaff(staff, strack);
 
         // Some elements in voice 1 of a staff should be copied to every track which has a linked voice in this staff
         static const std::set<ElementType> VOICE1_COPY_TYPES = {
@@ -6066,11 +6009,11 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::LYRICS
         };
         voice_idx_t voice = track2voice(strack);
-        if (staff->isVoiceVisible(voice) && tr.empty() && muse::contains(VOICE1_COPY_TYPES, et)) {
-            tr.push_back(staffIdx * VOICES);
+        if (staff->isVoiceVisible(voice) && linkedTracks.empty() && muse::contains(VOICE1_COPY_TYPES, et)) {
+            linkedTracks.push_back(staffIdx * VOICES);
         }
 
-        for (track_idx_t ntrack : tr) {
+        for (track_idx_t ntrack : linkedTracks) {
             EngravingItem* ne;
             if (staff == ostaff) {
                 ne = element;
@@ -6456,68 +6399,10 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
     SegmentType segmentType = SegmentType::ChordRest;
 
-    // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
-    const bool linked = ostaff->staffList().size() > 1;
-
     for (const Staff* staff : ostaff->staffList()) {
-        std::list<track_idx_t> tracks;
-        const staff_idx_t staffIdx = staff->idx();
-        if (!staff->score()->excerpt()) {
-            // On masterScore.
-            track_idx_t track = staffIdx * VOICES + (strack % VOICES);
-            tracks.push_back(track);
-        } else {
-            const TracksMap& mapping = staff->score()->excerpt()->tracksMapping();
-            if (mapping.empty()) {
-                // This can happen during reading the score and there is
-                // no Tracklist tag specified.
-                // TODO solve this in read302.cpp.
-                tracks.push_back(strack);
-            } else {
-                std::vector<track_idx_t> mappedTracks = muse::values(mapping, strack);
-                if (mappedTracks.empty()) {
-                    // This is a linked staff in a part and the element has been added to a linked staff in the main score
-                    track_idx_t track = staffIdx * VOICES + (strack % VOICES);
-                    track_idx_t mappedTrack = muse::value(mapping, track, muse::nidx);
-                    mappedTrack = (mappedTrack != muse::nidx) ? mappedTrack : track;
-                    if (staff->isVoiceVisible(strack % VOICES)) {
-                        mappedTracks.push_back(mappedTrack);
-                    }
-                }
-                for (track_idx_t track : mappedTracks) {
-                    // linkedPart : linked staves within same part/instrument.
-                    // linkedScore: linked staves over different scores via excerpts.
-                    const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
-                    const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
-                    if (linkedPart && !linkedScore) {
-                        track_idx_t mappedTrack = muse::value(mapping, track, muse::nidx);
-                        if (mappedTrack == muse::nidx) {
-                            continue;
-                        }
-                        track_idx_t linkedTrack = staffIdx * VOICES + mappedTrack % VOICES;
-                        if (!staff->isVoiceVisible(strack % VOICES)) {
-                            continue;
-                        }
-                        tracks.push_back(linkedTrack);
-                    } else if (!linkedPart && linkedScore) {
-                        // Staff in linked score
-                        if ((track >> 2) != staffIdx) {
-                            // Element on linked staff in linked part
-                            track += (staffIdx - (track >> 2)) * VOICES;
-                            if (!staff->isVoiceVisible(strack % VOICES)) {
-                                continue;
-                            }
-                        }
-                        tracks.push_back(track);
-                    } else {
-                        // Staff in part edit was performed on
-                        tracks.push_back(track);
-                    }
-                }
-            }
-        }
+        const std::vector<track_idx_t> linkedTracks = ostaff->getLinkedTracksInStaff(staff, strack);
 
-        for (track_idx_t ntrack : tracks) {
+        for (track_idx_t ntrack : linkedTracks) {
             if (ntrack < staff->part()->startTrack() || ntrack >= staff->part()->endTrack()) {
                 continue;
             }

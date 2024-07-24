@@ -261,6 +261,8 @@ public:
 
     Staff* findLinkedInScore(const Score* score) const override;
 
+    std::vector<track_idx_t> getLinkedTracksInStaff(const Staff* linkedStaff, const track_idx_t strack) const;
+
 private:
 
     friend class Factory;

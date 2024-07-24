@@ -5188,10 +5188,12 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                 break;
             }
 
-            if (score->excerpt()
-                && muse::key(score->excerpt()->tracksMapping(), chord->staffIdx() * VOICES + chord->voice(),
-                             muse::nidx) == chord->staffIdx() * VOICES + voice) {
-                break;
+            if (score->excerpt()) {
+                const track_idx_t originalTrack = chord->staffIdx() * VOICES + chord->voice();
+                const track_idx_t originalTrackMapped = muse::key(score->excerpt()->tracksMapping(), originalTrack, muse::nidx);
+                if (originalTrackMapped == dstTrack) {
+                    break;
+                }
             }
 
             // set up destination chord
