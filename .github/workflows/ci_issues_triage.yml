@@ -51,6 +51,13 @@ jobs:
         github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
         labeled: VST
 
+    - name: 'Design tasks'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/26
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: 'needs design'
+
   assign:
     if: (github.event.action == 'labeled' || github.event.action == 'unlabeled') && github.event.issue.state == 'open'
     runs-on: ubuntu-latest
