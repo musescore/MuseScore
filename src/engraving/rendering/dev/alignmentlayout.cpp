@@ -112,11 +112,29 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
     double curY = item->pos().y();
     switch (item->type()) {
     case ElementType::DYNAMIC:
-        curY -= 0.46 * item->spatium() * toDynamic(item)->dynamicsSize(); // approximated half x-height of dynamic
-        break;
     case ElementType::EXPRESSION:
-        curY -= 0.5 * toExpression(item)->fontMetrics().xHeight();
+    {
+        AlignV vertAlign = toTextBase(item)->align().vertical;
+        double bboxHeight = item->ldata()->bbox().height();
+        switch (vertAlign) {
+        case AlignV::TOP:
+            curY += 0.5 * bboxHeight;
+            break;
+        case AlignV::VCENTER:
+            break;
+        case AlignV::BOTTOM:
+            curY -= 0.5 * bboxHeight;
+            break;
+        case AlignV::BASELINE:
+            if (item->isDynamic()) {
+                curY -= 0.46 * item->spatium() * toDynamic(item)->dynamicsSize(); // approximated half x-height of dynamic
+            } else {
+                curY -= 0.5 * toExpression(item)->fontMetrics().xHeight();
+            }
+            break;
+        }
         break;
+    }
     case ElementType::HAIRPIN_SEGMENT:
     {
         const HairpinSegment* hairpinSeg = toHairpinSegment(item);
