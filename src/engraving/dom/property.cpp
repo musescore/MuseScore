@@ -373,7 +373,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LOCATION_GRACE,          false, "grace",                 P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "grace note index") },
     { Pid::LOCATION_NOTE,           false, "note",                  P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "note index") },
 
-    { Pid::VOICE,                   false, "voice",                 P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "voice") },
+    { Pid::VOICE,                   true,  "voice",                 P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "voice") },
     { Pid::POSITION,                false, "position",              P_TYPE::FRACTION,           PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position") },
 
     { Pid::CLEF_TYPE_CONCERT,       true,  "concertClefType",       P_TYPE::CLEF_TYPE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "concert clef type") },
