@@ -1136,7 +1136,7 @@ void NotationParts::setBracketsAndBarlines()
 void NotationParts::endInteractionWithScore()
 {
     m_interaction->clearSelection();
-    m_interaction->noteInput()->resetInputPosition();
+    m_interaction->noteInput()->endNoteInput(/*resetState=*/ true);
 }
 
 void NotationParts::notifyAboutPartChanged(const Part* part) const
