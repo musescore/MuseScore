@@ -1755,9 +1755,9 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
     }
 
     score()->undoInsertTime(startTick, diff);
-    score()->undo(new InsertTime(score(), startTick, diff));
 
     for (Score* s : score()->scoreList()) {
+        s->undo(new InsertTime(s, startTick, diff));
         Measure* m = s->tick2measure(tick());
         s->undo(new ChangeMeasureLen(m, nf));
         if (nl > ol) {
