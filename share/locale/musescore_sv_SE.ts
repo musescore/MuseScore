@@ -12882,7 +12882,7 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1148"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>Sidnummer</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1156"/>
@@ -20460,7 +20460,7 @@ upptakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="107"/>
         <source>Straight</source>
         <comment>Note flags</comment>
-        <translation>Rakt</translation>
+        <translation>Flaggor</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="190"/>
@@ -21238,7 +21238,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/notationsettingsproxymodel.cpp" line="38"/>
         <source>Notation</source>
-        <translation>Notskrift</translation>
+        <translation>Notering</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/beams/beamsettingsmodel.cpp" line="34"/>
@@ -21309,7 +21309,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/tremolos/tremolosettingsmodel.cpp" line="37"/>
         <source>Tremolos</source>
-        <translation>Tremolon</translation>
+        <translation>Tremolando</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
@@ -22905,7 +22905,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Custom suffix:</source>
-        <translation type="unfinished"/>
+        <translation>Anpassad ändelse:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="180"/>
@@ -22965,12 +22965,12 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="291"/>
         <source>Trimmed</source>
-        <translation type="unfinished"/>
+        <translation>Ansad</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="292"/>
         <source>Extended</source>
-        <translation type="unfinished"/>
+        <translation>Förlängd</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="320"/>
@@ -23030,7 +23030,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="205"/>
         <source>Tremolos</source>
-        <translation>Tremolon</translation>
+        <translation>Tremolo</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="60"/>
@@ -23225,7 +23225,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="129"/>
         <source>Cannot paste in tremolo</source>
-        <translation>Kan inte klistra in tremolo</translation>
+        <translation>Kan inte klistra in i tremolo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="132"/>
@@ -24972,7 +24972,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1734"/>
         <source>C</source>
-        <translation>c</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1735"/>
@@ -24987,7 +24987,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
         <source>D</source>
-        <translation>d</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1739"/>
@@ -25002,7 +25002,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1742"/>
         <source>E</source>
-        <translation>e</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1743"/>
@@ -25017,7 +25017,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1746"/>
         <source>F</source>
-        <translation>f</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1747"/>
@@ -25032,7 +25032,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1750"/>
         <source>G</source>
-        <translation>g</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1751"/>
@@ -25047,7 +25047,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
         <source>A</source>
-        <translation>a</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1755"/>
@@ -25062,7 +25062,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
         <source>B</source>
-        <translation>h</translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1759"/>

@@ -6864,7 +6864,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="686"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="687"/>
         <source>Insert measures at end of score…</source>
-        <translation>Takte am Ende der Partitur anhängen…</translation>
+        <translation>Takte am Ende der Partitur einfügen…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="766"/>
@@ -22168,12 +22168,12 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="80"/>
         <source>Beam thickness</source>
-        <translation>Balkenstärke</translation>
+        <translation>Balkenstärke:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="100"/>
         <source>Broken beam minimum length</source>
-        <translation>Min. länge unterbrochener Balken</translation>
+        <translation>Min. länge unterbrochener Balken:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="121"/>
@@ -22940,12 +22940,12 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="227"/>
         <source>Line</source>
-        <translation>Linie</translation>
+        <translation>Balken</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="228"/>
         <source>Slur</source>
-        <translation>Bindebogen</translation>
+        <translation>Bogen</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="256"/>
