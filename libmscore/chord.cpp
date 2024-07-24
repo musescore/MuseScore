@@ -1739,7 +1739,7 @@ static void updatePercussionNotes(Chord* c, const Drumset* drumset)
 //   cmdUpdateNotes
 //---------------------------------------------------------
 
-void Chord::cmdUpdateNotes(AccidentalState* as)
+void Chord::cmdUpdateNotes(AccidentalState* as, int staffIdx)
       {
       // TAB_STAFF is different, as each note has to be fretted
       // in the context of the all of the chords of the whole segment
@@ -1748,9 +1748,12 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       StaffGroup staffGroup = st->staffTypeForElement(this)->group();
       if (staffGroup == StaffGroup::TAB) {
             const Instrument* instrument = part()->instrument(this->tick());
-            for (Chord* ch : graceNotes())
-                  instrument->stringData()->fretChords(ch);
-            instrument->stringData()->fretChords(this);
+            for (Chord* ch : graceNotes()) {
+                  if (ch->vStaffIdx() == staffIdx)
+                        instrument->stringData()->fretChords(ch);
+                  }
+            if (vStaffIdx() == staffIdx)
+                  instrument->stringData()->fretChords(this);
             return;
             }
       else  {
@@ -1763,26 +1766,32 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       if (staffGroup == StaffGroup::STANDARD) {
             const QVector<Chord*> gnb(graceNotesBefore());
             for (Chord* ch : gnb) {
+                  if (ch->vStaffIdx() != staffIdx)
+                        continue;
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
                   ch->sortNotes();
                   }
-            std::vector<Note*> lnotes(notes());  // we need a copy!
-            for (Note* note : lnotes) {
-                  if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
-                        // same pitch
-                        if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
-                              // not courtesy
-                              // TODO: remove accidental only if note is not
-                              // on new system
-                              score()->undoRemoveElement(note->accidental());
+            if (vStaffIdx() == staffIdx) {
+                  std::vector<Note*> lnotes(notes());  // we need a copy!
+                  for (Note* note : lnotes) {
+                        if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
+                              // same pitch
+                              if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
+                                    // not courtesy
+                                   // TODO: remove accidental only if note is not
+                                    // on new system
+                                    score()->undoRemoveElement(note->accidental());
+                                    }
                               }
+                        note->updateAccidental(as);
                         }
-                  note->updateAccidental(as);
                   }
             const QVector<Chord*> gna(graceNotesAfter());
             for (Chord* ch : gna) {
+                  if (ch->vStaffIdx() != staffIdx)
+                        continue;
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);

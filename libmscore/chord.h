@@ -173,7 +173,7 @@ class Chord final : public ChordRest {
       void layout() override;
       QPointF pagePos() const override;      ///< position in page coordinates
       void layout2();
-      void cmdUpdateNotes(AccidentalState*);
+      void cmdUpdateNotes(AccidentalState*, int);
 
       NoteType noteType() const       { return _noteType; }
       void setNoteType(NoteType t)    { _noteType = t; }

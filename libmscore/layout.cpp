@@ -3194,9 +3194,9 @@ void Score::getNextMeasure(LayoutContext& lc)
                               if (cr->isSmall())
                                     m *= score()->styleD(Sid::smallNoteMag);
 
-                              if (cr->isChord() && cr->vStaffIdx() == staffIdx) {
+                              if (cr->isChord()) {
                                     Chord* chord = toChord(cr);
-                                    chord->cmdUpdateNotes(&as);
+                                    chord->cmdUpdateNotes(&as, staffIdx);
                                     for (Chord* c : chord->graceNotes()) {
                                           c->setMag(m * score()->styleD(Sid::graceNoteMag));
                                           c->computeUp();
