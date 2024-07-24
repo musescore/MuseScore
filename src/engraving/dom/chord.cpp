@@ -3210,10 +3210,10 @@ void Chord::computeKerningExceptions()
             m_allowKerningBelow = false;
         }
     }
-    if (m_startEndSlurs.startUp || m_startEndSlurs.endUp) {
+    if ((m_startEndSlurs.startUp || m_startEndSlurs.endUp) && !ldata()->up) {
         m_allowKerningAbove = false;
     }
-    if (m_startEndSlurs.startDown || m_startEndSlurs.endDown) {
+    if ((m_startEndSlurs.startDown || m_startEndSlurs.endDown) && ldata()->up) {
         m_allowKerningBelow = false;
     }
 }
