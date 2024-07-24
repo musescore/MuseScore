@@ -38,10 +38,7 @@ class AbstractAudioEncoder
 public:
     AbstractAudioEncoder() = default;
 
-    virtual ~AbstractAudioEncoder()
-    {
-        closeDestination();
-    }
+    virtual ~AbstractAudioEncoder() = default;
 
     virtual bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
     {
@@ -58,6 +55,11 @@ public:
         prepareOutputBuffer(totalSamplesNumber);
 
         return true;
+    }
+
+    void deinit()
+    {
+        closeDestination();
     }
 
     const SoundTrackFormat& format() const
