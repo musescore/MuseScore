@@ -2064,7 +2064,7 @@
         <source>Oboe in F, sounding a perfect fifth below the standard oboe.</source>
         <comment>english-horn description</comment>
         <extracomment>description for English Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe in F, eine perfekte Quinte unter der Standard Oboe klingend.</translation>
+        <translation>Oboe in F, eine Quinte unter der Standard Oboe.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="872"/>
@@ -2092,7 +2092,7 @@
         <source>Oboe in C, sounding an octave lower than the standard oboe. Similar, but not identical to, the heckelphone.</source>
         <comment>bass-oboe description</comment>
         <extracomment>description for Bass Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe in C, eine Oktave unter der Standard Oboe, ähnlich dem Heckelphon, entspricht der englischen Bassoboe.</translation>
+        <translation>Oboe in C, eine Oktave unter der Standardoboe, ähnlich dem Heckelphon, entspricht der englischen Bassoboe.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="881"/>
@@ -2120,7 +2120,7 @@
         <source>Oboe in C, sounding an octave lower than the standard oboe. Similar, but not identical to, the bass oboe.</source>
         <comment>heckelphone description</comment>
         <extracomment>description for Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe in C, eine Oktave unter der Standard Oboe, ähnlich der Baritonoboe.</translation>
+        <translation>Oboe in C, eine Oktave unter der Standardoboe, ähnlich der Baritonoboe.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="890"/>
@@ -4458,7 +4458,7 @@
         <source>Mel. Sax.</source>
         <comment>melody-saxophone shortName</comment>
         <extracomment>shortName for Melody Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mel. Sax.</translation>
+        <translation>Melsax.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1636"/>
@@ -5669,7 +5669,7 @@
         <source>Bs. Harm.</source>
         <comment>bass-harmonica shortName</comment>
         <extracomment>shortName for Bass Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bhm.</translation>
+        <translation>Bmh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2023"/>
@@ -5837,7 +5837,7 @@
         <source>B. She.</source>
         <comment>bass-sheng shortName</comment>
         <extracomment>shortName for Bass Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bshe.</translation>
+        <translation>Bsh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2080"/>
@@ -11199,7 +11199,7 @@
         <source>Tn. Klx. Hns.</source>
         <comment>tuned-klaxon-horns shortName</comment>
         <extracomment>shortName for Tuned Klaxon Horns; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G. Hp.</translation>
+        <translation>Gst. Hp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3773"/>
@@ -11367,7 +11367,7 @@
         <source>Ch. Toms</source>
         <comment>chinese-tom-toms shortName</comment>
         <extracomment>shortName for Chinese Tom-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ch. Tomt.</translation>
+        <translation>Ch. Toms</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3830"/>
@@ -11423,21 +11423,21 @@
         <source>Concert Toms</source>
         <comment>tom-toms trackName</comment>
         <extracomment>trackName for Concert Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Konzert Tomtoms</translation>
+        <translation>Konzert Toms</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3852"/>
         <source>Toms</source>
         <comment>tom-toms longName</comment>
         <extracomment>longName for Concert Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tomtoms</translation>
+        <translation>Toms</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3854"/>
         <source>Toms</source>
         <comment>tom-toms shortName</comment>
         <extracomment>shortName for Concert Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tomt.</translation>
+        <translation>Toms</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3857"/>
@@ -12970,35 +12970,35 @@
         <source>Finger snap.</source>
         <comment>finger-snap description</comment>
         <extracomment>description for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fingerschnippen.</translation>
+        <translation>Mit den Fingern schnalzen (Orff-Schulwerk Klanggeste).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4378"/>
         <source>Finger Snap</source>
         <comment>finger-snap trackName</comment>
         <extracomment>trackName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fingerschnippen</translation>
+        <translation>Schnalzen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4380"/>
         <source>Finger Snap</source>
         <comment>finger-snap longName</comment>
         <extracomment>longName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fingerschnippen</translation>
+        <translation>Schnalzen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4382"/>
         <source>Fi. Sna.</source>
         <comment>finger-snap shortName</comment>
         <extracomment>shortName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fi.snp.</translation>
+        <translation>Schna.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4385"/>
         <source>Hand clap.</source>
         <comment>hand-clap description</comment>
         <extracomment>description for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klatschen.</translation>
+        <translation>Mit den Händen klatschen (Orff-Schulwerk Klanggeste).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4387"/>
@@ -13019,42 +13019,42 @@
         <source>Hd. Clp.</source>
         <comment>hand-clap shortName</comment>
         <extracomment>shortName for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klt.</translation>
+        <translation>Kla.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4394"/>
         <source>Hand slap.</source>
         <comment>slap description</comment>
         <extracomment>description for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Handschlag.</translation>
+        <translation>Mit den Händen patschen (Orff-Schulwerk Klanggeste).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4396"/>
         <source>Slap</source>
         <comment>slap trackName</comment>
         <extracomment>trackName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>Patschen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4398"/>
         <source>Slap</source>
         <comment>slap longName</comment>
         <extracomment>longName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>Patschen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4400"/>
         <source>Sla.</source>
         <comment>slap shortName</comment>
         <extracomment>shortName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sla.</translation>
+        <translation>Pa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4403"/>
         <source>Foot stamp.</source>
         <comment>stamp description</comment>
         <extracomment>description for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fußstampfen</translation>
+        <translation>(Fuß-)Stampfen (Orff-Schulwerk Klanggeste)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4405"/>
@@ -17751,7 +17751,7 @@
         <source>Br.</source>
         <comment>brac shortName</comment>
         <extracomment>shortName for Brač; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bb.</translation>
+        <translation>Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5864"/>
@@ -17807,7 +17807,7 @@
         <source>Be.</source>
         <comment>berda shortName</comment>
         <extracomment>shortName for Berda; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gl.</translation>
+        <translation>Bd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5882"/>
@@ -17835,7 +17835,7 @@
         <source>Č.</source>
         <comment>celo shortName</comment>
         <extracomment>shortName for Čelo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Č.</translation>
+        <translation>Čl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5891"/>
@@ -17912,7 +17912,7 @@
         <source>Laúd</source>
         <comment>laud shortName</comment>
         <extracomment>shortName for Laúd; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Laúd</translation>
+        <translation>Ld.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5916"/>

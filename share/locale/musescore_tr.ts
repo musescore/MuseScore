@@ -2912,12 +2912,12 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4386"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6353"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
-        <translation>&apos;Ölçü göstergesi - ölçü çizgisi arası mesafe&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Ölçü göstergesinden ölçü çizgisine mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4406"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
-        <translation>&apos;Notanın Ölçü çizgisine mesafesi&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Notadan ölçü çizgisine mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4432"/>
@@ -2932,22 +2932,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4472"/>
         <source>Time signature to barline:</source>
-        <translation>Ölçü çizgisinden ölçü göstergesine:</translation>
+        <translation>Ölçü göstergesinden ölçü çizgisine:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4485"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
-        <translation>&apos;Açkı - ölçü göstergesi arası mesafe&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Açkdan ölçü göstergesine mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4498"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
-        <translation>&apos;Açkı donanım mesafesi&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Açkıdan donanıma mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4537"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
-        <translation>&apos;Açkıdan ölçü çizgisine mesafesi&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Açkıdan ölçü çizgisine mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4547"/>
@@ -2992,12 +2992,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4678"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation>&apos;Açkı/Donanım sağ boşluk&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Açkı/Donanım sağ boşluğu&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4704"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation>&apos;Açkı ölçü çizgisi mesafesi&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Açkıda ölçü çizgisine mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4747"/>
@@ -3017,7 +3017,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4796"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
-        <translation>&apos;Donanımın ölçü çizgisine mesafesi&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Donanımından ölçü çizgisine mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4806"/>
@@ -3032,7 +3032,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4845"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation>&apos;Ölçü çizgisinin süsleme notasına mesafe&apos; değerini sıfırlayın</translation>
+        <translation>&apos;Ölçü çizgisininden süsleme notasına mesafe&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4881"/>
@@ -3318,12 +3318,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4949"/>
         <source>Time signature to first note:</source>
-        <translation>Ölçü göstergesinden ilk notaya:</translation>
+        <translation>Ölçü göstergesinden ilk notaya(ilk satır):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4972"/>
         <source>Clef/key signature to first note:</source>
-        <translation>Açkıdan/donanımdan ilk notaya:</translation>
+        <translation>Açkıdan/donanımdan ilk notaya(sonraki satırlar):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4985"/>
@@ -4858,7 +4858,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Musical symbols scale:</source>
-        <translation>Müzikal sembol ölçeği</translation>
+        <translation>Müzikal sembol ölçeği:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
@@ -5572,7 +5572,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="40"/>
         <source>Same subtype:</source>
-        <translation>Aynı alt tip</translation>
+        <translation>Aynı alt tip:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="99"/>
@@ -5635,7 +5635,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="110"/>
         <source>Same notehead:</source>
-        <translation>Aynı notabaşı</translation>
+        <translation>Aynı notabaşı:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="138"/>
@@ -5650,17 +5650,17 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="152"/>
         <source>Same note type:</source>
-        <translation>Aynı nota tipi</translation>
+        <translation>Aynı nota tipi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="103"/>
         <source>Same duration:</source>
-        <translation>Aynı süre</translation>
+        <translation>Aynı süre:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="61"/>
         <source>Same pitch:</source>
-        <translation>Aynı perde</translation>
+        <translation>Aynı perde:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="117"/>
@@ -5675,17 +5675,17 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="40"/>
         <source>Same type:</source>
-        <translation>Aynı tip</translation>
+        <translation>Aynı tip:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="82"/>
         <source>Same note name:</source>
-        <translation>Aynı nota ismi</translation>
+        <translation>Aynı nota ismi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="145"/>
         <source>Same string:</source>
-        <translation>Aynı tel</translation>
+        <translation>Aynı tel:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="166"/>
@@ -5762,7 +5762,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Select swing ratio:</source>
-        <translation>Swing oranını seçin</translation>
+        <translation>Swing oranını seçin:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="125"/>
@@ -8443,17 +8443,17 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2186"/>
         <source>Toggle duration dot: double</source>
-        <translation>Çift uzatma noktasını aç/kapat</translation>
+        <translation>Çift uzatma noktasını aç/kapat: çift</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2193"/>
         <source>Toggle duration dot: triple</source>
-        <translation>Üçlü uzatma noktasını aç/kapat</translation>
+        <translation>Üçlü uzatma noktasını aç/kapat: üçlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2200"/>
         <source>Toggle duration dot: quadruple</source>
-        <translation>Dörtlü uzatma noktasını aç/kapat</translation>
+        <translation>Dörtlü uzatma noktasını aç/kapat: dörtlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2207"/>
@@ -11401,7 +11401,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="125"/>
         <source>File path: %1</source>
-        <translation>Dosya Yolu: %1</translation>
+        <translation>Dosya yolu: %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="144"/>
@@ -13156,42 +13156,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2317"/>
         <source>Slide out down</source>
-        <translation>Aşağı doğru kaydırın</translation>
+        <translation>Aşağıdan kaydırarak çık</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2318"/>
         <source>Slide out up</source>
-        <translation>Yukarı doğru kaydırın</translation>
+        <translation>Yukarıdan kaydırarak çık</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2319"/>
         <source>Slide in above</source>
-        <translation>Yukarı kaydırın</translation>
+        <translation>Yukarıdan kaydırarak gir</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2320"/>
         <source>Slide in below</source>
-        <translation>Aşağı kaydırın</translation>
+        <translation>Aşağıdan kaydırarak gir</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2322"/>
         <source>Slide out down (rough)</source>
-        <translation>Aşağı doğru kaydırın (dalgalı)</translation>
+        <translation>Aşağıdan kaydırarak çık (dalgalı)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2323"/>
         <source>Slide out up (rough)</source>
-        <translation>Yukarı doğru kaydırın (dalgalı)</translation>
+        <translation>Yukarıdan kaydırarak çık (dalgalı)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2324"/>
         <source>Slide in above (rough)</source>
-        <translation>Yukarı kaydırın (dalgalı)</translation>
+        <translation>Yukarıdan kaydırarak gir (dalgalı)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2325"/>
         <source>Slide in below (rough)</source>
-        <translation>Aşağı kaydırın (dalgalı)</translation>
+        <translation>Aşağıdan kaydırarak gir (dalgalı)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2442"/>
@@ -13505,13 +13505,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/check.cpp" line="200"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;Tamamlanmamış ölçü&lt;/b&gt;: %1, ölçü %2, dizek %3. Bulunan %4. Beklenen %5.</translation>
+        <translation>&lt;b&gt;Tamamlanmamış ölçü&lt;/b&gt;: %1, ölçü %2, dizek %3. Bulunan: %4. Beklenen: %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="215"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;Ses çok uzun&lt;/b&gt;: %1, ölçü %2, dizek %3, ses %4. Bulunan %5. Beklenen %6.</translation>
+        <translation>&lt;b&gt;Ses çok uzun&lt;/b&gt;: %1, ölçü %2, dizek %3, ses %4. Bulunan: %5. Beklenen: %6.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="78"/>
@@ -21831,7 +21831,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="187"/>
         <source>Note: linked staves contain identical information.</source>
-        <translation>Not: Bağlantılı dizekler aynı bilgileri içerir.</translation>
+        <translation>Not: bağlantılı dizekler aynı bilgileri içerir.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="191"/>
@@ -22274,7 +22274,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
         <source>Find / Go to:</source>
-        <translation>Bul / Git</translation>
+        <translation>Bul / Git:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
@@ -22838,7 +22838,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="54"/>
         <source>Position above:</source>
-        <translation>Yukarıdayken konumu:</translation>
+        <translation>Yukarıdaki konumu:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="60"/>
@@ -22863,7 +22863,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
         <source>Nut line thickness:</source>
-        <translation>Üst eşik çizgi kalınlığı:</translation>
+        <translation>Sap eşiği çizgi kalınlığı:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="111"/>
@@ -22908,7 +22908,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Custom suffix:</source>
-        <translation>Özel son ek</translation>
+        <translation>Özel son ek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="180"/>
@@ -22933,7 +22933,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="220"/>
         <source>Appearance:</source>
-        <translation>Görünüm</translation>
+        <translation>Görünüm:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="227"/>
@@ -23744,7 +23744,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="792"/>
         <source>Inside the header</source>
-        <translation>Başlığın içinde</translation>
+        <translation>Başlığın içine</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="794"/>
@@ -27848,7 +27848,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="38"/>
         <source>Sample rate:</source>
-        <translation>Örnekleme Oranı:</translation>
+        <translation>Örnekleme oranı:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="49"/>
@@ -28185,7 +28185,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="172"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation>Lütfen unutmayın: Partisyon düzeni MuseScore Studio&apos;daki iyileştirmelerden etkilenecektir.</translation>
+        <translation>Lütfen unutmayın: partisyon düzeni MuseScore Studio&apos;daki iyileştirmelerden etkilenecektir.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="178"/>
@@ -28223,12 +28223,12 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="112"/>
         <source>Choose instruments</source>
-        <translation>Çalgıları Seçin</translation>
+        <translation>Çalgıları seçin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="122"/>
         <source>Create from template</source>
-        <translation>Şablondan Oluşturun</translation>
+        <translation>Şablondan oluşturun</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="69"/>

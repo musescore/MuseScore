@@ -5914,7 +5914,7 @@
         <source>mute</source>
         <comment>c-horn-alto channel</comment>
         <extracomment>channel for Horn; transposition: C alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2104"/>
@@ -5963,7 +5963,7 @@
         <source>mute</source>
         <comment>bb-horn-alto channel</comment>
         <extracomment>channel for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2119"/>
@@ -6012,7 +6012,7 @@
         <source>mute</source>
         <comment>a-horn channel</comment>
         <extracomment>channel for Horn; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2134"/>
@@ -6061,7 +6061,7 @@
         <source>mute</source>
         <comment>ab-horn channel</comment>
         <extracomment>channel for Horn; transposition: A♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2149"/>
@@ -6110,7 +6110,7 @@
         <source>mute</source>
         <comment>g-horn channel</comment>
         <extracomment>channel for Horn; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2164"/>
@@ -6159,7 +6159,7 @@
         <source>mute</source>
         <comment>e-horn channel</comment>
         <extracomment>channel for Horn; transposition: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2179"/>
@@ -6208,7 +6208,7 @@
         <source>mute</source>
         <comment>eb-horn channel</comment>
         <extracomment>channel for Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2194"/>
@@ -6257,7 +6257,7 @@
         <source>mute</source>
         <comment>d-horn channel</comment>
         <extracomment>channel for Horn; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2209"/>
@@ -6306,7 +6306,7 @@
         <source>mute</source>
         <comment>horn channel</comment>
         <extracomment>channel for Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2224"/>
@@ -6355,7 +6355,7 @@
         <source>mute</source>
         <comment>c-horn channel</comment>
         <extracomment>channel for Horn; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2239"/>
@@ -6404,7 +6404,7 @@
         <source>mute</source>
         <comment>c-horn-bass channel</comment>
         <extracomment>channel for Horn (bass clef); transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2254"/>
@@ -6453,7 +6453,7 @@
         <source>mute</source>
         <comment>bb-horn-basso channel</comment>
         <extracomment>channel for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2269"/>
@@ -6495,7 +6495,7 @@
         <source>mute</source>
         <comment>vienna-horn channel</comment>
         <extracomment>channel for Vienna Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2282"/>
@@ -6642,7 +6642,7 @@
         <source>mute</source>
         <comment>eb-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2328"/>
@@ -6691,7 +6691,7 @@
         <source>mute</source>
         <comment>c-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2343"/>
@@ -6740,7 +6740,7 @@
         <source>mute</source>
         <comment>bb-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2358"/>
@@ -6789,7 +6789,7 @@
         <source>mute</source>
         <comment>a-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2373"/>
@@ -6831,7 +6831,7 @@
         <source>mute</source>
         <comment>saxhorn channel</comment>
         <extracomment>channel for Saxhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2386"/>
@@ -6880,7 +6880,7 @@
         <source>mute</source>
         <comment>f-alto-horn channel</comment>
         <extracomment>channel for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2401"/>
@@ -6929,7 +6929,7 @@
         <source>mute</source>
         <comment>eb-alto-horn channel</comment>
         <extracomment>channel for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2416"/>
@@ -6971,7 +6971,7 @@
         <source>mute</source>
         <comment>baritone-horn channel</comment>
         <extracomment>channel for Baritone Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2429"/>
@@ -7013,7 +7013,7 @@
         <source>mute</source>
         <comment>baritone-horn-treble channel</comment>
         <extracomment>channel for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2442"/>
@@ -7055,7 +7055,7 @@
         <source>mute</source>
         <comment>baritone-horn-central-europe-treble channel</comment>
         <extracomment>channel for Baritone Horn (Central European, treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2455"/>
@@ -7097,7 +7097,7 @@
         <source>mute</source>
         <comment>baritone-horn-central-europe channel</comment>
         <extracomment>channel for Baritone Horn (Central European); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2468"/>
@@ -7139,7 +7139,7 @@
         <source>mute</source>
         <comment>posthorn channel</comment>
         <extracomment>channel for Posthorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2481"/>
@@ -7188,7 +7188,7 @@
         <source>mute</source>
         <comment>bb-piccolo-trumpet channel</comment>
         <extracomment>channel for Piccolo Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2496"/>
@@ -7230,7 +7230,7 @@
         <source>mute</source>
         <comment>piccolo-trumpet channel</comment>
         <extracomment>channel for Piccolo Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2509"/>
@@ -7279,7 +7279,7 @@
         <source>mute</source>
         <comment>a-piccolo-trumpet channel</comment>
         <extracomment>channel for Piccolo Trumpet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2524"/>
@@ -7328,7 +7328,7 @@
         <source>mute</source>
         <comment>f-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2539"/>
@@ -7377,7 +7377,7 @@
         <source>mute</source>
         <comment>e-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2554"/>
@@ -7426,7 +7426,7 @@
         <source>mute</source>
         <comment>eb-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2569"/>
@@ -7475,7 +7475,7 @@
         <source>mute</source>
         <comment>d-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2584"/>
@@ -7517,7 +7517,7 @@
         <source>mute</source>
         <comment>c-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2599"/>
@@ -7559,7 +7559,7 @@
         <source>mute</source>
         <comment>trumpet channel</comment>
         <extracomment>channel for Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2614"/>
@@ -7594,7 +7594,7 @@
         <source>mute</source>
         <comment>bb-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2627"/>
@@ -7643,7 +7643,7 @@
         <source>mute</source>
         <comment>a-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2642"/>
@@ -7685,7 +7685,7 @@
         <source>mute</source>
         <comment>pocket-trumpet channel</comment>
         <extracomment>channel for Pocket Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2655"/>
@@ -7727,7 +7727,7 @@
         <source>mute</source>
         <comment>slide-trumpet channel</comment>
         <extracomment>channel for Slide Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2668"/>
@@ -7769,7 +7769,7 @@
         <source>mute</source>
         <comment>tenor-trumpet channel</comment>
         <extracomment>channel for Tenor Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2681"/>
@@ -7818,7 +7818,7 @@
         <source>mute</source>
         <comment>eb-bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2696"/>
@@ -7867,7 +7867,7 @@
         <source>mute</source>
         <comment>c-bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2711"/>
@@ -7909,7 +7909,7 @@
         <source>mute</source>
         <comment>bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2724"/>
@@ -7958,7 +7958,7 @@
         <source>mute</source>
         <comment>bb-bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2739"/>
@@ -8007,7 +8007,7 @@
         <source>mute</source>
         <comment>f-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2754"/>
@@ -8056,7 +8056,7 @@
         <source>mute</source>
         <comment>eb-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2769"/>
@@ -8105,7 +8105,7 @@
         <source>mute</source>
         <comment>d-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2784"/>
@@ -8154,7 +8154,7 @@
         <source>mute</source>
         <comment>c-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2799"/>
@@ -8203,7 +8203,7 @@
         <source>mute</source>
         <comment>bb-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2814"/>
@@ -8245,7 +8245,7 @@
         <source>mute</source>
         <comment>baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2827"/>
@@ -8511,7 +8511,7 @@
         <source>mute</source>
         <comment>fiscorn channel</comment>
         <extracomment>channel for Fiscorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2912"/>
@@ -8553,7 +8553,7 @@
         <source>mute</source>
         <comment>flugelhorn channel</comment>
         <extracomment>channel for Flugelhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2925"/>
@@ -8595,7 +8595,7 @@
         <source>mute</source>
         <comment>kuhlohorn channel</comment>
         <extracomment>channel for Kuhlohorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2938"/>
@@ -9008,7 +9008,7 @@
         <source>mute</source>
         <comment>soprano-trombone channel</comment>
         <extracomment>channel for Soprano Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3069"/>
@@ -9050,7 +9050,7 @@
         <source>mute</source>
         <comment>alto-trombone channel</comment>
         <extracomment>channel for Alto Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3082"/>
@@ -9092,7 +9092,7 @@
         <source>mute</source>
         <comment>tenor-trombone channel</comment>
         <extracomment>channel for Tenor Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3095"/>
@@ -9134,7 +9134,7 @@
         <source>mute</source>
         <comment>trombone channel</comment>
         <extracomment>channel for Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3108"/>
@@ -9176,7 +9176,7 @@
         <source>mute</source>
         <comment>trombone-treble channel</comment>
         <extracomment>channel for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3134"/>
@@ -9218,7 +9218,7 @@
         <source>mute</source>
         <comment>contrabass-trombone channel</comment>
         <extracomment>channel for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3121"/>
@@ -9260,7 +9260,7 @@
         <source>mute</source>
         <comment>bass-trombone channel</comment>
         <extracomment>channel for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3147"/>
@@ -9855,7 +9855,7 @@
         <source>Instrument of the tuba family.</source>
         <comment>helicon description</comment>
         <extracomment>description for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba-perheen instrumentti.</translation>
+        <translation>Tuba-perheen soitin.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3336"/>
@@ -9995,7 +9995,7 @@
         <source>mute</source>
         <comment>rag-dung channel</comment>
         <extracomment>channel for Rag Dung; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3383"/>
@@ -15182,7 +15182,7 @@
         <source>mute</source>
         <comment>soprano-guitar channel</comment>
         <extracomment>channel for Soprano Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5094"/>
@@ -15224,7 +15224,7 @@
         <source>mute</source>
         <comment>alto-guitar channel</comment>
         <extracomment>channel for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5107"/>
@@ -15266,7 +15266,7 @@
         <source>mute</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5119"/>
@@ -15427,7 +15427,7 @@
         <source>Hel.</source>
         <comment>helicon shortName</comment>
         <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
@@ -15539,7 +15539,7 @@
         <source>mute</source>
         <comment>guitar-steel channel</comment>
         <extracomment>channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5149"/>
@@ -15602,7 +15602,7 @@
         <source>mute</source>
         <comment>guitar-nylon channel</comment>
         <extracomment>channel for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5176"/>
@@ -15637,7 +15637,7 @@
         <source>mute</source>
         <comment>guitar-nylon-treble-clef channel</comment>
         <extracomment>channel for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5187"/>
@@ -15742,7 +15742,7 @@
         <source>mute</source>
         <comment>pedal-steel-guitar channel</comment>
         <extracomment>channel for Pedal Steel Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5220"/>
@@ -15819,7 +15819,7 @@
         <source>mute</source>
         <comment>contra-guitar channel</comment>
         <extracomment>channel for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5245"/>
@@ -15910,7 +15910,7 @@
         <source>mute</source>
         <comment>11-string-alto-guitar channel</comment>
         <extracomment>channel for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5274"/>
@@ -15952,7 +15952,7 @@
         <source>mute</source>
         <comment>12-string-guitar channel</comment>
         <extracomment>channel for 12-string Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>vaimenna</translation>
+        <translation>mykistä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5286"/>

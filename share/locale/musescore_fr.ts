@@ -9323,7 +9323,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="419"/>
         <source>S&amp;ave style…</source>
-        <translation>Enregistrer le style…</translation>
+        <translation>En&amp;registrer le style…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="431"/>
@@ -9718,12 +9718,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1413"/>
         <source>Reset &amp;text style overrides</source>
-        <translation>Réinitialiser les personnalisations de style de texte</translation>
+        <translation>Réinitialiser les personnalisations de style de &amp;texte</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1419"/>
         <source>Reset &amp;beams</source>
-        <translation>Réinitialiser les ligatures</translation>
+        <translation>Réinitialiser les &amp;ligatures</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1425"/>
