@@ -2232,13 +2232,11 @@ static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
 
 static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
 {
-    b->setLeftMargin(0.0);
-    b->setRightMargin(0.0);
-    b->setTopMargin(0.0);
-    b->setBottomMargin(0.0);
+    b->setAutoSizeEnabled(false);      // didn't exist in Mu1
+
     b->setBoxHeight(Spatium(0));       // override default set in constructor
     b->setBoxWidth(Spatium(0));
-    b->setAutoSizeEnabled(false);
+    bool keepMargins = false;          // whether original margins have to be kept when reading old file
     System* bSystem = b->system() ? b->system() : ctx.dummy()->system();
 
     while (e.readNextStartElement()) {
@@ -2247,13 +2245,25 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
             HBox* hb = Factory::createHBox(bSystem);
             readBox(e, ctx, hb);
             b->add(hb);
+            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
             VBox* vb = Factory::createVBox(bSystem);
             readBox(e, ctx, vb);
             b->add(vb);
+            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (!readBoxProperties(e, ctx, b)) {
             e.unknown();
         }
+    }
+
+    // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
+    // for backward compatibility set them to 0.0 in all other cases, the Mu1 defaults of 5.0 just look horrible in Mu3 and Mu4
+
+    if (ctx.mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins) {
+        b->setLeftMargin(0.0);
+        b->setRightMargin(0.0);
+        b->setTopMargin(0.0); // 2.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
+        b->setBottomMargin(0.0); // 1.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
     }
 }
 
