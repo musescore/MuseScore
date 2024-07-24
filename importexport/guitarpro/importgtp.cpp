@@ -11,57 +11,55 @@
 //=============================================================================
 
 #include "importgtp.h"
-
 #include "importptb.h"
 
-#include "mscore/preferences.h"
-
-#include <libmscore/measurebase.h>
-#include <libmscore/text.h>
+#include <libmscore/arpeggio.h>
+#include <libmscore/articulation.h>
+#include <libmscore/barline.h>
+#include <libmscore/bend.h>
 #include <libmscore/box.h>
-#include <libmscore/staff.h>
-#include <libmscore/part.h>
+#include <libmscore/bracket.h>
+#include <libmscore/chord.h>
+#include <libmscore/chordline.h>
+#include <libmscore/clef.h>
+#include <libmscore/dynamic.h>
+#include <libmscore/excerpt.h>
+#include <libmscore/fret.h>
+#include <libmscore/glissando.h>
+#include <libmscore/hairpin.h>
+#include <libmscore/harmony.h>
+#include <libmscore/instrtemplate.h>
+#include <libmscore/keysig.h>
+#include <libmscore/letring.h>
+#include <libmscore/lyrics.h>
 #include <libmscore/measure.h>
+#include <libmscore/measurebase.h>
+#include <libmscore/note.h>
+#include <libmscore/notedot.h>
+#include <libmscore/ottava.h>
+#include <libmscore/palmmute.h>
+#include <libmscore/part.h>
+#include <libmscore/rehearsalmark.h>
+#include <libmscore/rest.h>
+#include <libmscore/segment.h>
+#include <libmscore/slur.h>
+#include <libmscore/staff.h>
+#include <libmscore/stafftext.h>
+#include <libmscore/stafftype.h>
+#include <libmscore/stringdata.h>
+#include <libmscore/sym.h>
+#include <libmscore/tempotext.h>
+#include <libmscore/text.h>
+#include <libmscore/textline.h>
+#include <libmscore/tie.h>
 #include <libmscore/timesig.h>
 #include <libmscore/tremolo.h>
-#include <libmscore/rest.h>
-#include <libmscore/chord.h>
-#include <libmscore/note.h>
-#include <libmscore/stringdata.h>
-#include <libmscore/clef.h>
-#include <libmscore/lyrics.h>
-#include <libmscore/tempotext.h>
-#include <libmscore/slur.h>
-#include <libmscore/tie.h>
-#include <libmscore/tuplet.h>
-#include <libmscore/barline.h>
-#include <libmscore/excerpt.h>
-#include <libmscore/stafftype.h>
-#include <libmscore/bracket.h>
-#include <libmscore/articulation.h>
-#include <libmscore/keysig.h>
-#include <libmscore/harmony.h>
-#include <libmscore/bend.h>
 #include <libmscore/tremolobar.h>
-#include <libmscore/segment.h>
-#include <libmscore/rehearsalmark.h>
-#include <libmscore/dynamic.h>
-#include <libmscore/arpeggio.h>
-#include <libmscore/volta.h>
-#include <libmscore/fret.h>
-#include <libmscore/instrtemplate.h>
-#include <libmscore/glissando.h>
-#include <libmscore/chordline.h>
-#include <libmscore/instrtemplate.h>
-#include <libmscore/hairpin.h>
-#include <libmscore/ottava.h>
-#include <libmscore/notedot.h>
-#include <libmscore/stafftext.h>
-#include <libmscore/sym.h>
-#include <libmscore/textline.h>
-#include <libmscore/letring.h>
-#include <libmscore/palmmute.h>
+#include <libmscore/tuplet.h>
 #include <libmscore/vibrato.h>
+#include <libmscore/volta.h>
+
+#include "mscore/preferences.h"
 
 namespace Ms {
 
@@ -738,7 +736,11 @@ void GuitarPro::readLyrics()
       QString lyrics = readWordPascalString();
       lyrics.replace(QRegExp("\n"), " ");
       lyrics.replace(QRegExp("\r"), " ");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      auto sl = lyrics.split(" ", Qt::KeepEmptyParts);
+#else
       auto sl = lyrics.split(" ", QString::KeepEmptyParts);
+#endif
       //gpLyrics.lyrics = lyrics.split(" ", QString::KeepEmptyParts);
       for (auto& str : sl) {
             /*while (str[0] == '-')
@@ -1089,6 +1091,9 @@ bool GuitarPro1::read(QFile* fp)
             int tuning[GP_MAX_STRING_NUMBER];
 
             int strings  = version > 101 ? readInt() : 6;
+            if (strings <= 0 || strings > GP_MAX_STRING_NUMBER)
+                   return false;
+
             for (int j = 0; j < strings; ++j)
                   tuning[j] = readInt();
             std::vector<int> tuning2(strings);
