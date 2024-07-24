@@ -1296,7 +1296,8 @@ int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook,
         }
     }
 
-    int staffOverlap = std::min(beamOverlap, (staffLines - 1) * 4);
+    int staffLineOffset = isFullSize ? 1 : 4;
+    int staffOverlap = std::min(beamOverlap, (staffLines - staffLineOffset) * 4);
     if (!up) {
         return staffOverlap;
     }
