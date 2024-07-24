@@ -795,6 +795,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //    create skylines
     //-------------------------------------------------------------
 
+    std::vector<MeasureNumber*> measureNumbers;
+    std::vector<MMRestRange*> mmrRanges;
+
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         SysStaff* ss = system->staff(staffIdx);
         Skyline& skyline = ss->skyline();
@@ -811,10 +814,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 continue;
             }
             if (mno && mno->addToSkyline()) {
-                ss->skyline().add(mno->ldata()->bbox().translated(m->pos() + mno->pos() + mno->staffOffset()), mno);
+                measureNumbers.push_back(mno);
             }
             if (mmrr && mmrr->addToSkyline()) {
-                ss->skyline().add(mmrr->ldata()->bbox().translated(m->pos() + mmrr->pos()), mmrr);
+                mmrRanges.push_back(mmrr);
             }
             if (m->staffLines(staffIdx)->addToSkyline()) {
                 ss->skyline().add(m->staffLines(staffIdx)->ldata()->bbox().translated(m->pos()), m->staffLines(staffIdx));
@@ -1377,6 +1380,17 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 TLayout::layoutItem(e, ctx);
             }
         }
+    }
+
+    for (MeasureNumber* mno : measureNumbers) {
+        Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
+        system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
+                                                                                      + mno->staffOffset()), mno);
+    }
+
+    for (MMRestRange* mmrr : mmrRanges) {
+        Autoplace::autoplaceMeasureElement(mmrr, mmrr->mutldata());
+        system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(mmrr->measure()->pos() + mmrr->pos()), mmrr);
     }
 }
 

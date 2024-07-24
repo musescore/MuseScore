@@ -1046,6 +1046,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(measureNumberOffsetType,                    int(OffsetType::SPATIUM)),
     styleDef(measureNumberVPlacement,                    PlacementV::ABOVE),
     styleDef(measureNumberHPlacement,                    PlacementH::LEFT),
+    styleDef(measureNumberMinDistance,                   Spatium(0.5)),
     styleDef(measureNumberAlign,                         Align(AlignH::LEFT, AlignV::BASELINE)),
     styleDef(measureNumberFrameType,                     int(FrameType::NO_FRAME)),
     styleDef(measureNumberFramePadding,                  0.2),
@@ -1074,6 +1075,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(mmRestRangeFrameRound,                      0),
     styleDef(mmRestRangeFrameFgColor,                    PropertyValue::fromValue(Color::BLACK)),
     styleDef(mmRestRangeFrameBgColor,                    PropertyValue::fromValue(Color::transparent)),
+    styleDef(mmRestRangeMinDistance,                     Spatium(0.5)),
 
     styleDef(translatorFontFace,                         "Edwin"),
     styleDef(translatorFontSize,                         10.0),
