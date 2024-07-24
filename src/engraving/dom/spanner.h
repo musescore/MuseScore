@@ -212,7 +212,7 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
-    void computeStartElement();
+    virtual void computeStartElement();
     void computeEndElement();
 
     static Note* endElementFromSpanner(Spanner* sp, EngravingItem* newStart);
