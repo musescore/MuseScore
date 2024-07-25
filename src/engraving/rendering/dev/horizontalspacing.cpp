@@ -255,13 +255,13 @@ void HorizontalSpacing::spaceRightAlignedSegments(Measure* m, double segmentShap
     // Compute spacing
     for (Segment* raSegment : rightAlignedSegments) {
         // 1) right-align the segment against the following ones
-        double minDistAfter = -DBL_MAX;
+        double minDistAfter = 0.0;
         for (Segment* seg = raSegment->nextActive(); seg; seg = seg->nextActive()) {
             double xDiff = seg->x() - raSegment->x();
             double minDist = minHorizontalCollidingDistance(raSegment, seg, segmentShapeSqueezeFactor);
             minDistAfter = std::max(minDistAfter, minDist - xDiff);
         }
-        if (minDistAfter != -DBL_MAX && raSegment->prevActive()) {
+        if (raSegment->prevActive()) {
             Segment* prevSegment = raSegment->prevActive();
             prevSegment->setWidth(prevSegment->width() - minDistAfter);
             prevSegment->setWidthOffset(prevSegment->widthOffset() - minDistAfter);
@@ -539,6 +539,10 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
 
     switch (type) {
     case ElementType::CLEF:
+        if (toClef(item)->isMidMeasureClef()) {
+            return false;
+        }
+    // fall through
     case ElementType::TIMESIG:
     case ElementType::KEYSIG:
     case ElementType::BAR_LINE:
