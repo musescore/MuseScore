@@ -48,6 +48,7 @@
 #include "dom/note.h"
 
 #include "dom/ornament.h"
+#include "dom/page.h"
 #include "dom/part.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -753,10 +754,12 @@ void ChordLayout::layoutSpanners(Chord* item, LayoutContext& ctx)
             TLayout::layoutTie(tie, ctx);
         }
         for (Spanner* sp : n->spannerBack()) {
-            if (sp->isGuitarBend()) {
-                continue;
-            }
             TLayout::layoutSpanner(sp, ctx);
+        }
+        for (Spanner* sp : n->spannerFor()) {
+            if ((sp->isGlissando() || sp->isGuitarBend()) && sp->tick2() >= ctx.state().page()->endTick()) {
+                TLayout::layoutSpanner(sp, ctx);
+            }
         }
     }
 }
