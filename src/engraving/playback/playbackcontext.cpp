@@ -113,12 +113,11 @@ PlaybackParamLayers PlaybackContext::playbackParamLayers(const Score* score) con
 
     auto addParams = [score, &result](const ParamsByTrack& paramsByTrack) {
         for (const auto& params : paramsByTrack) {
-            PlaybackParamMap paramMap;
+            PlaybackParamMap& paramMap = result[static_cast<layer_idx_t>(params.first)];
             for (const auto& pair : params.second) {
-                paramMap.emplace(timestampFromTicks(score, pair.first), pair.second);
+                PlaybackParamList& list = paramMap[timestampFromTicks(score, pair.first)];
+                list.insert(list.end(), pair.second.begin(), pair.second.end());
             }
-
-            result.emplace(static_cast<layer_idx_t>(params.first), std::move(paramMap));
         }
     };
 
