@@ -149,6 +149,9 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     ctx.update(parts.at(0)->id(), score);
 
     DynamicLevelMap expectedDynamics {
+        // 1st measure
+        { timestampFromTicks(score, 0), dynamicLevelFromType(mpe::DynamicType::Natural) },
+
         // 2nd measure
         { timestampFromTicks(score, 1920), dynamicLevelFromType(mpe::DynamicType::ppp) }, // 1st quarter note
         { timestampFromTicks(score, 3360), dynamicLevelFromType(mpe::DynamicType::p) }, // 4th quarter note

@@ -182,6 +182,13 @@ void PlaybackContext::update(const ID partId, const Score* score, bool expandRep
 
         handleMeasureRepeats(measureRepeats, tickPositionOffset);
     }
+
+    for (track_idx_t trackIdx = m_partStartTrack; trackIdx < m_partEndTrack; ++trackIdx) {
+        DynamicMap& dynamics = m_dynamicsByTrack[trackIdx];
+        if (!muse::contains(dynamics, 0)) {
+            dynamics.emplace(0, DynamicInfo { dynamicLevelFromType(mpe::DynamicType::Natural), 0 });
+        }
+    }
 }
 
 void PlaybackContext::clear()
