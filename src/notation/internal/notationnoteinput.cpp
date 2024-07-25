@@ -293,7 +293,7 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     return el;
 }
 
-void NotationNoteInput::endNoteInput()
+void NotationNoteInput::endNoteInput(bool resetState)
 {
     TRACEFUNC;
 
@@ -310,6 +310,12 @@ void NotationNoteInput::endNoteInput()
             el.front()->setSelected(false);
         }
         is.setSlur(0);
+    }
+
+    if (resetState) {
+        is.setTrack(muse::nidx);
+        is.setString(-1);
+        is.setSegment(nullptr);
     }
 
     notifyAboutNoteInputEnded();
@@ -463,17 +469,6 @@ void NotationNoteInput::setCurrentTrack(track_idx_t trackIndex)
     TRACEFUNC;
 
     score()->inputState().setTrack(trackIndex);
-    notifyAboutStateChanged();
-}
-
-void NotationNoteInput::resetInputPosition()
-{
-    mu::engraving::InputState& inputState = score()->inputState();
-
-    inputState.setTrack(muse::nidx);
-    inputState.setString(-1);
-    inputState.setSegment(nullptr);
-
     notifyAboutStateChanged();
 }
 

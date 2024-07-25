@@ -169,6 +169,10 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         return nullptr;
     }
 
+    if (!is.cr()) { // invalid state
+        return nullptr;
+    }
+
     DEFER {
         m_undoStack->commitChanges();
     };

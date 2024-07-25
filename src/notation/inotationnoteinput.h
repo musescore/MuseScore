@@ -23,8 +23,9 @@
 #define MU_NOTATION_INOTATIONNOTEINPUT_H
 
 #include "async/notification.h"
+#include "types/ret.h"
+
 #include "notationtypes.h"
-#include "types/retval.h"
 
 namespace mu::notation {
 class INotationNoteInput
@@ -37,7 +38,7 @@ public:
     virtual NoteInputState state() const = 0;
 
     virtual void startNoteInput() = 0;
-    virtual void endNoteInput() = 0;
+    virtual void endNoteInput(bool resetState = false) = 0;
     virtual void toggleNoteInputMethod(NoteInputMethod method) = 0;
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
@@ -61,8 +62,6 @@ public:
     virtual void setDrumNote(int note) = 0;
     virtual void setCurrentVoice(voice_idx_t voiceIndex) = 0;
     virtual void setCurrentTrack(track_idx_t trackIndex) = 0;
-
-    virtual void resetInputPosition() = 0;
 
     virtual muse::RectF cursorRect() const = 0;
 
