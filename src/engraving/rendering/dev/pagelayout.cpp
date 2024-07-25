@@ -232,6 +232,12 @@ void PageLayout::collectPage(LayoutContext& ctx)
                 collected = true;
             }
         }
+
+        if (engravingProgressNotifier()) {
+            float curPercent = static_cast<float>(ctx.state().measureNo()) / ctx.dom().lastSegment()->measure()->index();
+            engravingProgressNotifier()->notify();
+        }
+
         ctx.mutState().setPrevSystem(ctx.mutState().curSystem());
         assert(ctx.state().curSystem() != nextSystem);
         ctx.mutState().setCurSystem(nextSystem);

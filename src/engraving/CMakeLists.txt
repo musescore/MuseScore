@@ -56,6 +56,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingfont.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengravingprogressnotifier.h
 
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/messagebox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/messagebox.h
