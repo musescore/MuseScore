@@ -1364,6 +1364,10 @@ bool GuitarPro1::read(IODevice* io)
         int tuning[GP_MAX_STRING_NUMBER];
 
         int strings  = version > 101 ? readInt() : 6;
+        if (strings <= 0 || strings > GP_MAX_STRING_NUMBER) {
+            return false;
+        }
+
         for (int j = 0; j < strings; ++j) {
             tuning[j] = readInt();
         }
