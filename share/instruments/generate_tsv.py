@@ -67,7 +67,7 @@ for genre in root.findall('Genre'):
         'id': id,
         'name': genre.find('name').text,
     }
-create_tsv('tsv/genres.tsv', genres)
+create_tsv(script_dir / 'tsv/genres.tsv', genres)
 
 families = {}
 for family in root.findall('Family'):
@@ -76,7 +76,7 @@ for family in root.findall('Family'):
         'id': id,
         'name': family.find('name').text,
     }
-create_tsv('tsv/families.tsv', families)
+create_tsv(script_dir / 'tsv/families.tsv', families)
 
 articulation_names = {}
 for articulation in root.findall('Articulation'):
@@ -86,7 +86,7 @@ for articulation in root.findall('Articulation'):
         'velocity': articulation.find('velocity').text,
         'gateTime': articulation.find('gateTime').text,
     }
-create_tsv('tsv/articulation_names.tsv', articulation_names)
+create_tsv(script_dir / 'tsv/articulation_names.tsv', articulation_names)
 
 groups = {}
 instruments = {}
@@ -228,8 +228,8 @@ for group in root.findall('InstrumentGroup'):
         if drums:
             drumsets[instrument_id] = drums
 
-create_tsv('tsv/groups.tsv', groups)
-create_tsv('tsv/instruments.tsv', instruments)
-create_tsv('tsv/articulations.tsv', articulations)
-create_tsv('tsv/channels.tsv', channels)
-create_tsv('tsv/drumsets.tsv', drumsets)
+create_tsv(script_dir / 'tsv/groups.tsv', groups)
+create_tsv(script_dir / 'tsv/instruments.tsv', instruments)
+create_tsv(script_dir / 'tsv/articulations.tsv', articulations)
+create_tsv(script_dir / 'tsv/channels.tsv', channels)
+create_tsv(script_dir / 'tsv/drumsets.tsv', drumsets)
