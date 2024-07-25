@@ -414,6 +414,7 @@ void Score::setUpTempoMap()
         sigmap()->clear();
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
     }
+    std::vector<Measure*> anacrusisMeasures;
 
     auto tempoPrimo = std::optional<BeatsPerSecond> {};
 
@@ -429,6 +430,14 @@ void Score::setUpTempoMap()
         m->moveTicks(diff);
         if (m->mmRest()) {
             m->mmRest()->moveTicks(diff);
+        }
+        // TODO: Better to use Measure::isAnacrusis() here
+        // but since it requires irregular() return true it's not working as expected
+        // if user didn't checked "Exclude from measure count" in measure properties,
+        // but reduces the real measure length.
+        // So we use the following workaround:
+        if (m->ticks() < m->timesig()) {
+            anacrusisMeasures.push_back(m);
         }
 
         rebuildTempoAndTimeSigMaps(m, tempoPrimo);
@@ -472,6 +481,9 @@ void Score::setUpTempoMap()
     }
 
     masterScore()->updateRepeatListTempo();
+    if (!anacrusisMeasures.empty()) {
+        fixAnacrusisTempo(anacrusisMeasures);
+    }
     m_needSetUpTempoMap = false;
 }
 
@@ -601,6 +613,34 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
 
         if (pm && (!mTicks.identical(pm->ticks()) || !m->timesig().identical(pm->timesig()))) {
             sigmap()->add(m->tick().ticks(), SigEvent(mTicks, m->timesig(), m->no()));
+        }
+    }
+}
+
+void Score::fixAnacrusisTempo(const std::vector<Measure*>& measures) const
+{
+    auto getTempoTextIfExist = [](const Measure* m) -> TempoText* {
+        for (const Segment& s : m->segments()) {
+            if (s.isChordRestType()) {
+                for (EngravingItem* e : s.annotations()) {
+                    if (e->isTempoText()) {
+                        return toTempoText(e);
+                    }
+                }
+            }
+        }
+        return nullptr;
+    };
+
+    for (Measure* measure : measures) {
+        if (getTempoTextIfExist(measure)) {
+            continue;
+        }
+        Measure* nextMeasure = measure->nextMeasure();
+        if (nextMeasure) {
+            if (TempoText* tt = getTempoTextIfExist(nextMeasure); tt) {
+                tempomap()->setTempo(measure->tick().ticks(), tt->tempo());
+            }
         }
     }
 }
