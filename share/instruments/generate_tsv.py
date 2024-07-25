@@ -12,8 +12,7 @@ if locale.getpreferredencoding().lower() != 'utf-8':
     raise SystemExit(1)
 
 import csv
-import os
-import sys
+from pathlib import Path
 import xml.etree.ElementTree as ET
 
 null='[null]' # value to use in TSV when data is not specified in XML
@@ -51,8 +50,8 @@ def find_text(element, tagName, default='[null]'):
     tag = element.find(tagName)
     return default if tag is None else tag.text
 
-os.chdir(os.path.dirname(os.path.realpath(__file__))) # make all paths relative to this script's directory
-os.makedirs('tsv', exist_ok=True)
+script_dir = Path(__file__).parent
+Path.mkdir(script_dir / 'tsv', exist_ok=True)
 
 # InstrumentsXML
 root = ET.parse('instruments.xml').getroot()
