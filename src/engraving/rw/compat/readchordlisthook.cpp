@@ -57,6 +57,11 @@ void ReadChordListHook::validate()
         return;
     }
 
+    if (m_chordListTag) {
+        // if we encountered a ChordList tag, everything is fine already
+        return;
+    }
+
     // if we just specified a new chord description file
     // and didn't encounter a ChordList tag
     // then load the chord description file
@@ -65,7 +70,7 @@ void ReadChordListHook::validate()
     ChordList* chordList = m_score->chordList();
 
     String newChordDescriptionFile = style.styleSt(Sid::chordDescriptionFile);
-    if (newChordDescriptionFile != m_oldChordDescriptionFile && !m_chordListTag) {
+    if (newChordDescriptionFile != m_oldChordDescriptionFile) {
         if (!newChordDescriptionFile.startsWith(u"chords_") && style.styleSt(Sid::chordStyle) == "std") {
             // should not normally happen,
             // but treat as "old" (114) score just in case
@@ -81,7 +86,5 @@ void ReadChordListHook::validate()
     }
 
     // make sure we have a chordlist
-    if (!m_chordListTag) {
-        chordList->checkChordList(m_score->configuration()->appDataPath(), style);
-    }
+    chordList->checkChordList(m_score->configuration()->appDataPath(), style);
 }
