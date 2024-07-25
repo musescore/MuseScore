@@ -99,11 +99,27 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
 
     // Read ChordList
     {
+        bool chordListOk = false;
         ByteArray chordListData = mscReader.readChordListFile();
         if (!chordListData.empty()) {
             Buffer buf(&chordListData);
             buf.open(IODevice::ReadOnly);
-            masterScore->chordList()->read(&buf);
+
+            chordListOk = masterScore->chordList()->read(&buf);
+        }
+
+        masterScore->chordList()->setCustomChordList(chordListOk);
+
+        if (!chordListOk) {
+            // See also ReadChordListHook::validate()
+            MStyle& style = masterScore->style();
+            ChordList* chordList = masterScore->chordList();
+
+            bool custom = style.styleSt(Sid::chordStyle) == "custom";
+            chordList->setCustomChordList(custom);
+
+            // Ensure that `checkChordList` loads the default chord list
+            chordList->unload();
         }
     }
 
