@@ -2260,6 +2260,8 @@ void TDraw::draw(const Note* item, Painter* painter)
                 for (MuseScoreView* view : item->score()->getViewer()) {
                     view->drawBackground(painter, bb);
                 }
+            } else if (item->score()->printing()) {
+                painter->fillRect(bb, Color::WHITE);
             } else {
                 painter->fillRect(bb, config->noteBackgroundColor());
             }
