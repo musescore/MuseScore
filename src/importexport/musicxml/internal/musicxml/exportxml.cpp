@@ -5877,8 +5877,8 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 // set the default words format
                 const String mtf = m_score->style().styleSt(Sid::musicalTextFont);
                 CharFormat defFmt;
-                defFmt.setFontFamily(m_score->style().styleSt(Sid::lyricsEvenFontFace));
-                defFmt.setFontSize(m_score->style().styleD(Sid::lyricsOddFontSize));
+                defFmt.setFontFamily(m_score->style().styleSt(l->isEven() ? Sid::lyricsEvenFontFace : Sid::lyricsOddFontFace));
+                defFmt.setFontSize(m_score->style().styleD(l->isEven() ? Sid::lyricsEvenFontSize : Sid::lyricsOddFontSize));
                 // write formatted
                 MScoreTextToMXML mttm(u"text", attr, defFmt, mtf);
                 mttm.writeTextFragments(l->fragmentList(), m_xml);
