@@ -1071,7 +1071,7 @@ bool GuitarPro4::read(IODevice* io)
                                 break;                //seg = mes->last();
                             }
                             if (seg->segmentType() == SegmentType::ChordRest
-                                && seg->cr(chord->track())->isChord()) {
+                                && seg->cr(chord->track()) && seg->cr(chord->track())->isChord()) {
                                 bool br = false;
                                 Chord* cr1 = toChord(seg->cr(chord->track()));
                                 if (cr1) {
