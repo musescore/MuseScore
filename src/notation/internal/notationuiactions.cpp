@@ -1801,79 +1801,79 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle turn"),
-             TranslatableString("action", "Add/remove ornament: turn")
+             TranslatableString("action", "Add ornament: turn")
              ),
     UiAction("add-turn-inverted",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle inverted turn"),
-             TranslatableString("action", "Add/remove ornament: inverted turn")
+             TranslatableString("action", "Add ornament: inverted turn")
              ),
     UiAction("add-turn-slash",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle turn with slash"),
-             TranslatableString("action", "Add/remove ornament: turn with slash")
+             TranslatableString("action", "Add ornament: turn with slash")
              ),
     UiAction("add-trill",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle trill"),
-             TranslatableString("action", "Add/remove ornament: trill")
+             TranslatableString("action", "Add ornament: trill")
              ),
     UiAction("add-short-trill",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle short trill"),
-             TranslatableString("action", "Add/remove ornament: short trill")
+             TranslatableString("action", "Add ornament: short trill")
              ),
     UiAction("add-mordent",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle mordent"),
-             TranslatableString("action", "Add/remove ornament: mordent")
+             TranslatableString("action", "Add ornament: mordent")
              ),
     UiAction("add-tremblement",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle tremblement"),
-             TranslatableString("action", "Add/remove ornament: tremblement")
+             TranslatableString("action", "Add ornament: tremblement")
              ),
     UiAction("add-prall-mordent",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle prall mordent"),
-             TranslatableString("action", "Add/remove ornament: prall mordent")
+             TranslatableString("action", "Add ornament: prall mordent")
              ),
     UiAction("add-shake",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle shake"),
-             TranslatableString("action", "Add/remove ornament: shake")
+             TranslatableString("action", "Add ornament: shake")
              ),
     UiAction("add-shake-muffat",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle shake (Muffat)"),
-             TranslatableString("action", "Add/remove ornament: shake (Muffat)")
+             TranslatableString("action", "Add ornament: shake (Muffat)")
              ),
     UiAction("add-tremblement-couperin",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Toggle tremblement (Couperin)"),
-             TranslatableString("action", "Add/remove ornament: tremblement (Couperin)")
+             TranslatableString("action", "Toggle tremblement appuyé (Couperin)"),
+             TranslatableString("action", "Add ornament: tremblement appuyé (Couperin)")
              ),
     UiAction("add-up-bow",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle up bow"),
-             TranslatableString("action", "Add/remove bowing: up bow")
+             TranslatableString("action", "Add bowing: up bow")
              ),
     UiAction("add-down-bow",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle down bow"),
-             TranslatableString("action", "Add/remove bowing: down bow")
+             TranslatableString("action", "Add bowing: down bow")
              ),
     UiAction("reset-style",
              mu::context::UiCtxNotationOpened,
