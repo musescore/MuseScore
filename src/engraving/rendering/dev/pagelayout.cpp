@@ -423,7 +423,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
         auto spanners = ctx.dom().spannerMap().findOverlapping(stick, etick);
         for (auto interval : spanners) {
             Spanner* sp = interval.value;
-            if (!sp->isSlur()) {
+            if (!sp->isSlur() || sp->tick() == system->endTick()) {
                 continue;
             }
             if (toSlur(sp)->isCrossStaff()) {
