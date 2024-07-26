@@ -2635,13 +2635,15 @@ void Score::deleteItem(EngravingItem* el)
                         break;
                     }
 
+                    Fraction curTick = stick;
                     for (const TDuration& d : dList) {
                         Rest* rr = Factory::createRest(this->dummy()->segment());
                         rr->setTicks(d.fraction());
                         rr->setDurationType(d);
                         rr->setTrack(track);
                         rr->setGap(true);
-                        undoAddCR(rr, m, stick);
+                        undoAddCR(rr, m, curTick);
+                        curTick += d.fraction();
                     }
                 }
             }
