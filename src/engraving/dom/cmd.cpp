@@ -57,6 +57,7 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "note.h"
+#include "ornament.h"
 #include "page.h"
 #include "part.h"
 #include "pitchspelling.h"
@@ -2093,6 +2094,39 @@ void Score::toggleArticulation(SymId attr)
                 }
             }
             Articulation* na = Factory::createArticulation(this->dummy()->chord());
+            na->setSymId(attr);
+            if (!toggleArticulation(el, na)) {
+                delete na;
+            }
+
+            if (cr) {
+                set.insert(cr);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   toggleOrnament
+///   Toggle attribute \a attr for all selected notes/rests.
+///
+///   Like toggleArticulation, but for ornaments.
+//---------------------------------------------------------
+
+void Score::toggleOrnament(SymId attr)
+{
+    std::set<Chord*> set;
+    for (EngravingItem* el : selection().elements()) {
+        if (el->isNote() || el->isChord()) {
+            Chord* cr = 0;
+            // apply articulation on a given chord only once
+            if (el->isNote()) {
+                cr = toNote(el)->chord();
+                if (muse::contains(set, cr)) {
+                    continue;
+                }
+            }
+            Ornament* na = Factory::createOrnament(this->dummy()->chord());
             na->setSymId(attr);
             if (!toggleArticulation(el, na)) {
                 delete na;

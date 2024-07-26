@@ -278,6 +278,7 @@ public:
     void toggleSubScript() override;
     void toggleSuperScript() override;
     void toggleArticulation(mu::engraving::SymId) override;
+    void toggleOrnament(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
 
     bool canInsertClef(mu::engraving::ClefType) const override;

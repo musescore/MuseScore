@@ -423,17 +423,17 @@ void NotationActionController::init()
 
     registerAction("repeat-sel", &Controller::repeatSelection);
 
-    registerAction("add-turn", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentTurn);
-    registerAction("add-turn-inverted", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentTurnInverted);
-    registerAction("add-turn-slash", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentTurnSlash);
-    registerAction("add-trill", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentTrill);
-    registerAction("add-short-trill", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentShortTrill);
-    registerAction("add-mordent", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentMordent);
-    registerAction("add-tremblement", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentTremblement);
-    registerAction("add-prall-mordent", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentPrallMordent);
-    registerAction("add-shake", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentShake3);
-    registerAction("add-shake-muffat", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentShakeMuffat1);
-    registerAction("add-tremblement-couperin", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentTremblementCouperin);
+    registerAction("add-turn", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurn);
+    registerAction("add-turn-inverted", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnInverted);
+    registerAction("add-turn-slash", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnSlash);
+    registerAction("add-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTrill);
+    registerAction("add-short-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShortTrill);
+    registerAction("add-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentMordent);
+    registerAction("add-tremblement", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblement);
+    registerAction("add-prall-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentPrallMordent);
+    registerAction("add-shake", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShake3);
+    registerAction("add-shake-muffat", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShakeMuffat1);
+    registerAction("add-tremblement-couperin", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblementCouperin);
 
     registerAction("add-up-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsUpBow);
     registerAction("add-down-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);

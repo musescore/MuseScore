@@ -241,6 +241,7 @@ public:
     MOCK_METHOD(void, insertClef, (mu::engraving::ClefType), (override));
 
     MOCK_METHOD(void, toggleArticulation, (mu::engraving::SymId), (override));
+    MOCK_METHOD(void, toggleOrnament, (mu::engraving::SymId), (override));
     MOCK_METHOD(void, changeAccidental, (mu::engraving::AccidentalType), (override));
     MOCK_METHOD(void, transposeSemitone, (int), (override));
     MOCK_METHOD(void, transposeDiatonicAlterations, (mu::engraving::TransposeDirection), (override));
