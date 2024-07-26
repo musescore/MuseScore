@@ -25,6 +25,7 @@
 #include "timeline.h"
 
 #include <QApplication>
+#include <QQuickWindow>
 #include <QSplitter>
 #include <QTimer>
 
@@ -115,8 +116,10 @@ TimelineView::TimelineView(QQuickItem* parent)
 void TimelineView::doDraw()
 {
     if (isVisible()) {
+        m_dpr =  window() ? window()->devicePixelRatio() : 1.0;
 
-        m_image = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
+        m_image = QImage(width() * m_dpr, height() * m_dpr, QImage::Format_ARGB32_Premultiplied);
+        m_image.setDevicePixelRatio(m_dpr);
         m_image.fill(Qt::transparent);
 
         if (qWidget()) {

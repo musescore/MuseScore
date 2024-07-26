@@ -50,6 +50,7 @@ private:
     void paint(QPainter* painter) override;
     void componentComplete() override;
 
+    qreal m_dpr = 1.0; // device pixel ratio
     QImage m_image;
     QTimer m_drawTimer;
 };
