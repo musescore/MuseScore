@@ -4783,59 +4783,86 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                 undoAddCR(toChordRest(rest), dm, dm->tick());
             }
         }
+
+        const std::vector<EngravingItem*> annotations = oseg->annotations();
+        for (EngravingItem* annotation : annotations) {
+            if (!annotation->elementAppliesToTrack(strack)) {
+                continue;
+            }
+
+            EngravingItem* newAnnotation;
+            //does a linked clone to create just this element
+            //otherwise element will be add in every linked stave
+            if (link) {
+                newAnnotation = annotation->linkedClone();
+            } else {
+                newAnnotation = annotation->clone();
+            }
+            newAnnotation->setTrack(dtrack);
+
+            // Add element (link -> just in this measure)
+            if (link) {
+                if (!ns) {
+                    ns = dm->getSegment(oseg->segmentType(), oseg->tick());
+                }
+                ns->add(newAnnotation);
+            } else {
+                doUndoAddElement(newAnnotation);
+            }
+        }
     }
 
     if (spanner) {
-        // Find and add corresponding slurs
+        // Find and add corresponding slurs and hairpins
+        static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAIRPIN };
         auto spanners = score->spannerMap().findOverlapping(start.ticks(), lTick.ticks());
         for (auto i = spanners.begin(); i < spanners.end(); i++) {
             Spanner* sp      = i->value;
             Fraction spStart = sp->tick();
-            track_idx_t track = sp->track();
-            track_idx_t track2 = sp->track2();
             Fraction spEnd = spStart + sp->ticks();
 
-            if (sp->isSlur() && (spStart >= start && spEnd < lTick)) {
-                if (track == strack && track2 == strack) {
-                    Spanner* ns = toSpanner(link ? sp->linkedClone() : sp->clone());
-
-                    ns->setScore(this);
-                    ns->setParent(0);
-                    ns->setTrack(dtrack);
-                    ns->setTrack2(dtrack);
-
-                    // set start/end element for slur
-                    ChordRest* cr1 = sp->startCR();
-                    ChordRest* cr2 = sp->endCR();
-
-                    ns->setStartElement(0);
-                    ns->setEndElement(0);
-                    if (cr1 && cr1->links()) {
-                        for (EngravingObject* e : *cr1->links()) {
-                            ChordRest* cr = toChordRest(e);
-                            if (cr == cr1) {
-                                continue;
-                            }
-                            if ((cr->score() == this) && (cr->tick() == ns->tick()) && cr->track() == dtrack) {
-                                ns->setStartElement(cr);
-                                break;
-                            }
-                        }
-                    }
-                    if (cr2 && cr2->links()) {
-                        for (EngravingObject* e : *cr2->links()) {
-                            ChordRest* cr = toChordRest(e);
-                            if (cr == cr2) {
-                                continue;
-                            }
-                            if ((cr->score() == this) && (cr->tick() == ns->tick2()) && cr->track() == dtrack) {
-                                ns->setEndElement(cr);
-                                break;
-                            }
-                        }
-                    }
-                    doUndoAddElement(ns);
+            if (muse::contains(SPANNERS_TO_COPY, sp->type()) && (spStart >= start && spEnd < lTick)) {
+                if (!sp->elementAppliesToTrack(strack)) {
+                    continue;
                 }
+                Spanner* ns = toSpanner(link ? sp->linkedClone() : sp->clone());
+
+                ns->setScore(this);
+                ns->setParent(0);
+                ns->setTrack(dtrack);
+                ns->setTrack2(dtrack);
+
+                // set start/end element for slur
+                ChordRest* cr1 = sp->startCR();
+                ChordRest* cr2 = sp->endCR();
+
+                ns->setStartElement(0);
+                ns->setEndElement(0);
+                if (cr1 && cr1->links()) {
+                    for (EngravingObject* e : *cr1->links()) {
+                        ChordRest* cr = toChordRest(e);
+                        if (cr == cr1) {
+                            continue;
+                        }
+                        if ((cr->score() == this) && (cr->tick() == ns->tick()) && cr->track() == dtrack) {
+                            ns->setStartElement(cr);
+                            break;
+                        }
+                    }
+                }
+                if (cr2 && cr2->links()) {
+                    for (EngravingObject* e : *cr2->links()) {
+                        ChordRest* cr = toChordRest(e);
+                        if (cr == cr2) {
+                            continue;
+                        }
+                        if ((cr->score() == this) && (cr->tick() == ns->tick2()) && cr->track() == dtrack) {
+                            ns->setEndElement(cr);
+                            break;
+                        }
+                    }
+                }
+                doUndoAddElement(ns);
             }
         }
     }

@@ -243,6 +243,8 @@ public:
     Segment* startSegment() const;
     Segment* endSegment() const;
 
+    bool elementAppliesToTrack(const track_idx_t refTrack) const override;
+
     virtual void setSelected(bool f) override;
     virtual void setVisible(bool f) override;
     virtual void setAutoplace(bool f) override;

@@ -1314,6 +1314,33 @@ void EngravingItem::checkVoiceAssignmentCompatibleWithTrack()
     }
 }
 
+bool EngravingItem::elementAppliesToTrack(const track_idx_t refTrack) const
+{
+    if (!hasVoiceAssignmentProperties()) {
+        return refTrack == track();
+    }
+
+    const VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+    if (voiceAssignment == VoiceAssignment::CURRENT_VOICE_ONLY && track() == refTrack) {
+        return true;
+    }
+
+    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF && track2staff(track()) == track2staff(refTrack)) {
+        return true;
+    }
+
+    const Part* elementPart = part();
+    if (!elementPart) {
+        return false;
+    }
+
+    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (elementPart->startTrack() <= refTrack
+                                                                        && elementPart->endTrack() - 1 >= refTrack)) {
+        return true;
+    }
+    return false;
+}
+
 void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirection)
 {
     PlacementV oldPlacement = placement();

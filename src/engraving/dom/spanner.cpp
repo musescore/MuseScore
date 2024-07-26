@@ -30,6 +30,7 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "note.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -1116,6 +1117,39 @@ Segment* Spanner::endSegment() const
     }
 
     return endSeg;
+}
+
+bool Spanner::elementAppliesToTrack(const track_idx_t refTrack) const
+{
+    for (track_idx_t track : { track(), track2() }) {
+        if (!hasVoiceAssignmentProperties()) {
+            if (refTrack == track) {
+                continue;
+            }
+        }
+
+        const VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+        if (voiceAssignment == VoiceAssignment::CURRENT_VOICE_ONLY && track == refTrack) {
+            continue;
+        }
+
+        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF && track2staff(track) == track2staff(refTrack)) {
+            continue;
+        }
+
+        const Part* elementPart = part();
+        if (!elementPart) {
+            return false;
+        }
+
+        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (elementPart->startTrack() <= refTrack
+                                                                            && elementPart->endTrack() - 1 >= refTrack)) {
+            continue;
+        }
+
+        return false;
+    }
+    return true;
 }
 
 //---------------------------------------------------------

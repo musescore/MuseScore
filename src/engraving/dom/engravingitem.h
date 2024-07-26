@@ -684,6 +684,7 @@ public:
     bool appliesToAllVoicesInInstrument() const;
     void setInitialTrackAndVoiceAssignment(track_idx_t track, bool curVoiceOnlyOverride);
     void checkVoiceAssignmentCompatibleWithTrack();
+    virtual bool elementAppliesToTrack(const track_idx_t refTrack) const;
     void setPlacementBasedOnVoiceAssignment(DirectionV styledDirection);
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
