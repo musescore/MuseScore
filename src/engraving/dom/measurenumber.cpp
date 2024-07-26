@@ -35,6 +35,7 @@ namespace mu::engraving {
 static const ElementStyle measureNumberStyle {
     { Sid::measureNumberVPlacement, Pid::PLACEMENT },
     { Sid::measureNumberHPlacement, Pid::HPLACEMENT },
+    { Sid::measureNumberMinDistance, Pid::MIN_DISTANCE }
 };
 
 //---------------------------------------------------------

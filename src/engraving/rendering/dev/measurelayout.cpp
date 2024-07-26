@@ -1127,7 +1127,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
                 m->add(t);
             }
             t->setXmlText(s);
-            TLayout::layoutMeasureNumber(t, t->mutldata());
+            TLayout::layoutMeasureNumber(t, t->mutldata(), ctx);
         } else {
             if (t) {
                 ctx.mutDom().doUndoRemoveElement(t);
@@ -1173,8 +1173,45 @@ void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
         }
         // setXmlText is reimplemented to take care of brackets
         rr->setXmlText(s);
-        TLayout::layoutMMRestRange(rr, rr->mutldata());
+        TLayout::layoutMMRestRange(rr, rr->mutldata(), ctx);
     }
+}
+
+MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Measure* measure, const Segment* firstCrSeg,
+                                                                       const staff_idx_t staffIdx, const bool needsHeaderException,
+                                                                       const bool modernMMRest,
+                                                                       const LayoutContext& ctx)
+{
+    if (!measure || !firstCrSeg) {
+        return MeasureStartEndPos(0.0, 0.0);
+    }
+
+    Segment* s1;
+    for (s1 = firstCrSeg->prevActive(); s1 && s1->allElementsInvisible(); s1 = s1->prevActive()) {
+    }
+    Segment* s2;
+    if (modernMMRest) {
+        for (s2 = firstCrSeg->nextActive(); s2; s2 = s2->nextActive()) {
+            if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
+                break;
+            }
+        }
+    } else {
+        // Ignore any stuff before the end bar line (such as courtesy clefs)
+        s2 = measure->findSegment(SegmentType::EndBarLine, measure->endTick());
+    }
+
+    double x1 = s1 ? s1->x() + s1->minRight() : 0;
+    double x2 = s2 ? s2->x() - s2->minLeft() : measure->width();
+
+    bool headerException = measure->header() && firstCrSeg->prev() && !firstCrSeg->prev()->isStartRepeatBarLineType()
+                           && needsHeaderException;
+    if (headerException) { //needs this exception on header bar
+        // Set x1 to the imaginary barline located the minimum barline->note distance to the left of the rest's segment
+        x1 = firstCrSeg->x() - ctx.conf().styleMM(Sid::barNoteDistance);
+    }
+
+    return MeasureStartEndPos(x1, x2);
 }
 
 //-----------------------------------------------------------------------------
@@ -1212,33 +1249,15 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 //    x1 - left measure position of free space
                 //    x2 - right measure position of free space
 
-                Segment* s1;
-                for (s1 = s.prevActive(); s1 && s1->allElementsInvisible(); s1 = s1->prevActive()) {
-                }
-                Segment* s2;
-                if (modernMMRest) {
-                    for (s2 = s.nextActive(); s2; s2 = s2->nextActive()) {
-                        if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
-                            break;
-                        }
-                    }
-                } else {
-                    // Ignore any stuff before the end bar line (such as courtesy clefs)
-                    s2 = m->findSegment(SegmentType::EndBarLine, m->endTick());
-                }
+                const MeasureStartEndPos measureStartEnd = getMeasureStartEndPos(m, &s, staffIdx, e->isMMRest(), modernMMRest, ctx);
 
-                double x1 = s1 ? s1->x() + s1->minRight() : 0;
-                double x2 = s2 ? s2->x() - s2->minLeft() : m->width();
+                const double x1 = measureStartEnd.x1;
+                const double x2 = measureStartEnd.x2;
 
                 if (e->isMMRest()) {
                     MMRest* mmrest = toMMRest(e);
                     // center multimeasure rest
                     double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
-                    bool headerException = m->header() && s.prev() && !s.prev()->isStartRepeatBarLineType();
-                    if (headerException) { //needs this exception on header bar
-                        // Set x1 to the imaginary barline located the minimum barline->note distance to the left of the rest's segment
-                        x1 = s.x() - ctx.conf().styleMM(Sid::barNoteDistance);
-                    }
                     double w = x2 - x1 - 2 * d;
                     MMRest::LayoutData* mmrestLD = mmrest->mutldata();
                     mmrestLD->restWidth = w;

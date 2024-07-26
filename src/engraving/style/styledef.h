@@ -1058,6 +1058,7 @@ enum class Sid {
     measureNumberOffsetType,
     measureNumberVPlacement,
     measureNumberHPlacement,
+    measureNumberMinDistance,
     measureNumberAlign,
     measureNumberFrameType,
     measureNumberFramePadding,
@@ -1086,6 +1087,7 @@ enum class Sid {
     mmRestRangeFrameRound,
     mmRestRangeFrameFgColor,
     mmRestRangeFrameBgColor,
+    mmRestRangeMinDistance,
 
     translatorFontFace,
     translatorFontSize,

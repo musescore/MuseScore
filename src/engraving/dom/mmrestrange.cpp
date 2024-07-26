@@ -39,7 +39,8 @@ namespace mu::engraving {
 static const ElementStyle mmRestRangeStyle {
     { Sid::mmRestRangeBracketType, Pid::MMREST_RANGE_BRACKET_TYPE },
     { Sid::mmRestRangeVPlacement,  Pid::PLACEMENT },
-    { Sid::mmRestRangeHPlacement,  Pid::HPLACEMENT }
+    { Sid::mmRestRangeHPlacement,  Pid::HPLACEMENT },
+    { Sid::mmRestRangeMinDistance, Pid::MIN_DISTANCE }
 };
 
 MMRestRange::MMRestRange(Measure* parent)
