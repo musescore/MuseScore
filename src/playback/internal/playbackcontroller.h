@@ -125,7 +125,7 @@ private:
 
     void updateCurrentTempo();
 
-    void seek(const muse::midi::tick_t tick);
+    void seekRawTick(const muse::midi::tick_t tick);
     void seek(const muse::audio::secs_t secs);
 
     bool isPaused() const;
