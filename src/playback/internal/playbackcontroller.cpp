@@ -209,13 +209,18 @@ void PlaybackController::reset()
     stop();
 }
 
-void PlaybackController::seek(const midi::tick_t tick)
+void PlaybackController::seekRawTick(const midi::tick_t tick)
 {
     if (m_currentTick == tick) {
         return;
     }
 
-    seek(playedTickToSecs(tick));
+    RetVal<midi::tick_t> playedTick = notationPlayback()->playPositionTickByRawTick(tick);
+    if (!playedTick.ret) {
+        return;
+    }
+
+    seek(playedTickToSecs(playedTick.val));
 }
 
 void PlaybackController::seek(const audio::secs_t secs)
@@ -363,7 +368,7 @@ void PlaybackController::seekElement(const notation::EngravingItem* element)
         return;
     }
 
-    seek(tick.val);
+    seek(playedTickToSecs(tick.val));
 }
 
 void PlaybackController::seekBeat(int measureIndex, int beatIndex)
@@ -390,12 +395,7 @@ void PlaybackController::seekRangeSelection()
 
     midi::tick_t startTick = selectionRange()->startTick().ticks();
 
-    RetVal<midi::tick_t> tick = notationPlayback()->playPositionTickByRawTick(startTick);
-    if (!tick.ret) {
-        return;
-    }
-
-    seek(tick.val);
+    seekRawTick(startTick);
 }
 
 void PlaybackController::onAudioResourceChanged(const InstrumentTrackId& trackId,
@@ -1469,7 +1469,7 @@ void PlaybackController::setTempoMultiplier(double multiplier)
     }
 
     notationPlayback()->setTempoMultiplier(multiplier);
-    seek(tick);
+    seekRawTick(tick);
     updateLoop();
 
     if (playing) {
