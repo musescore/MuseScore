@@ -87,6 +87,20 @@ void PianoKeyboardController::setPressedKey(std::optional<piano_key_t> key)
     m_keyStatesChanged.notify();
 }
 
+void PianoKeyboardController::setHoveredKey(std::optional<piano_key_t> key)
+{
+    auto notation = currentNotation();
+    if (!notation || m_hoveredKey == key || !notation->interaction()->noteInput()->isNoteInputMode()) {
+        return;
+    }
+
+    if (key.has_value()) {
+        notation->interaction()->showShadowNoteFromPianoKeyboard(key.value());
+    }
+
+    m_hoveredKey = key;
+}
+
 void PianoKeyboardController::onNotationChanged()
 {
     if (auto notation = currentNotation()) {
