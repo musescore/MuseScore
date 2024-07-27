@@ -75,7 +75,7 @@ public:
     MOCK_METHOD(muse::async::Notification, currentTempoChanged, (), (const, override));
 
     MOCK_METHOD(notation::MeasureBeat, currentBeat, (), (const, override));
-    MOCK_METHOD(muse::audio::msecs_t, beatToMilliseconds, (int, int), (const, override));
+    MOCK_METHOD(muse::audio::secs_t, beatToSecs, (int, int), (const, override));
 
     MOCK_METHOD(double, tempoMultiplier, (), (const, override));
     MOCK_METHOD(void, setTempoMultiplier, (double), (override));

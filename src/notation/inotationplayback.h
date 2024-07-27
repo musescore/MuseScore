@@ -51,12 +51,12 @@ public:
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 
-    virtual muse::audio::msecs_t totalPlayTime() const = 0;
-    virtual muse::async::Channel<muse::audio::msecs_t> totalPlayTimeChanged() const = 0;
+    virtual muse::audio::secs_t totalPlayTime() const = 0;
+    virtual muse::async::Channel<muse::audio::secs_t> totalPlayTimeChanged() const = 0;
 
-    virtual float playedTickToSec(muse::midi::tick_t tick) const = 0;
-    virtual muse::midi::tick_t secToPlayedTick(float sec) const = 0;
-    virtual muse::midi::tick_t secToTick(float sec) const = 0;
+    virtual muse::audio::secs_t playedTickToSec(muse::midi::tick_t tick) const = 0;
+    virtual muse::midi::tick_t secToPlayedTick(muse::audio::secs_t sec) const = 0;
+    virtual muse::midi::tick_t secToTick(muse::audio::secs_t sec) const = 0;
 
     virtual muse::RetVal<muse::midi::tick_t> playPositionTickByRawTick(muse::midi::tick_t tick) const = 0;
     virtual muse::RetVal<muse::midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;

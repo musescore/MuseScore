@@ -159,7 +159,7 @@ mu::notation::MeasureBeat PlaybackControllerStub::currentBeat() const
     return {};
 }
 
-muse::audio::msecs_t PlaybackControllerStub::beatToMilliseconds(int, int) const
+muse::audio::secs_t PlaybackControllerStub::beatToSecs(int, int) const
 {
     return 0;
 }

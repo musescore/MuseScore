@@ -89,7 +89,7 @@ public:
     virtual muse::async::Notification currentTempoChanged() const = 0;
 
     virtual notation::MeasureBeat currentBeat() const = 0;
-    virtual muse::audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
+    virtual muse::audio::secs_t beatToSecs(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;
