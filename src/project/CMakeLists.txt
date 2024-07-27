@@ -102,6 +102,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/itemplatesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mdlmigrator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mdlmigrator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectmigrator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectmigrator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectfileinfoprovider.cpp

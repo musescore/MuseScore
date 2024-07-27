@@ -223,6 +223,7 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
             migration.isApplyMigration = isMigration;
             migration.isApplyEdwin = isMigration;
             migration.isApplyLeland = isMigration;
+            migration.isRemapPercussion = isMigration;
         }
 
         //! NOTE Don't write to settings, just on current session

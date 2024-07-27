@@ -39,6 +39,7 @@ StyledDialogView {
 
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
+    property bool isRemapPercussion: true
     property bool isAskAgain: true
 
     contentHeight: {
@@ -85,6 +86,7 @@ StyledDialogView {
                 isAskAgain: dialog.isAskAgain,
                 isApplyLeland: dialog.isApplyLeland,
                 isApplyEdwin: dialog.isApplyEdwin,
+                isRemapPercussion: dialog.isRemapPercussion,
             }
         }
 
@@ -114,8 +116,13 @@ StyledDialogView {
 
             appVersion: dialog.appVersion
             isAskAgain: dialog.isAskAgain
+            isRemapPercussion: dialog.isRemapPercussion
 
             navigationPanel.section: dialog.navigationSection
+
+            onIsRemapPercussionChangeRequested: function(remapPercussion) {
+                dialog.isRemapPercussion = remapPercussion
+            }
 
             onIsAskAgainChangeRequested: function(askAgain) {
                 dialog.isAskAgain = askAgain
@@ -144,6 +151,7 @@ StyledDialogView {
 
             isApplyLeland: dialog.isApplyLeland
             isApplyEdwin: dialog.isApplyEdwin
+            isRemapPercussion: dialog.isRemapPercussion
 
             navigationSection: dialog.navigationSection
 
@@ -153,6 +161,10 @@ StyledDialogView {
 
             onIsApplyLelandChangeRequested: function(applyLeland) {
                 dialog.isApplyLeland = applyLeland
+            }
+
+            onIsRemapPercussionChangeRequested: function(remapPercussion) {
+                dialog.isRemapPercussion = remapPercussion
             }
 
             onIsAskAgainChangeRequested: function(askAgain) {
