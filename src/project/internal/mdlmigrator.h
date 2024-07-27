@@ -22,7 +22,9 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
 #include "engraving/types/types.h"
+#include "iglobalconfiguration.h"
 
 namespace mu::engraving {
 class Drumset;
@@ -36,15 +38,18 @@ using RepitchFunc = std::function<int (int)>;
 
 class MdlMigrator
 {
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+
 public:
     MdlMigrator(mu::engraving::MasterScore* score)
         : m_score(score) {}
     void remapPercussion();
 
 private:
+    bool loadDrumset(mu::engraving::Drumset* drumset, muse::io::path_t path);
     void remapPitches(mu::engraving::track_idx_t startTrack, mu::engraving::track_idx_t endTrack, mu::engraving::Fraction startTick,
                       mu::engraving::Fraction endTick, const RepitchFunc& repitch);
-    bool needToRemap(const mu::engraving::Instrument& instr, RepitchFunc& repitch);
+    bool needToRemap(const mu::engraving::Instrument& instr, RepitchFunc& repitch, muse::io::path_t& drumsetPath);
 
     // Repitch functions
     static int repitchMdlSnares(int pitch);

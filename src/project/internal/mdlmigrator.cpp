@@ -27,6 +27,8 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/rw/xmlreader.h"
+#include "io/file.h"
 
 #include "log.h"
 
@@ -62,28 +64,61 @@ void MdlMigrator::remapPercussion()
             }
 
             RepitchFunc repitch;
+            path_t drumsetPath = globalConfiguration()->appDataPath() + "templates/";
 
-            if (!needToRemap(*instr, repitch)) {
+            if (!needToRemap(*instr, repitch, drumsetPath)) {
                 continue;
             }
 
             remapPitches(startTrack, endTrack, startTick, endTick, repitch);
 
             Drumset* drumset = instr->drumset();
-            Drumset newDrumset;
-            newDrumset.clear();
-            for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
-                if (drumset->isValid(i)) {
-                    newDrumset.setDrum(repitch(i), drumset->drum(i));
+
+            if (!loadDrumset(drumset, drumsetPath)) {
+                Drumset newDrumset;
+                newDrumset.clear();
+                for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
+                    if (drumset->isValid(i)) {
+                        newDrumset.setDrum(repitch(i), drumset->drum(i));
+                    }
                 }
+                instr->setDrumset(&newDrumset);
+                // Note: The new drumset may have fewer drums than the old one.
+                // This happens if there were two pitches X and Y for which
+                // repitch(X) == repitch(Y), and the old drumset had drums on
+                // both X and Y. The winning drum is the higher of X and Y.
             }
-            instr->setDrumset(&newDrumset);
-            // Note: The new drumset may have fewer drums than the old one.
-            // This happens if there were two pitches X and Y for which
-            // repitch(X) == repitch(Y), and the old drumset had drums on
-            // both X and Y. The winning drum is the higher of X and Y.
         }
     }
+}
+
+bool MdlMigrator::loadDrumset(Drumset* drumset, path_t path)
+{
+    File file(path);
+    if (!file.open(IODevice::ReadOnly)) {
+        return false;
+    }
+    XmlReader xml(&file);
+    drumset->clear();
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "museScore") {
+            bool ok = true;
+            const String verString = xml.attribute("version");
+            const int version = String(verString).remove(u".").toInt(&ok);
+            IF_ASSERT_FAILED(ok && version <= Constants::MSC_VERSION) {
+                LOGW("Loading drumset from unrecognized MuseScore version <%s>", verString.toAscii().constData());
+            }
+            while (xml.readNextStartElement()) {
+                if (xml.name() == "Drum") {
+                    drumset->load(xml);
+                } else {
+                    xml.unknown();
+                }
+            }
+        }
+    }
+    file.close();
+    return true;
 }
 
 void MdlMigrator::remapPitches(track_idx_t startTrack, track_idx_t endTrack, Fraction startTick, Fraction endTick,
@@ -115,7 +150,7 @@ void MdlMigrator::remapPitches(track_idx_t startTrack, track_idx_t endTrack, Fra
     }
 }
 
-bool MdlMigrator::needToRemap(const Instrument& instr, RepitchFunc& repitch)
+bool MdlMigrator::needToRemap(const Instrument& instr, RepitchFunc& repitch, path_t& drumsetPath)
 {
     const Drumset* drumset = instr.drumset();
     const InstrChannel* channel = instr.channel(0);
@@ -132,12 +167,15 @@ bool MdlMigrator::needToRemap(const Instrument& instr, RepitchFunc& repitch)
         // MDL Snare Line A (id="mdl-snareline-a")
         // MDL Snare        (id="mdl-snaresolo")
         // MDL Snare A      (id="mdl-snaresolo-a")
+        drumsetPath += "Marching_Snare_Drums.drm";
         repitch = repitchMdlSnares;
     } else if (musicXmlId == u"mdl.drum.tenor-drum" && (program == 7 || program == 8)) {
         // MDL Tenor Line   (id="mdl-tenorline")
         // MDL Tenors       (id="mdl-tenorsolo")
+        drumsetPath += "Marching_Tenors.drm";
         repitch = repitchMdlTenors;
     } else if (musicXmlId == u"mdl.drum.bass-drum" && program == 0) {
+        drumsetPath += "Marching_Bass_Drums.drm";
         if (drumset->isValid(61)) {
             // MDL Bass Line (10)   (id="mdl-bassline-10")
             repitch = repitchMdlBassline10;
@@ -147,6 +185,7 @@ bool MdlMigrator::needToRemap(const Instrument& instr, RepitchFunc& repitch)
         }
     } else if (musicXmlId == u"mdl.metal.cymbal.crash" && program == 1) {
         // MDL Cymbal Line  (id="mdl-cymballine")
+        drumsetPath += "Marching_Cymbals.drm";
         repitch = repitchMdlCymballine;
     } else {
         return false;
