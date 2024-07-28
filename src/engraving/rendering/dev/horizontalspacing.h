@@ -22,6 +22,9 @@
 #ifndef MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
 #define MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
 
+#include <dom/notedot.h>
+
+
 namespace mu::engraving {
 class Chord;
 class EngravingItem;
@@ -69,6 +72,7 @@ private:
 
     static KerningType doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
+    static KerningType computeNoteDotKerningType(const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
 };

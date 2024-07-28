@@ -568,6 +568,8 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         return computeNoteKerningType(toNote(item1), item2);
     case ElementType::STEM_SLASH:
         return computeStemSlashKerningType(toStemSlash(item1), item2);
+    case ElementType::NOTEDOT:
+        return computeNoteDotKerningType(item2);
     default:
         return KerningType::KERNING;
     }
@@ -605,6 +607,14 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
         return KerningType::NON_KERNING;
     }
 
+    return KerningType::KERNING;
+}
+
+KerningType HorizontalSpacing::computeNoteDotKerningType(const EngravingItem* item2) {
+    EngravingItem* nextParent = item2->parentItem(true);
+    if (nextParent && nextParent->isNote() && toNote(nextParent)->isTrillCueNote()) {
+        return KerningType::NON_KERNING;
+    }
     return KerningType::KERNING;
 }
 
