@@ -50,11 +50,6 @@ mkdir -p $QT_PATH
 7z x -y qt.7z -o$QT_PATH
 rm qt.7z
 
-# Dump syms
-echo "Download dump_syms"
-wget -q --show-progress -O dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/macos/x86-64/dump_syms.7z"
-7z x -y dump_syms.7z -o"$HOME/breakpad"
-
 # VST SDK
 echo "Download VST SDK"
 wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z"

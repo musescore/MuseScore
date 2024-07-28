@@ -190,7 +190,9 @@ jobs:
       if: env.DO_BUILD == 'true'
       shell: bash
       run: |
-        bash ./buildscripts/ci/windows/dumpsyms.sh
+        APP_BIN=$(pwd)/build.release/src/app/MuseScore4.pdb
+        cmake -DAPP_BIN=${APP_BIN} \
+              -P buildscripts/ci/crashdumps/ci_generate_dumpsyms.cmake
     - name: Package
       if: env.DO_BUILD == 'true'
       shell: cmd
@@ -207,7 +209,11 @@ jobs:
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       shell: bash
       run: |
-        bash ./buildscripts/ci/tools/sentry_syms_upload.sh -t ${{ secrets.SENTRY_AUTH_TOKEN }} -p ${SENTRY_PROJECT}    
+        cmake -DSENTRY_URL=https://sentry.musescore.org \
+              -DSENTRY_ORG=musescore \
+              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+              -P buildscripts/ci/crashdumps/ci_sentry_dumpsyms_upload.cmake
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       shell: bash

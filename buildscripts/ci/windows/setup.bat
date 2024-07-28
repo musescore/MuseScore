@@ -60,11 +60,6 @@ CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z" -O  %TEMP_DIR%\VST3_SDK.7z
 CALL "7z" x -y %TEMP_DIR%\VST3_SDK.7z "-oC:\vst"
 
-:: breakpad_tools
-ECHO "=== Install breakpad_tools ==="
-CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/breakpad/windows/x86/dump_syms.7z" -O %TEMP_DIR%\dump_syms.7z
-CALL "7z" x -y %TEMP_DIR%\dump_syms.7z "-oC:\breakpad_tools"
-
 IF %BUILD_WIN_PORTABLE% == ON (
 ECHO "=== Installing PortableApps.com Tools ==="
 :: portableappslauncher is a vanilla installation of PortableApps.com Launcher https://portableapps.com/apps/development/portableapps.com_launcher
