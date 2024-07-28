@@ -14536,12 +14536,12 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="700"/>
         <source>Baritone clef (C clef)</source>
-        <translation>Barytonklav (C-klav)</translation>
+        <translation>Barytonklav (c-klav)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="701"/>
         <source>C clef, H shape (19th century)</source>
-        <translation>C-klav, H-formad (1800-tal)</translation>
+        <translation>c-klav (c²), H-formad (1800-tal)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="702"/>
@@ -14601,7 +14601,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="713"/>
         <source>Baritone clef (F clef)</source>
-        <translation>Barytonklav (F-klav)</translation>
+        <translation>Barytonklav (f-klav)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="714"/>
@@ -17190,12 +17190,12 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3803"/>
         <source>C clef</source>
-        <translation>C-klav</translation>
+        <translation>c-klav</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3804"/>
         <source>C clef ottava bassa</source>
-        <translation>C-klav ottava bassa</translation>
+        <translation>c-klav ottava bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3811"/>
@@ -17271,7 +17271,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4058"/>
         <source>F clef</source>
-        <translation>F-klav</translation>
+        <translation>f-klav</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4068"/>
@@ -17346,7 +17346,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4245"/>
         <source>G clef</source>
-        <translation>G-klav</translation>
+        <translation>g-klav</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4271"/>
@@ -21309,7 +21309,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/tremolos/tremolosettingsmodel.cpp" line="37"/>
         <source>Tremolos</source>
-        <translation>Tremolando</translation>
+        <translation>Tremolo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
@@ -24429,7 +24429,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="630"/>
         <source>Tremolos</source>
-        <translation>Tremolo och tremolando</translation>
+        <translation>Förkortningar, tremolo och tremolando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="665"/>

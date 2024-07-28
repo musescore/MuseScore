@@ -4862,7 +4862,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
-        <translation>Wert für &apos;Skalierung des Zeichensatzes für musikalische Symbols:&apos; zurücksetzen</translation>
+        <translation>Wert für &apos;Skalierung des Zeichensatzes für musikalische Symbols&apos; zurücksetzen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14556"/>
@@ -10593,7 +10593,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="245"/>
         <source>Str&amp;etch</source>
-        <translation>D&amp;ehnen/Stauchen</translation>
+        <translation>&amp;Dehnen/Stauchen</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="256"/>
@@ -21510,7 +21510,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="65"/>
         <source>Bottom padding</source>
-        <translation>Unterer Abstand:</translation>
+        <translation>Unterer Abstand</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="79"/>
@@ -22168,12 +22168,12 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="80"/>
         <source>Beam thickness</source>
-        <translation>Balkenstärke:</translation>
+        <translation>Balkenstärke</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="100"/>
         <source>Broken beam minimum length</source>
-        <translation>Min. länge unterbrochener Balken:</translation>
+        <translation>Min. länge unterbrochener Balken</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="121"/>
@@ -23746,7 +23746,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="792"/>
         <source>Inside the header</source>
-        <translation>Innerhalb des Kopfes</translation>
+        <translation>Innerhalb des Systemkopfes</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="794"/>
@@ -27501,7 +27501,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="48"/>
         <source>Work title</source>
-        <translation>Werktitel:</translation>
+        <translation>Werktitel</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="51"/>
@@ -27521,17 +27521,17 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="55"/>
         <source>Work number</source>
-        <translation>Werknummer:</translation>
+        <translation>Werknummer</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="56"/>
         <source>Movement title</source>
-        <translation>Satztitel:</translation>
+        <translation>Satztitel</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="57"/>
         <source>Movement number</source>
-        <translation>Satznummer:</translation>
+        <translation>Satznummer</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="59"/>
@@ -28281,7 +28281,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation>Hinweis: Sie können Takte auch hinzufügen &amp; entfernen, nachdem Sie Ihre Partitur erstellt haben</translation>
+        <translation>Hinweis: Sie können Takte auch hinzufügen &amp; löschen, nachdem Sie Ihre Partitur erstellt haben</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="49"/>

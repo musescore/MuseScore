@@ -5535,7 +5535,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="95"/>
         <source>Override with custom options</source>
-        <translation>Folosește opțiuni particularizate</translation>
+        <translation>Folosește opțiuni personalizate</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="172"/>
@@ -10218,7 +10218,7 @@ text x-height):</source>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>Această acțiune va reseta toate preferințele aplicației și va șterge toate paletele și scurtăturile particularizate. Lista de partituri recenta va fi de asemenea golită.
+        <translation>Această acțiune va reseta toate preferințele aplicației și va șterge toate paletele și scurtăturile personalizate. Lista de partituri recenta va fi de asemenea golită.
 
 Această acțiune nu va șterge niciuna din partiturile tale.</translation>
     </message>
@@ -15237,7 +15237,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="767"/>
         <source>Custom</source>
-        <translation>Particularizat</translation>
+        <translation>Personalizat</translation>
     </message>
 </context>
 <context>
@@ -15848,12 +15848,12 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/scoreorder.cpp" line="225"/>
         <source>%1 (Customized)</source>
-        <translation>%1 (Particularizat)</translation>
+        <translation>%1 (Personalizat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="575"/>
         <source>Custom</source>
-        <translation>Particularizat</translation>
+        <translation>Personalizat</translation>
     </message>
 </context>
 <context>
@@ -19670,7 +19670,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="67"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="70"/>
         <source>Custom</source>
-        <translation>Particularizat</translation>
+        <translation>Personalizat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="65"/>
@@ -19685,7 +19685,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
         <source>Customize bend</source>
-        <translation>Particularizează bend-ul</translation>
+        <translation>Personalizează bend-ul</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
@@ -22131,7 +22131,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="49"/>
         <source>Customization actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Customize toolbar&quot; popup</extracomment>
-        <translation>Acțiuni de particularizare</translation>
+        <translation>Acțiuni de personalizare</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="61"/>
@@ -22908,7 +22908,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Custom suffix:</source>
-        <translation>Sufix particularizat:</translation>
+        <translation>Sufix personalizat:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="180"/>
@@ -23040,7 +23040,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="208"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="216"/>
         <source>Customize toolbar</source>
-        <translation>Particularizează bara de unelte</translation>
+        <translation>Personalizează bara de unelte</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="519"/>
@@ -23506,7 +23506,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="36"/>
         <source>Custom</source>
-        <translation>Particularizat</translation>
+        <translation>Personalizat</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
@@ -24046,7 +24046,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1345"/>
         <source>Custom key signature</source>
-        <translation>Armură particularizată</translation>
+        <translation>Armură personalizată</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3053"/>
@@ -24109,7 +24109,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="70"/>
         <source>Create custom palette</source>
-        <translation>Crează paletă particularizată</translation>
+        <translation>Crează paletă personalizată</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="85"/>
@@ -24134,7 +24134,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="56"/>
         <source>Name your custom palette</source>
-        <translation>Denumește paleta ta particularizată</translation>
+        <translation>Denumește paleta ta personalizată</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="99"/>
@@ -25173,37 +25173,37 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="375"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
-        <translation>Dorești să ascunzi această celulă din paleta particularizată sau să o ștergi definitiv?</translation>
+        <translation>Dorești să ascunzi această celulă din paleta personalizată sau să o ștergi definitiv?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="376"/>
         <source>Do you want to hide these custom palette cells or permanently delete them?</source>
-        <translation>Dorești să ascunzi aceste celule din paleta particularizată sau să le ștergi definitiv?</translation>
+        <translation>Dorești să ascunzi aceste celule din paleta personalizată sau să le ștergi definitiv?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="382"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
-        <translation>Dorești să ștergi definitiv această celulă din paleta particularizată?</translation>
+        <translation>Dorești să ștergi definitiv această celulă din paleta personalizată?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="383"/>
         <source>Do you want to permanently delete these custom palette cells?</source>
-        <translation>Dorești să ștergi definitiv aceste celule din paleta particularizată?</translation>
+        <translation>Dorești să ștergi definitiv aceste celule din paleta personalizată?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="399"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
-        <translation>Dorești să ascunzi această paletă particularizată sau să o ștergi definitiv?</translation>
+        <translation>Dorești să ascunzi această paletă personalizată sau să o ștergi definitiv?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="400"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
-        <translation>Dorești să ascunzi aceste palete particularizate sau să le ștergi permanent?</translation>
+        <translation>Dorești să ascunzi aceste palete personalizate sau să le ștergi permanent?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="818"/>
         <source>Do you want to permanently delete this custom palette?</source>
-        <translation>Dorești să ștergi definitiv această paletă particularizată?</translation>
+        <translation>Dorești să ștergi definitiv această paletă personalizată?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="839"/>
@@ -29639,7 +29639,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="182"/>
         <source>Toolbar customizations</source>
-        <translation>Particularizare bară de unelte</translation>
+        <translation>Personalizare bară de unelte</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="44"/>

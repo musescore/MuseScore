@@ -3236,34 +3236,34 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
         <source>Dash</source>
-        <translation>Dash</translation>
+        <translation>Hyphen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11677"/>
         <source>Max. dash gap:</source>
-        <translation>Max. dash gap:</translation>
+        <translation>Max. hyphen gap:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11713"/>
         <source>Min. dash gap:</source>
-        <translation>Min. dash gap:</translation>
+        <translation>Min. hyphen gap:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11893"/>
         <source>Omit dash when space is limited</source>
-        <translation>Omit dash when space is limited</translation>
+        <translation>Omit hyphen when space is limited</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
-        <translation>Restate dash before syllable on 
+        <translation>Restate hyphen before syllable on 
 first note of the system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11921"/>
         <source>Dash placement at the start of the system:</source>
-        <translation>Dash placement at the start of the system:</translation>
+        <translation>Hyphen placement at the start of the system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
@@ -4388,7 +4388,7 @@ first note of the system</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation>Reset &apos;Dash gap&apos; value</translation>
+        <translation>Reset &apos;Hyphen gap&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11855"/>
@@ -4405,12 +4405,12 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11903"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation>Reset &apos;Omit dash when space is limited&apos; value</translation>
+        <translation>Reset &apos;Omit hyphen when space is limited&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11947"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation>Reset &apos;Dash placement at the start of the system&apos; value</translation>
+        <translation>Reset &apos;Hyphen placement at the start of the system&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11962"/>
@@ -9603,7 +9603,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1269"/>
         <source>St&amp;aff text</source>
-        <translation>St&amp;aff text</translation>
+        <translation>St&amp;ave text</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1275"/>
@@ -11513,7 +11513,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public Licence vers
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="141"/>
         <source>Staff %1</source>
-        <translation>Stave: %1</translation>
+        <translation>Stave %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="211"/>
@@ -19711,7 +19711,7 @@ anacrusis</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="49"/>
         <source>Interpretation</source>
-        <translation>Interpretation:</translation>
+        <translation>Interpretation</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="56"/>
@@ -19726,7 +19726,7 @@ anacrusis</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="63"/>
         <source>Voicing</source>
-        <translation>Voicing:</translation>
+        <translation>Voicing</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="71"/>
@@ -21602,7 +21602,7 @@ anacrusis</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="112"/>
         <source>All voices on this staff only</source>
-        <translation>All voices on this staff only</translation>
+        <translation>All voices on this stave only</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="187"/>
@@ -22341,7 +22341,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="203"/>
         <source>Staff %1</source>
-        <translation>Stave: %1</translation>
+        <translation>Stave %1</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="863"/>
@@ -27154,7 +27154,7 @@ failed.</translation>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>Sound flags may be reset, but staff text will remain. This action can’t be undone.</translation>
+        <translation>Sound flags may be reset, but stave text will remain. This action can’t be undone.</translation>
     </message>
 </context>
 <context>

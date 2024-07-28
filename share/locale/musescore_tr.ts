@@ -2640,7 +2640,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11324"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12273"/>
         <source>Reset &apos;Position below&apos; value</source>
-        <translation>&apos;Aşağıdaki konum &apos; değerini sıfırlayın</translation>
+        <translation>&apos;Aşağıdayken konumu&apos; değerini sıfırlayın</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3073"/>
@@ -7736,7 +7736,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
         <source>Enter interval: sixth above</source>
-        <translation>Aralık gir: altılı yukarı</translation>
+        <translation>Aralık gir: üstüne altılı</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="901"/>
@@ -7756,42 +7756,42 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
         <source>Enter interval: second below</source>
-        <translation>Aralık gir: ikili aşağı</translation>
+        <translation>Aralık gir: altına ikili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
         <source>Enter interval: third below</source>
-        <translation>Aralık gir: üçlü aşağı</translation>
+        <translation>Aralık gir: altına üçlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="931"/>
         <source>Enter interval: fourth below</source>
-        <translation>Aralık gir: dörtlü aşağı</translation>
+        <translation>Aralık gir: altına dörtlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="937"/>
         <source>Enter interval: fifth below</source>
-        <translation>Aralık gir: beşli aşağı</translation>
+        <translation>Aralık gir: altına beşli</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="943"/>
         <source>Enter interval: sixth below</source>
-        <translation>Aralık gir: altılı aşağı</translation>
+        <translation>Aralık gir: altına altılı</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="949"/>
         <source>Enter interval: seventh below</source>
-        <translation>Aralık gir: yedili aşağı</translation>
+        <translation>Aralık gir: altına yedili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="955"/>
         <source>Enter interval: octave below</source>
-        <translation>Aralık gir: oktav aşağı</translation>
+        <translation>Aralık gir: altına oktav</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="961"/>
         <source>Enter interval: ninth below</source>
-        <translation>Aralık gir: dokuzlu aşağı</translation>
+        <translation>Aralık gir: altına dokuzlu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1200"/>
@@ -9454,77 +9454,77 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
         <source>Se&amp;cond above</source>
-        <translation>&amp;İkili üstü</translation>
+        <translation>Üstüne &amp;ikili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="876"/>
         <source>Thir&amp;d above</source>
-        <translation>&amp;Üçlü üstü</translation>
+        <translation>Üstüne &amp;üçlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="882"/>
         <source>Fou&amp;rth above</source>
-        <translation>&amp;Dörtlü üstü</translation>
+        <translation>Üstüne &amp;dörtlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="888"/>
         <source>Fift&amp;h above</source>
-        <translation>B&amp;eşli üstü</translation>
+        <translation>Üstüne b&amp;eşli</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="894"/>
         <source>Si&amp;xth above</source>
-        <translation>&amp;Altılı üstü</translation>
+        <translation>Üstüne &amp;altılı</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="900"/>
         <source>Seve&amp;nth above</source>
-        <translation>&amp;Yedili üstü</translation>
+        <translation>Üstüne &amp;yedili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="906"/>
         <source>Octave &amp;above</source>
-        <translation>&amp;Oktav üstü</translation>
+        <translation>Üstüne &amp;oktav</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="912"/>
         <source>Ninth abov&amp;e</source>
-        <translation>Do&amp;kuzlu üstü</translation>
+        <translation>Üstüne do&amp;kuzlu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="918"/>
         <source>&amp;Second below</source>
-        <translation>İkili altı</translation>
+        <translation>Altına &amp;ikili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="924"/>
         <source>&amp;Third below</source>
-        <translation>Üçlü altı</translation>
+        <translation>Altına &amp;üçlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="930"/>
         <source>F&amp;ourth below</source>
-        <translation>Dörtlü altı</translation>
+        <translation>Altına &amp;dörtlü</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="936"/>
         <source>&amp;Fifth below</source>
-        <translation>Beşli altı</translation>
+        <translation>Altına b&amp;eşli</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="942"/>
         <source>S&amp;ixth below</source>
-        <translation>Altılı altı</translation>
+        <translation>Altına &amp;altılı</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="948"/>
         <source>Se&amp;venth below</source>
-        <translation>Yedili altı</translation>
+        <translation>Altına &amp;yedili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="954"/>
         <source>Octave &amp;below</source>
-        <translation>Oktav altı</translation>
+        <translation>Altına &amp;oktav</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="960"/>
@@ -9982,7 +9982,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1745"/>
         <source>Underline</source>
-        <translation>Altını çizili</translation>
+        <translation>Altı çizili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="456"/>
@@ -11826,7 +11826,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/note.cpp" line="3202"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
-        <translation>Aşağı çaprazlama dizek</translation>
+        <translation>Altına çaprazlama dizek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3206"/>
@@ -16927,17 +16927,17 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3697"/>
         <source>Accent below</source>
-        <translation>Aşağıda aksan</translation>
+        <translation>Altına aksan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3698"/>
         <source>Accent-staccato above</source>
-        <translation>Aksan-staccato yukarıda</translation>
+        <translation>Üstüne aksan-staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3699"/>
         <source>Accent-staccato below</source>
-        <translation>Aksan-staccato aşağıda</translation>
+        <translation>Altına aksan-staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3700"/>
@@ -16952,12 +16952,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3702"/>
         <source>Marcato above</source>
-        <translation>Marcato yukarıda</translation>
+        <translation>Üstüne marcato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3703"/>
         <source>Marcato below</source>
-        <translation>Marcato aşağıda</translation>
+        <translation>Altına marcato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3704"/>
@@ -16967,7 +16967,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3705"/>
         <source>Marcato-staccato below</source>
-        <translation>Marcato-staccato aşağı</translation>
+        <translation>Altına marcato-staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3706"/>
@@ -16977,137 +16977,137 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3707"/>
         <source>Marcato-tenuto below</source>
-        <translation>Marcato-tenuto aşağı</translation>
+        <translation>Altına marcato-tenuto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3708"/>
         <source>Soft accent above</source>
-        <translation>Yumuşak aksan yukarıda</translation>
+        <translation>Üstüne yumuşak aksan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3709"/>
         <source>Soft accent below</source>
-        <translation>Yumuşak aksan aşağıda</translation>
+        <translation>Altına yumuşak aksan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3710"/>
         <source>Soft accent-staccato above</source>
-        <translation>Yumuşak aksan-staccato yukarıda</translation>
+        <translation>Üstüne yumuşak aksan-staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3711"/>
         <source>Soft accent-staccato below</source>
-        <translation>Yumuşak aksan-staccato aşağıda</translation>
+        <translation>Altına yumuşak aksan-staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3712"/>
         <source>Soft accent-tenuto above</source>
-        <translation>Yumuşak aksan-tenuto yukarıda</translation>
+        <translation>Üstüne yumuşak aksan-tenuto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3713"/>
         <source>Soft accent-tenuto below</source>
-        <translation>Yumuşak aksan-tenuto aşağıda</translation>
+        <translation>Altına yumuşak aksan-tenuto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3714"/>
         <source>Soft accent-tenuto-staccato above</source>
-        <translation>Yumuşak aksan-tenuto-staccato yukarıda</translation>
+        <translation>Üstüne aksan-tenuto-staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3715"/>
         <source>Soft accent-tenuto-staccato below</source>
-        <translation>Yumuşak aksan-tenuto-staccato aşağıda</translation>
+        <translation>Altına yumuşak aksan-tenuto-staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3716"/>
         <source>Staccatissimo above</source>
-        <translation>Staccatissimo yukarıda</translation>
+        <translation>Üstüne staccatissimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3717"/>
         <source>Staccatissimo below</source>
-        <translation>Staccatissimo aşağıda</translation>
+        <translation>Altına staccatissimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3718"/>
         <source>Staccatissimo stroke above</source>
-        <translation>Staccatissimo vuruş yukarıda</translation>
+        <translation>Üstüne Staccatissimo çizgisi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3719"/>
         <source>Staccatissimo stroke below</source>
-        <translation>Staccatissimo vuruş aşağıda</translation>
+        <translation>Altına Staccatissimo çizgisi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3720"/>
         <source>Staccatissimo wedge above</source>
-        <translation>Staccatissimo wedge yukarıda</translation>
+        <translation>Üstüne staccatissimo wedge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3721"/>
         <source>Staccatissimo wedge below</source>
-        <translation>Staccatissimo wedge aşağıda</translation>
+        <translation>Altına staccatissimo wedge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3722"/>
         <source>Staccato above</source>
-        <translation>Staccato yukarıda</translation>
+        <translation>Üstüne staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3723"/>
         <source>Staccato below</source>
-        <translation>Staccato aşağıda</translation>
+        <translation>Altına staccato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3724"/>
         <source>Stress above</source>
-        <translation>Vurgu yukarıda</translation>
+        <translation>Üstüne vurgu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3725"/>
         <source>Stress below</source>
-        <translation>Vurgu aşağıda</translation>
+        <translation>Altına vurgu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3726"/>
         <source>Tenuto above</source>
-        <translation>Tenuto yukarıda</translation>
+        <translation>Üstüne tenuto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3727"/>
         <source>Tenuto-accent above</source>
-        <translation>Tenuto-aksan yukarıda</translation>
+        <translation>Üstüne tenuto-aksan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3728"/>
         <source>Tenuto-accent below</source>
-        <translation>Tenuto-aksan aşağıda</translation>
+        <translation>Altına tenuto-aksan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3729"/>
         <source>Tenuto below</source>
-        <translation>Tenuto aşağıda</translation>
+        <translation>Altına tenuto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3730"/>
         <source>Louré (tenuto-staccato) above</source>
-        <translation>Louré (tenuto-staccato) yukarıda</translation>
+        <translation>Üstüne louré (tenuto-staccato)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3731"/>
         <source>Louré (tenuto-staccato) below</source>
-        <translation>Louré (tenuto-staccato) aşağıda</translation>
+        <translation>Altına louré (tenuto-staccato)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3732"/>
         <source>Unstress above</source>
-        <translation>Vurgusuz yukarıda</translation>
+        <translation>Üstüne vurgusuz</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3733"/>
         <source>Unstress below</source>
-        <translation>Vurgusuz aşağıda</translation>
+        <translation>Altına vurgusuz</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3735"/>
@@ -17218,7 +17218,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3814"/>
         <source>Single stroke caesura</source>
-        <translation>Tek vuruşluk durak</translation>
+        <translation>Tek çizgili durak</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3815"/>
@@ -17283,7 +17283,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4069"/>
         <source>Fermata below</source>
-        <translation>Aşağı durgu</translation>
+        <translation>Altına durgu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4070"/>
@@ -17293,7 +17293,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4071"/>
         <source>Long fermata below</source>
-        <translation>Aşağı uzun durgu</translation>
+        <translation>Altına uzun durgu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4072"/>
@@ -17303,7 +17303,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4073"/>
         <source>Long fermata (Henze) below</source>
-        <translation>Aşağı kısa durgu</translation>
+        <translation>Altına kısa durgu (Henze)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4074"/>
@@ -17313,7 +17313,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4075"/>
         <source>Short fermata below</source>
-        <translation>Aşağı kısa durgu</translation>
+        <translation>Altına kısa durgu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4076"/>
@@ -17323,7 +17323,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4077"/>
         <source>Short fermata (Henze) below</source>
-        <translation>Aşağı kısa durgu (Henze)</translation>
+        <translation>Altına kısa durgu (Henze)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4078"/>
@@ -17333,7 +17333,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4079"/>
         <source>Very long fermata below</source>
-        <translation>Aşağı çok uzun durgu</translation>
+        <translation>Altına çok uzun durgu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4080"/>
@@ -17343,7 +17343,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4081"/>
         <source>Very short fermata below</source>
-        <translation>Aşağı çok kısa durgu</translation>
+        <translation>Altına çok kısa durgu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4245"/>
@@ -17533,7 +17533,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5615"/>
         <source>Snap pizzicato below</source>
-        <translation>Aşağıya yaslanmış pizzicato</translation>
+        <translation>Altına yaslanmış pizzicato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5621"/>
@@ -17763,7 +17763,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6068"/>
         <source>Up prall</source>
-        <translation>Prall yukarıda</translation>
+        <translation>Üstüne prall</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6069"/>
@@ -17773,12 +17773,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6070"/>
         <source>Prall down</source>
-        <translation>Prall aşağıda</translation>
+        <translation>Aşağıya prall</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6072"/>
         <source>Down mordent</source>
-        <translation>Aşağı mordant</translation>
+        <translation>Aşağıya mordant</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6073"/>
@@ -19357,7 +19357,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/FermataExpandableBlank.qml" line="51"/>
         <source>Time stretch</source>
-        <translation>Zamanı esnetme</translation>
+        <translation>Zamanı uzat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="51"/>
@@ -23471,7 +23471,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/view/internal/caposettingsmodel.cpp" line="136"/>
         <source>Below</source>
-        <translation>Aşağıda</translation>
+        <translation>Altında</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
