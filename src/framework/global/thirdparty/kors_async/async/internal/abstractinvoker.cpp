@@ -24,6 +24,7 @@ SOFTWARE.
 #include "abstractinvoker.h"
 
 #include <cassert>
+#include <iostream>
 
 #include "queuedinvoker.h"
 
@@ -50,21 +51,37 @@ void AbstractInvoker::invoke(int type)
 
 void AbstractInvoker::invoke(int type, const NotifyData& data)
 {
-    auto it = m_callbacks.find(type);
-    if (it == m_callbacks.end()) {
-        return;
+    CallBacks callbacks;
+    {
+        std::shared_lock lock(m_callbacksMutex);
+
+        auto it = m_callbacks.find(type);
+        if (it == m_callbacks.end()) {
+            return;
+        }
+
+        //! NOTE: explicit copy because collection can be modified from elsewhere
+        callbacks = it->second;
     }
 
     std::thread::id threadID = std::this_thread::get_id();
 
-    //! NOTE: explicit copy because collection can be modified from elsewhere
-    CallBacks callbacks = it->second;
-
     for (const CallBack& c : callbacks) {
-        if (!it->second.containsReceiver(c.receiver)) {
-            std::cout << "Skipping removed receiver";
-            continue;
+        {
+            std::shared_lock lock(m_callbacksMutex);
+
+            auto it = m_callbacks.find(type);
+            if (it == m_callbacks.end()) {
+                std::cout << "Skipping removed callback type";
+                continue;
+            }
+
+            if (!it->second.containsReceiver(c.receiver)) {
+                std::cout << "Skipping removed receiver";
+                continue;
+            }
         }
+
         if (c.threadID == threadID) {
             invokeCallback(type, c, data);
         } else {
@@ -104,6 +121,8 @@ void AbstractInvoker::onMainThreadInvoke(const std::function<void(const std::fun
 
 bool AbstractInvoker::isConnected() const
 {
+    std::shared_lock lock(m_callbacksMutex);
+
     for (auto it = m_callbacks.cbegin(); it != m_callbacks.cend(); ++it) {
         const CallBacks& cs = it->second;
         if (cs.size() > 0) {
@@ -129,6 +148,12 @@ bool AbstractInvoker::CallBacks::containsReceiver(Asyncable* receiver) const
 }
 
 void AbstractInvoker::removeCallBack(int type, Asyncable* receiver)
+{
+    std::unique_lock lock(m_callbacksMutex);
+    doRemoveCallBack(type, receiver);
+}
+
+void AbstractInvoker::doRemoveCallBack(int type, Asyncable* receiver)
 {
     auto it = m_callbacks.find(type);
     if (it == m_callbacks.end()) {
@@ -164,6 +189,8 @@ void AbstractInvoker::removeCallBack(int type, Asyncable* receiver)
 
 void AbstractInvoker::removeAllCallBacks()
 {
+    std::unique_lock lock(m_callbacksMutex);
+
     for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it) {
         for (CallBack& c : it->second) {
             if (c.receiver) {
@@ -178,6 +205,8 @@ void AbstractInvoker::removeAllCallBacks()
 
 void AbstractInvoker::addCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode)
 {
+    std::unique_lock lock(m_callbacksMutex);
+
     const CallBacks& callbacks = m_callbacks[type];
     if (callbacks.containsReceiver(receiver)) {
         switch (mode) {
@@ -185,7 +214,7 @@ void AbstractInvoker::addCallBack(int type, Asyncable* receiver, void* call, Asy
             deleteCall(type, call);
             return;
         case Asyncable::AsyncMode::AsyncSetRepeat:
-            removeCallBack(type, receiver);
+            doRemoveCallBack(type, receiver);
             break;
         }
     }
@@ -200,6 +229,8 @@ void AbstractInvoker::addCallBack(int type, Asyncable* receiver, void* call, Asy
 
 void AbstractInvoker::disconnectAsync(Asyncable* receiver)
 {
+    std::unique_lock lock(m_callbacksMutex);
+
     std::vector<int> types;
     for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it) {
         for (CallBack& c : it->second) {
@@ -210,7 +241,7 @@ void AbstractInvoker::disconnectAsync(Asyncable* receiver)
     }
 
     for (int type : types) {
-        removeCallBack(type, receiver);
+        doRemoveCallBack(type, receiver);
     }
 }
 
@@ -228,6 +259,8 @@ void AbstractInvoker::removeQInvoker(QInvoker* qi)
 
 bool AbstractInvoker::containsReceiver(Asyncable* receiver) const
 {
+    std::shared_lock lock(m_callbacksMutex);
+
     for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it) {
         for (const CallBack& c : it->second) {
             if (c.receiver == receiver) {

@@ -27,9 +27,9 @@ SOFTWARE.
 #include <memory>
 #include <vector>
 #include <list>
-#include <iostream>
 #include <map>
 #include <mutex>
+#include <shared_mutex>
 #include <thread>
 #include <functional>
 
@@ -106,6 +106,11 @@ protected:
     virtual void deleteCall(int type, void* call) = 0;
     virtual void doInvoke(int type, void* call, const NotifyData& data) = 0;
 
+    void addCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetRepeat);
+    void removeCallBack(int type, Asyncable* receiver);
+    void removeAllCallBacks();
+
+private:
     struct CallBack {
         std::thread::id threadID;
         int type = 0;
@@ -166,15 +171,14 @@ protected:
 
     void invokeCallback(int type, const CallBack& c, const NotifyData& data);
 
-    void addCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetRepeat);
-    void removeCallBack(int type, Asyncable* receiver);
-    void removeAllCallBacks();
+    void doRemoveCallBack(int type, Asyncable* receiver);
 
     void addQInvoker(QInvoker* qi);
     void removeQInvoker(QInvoker* qi);
 
     bool containsReceiver(Asyncable* receiver) const;
 
+    mutable std::shared_mutex m_callbacksMutex;
     std::map<int /*type*/, CallBacks > m_callbacks;
 
     std::mutex m_qInvokersMutex;
