@@ -610,7 +610,8 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
     return KerningType::KERNING;
 }
 
-KerningType HorizontalSpacing::computeNoteDotKerningType(const EngravingItem* item2) {
+KerningType HorizontalSpacing::computeNoteDotKerningType(const EngravingItem* item2)
+{
     EngravingItem* nextParent = item2->parentItem(true);
     if (nextParent && nextParent->isNote() && toNote(nextParent)->isTrillCueNote()) {
         return KerningType::NON_KERNING;
