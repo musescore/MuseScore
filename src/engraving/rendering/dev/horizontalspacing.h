@@ -22,9 +22,6 @@
 #ifndef MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
 #define MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
 
-#include <dom/notedot.h>
-
-
 namespace mu::engraving {
 class Chord;
 class EngravingItem;
