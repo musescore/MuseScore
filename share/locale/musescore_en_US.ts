@@ -22164,12 +22164,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="80"/>
         <source>Beam thickness</source>
-        <translation>Beam thickness:</translation>
+        <translation>Beam thickness</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="100"/>
         <source>Broken beam minimum length</source>
-        <translation>Broken beam minimum length:</translation>
+        <translation>Broken beam minimum length</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="121"/>

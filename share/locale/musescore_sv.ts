@@ -5076,12 +5076,12 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
         <source>Dock window</source>
-        <translation type="unfinished"/>
+        <translation>Docka fönster</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
         <source>Undock window</source>
-        <translation type="unfinished"/>
+        <translation>Docka ur fönster</translation>
     </message>
 </context>
 <context>
@@ -12882,7 +12882,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1148"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>Sidnummer</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1156"/>
@@ -17997,13 +17997,13 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
         <source>Enabled</source>
-        <translation>Aktiverat</translation>
+        <translation>Aktiverade</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="145"/>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="92"/>
         <source>Disabled</source>
-        <translation>Avaktiverat</translation>
+        <translation>Inaktiverade</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="192"/>
@@ -18014,13 +18014,13 @@ Band %1 på strängar %2</translation>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="194"/>
         <source>Shortcut:</source>
         <extracomment>Keyboard shortcut</extracomment>
-        <translation>Genväg:</translation>
+        <translation>Kortkommando:</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="80"/>
         <source>Edit shortcut</source>
         <extracomment>Edit the keyboard shortcut assigned to a plug-in</extracomment>
-        <translation>Redigera genväg</translation>
+        <translation>Ändra kortkommando</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="103"/>
@@ -18030,7 +18030,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="103"/>
         <source>Disable</source>
-        <translation>Avaktivera</translation>
+        <translation>Inaktivera</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="46"/>
@@ -18050,7 +18050,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="72"/>
         <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
-        <translation>Insticksprogrammet “%1” är avaktiverat. Vill du aktivera det nu?</translation>
+        <translation>Insticksprogrammet “%1” är inaktiverat. Vill du aktivera det nu?</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="73"/>
@@ -27214,7 +27214,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
         <source>Search recent scores</source>
-        <translation>Sök senaste stycke</translation>
+        <translation>Sök bland senaste noter</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="143"/>

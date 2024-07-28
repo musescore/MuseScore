@@ -6538,7 +6538,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation>Effacer la liste des partitions récentes</translation>
+        <translation>&amp;Effacer la liste des partitions récentes</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
@@ -8863,22 +8863,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="75"/>
         <source>About &amp;MusicXML…</source>
-        <translation>À propos de &amp;MusicXML…</translation>
+        <translation>À propos de Music&amp;XML…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="80"/>
         <source>Online &amp;handbook</source>
-        <translation>Manuel en &amp;ligne</translation>
+        <translation>&amp;Manuel en ligne</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="86"/>
         <source>As&amp;k for help</source>
-        <translation>Demander de l&apos;aide</translation>
+        <translation>&amp;Demander de l&apos;aide</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="91"/>
         <source>Revert to &amp;factory settings</source>
-        <translation>Restaurer les paramètres par défaut</translation>
+        <translation>&amp;Restaurer les paramètres par défaut</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="107"/>
@@ -9018,7 +9018,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
         <source>&amp;Note input</source>
-        <translation>&amp;Saisie des notes</translation>
+        <translation>Saisie des &amp;notes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
@@ -9033,7 +9033,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/update/internal/updateuiactions.cpp" line="36"/>
         <source>Check for &amp;update</source>
-        <translation>Rechercher les mises à jour</translation>
+        <translation>Rechercher les mises à jo&amp;ur</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="178"/>
@@ -9198,12 +9198,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
         <source>Show &amp;invisible</source>
-        <translation>Afficher les éléments invisibles</translation>
+        <translation>Afficher les éléments &amp;invisibles</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
         <source>Show f&amp;ormatting</source>
-        <translation>Afficher les symboles de mise en page</translation>
+        <translation>Afficher les symb&amp;oles de mise en page</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2396"/>
@@ -9213,12 +9213,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2402"/>
         <source>Show &amp;frames</source>
-        <translation>Afficher les cadres</translation>
+        <translation>Afficher les &amp;cadres</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
         <source>Show page &amp;margins</source>
-        <translation>Afficher les marges des pages</translation>
+        <translation>Afficher les &amp;marges des pages</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="71"/>
@@ -9333,22 +9333,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="437"/>
         <source>&amp;Implode</source>
-        <translation>&amp;Rassembler</translation>
+        <translation>Ra&amp;ssembler</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>Realize &amp;chord symbols</source>
-        <translation>Créer les notes des symboles d&apos;accord</translation>
+        <translation>Créer les notes des symboles d&apos;a&amp;ccord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
         <source>Remove selected ran&amp;ge</source>
-        <translation>Supprimer la plage sélectionnée</translation>
+        <translation>Supprimer la pla&amp;ge sélectionnée</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>Activer / Désactiver : Notation rythmique avec des slashs</translation>
+        <translation>Activer / Désactiver la notation rythmique avec des sl&amp;ashs</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
@@ -9358,27 +9358,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
         <source>Respell &amp;pitches</source>
-        <translation>Échanger les notes enharmoniques</translation>
+        <translation>Échanger les &amp;notes enharmoniques</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="474"/>
         <source>Regroup &amp;rhythms</source>
-        <translation>Regrouper les rythmes</translation>
+        <translation>Regrouper les &amp;rythmes</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="480"/>
         <source>Resequence re&amp;hearsal marks</source>
-        <translation>Remettre les repères dans l&apos;ordre</translation>
+        <translation>Remettre les re&amp;pères dans l&apos;ordre</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="492"/>
         <source>Copy &amp;lyrics to clipboard</source>
-        <translation>Copier les paroles dans le presse-papier</translation>
+        <translation>Copier les paro&amp;les dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="498"/>
         <source>Remove empty trailing meas&amp;ures</source>
-        <translation>Supprimer les mesures restantes</translation>
+        <translation>Supprimer les mes&amp;ures restantes</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="505"/>
@@ -9453,82 +9453,82 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
         <source>Se&amp;cond above</source>
-        <translation>Seconde au-dessus</translation>
+        <translation>Se&amp;conde au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="876"/>
         <source>Thir&amp;d above</source>
-        <translation>Tierce au-dessus</translation>
+        <translation>Tie&amp;rce au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="882"/>
         <source>Fou&amp;rth above</source>
-        <translation>Qua&amp;rte au-dessus</translation>
+        <translation>Qu&amp;arte au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="888"/>
         <source>Fift&amp;h above</source>
-        <translation>Quinte au-dessus</translation>
+        <translation>&amp;Quinte au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="894"/>
         <source>Si&amp;xth above</source>
-        <translation>Sixte au-dessus</translation>
+        <translation>Si&amp;xte au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="900"/>
         <source>Seve&amp;nth above</source>
-        <translation>Septième au-dessus</translation>
+        <translation>Sep&amp;tième au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="906"/>
         <source>Octave &amp;above</source>
-        <translation>Octave au-dessus</translation>
+        <translation>&amp;Octave au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="912"/>
         <source>Ninth abov&amp;e</source>
-        <translation>Neuvième au-dessus</translation>
+        <translation>&amp;Neuvième au-dessus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="918"/>
         <source>&amp;Second below</source>
-        <translation>&amp;Seconde en-dessous</translation>
+        <translation>&amp;Seconde au-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="924"/>
         <source>&amp;Third below</source>
-        <translation>&amp;Tierce en-dessous</translation>
+        <translation>Ti&amp;erce au-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="930"/>
         <source>F&amp;ourth below</source>
-        <translation>Qu&amp;arte en-dessous</translation>
+        <translation>Quarte au-&amp;dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="936"/>
         <source>&amp;Fifth below</source>
-        <translation>Qu&amp;inte en-dessous</translation>
+        <translation>Qu&amp;inte au-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="942"/>
         <source>S&amp;ixth below</source>
-        <translation>Si&amp;xte en-dessous</translation>
+        <translation>Sixte au&amp;-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="948"/>
         <source>Se&amp;venth below</source>
-        <translation>Se&amp;ptième en-dessous</translation>
+        <translation>Se&amp;ptième au-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="954"/>
         <source>Octave &amp;below</source>
-        <translation>Octave en-dessous</translation>
+        <translation>Octa&amp;ve au-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="960"/>
         <source>Ninth belo&amp;w</source>
-        <translation>Neuvième en-dessous</translation>
+        <translation>Neuvi&amp;ème au-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1187"/>
@@ -9956,7 +9956,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2423"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation>Marquer les mesures irrégulières</translation>
+        <translation>Marquer les mesures i&amp;rrégulières</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
@@ -9997,7 +9997,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="42"/>
         <source>Show &amp;scripts…</source>
-        <translation>Afficher les scripts…</translation>
+        <translation>Afficher les &amp;scripts…</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="38"/>
@@ -10054,7 +10054,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation>Afficher l&apos;accessibility tree…</translation>
+        <translation>Afficher l&apos;&amp;accessibility tree…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
@@ -10069,7 +10069,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
         <source>&amp;Multiinstances</source>
-        <translation>&amp;Multi-instance</translation>
+        <translation>Multi-&amp;instances</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>

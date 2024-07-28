@@ -19377,7 +19377,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="168"/>
         <source>Batterie</source>
-        <translation type="unfinished"/>
+        <translation>Batterie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="169"/>
@@ -19392,7 +19392,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="171"/>
         <source>Voice Groups</source>
-        <translation type="unfinished"/>
+        <translation>Gruppi tal-Vuċijiet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="172"/>
@@ -19402,7 +19402,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="173"/>
         <source>Keyboards</source>
-        <translation type="unfinished"/>
+        <translation>Keyboards</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="174"/>
@@ -19633,7 +19633,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4585"/>
         <source>Keyboards</source>
-        <translation type="unfinished"/>
+        <translation>Keyboards</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4750"/>

@@ -9,7 +9,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="76"/>
         <source>Center text on reference point</source>
-        <translation>Centrer tekst om referencepunkt</translation>
+        <translation>Centrér tekst om referencepunkt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="101"/>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="164"/>
         <source>Center text vertical to reference point</source>
-        <translation>Centrer tekst lodret mod referencepunkt</translation>
+        <translation>Centrér tekst lodret mod referencepunkt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="189"/>
@@ -1141,22 +1141,22 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="704"/>
         <source>0 - Diminished second</source>
-        <translation>0 - Formindsket andenstemme</translation>
+        <translation>0 - Formindsket sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="709"/>
         <source>1 - Minor second</source>
-        <translation>1 - Mol andenstemme</translation>
+        <translation>1 - Lille sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="714"/>
         <source>2 - Major second</source>
-        <translation>2 - Dur andenstemme</translation>
+        <translation>2 - stor sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="719"/>
         <source>3 - Augmented second</source>
-        <translation>3 - Forstærket andenstemme</translation>
+        <translation>3 - Forstørret sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="724"/>
@@ -2809,12 +2809,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="612"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation>Nulstil værdi for &apos;Instrumentmærkater i efterfølgende systemer&apos;</translation>
+        <translation>Nulstil værdi for &apos;Instrumentmærke i efterfølgende systemer&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="632"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation>Nulstil værdi for &apos;Instrumentmærkater i første system af et afsnit&apos;</translation>
+        <translation>Nulstil værdi for &apos;Instrumentmærke i første system af et afsnit&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="642"/>
@@ -3084,17 +3084,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5404"/>
         <source>Only before courtesy key signatures</source>
-        <translation>Kun før hjælpetoneartangivelser</translation>
+        <translation>Kun før hjælpetoneartsangivelser</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5414"/>
         <source>Use double barlines before time signatures</source>
-        <translation>Brug dobbelte taktstreger før taktartangivelser</translation>
+        <translation>Brug dobbelte taktstreger før taktartsangivelser</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5434"/>
         <source>Only before courtesy time signatures</source>
-        <translation>Kun før hjælpetaktsartangivelser</translation>
+        <translation>Kun før hjælpetaktartsangivelser</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5688"/>
@@ -3176,7 +3176,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7921"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation>Stemme 1 &amp; 3 over nodelinje, stemme 2 og 4 under nodelinje</translation>
+        <translation>Stemme 1 &amp; 3 over nodelinje, stemme 2 &amp; 4 under nodelinje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
@@ -6053,22 +6053,22 @@ tekstens x-højde)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="222"/>
         <source>Diminished second</source>
-        <translation>Formindsket andenstemme</translation>
+        <translation>Formindsket sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="227"/>
         <source>Minor second</source>
-        <translation>Mol andenstemme</translation>
+        <translation>Lille sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="232"/>
         <source>Major second</source>
-        <translation>Dur andenstemme</translation>
+        <translation>Stor sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="237"/>
         <source>Augmented second</source>
-        <translation>Forstærket andenstemme</translation>
+        <translation>Forstørret sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="242"/>
@@ -6203,7 +6203,7 @@ tekstens x-højde)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="409"/>
         <source>Second</source>
-        <translation>Andenstemme</translation>
+        <translation>Sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="414"/>
@@ -7715,7 +7715,7 @@ tekstens x-højde)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
         <source>Enter interval: second above</source>
-        <translation>Indtast interval: Anden over</translation>
+        <translation>Indtast interval: sekund over</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="877"/>
@@ -7755,7 +7755,7 @@ tekstens x-højde)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
         <source>Enter interval: second below</source>
-        <translation>Indtast interval: Anden under</translation>
+        <translation>Indtast interval: sekund under</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
@@ -9493,7 +9493,7 @@ tekstens x-højde)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="918"/>
         <source>&amp;Second below</source>
-        <translation>&amp;Anden under</translation>
+        <translation>Sekund under</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="924"/>
@@ -13399,7 +13399,7 @@ Publiceret i henhold til &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="202"/>
         <source>%n measure(s)</source>
-        <translation><numerusform>%n takt</numerusform><numerusform>%n takt(er)</numerusform></translation>
+        <translation><numerusform>%n takt</numerusform><numerusform>%n takter</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="61"/>
@@ -15836,7 +15836,7 @@ Bånd %1 på strenge %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1531"/>
         <source>Jazz tone</source>
-        <translation>Jazztone</translation>
+        <translation>Jazz tone</translation>
     </message>
 </context>
 <context>
@@ -15867,7 +15867,7 @@ Bånd %1 på strenge %2</translation>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="423"/>
         <source>Dashed</source>
-        <translation>Stiplet</translation>
+        <translation>Stiplet (-)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="425"/>
@@ -17997,13 +17997,13 @@ Bånd %1 på strenge %2</translation>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
         <source>Enabled</source>
-        <translation>Slået til</translation>
+        <translation>Aktiveret</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="145"/>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="92"/>
         <source>Disabled</source>
-        <translation>Slået fra</translation>
+        <translation>Deaktiveret</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="192"/>
@@ -18020,17 +18020,17 @@ Bånd %1 på strenge %2</translation>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="80"/>
         <source>Edit shortcut</source>
         <extracomment>Edit the keyboard shortcut assigned to a plug-in</extracomment>
-        <translation>Redigér genvej</translation>
+        <translation>Ændr genvej</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="103"/>
         <source>Enable</source>
-        <translation>Slå til</translation>
+        <translation>Aktivér</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="103"/>
         <source>Disable</source>
-        <translation>Slå fra</translation>
+        <translation>Deaktivér</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="46"/>
@@ -18045,7 +18045,7 @@ Bånd %1 på strenge %2</translation>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
         <source>Plugin is not in the correct format</source>
-        <translation>Programudvidelse har ukorrekt format</translation>
+        <translation>Programudvidelsen har ikke korrekt format</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="72"/>
@@ -21370,19 +21370,19 @@ optakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="59"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="77"/>
         <source>Minor second</source>
-        <translation>Mol andenstemme</translation>
+        <translation>Lille sekund</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="60"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="78"/>
         <source>Major second</source>
-        <translation>Dur andenstemme</translation>
+        <translation>Stor sekund</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="79"/>
         <source>Augmented second</source>
-        <translation>Forstærket andenstemme</translation>
+        <translation>Forstørret sekund</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="69"/>
@@ -21433,7 +21433,7 @@ optakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="159"/>
         <source>Second</source>
-        <translation>Andenstemme</translation>
+        <translation>Sekund</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="160"/>
@@ -23522,22 +23522,22 @@ Uanset om du lige er begyndt med notationssoftware, eller er en superbruger, der
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
         <source>Keep accidentals close to offset notes</source>
-        <translation>Hold fortegn tæt på forskudte noder</translation>
+        <translation>Hold fortegn tæt på spejlvendte noder</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
         <source>Pair accidentals on seconds</source>
-        <translation>Par fortegn på andenstemmer</translation>
+        <translation>Par fortegn ved sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation>Justér fortegn en oktav fra hinanden på tværs af delakkorder</translation>
+        <translation>Justér fortegn på række over oktaver på tværs af delakkord</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
-        <translation>Justér fortegn på forskudte oktaver</translation>
+        <translation>Justér fortegn på række over oktaver</translation>
     </message>
 </context>
 <context>
@@ -27152,7 +27152,7 @@ fejlede.</translation>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>Lydflag kan nulstilles, men nodelinjeteksten vil være uændret. Handlingen kan ikke fortrydes.</translation>
+        <translation>Sound flag kan nulstilles, men nodelinjeteksten forbliver uændret. Denne handling kan ikke fortrydes.</translation>
     </message>
 </context>
 <context>
