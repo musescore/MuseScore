@@ -986,18 +986,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     //-------------------------------------------------------------
-    // Drumline sticking
-    //-------------------------------------------------------------
-
-    for (const Segment* s : sl) {
-        for (EngravingItem* e : s->annotations()) {
-            if (e->isSticking()) {
-                TLayout::layoutItem(e, ctx);
-            }
-        }
-    }
-
-    //-------------------------------------------------------------
     // layout slurs
     //-------------------------------------------------------------
 
@@ -1029,6 +1017,18 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
         if (ecr && ecr->isChord()) {
             ChordLayout::layoutArticulations3(toChord(ecr), slur, ctx);
+        }
+    }
+
+    //-------------------------------------------------------------
+    // Drumline sticking
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isSticking()) {
+                TLayout::layoutItem(e, ctx);
+            }
         }
     }
 
