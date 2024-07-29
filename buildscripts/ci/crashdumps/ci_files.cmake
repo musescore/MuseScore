@@ -1,6 +1,9 @@
 set(CI_FILES
     README.md
     view_dump.sh
+
+    ci_generate_and_upload.cmake
+
     ci_generate_dumpsyms.cmake
     generate_syms.cmake
     ci_sentry_dumpsyms_upload.cmake

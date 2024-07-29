@@ -186,13 +186,6 @@ jobs:
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         buildscripts\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL%
-    - name: Generate dump symbols
-      if: env.DO_BUILD == 'true'
-      shell: bash
-      run: |
-        APP_BIN=$(pwd)/build.release/src/app/MuseScore4.pdb
-        cmake -DAPP_BIN=${APP_BIN} \
-              -P buildscripts/ci/crashdumps/ci_generate_dumpsyms.cmake
     - name: Package
       if: env.DO_BUILD == 'true'
       shell: cmd
@@ -205,15 +198,17 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
-    - name: Upload dump symbols
+    - name: Generate and upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       shell: bash
       run: |
-        cmake -DSENTRY_URL=https://sentry.musescore.org \
+        APP_BIN=$(pwd)/build.release/src/app/MuseScore4.pdb
+        cmake -DAPP_BIN=${APP_BIN} \
+              -DSENTRY_URL=https://sentry.musescore.org \
               -DSENTRY_ORG=musescore \
               -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
               -DSENTRY_PROJECT=${SENTRY_PROJECT} \
-              -P buildscripts/ci/crashdumps/ci_sentry_dumpsyms_upload.cmake
+              -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       shell: bash
