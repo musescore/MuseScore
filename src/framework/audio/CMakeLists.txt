@@ -54,6 +54,13 @@ elseif(OS_IS_LIN OR OS_IS_FBSD)
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
         )
+        if (MUSE_MODULE_AUDIO_PW)
+            set(DRIVER_SRC
+                ${DRIVER_SRC}
+                ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/pwaudiodriver.cpp
+                ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/pwaudiodriver.h
+            )
+        endif()
     endif()
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
@@ -330,6 +337,7 @@ else ()
             pkg_check_modules(PipeWire REQUIRED libpipewire-0.3)
             set(MODULE_INCLUDE ${MODULE_INCLUDE} ${PipeWire_INCLUDE_DIRS} )
             set(MODULE_LINK ${MODULE_LINK} ${PipeWire_LIBRARIES} pthread )
+            set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_AUDIO_PW)
         else()
         endif()
     endif()
