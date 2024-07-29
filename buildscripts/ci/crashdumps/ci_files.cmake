@@ -3,6 +3,7 @@ set(CI_FILES
     view_dump.sh
     ci_generate_dumpsyms.cmake
     generate_syms.cmake
+    ci_sentry_dumpsyms_upload.cmake
 
     posix/generate_breakpad_symbols.py
     win/generate_breakpad_symbols.py
