@@ -34,6 +34,7 @@ Item {
 
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
+    property bool isRemapPercussion: true
 
     property NavigationSection navigationSection: null
 
@@ -45,6 +46,7 @@ Item {
     signal isAskAgainChangeRequested(bool askAgain)
     signal isApplyLelandChangeRequested(bool applyLeland)
     signal isApplyEdwinChangeRequested(bool applyEdwin)
+    signal isRemapPercussionChangeRequested(bool remapPercussion)
 
     signal watchVideoRequested()
     signal access()
@@ -155,9 +157,20 @@ Item {
             }
         }
 
-        Item {
-            width: 1
-            height: 16
+        CheckBox {
+            id: percussionOption
+            anchors.left: parent.left
+            height: 32
+            text: qsTrc("project/migration", "Our new notation and sound mapping for <a href=\"%1\">MDL percussion</a>")
+                  .arg("https://musescore.org/en/handbook/4") // TODO: Replace with link to page about MDL migration.
+            checked: root.isRemapPercussion
+
+            navigation.panel: mainContent.navigationPanel
+            navigation.row: 3
+
+            onClicked: {
+                root.isRemapPercussionChangeRequested(!checked)
+            }
         }
 
         StyledTextLabel {
@@ -201,14 +214,6 @@ Item {
             section: root.navigationSection
             accessible.role: MUAccessible.Dialog
             order: 1
-        }
-
-        Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: -16
-            height: 2
-            color: ui.theme.buttonColor
         }
 
         CheckBox {

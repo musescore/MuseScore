@@ -61,6 +61,7 @@ struct MigrationOptions
 
     bool isApplyLeland = true;
     bool isApplyEdwin = true;
+    bool isRemapPercussion = true;
 
     bool isValid() const { return appVersion != 0; }
 };

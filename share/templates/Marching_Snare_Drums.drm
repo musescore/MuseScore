@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.40">
+  <Drum pitch="55">
+    <head>plus</head>
+    <line>-1</line>
+    <voice>0</voice>
+    <name>Stick click</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="50">
+    <head>normal</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Hit</name>
+    <stem>1</stem>
+    <shortcut>A</shortcut>
+    </Drum>
+  <Drum pitch="53">
+    <head>cross</head>
+    <line>0</line>
+    <voice>0</voice>
+    <name>Rim</name>
+    <stem>1</stem>
+    <shortcut>C</shortcut>
+    </Drum>
+  <Drum pitch="57">
+    <head>slashed2</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Stick Shot</name>
+    <stem>1</stem>
+    <shortcut>F</shortcut>
+    </Drum>
+  <Drum pitch="56">
+    <head>slashed1</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Cross Stick</name>
+    <stem>1</stem>
+    <shortcut>E</shortcut>
+    </Drum>
+  <Drum pitch="49">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadRoundWhiteWithDot</whole>
+      <half>noteheadRoundWhiteWithDot</half>
+      <quarter>noteheadRoundWhiteWithDot</quarter>
+      <breve>noteheadRoundWhiteWithDot</breve>
+      </noteheads>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Ping Shot</name>
+    <stem>1</stem>
+    <shortcut>D</shortcut>
+    </Drum>
+  <Drum pitch="51">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Rim Shot</name>
+    <stem>1</stem>
+    <shortcut>B</shortcut>
+    </Drum>
+  <Drum pitch="52">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadCircleX</whole>
+      <half>noteheadCircleX</half>
+      <quarter>noteheadCircleX</quarter>
+      <breve>noteheadCircleX</breve>
+      </noteheads>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Gok Shot</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="60">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadTriangleRoundDownWhite</whole>
+      <half>noteheadTriangleRoundDownWhite</half>
+      <quarter>noteheadTriangleRoundDownBlack</quarter>
+      <breve>noteShapeTriangleRoundDoubleWhole</breve>
+      </noteheads>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Back Stick</name>
+    <stem>1</stem>
+    <shortcut>G</shortcut>
+    </Drum>
+  </museScore>

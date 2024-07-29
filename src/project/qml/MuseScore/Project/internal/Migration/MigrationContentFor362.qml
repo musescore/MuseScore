@@ -32,6 +32,7 @@ ColumnLayout {
 
     property string appVersion: ""
     property bool isAskAgain: false
+    property bool isRemapPercussion: true
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "MigrationPanel"
@@ -44,6 +45,7 @@ ColumnLayout {
     }
 
     signal isAskAgainChangeRequested(bool askAgain)
+    signal isRemapPercussionChangeRequested(bool remapPercussion)
     signal watchVideoRequested()
     signal access()
 
@@ -91,6 +93,24 @@ ColumnLayout {
         elide: Text.ElideNone
 
         text: qsTrc("project/migration", "Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.")
+    }
+
+    CheckBox {
+        id: percussionOption
+
+        Layout.fillWidth: true
+        height: 32
+
+        text: qsTrc("project/migration", "Use our new notation and sound mapping for <a href=\"%1\">MDL percussion</a>")
+              .arg("https://musescore.org/en/handbook/4") // TODO: Replace with link to page about MDL migration.
+        checked: root.isRemapPercussion
+
+        navigation.panel: navigationPanel
+        navigation.row: 3
+
+        onClicked: {
+            root.isRemapPercussionChangeRequested(!checked)
+        }
     }
 
     CheckBox {
