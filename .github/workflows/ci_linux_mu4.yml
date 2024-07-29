@@ -179,14 +179,6 @@ jobs:
         sudo bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
         echo "============== ccache ==============="
         ccache -s
-    - name: Generate dump symbols
-      if: env.DO_BUILD == 'true'
-      run: |
-        APP_BIN=$(find "$(pwd)/build.release/src/app/" -type f -name "mscore4portable*" -print -quit)
-        ARCH=x86-64
-        sudo cmake -DAPP_BIN=${APP_BIN} \
-                   -DARCH=${ARCH} \
-                   -P buildscripts/ci/crashdumps/ci_generate_dumpsyms.cmake
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
@@ -195,14 +187,18 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./buildscripts/ci/tools/checksum.sh 
-    - name: Upload dump symbols
+    - name: Generate and upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       run: |
-        cmake -DSENTRY_URL=https://sentry.musescore.org \
-              -DSENTRY_ORG=musescore \
-              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
-              -P buildscripts/ci/crashdumps/ci_sentry_dumpsyms_upload.cmake
+        APP_BIN=$(find "$(pwd)/build.release/src/app/" -type f -name "mscore4portable*" -print -quit)
+        ARCH=x86-64
+        sudo cmake -DAPP_BIN=${APP_BIN} \
+                   -DARCH=${ARCH} \
+                   -DSENTRY_URL=https://sentry.musescore.org \
+                   -DSENTRY_ORG=musescore \
+                   -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+                   -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+                   -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
