@@ -46,28 +46,40 @@ public:
 
     virtual ~AbstractEventSequencer()
     {
-        m_mainStreamChanges.resetOnReceive(this);
-        m_offStreamChanges.resetOnReceive(this);
+        m_playbackData.mainStream.resetOnReceive(this);
+        m_playbackData.offStream.resetOnReceive(this);
     }
 
     void load(const mpe::PlaybackData& data)
     {
         ONLY_AUDIO_WORKER_THREAD;
 
-        m_mainStreamChanges = data.mainStream;
-        m_offStreamChanges = data.offStream;
+        m_playbackData = data;
 
-        m_mainStreamChanges.onReceive(this,
-                                      [this](const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                             const mpe::PlaybackParamLayers& params) {
-            updateMainStreamEvents(events, dynamics, params);
+        m_playbackData.mainStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events,
+                                                         const mpe::DynamicLevelLayers& dynamics,
+                                                         const mpe::PlaybackParamLayers& params) {
+            m_playbackData.originEvents = events;
+            m_playbackData.dynamics = dynamics;
+            m_playbackData.params = params;
+            m_shouldUpdateMainStreamEvents = true;
+
+            if (m_isActive) {
+                updateMainStreamEvents(events, dynamics, params);
+                m_shouldUpdateMainStreamEvents = false;
+            }
         });
 
-        m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) {
+        m_playbackData.offStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) {
             updateOffStreamEvents(events, params);
         });
 
         updateMainStreamEvents(data.originEvents, data.dynamics, data.params);
+    }
+
+    const mpe::PlaybackData& playbackData() const
+    {
+        return m_playbackData;
     }
 
     virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) = 0;
@@ -76,7 +88,16 @@ public:
 
     void setActive(const bool active)
     {
+        if (m_isActive == active) {
+            return;
+        }
+
         m_isActive = active;
+
+        if (m_isActive && m_shouldUpdateMainStreamEvents) {
+            updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
+            m_shouldUpdateMainStreamEvents = false;
+        }
     }
 
     bool isActive() const
@@ -117,7 +138,7 @@ public:
 
     mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
     {
-        for (const auto& layer : m_dynamicLevelLayers) {
+        for (const auto& layer : m_playbackData.dynamics) {
             const mpe::DynamicLevelMap& dynamics = layer.second;
             auto it = muse::findLessOrEqual(dynamics, position);
             if (it != dynamics.end()) {
@@ -128,13 +149,14 @@ public:
         return mpe::dynamicLevelFromType(muse::mpe::DynamicType::Natural);
     }
 
-    EventSequence eventsToBePlayed(const msecs_t nextMsecs)
+    EventSequenceMap movePlaybackForward(const msecs_t nextMsecs)
     {
         ONLY_AUDIO_WORKER_THREAD;
 
-        EventSequence result;
+        EventSequenceMap result;
 
         if (!m_isActive) {
+            result.emplace(0, EventSequence());
             handleOffStream(result, nextMsecs);
             return result;
         }
@@ -142,6 +164,8 @@ public:
         if (m_currentMainSequenceIt == m_mainStreamEvents.cend()) {
             return result;
         }
+
+        result.emplace(m_playbackPosition, EventSequence());
 
         m_playbackPosition += nextMsecs;
 
@@ -174,15 +198,18 @@ protected:
         m_currentDynamicsIt = m_dynamicEvents.lower_bound(m_playbackPosition);
     }
 
-    void handleOffStream(EventSequence& result, const msecs_t nextMsecs)
+    void handleOffStream(EventSequenceMap& result, const msecs_t nextMsecs)
     {
         if (m_offStreamEvents.empty() || m_currentOffSequenceIt == m_offStreamEvents.cend()) {
             return;
         }
 
         if (m_currentOffSequenceIt->first <= nextMsecs) {
-            result = m_currentOffSequenceIt->second;
-            m_currentOffSequenceIt = m_offStreamEvents.erase(m_currentOffSequenceIt);
+            while (m_currentOffSequenceIt != m_offStreamEvents.end()
+                   && m_currentOffSequenceIt->first <= nextMsecs) {
+                result.insert_or_assign(m_currentOffSequenceIt->first, std::move(m_currentOffSequenceIt->second));
+                m_currentOffSequenceIt = m_offStreamEvents.erase(m_currentOffSequenceIt);
+            }
         } else {
             auto node = m_offStreamEvents.extract(m_currentOffSequenceIt);
             node.key() -= nextMsecs;
@@ -191,26 +218,28 @@ protected:
         }
     }
 
-    void handleMainStream(EventSequence& result)
+    void handleMainStream(EventSequenceMap& result)
     {
-        if (m_currentMainSequenceIt->first <= m_playbackPosition) {
-            result.insert(m_currentMainSequenceIt->second.cbegin(),
-                          m_currentMainSequenceIt->second.cend());
-
+        while (m_currentMainSequenceIt != m_mainStreamEvents.end()
+               && m_currentMainSequenceIt->first < m_playbackPosition) {
+            EventSequence& sequence = result[m_currentMainSequenceIt->first];
+            sequence.insert(m_currentMainSequenceIt->second.cbegin(),
+                            m_currentMainSequenceIt->second.cend());
             m_currentMainSequenceIt = std::next(m_currentMainSequenceIt);
         }
     }
 
-    void handleDynamicChanges(EventSequence& result)
+    void handleDynamicChanges(EventSequenceMap& result)
     {
-        if (m_dynamicEvents.empty() || m_currentDynamicsIt == m_dynamicEvents.cend()) {
+        if (m_dynamicEvents.empty()) {
             return;
         }
 
-        if (m_currentDynamicsIt->first <= m_playbackPosition) {
-            result.insert(m_currentDynamicsIt->second.cbegin(),
-                          m_currentDynamicsIt->second.cend());
-
+        while (m_currentDynamicsIt != m_dynamicEvents.end()
+               && m_currentDynamicsIt->first < m_playbackPosition) {
+            EventSequence& sequence = result[m_currentDynamicsIt->first];
+            sequence.insert(m_currentDynamicsIt->second.cbegin(),
+                            m_currentDynamicsIt->second.cend());
             m_currentDynamicsIt = std::next(m_currentDynamicsIt);
         }
     }
@@ -225,15 +254,15 @@ protected:
     EventSequenceMap m_offStreamEvents;
     EventSequenceMap m_dynamicEvents;
 
-    mpe::DynamicLevelLayers m_dynamicLevelLayers;
+    mpe::PlaybackData m_playbackData;
 
     bool m_isActive = false;
 
-    mpe::MainStreamChanges m_mainStreamChanges;
-    mpe::OffStreamChanges m_offStreamChanges;
-
     OnFlushedCallback m_onOffStreamFlushed;
     OnFlushedCallback m_onMainStreamFlushed;
+
+private:
+    bool m_shouldUpdateMainStreamEvents = false;
 };
 }
 

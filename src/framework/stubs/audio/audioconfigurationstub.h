@@ -42,7 +42,12 @@ public:
     unsigned int driverBufferSize() const override; // samples
     void setDriverBufferSize(unsigned int size) override;
     async::Notification driverBufferSizeChanged() const override;
-    samples_t renderStep() const override;
+
+    msecs_t audioWorkerInterval(const samples_t, const sample_rate_t) const override;
+    samples_t minSamplesToReserve(RenderMode mode) const override;
+
+    samples_t samplesToPreallocate() const override;
+    async::Channel<samples_t> samplesToPreallocateChanged() const override;
 
     unsigned int sampleRate() const override;
     void setSampleRate(unsigned int sampleRate) override;

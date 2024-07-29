@@ -63,7 +63,7 @@ public:
     void clearMasterOutputParams();
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const;
 
-    async::Channel<audioch_t, AudioSignalVal> masterAudioSignalChanges() const;
+    AudioSignalChanges masterAudioSignalChanges() const;
 
     void setIsIdle(bool idle);
     void setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds);
@@ -87,14 +87,11 @@ private:
     bool useMultithreading() const;
 
     void notifyNoAudioSignal();
-    void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     msecs_t currentTime() const;
 
     size_t m_minTrackCountForMultithreading = 0;
     size_t m_nonMutedTrackCount = 0;
-
-    std::vector<float> m_writeCacheBuff;
 
     AudioOutputParams m_masterParams;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;

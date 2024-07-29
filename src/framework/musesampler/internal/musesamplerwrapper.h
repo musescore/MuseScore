@@ -57,6 +57,8 @@ public:
 private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
+
     void updateRenderingMode(const muse::audio::RenderMode mode) override;
 
     // IMuseSamplerTracks
@@ -71,6 +73,7 @@ private:
     InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
+    void prepareOutputBuffer(const muse::audio::samples_t samples);
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const muse::audio::samples_t samples);
     void extractOutputSamples(muse::audio::samples_t samples, float* output);
@@ -91,6 +94,7 @@ private:
     std::array<float*, 2> m_internalBuffer;
 
     bool m_offlineModeStarted = false;
+    bool m_allNotesOffRequested = false;
 
     MuseSamplerSequencer m_sequencer;
 };

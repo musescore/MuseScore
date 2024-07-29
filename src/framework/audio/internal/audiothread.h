@@ -39,7 +39,8 @@ public:
 
     using Runnable = std::function<void ()>;
 
-    void run(const Runnable& onStart, const Runnable& loopBody);
+    void run(const Runnable& onStart, const Runnable& loopBody, const uint64_t intervalMsecs = 1);
+    void setInterval(const uint64_t intervalMsecs);
     void stop(const Runnable& onFinished = nullptr);
     bool isRunning() const;
 
@@ -49,6 +50,7 @@ private:
     Runnable m_onStart = nullptr;
     Runnable m_mainLoopBody = nullptr;
     Runnable m_onFinished = nullptr;
+    uint64_t m_intervalMsecs = 0;
 
     std::unique_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;

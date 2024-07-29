@@ -43,6 +43,7 @@ public:
 
     unsigned int sampleRate() const;
     unsigned int channelCount() const;
+    unsigned int minPeriodInFrames() const;
 
     void setFallbackDevice(const hstring& deviceId);
 

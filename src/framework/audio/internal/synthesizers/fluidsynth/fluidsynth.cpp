@@ -130,7 +130,7 @@ Ret FluidSynth::init()
     createFluidInstance();
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        revokePlayingNotes();
+        m_allNotesOffRequested = true;
     });
 
     LOGD() << "synth inited\n";
@@ -145,6 +145,21 @@ void FluidSynth::createFluidInstance()
 
     fluid_sfloader_set_data(sfloader, m_fluid->settings);
     fluid_synth_add_sfloader(m_fluid->synth, sfloader);
+}
+
+void FluidSynth::allNotesOff()
+{
+    IF_ASSERT_FAILED(m_fluid->synth) {
+        return;
+    }
+
+    fluid_synth_all_notes_off(m_fluid->synth, -1);
+
+    int lastChannelIdx = static_cast<int>(m_sequencer.channels().lastIndex());
+    for (int i = 0; i < lastChannelIdx; ++i) {
+        setControllerValue(i, midi::SUSTAIN_PEDAL_CONTROLLER, 0);
+        setPitchBend(i, 8192);
+    }
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -278,19 +293,14 @@ void FluidSynth::setupEvents(const mpe::PlaybackData& playbackData)
     m_sequencer.load(playbackData);
 }
 
+const mpe::PlaybackData& FluidSynth::playbackData() const
+{
+    return m_sequencer.playbackData();
+}
+
 void FluidSynth::revokePlayingNotes()
 {
-    IF_ASSERT_FAILED(m_fluid->synth) {
-        return;
-    }
-
-    fluid_synth_all_notes_off(m_fluid->synth, -1);
-
-    int lastChannelIdx = static_cast<int>(m_sequencer.channels().lastIndex());
-    for (int i = 0; i < lastChannelIdx; ++i) {
-        setControllerValue(i, midi::SUSTAIN_PEDAL_CONTROLLER, 0);
-        setPitchBend(i, 8192);
-    }
+    m_allNotesOffRequested = true;
 }
 
 void FluidSynth::flushSound()
@@ -299,7 +309,7 @@ void FluidSynth::flushSound()
         return;
     }
 
-    revokePlayingNotes();
+    allNotesOff();
 
     fluid_synth_all_sounds_off(m_fluid->synth, -1);
     fluid_synth_cc(m_fluid->synth, -1, 121, 127);
@@ -341,9 +351,40 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
-    FluidSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMsecs);
+    if (m_allNotesOffRequested) {
+        allNotesOff();
+        m_allNotesOffRequested = false;
+    }
 
+    const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
+    const FluidSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
+    samples_t sampleOffset = 0;
+
+    for (auto it = sequences.cbegin(); it != sequences.cend(); ++it) {
+        samples_t durationInSamples = samplesPerChannel - sampleOffset;
+
+        auto nextIt = std::next(it);
+        if (nextIt != sequences.cend()) {
+            msecs_t duration = nextIt->first - it->first;
+            durationInSamples = microSecsToSamples(duration, m_sampleRate);
+        }
+
+        IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
+            break;
+        }
+
+        if (!processSequence(it->second, durationInSamples, buffer + sampleOffset * FLUID_AUDIO_CHANNELS_COUNT)) {
+            return 0;
+        }
+
+        sampleOffset += durationInSamples;
+    }
+
+    return samplesPerChannel;
+}
+
+bool FluidSynth::processSequence(const FluidSequencer::EventSequence& sequence, const samples_t samples, float* buffer)
+{
     if (!sequence.empty()) {
         m_tuning.reset();
     }
@@ -354,15 +395,11 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 
     fluid_synth_tune_notes(m_fluid->synth, 0, 0, m_tuning.size(), m_tuning.keys.data(), m_tuning.pitches.data(), true);
 
-    int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
+    int result = fluid_synth_write_float(m_fluid->synth, samples,
                                          buffer, 0, FLUID_AUDIO_CHANNELS_COUNT,
                                          buffer, 1, FLUID_AUDIO_CHANNELS_COUNT);
 
-    if (result != FLUID_OK) {
-        return 0;
-    }
-
-    return samplesPerChannel;
+    return result == FLUID_OK;
 }
 
 async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const

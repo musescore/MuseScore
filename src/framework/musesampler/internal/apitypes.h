@@ -273,6 +273,9 @@ typedef ms_MuseSampler (* ms_MuseSampler_create)();
 typedef void (* ms_MuseSampler_destroy)(ms_MuseSampler);
 typedef ms_Result (* ms_MuseSampler_init)(ms_MuseSampler ms, double sample_rate, int block_size, int channel_count);
 
+// Added in 0.100
+typedef ms_Result (* ms_MuseSampler_init_2)(ms_MuseSampler ms, double sample_rate, int block_size, int channel_count);
+
 typedef ms_Result (* ms_MuseSampler_set_demo_score)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_clear_score)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_finalize_score)(ms_MuseSampler ms);

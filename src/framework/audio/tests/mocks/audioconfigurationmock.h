@@ -44,7 +44,12 @@ public:
     MOCK_METHOD(unsigned int, driverBufferSize, (), (const, override));
     MOCK_METHOD(void, setDriverBufferSize, (unsigned int), (override));
     MOCK_METHOD(async::Notification, driverBufferSizeChanged, (), (const, override));
-    MOCK_METHOD(samples_t, renderStep, (), (const, override));
+
+    MOCK_METHOD(msecs_t, audioWorkerInterval, (const samples_t, const sample_rate_t), (const, override));
+    MOCK_METHOD(samples_t, minSamplesToReserve, (RenderMode), (const, override));
+
+    MOCK_METHOD(samples_t, samplesToPreallocate, (), (const, override));
+    MOCK_METHOD(async::Channel<samples_t>, samplesToPreallocateChanged, (), (const, override));
 
     MOCK_METHOD(unsigned int, sampleRate, (), (const, override));
     MOCK_METHOD(void, setSampleRate, (unsigned int), (override));

@@ -43,7 +43,7 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
     }
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        revokePlayingNotes();
+        m_allNotesOffRequested = true;
     });
 }
 
@@ -63,24 +63,16 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
     if (!m_sampler) {
         m_sampler = m_samplerLib->create();
 
-        samples_t renderStep = config()->renderStep();
+        samples_t defaultSize = config()->samplesToPreallocate();
 
-        if (m_samplerLib->initSampler(m_sampler, m_sampleRate, renderStep, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
+        if (!m_samplerLib->initSampler(m_sampler, m_sampleRate, defaultSize, AUDIO_CHANNELS_COUNT)) {
             LOGE() << "Unable to init MuseSampler";
             return;
         } else {
             LOGD() << "Successfully initialized sampler";
         }
 
-        m_leftChannel.resize(renderStep);
-        m_rightChannel.resize(renderStep);
-
-        m_bus._num_channels = AUDIO_CHANNELS_COUNT;
-        m_bus._num_data_pts = renderStep;
-
-        m_internalBuffer[0] = m_leftChannel.data();
-        m_internalBuffer[1] = m_rightChannel.data();
-        m_bus._channels = m_internalBuffer.data();
+        prepareOutputBuffer(defaultSize);
     }
 
     if (currentRenderMode() == RenderMode::OfflineMode) {
@@ -105,14 +97,23 @@ samples_t MuseSamplerWrapper::process(float* buffer, samples_t samplesPerChannel
         return 0;
     }
 
+    if (m_allNotesOffRequested) {
+        m_samplerLib->allNotesOff(m_sampler);
+        m_allNotesOffRequested = false;
+    }
+
+    prepareOutputBuffer(samplesPerChannel);
+
     bool active = isActive();
 
     if (!active) {
         msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_sampleRate);
-        MuseSamplerSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMicros);
+        MuseSamplerSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMicros);
 
-        for (const MuseSamplerSequencer::EventType& event : sequence) {
-            handleAuditionEvents(event);
+        for (const auto& pair : sequences) {
+            for (const MuseSamplerSequencer::EventType& event : pair.second) {
+                handleAuditionEvents(event);
+            }
         }
     }
 
@@ -147,13 +148,7 @@ AudioSourceType MuseSamplerWrapper::type() const
 
 void MuseSamplerWrapper::flushSound()
 {
-    IF_ASSERT_FAILED(isValid()) {
-        return;
-    }
-
-    m_samplerLib->allNotesOff(m_sampler);
-
-    LOGD() << "ALL NOTES OFF";
+    m_allNotesOffRequested = true;
 }
 
 bool MuseSamplerWrapper::isValid() const
@@ -185,6 +180,13 @@ void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
     ONLY_AUDIO_WORKER_THREAD;
 
     m_sequencer.load(playbackData);
+}
+
+const mpe::PlaybackData& MuseSamplerWrapper::playbackData() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_sequencer.playbackData();
 }
 
 void MuseSamplerWrapper::updateRenderingMode(const RenderMode mode)
@@ -312,6 +314,24 @@ std::string MuseSamplerWrapper::resolveDefaultPresetCode(const InstrumentInfo& i
     return std::string();
 }
 
+void MuseSamplerWrapper::prepareOutputBuffer(const muse::audio::samples_t samples)
+{
+    if (m_leftChannel.size() < samples) {
+        m_leftChannel.resize(samples, 0.f);
+    }
+
+    if (m_rightChannel.size() < samples) {
+        m_rightChannel.resize(samples, 0.f);
+    }
+
+    m_bus._num_channels = AUDIO_CHANNELS_COUNT;
+    m_bus._num_data_pts = samples;
+
+    m_internalBuffer[0] = m_leftChannel.data();
+    m_internalBuffer[1] = m_rightChannel.data();
+    m_bus._channels = m_internalBuffer.data();
+}
+
 void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventType& event)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
@@ -370,7 +390,5 @@ void MuseSamplerWrapper::extractOutputSamples(samples_t samples, float* output)
 
 void MuseSamplerWrapper::revokePlayingNotes()
 {
-    if (m_samplerLib) {
-        m_samplerLib->allNotesOff(m_sampler);
-    }
+    m_allNotesOffRequested = true;
 }

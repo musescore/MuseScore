@@ -47,8 +47,11 @@ public:
 
     std::string name() const override;
     AudioSourceType type() const override;
+
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
+
     void flushSound() override;
 
     bool isActive() const override;
@@ -97,6 +100,9 @@ private:
     Ret init();
     void createFluidInstance();
 
+    void allNotesOff();
+
+    bool processSequence(const FluidSequencer::EventSequence& sequence, const samples_t samples, float* buffer);
     bool handleEvent(const midi::Event& event);
 
     void toggleExpressionController();
@@ -114,6 +120,8 @@ private:
     std::optional<midi::Program> m_preset;
 
     KeyTuning m_tuning;
+
+    bool m_allNotesOffRequested = false;
 };
 
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;

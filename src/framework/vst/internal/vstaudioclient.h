@@ -34,16 +34,20 @@ public:
     VstAudioClient() = default;
     ~VstAudioClient();
 
-    void init(muse::audio::AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t&& audioChannelsCount = 2);
+    void init(muse::audio::AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t audioChannelsCount = 2);
 
-    bool handleEvent(const VstEvent& event);
-    bool handleParamChange(const PluginParamInfo& param);
+    void loadSupportedParams();
+
+    bool handleEvent(const VstEvent& event, const audio::samples_t sampleOffset);
+    bool handleParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
-    void flush();
 
-    void setBlockSize(unsigned int samples);
+    void flush();
+    void allNotesOff();
+
+    void setMaxSamplesPerBlock(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
@@ -51,11 +55,11 @@ public:
 private:
     struct SamplesInfo {
         unsigned int sampleRate = 0;
-        unsigned int samplesPerBlock = 0;
+        unsigned int maxSamplesPerBlock = 0;
 
         bool isValid()
         {
-            return sampleRate > 0 && samplesPerBlock > 0;
+            return sampleRate > 0 && maxSamplesPerBlock > 0;
         }
     };
 
@@ -65,15 +69,16 @@ private:
     void setUpProcessData();
     void updateProcessSetup();
     void extractInputSamples(muse::audio::samples_t sampleCount, const float* sourceBuffer);
-    bool fillOutputBuffer(muse::audio::samples_t sampleCount, float* output);
+
+    bool fillOutputBufferInstrument(muse::audio::samples_t sampleCount, float* output);
+    bool fillOutputBufferFx(muse::audio::samples_t sampleCount, float* output);
 
     void ensureActivity();
     void disableActivity();
 
     void flushBuffers();
 
-    void loadAllNotesOffParam();
-    void addParamChange(const PluginParamInfo& param);
+    void addParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
 
     bool m_isActive = false;
     muse::audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0
@@ -91,12 +96,15 @@ private:
     VstProcessData m_processData;
     VstProcessContext m_processContext;
 
+    std::unordered_map<size_t, VstEvent> m_playingNotes;
+    std::unordered_set<PluginParamId> m_playingParams;
+
+    std::unordered_map<PluginParamId, PluginParamInfo> m_pluginParamInfoMap;
+
     bool m_needUnprepareProcessData = false;
 
     muse::audio::AudioPluginType m_type = muse::audio::AudioPluginType::Undefined;
     muse::audio::audioch_t m_audioChannelsCount = 0;
-
-    std::optional<PluginParamInfo> m_allNotesOffParam;
 };
 }
 

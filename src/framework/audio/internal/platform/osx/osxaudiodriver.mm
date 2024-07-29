@@ -143,8 +143,8 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    // Allocate 3 audio buffers. At the same time one used for writing, one for reading and one for reserve
-    for (unsigned int i = 0; i < 3; ++i) {
+    // Allocate 2 audio buffers. At the same time one used for writing, one for reading
+    for (unsigned int i = 0; i < 2; ++i) {
         AudioQueueBufferRef buffer;
         result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.samples * audioFormat.mBytesPerFrame, &buffer);
         if (result != noErr) {
@@ -166,7 +166,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    LOGD() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.sampleRate;
+    LOGI() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.sampleRate;
 
     return true;
 }
@@ -351,10 +351,11 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
         return {};
     }
 
-    unsigned int minimum = std::max(static_cast<int>(range.mMinimum), MINIMUM_BUFFER_SIZE);
+    unsigned int minimum = std::max(static_cast<size_t>(range.mMinimum), MINIMUM_BUFFER_SIZE);
+    unsigned int maximum = std::min(static_cast<size_t>(range.mMaximum), MAXIMUM_BUFFER_SIZE);
 
     std::vector<unsigned int> result;
-    for (unsigned int bufferSize = range.mMaximum; bufferSize >= minimum;) {
+    for (unsigned int bufferSize = maximum; bufferSize >= minimum;) {
         result.push_back(bufferSize);
         bufferSize /= 2;
     }

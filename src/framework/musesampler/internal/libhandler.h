@@ -67,7 +67,8 @@ struct MuseSamplerLibHandler
 
     ms_MuseSampler_create create = nullptr;
     ms_MuseSampler_destroy destroy = nullptr;
-    ms_MuseSampler_init initSampler = nullptr;
+
+    std::function<bool(ms_MuseSampler ms, double sample_rate, int block_size, int channel_count)> initSampler = nullptr;
 
     ms_MuseSampler_clear_score clearScore = nullptr;
     ms_MuseSampler_add_track addTrack = nullptr;
@@ -115,6 +116,8 @@ private:
     ms_MuseSampler_start_audition_note_3 startAuditionNoteInternal3 = nullptr;
     ms_MuseSampler_start_audition_note_4 startAuditionNoteInternal4 = nullptr;
     ms_MuseSampler_start_liveplay_note_2 startLivePlayNoteInternal2 = nullptr;
+    ms_MuseSampler_init initSamplerInternal = nullptr;
+    ms_MuseSampler_init_2 initSamplerInternal2 = nullptr;
 
 public:
     MuseSamplerLibHandler(const io::path_t& path)
@@ -183,7 +186,18 @@ public:
 
         create = (ms_MuseSampler_create)muse::getLibFunc(m_lib, "ms_MuseSampler_create");
         destroy = (ms_MuseSampler_destroy)muse::getLibFunc(m_lib, "ms_MuseSampler_destroy");
-        initSampler = (ms_MuseSampler_init)muse::getLibFunc(m_lib, "ms_MuseSampler_init");
+
+        if (at_least_v_0_100) {
+            initSamplerInternal2 = (ms_MuseSampler_init_2)muse::getLibFunc(m_lib, "ms_MuseSampler_init_2");
+            initSampler = [this](ms_MuseSampler ms, double sample_rate, int block_size, int channel_count) {
+                return initSamplerInternal2(ms, sample_rate, block_size, channel_count) == ms_Result_OK;
+            };
+        } else {
+            initSamplerInternal = (ms_MuseSampler_init)muse::getLibFunc(m_lib, "ms_MuseSampler_init");
+            initSampler = [this](ms_MuseSampler ms, double sample_rate, int block_size, int channel_count) {
+                return initSamplerInternal(ms, sample_rate, block_size, channel_count) == ms_Result_OK;
+            };
+        }
 
         clearScore = (ms_MuseSampler_clear_score)muse::getLibFunc(m_lib, "ms_MuseSampler_clear_score");
         addTrack = (ms_MuseSampler_add_track)muse::getLibFunc(m_lib, "ms_MuseSampler_add_track");
@@ -407,7 +421,8 @@ private:
                << "\n ms_MuseSampler_add_track_text_articulation_event - " << reinterpret_cast<uint64_t>(addTextArticulationEvent)
                << "\n ms_MuseSampler_create - " << reinterpret_cast<uint64_t>(create)
                << "\n ms_MuseSampler_destroy - " << reinterpret_cast<uint64_t>(destroy)
-               << "\n ms_MuseSampler_init - " << reinterpret_cast<uint64_t>(initSampler)
+               << "\n ms_MuseSampler_init - " << reinterpret_cast<uint64_t>(initSamplerInternal)
+               << "\n ms_MuseSampler_init_2 - " << reinterpret_cast<uint64_t>(initSamplerInternal2)
                << "\n ms_disable_reverb - " << reinterpret_cast<uint64_t>(disableReverb)
                << "\n ms_MuseSampler_clear_score - " << reinterpret_cast<uint64_t>(clearScore)
                << "\n ms_MuseSampler_add_track - " << reinterpret_cast<uint64_t>(addTrack)

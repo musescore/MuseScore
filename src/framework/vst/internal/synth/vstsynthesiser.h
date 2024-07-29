@@ -59,6 +59,7 @@ public:
 
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
 
     bool isActive() const override;
     void setIsActive(const bool isActive) override;
@@ -74,13 +75,12 @@ public:
 
 private:
     void toggleVolumeGain(const bool isActive);
+    void handleSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t sampleOffset);
 
     VstPluginPtr m_pluginPtr = nullptr;
-
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     async::Channel<unsigned int> m_streamsCountChanged;
-    muse::audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;
 
