@@ -1160,6 +1160,9 @@ bool NotationInteraction::dragCopyAllowed(const EngravingItem* element) const
     case ElementType::MEASURE:
     case ElementType::NOTE:
     case ElementType::VBOX:
+    case ElementType::HBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
     // TODO: Bends can't be copy-dragged until corresponding SingleLayout::layout and SingleDraw::draw methods have been implemented
     case ElementType::GUITAR_BEND:
     case ElementType::GUITAR_BEND_SEGMENT:
