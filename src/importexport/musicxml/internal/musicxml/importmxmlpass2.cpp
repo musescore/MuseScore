@@ -1951,7 +1951,8 @@ void MusicXMLParserPass2::scorePartwise()
             continue;
         }
         const String sysElText = sysEl->isTextBase() ? toTextBase(sysEl)->plainText() : toTextLineBase(sysEl)->beginText();
-        for (EngravingItem* existingEl : seg->annotations()) {
+        std::vector<EngravingItem*> annotations = seg->annotations();
+        for (EngravingItem* existingEl : annotations) {
             const bool bothText = (existingEl->isTextBase() || existingEl->isTextLineBase()) && elIsText;
             if (existingEl && existingEl != sysEl && bothText) {
                 const String existingText
