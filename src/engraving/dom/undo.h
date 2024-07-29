@@ -571,9 +571,9 @@ class CloneVoice : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, CloneVoice)
 
-    Segment* sf = nullptr;
+    Segment* sourceSeg = nullptr;
     Fraction lTick;
-    Segment* d = nullptr;               //Destination
+    Segment* destSeg = nullptr;               //Destination
     track_idx_t strack = muse::nidx;
     track_idx_t dtrack = muse::nidx;
     track_idx_t otrack;
@@ -588,7 +588,7 @@ public:
 
     UNDO_TYPE(CommandType::CloneVoice)
     UNDO_NAME("CloneVoice")
-    UNDO_CHANGED_OBJECTS({ sf, d })
+    UNDO_CHANGED_OBJECTS({ sourceSeg, destSeg })
 };
 
 class ChangeInstrumentShort : public UndoCommand

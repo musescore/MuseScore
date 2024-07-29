@@ -30,6 +30,7 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "note.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -1116,6 +1117,18 @@ Segment* Spanner::endSegment() const
     }
 
     return endSeg;
+}
+
+bool Spanner::elementAppliesToTrack(const track_idx_t refTrack) const
+{
+    if (!hasVoiceAssignmentProperties()) {
+        return refTrack == track() || refTrack == track2();
+    }
+
+    const VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+
+    return EngravingItem::elementAppliesToTrack(track(), refTrack, voiceAssignment, part()) || EngravingItem::elementAppliesToTrack(
+        track2(), refTrack, voiceAssignment, part());
 }
 
 //---------------------------------------------------------

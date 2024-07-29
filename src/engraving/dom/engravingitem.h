@@ -684,6 +684,7 @@ public:
     bool appliesToAllVoicesInInstrument() const;
     void setInitialTrackAndVoiceAssignment(track_idx_t track, bool curVoiceOnlyOverride);
     void checkVoiceAssignmentCompatibleWithTrack();
+    virtual bool elementAppliesToTrack(const track_idx_t refTrack) const;
     void setPlacementBasedOnVoiceAssignment(DirectionV styledDirection);
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
@@ -706,6 +707,9 @@ protected:
     Color m_color;                // element color attribute
 
     track_idx_t m_track = muse::nidx;         // staffIdx * VOICES + voice
+
+    static bool elementAppliesToTrack(const track_idx_t elementTrack, const track_idx_t refTrack, const VoiceAssignment voiceAssignment,
+                                      const Part* part);
 
 private:
 
