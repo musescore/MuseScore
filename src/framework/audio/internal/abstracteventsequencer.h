@@ -65,8 +65,7 @@ public:
             m_shouldUpdateMainStreamEvents = true;
 
             if (m_isActive) {
-                updateMainStreamEvents(events, dynamics, params);
-                m_shouldUpdateMainStreamEvents = false;
+                updateMainStream();
             }
         });
 
@@ -82,6 +81,14 @@ public:
         return m_playbackData;
     }
 
+    void updateMainStream()
+    {
+        if (m_shouldUpdateMainStreamEvents) {
+            updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
+            m_shouldUpdateMainStreamEvents = false;
+        }
+    }
+
     void setActive(const bool active)
     {
         if (m_isActive == active) {
@@ -90,9 +97,8 @@ public:
 
         m_isActive = active;
 
-        if (m_isActive && m_shouldUpdateMainStreamEvents) {
-            updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
-            m_shouldUpdateMainStreamEvents = false;
+        if (m_isActive) {
+            updateMainStream();
         }
     }
 
