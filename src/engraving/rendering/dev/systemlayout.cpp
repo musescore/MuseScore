@@ -1150,7 +1150,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
-    AlignmentLayout::alignItems(dynamicsExprAndHairpinsToAlign, system);
+    AlignmentLayout::alignItemsWithTheirSnappingChain(dynamicsExprAndHairpinsToAlign, system);
 
     processLines(system, ctx, spanner, false);
     processLines(system, ctx, ottavas, false);
@@ -1343,7 +1343,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
-    AlignmentLayout::alignItems(tempoElementsToAlign, system);
+    AlignmentLayout::alignItemsWithTheirSnappingChain(tempoElementsToAlign, system);
 
     //-------------------------------------------------------------
     // Marker and Jump
