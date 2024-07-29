@@ -289,6 +289,25 @@ void ApplicationActionController::openAskForHelpPage()
 
 void ApplicationActionController::openPreferencesDialog()
 {
+    const context::IPlaybackStatePtr state = globalContext()->playbackState();
+    if (state->playbackStatus() == audio::PlaybackStatus::Running) {
+        dispatcher()->dispatch("stop");
+
+        async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
+        statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {
+            auto statusChangedMut = statusChanged;
+            statusChangedMut.resetOnReceive(this);
+            doOpenPreferencesDialog();
+        });
+
+        return;
+    }
+
+    doOpenPreferencesDialog();
+}
+
+void ApplicationActionController::doOpenPreferencesDialog()
+{
     if (multiInstancesProvider()->isPreferencesAlreadyOpened()) {
         multiInstancesProvider()->activateWindowWithOpenedPreferences();
         return;
