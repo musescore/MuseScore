@@ -1374,7 +1374,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(stickingFontSpatiumDependent,               true),
     styleDef(stickingFontStyle,                          int(FontStyle::Normal)),
     styleDef(stickingColor,                              PropertyValue::fromValue(Color::BLACK)),
-    styleDef(stickingAlign,                              Align(AlignH::LEFT, AlignV::BASELINE)),
+    styleDef(stickingAlign,                              Align(AlignH::HCENTER, AlignV::BASELINE)),
     styleDef(stickingOffset,                             PointF()),
     styleDef(stickingPlacement,                          PlacementV::BELOW),
     styleDef(stickingPosAbove,                           PointF(.0, -2.0)),
