@@ -13706,7 +13706,7 @@
                   <trackName>Treble Viol</trackName>
                   <longName>Treble Viol</longName>
                   <shortName>Tr. Vl.</shortName>
-                  <description>Treble viol.</description>
+                  <description>Treble viola da gamba. Second highest member of the viol family.</description>
                   <musicXMLid>strings.viol.treble</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13740,7 +13740,7 @@
                   <trackName>Alto Viol</trackName>
                   <longName>Alto Viol</longName>
                   <shortName>A. Vl.</shortName>
-                  <description>Alto viol.</description>
+                  <description>Alto viola da gamba. Third highest member of the viol family.</description>
                   <musicXMLid>strings.viol.alto</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13807,7 +13807,7 @@
                   <trackName>Tenor Viol</trackName>
                   <longName>Tenor Viol</longName>
                   <shortName>T. Vl.</shortName>
-                  <description>Tenor viol.</description>
+                  <description>Tenor viola da gamba. Middle member of the viol family.</description>
                   <musicXMLid>strings.viol.tenor</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13872,10 +13872,10 @@
             </Instrument>
             <Instrument id="viola-da-gamba">
                   <family>viols</family>
-                  <trackName>Viola da gamba</trackName>
-                  <longName>Viola da gamba</longName>
-                  <shortName>Vla. d. g.</shortName>
-                  <description>Viola da gamba (staff notation).</description>
+                  <trackName>Bass Viol</trackName>
+                  <longName>Bass Viol</longName>
+                  <shortName>B. Vl.</shortName>
+                  <description>Bass viola da gamba (staff notation). Third lowest member of the viol family.</description>
                   <StringData>
                         <frets>13</frets>
                         <string>33</string>
@@ -13907,10 +13907,10 @@
             <Instrument id="viola-da-gamba-tablature">
                   <init>viola-da-gamba</init>
                   <family>viols</family>
-                  <trackName>Viola da gamba (tablature)</trackName>
-                  <longName>Viola da gamba</longName>
-                  <shortName>Vla. d. g.</shortName>
-                  <description>Viola da gamba (tablature).</description>
+                  <trackName>Bass Viol (tablature)</trackName>
+                  <longName>Bass Viol</longName>
+                  <shortName>B. Vl.</shortName>
+                  <description>Bass viola da gamba (tablature). Third lowest member of the viol family.</description>
                   <StringData>
                         <frets>13</frets>
                   </StringData>
@@ -13923,7 +13923,7 @@
                   <longName>G Violone</longName>
                   <shortName>G Vne.</shortName>
                   <traitName type="tuning">*G</traitName>
-                  <description>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</description>
+                  <description>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13958,7 +13958,7 @@
                   <longName>D Violone</longName>
                   <shortName>D Vne.</shortName>
                   <traitName type="tuning">D</traitName>
-                  <description>Large viol with the lowest string tuned to D. Sometimes called the D violone.</description>
+                  <description>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
                         <frets>13</frets>
