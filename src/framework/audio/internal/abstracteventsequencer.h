@@ -82,10 +82,6 @@ public:
         return m_playbackData;
     }
 
-    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) = 0;
-    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                        const mpe::PlaybackParamLayers& params) = 0;
-
     void setActive(const bool active)
     {
         if (m_isActive == active) {
@@ -176,6 +172,10 @@ public:
     }
 
 protected:
+    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) = 0;
+    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                        const mpe::PlaybackParamLayers& params) = 0;
+
     void resetAllIterators()
     {
         updateMainSequenceIterator();

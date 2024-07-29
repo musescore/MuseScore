@@ -66,11 +66,11 @@ class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::Not
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);
 
+private:
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                 const mpe::PlaybackParamLayers& params) override;
 
-private:
     void clearAllTracks();
     void finalizeAllTracks();
 
