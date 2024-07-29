@@ -1873,8 +1873,7 @@ void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const Lay
 {
     LAYOUT_CALL_ITEM(item);
 
-    ldata->disconnectItemSnappedAfter();
-    ldata->disconnectItemSnappedBefore();
+    ldata->disconnectSnappedItems();
 
     HairpinSegment* snapBeforeHairpinAcrossSysBreak = item->findSnapBeforeHairpinAcrossSystemBreak();
     if (snapBeforeHairpinAcrossSysBreak) {
@@ -1978,8 +1977,7 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
         }
     }
 
-    ldata->disconnectItemSnappedAfter();
-    ldata->disconnectItemSnappedBefore();
+    ldata->disconnectSnappedItems();
 
     if (!item->autoplace()) {
         return;
@@ -3022,8 +3020,7 @@ void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, L
 
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
 
-    ldata->disconnectItemSnappedBefore();
-    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectSnappedItems();
 
     layoutTextLineBaseSegment(item, ctx);
 
@@ -3113,8 +3110,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
     const double _spatium = item->spatium();
 
-    ldata->disconnectItemSnappedBefore();
-    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectSnappedItems();
 
     EngravingItem* possibleSnapBeforeElement = nullptr;
     EngravingItem* possibleSnapAfterElement = nullptr;
@@ -5604,8 +5600,7 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
         return;
     }
 
-    ldata->disconnectItemSnappedBefore();
-    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectSnappedItems();
 
     layoutBaseTextBase(item, ldata);
 
