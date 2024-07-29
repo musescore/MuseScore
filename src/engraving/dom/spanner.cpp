@@ -1121,35 +1121,14 @@ Segment* Spanner::endSegment() const
 
 bool Spanner::elementAppliesToTrack(const track_idx_t refTrack) const
 {
-    for (track_idx_t track : { track(), track2() }) {
-        if (!hasVoiceAssignmentProperties()) {
-            if (refTrack == track) {
-                continue;
-            }
-        }
-
-        const VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-        if (voiceAssignment == VoiceAssignment::CURRENT_VOICE_ONLY && track == refTrack) {
-            continue;
-        }
-
-        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF && track2staff(track) == track2staff(refTrack)) {
-            continue;
-        }
-
-        const Part* elementPart = part();
-        if (!elementPart) {
-            return false;
-        }
-
-        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (elementPart->startTrack() <= refTrack
-                                                                            && elementPart->endTrack() - 1 >= refTrack)) {
-            continue;
-        }
-
-        return false;
+    if (!hasVoiceAssignmentProperties()) {
+        return refTrack == track() || refTrack == track2();
     }
-    return true;
+
+    const VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+
+    return EngravingItem::elementAppliesToTrack(track(), refTrack, voiceAssignment, part()) || EngravingItem::elementAppliesToTrack(
+        track2(), refTrack, voiceAssignment, part());
 }
 
 //---------------------------------------------------------

@@ -4593,8 +4593,8 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
 
         if (oe && !oe->generated() && oe->isChordRest()) {
             EngravingItem* ne;
-            //does a linked clone to create just this element
-            //otherwise element will be add in every linked stave
+            // If we want to maintain the link (exchange voice) create a linked clone
+            // If we want new, unlinked elements (implode/explode) create a clone
             if (link) {
                 ne = oe->linkedClone();
             } else {
@@ -4759,13 +4759,15 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                     }
                 }
 
-                // Add element (link -> just in this measure)
+                // Add element
                 if (link) {
+                    // To segment to avoid adding to all linked staves (exchange voice)
                     if (!ns) {
                         ns = dm->getSegment(oseg->segmentType(), oseg->tick());
                     }
                     ns->add(ne);
                 } else {
+                    // To score, to add to all linked staves (implode/explode)
                     undoAddCR(toChordRest(ne), dm, oseg->tick());
                 }
             }
@@ -4791,8 +4793,8 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
             }
 
             EngravingItem* newAnnotation;
-            //does a linked clone to create just this element
-            //otherwise element will be add in every linked stave
+            // If we want to maintain the link (exchange voice) create a linked clone
+            // If we want new, unlinked elements (implode/explode) create a clone
             if (link) {
                 newAnnotation = annotation->linkedClone();
             } else {
@@ -4800,13 +4802,15 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
             }
             newAnnotation->setTrack(dtrack);
 
-            // Add element (link -> just in this measure)
+            // Add element
             if (link) {
+                // To segment to avoid adding to all linked staves (exchange voice)
                 if (!ns) {
                     ns = dm->getSegment(oseg->segmentType(), oseg->tick());
                 }
                 ns->add(newAnnotation);
             } else {
+                // To score, to add to all linked staves (implode/explode)
                 doUndoAddElement(newAnnotation);
             }
         }

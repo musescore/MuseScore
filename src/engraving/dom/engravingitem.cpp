@@ -1319,26 +1319,9 @@ bool EngravingItem::elementAppliesToTrack(const track_idx_t refTrack) const
     if (!hasVoiceAssignmentProperties()) {
         return refTrack == track();
     }
-
     const VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-    if (voiceAssignment == VoiceAssignment::CURRENT_VOICE_ONLY && track() == refTrack) {
-        return true;
-    }
 
-    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF && track2staff(track()) == track2staff(refTrack)) {
-        return true;
-    }
-
-    const Part* elementPart = part();
-    if (!elementPart) {
-        return false;
-    }
-
-    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (elementPart->startTrack() <= refTrack
-                                                                        && elementPart->endTrack() - 1 >= refTrack)) {
-        return true;
-    }
-    return false;
+    return elementAppliesToTrack(track(), refTrack, voiceAssignment, part());
 }
 
 void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirection)
@@ -2605,6 +2588,28 @@ EngravingItem::LayoutData* EngravingItem::mutldataInternal()
         m_layoutData->m_item = this;
     }
     return m_layoutData;
+}
+
+bool EngravingItem::elementAppliesToTrack(const track_idx_t elementTrack, const track_idx_t refTrack,
+                                          const VoiceAssignment voiceAssignment, const Part* part)
+{
+    if (voiceAssignment == VoiceAssignment::CURRENT_VOICE_ONLY && elementTrack == refTrack) {
+        return true;
+    }
+
+    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF && track2staff(elementTrack) == track2staff(refTrack)) {
+        return true;
+    }
+
+    if (!part) {
+        return false;
+    }
+
+    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (part->startTrack() <= refTrack
+                                                                        && part->endTrack() - 1 >= refTrack)) {
+        return true;
+    }
+    return false;
 }
 
 void EngravingItem::LayoutData::setBbox(const RectF& r)

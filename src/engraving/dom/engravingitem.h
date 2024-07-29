@@ -708,6 +708,9 @@ protected:
 
     track_idx_t m_track = muse::nidx;         // staffIdx * VOICES + voice
 
+    static bool elementAppliesToTrack(const track_idx_t elementTrack, const track_idx_t refTrack, const VoiceAssignment voiceAssignment,
+                                      const Part* part);
+
 private:
 
     friend class Factory;
