@@ -6084,6 +6084,11 @@ void NotationInteraction::toggleArticulation(mu::engraving::SymId symId)
     execute(&mu::engraving::Score::toggleArticulation, symId);
 }
 
+void NotationInteraction::toggleOrnament(mu::engraving::SymId symId)
+{
+    execute(&mu::engraving::Score::toggleOrnament, symId);
+}
+
 void NotationInteraction::toggleAutoplace(bool all)
 {
     execute(&mu::engraving::Score::cmdToggleAutoplace, all);

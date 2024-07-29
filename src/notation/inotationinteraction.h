@@ -281,6 +281,7 @@ public:
     virtual void insertClef(mu::engraving::ClefType) = 0;
 
     virtual void toggleArticulation(mu::engraving::SymId) = 0;
+    virtual void toggleOrnament(mu::engraving::SymId) = 0;
     virtual void changeAccidental(mu::engraving::AccidentalType) = 0;
     virtual void transposeSemitone(int) = 0;
     virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;

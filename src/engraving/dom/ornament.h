@@ -39,6 +39,8 @@ public:
     Ornament(const Ornament& o);
     ~Ornament();
 
+    TranslatableString typeUserName() const override;
+
     static SymId fromTrillType(TrillType trillType);
 
     PropertyValue getProperty(Pid propertyId) const override;
