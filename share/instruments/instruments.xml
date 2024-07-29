@@ -13435,6 +13435,38 @@
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                   <genre>popular</genre>
             </Instrument>
+            <Instrument id="timple-canario">
+                  <family>guitars</family>
+                  <trackName>Timple Canario</trackName>
+                  <longName>Timple Canario</longName>
+                  <shortName>Timpl.</shortName>
+                  <description>Small Spanish 5-string guitar (staff notation).</description>
+                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <StringData>
+                        <frets>18</frets>
+                        <string>67</string>
+                        <string>72</string>
+                        <string>64</string>
+                        <string>69</string>
+                        <string>74</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>64-86</aPitchRange>
+                  <pPitchRange>64-92</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="timple-canario-tablature">
+                  <init>timple-canario</init>
+                  <family>guitars</family>
+                  <trackName>Timple Canario (tablature)</trackName>
+                  <longName>Timple Canario</longName>
+                  <description>Small Spanish 5-string guitar (tablature).</description>
+                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <stafftype staffTypePreset="tab5StrSimple">tablature</stafftype>
+                  <genre>world</genre>
+            </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings - Bowed</name>
