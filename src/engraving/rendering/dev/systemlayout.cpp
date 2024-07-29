@@ -1023,13 +1023,25 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
     // Drumline sticking
     //-------------------------------------------------------------
-
+    struct StaffStickingGroups {
+        std::vector<EngravingItem*> stickingsAbove;
+        std::vector<EngravingItem*> stickingsBelow;
+    };
+    std::map<staff_idx_t, StaffStickingGroups> staffStickings;
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isSticking()) {
                 TLayout::layoutItem(e, ctx);
+                if (e->addToSkyline()) {
+                    e->placeAbove() ? staffStickings[e->staffIdx()].stickingsAbove.push_back(e) : staffStickings[e->staffIdx()].
+                    stickingsBelow.push_back(e);
+                }
             }
         }
+    }
+    for (auto staffSticking : staffStickings) {
+        AlignmentLayout::alignItemsGroup(staffSticking.second.stickingsAbove, system);
+        AlignmentLayout::alignItemsGroup(staffSticking.second.stickingsBelow, system);
     }
 
     //-------------------------------------------------------------
