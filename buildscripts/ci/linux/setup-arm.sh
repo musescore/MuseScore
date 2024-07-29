@@ -199,25 +199,6 @@ apt-get install -y --no-install-recommends ninja-build
 echo "ninja version"
 ninja --version
 
-# Dump syms
-if [ "$PACKARCH" == "armv7l" ]; then
-  echo "Get Breakpad"
-  breakpad_dir=$BUILD_TOOLS/breakpad
-  if [[ ! -d "$breakpad_dir" ]]; then
-    curl -o $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/armv7l/dump_syms.zip"
-    7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
-  fi
-  echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
-else
-  echo "Get Breakpad"
-  breakpad_dir=$BUILD_TOOLS/breakpad
-  if [[ ! -d "$breakpad_dir" ]]; then
-    curl -o $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/aarch64/dump_syms.zip"
-    7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
-  fi
-  echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
-fi
-
 echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
 echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
 echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}

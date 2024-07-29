@@ -198,7 +198,13 @@ jobs:
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       run: |
-        bash ./buildscripts/ci/macos/dumpsyms.sh  
+        APP_BIN=$(pwd)/applebuild/mscore.app/Contents/MacOS/mscore
+        GENERATE_ARCHS=("x86_64 arm64")
+        BUILD_DIR=$(pwd)/applebuild
+        cmake -DAPP_BIN=${APP_BIN} \
+              -DGENERATE_ARCHS="${GENERATE_ARCHS}" \
+              -DBUILD_DIR=${BUILD_DIR} \
+              -P buildscripts/ci/crashdumps/ci_generate_dumpsyms.cmake
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
@@ -218,7 +224,11 @@ jobs:
     - name: Upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       run: |
-        bash ./buildscripts/ci/tools/sentry_syms_upload.sh -t ${{ secrets.SENTRY_AUTH_TOKEN }} -p ${SENTRY_PROJECT}    
+        cmake -DSENTRY_URL=https://sentry.musescore.org \
+              -DSENTRY_ORG=musescore \
+              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+              -P buildscripts/ci/crashdumps/ci_sentry_dumpsyms_upload.cmake
     - name: Publish package 
       if: env.DO_PUBLISH == 'true'
       run: |

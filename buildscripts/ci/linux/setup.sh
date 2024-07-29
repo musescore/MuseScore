@@ -201,15 +201,6 @@ echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
 echo "ninja version"
 $ninja_dir/ninja --version
 
-# Dump syms
-echo "Get Breakpad"
-breakpad_dir=$BUILD_TOOLS/breakpad
-if [[ ! -d "$breakpad_dir" ]]; then
-  wget -q --show-progress -O $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/x86-64/dump_syms.7z"
-  7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
-fi
-echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
-
 ##########################################################################
 # OTHER
 ##########################################################################
