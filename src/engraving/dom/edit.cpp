@@ -6156,6 +6156,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ChordRest* ncr = toChordRest(seg->element(linkedTrack));
             ne->setParent(ncr);
             if (element->isChordLine()) {
+                if (cr->isGrace()) {
+                    ncr = findLinkedChord(toChord(cr), score->staff(staffIdx));
+                    ne->setParent(ncr);
+                }
                 ChordLine* oldChordLine = toChordLine(element);
                 ChordLine* newChordLine = toChordLine(ne);
                 // Chordline also needs to know the new note
