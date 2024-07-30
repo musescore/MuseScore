@@ -2217,6 +2217,8 @@ static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
         VBox* vb = Factory::createVBox(b->system());
         readBox(e, ctx, vb);
         b->add(vb);
+        // If nested inside title frame, don't scale with spatium
+        vb->setSizeIsSpatiumDependent(!b->isTitleFrame());
     }
 //      else if (MeasureBase::readProperties(e))
 //            ;
@@ -2251,6 +2253,8 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
             readBox(e, ctx, vb);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins
+            // If nested inside title frame, don't scale with spatium
+            vb->setSizeIsSpatiumDependent(!b->isTitleFrame());
         } else if (!readBoxProperties(e, ctx, b)) {
             e.unknown();
         }
@@ -2334,6 +2338,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
             readBox(e, ctx, mb);
             mb->setTick(ctx.tick());
             score->measures()->add(mb);
+            mb->setSizeIsSpatiumDependent(!mb->isTitleFrame());
         } else if (tag == "tick") {
             ctx.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
         } else {

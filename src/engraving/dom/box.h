@@ -50,6 +50,7 @@ public:
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
     virtual void add(EngravingItem* e) override;
+    virtual double point(const Spatium val) const override;
 
     RectF contentRect() const;
     Spatium boxWidth() const { return m_boxWidth; }
@@ -71,6 +72,7 @@ public:
     bool isAutoSizeEnabled() const { return m_isAutoSizeEnabled; }
     void setAutoSizeEnabled(const bool val) { m_isAutoSizeEnabled = val; }
     void copyValues(Box* origin);
+    bool isTitleFrame() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

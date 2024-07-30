@@ -4120,6 +4120,7 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
     }
 
     Fraction tick;
+    bool isTitleFrame = type == ElementType::VBOX && beforeMeasure == beforeMeasure->score()->first();
     if (beforeMeasure) {
         if (beforeMeasure->isMeasure()) {
             Measure* m = toMeasure(beforeMeasure);
@@ -4145,6 +4146,7 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
     newMeasureBase->setTick(tick);
     newMeasureBase->setNext(beforeMeasure);
     newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
+    newMeasureBase->setSizeIsSpatiumDependent(!isTitleFrame);
 
     undo(new InsertMeasures(newMeasureBase, newMeasureBase));
 
