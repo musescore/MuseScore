@@ -28,13 +28,14 @@
 #include "iinteractive.h"
 
 namespace muse::autobot {
-class AutobotActionsController : public muse::actions::Actionable
+class AutobotActionsController : public Injectable, public actions::Actionable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(IInteractive, interactive)
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<IInteractive> interactive = { this };
 
 public:
-    AutobotActionsController() = default;
+    AutobotActionsController(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

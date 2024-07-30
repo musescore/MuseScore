@@ -38,15 +38,16 @@ class XmlWriter;
 }
 
 namespace muse::shortcuts {
-class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
+class ShortcutsRegister : public IShortcutsRegister, public Injectable, public async::Asyncable
 {
-    INJECT(IShortcutsConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(muse::ui::IUiActionsRegister, uiactionsRegister)
+    Inject<IShortcutsConfiguration> configuration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    Inject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
 
 public:
-    ShortcutsRegister() = default;
+    ShortcutsRegister(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

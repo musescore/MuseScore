@@ -110,7 +110,7 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioConfiguration>();
+    m_configuration = std::make_shared<AudioConfiguration>(iocContext());
     m_audioEngine = std::make_shared<AudioEngine>(iocContext());
     m_audioWorker = std::make_shared<AudioThread>();
     m_audioBuffer = std::make_shared<AudioBuffer>();
@@ -118,7 +118,7 @@ void AudioModule::registerExports()
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
     m_playbackFacade = std::make_shared<Playback>(iocContext());
-    m_soundFontRepository = std::make_shared<SoundFontRepository>();
+    m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());

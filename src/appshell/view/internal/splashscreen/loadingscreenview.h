@@ -33,13 +33,13 @@
 class QSvgRenderer;
 
 namespace mu::appshell {
-class LoadingScreenView : public QWidget
+class LoadingScreenView : public QWidget, public muse::Injectable
 {
     Q_OBJECT
 
-    Inject<muse::ui::IUiConfiguration> uiConfiguration;
-    Inject<muse::languages::ILanguagesService> languagesService;
-    Inject<muse::IApplication> application;
+    Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    Inject<muse::languages::ILanguagesService> languagesService = { this };
+    Inject<muse::IApplication> application = { this };
 
 public:
     explicit LoadingScreenView(QWidget* parent = nullptr);

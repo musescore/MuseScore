@@ -29,12 +29,12 @@
 #include "global/iinteractive.h"
 
 namespace muse::extensions {
-class DevExtensionsListModel : public QObject
+class DevExtensionsListModel : public QObject, public Injectable
 {
     Q_OBJECT
 
-    Inject<IExtensionsProvider> provider;
-    Inject<IInteractive> interactive;
+    Inject<IExtensionsProvider> provider = { this };
+    Inject<IInteractive> interactive = { this };
 
 public:
     DevExtensionsListModel(QObject* parent = nullptr);

@@ -40,7 +40,7 @@ public:
     Q_ENUM(Button)
 };
 
-class MessageDialog : public QObject
+class MessageDialog : public QObject, public Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
@@ -49,7 +49,7 @@ class MessageDialog : public QObject
     Q_PROPERTY(QVariantList standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged FINAL)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
 
-    Inject<IInteractive> interactive;
+    Inject<IInteractive> interactive = { this };
 
 public:
 

@@ -31,7 +31,7 @@
 using namespace muse::update;
 
 UpdateModel::UpdateModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
     setProgressTitle(muse::qtrc("update", "Updating MuseScore Studio"));
 }

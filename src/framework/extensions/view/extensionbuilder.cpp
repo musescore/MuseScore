@@ -33,7 +33,7 @@
 using namespace muse::extensions;
 
 ExtensionBuilder::ExtensionBuilder(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {}
 
 void ExtensionBuilder::load(const QString& uri, QObject* itemParent)

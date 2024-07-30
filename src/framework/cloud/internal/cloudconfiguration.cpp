@@ -52,6 +52,11 @@ static QByteArray generateClientId()
     return QString::number(randId, 16).toLatin1();
 }
 
+CloudConfiguration::CloudConfiguration(const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx)
+{
+}
+
 void CloudConfiguration::init()
 {
     if (settings()->value(CLIENT_ID_KEY).isNull()) {

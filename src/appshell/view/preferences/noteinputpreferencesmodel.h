@@ -31,14 +31,9 @@
 #include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
-class NoteInputPreferencesModel : public QObject
+class NoteInputPreferencesModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(muse::shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
-    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
@@ -57,6 +52,11 @@ class NoteInputPreferencesModel : public QObject
         bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
     Q_PROPERTY(
         bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged FINAL)
+
+    muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
+    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);

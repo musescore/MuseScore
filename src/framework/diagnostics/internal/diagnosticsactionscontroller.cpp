@@ -43,7 +43,7 @@ void DiagnosticsActionsController::init()
     dispatcher()->reg(this, "diagnostic-show-profiler", [this]() { openUri(PROFILER_URI); });
     dispatcher()->reg(this, "diagnostic-show-navigation-tree", [this]() { openUri(NAVIGATION_TREE_URI); });
     dispatcher()->reg(this, "diagnostic-show-accessible-tree", [this]() { openUri(ACCESSIBLE_TREE_URI); });
-    dispatcher()->reg(this, "diagnostic-accessible-tree-dump", []() { DiagnosticAccessibleModel::dumpTree(); });
+    dispatcher()->reg(this, "diagnostic-accessible-tree-dump", []() { DiagnosticAccessibleModel().dumpTree(); });
     dispatcher()->reg(this, "diagnostic-show-engraving-elements", [this]() { openUri(ENGRAVING_ELEMENTS_URI, false); });
     dispatcher()->reg(this, "diagnostic-save-diagnostic-files", this, &DiagnosticsActionsController::saveDiagnosticFiles);
 }

@@ -31,14 +31,15 @@
 #include "workspace.h"
 
 namespace muse::workspace {
-class WorkspaceManager : public IWorkspaceManager, public async::Asyncable
+class WorkspaceManager : public IWorkspaceManager, public Injectable, public async::Asyncable
 {
-    INJECT(IWorkspaceConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<IWorkspaceConfiguration> configuration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
 
-    WorkspaceManager() = default;
+    WorkspaceManager(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
     void deinit();

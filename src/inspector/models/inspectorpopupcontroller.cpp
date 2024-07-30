@@ -33,7 +33,7 @@ using namespace mu::inspector;
 using namespace muse::uicomponents;
 
 InspectorPopupController::InspectorPopupController(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -31,7 +31,7 @@
 
 namespace muse::extensions::api {
 //! NOTE Used for qml and scripts
-class ExtApi : public QObject
+class ExtApi : public QObject, public Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
@@ -58,7 +58,7 @@ class ExtApi : public QObject
     //Q_PROPERTY(QJSValue process READ process CONSTANT)
     //Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    Inject<muse::api::IApiRegister> apiRegister;
+    Inject<muse::api::IApiRegister> apiRegister = { this };
 
 public:
     ExtApi(muse::api::IApiEngine* engine, QObject* parent);

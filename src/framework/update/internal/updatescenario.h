@@ -35,16 +35,19 @@
 #include "../iupdatescenario.h"
 
 namespace muse::update {
-class UpdateScenario : public IUpdateScenario, public async::Asyncable
+class UpdateScenario : public IUpdateScenario, public Injectable, public async::Asyncable
 {
-    Inject<IInteractive> interactive;
-    Inject<actions::IActionsDispatcher> dispatcher;
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
-    Inject<IUpdateConfiguration> configuration;
+    Inject<IInteractive> interactive = { this };
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    Inject<IUpdateConfiguration> configuration = { this };
 
-    Inject<IAppUpdateService> service;
+    Inject<IAppUpdateService> service = { this };
 
 public:
+    UpdateScenario(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void delayedInit();
 
     void checkForUpdate() override;

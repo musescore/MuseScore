@@ -26,7 +26,7 @@ using namespace mu::appshell;
 using namespace mu::notation;
 
 MainWindowTitleProvider::MainWindowTitleProvider(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

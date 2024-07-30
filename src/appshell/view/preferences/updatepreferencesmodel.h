@@ -28,14 +28,14 @@
 #include "update/iupdateconfiguration.h"
 
 namespace mu::appshell {
-class UpdatePreferencesModel : public QObject
+class UpdatePreferencesModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(muse::update::IUpdateConfiguration, updateConfiguration)
-
     Q_PROPERTY(
         bool needCheckForNewAppVersion READ needCheckForNewAppVersion WRITE setNeedCheckForNewAppVersion NOTIFY needCheckForNewAppVersionChanged)
+
+    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
 
 public:
     explicit UpdatePreferencesModel(QObject* parent = nullptr);

@@ -30,14 +30,14 @@
 #include "api/iapiengine.h"
 
 namespace muse::extensions::apiv1 {
-class ExtApiV1 : public QObject
+class ExtApiV1 : public QObject, public Injectable
 {
     Q_OBJECT
 
     Q_PROPERTY(QJSValue log READ log CONSTANT)
     Q_PROPERTY(QJSValue engraving READ engraving CONSTANT)
 
-    Inject<muse::api::IApiRegister> apiRegister;
+    Inject<muse::api::IApiRegister> apiRegister = { this };
 
 public:
 

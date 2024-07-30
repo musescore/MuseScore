@@ -31,7 +31,7 @@
 using namespace muse::shortcuts;
 
 EditShortcutModel::EditShortcutModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

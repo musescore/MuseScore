@@ -32,15 +32,15 @@
 #include "ilearnconfiguration.h"
 
 namespace muse::learn {
-class LearnPageModel : public QObject, public async::Asyncable
+class LearnPageModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariantList startedPlaylist READ startedPlaylist NOTIFY startedPlaylistChanged)
     Q_PROPERTY(QVariantList advancedPlaylist READ advancedPlaylist NOTIFY advancedPlaylistChanged)
 
-    Inject<ILearnService> learnService;
-    Inject<ILearnConfiguration> learnConfiguration;
+    Inject<ILearnService> learnService = { this };
+    Inject<ILearnConfiguration> learnConfiguration = { this };
 
 public:
     explicit LearnPageModel(QObject* parent = nullptr);

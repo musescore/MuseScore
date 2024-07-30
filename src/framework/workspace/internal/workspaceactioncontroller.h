@@ -29,13 +29,16 @@
 #include "iinteractive.h"
 
 namespace muse::workspace {
-class WorkspaceActionController : public muse::actions::Actionable
+class WorkspaceActionController : public Injectable, public actions::Actionable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(IInteractive, interactive)
-    INJECT(IWorkspaceConfiguration, configuration)
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<IWorkspaceConfiguration> configuration = { this };
 
 public:
+    WorkspaceActionController(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
 private:

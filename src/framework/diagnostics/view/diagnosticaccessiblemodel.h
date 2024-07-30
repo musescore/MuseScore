@@ -34,12 +34,12 @@
 class QAccessibleInterface;
 class QAccessibleEvent;
 namespace muse::diagnostics {
-class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::async::Asyncable
+class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(bool isAutoRefresh READ isAutoRefresh WRITE setIsAutoRefresh NOTIFY isAutoRefreshChanged)
 
-    INJECT_STATIC(muse::accessibility::IAccessibilityController, accessibilityController)
+    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     explicit DiagnosticAccessibleModel(QObject* parent = nullptr);
@@ -57,7 +57,7 @@ public:
     Q_INVOKABLE void init();
     Q_INVOKABLE void reload();
 
-    static void dumpTree();
+    void dumpTree();
 
 public slots:
     void setIsAutoRefresh(bool isAutoRefresh);

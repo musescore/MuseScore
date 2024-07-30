@@ -58,8 +58,8 @@ static const QString EDITOR_SOURCE_KEY("editor_source");
 static const QString EDITOR_SOURCE_VALUE("Musescore Editor %1");
 static const QString PLATFORM_KEY("platform");
 
-MuseScoreComService::MuseScoreComService(QObject* parent)
-    : AbstractCloudService(parent)
+MuseScoreComService::MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : AbstractCloudService(iocCtx, parent)
 {
 }
 

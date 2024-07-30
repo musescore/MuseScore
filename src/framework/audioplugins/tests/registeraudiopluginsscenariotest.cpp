@@ -50,7 +50,7 @@ class AudioPlugins_RegisterAudioPluginsScenarioTest : public ::testing::Test
 protected:
     void SetUp() override
     {
-        m_scenario = std::make_shared<RegisterAudioPluginsScenario>();
+        m_scenario = std::make_shared<RegisterAudioPluginsScenario>(modularity::globalCtx());
         m_globalConfiguration = std::make_shared<GlobalConfigurationMock>();
         m_interactive = std::make_shared<InteractiveMock>();
         m_process = std::make_shared<ProcessMock>();

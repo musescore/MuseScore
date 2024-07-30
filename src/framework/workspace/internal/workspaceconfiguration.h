@@ -28,11 +28,14 @@
 #include "async/asyncable.h"
 
 namespace muse::workspace {
-class WorkspaceConfiguration : public IWorkspaceConfiguration, public async::Asyncable
+class WorkspaceConfiguration : public IWorkspaceConfiguration, public Injectable, public async::Asyncable
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
+    WorkspaceConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     io::paths_t workspacePaths() const override;
