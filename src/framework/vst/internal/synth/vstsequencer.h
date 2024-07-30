@@ -59,13 +59,13 @@ class VstSequencer : public muse::audio::AbstractEventSequencer<VstEvent, ParamC
 public:
     void init(ParamsMapping&& mapping, bool useDynamicEvents);
 
+    muse::audio::gain_t currentGain() const;
+
+private:
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                 const mpe::PlaybackParamLayers& params) override;
 
-    muse::audio::gain_t currentGain() const;
-
-private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events);
     void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers);
 

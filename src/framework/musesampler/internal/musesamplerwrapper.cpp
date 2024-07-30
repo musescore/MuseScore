@@ -197,6 +197,8 @@ void MuseSamplerWrapper::updateRenderingMode(const RenderMode mode)
         return;
     }
 
+    m_sequencer.updateMainStream();
+
     if (mode != RenderMode::OfflineMode && m_offlineModeStarted) {
         m_samplerLib->stopOfflineMode(m_sampler);
         m_offlineModeStarted = false;
