@@ -840,12 +840,12 @@ void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
 {
     if (element->isSpanner() && !toSpanner(element)->segmentsEmpty()) {
         SpannerSegment* frontSeg = toSpanner(element)->frontSegment();
-        select({ frontSeg });
+        doSelect({ frontSeg }, SelectType::SINGLE);
         if (frontSeg->needStartEditingAfterSelecting()) {
             startEditElement(frontSeg, false);
         }
     } else {
-        select({ element });
+        doSelect({ element }, SelectType::SINGLE);
         if (element->needStartEditingAfterSelecting()) {
             startEditElement(element, false);
         }
@@ -3435,6 +3435,7 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
 
     m_editData.element = element;
     m_editData.curGrip = grip;
+    m_editData.editTextualProperties = false;
 
     updateGripAnchorLines();
     m_editData.element->startEdit(m_editData);
