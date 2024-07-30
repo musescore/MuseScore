@@ -475,6 +475,11 @@ void NotationActionController::init()
         registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(static_cast<int>(i)); });
     }
 
+    registerAction("voice-assignment-all-in-instrument", &Interaction::changeSelectedElementsVoiceAssignment,
+                   VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
+    registerAction("voice-assignment-all-in-staff", &Interaction::changeSelectedElementsVoiceAssignment,
+                   VoiceAssignment::ALL_VOICE_IN_STAFF);
+
     // TAB
     registerAction("string-above", &Controller::move, MoveDirection::Up, false, &Controller::isTablatureStaff);
     registerAction("string-below", &Controller::move, MoveDirection::Down, false, &Controller::isTablatureStaff);
@@ -1052,7 +1057,7 @@ void NotationActionController::changeVoice(voice_idx_t voiceIndex)
     noteInput->setCurrentVoice(voiceIndex);
 
     if (!noteInput->isNoteInputMode()) {
-        interaction->changeSelectedNotesVoice(static_cast<int>(voiceIndex));
+        interaction->changeSelectedElementsVoice(voiceIndex);
     }
 }
 

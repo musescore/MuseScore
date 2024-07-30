@@ -685,6 +685,14 @@
     <seq>Ctrl+Alt+4</seq>
     </SC>
   <SC>
+    <key>voice-assignment-all-in-instrument</key>
+    <seq>Ctrl+Alt+0</seq>
+    </SC>
+  <SC>
+    <key>voice-assignment-all-in-staff</key>
+    <seq>Ctrl+Alt+-</seq>
+    </SC>
+  <SC>
     <key>toggle-instruments</key>
     <seq>F7</seq>
     <autorepeat>0</autorepeat>

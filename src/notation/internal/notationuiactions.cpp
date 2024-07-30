@@ -2396,6 +2396,18 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Use voice 4"),
              IconCode::Code::VOICE_4
              ),
+    UiAction("voice-assignment-all-in-instrument",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "All voices on instrument"),
+             TranslatableString("action", "Use all voices on instrument")
+             ),
+    UiAction("voice-assignment-all-in-staff",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "All voices on staff"),
+             TranslatableString("action", "Use all voices on staff")
+             ),
     UiAction("notation-context-menu",
              mu::context::UiCtxNotationFocused,
              mu::context::CTX_NOTATION_FOCUSED
