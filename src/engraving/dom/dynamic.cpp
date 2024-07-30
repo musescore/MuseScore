@@ -1047,6 +1047,6 @@ std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
     if (hasLeftHairpin() && !hasRightHairpin()) {
         return { pp + rightOffset };
     }
-    return { pp + leftOffset, pp + rightOffset};
+    return { pp + leftOffset, pp + rightOffset };
 }
 }
