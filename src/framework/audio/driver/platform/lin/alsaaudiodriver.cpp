@@ -21,18 +21,25 @@
  */
 #include "alsaaudiodriver.h"
 
+#include "translation.h"
+#include "log.h"
+#include "runtime.h"
+
 #define ALSA_PCM_NEW_HW_PARAMS_API
 #include <alsa/asoundlib.h>
 
 #include <fcntl.h>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
 #include <pthread.h>
 
-#include "translation.h"
-#include "log.h"
-#include "runtime.h"
+#include <sys/mman.h>
+#include <sched.h>
+
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+
+#define ALSA_REALTIME
 
 using namespace muse;
 using namespace muse::audio;
@@ -53,6 +60,41 @@ struct ALSAData
 static ALSAData* s_alsaData{ nullptr };
 static muse::audio::IAudioDriver::Spec s_format;
 
+#ifdef ALSA_REALTIME
+static bool alsaAcquireRealtime(pthread_t th)
+{
+    const int min_prio = sched_get_priority_min(SCHED_FIFO);
+    const int max_prio = sched_get_priority_max(SCHED_FIFO);
+    // priority is normally anything from 0 to 99
+    // No need to have a too high value though as it can make problems in the kernel scheduling.
+    const int desired_prio = 20;
+    const int sched_prio = std::max(min_prio, std::min(max_prio, desired_prio));
+    struct sched_param param = {
+        .sched_priority = sched_prio,
+    };
+    LOGD() << "Requesting RT priority " << sched_prio;
+
+    /* Set scheduler policy and priority of pthread */
+    int ret = pthread_setschedparam(th, SCHED_FIFO, &param);
+    if (ret) {
+        LOGW() << "pthread setschedparam failed: " << strerror(ret);
+        return false;
+    }
+
+    // Pinning to RAM the data accessed during the realtime thread
+    // (optional and require CAP_IPC_LOCK capability)
+    const auto bufLen = s_alsaData->samples * s_alsaData->channels;
+    if (mlock(reinterpret_cast<void*>(s_alsaData), sizeof(ALSAData))) {
+        LOGW() << "Could not lock ALSA data to RAM: " << strerror(errno);
+    }
+    if (mlock(reinterpret_cast<void*>(s_alsaData->buffer), bufLen * sizeof(float))) {
+        LOGW() << "Could not lock ALSA buffer to RAM: " << strerror(errno);
+    }
+
+    return true;
+}
+#endif
+
 static void* alsaThread(void* aParam)
 {
     muse::runtime::setThreadName("audio_driver");
@@ -62,6 +104,14 @@ static void* alsaThread(void* aParam)
     IF_ASSERT_FAILED(ret > 0) {
         return nullptr;
     }
+
+#ifdef ALSA_REALTIME
+    if (!alsaAcquireRealtime(data->threadHandle)) {
+        LOGW() << "Could not acquire realtime priority";
+    } else {
+        LOGI() << "Successfully acquired realtime priority";
+    }
+#endif
 
     while (!data->audioProcessingDone)
     {
@@ -198,8 +248,8 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     snd_pcm_hw_params_get_rate(params, &val, &dir);
     aSamplerate = val;
 
-    s_alsaData->buffer = new float[s_alsaData->samples * s_alsaData->channels];
-    //_alsaData->sampleBuffer = new short[_alsaData->samples * _alsaData->channels];
+    const auto bufLen = s_alsaData->samples * s_alsaData->channels;
+    s_alsaData->buffer = new float[bufLen];
 
     s_format = spec;
     s_format.output.sampleRate = aSamplerate;
@@ -210,10 +260,11 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     }
 
     s_alsaData->threadHandle = 0;
-    int ret = pthread_create(&s_alsaData->threadHandle, NULL, alsaThread, (void*)s_alsaData);
 
-    if (0 != ret) {
-        LOGE() << "Unable to create audio thread, err code: " << ret;
+    rc = pthread_create(&s_alsaData->threadHandle, nullptr, alsaThread, (void*)s_alsaData);
+
+    if (0 != rc) {
+        LOGE() << "Could not start ALSA thread: " << strerror(errno);
         return false;
     }
 
