@@ -30,7 +30,11 @@ static const QString STATUS_SUCCESS("success");
 static const QString STATUS_FAILED("failed");
 
 AbFilesModel::AbFilesModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
+{
+}
+
+void AbFilesModel::init()
 {
     //m_fileIndex = autobot()->currentFileIndex();
     m_fileIndex.ch.onReceive(this, [this](int idx) {
@@ -40,9 +44,9 @@ AbFilesModel::AbFilesModel(QObject* parent)
         emit dataChanged(index(idx), index(idx));
     });
 
-//    autobot()->fileFinished().onReceive(this, [this](const File& f) {
-//        updateFile(f);
-//    });
+    //    autobot()->fileFinished().onReceive(this, [this](const File& f) {
+    //        updateFile(f);
+    //    });
 
     update();
 }

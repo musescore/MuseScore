@@ -34,7 +34,7 @@
 namespace muse::audio {
 class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable
 {
-    Inject<fx::IFxResolver> fxResolver;
+    Inject<fx::IFxResolver> fxResolver = { this };
 
 public:
     explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,

@@ -60,7 +60,7 @@ static QVariantMap makeCloudInfoMap(const QString& title, const AccountInfo& acc
 }
 
 CloudsModel::CloudsModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -29,7 +29,7 @@
 using namespace muse::learn;
 
 LearnPageModel::LearnPageModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

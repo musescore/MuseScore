@@ -31,13 +31,14 @@
 #include "global/async/asyncable.h"
 
 namespace muse::extensions {
-class ExtensionsConfiguration : public IExtensionsConfiguration, public async::Asyncable
+class ExtensionsConfiguration : public IExtensionsConfiguration, public Injectable, public async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
-    ExtensionsConfiguration() = default;
+    ExtensionsConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

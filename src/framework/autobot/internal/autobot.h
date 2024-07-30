@@ -54,7 +54,7 @@ class Autobot : public IAutobot, public Injectable, public async::Asyncable
 
 public:
     Autobot(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Injectable(iocCtx), m_report(iocCtx) {}
 
     void init();
 

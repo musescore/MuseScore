@@ -54,8 +54,9 @@ using namespace muse::async;
 static constexpr double PLAYBACK_TAIL_SECS = 3;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore,
-                                   muse::async::Notification notationChanged)
-    : m_getScore(getScore), m_notationChanged(notationChanged)
+                                   muse::async::Notification notationChanged,
+                                   const modularity::ContextPtr& iocCtx)
+    : m_getScore(getScore), m_notationChanged(notationChanged), m_playbackModel(iocCtx)
 {
     m_notationChanged.onNotify(this, [this]() {
         updateLoopBoundaries();

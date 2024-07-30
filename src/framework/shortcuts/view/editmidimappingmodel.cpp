@@ -30,7 +30,7 @@ using namespace muse::shortcuts;
 using namespace muse::midi;
 
 EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

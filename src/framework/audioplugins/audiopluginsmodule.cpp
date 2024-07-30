@@ -47,10 +47,10 @@ std::string AudioPluginsModule::moduleName() const
 void AudioPluginsModule::registerExports()
 {
     m_configuration = std::make_shared<AudioPluginsConfiguration>();
-    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
+    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>(iocContext());
 
     ioc()->registerExport<IAudioPluginsConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>());
+    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>(iocContext()));
     ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
     ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
     ioc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), m_registerAudioPluginsScenario);

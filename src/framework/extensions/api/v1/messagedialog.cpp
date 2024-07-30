@@ -24,7 +24,7 @@
 using namespace muse::extensions::apiv1;
 
 MessageDialog::MessageDialog(QObject* parent)
-    : QObject(parent) {}
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this)) {}
 
 void MessageDialog::doOpen(const QString& title, const QString& text, const QString& detailed, const QVariantList& buttons)
 {

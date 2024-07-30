@@ -33,15 +33,15 @@
 #include "global/async/asyncable.h"
 
 namespace muse::extensions {
-class ExtensionBuilder : public QObject, public async::Asyncable
+class ExtensionBuilder : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged FINAL)
     Q_PROPERTY(QQuickItem * contentItem READ contentItem NOTIFY contentItemChanged FINAL)
 
-    Inject<IExtensionsProvider> provider;
-    Inject<IExtensionsUiEngine> engine;
+    Inject<IExtensionsProvider> provider = { this };
+    Inject<IExtensionsUiEngine> engine = { this };
 
 public:
     ExtensionBuilder(QObject* parent = nullptr);

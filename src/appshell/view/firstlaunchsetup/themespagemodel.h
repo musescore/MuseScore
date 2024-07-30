@@ -30,7 +30,7 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::appshell {
-class ThemesPageModel : public QObject, public muse::async::Asyncable
+class ThemesPageModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -45,7 +45,7 @@ class ThemesPageModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit ThemesPageModel(QObject* parent = nullptr);

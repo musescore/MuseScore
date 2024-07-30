@@ -30,13 +30,13 @@
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace muse::cloud {
-class MuseScoreComAuthorizationModel : public QObject, async::Asyncable
+class MuseScoreComAuthorizationModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IMuseScoreComService, museScoreComService)
-
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
+
+    Inject<IMuseScoreComService> museScoreComService = { this };
 
 public:
     explicit MuseScoreComAuthorizationModel(QObject* parent = nullptr);

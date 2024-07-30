@@ -36,17 +36,20 @@
 #include "audioplugins/iregisteraudiopluginsscenario.h"
 
 namespace mu::appshell {
-class StartupScenario : public IStartupScenario, public muse::async::Asyncable
+class StartupScenario : public IStartupScenario, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IInteractive> interactive;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher;
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
-    muse::Inject<IAppShellConfiguration> configuration;
-    muse::Inject<ISessionsManager> sessionsManager;
-    muse::Inject<project::IProjectAutoSaver> projectAutoSaver;
-    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<ISessionsManager> sessionsManager = { this };
+    muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
+    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
 
 public:
+
+    StartupScenario(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     void setStartupType(const std::optional<std::string>& type) override;
 

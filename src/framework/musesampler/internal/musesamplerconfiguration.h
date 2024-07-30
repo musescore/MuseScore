@@ -29,11 +29,14 @@
 #include "imusesamplerconfiguration.h"
 
 namespace muse::musesampler {
-class MuseSamplerConfiguration : public IMuseSamplerConfiguration
+class MuseSamplerConfiguration : public IMuseSamplerConfiguration, public Injectable
 {
-    INJECT(IGlobalConfiguration, globalConfig)
+    Inject<IGlobalConfiguration> globalConfig = { this };
 
 public:
+    MuseSamplerConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     // Preferred local user install path; try this first.

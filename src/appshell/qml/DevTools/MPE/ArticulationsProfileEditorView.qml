@@ -34,6 +34,10 @@ Rectangle {
         id: editorModel
     }
 
+    Component.onCompleted: {
+        editorModel.init()
+    }
+
     RowLayout {
         id: contentRow
 

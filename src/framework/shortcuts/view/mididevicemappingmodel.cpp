@@ -65,7 +65,7 @@ inline ActionCodeList allMidiActions()
 }
 
 MidiDeviceMappingModel::MidiDeviceMappingModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

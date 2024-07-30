@@ -28,12 +28,12 @@
 #include "ui/iuicontextresolver.h"
 
 namespace muse::workspace {
-class WorkspaceUiActions : public ui::IUiActionsModule
+class WorkspaceUiActions : public ui::IUiActionsModule, public Injectable
 {
-    Inject<ui::IUiContextResolver> uicontextResolver;
+    Inject<ui::IUiContextResolver> uicontextResolver = { this };
 
 public:
-    WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller);
+    WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller, const modularity::ContextPtr& iocCtx);
 
     const ui::UiActionList& actionsList() const override;
 

@@ -33,7 +33,7 @@
 #include "ishortcutscontroller.h"
 
 namespace muse::shortcuts {
-class ShortcutsInstanceModel : public QObject, public async::Asyncable
+class ShortcutsInstanceModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -41,8 +41,8 @@ class ShortcutsInstanceModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    INJECT(IShortcutsRegister, shortcutsRegister)
-    INJECT(IShortcutsController, controller)
+    Inject<IShortcutsRegister> shortcutsRegister = { this };
+    Inject<IShortcutsController> controller = { this };
 
 public:
     explicit ShortcutsInstanceModel(QObject* parent = nullptr);

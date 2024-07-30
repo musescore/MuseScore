@@ -38,19 +38,22 @@
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class AppShellConfiguration : public IAppShellConfiguration, public muse::async::Asyncable
+class AppShellConfiguration : public IAppShellConfiguration, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::Inject<muse::IApplication> application;
-    muse::Inject<muse::io::IFileSystem> fileSystem;
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::Inject<project::IProjectConfiguration> projectConfiguration;
-    muse::Inject<notation::INotationConfiguration> notationConfiguration;
-    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration;
-    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::IApplication> application = { this };
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
+    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
 
 public:
+    AppShellConfiguration(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     void init();
 
     bool hasCompletedFirstLaunchSetup() const override;

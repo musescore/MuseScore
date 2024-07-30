@@ -28,7 +28,7 @@ using namespace mu;
 using namespace mu::appshell;
 
 FirstLaunchSetupModel::FirstLaunchSetupModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     m_pages = {
         Page { "ThemesPage.qml", "musescore://notation" },

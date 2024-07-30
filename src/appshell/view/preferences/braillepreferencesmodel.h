@@ -29,15 +29,15 @@
 #include "braille/ibrailleconfiguration.h"
 
 namespace mu::appshell {
-class BraillePreferencesModel : public QObject
+class BraillePreferencesModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(braille::IBrailleConfiguration, brailleConfiguration)
 
     Q_PROPERTY(bool braillePanelEnabled READ braillePanelEnabled WRITE setBraillePanelEnabled NOTIFY braillePanelEnabledChanged)
     Q_PROPERTY(QString brailleTable READ brailleTable WRITE setBrailleTable NOTIFY brailleTableChanged)
     Q_PROPERTY(int intervalDirection READ intervalDirection WRITE setIntervalDirection NOTIFY intervalDirectionChanged)
+
+    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
 
 public:
     explicit BraillePreferencesModel(QObject* parent = nullptr);

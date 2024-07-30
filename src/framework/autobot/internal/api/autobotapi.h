@@ -40,12 +40,12 @@ class AutobotApi : public muse::api::ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(autobot::IAutobot, autobot)
-    INJECT(autobot::IAutobotConfiguration, autobotConfiguration)
-    INJECT(mu::project::IProjectFilesController, projectFilesController)
-    INJECT(IInteractive, interactive)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(muse::ui::IMainWindow, mainWindow)
+    Inject<autobot::IAutobot> autobot = { this };
+    Inject<autobot::IAutobotConfiguration> autobotConfiguration = { this };
+    Inject<mu::project::IProjectFilesController> projectFilesController = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<muse::ui::IMainWindow> mainWindow = { this };
 
 public:
     explicit AutobotApi(muse::api::IApiEngine* e);

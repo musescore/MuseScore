@@ -60,7 +60,7 @@ Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
     qApp->setOverrideCursor(Qt::WaitCursor);
     qApp->processEvents();
 
-    Ret ret = DiagnosticFilesWriter::writeDiagnosticFiles(path);
+    Ret ret = DiagnosticFilesWriter(iocContext()).writeDiagnosticFiles(path);
 
     qApp->restoreOverrideCursor();
 

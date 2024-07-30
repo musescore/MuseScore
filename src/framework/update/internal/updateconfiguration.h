@@ -31,11 +31,14 @@
 #include "global/types/config.h"
 
 namespace muse::update {
-class UpdateConfiguration : public IUpdateConfiguration, public async::Asyncable
+class UpdateConfiguration : public IUpdateConfiguration, public Injectable, public async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
+    UpdateConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     bool isAppUpdatable() const override;

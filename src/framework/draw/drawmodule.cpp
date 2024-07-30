@@ -49,11 +49,11 @@ void DrawModule::registerExports()
 
     ioc()->registerExport<draw::IImageProvider>(moduleName(), new QImageProvider());
 
-    auto mainFProvider = std::make_shared<FontProvider>();
+    auto mainFProvider = std::make_shared<FontProvider>(iocContext());
     auto qtFProvider = std::make_shared<QFontProvider>();
     auto fdispatcher = std::make_shared<FontProviderDispatcher>(mainFProvider, qtFProvider);
 
-    m_fontsEngine = std::make_shared<FontsEngine>();
+    m_fontsEngine = std::make_shared<FontsEngine>(iocContext());
     ioc()->registerExport<draw::IFontProvider>(moduleName(), fdispatcher);
     ioc()->registerExport<draw::IFontsEngine>(moduleName(), m_fontsEngine);
     ioc()->registerExport<draw::IFontsDatabase>(moduleName(), new FontsDatabase());
