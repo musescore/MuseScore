@@ -222,6 +222,7 @@ else()
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wininteractivehelper.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wininteractivehelper.h
         )
+        list(APPEND MODULE_LINK Winmm) # needed for timeBeginPeriod
     endif()
 endif()
 
