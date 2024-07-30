@@ -159,6 +159,7 @@ public:
 
     MOCK_METHOD(void, increaseDecreaseDuration, (int, bool), (override));
 
+    MOCK_METHOD(void, toggleDynamicPopup, (), (override));
     MOCK_METHOD(bool, toggleLayoutBreakAvailable, (), (const, override));
     MOCK_METHOD(void, toggleLayoutBreak, (LayoutBreakType), (override));
 

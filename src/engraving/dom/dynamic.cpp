@@ -976,7 +976,11 @@ String Dynamic::screenReaderInfo() const
 
 void Dynamic::drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling)
 {
-    EngravingItem::drawEditMode(p, ed, currentViewScaling);
+    if (ed.editTextualProperties) {
+        TextBase::drawEditMode(p, ed, currentViewScaling);
+    } else {
+        EngravingItem::drawEditMode(p, ed, currentViewScaling);
+    }
 }
 
 //---------------------------------------------------------
