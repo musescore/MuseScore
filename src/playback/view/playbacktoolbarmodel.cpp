@@ -67,8 +67,6 @@ void PlaybackToolBarModel::load()
 
 void PlaybackToolBarModel::setupConnections()
 {
-    context::IPlaybackStatePtr playbackState = globalContext()->playbackState();
-
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         emit isPlayAllowedChanged();
     });
@@ -77,7 +75,7 @@ void PlaybackToolBarModel::setupConnections()
         onActionsStateChanges({ PLAY_ACTION_CODE });
     });
 
-    playbackState->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
+    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](secs_t secs, midi::tick_t) {
         updatePlayPosition(secs);
     });
 

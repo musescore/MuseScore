@@ -227,9 +227,9 @@ void PlaybackController::seek(const audio::secs_t secs)
     currentPlayer()->seek(secs);
 }
 
-Channel<uint32_t> PlaybackController::midiTickPlayed() const
+muse::async::Channel<secs_t, tick_t> PlaybackController::currentPlaybackPositionChanged() const
 {
-    return m_tickPlayed;
+    return m_currentPlaybackPositionChanged;
 }
 
 TrackSequenceId PlaybackController::currentTrackSequenceId() const
@@ -1264,7 +1264,7 @@ void PlaybackController::setupSequencePlayer()
 {
     currentPlayer()->playbackPositionChanged().onReceive(this, [this](const audio::secs_t pos) {
         m_currentTick = notationPlayback()->secToTick(pos);
-        m_tickPlayed.send(m_currentTick);
+        m_currentPlaybackPositionChanged.send(pos, m_currentTick);
 
         updateCurrentTempo();
 

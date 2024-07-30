@@ -50,7 +50,7 @@ public:
 
     virtual void reset() = 0;
 
-    virtual muse::async::Channel<uint32_t> midiTickPlayed() const = 0;
+    virtual muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const = 0;
 
     virtual muse::audio::TrackSequenceId currentTrackSequenceId() const = 0;
     virtual muse::async::Notification currentTrackSequenceIdChanged() const = 0;

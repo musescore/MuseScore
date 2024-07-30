@@ -622,7 +622,7 @@ void AbstractNotationPaintView::onNotationSetup()
         onPlayingChanged();
     });
 
-    playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
+    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](audio::secs_t, midi::tick_t tick) {
         movePlaybackCursor(tick);
     });
 

@@ -36,7 +36,7 @@ public:
 
     void reset() override;
 
-    muse::async::Channel<uint32_t> midiTickPlayed() const override;
+    muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
 
     muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     muse::async::Notification currentTrackSequenceIdChanged() const override;
