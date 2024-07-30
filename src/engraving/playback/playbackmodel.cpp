@@ -261,13 +261,15 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
 void PlaybackModel::triggerMetronome(int tick)
 {
-    auto trackPlaybackData = m_playbackDataMap.find(metronomeTrackId());
+    auto trackPlaybackData = m_playbackDataMap.find(METRONOME_TRACK_ID);
     if (trackPlaybackData == m_playbackDataMap.cend()) {
         return;
     }
 
+    const ArticulationsProfilePtr profile = defaultActiculationProfile(METRONOME_TRACK_ID);
+
     PlaybackEventsMap result;
-    m_renderer.renderMetronome(m_score, tick, 0, result);
+    m_renderer.renderMetronome(m_score, tick, 0, profile, result);
     trackPlaybackData->second.offStream.send(std::move(result), {});
 }
 
@@ -473,6 +475,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
         return staff.isPrimaryStaff(); // skip linked staves
     });
 
+    const ArticulationsProfilePtr metronomeProfile = defaultActiculationProfile(METRONOME_TRACK_ID);
+
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
@@ -509,7 +513,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
             }
 
             m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
-                                       m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
+                                       metronomeProfile, m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
             collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
         }
     }

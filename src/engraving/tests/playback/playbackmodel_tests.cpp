@@ -831,7 +831,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] The articulation profiles repository will be returning profiles for StringsArticulation family
-    ON_CALL(*m_repositoryMock, defaultProfile(ArticulationFamily::Strings)).WillByDefault(Return(m_defaultProfile));
+    ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
 
     // [GIVEN] Expected amount of changed events
     int expectedChangedEventsCount = 24;

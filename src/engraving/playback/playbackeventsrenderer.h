@@ -52,10 +52,10 @@ public:
                            muse::mpe::PlaybackEventsMap& result) const;
 
     void renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick, const int ticksPositionOffset,
-                         muse::mpe::PlaybackEventsMap& result) const;
+                         const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
 
     void renderMetronome(const Score* score, const int tick, const muse::mpe::timestamp_t actualTimestamp,
-                         muse::mpe::PlaybackEventsMap& result) const;
+                         const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
 
 private:
     void renderNoteEvents(const Chord* chord, const int tickPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
