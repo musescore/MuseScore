@@ -66,7 +66,7 @@ static ActionCode zoomTypeToActionCode(ZoomType type)
 }
 
 NotationStatusBarModel::NotationStatusBarModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

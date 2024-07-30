@@ -53,9 +53,9 @@ std::string AutobotModule::moduleName() const
 
 void AutobotModule::registerExports()
 {
-    m_configuration = std::make_shared<AutobotConfiguration>();
+    m_configuration = std::make_shared<AutobotConfiguration>(iocContext());
     m_autobot = std::make_shared<Autobot>(iocContext());
-    m_actionsController = std::make_shared<AutobotActionsController>();
+    m_actionsController = std::make_shared<AutobotActionsController>(iocContext());
 
     ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
     ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);

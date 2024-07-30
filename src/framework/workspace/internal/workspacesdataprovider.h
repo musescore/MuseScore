@@ -31,12 +31,13 @@
 #include "async/asyncable.h"
 
 namespace muse::workspace {
-class WorkspacesDataProvider : public IWorkspacesDataProvider, public async::Asyncable
+class WorkspacesDataProvider : public IWorkspacesDataProvider, public Injectable, public async::Asyncable
 {
-    INJECT(IWorkspaceManager, manager)
+    Inject<IWorkspaceManager> manager = { this };
 
 public:
-    WorkspacesDataProvider() = default;
+    WorkspacesDataProvider(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

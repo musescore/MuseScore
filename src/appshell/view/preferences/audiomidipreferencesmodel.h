@@ -33,15 +33,9 @@
 #include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
-class AudioMidiPreferencesModel : public QObject, public muse::async::Asyncable
+class AudioMidiPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(muse::audio::IAudioConfiguration, audioConfiguration)
-    INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
-    INJECT(muse::midi::IMidiOutPort, midiOutPort)
-    INJECT(muse::midi::IMidiInPort, midiInPort)
-    INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
 
@@ -55,6 +49,12 @@ class AudioMidiPreferencesModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool useMIDI20Output READ useMIDI20Output WRITE setUseMIDI20Output NOTIFY useMIDI20OutputChanged)
 
     Q_PROPERTY(bool muteHiddenInstruments READ muteHiddenInstruments WRITE setMuteHiddenInstruments NOTIFY muteHiddenInstrumentsChanged)
+
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
+    muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
+    muse::Inject<muse::midi::IMidiInPort> midiInPort = { this };
+    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     explicit AudioMidiPreferencesModel(QObject* parent = nullptr);

@@ -35,16 +35,9 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
-class ImportPreferencesModel : public QObject, public muse::async::Asyncable
+class ImportPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
-    INJECT(iex::ove::IOveConfiguration, oveConfiguration)
-    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QString styleFileImportPath READ styleFileImportPath WRITE setStyleFileImportPath NOTIFY styleFileImportPathChanged)
 
@@ -62,6 +55,13 @@ class ImportPreferencesModel : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
+
+    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration = { this };
+    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
+    muse::Inject<iex::ove::IOveConfiguration> oveConfiguration = { this };
+    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration = { this };
+    muse::Inject<iex::mei::IMeiConfiguration> meiConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     explicit ImportPreferencesModel(QObject* parent = nullptr);

@@ -59,7 +59,7 @@ QString muse::cloud::userAgent()
         QSysInfo::currentCpuArchitecture()
     };
 
-    static Inject<IApplication> app;
+    static GlobalInject<IApplication> app;
 
     return QString("MS_EDITOR/%1.%2 (%3)")
            .arg(app()->version().toString(), app()->build())
@@ -71,8 +71,8 @@ int muse::cloud::generateFileNameNumber()
     return QRandomGenerator::global()->generate() % 100000;
 }
 
-AbstractCloudService::AbstractCloudService(QObject* parent)
-    : QObject(parent)
+AbstractCloudService::AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : QObject(parent), Injectable(iocCtx)
 {
     m_userAuthorized.val = false;
 }
@@ -105,7 +105,7 @@ void AbstractCloudService::initOAuthIfNecessary()
 
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
 
-    m_replyHandler = new OAuthHttpServerReplyHandler(this);
+    m_replyHandler = new OAuthHttpServerReplyHandler(iocContext(), this);
     m_replyHandler->setRedirectUrl(m_serverConfig.signInSuccessUrl);
 
     m_oauth2->setAuthorizationUrl(m_serverConfig.authorizationUrl);

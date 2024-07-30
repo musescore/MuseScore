@@ -29,12 +29,15 @@
 #include "iinteractive.h"
 
 namespace muse::diagnostics {
-class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario
+class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario, public Injectable
 {
-    INJECT(diagnostics::IDiagnosticsConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
+    Inject<diagnostics::IDiagnosticsConfiguration> configuration = { this };
+    Inject<muse::IInteractive> interactive = { this };
 
 public:
+    SaveDiagnosticFilesScenario(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     muse::Ret saveDiagnosticFiles() override;
 };
 }

@@ -178,7 +178,7 @@ muse::Ret ExtensionsProvider::run(const Action& a)
 
     Ret ret;
     if (a.legacyPlugin) {
-        legacy::ExtPluginRunner runner;
+        legacy::ExtPluginRunner runner(iocContext());
         ret = runner.run(a);
     } else {
         ExtensionRunner runner(iocContext());

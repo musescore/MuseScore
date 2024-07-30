@@ -29,7 +29,7 @@
 #include "iinteractive.h"
 
 namespace mu::appshell {
-class FirstLaunchSetupModel : public QObject
+class FirstLaunchSetupModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
@@ -41,8 +41,8 @@ class FirstLaunchSetupModel : public QObject
     Q_PROPERTY(bool canGoForward READ canGoForward NOTIFY currentPageChanged)
     Q_PROPERTY(bool canFinish READ canFinish NOTIFY currentPageChanged)
 
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit FirstLaunchSetupModel(QObject* parent = nullptr);

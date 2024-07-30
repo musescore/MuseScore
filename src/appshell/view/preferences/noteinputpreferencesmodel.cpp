@@ -27,7 +27,7 @@
 using namespace mu::appshell;
 
 NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

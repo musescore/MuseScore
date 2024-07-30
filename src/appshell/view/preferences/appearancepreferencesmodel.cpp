@@ -22,10 +22,11 @@
 
 #include "appearancepreferencesmodel.h"
 
+#include "translation.h"
+
 #include "ui/internal/themeconverter.h"
 
 #include "log.h"
-#include "translation.h"
 
 using namespace mu::appshell;
 using namespace mu::notation;
@@ -35,7 +36,7 @@ using namespace muse::ui;
 static constexpr int INVALID_INDEX = -1;
 
 AppearancePreferencesModel::AppearancePreferencesModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

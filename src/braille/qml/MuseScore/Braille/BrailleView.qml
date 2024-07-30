@@ -37,6 +37,11 @@ StyledFlickable {
         direction: NavigationPanel.Both
     }
 
+    Component.onCompleted: {
+        brailleModel.load()
+        root.visible = brailleModel.enabled
+    }
+
     BrailleModel {
         id: brailleModel
         property int keys_pressed: 0
@@ -67,10 +72,6 @@ StyledFlickable {
                     break;
                 }
             }
-        }
-
-        Component.onCompleted: {
-            root.visible = brailleModel.enabled
         }
     }
 

@@ -29,13 +29,14 @@
 #include "../iaudioconfiguration.h"
 
 namespace muse::audio {
-class AudioConfiguration : public IAudioConfiguration
+class AudioConfiguration : public IAudioConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
-    Inject<io::IFileSystem> fileSystem;
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
-    AudioConfiguration() = default;
+    AudioConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

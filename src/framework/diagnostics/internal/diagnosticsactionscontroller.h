@@ -30,14 +30,15 @@
 #include "isavediagnosticfilesscenario.h"
 
 namespace muse::diagnostics {
-class DiagnosticsActionsController : public muse::actions::Actionable
+class DiagnosticsActionsController : public Injectable, public actions::Actionable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<diagnostics::ISaveDiagnosticFilesScenario> saveDiagnosticsScenario = { this };
 
 public:
-    DiagnosticsActionsController() = default;
+    DiagnosticsActionsController(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

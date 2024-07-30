@@ -31,11 +31,14 @@
 #include "global/types/config.h"
 
 namespace muse::shortcuts {
-class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asyncable
+class ShortcutsConfiguration : public IShortcutsConfiguration, public Injectable, public async::Asyncable
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
+    ShortcutsConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     QString currentKeyboardLayout() const override;

@@ -37,7 +37,7 @@ static const QString IS_REMOVABLE_KEY("isRemovable");
 static const QString INDEX_KEY("index");
 
 WorkspaceListModel::WorkspaceListModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

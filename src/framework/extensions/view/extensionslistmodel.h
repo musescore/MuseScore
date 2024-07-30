@@ -33,13 +33,13 @@
 #include "extensions/iextensionsprovider.h"
 
 namespace muse::extensions {
-class ExtensionsListModel : public QAbstractListModel, public async::Asyncable
+class ExtensionsListModel : public QAbstractListModel, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
-    Inject<IInteractive> interactive;
-    Inject<IExtensionsProvider> provider;
-    Inject<IExtensionsConfiguration> configuration;
+    Inject<IInteractive> interactive = { this };
+    Inject<IExtensionsProvider> provider = { this };
+    Inject<IExtensionsConfiguration> configuration = { this };
 
 public:
     explicit ExtensionsListModel(QObject* parent = nullptr);

@@ -25,7 +25,7 @@
 using namespace muse::cloud;
 
 MuseScoreComAuthorizationModel::MuseScoreComAuthorizationModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

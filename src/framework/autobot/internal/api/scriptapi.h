@@ -30,7 +30,7 @@
 #include "api/iapiengine.h"
 
 namespace muse::autobot {
-class ScriptApi : public QObject
+class ScriptApi : public QObject, public Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
@@ -45,7 +45,7 @@ class ScriptApi : public QObject
     Q_PROPERTY(QJSValue process READ process CONSTANT)
     Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    INJECT(muse::api::IApiRegister, apiRegister)
+    Inject<muse::api::IApiRegister> apiRegister = { this };
 
 public:
     ScriptApi(muse::api::IApiEngine* engine, QObject* parent);

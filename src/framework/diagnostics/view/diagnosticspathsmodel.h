@@ -29,12 +29,12 @@
 #include "iinteractive.h"
 
 namespace muse::diagnostics {
-class DiagnosticsPathsModel : public QAbstractListModel
+class DiagnosticsPathsModel : public QAbstractListModel, public Injectable
 {
     Q_OBJECT
 
-    INJECT(IDiagnosticsPathsRegister, pathsRegister)
-    INJECT(muse::IInteractive, interactive)
+    Inject<IDiagnosticsPathsRegister> pathsRegister = { this };
+    Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit DiagnosticsPathsModel(QObject* parent = nullptr);

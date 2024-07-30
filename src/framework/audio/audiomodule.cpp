@@ -115,7 +115,7 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioConfiguration>();
+    m_configuration = std::make_shared<AudioConfiguration>(iocContext());
     m_audioEngine = std::make_shared<AudioEngine>(iocContext());
     m_audioWorker = std::make_shared<AudioThread>();
     m_audioBuffer = std::make_shared<AudioBuffer>();
@@ -123,8 +123,8 @@ void AudioModule::registerExports()
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
     m_playbackFacade = std::make_shared<Playback>(iocContext());
-    m_soundFontRepository = std::make_shared<SoundFontRepository>();
-    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
+    m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
+    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>(iocContext());
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -161,7 +161,7 @@ void AudioModule::registerExports()
 
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 
-    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>());
+    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>(iocContext()));
     ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
     ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
     ioc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), m_registerAudioPluginsScenario);

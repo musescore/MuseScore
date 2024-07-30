@@ -41,16 +41,9 @@
 #include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {
-class NotationStatusBarModel : public QObject, public muse::async::Asyncable, public muse::actions::Actionable
+class NotationStatusBarModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
-    INJECT(muse::workspace::IWorkspaceConfiguration, workspaceConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
     Q_PROPERTY(QVariant currentWorkspaceItem READ currentWorkspaceItem NOTIFY currentWorkspaceActionChanged)
@@ -60,6 +53,13 @@ class NotationStatusBarModel : public QObject, public muse::async::Asyncable, pu
     Q_PROPERTY(QVariantList availableViewModeList READ availableViewModeList_property NOTIFY availableViewModeListChanged)
     Q_PROPERTY(QVariantList availableZoomList READ availableZoomList_property NOTIFY availableZoomListChanged)
     Q_PROPERTY(int currentZoomPercentage READ currentZoomPercentage WRITE setCurrentZoomPercentage NOTIFY currentZoomPercentageChanged)
+
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::Inject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);

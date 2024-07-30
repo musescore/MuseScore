@@ -37,15 +37,9 @@
 #include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
-class GeneralPreferencesModel : public QObject, public muse::async::Asyncable
+class GeneralPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::languages::ILanguagesConfiguration, languagesConfiguration)
-    INJECT(muse::languages::ILanguagesService, languagesService)
-    INJECT(muse::shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
 
     Q_PROPERTY(QVariantList languages READ languages NOTIFY languagesChanged)
     Q_PROPERTY(QString currentLanguageCode READ currentLanguageCode WRITE setCurrentLanguageCode NOTIFY currentLanguageCodeChanged)
@@ -59,6 +53,12 @@ class GeneralPreferencesModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool isNeedRestart READ isNeedRestart WRITE setIsNeedRestart NOTIFY isNeedRestartChanged)
 
     Q_PROPERTY(QVariantList startupModes READ startupModes NOTIFY startupModesChanged)
+
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
+    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
+    muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
 
 public:
     explicit GeneralPreferencesModel(QObject* parent = nullptr);

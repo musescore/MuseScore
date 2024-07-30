@@ -30,7 +30,7 @@
 using namespace mu::appshell;
 
 ImportPreferencesModel::ImportPreferencesModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

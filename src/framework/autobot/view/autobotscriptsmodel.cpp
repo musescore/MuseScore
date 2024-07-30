@@ -49,19 +49,8 @@ ScriptType typeFromString(const QString& str)
 }
 
 AutobotScriptsModel::AutobotScriptsModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
-    autobot()->statusChanged().onReceive(this, [this](const io::path_t& path, const IAutobot::Status& status) {
-        setStatus(path, status);
-
-        if (status == IAutobot::Status::Error) {
-            stopRunAllTC();
-        }
-    });
-
-    autobot()->speedModeChanged().onReceive(this, [this](const SpeedMode&) {
-        emit speedModeChanged();
-    });
 }
 
 AutobotScriptsModel::~AutobotScriptsModel()
@@ -109,6 +98,18 @@ QHash<int, QByteArray> AutobotScriptsModel::roleNames() const
 
 void AutobotScriptsModel::load()
 {
+    autobot()->statusChanged().onReceive(this, [this](const io::path_t& path, const IAutobot::Status& status) {
+        setStatus(path, status);
+
+        if (status == IAutobot::Status::Error) {
+            stopRunAllTC();
+        }
+    });
+
+    autobot()->speedModeChanged().onReceive(this, [this](const SpeedMode&) {
+        emit speedModeChanged();
+    });
+
     beginResetModel();
 
     m_scripts = scriptsRepository()->scripts();

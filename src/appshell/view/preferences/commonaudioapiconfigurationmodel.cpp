@@ -24,14 +24,13 @@
 
 #include "audio/audiotypes.h"
 
-#include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
 using namespace muse::audio;
 
 CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

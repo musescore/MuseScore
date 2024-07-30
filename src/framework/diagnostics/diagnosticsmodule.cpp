@@ -69,12 +69,12 @@ std::string DiagnosticsModule::moduleName() const
 
 void DiagnosticsModule::registerExports()
 {
-    m_configuration = std::make_shared<DiagnosticsConfiguration>();
-    m_actionsController = std::make_shared<DiagnosticsActionsController>();
+    m_configuration = std::make_shared<DiagnosticsConfiguration>(iocContext());
+    m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
 
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
     ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario());
+    ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario(iocContext()));
 }
 
 void DiagnosticsModule::resolveImports()

@@ -49,10 +49,10 @@ std::string WorkspaceModule::moduleName() const
 
 void WorkspaceModule::registerExports()
 {
-    m_manager = std::make_shared<WorkspaceManager>();
-    m_configuration = std::make_shared<WorkspaceConfiguration>();
-    m_actionController = std::make_shared<WorkspaceActionController>();
-    m_provider= std::make_shared<WorkspacesDataProvider>();
+    m_manager = std::make_shared<WorkspaceManager>(iocContext());
+    m_configuration = std::make_shared<WorkspaceConfiguration>(iocContext());
+    m_actionController = std::make_shared<WorkspaceActionController>(iocContext());
+    m_provider= std::make_shared<WorkspacesDataProvider>(iocContext());
 
     ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IWorkspaceManager>(moduleName(), m_manager);
@@ -63,7 +63,7 @@ void WorkspaceModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController));
+        ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController, iocContext()));
     }
 }
 

@@ -30,11 +30,14 @@
 #include "ilearnconfiguration.h"
 
 namespace muse::learn {
-class LearnConfiguration : public ILearnConfiguration
+class LearnConfiguration : public ILearnConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
+    LearnConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     network::RequestHeaders headers() const override;

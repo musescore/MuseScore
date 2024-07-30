@@ -42,7 +42,7 @@ class Audio_KnownAudioPluginsRegisterTest : public ::testing::Test
 protected:
     void SetUp() override
     {
-        m_knownPlugins = std::make_shared<KnownAudioPluginsRegister>();
+        m_knownPlugins = std::make_shared<KnownAudioPluginsRegister>(modularity::globalCtx());
         m_fileSystem = std::make_shared<FileSystemMock>();
         m_configuration = std::make_shared<AudioConfigurationMock>();
 

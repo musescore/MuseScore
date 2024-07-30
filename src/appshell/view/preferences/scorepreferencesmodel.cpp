@@ -28,7 +28,7 @@ using namespace muse;
 using namespace mu::appshell;
 
 ScorePreferencesModel::ScorePreferencesModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
