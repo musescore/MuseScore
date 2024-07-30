@@ -259,7 +259,6 @@
               <subtype>0</subtype>
               <direction>up</direction>
               <lineStyle>dashed</lineStyle>
-              <lineStyle>dashed</lineStyle>
               </HairPin>
             <next>
               <location>
@@ -312,7 +311,6 @@
             <HairPin>
               <subtype>1</subtype>
               <direction>up</direction>
-              <lineStyle>dotted</lineStyle>
               <lineStyle>dotted</lineStyle>
               </HairPin>
             <next>
@@ -690,7 +688,6 @@
             <HairPin>
               <subtype>3</subtype>
               <beginText>diminuendo</beginText>
-              <lineStyle>dotted</lineStyle>
               <lineStyle>dotted</lineStyle>
               </HairPin>
             <next>

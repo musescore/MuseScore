@@ -191,8 +191,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
-              <lineVisible>0</lineVisible>
               <direction>down</direction>
+              <lineVisible>0</lineVisible>
               </HairPin>
             <next>
               <location>
@@ -303,8 +303,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
-              <lineVisible>0</lineVisible>
               <direction>down</direction>
+              <lineVisible>0</lineVisible>
               </HairPin>
             <next>
               <location>
@@ -352,8 +352,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
-              <lineVisible>0</lineVisible>
               <direction>down</direction>
+              <lineVisible>0</lineVisible>
               </HairPin>
             <next>
               <location>
@@ -500,8 +500,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>3</subtype>
-              <lineVisible>0</lineVisible>
               <direction>down</direction>
+              <lineVisible>0</lineVisible>
               </HairPin>
             <next>
               <location>
@@ -606,8 +606,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
-              <lineVisible>0</lineVisible>
               <direction>down</direction>
+              <lineVisible>0</lineVisible>
               </HairPin>
             <next>
               <location>

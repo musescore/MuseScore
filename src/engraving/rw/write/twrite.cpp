@@ -1598,15 +1598,8 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::VELO_CHANGE);
     writeProperty(item, xml, Pid::HAIRPIN_CIRCLEDTIP);
     writeProperty(item, xml, Pid::DYNAMIC_RANGE);
-//      writeProperty(xml, Pid::BEGIN_TEXT);
-    writeProperty(item, xml, Pid::END_TEXT);
-//      writeProperty(xml, Pid::CONTINUE_TEXT);
-    writeProperty(item, xml, Pid::LINE_VISIBLE);
     writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
     writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
-    writeProperty(item, xml, Pid::BEGIN_TEXT_OFFSET);
-    writeProperty(item, xml, Pid::CONTINUE_TEXT_OFFSET);
-    writeProperty(item, xml, Pid::END_TEXT_OFFSET);
 
     writeProperty(item, xml, Pid::VOICE_ASSIGNMENT);
     writeProperty(item, xml, Pid::DIRECTION);
@@ -1615,12 +1608,7 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::SNAP_BEFORE);
     writeProperty(item, xml, Pid::SNAP_AFTER);
 
-    for (const StyledProperty& spp : *item->styledProperties()) {
-        if (!item->isStyled(spp.pid)) {
-            writeProperty(item, xml, spp.pid);
-        }
-    }
-    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
 
