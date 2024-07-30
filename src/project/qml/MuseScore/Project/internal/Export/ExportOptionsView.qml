@@ -134,7 +134,7 @@ Column {
 
             var properties = {
                 model: Qt.binding(() => root.exportModel),
-                navigationPanel: root.navPanel,
+                navigationPanel: navPanel,
                 navigationOrder: 3
             }
 
