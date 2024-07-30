@@ -1012,10 +1012,10 @@
     <stickingFontSpatiumDependent>1</stickingFontSpatiumDependent>
     <stickingFontStyle>0</stickingFontStyle>
     <stickingColor r="0" g="0" b="0" a="255"/>
-    <stickingAlign>left,baseline</stickingAlign>
+    <stickingAlign>center,baseline</stickingAlign>
     <stickingOffset x="0" y="0"/>
     <stickingPlacement>1</stickingPlacement>
-    <stickingPosAbove x="0" y="-2"/>
+    <stickingPosAbove x="0" y="-1"/>
     <stickingPosBelow x="0" y="2"/>
     <stickingMinDistance>0.5</stickingMinDistance>
     <stickingFrameType>0</stickingFrameType>

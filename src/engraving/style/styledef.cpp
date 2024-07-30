@@ -1377,7 +1377,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(stickingAlign,                              Align(AlignH::HCENTER, AlignV::BASELINE)),
     styleDef(stickingOffset,                             PointF()),
     styleDef(stickingPlacement,                          PlacementV::BELOW),
-    styleDef(stickingPosAbove,                           PointF(.0, -2.0)),
+    styleDef(stickingPosAbove,                           PointF(.0, -1.0)),
     styleDef(stickingPosBelow,                           PointF(.0, 2.0)),
     styleDef(stickingMinDistance,                        Spatium(0.5)),
     styleDef(stickingFrameType,                          int(FrameType::NO_FRAME)),
