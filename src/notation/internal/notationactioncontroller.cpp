@@ -519,7 +519,7 @@ void NotationActionController::init()
     });
 
     // Register engraving debugging options actions
-    for (auto [code, member] : engravingDebuggingActions) {
+    for (auto& [code, member] : engravingDebuggingActions) {
         dispatcher()->reg(this, code, [this, member = member]() {
             EngravingDebuggingOptions options = engravingConfiguration()->debuggingOptions();
             options.*member = !(options.*member);
@@ -2211,9 +2211,9 @@ void NotationActionController::registerAction(const ActionCode& code,
     registerAction(code, handler, param1, PlayMode::NoPlay, enabler);
 }
 
-template<typename P1, typename P2>
+template<typename P1, typename P2, typename Q1, typename Q2>
 void NotationActionController::registerAction(const ActionCode& code, void (INotationInteraction::* handler)(P1, P2),
-                                              P1 param1, P2 param2, PlayMode playMode, bool (NotationActionController::* enabler)() const)
+                                              Q1 param1, Q2 param2, PlayMode playMode, bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, [this, handler, param1, param2, playMode]()
     {

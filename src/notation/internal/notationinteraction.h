@@ -204,7 +204,7 @@ public:
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
-    void swapVoices(int voiceIndex1, int voiceIndex2) override;
+    void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
     void addFret(int fretIndex) override;
     void changeSelectedElementsVoice(voice_idx_t voiceIndex) override;

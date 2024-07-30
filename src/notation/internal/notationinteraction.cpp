@@ -4381,7 +4381,7 @@ bool NotationInteraction::transpose(const TransposeOptions& options)
     return ok;
 }
 
-void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)
+void NotationInteraction::swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2)
 {
     if (selection()->isNone()) {
         return;
