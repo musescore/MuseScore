@@ -3037,6 +3037,8 @@ static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
             VBox* vb = Factory::createVBox(b->score()->dummy()->system());
             read400::TRead::read(vb, e, ctx);
             b->add(vb);
+            // If nested inside title frame, don't scale with spatium
+            vb->setSizeIsSpatiumDependent(!b->isTitleFrame());
         } else if (tag == "Text") {
             Text* t;
             if (b->isTBox()) {
@@ -3122,6 +3124,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 if (!readMeasureLast && !lastReadBox) {
                     b->setTopGap(b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
                     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
+                    b->setSizeIsSpatiumDependent(false);
                 } else if (readMeasureLast) {
                     b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
                 }

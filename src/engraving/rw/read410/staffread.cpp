@@ -24,6 +24,7 @@
 #include "rw/write/twrite.h"
 
 #include "dom/factory.h"
+#include "dom/box.h"
 #include "dom/measure.h"
 #include "dom/score.h"
 
@@ -85,6 +86,7 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 TRead::readItem(mb, e, ctx);
                 mb->setTick(ctx.tick());
                 score->measures()->add(mb);
+                mb->setSizeIsSpatiumDependent(!toBox(mb)->isTitleFrame());
             } else if (tag == "tick") {
                 ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             } else {

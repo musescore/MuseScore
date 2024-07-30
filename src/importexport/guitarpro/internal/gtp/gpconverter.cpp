@@ -1014,14 +1014,12 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
     MeasureBase* m = nullptr;
     if (!_score->measures()->first()) {
-        m = Factory::createVBox(_score->dummy()->system());
-        m->setTick(Fraction(0, 1));
+        m = Factory::createTitleVBox(_score->dummy()->system());
         _score->addMeasure(m, 0);
     } else {
         m = _score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = Factory::createVBox(_score->dummy()->system());
-            mb->setTick(Fraction(0, 1));
+            MeasureBase* mb = Factory::createTitleVBox(_score->dummy()->system());
             _score->addMeasure(mb, m);
             m = mb;
         }

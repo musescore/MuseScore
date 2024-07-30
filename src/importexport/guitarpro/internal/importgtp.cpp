@@ -3105,14 +3105,12 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
 
     MeasureBase* m = nullptr;
     if (!score->measures()->first()) {
-        m = Factory::createVBox(score->dummy()->system());
-        m->setTick(Fraction(0, 1));
+        m = Factory::createTitleVBox(score->dummy()->system());
         score->addMeasure(m, 0);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = Factory::createVBox(score->dummy()->system());
-            mb->setTick(Fraction(0, 1));
+            MeasureBase* mb = Factory::createTitleVBox(score->dummy()->system());
             score->addMeasure(mb, m);
             m = mb;
         }

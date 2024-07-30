@@ -1301,8 +1301,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             }
 
             if (!measure) {
-                measure = Factory::createVBox(score->dummy()->system());
-                measure->setTick(Fraction(0, 1));
+                measure = Factory::createTitleVBox(score->dummy()->system());
                 score->addMeasure(measure, score->measures()->first());
             }
 
@@ -1333,8 +1332,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         if (mbl->size() && mbl->first()->type() == ElementType::VBOX) {
             mb = static_cast<VBox*>(mbl->first());
         } else {
-            VBox* vb = Factory::createVBox(score->dummy()->system());
-            vb->setTick(Fraction(0, 1));
+            VBox* vb = Factory::createTitleVBox(score->dummy()->system());
             score->addMeasure(vb, mb);
             mb = vb;
         }

@@ -23,8 +23,10 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 import "internal"
+import "../../common"
 
 Column {
     id: root
@@ -40,6 +42,17 @@ Column {
 
     function focusOnFirst() {
         verticalGapsSection.focusOnFirst()
+    }
+
+    PropertyCheckBox {
+        id: matchStaffSize
+
+        navigation.name: "Follow staff size"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 1
+
+        text: qsTrc("inspector", "Follow staff size")
+        propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
     }
 
     VerticalGapsSection {

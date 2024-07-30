@@ -1400,7 +1400,7 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
     if (boxAutoSize && MScore::noImages) {
         // adjustLayoutWithoutImages
         double calculatedVBoxHeight = 0;
-        const int padding = ctx.conf().spatium();
+        const int padding = item->sizeIsSpatiumDependent() ? ctx.conf().spatium() : SPATIUM20;
         ElementList elist = item->el();
         for (EngravingItem* e : elist) {
             if (e->isText()) {
