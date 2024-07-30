@@ -4408,6 +4408,19 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
     apply();
 }
 
+void NotationInteraction::toggleDynamicPopup()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    if (selection()->elements().size() != 1) {
+        return;
+    }
+
+    addTextToItem(TextStyleType::DYNAMICS, selection()->element());
+}
+
 bool NotationInteraction::toggleLayoutBreakAvailable() const
 {
     return !selection()->isNone() && !isTextEditingStarted();

@@ -1193,6 +1193,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Ottava 8va &bassa"),
              TranslatableString("action", "Add ottava 8va bassa")
              ),
+    UiAction("add-dynamic",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Dynamic"),
+             TranslatableString("action", "Add dynamic")
+             ),
     UiAction("add-hairpin",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
