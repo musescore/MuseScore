@@ -3870,6 +3870,33 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
     undoAddElement(hairpin);
 }
 
+void Score::addHairpinOnGripDrag(Hairpin* hairpin, Dynamic* dynamic, const PointF& pos, Dynamic::Grip grip)
+{
+    track_idx_t track = dynamic->track();
+    hairpin->setTrack(track);
+    hairpin->setTrack2(track);
+
+    Segment* seg = nullptr;
+    double spacingFactor = 0.5;
+    staff_idx_t staffIndex = dynamic->staffIdx();
+
+    // Find segment of type ChordRest or TimeTick near cursor postion
+    dragPosition(pos, &staffIndex, &seg, spacingFactor, hairpin->allowTimeAnchor());
+
+    switch (grip) {
+    case Dynamic::Grip::LEFT:
+        hairpin->setTick(seg ? seg->tick() : dynamic->segment()->prev1ChordRestOrTimeTick()->tick());
+        hairpin->setTick2(dynamic->tick());
+        break;
+    case Dynamic::Grip::RIGHT:
+        hairpin->setTick(dynamic->tick());
+        hairpin->setTick2(seg ? seg->tick() : dynamic->segment()->next1ChordRestOrTimeTick()->tick());
+        break;
+    }
+
+    undoAddElement(hairpin);
+}
+
 //---------------------------------------------------------
 //   cmdCreateTuplet
 //    replace cr with tuplet
