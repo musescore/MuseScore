@@ -41,6 +41,11 @@ using namespace mu;
 namespace mu::engraving {
 class DrumSet;
 
+bool InputState::isValid() const
+{
+    return m_segment != nullptr && m_track != muse::nidx;
+}
+
 //---------------------------------------------------------
 //   drumset
 //---------------------------------------------------------
