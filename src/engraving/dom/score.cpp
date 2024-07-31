@@ -5194,24 +5194,43 @@ String Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* curr
 //    moves selected notes into specified voice if possible
 //---------------------------------------------------------
 
-void Score::changeSelectedNotesVoice(voice_idx_t voice)
+void Score::changeSelectedElementsVoice(voice_idx_t voice)
 {
-    std::vector<EngravingItem*> el;
+    auto isOperationValid = [](Score* score, track_idx_t origTrack, track_idx_t dstTrack) {
+        Excerpt* excerpt = score->excerpt();
+        if (!excerpt) {
+            return true;
+        }
+
+        const track_idx_t dstTrackMapped = muse::key(excerpt->tracksMapping(), dstTrack, muse::nidx);
+        if (dstTrackMapped == muse::nidx) {
+            return false;
+        }
+
+        const track_idx_t origTrackMapped = muse::key(excerpt->tracksMapping(), origTrack, muse::nidx);
+        if (origTrackMapped == dstTrack) {
+            return false;
+        }
+
+        return true;
+    };
+
+    std::vector<EngravingItem*> newElements;
     std::vector<EngravingItem*> oel = selection().elements();       // make copy
     for (EngravingItem* e : oel) {
-        if (e->type() != ElementType::NOTE) {
-            continue;
-        }
+        if (e->isNote()) {
+            Note* note   = toNote(e);
+            Chord* chord = note->chord();
 
-        Note* note   = toNote(e);
-        Chord* chord = note->chord();
+            // move grace notes with main chord only
+            if (chord->isGrace() || chord->isTrillCueNote()) {
+                continue;
+            }
 
-        // move grace notes with main chord only
-        if (chord->isGrace() || chord->isTrillCueNote()) {
-            continue;
-        }
+            if (chord->voice() == voice) {
+                continue;
+            }
 
-        if (chord->voice() != voice) {
             Score* score = this;
             if (excerpt() && !chord->staff()->isVoiceVisible(voice)) {
                 // We are on a linked stave with the desired voice not visible
@@ -5223,20 +5242,12 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
             Segment* s       = chord->segment();
             Measure* m       = s->measure();
             size_t notes     = chord->notes().size();
-            track_idx_t dstTrack     = chord->staffIdx() * VOICES + voice;
+            track_idx_t dstTrack = chord->staffIdx() * VOICES + voice;
             ChordRest* dstCR = toChordRest(s->element(dstTrack));
             Chord* dstChord  = nullptr;
 
-            if (score->excerpt() && muse::key(score->excerpt()->tracksMapping(), dstTrack, muse::nidx) == muse::nidx) {
-                break;
-            }
-
-            if (score->excerpt()) {
-                const track_idx_t originalTrack = chord->staffIdx() * VOICES + chord->voice();
-                const track_idx_t originalTrackMapped = muse::key(score->excerpt()->tracksMapping(), originalTrack, muse::nidx);
-                if (originalTrackMapped == dstTrack) {
-                    break;
-                }
+            if (!isOperationValid(score, chord->track(), dstTrack)) {
+                continue;
             }
 
             // set up destination chord
@@ -5296,81 +5307,114 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                 }
             }
 
-            // move note to destination chord
-            if (dstChord) {
-                // create & add new note
-                Note* newNote = Factory::copyNote(*note);
-                newNote->setSelected(false);
-                newNote->setParent(dstChord);
-                score->undoAddElement(newNote);
-                el.push_back(newNote);
-                // add new chord if one was created
-                if (dstChord != dstCR) {
-                    score->undoAddCR(dstChord, m, s->tick());
-                }
-                for (EngravingObject* linked : note->linkList()) {
-                    Note* linkedNote = toNote(linked);
-                    Note* linkedNewNote = linked == note ? newNote : toNote(newNote->findLinkedInStaff(linkedNote->staff()));
-                    // reconnect the tie to this note, if any
-                    Tie* tie = linkedNote->tieBack();
-                    if (tie) {
-                        score->undoChangeSpannerElements(tie, tie->startNote(), linkedNewNote);
-                    }
-                    // reconnect the tie from this note, if any
-                    tie = linkedNote->tieFor();
-                    if (tie) {
-                        score->undoChangeSpannerElements(tie, linkedNewNote, tie->endNote());
-                    }
-                }
+            if (!dstChord) {
+                continue;
+            }
 
-                // remove original note
-                if (notes > 1) {
-                    score->undoRemoveElement(note);
-                } else if (notes == 1) {
-                    // take care of slurs
-                    int currentTick = chord->tick().ticks();
-                    for (auto it : score->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
-                        Spanner* spanner = it.value;
-                        if (!spanner->isSlur()) {
-                            continue;
-                        }
-                        Slur* slur = toSlur(spanner);
-                        if (slur->startElement() == chord) {
-                            score->undoChangeSpannerElements(slur, dstChord, slur->endElement());
-                        } else if (slur->endElement() == chord) {
-                            score->undoChangeSpannerElements(slur, slur->startElement(), dstChord);
-                        }
-                    }
-                    // create rest to leave behind
-                    Rest* r = Factory::createRest(s);
-                    r->setTrack(chord->track());
-                    r->setDurationType(chord->durationType());
-                    r->setTicks(chord->ticks());
-                    r->setTuplet(chord->tuplet());
-                    r->setParent(s);
-                    // if there were grace notes, move them
-                    while (!chord->graceNotes().empty()) {
-                        Chord* gc = chord->graceNotes().front();
-                        Chord* ngc = Factory::copyChord(*gc);
-                        score->undoRemoveElement(gc);
-                        ngc->setParent(dstChord);
-                        ngc->setTrack(dstChord->track());
-                        score->undoAddElement(ngc);
-                    }
-                    // remove chord, replace with rest
-                    score->undoRemoveElement(chord);
-                    score->undoAddCR(r, m, s->tick());
+            // move note to destination chord
+
+            // create & add new note
+            Note* newNote = Factory::copyNote(*note);
+            newNote->setSelected(false);
+            newNote->setParent(dstChord);
+            score->undoAddElement(newNote);
+            newElements.push_back(newNote);
+            // add new chord if one was created
+            if (dstChord != dstCR) {
+                score->undoAddCR(dstChord, m, s->tick());
+            }
+            for (EngravingObject* linked : note->linkList()) {
+                Note* linkedNote = toNote(linked);
+                Note* linkedNewNote = linked == note ? newNote : toNote(newNote->findLinkedInStaff(linkedNote->staff()));
+                // reconnect the tie to this note, if any
+                Tie* tie = linkedNote->tieBack();
+                if (tie) {
+                    score->undoChangeSpannerElements(tie, tie->startNote(), linkedNewNote);
+                }
+                // reconnect the tie from this note, if any
+                tie = linkedNote->tieFor();
+                if (tie) {
+                    score->undoChangeSpannerElements(tie, linkedNewNote, tie->endNote());
                 }
             }
+
+            // remove original note
+            if (notes > 1) {
+                score->undoRemoveElement(note);
+            } else if (notes == 1) {
+                // take care of slurs
+                int currentTick = chord->tick().ticks();
+                for (auto it : score->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
+                    Spanner* spanner = it.value;
+                    if (!spanner->isSlur()) {
+                        continue;
+                    }
+                    Slur* slur = toSlur(spanner);
+                    if (slur->startElement() == chord) {
+                        score->undoChangeSpannerElements(slur, dstChord, slur->endElement());
+                    } else if (slur->endElement() == chord) {
+                        score->undoChangeSpannerElements(slur, slur->startElement(), dstChord);
+                    }
+                }
+                // create rest to leave behind
+                Rest* r = Factory::createRest(s);
+                r->setTrack(chord->track());
+                r->setDurationType(chord->durationType());
+                r->setTicks(chord->ticks());
+                r->setTuplet(chord->tuplet());
+                r->setParent(s);
+                // if there were grace notes, move them
+                while (!chord->graceNotes().empty()) {
+                    Chord* gc = chord->graceNotes().front();
+                    Chord* ngc = Factory::copyChord(*gc);
+                    score->undoRemoveElement(gc);
+                    ngc->setParent(dstChord);
+                    ngc->setTrack(dstChord->track());
+                    score->undoAddElement(ngc);
+                }
+                // remove chord, replace with rest
+                score->undoRemoveElement(chord);
+                score->undoAddCR(r, m, s->tick());
+            }
+        } else if (e->hasVoiceAssignmentProperties()) {
+            if (e->isSpannerSegment()) {
+                e = toSpannerSegment(e)->spanner();
+            }
+
+            track_idx_t dstTrack = e->staffIdx() * VOICES + voice;
+            if (!isOperationValid(this, e->track(), dstTrack)) {
+                continue;
+            }
+
+            e->undoChangeProperty(Pid::VOICE, voice);
+            e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
+            newElements.push_back(e);
         }
     }
 
-    if (!el.empty()) {
+    if (!newElements.empty()) {
         selection().clear();
+        select(newElements, SelectType::ADD, muse::nidx);
     }
 
-    select(el, SelectType::ADD, muse::nidx);
     setLayoutAll();
+}
+
+void Score::changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment)
+{
+    std::vector<EngravingItem*> newElements;
+
+    for (EngravingItem* e : selection().elements()) {
+        if (e->hasVoiceAssignmentProperties()) {
+            e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, voiceAssignment);
+            newElements.push_back(e);
+        }
+    }
+
+    if (!newElements.empty()) {
+        selection().clear();
+        select(newElements, SelectType::ADD, muse::nidx);
+    }
 }
 
 std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo, StaffAccepted staffAccepted) const

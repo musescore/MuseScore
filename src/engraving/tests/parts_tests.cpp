@@ -1291,7 +1291,7 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
 
     part->startCmd();
     part->select(n);
-    part->changeSelectedNotesVoice(1);
+    part->changeSelectedElementsVoice(1);
     part->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(part, u"part-visible-tracks-part.mscx",

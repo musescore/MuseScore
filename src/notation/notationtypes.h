@@ -588,7 +588,7 @@ constexpr bool isNotesIntervalValid(int interval)
            && interval != 0 && interval != -1;
 }
 
-constexpr bool isVoiceIndexValid(size_t voiceIndex)
+constexpr bool isVoiceIndexValid(voice_idx_t voiceIndex)
 {
     return voiceIndex < mu::engraving::VOICES;
 }

@@ -103,7 +103,7 @@ TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
     }
     // change voice
     score->startCmd();
-    score->changeSelectedNotesVoice(1);
+    score->changeSelectedElementsVoice(1);
     score->endCmd(false, /*layoutAllParts = */ true);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 

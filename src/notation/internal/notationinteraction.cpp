@@ -4381,7 +4381,7 @@ bool NotationInteraction::transpose(const TransposeOptions& options)
     return ok;
 }
 
-void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)
+void NotationInteraction::swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2)
 {
     if (selection()->isNone()) {
         return;
@@ -4438,7 +4438,7 @@ void NotationInteraction::addFret(int fretIndex)
     apply();
 }
 
-void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
+void NotationInteraction::changeSelectedElementsVoice(voice_idx_t voiceIndex)
 {
     if (selection()->isNone()) {
         return;
@@ -4449,7 +4449,18 @@ void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
     }
 
     startEdit();
-    score()->changeSelectedNotesVoice(voiceIndex);
+    score()->changeSelectedElementsVoice(voiceIndex);
+    apply();
+}
+
+void NotationInteraction::changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->changeSelectedElementsVoiceAssignment(voiceAssignment);
     apply();
 }
 

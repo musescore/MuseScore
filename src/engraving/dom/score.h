@@ -555,7 +555,8 @@ public:
     void deleteLater(EngravingObject* e) { m_updateState.deleteList.push_back(e); }
     void deletePostponed();
 
-    void changeSelectedNotesVoice(voice_idx_t);
+    void changeSelectedElementsVoice(voice_idx_t);
+    void changeSelectedElementsVoiceAssignment(VoiceAssignment);
 
     const std::vector<Part*>& parts() const;
     int visiblePartCount() const;

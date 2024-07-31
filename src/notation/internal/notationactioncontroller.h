@@ -247,8 +247,8 @@ private:
     template<typename P1>
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1), P1,
                         bool (NotationActionController::*)() const);
-    template<typename P1, typename P2>
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), P1, P2, PlayMode = PlayMode::NoPlay,
+    template<typename P1, typename P2, typename Q1, typename Q2>
+    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), Q1, Q2, PlayMode = PlayMode::NoPlay,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
 
     void notifyAccessibilityAboutActionTriggered(const muse::actions::ActionCode& actionCode);
