@@ -48,9 +48,9 @@ void PlaybackControllerStub::reset()
 {
 }
 
-muse::async::Channel<uint32_t> PlaybackControllerStub::midiTickPlayed() const
+muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> PlaybackControllerStub::currentPlaybackPositionChanged() const
 {
-    return muse::async::Channel<uint32_t>();
+    return muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>();
 }
 
 muse::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() const
@@ -159,7 +159,7 @@ mu::notation::MeasureBeat PlaybackControllerStub::currentBeat() const
     return {};
 }
 
-muse::audio::msecs_t PlaybackControllerStub::beatToMilliseconds(int, int) const
+muse::audio::secs_t PlaybackControllerStub::beatToSecs(int, int) const
 {
     return 0;
 }

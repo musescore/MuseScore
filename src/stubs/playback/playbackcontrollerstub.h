@@ -36,7 +36,7 @@ public:
 
     void reset() override;
 
-    muse::async::Channel<uint32_t> midiTickPlayed() const override;
+    muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
 
     muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     muse::async::Notification currentTrackSequenceIdChanged() const override;
@@ -71,7 +71,7 @@ public:
     muse::async::Notification currentTempoChanged() const override;
 
     notation::MeasureBeat currentBeat() const override;
-    muse::audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
+    muse::audio::secs_t beatToSecs(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;

@@ -38,7 +38,7 @@ public:
 
     MOCK_METHOD(void, reset, (), (override));
 
-    MOCK_METHOD(muse::async::Channel<uint32_t>, midiTickPlayed, (), (const, override));
+    MOCK_METHOD((muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>), currentPlaybackPositionChanged, (), (const, override));
 
     MOCK_METHOD(muse::audio::TrackSequenceId, currentTrackSequenceId, (), (const, override));
     MOCK_METHOD(muse::async::Notification, currentTrackSequenceIdChanged, (), (const, override));
@@ -75,7 +75,7 @@ public:
     MOCK_METHOD(muse::async::Notification, currentTempoChanged, (), (const, override));
 
     MOCK_METHOD(notation::MeasureBeat, currentBeat, (), (const, override));
-    MOCK_METHOD(muse::audio::msecs_t, beatToMilliseconds, (int, int), (const, override));
+    MOCK_METHOD(muse::audio::secs_t, beatToSecs, (int, int), (const, override));
 
     MOCK_METHOD(double, tempoMultiplier, (), (const, override));
     MOCK_METHOD(void, setTempoMultiplier, (double), (override));

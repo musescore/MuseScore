@@ -67,8 +67,6 @@ void PlaybackToolBarModel::load()
 
 void PlaybackToolBarModel::setupConnections()
 {
-    context::IPlaybackStatePtr playbackState = globalContext()->playbackState();
-
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         emit isPlayAllowedChanged();
     });
@@ -77,7 +75,7 @@ void PlaybackToolBarModel::setupConnections()
         onActionsStateChanges({ PLAY_ACTION_CODE });
     });
 
-    playbackState->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
+    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](secs_t secs, midi::tick_t) {
         updatePlayPosition(secs);
     });
 
@@ -187,31 +185,31 @@ void PlaybackToolBarModel::setPlayTime(const QDateTime& time)
 
     doSetPlayTime(newTime);
 
-    msecs_t msec = timeToMilliseconds(newTime);
-    rewind(msec);
+    secs_t sec = timeToSeconds(newTime);
+    rewind(sec);
 }
 
 qreal PlaybackToolBarModel::playPosition() const
 {
     QTime totalTime = totalPlayTime();
-    msecs_t totalMsecs = timeToMilliseconds(totalTime);
+    secs_t totalSecs = timeToSeconds(totalTime);
 
-    if (totalMsecs == 0) {
+    if (totalSecs == 0.0) {
         return 0;
     }
 
-    msecs_t msecsDifference = totalMsecs - m_playTime.msecsTo(totalTime);
-    qreal position = static_cast<qreal>(msecsDifference) / static_cast<qreal>(totalMsecs);
+    secs_t currentSecs = timeToSeconds(m_playTime);
+    qreal position = static_cast<qreal>(currentSecs) / static_cast<qreal>(totalSecs);
 
     return position;
 }
 
 void PlaybackToolBarModel::setPlayPosition(qreal position)
 {
-    msecs_t totalPlayTimeMsecs = timeToMilliseconds(totalPlayTime());
-    msecs_t playPositionMsecs = totalPlayTimeMsecs * position;
+    secs_t totalPlayTimeSecs = timeToSeconds(totalPlayTime());
+    secs_t playPositionSecs = totalPlayTimeSecs * position;
 
-    QTime time = timeFromMilliseconds(playPositionMsecs);
+    QTime time = timeFromSeconds(playPositionSecs);
     setPlayTime(QDateTime(QDate::currentDate(), time));
 }
 
@@ -252,15 +250,15 @@ void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
     emit playPositionChanged();
 }
 
-void PlaybackToolBarModel::rewind(msecs_t milliseconds)
+void PlaybackToolBarModel::rewind(secs_t secs)
 {
-    dispatch("rewind", ActionData::make_arg1<msecs_t>(milliseconds));
+    dispatch("rewind", ActionData::make_arg1<secs_t>(secs));
 }
 
 void PlaybackToolBarModel::rewindToBeat(const MeasureBeat& beat)
 {
-    msecs_t msec = playbackController()->beatToMilliseconds(beat.measureIndex, beat.beatIndex);
-    rewind(msec);
+    secs_t secs = playbackController()->beatToSecs(beat.measureIndex, beat.beatIndex);
+    rewind(secs);
 }
 
 int PlaybackToolBarModel::measureNumber() const
