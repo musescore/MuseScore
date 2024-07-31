@@ -3077,7 +3077,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (lastReadBox) {
-                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).value<Millimetre>());
+                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).value<Spatium>());
                     lastReadBox = nullptr;
                 }
                 readMeasureLast = true;
@@ -3122,11 +3122,11 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 // If it's the first box, and comes before any measures, reset to
                 // 301 default.
                 if (!readMeasureLast && !lastReadBox) {
-                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
+                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).value<Spatium>());
                     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
                     b->setSizeIsSpatiumDependent(false);
                 } else if (readMeasureLast) {
-                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
+                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).value<Spatium>());
                 }
 
                 lastReadBox = b;
