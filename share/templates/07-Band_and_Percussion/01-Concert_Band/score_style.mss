@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
+<museScore version="4.40">
   <Style>
     <pageWidth>8.26772</pageWidth>
     <pageHeight>11.6929</pageHeight>
@@ -961,10 +961,10 @@
     <bendLineWidth>0.15</bendLineWidth>
     <bendArrowWidth>0.5</bendArrowWidth>
     <headerFontFace>Edwin</headerFontFace>
-    <headerFontSize>11</headerFontSize>
+    <headerFontSize>9</headerFontSize>
     <headerLineSpacing>1</headerLineSpacing>
     <headerFontSpatiumDependent>0</headerFontSpatiumDependent>
-    <headerFontStyle>1</headerFontStyle>
+    <headerFontStyle>0</headerFontStyle>
     <headerColor r="0" g="0" b="0" a="255"/>
     <headerAlign>center,center</headerAlign>
     <headerOffset x="0" y="0"/>

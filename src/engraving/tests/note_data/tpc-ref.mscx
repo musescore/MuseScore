@@ -4,6 +4,8 @@
     <Division>480</Division>
     <Style>
       <concertPitch>1</concertPitch>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
