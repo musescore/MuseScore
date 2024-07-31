@@ -1778,7 +1778,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
             Measure* searchMeasure = ctx.mutDom().tick2measure(std::min(clefTick, keySigTick));
             searchMeasure = searchMeasure->hasMMRest()
                             && ctx.conf().styleB(Sid::createMultiMeasureRests) ? searchMeasure->mmRest() : searchMeasure;
-            while (searchMeasure->tick() < m->tick() && (isFirstClef || isFirstKeySig)) {
+            while (searchMeasure && searchMeasure->tick() < m->tick() && (isFirstClef || isFirstKeySig)) {
                 const System* sys = searchMeasure->system();
                 if (isFirstClef && searchMeasure->tick() >= clefTick) {
                     // Need to check previous measure for clef change if one not found in this measure
