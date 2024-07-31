@@ -60,6 +60,8 @@ enum class NoteEntryMethod : char {
 class InputState
 {
 public:
+    bool isValid() const;
+
     ChordRest* cr() const;
 
     Fraction tick() const;
