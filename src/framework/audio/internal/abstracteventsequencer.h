@@ -163,11 +163,12 @@ public:
             return result;
         }
 
+        // Empty sequence means to continue the previous sequence
+        result.emplace(m_playbackPosition, EventSequence());
+
         if (m_currentMainSequenceIt == m_mainStreamEvents.cend()) {
             return result;
         }
-
-        result.emplace(m_playbackPosition, EventSequence());
 
         m_playbackPosition += nextMsecs;
 
@@ -227,7 +228,7 @@ protected:
     void handleMainStream(EventSequenceMap& result)
     {
         while (m_currentMainSequenceIt != m_mainStreamEvents.end()
-               && m_currentMainSequenceIt->first < m_playbackPosition) {
+               && m_currentMainSequenceIt->first <= m_playbackPosition) {
             EventSequence& sequence = result[m_currentMainSequenceIt->first];
             sequence.insert(m_currentMainSequenceIt->second.cbegin(),
                             m_currentMainSequenceIt->second.cend());
@@ -242,7 +243,7 @@ protected:
         }
 
         while (m_currentDynamicsIt != m_dynamicEvents.end()
-               && m_currentDynamicsIt->first < m_playbackPosition) {
+               && m_currentDynamicsIt->first <= m_playbackPosition) {
             EventSequence& sequence = result[m_currentDynamicsIt->first];
             sequence.insert(m_currentDynamicsIt->second.cbegin(),
                             m_currentDynamicsIt->second.cend());
