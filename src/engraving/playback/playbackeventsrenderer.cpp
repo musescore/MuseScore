@@ -47,6 +47,10 @@ using namespace muse::mpe;
 
 static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
 {
+    IF_ASSERT_FAILED(profile) {
+        return {};
+    }
+
     ArticulationMeta meta(ArticulationType::Standard,
                           profile->pattern(ArticulationType::Standard),
                           timestamp,
@@ -187,7 +191,8 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
 }
 
 void PlaybackEventsRenderer::renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick,
-                                             const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
+                                             const int ticksPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
+                                             mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(score) {
         return;
@@ -202,12 +207,12 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int measu
     for (int tick = measureStartTick; tick < measureEndTick; tick += step) {
         timestamp_t eventTimestamp = timestampFromTicks(score, tick + ticksPositionOffset);
 
-        renderMetronome(score, tick, eventTimestamp, result);
+        renderMetronome(score, tick, eventTimestamp, profile, result);
     }
 }
 
 void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick, const mpe::timestamp_t actualTimestamp,
-                                             mpe::PlaybackEventsMap& result) const
+                                             const muse::mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(score) {
         return;
@@ -223,7 +228,7 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
                                     ? pitchLevel(PitchClass::E, 5) // high wood block
                                     : pitchLevel(PitchClass::F, 5); // low wood block
 
-    static const ArticulationMap emptyArticulations;
+    const ArticulationMap articulations = makeStandardArticulationMap(profile, actualTimestamp, duration);
 
     BeatsPerSecond bps = score->tempomap()->tempo(tick);
 
@@ -232,8 +237,8 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
                                                         0,
                                                         0,
                                                         eventPitchLevel,
-                                                        dynamicLevelFromType(mpe::DynamicType::Natural),
-                                                        emptyArticulations,
+                                                        dynamicLevelFromType(mpe::DynamicType::mf),
+                                                        articulations,
                                                         bps.val));
 }
 
