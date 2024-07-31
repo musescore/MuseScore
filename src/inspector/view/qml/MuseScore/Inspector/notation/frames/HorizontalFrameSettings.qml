@@ -48,11 +48,11 @@ Column {
     PropertyCheckBox {
         id: matchStaffSize
 
-        navigation.name: "Follow staff size"
+        navigation.name: "Scale with staff size"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
 
-        text: qsTrc("inspector", "Follow staff size")
+        text: qsTrc("inspector", "Scale with staff size")
         propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
     }
 
@@ -70,8 +70,6 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
     }
-
-    SeparatorLine { anchors.margins: -12 }
 
     HorizontalGapsSection {
         id: horizontalGapsSection
