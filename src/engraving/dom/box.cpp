@@ -61,8 +61,7 @@ Box::Box(const ElementType& type, System* parent)
 
 void HBox::computeMinWidth()
 {
-    const double sp = sizeIsSpatiumDependent() ? spatium() : SPATIUM20;
-    setWidth(boxWidth().val() * sp + topGap() + bottomGap());    // top/bottom is really left/right
+    setWidth(point(boxWidth() + topGap() + bottomGap()));    // top/bottom is really left/right
 }
 
 bool Box::isEditAllowed(EditData&) const
@@ -215,10 +214,10 @@ bool Box::setProperty(Pid propertyId, const PropertyValue& v)
         m_boxWidth = v.value<Spatium>();
         break;
     case Pid::TOP_GAP:
-        m_topGap = v.value<Millimetre>();
+        m_topGap = v.value<Spatium>();
         break;
     case Pid::BOTTOM_GAP:
-        m_bottomGap = v.value<Millimetre>();
+        m_bottomGap = v.value<Spatium>();
         break;
     case Pid::LEFT_MARGIN:
         m_leftMargin = v.toDouble();
@@ -254,9 +253,9 @@ PropertyValue Box::propertyDefault(Pid id) const
         return Spatium(0.0);
 
     case Pid::TOP_GAP:
-        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::systemFrameDistance);
+        return isHBox() ? Spatium(0.0) : style().styleS(Sid::systemFrameDistance);
     case Pid::BOTTOM_GAP:
-        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::frameSystemDistance);
+        return isHBox() ? Spatium(0.0) : style().styleS(Sid::frameSystemDistance);
 
     case Pid::LEFT_MARGIN:
     case Pid::RIGHT_MARGIN:
