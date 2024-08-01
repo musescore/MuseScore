@@ -617,12 +617,12 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         int verse = pair.first;
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
-            double y = -(totVersesAbove - verse) * lyrics->lineHeight() * lyricsLineHeightFactor;
+            double y = -(totVersesAbove - verse) * lyrics->lineSpacing() * lyricsLineHeightFactor;
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
             Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
-            double y = -(totVersesAbove - verse) * lyrics->lineHeight() * lyricsLineHeightFactor;
+            double y = -(totVersesAbove - verse) * lyrics->lineSpacing() * lyricsLineHeightFactor;
             lyricsLineSegment->move(PointF(0.0, y + lyricsLineSegment->baseLineShift()));
         }
     }
@@ -631,12 +631,12 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         int verse = pair.first;
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
-            double y = staffHeight + verse * lyrics->lineHeight() * lyricsLineHeightFactor;
+            double y = staffHeight + verse * lyrics->lineSpacing() * lyricsLineHeightFactor;
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
             Lyrics* lyrics = lyricsLineSegment->lyricsLine()->lyrics();
-            double y = staffHeight + verse * lyrics->lineHeight() * lyricsLineHeightFactor;
+            double y = staffHeight + verse * lyrics->lineSpacing() * lyricsLineHeightFactor;
             lyricsLineSegment->move(PointF(0.0, y + lyricsLineSegment->baseLineShift()));
         }
     }
