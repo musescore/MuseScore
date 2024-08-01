@@ -134,7 +134,7 @@
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="72"/>
         <source>Center text on reference point</source>
-        <translation>Wyśrodkuj tekst do punktu odniesienia</translation>
+        <translation>Wyśrodkuj tekst poziomo do punktu odniesienia</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="101"/>
@@ -197,7 +197,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="56"/>
         <source>Anchor:</source>
-        <translation>Umiejscowienie:</translation>
+        <translation>Kotwica:</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="64"/>
@@ -376,12 +376,12 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation>Złam pięciolinię co każde X takt(y/ów)</translation>
+        <translation>Złam systemy co: X takt(y/ów)</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="27"/>
         <source>Break systems every</source>
-        <translation>Złam systemy co każde:</translation>
+        <translation>Złam systemy co:</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="34"/>
@@ -439,7 +439,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="88"/>
         <source>Release</source>
-        <translation>Opadanie</translation>
+        <translation>Zanikanie</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="103"/>
@@ -450,7 +450,7 @@
         <location filename="../../effects/compressor/compressor_gui.ui" line="118"/>
         <location filename="../../effects/compressor/compressor_gui.ui" line="400"/>
         <source>RMS</source>
-        <translation>Moc RMS</translation>
+        <translation>RMS</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="128"/>
@@ -475,12 +475,12 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="202"/>
         <source>Release time (ms)</source>
-        <translation>Czas opadania od poziomu podtrzymania do zera (ms)</translation>
+        <translation>Czas zanikania od poziomu podtrzymania do zera (ms)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="205"/>
         <source>The release time in milliseconds.</source>
-        <translation>Czas opadania w milisekundach.</translation>
+        <translation>Czas zanikania w milisekundach.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="312"/>
@@ -505,17 +505,17 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="403"/>
         <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and peak is better for heavier, fast compression and percussion.</source>
-        <translation>Równowaga między mocą RMS i wartościami szczytowymi obwiedni. Moc RMS jest zazwyczaj lepsza dla subtelnych kompresji muzycznych, a wartość szczytowa jest bardziej odpowiednia dla cięższej, szybkiej kompresji i perkusji.</translation>
+        <translation>Równowaga między RMS i wartościami szczytowymi obwiedni. RMS jest zazwyczaj lepsza dla subtelnych kompresji muzycznych, a wartość szczytowa jest bardziej odpowiednia dla cięższej, szybkiej kompresji i perkusji.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="432"/>
         <source>Makeup gain (dB)</source>
-        <translation>Wzmocnienie utworu (dB)</translation>
+        <translation>Wzmocnienie (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="435"/>
         <source>Controls the final gain after compression, in dB.</source>
-        <translation>Kontrola wzmocnienia po kompresji, w dB.</translation>
+        <translation>Kontrola wzmocnienia po kompresji w dB.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="470"/>
@@ -627,7 +627,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="119"/>
         <source>Load…</source>
-        <translation>Wczytaj…</translation>
+        <translation>Załaduj…</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="126"/>
@@ -1648,7 +1648,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="271"/>
         <source>Hide when empty:</source>
-        <translation>Ukrywaj, gdy pusta/y:</translation>
+        <translation>Ukryj, gdy pusta/y:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="279"/>
@@ -1678,7 +1678,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="388"/>
         <source>Instrument Name Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolor nazwy instrumentu:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="468"/>
@@ -1843,7 +1843,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="772"/>
         <source>11 - Diminished Octave</source>
-        <translation>11 - Oktawa zwiększona</translation>
+        <translation>11 - Oktawa zmniejszona</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="777"/>
@@ -1924,7 +1924,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="59"/>
         <source>Hide system barline</source>
-        <translation>Ukrywaj systemową kreskę taktową</translation>
+        <translation>Ukryj systemową kreskę taktową</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="72"/>
@@ -2081,7 +2081,7 @@
         <location filename="../../mscore/editstafftype.ui" line="469"/>
         <location filename="../../mscore/editstafftype.ui" line="754"/>
         <source>pt</source>
-        <translation>pkt</translation>
+        <translation>pt.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="489"/>
@@ -2270,7 +2270,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1332"/>
         <source>&lt; Reset to Template</source>
-        <translation>&lt; Przywróć szablon</translation>
+        <translation>&lt; Resetuj do szablonu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1355"/>
@@ -2500,7 +2500,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="644"/>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation>Ukrywaj nazwę instrumentu, jeśli jest tylko 1 instrument</translation>
+        <translation>Ukryj nazwę instrumentu, jeśli jest tylko 1 instrument</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="667"/>
@@ -2550,7 +2550,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="970"/>
         <source>Music top margin:</source>
-        <translation>Górny margines muzyki:</translation>
+        <translation>Margines górny muzyki:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1188"/>
@@ -2560,7 +2560,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1208"/>
         <source>Music bottom margin:</source>
-        <translation>Dolny margines muzyki:</translation>
+        <translation>Margines dolny muzyki:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1819"/>
@@ -2581,12 +2581,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1127"/>
         <source>Vertical frame top margin:</source>
-        <translation>Górny margines ramki pionowej:</translation>
+        <translation>Margines górny ramki pionowej:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1178"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>Dolny margines ramki pionowej:</translation>
+        <translation>Margines dolny ramki pionowej:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1519"/>
@@ -2632,7 +2632,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3005"/>
         <source>Show first</source>
-        <translation>Pokazuj pierwszy</translation>
+        <translation>Pokaż pierwszy</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2380"/>
@@ -2810,7 +2810,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5078"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
-        <translation>Pokazuj repetycje z ozdobnikami (skrzydełkami)</translation>
+        <translation>Pokaż repetycje z ozdobnikami (skrzydełkami)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5254"/>
@@ -2861,7 +2861,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5387"/>
         <source>Accidental distance:</source>
-        <translation>Odległość znaków chromatycznych:</translation>
+        <translation>Odległość znaku chrom. od znaku chrom.:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5361"/>
@@ -3009,7 +3009,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="118"/>
         <location filename="../../mscore/editstyle.ui" line="7129"/>
         <source>Hairpins</source>
-        <translation>Crescenda/diminuenda</translation>
+        <translation>(De)crescendo</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7135"/>
@@ -3195,7 +3195,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11399"/>
         <source>Full German</source>
-        <translation>Pełna niemiecka</translation>
+        <translation>Niemiecka pełna</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11409"/>
@@ -3305,7 +3305,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="143"/>
         <source>Vibrato</source>
-        <translation>Vibrata</translation>
+        <translation>Vibrato</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="188"/>
@@ -3373,7 +3373,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="277"/>
         <source>Automatically load style settings based on font</source>
-        <translation>Automatycznie wczytaj ustawienia stylu w oparciu o czcionkę</translation>
+        <translation>Automatycznie załaduj ustawienia stylu w oparciu o czcionkę</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="438"/>
@@ -3583,7 +3583,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="608"/>
         <source>Hide empty staves within systems</source>
-        <translation>Ukrywaj puste pięciolinie w systemach</translation>
+        <translation>Ukryj puste pięciolinie w systemach</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="627"/>
@@ -3685,7 +3685,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1022"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation>Resetuj wartość &quot;Dolny margines ramki pionowej&quot;</translation>
+        <translation>Resetuj wartość &quot;Margines dolny ramki pionowej&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1799"/>
@@ -3695,7 +3695,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1157"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
-        <translation>Resetuj wartość &quot;Dolny margines muzyki&quot;</translation>
+        <translation>Resetuj wartość &quot;Margines dolny muzyki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1879"/>
@@ -3705,18 +3705,18 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="950"/>
         <source>Reset &apos;Music top margin&apos; value</source>
-        <translation>Resetuj wartość &quot;Górny margines muzyki&quot;</translation>
+        <translation>Resetuj wartość &quot;Margines górny muzyki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1039"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>Resetuj wartość &quot;Górny margines ramki pionowej&quot;</translation>
+        <translation>Resetuj wartość &quot;Margines górny ramki pionowej&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10916"/>
         <location filename="../../mscore/editstyle.ui" line="12324"/>
         <source>pt</source>
-        <translation>pkt</translation>
+        <translation>pt.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12478"/>
@@ -4028,7 +4028,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2706"/>
         <source>Inside margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Wewnętrzne marginesy</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3079"/>
@@ -4045,7 +4045,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3187"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation>Pokazuj zakresy numerów taktów przy pauzach wielotaktowych</translation>
+        <translation>Pokaż zakresy numerów taktów przy pauzach wielotaktowych</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3395"/>
@@ -4126,17 +4126,17 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="6568"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie pokazuj arpeggiów w standardowej notacji wyświetlanej w tabulaturze</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6617"/>
         <source>Slurs</source>
-        <translation type="unfinished">Łuki</translation>
+        <translation>Łuki</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6849"/>
         <source>Ties</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligatury</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11164"/>
@@ -4151,7 +4151,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="11487"/>
         <source>Load XML</source>
-        <translation>Wczytaj XML</translation>
+        <translation>Załaduj XML</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11523"/>
@@ -4213,7 +4213,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="12562"/>
         <source>Line Spacing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Interlinia:</translation>
     </message>
     <message>
         <source>Line Spacing: </source>
@@ -4292,7 +4292,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="4967"/>
         <source>Reset &apos;Show repeat barline tips (&quot;winged&quot; repeats)&apos; value</source>
-        <translation>Resetuj wartość &quot;Pokazuj repetycje z ozdobnikami (skrzydełkami)&quot;</translation>
+        <translation>Resetuj wartość &quot;Pokaż repetycje z ozdobnikami (skrzydełkami)&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5517"/>
@@ -4311,7 +4311,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     </message>
     <message>
         <source>Do not show arpeggio in standard notation when displayed in tablature</source>
-        <translation type="vanished">Nie pokazuj arpeggia w standardowej notacji wyświetlanej w tabulaturze</translation>
+        <translation type="vanished">Nie pokazuj arpeggiów w standardowej notacji wyświetlanej w tabulaturze</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6796"/>
@@ -4771,7 +4771,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="3370"/>
         <source>System Brackets</source>
-        <translation>Klamry systemowe</translation>
+        <translation>Klamry systemów</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3527"/>
@@ -4991,32 +4991,32 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="10309"/>
         <source>Min. top margin:</source>
-        <translation>Minimalny górny margines:</translation>
+        <translation>Minimalny margines górny:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10286"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
-        <translation>Resetuj wartość &quot;Minimalny górny margines&quot;</translation>
+        <translation>Resetuj wartość &quot;Minimalny margines górny&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10332"/>
         <source>Min. bottom margin:</source>
-        <translation>Minimalny dolny margines:</translation>
+        <translation>Minimalny margines dolny:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10189"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
-        <translation>Resetuj wartość &quot;Minimalny dolny margines&quot;</translation>
+        <translation>Resetuj wartość &quot;Minimalny margines dolny&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10086"/>
         <source>Align verse number</source>
-        <translation>Wyrównaj liczbę wierszy</translation>
+        <translation>Wyrównaj liczbę wersów</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10110"/>
         <source>Reset &apos;Align verse number&apos; value</source>
-        <translation>Resetuj wartość &quot;Wyrównaj liczbę wierszy&quot;</translation>
+        <translation>Resetuj wartość &quot;Wyrównaj liczbę wersów&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12461"/>
@@ -5232,32 +5232,32 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="250"/>
         <source>Export each score</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj każdą partyturę</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="257"/>
         <source>As a separate file</source>
-        <translation type="unfinished"></translation>
+        <translation>Jako osobny plik</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="264"/>
         <source>Combined into a single file</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączoną w jeden plik</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="646"/>
         <source>Each selected score will be exported as a separate audio file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Każda z zaznaczonych partytur zostanie wyeksportowana jako osobny plik dźwiękowy.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="676"/>
         <source>Each selected score will be exported as a separate MIDI file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Każda z zaznaczonych partytur zostanie wyeksportowana jako osobny plik MIDI.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="902"/>
         <source>Each selected score will be exported to a separate uncompressed MuseScore file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Każda z zaznaczonych partytur zostanie wyeksportowana jako osobny plik nieskompresowany MuseScore&apos;a.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="971"/>
@@ -5272,12 +5272,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="984"/>
         <source>PNG Images</source>
-        <translation>Obraz PNG</translation>
+        <translation>Plik grafiki bitmapowej PNG</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="989"/>
         <source>SVG Images</source>
-        <translation>Obraz SVG</translation>
+        <translation>Plik grafiki wektorowej SVG</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="994"/>
@@ -5312,7 +5312,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="1024"/>
         <source>Uncompressed MuseScore File</source>
-        <translation>Nieskompresowany plik MuseScore&apos;a</translation>
+        <translation>Plik nieskompresowany MuseScore&apos;a</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="67"/>
@@ -5364,22 +5364,22 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="404"/>
         <source>Export with transparent background</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj z przezroczystym tłem</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="411"/>
         <source>Export with background present in score</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj z tłem obecnym w partyturze</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="418"/>
         <source>Export with custom background color</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj z niestandardowym kolorem tła</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="431"/>
         <source>Background Options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcje tła:</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="465"/>
@@ -5440,7 +5440,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="663"/>
         <source>Export RPNs</source>
-        <translation>Eksportuj odwrotną notację polską</translation>
+        <translation>Eksportuj RPN-y</translation>
     </message>
     <message>
         <source>Each selected score will be exported as a separate MIDI file. </source>
@@ -5449,7 +5449,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="686"/>
         <source>Expand repeats</source>
-        <translation>Dołączaj repetycje</translation>
+        <translation>Dołącz repetycje</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="710"/>
@@ -5498,7 +5498,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     </message>
     <message>
         <source>Each selected score will be exported to a separate uncompressed MuseScore file. </source>
-        <translation type="vanished">Każda z wybranych partytur zostanie wyeksportowana jako osobny nieskompresowany plik MuseScore&apos;a.</translation>
+        <translation type="vanished">Każda z wybranych partytur zostanie wyeksportowana jako osobny plik nieskompresowany MuseScore&apos;a.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="29"/>
@@ -5568,7 +5568,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="122"/>
         <source>Loading…</source>
-        <translation>Wczytywanie…</translation>
+        <translation>Ładowanie…</translation>
     </message>
     <message>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="122"/>
@@ -5612,7 +5612,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/font_style_select.ui" line="143"/>
         <source>Strike</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekreślona</translation>
     </message>
 </context>
 <context>
@@ -5777,7 +5777,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="512"/>
         <source>XCircle</source>
-        <translation>X-kółko</translation>
+        <translation>Kółko z krzyżykiem</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="517"/>
@@ -6224,12 +6224,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="136"/>
         <source>Anchor:</source>
-        <translation>Umiejscowienie:</translation>
+        <translation>Kotwica:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="155"/>
         <source>Anchor</source>
-        <translation>Umiejscowienie</translation>
+        <translation>Kotwica</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="159"/>
@@ -6259,7 +6259,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="193"/>
         <source>Reset &apos;Anchor&apos; value</source>
-        <translation>Resetuj wartość &quot;Umiejscowienie&quot;</translation>
+        <translation>Resetuj wartość &quot;Kotwica&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="206"/>
@@ -6608,7 +6608,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="204"/>
         <source>pt</source>
-        <translation>pkt</translation>
+        <translation>pt.</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="236"/>
@@ -6786,7 +6786,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="135"/>
         <source>Reset &apos;Stemless&apos; value</source>
-        <translation>Resetuj wartość &quot;Bez laseczki&quot;</translation>
+        <translation>Resetuj wartość &quot;Bez laseczek&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="148"/>
@@ -6821,7 +6821,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="202"/>
         <source>Stemless</source>
-        <translation>Bez laseczki</translation>
+        <translation>Bez laseczek</translation>
     </message>
 </context>
 <context>
@@ -7488,32 +7488,32 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="415"/>
         <source>Ease In:</source>
-        <translation>Łagodność rozpoczęcia:</translation>
+        <translation>Powolne rozpoczęcie:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="448"/>
         <source>Reset &apos;Ease In&apos; value</source>
-        <translation>Resetuj wartość &quot;Łagodność rozpoczęcia&quot;</translation>
+        <translation>Resetuj wartość &quot;Powolne rozpoczęcie&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="455"/>
         <source>Ease Out:</source>
-        <translation>Łagodność zakończenia:</translation>
+        <translation>Powolne zakończenie:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="488"/>
         <source>Reset &apos;Ease Out&apos; value</source>
-        <translation>Resetuj wartość &quot;Łagodność zakończenia&quot;</translation>
+        <translation>Resetuj wartość &quot;Powolne zakończenie&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="541"/>
         <source>sp</source>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="557"/>
         <source>Line Thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grubość linii:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="285"/>
@@ -7528,7 +7528,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="259"/>
         <source>pt</source>
-        <translation>pkt</translation>
+        <translation>pt.</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="292"/>
@@ -7695,12 +7695,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="14"/>
         <source>Hairpin Inspector</source>
-        <translation>Kontroler crescendo/decrescendo</translation>
+        <translation>Kontroler (de)crescendo</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="60"/>
         <source>Hairpin</source>
-        <translation>Crescendo/decrescendo</translation>
+        <translation>(De)crescendo</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="91"/>
@@ -8106,7 +8106,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="142"/>
         <source>Play repeats</source>
-        <translation>Włącz odtwarzanie repetycji</translation>
+        <translation>Odtwarzaj repetycje</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="155"/>
@@ -8157,7 +8157,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="14"/>
         <source>Lasso Inspector</source>
-        <translation>Kontroler Przechwytywania obrazu</translation>
+        <translation>Kontroler przechwytywania obrazu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="57"/>
@@ -8190,12 +8190,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="14"/>
         <source>Let Ring Inspector</source>
-        <translation>Kontroler let ringu</translation>
+        <translation>Kontroler wybrzmienia</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="57"/>
         <source>Let Ring</source>
-        <translation>Let ring</translation>
+        <translation>Wybrzmienie</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="82"/>
@@ -8402,17 +8402,17 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="144"/>
         <source>Verse:</source>
-        <translation>Wiersz:</translation>
+        <translation>Wers:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="163"/>
         <source>Verse</source>
-        <translation>Wiersz</translation>
+        <translation>Wers</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="179"/>
         <source>Reset &apos;Verse&apos; value</source>
-        <translation>Resetuj wartość &quot;Wiersz&quot;</translation>
+        <translation>Resetuj wartość &quot;Wers&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="192"/>
@@ -9057,7 +9057,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="88"/>
         <source>Measure number one</source>
-        <translation type="unfinished"></translation>
+        <translation>Numer pierwszego taktu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="121"/>
@@ -9067,40 +9067,40 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="137"/>
         <source>Reset &apos;Long instrument names&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &apos;Pełne nazwy instrumentów&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="150"/>
         <source>Reset &apos;Measure number one&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &apos;Numer pierwszego taktu&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="163"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation type="unfinished">Resetuj wartość &quot;Wcięcie pierwszego systemu&quot;</translation>
+        <translation>Resetuj wartość &quot;Wcięcie pierwszego systemu&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="176"/>
         <source>Long instrument names</source>
-        <translation type="unfinished"></translation>
+        <translation>Pełne nazwy instrumentów</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="199"/>
         <source>First system indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Wcięcie pierwszego systemu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="206"/>
         <source>Start new section with:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozpocznij nową sekcję z:</translation>
     </message>
     <message>
         <source>Start new section with long instrument names</source>
-        <translation type="vanished">Rozpocznij nową sekcję z długimi nazwami instrumentów</translation>
+        <translation type="vanished">Rozpocznij nową sekcję z pełnymi nazwami instrumentów</translation>
     </message>
     <message>
         <source>Reset &apos;Start new section with long instrument names&apos; value</source>
-        <translation type="vanished">Resetuj wartość &quot;Rozpocznij nową sekcję z długimi nazwami instrumentów&quot;</translation>
+        <translation type="vanished">Resetuj wartość &quot;Rozpocznij nową sekcję z pełnymi nazwami instrumentów&quot;</translation>
     </message>
     <message>
         <source>Start new section with first system indentation</source>
@@ -9354,7 +9354,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="402"/>
         <source>Stemless</source>
-        <translation>Bez laseczki</translation>
+        <translation>Bez laseczek</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="505"/>
@@ -9485,7 +9485,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="362"/>
         <source>Reset &apos;Stemless&apos; value</source>
-        <translation>Resetuj wartość &quot;Bez laseczki&quot;</translation>
+        <translation>Resetuj wartość &quot;Bez laseczek&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="539"/>
@@ -9819,7 +9819,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="462"/>
         <source>pt</source>
-        <translation>pkt</translation>
+        <translation>pt.</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="110"/>
@@ -10660,7 +10660,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="357"/>
         <source>pt</source>
-        <translation>pkt</translation>
+        <translation>pt.</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="315"/>
@@ -10734,7 +10734,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="424"/>
         <source>Enable Auto-Size</source>
-        <translation>Włącz autowydłużanie</translation>
+        <translation>Autowydłużanie</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="437"/>
@@ -10828,7 +10828,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="14"/>
         <source>Vibrato Inspector</source>
-        <translation>Kontroler vibrata</translation>
+        <translation>Kontroler vibrato</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="57"/>
@@ -11012,7 +11012,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/instrdialog.ui" line="47"/>
         <source>Load…</source>
-        <translation>Wczytaj…</translation>
+        <translation>Załaduj…</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="54"/>
@@ -11486,8 +11486,8 @@ staccato</translation>
         <location filename="../../importexport/midiimport/importmidi_model.cpp" line="634"/>
         <source>Dotted
 notes</source>
-        <translation>Kropkowane
-nuty</translation>
+        <translation>Nuty
+z kropką</translation>
     </message>
     <message>
         <location filename="../../importexport/midiimport/importmidi_model.cpp" line="653"/>
@@ -11699,7 +11699,7 @@ Grupa niemiarowa przekracza takt.</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="219"/>
         <source>128</source>
-        <translation type="unfinished">128</translation>
+        <translation>128</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="274"/>
@@ -12175,7 +12175,7 @@ Grupa niemiarowa przekracza takt.</translation>
         <location filename="../../mscore/musescoredialogs.cpp" line="137"/>
         <location filename="../../mscore/musescoredialogs.cpp" line="142"/>
         <source> Evolution</source>
-        <translation type="unfinished"></translation>
+        <translation> Evolution</translation>
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="142"/>
@@ -12191,13 +12191,16 @@ Grupa niemiarowa przekracza takt.</translation>
         <location filename="../../mscore/musescoredialogs.cpp" line="150"/>
         <source>Visit %1 for new versions and more information.
 Get %2help%3 with the program or %4contribute%5 to its development.</source>
-        <translation type="unfinished"></translation>
+        <translation>Odwiedź %1, aby uzyskać nową wersję i więcej informacji.
+Uzyskaj %2pomoc%3 do programu lub %4przyczyń się%5 do jego rozwoju.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="156"/>
         <source>Copyright &amp;copy; 1999-2023 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prawa autorskie &amp;copy; 1999-2023 MuseScore BVBA i inni.
+Opublikowano na licencji %1GNU General Public License wersja 2%2.
+Polskie tłumaczenie MuseScore&apos;a: Grzegorz &quot;Gootector&quot; Pruchniakowski.</translation>
     </message>
     <message>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
@@ -12210,7 +12213,7 @@ Wesprzyj MuseScore&apos;a swoją %3darowizną%4.</translation>
 Published under the GNU General Public License.</source>
         <translation type="vanished">Prawa autorskie &amp;copy; 1999-2023 MuseScore BVBA i inni.
 Opublikowano na licencji GNU General Public License.
-Polskie tłumaczenie MuseScore&apos;a 3.6: Grzegorz &quot;Gootector&quot; Pruchniakowski.</translation>
+Polskie tłumaczenie MuseScore&apos;a: Grzegorz &quot;Gootector&quot; Pruchniakowski.</translation>
     </message>
 </context>
 <context>
@@ -12225,9 +12228,9 @@ Group under the W3C Community Contributor License Agreement
 %1
 A human-readable summary is available:
 %2</source>
-        <translation type="vanished">MusicXML jest otwartym formatem wymiany cyfrowych partytur,
-obsługiwanym przez wiele aplikacji.
-Prawa autorskie © 2004-2017 Współtwórcy specyfikacji MusicXML,
+        <translation type="vanished">MusicXML jest obsługiwanym przez wiele aplikacji
+otwartym formatem plików do wymiany cyfrowych partytur.
+Prawa autorskie © 2004-2017 Współtwórcy specyfikacji MusicXML
 opublikowanej przez W3C Music Notation Community Group na
 licencji W3C Community Contributor License Agreement (CLA):
 %1
@@ -12244,7 +12247,14 @@ Group under the W3C Community Final Specification Agreement:
 %1
 A human-readable summary is available:
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXML jest obsługiwanym przez wiele aplikacji
+otwartym formatem plików do wymiany cyfrowych partytur.
+Prawa autorskie © 2004-2017 Współtwórcy specyfikacji MusicXML
+opublikowanej przez W3C Music Notation Community Group na
+licencji W3C Community Contributor License Agreement (CLA):
+%1
+Podsumowanie dostępne jest na:
+%2</translation>
     </message>
 </context>
 <context>
@@ -12288,7 +12298,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="88"/>
         <source>Load Score</source>
-        <translation>Wczytaj partyturę</translation>
+        <translation>Załaduj partyturę</translation>
     </message>
 </context>
 <context>
@@ -12406,7 +12416,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="574"/>
         <source>MuseScore may not be able to load this drumset file.</source>
-        <translation>MuseScore nie jest w stanie wczytać tego pliku zestawu perkusji.</translation>
+        <translation>MuseScore nie jest w stanie załadować tego pliku zestawu perkusji.</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="603"/>
@@ -12458,7 +12468,7 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../mscore/editstringdata.cpp" line="40"/>
         <source>Unfingered</source>
         <comment>string data</comment>
-        <translation type="unfinished"></translation>
+        <translation>Niepalcowana</translation>
     </message>
 </context>
 <context>
@@ -12876,12 +12886,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="142"/>
         <source>PNG Images</source>
-        <translation>Obraz PNG</translation>
+        <translation>Plik grafiki bitmapowej PNG</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="143"/>
         <source>SVG Images</source>
-        <translation>Obraz SVG</translation>
+        <translation>Plik grafiki wektorowej SVG</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="144"/>
@@ -12916,7 +12926,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="150"/>
         <source>Uncompressed MuseScore File</source>
-        <translation>Nieskompresowany plik MuseScore&apos;a</translation>
+        <translation>Plik nieskompresowany MuseScore&apos;a</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="152"/>
@@ -13065,12 +13075,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/inspector/inspectorBend.cpp" line="64"/>
         <source>Prebend</source>
-        <translation>Podciągnięcie przed kostkowaniem</translation>
+        <translation>Podciągnięcie przed zagraniem dźwięku</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorBend.cpp" line="65"/>
         <source>Prebend/Release</source>
-        <translation>Podciągnięcie przed kostkowaniem i opuszczenie po kostkowaniu</translation>
+        <translation>Podciągnięcie przed zagraniem dźwięku i opuszczenie</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorBend.cpp" line="66"/>
@@ -13167,7 +13177,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="988"/>
         <source>Unknown</source>
-        <translation>nieznany</translation>
+        <translation>nieznana</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="989"/>
@@ -13177,47 +13187,47 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="990"/>
         <source>Major</source>
-        <translation>durowy</translation>
+        <translation>durowa</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="991"/>
         <source>Minor</source>
-        <translation>molowy</translation>
+        <translation>molowa</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="992"/>
         <source>Dorian</source>
-        <translation>dorycki</translation>
+        <translation>dorycka</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="993"/>
         <source>Phrygian</source>
-        <translation>frygijski</translation>
+        <translation>frygijska</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="994"/>
         <source>Lydian</source>
-        <translation>lidyjski</translation>
+        <translation>lidyjska</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="995"/>
         <source>Mixolydian</source>
-        <translation>miksolidyjski</translation>
+        <translation>miksolidyjska</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="996"/>
         <source>Aeolian</source>
-        <translation type="unfinished"></translation>
+        <translation>eolska</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
         <source>Ionian</source>
-        <translation>joński</translation>
+        <translation>jońska</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
-        <translation>lokrycki</translation>
+        <translation>lokrycka</translation>
     </message>
 </context>
 <context>
@@ -13353,7 +13363,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="156"/>
         <source>Load Instrument List</source>
-        <translation>Wczytaj listę instrumentów</translation>
+        <translation>Załaduj listę instrumentów</translation>
     </message>
 </context>
 <context>
@@ -13432,7 +13442,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/cloud/logindialog.cpp" line="49"/>
         <source>Forgot password?</source>
-        <translation>Zapomniałeś/aś hasła?</translation>
+        <translation>Nie pamiętasz hasła?</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/logindialog.cpp" line="65"/>
@@ -13730,7 +13740,7 @@ Instrument: %5</translation>
     <message>
         <location filename="../../mscore/mssplashscreen.cpp" line="96"/>
         <source>Evolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Evolution</translation>
     </message>
     <message>
         <source>Development Build</source>
@@ -13760,7 +13770,7 @@ Instrument: %5</translation>
         <location filename="../../mscore/musescore.cpp" line="7136"/>
         <location filename="../../mscore/musescore.cpp" line="7148"/>
         <source>Error Opening LAME library</source>
-        <translation>Błąd otwarcia biblioteki LAME</translation>
+        <translation>Błąd otwierania biblioteki LAME</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7137"/>
@@ -13770,7 +13780,7 @@ Instrument: %5</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7149"/>
         <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>Nieaktualna lub nieobsługiwana biblioteka kodowania MP3!</translation>
+        <translation>Nieprawidłowa lub nieobsługiwana biblioteka kodowania MP3!</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7097"/>
@@ -13902,7 +13912,7 @@ przed zamknięciem?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="335"/>
         <source>Load Score</source>
-        <translation>Wczytaj partyturę</translation>
+        <translation>Załaduj partyturę</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="533"/>
@@ -13916,7 +13926,7 @@ przed zamknięciem?</translation>
         <location filename="../../mscore/file.cpp" line="2450"/>
         <location filename="../../mscore/file.cpp" line="2528"/>
         <source>Uncompressed MuseScore 3 File</source>
-        <translation>Nieskompresowany plik MuseScore&apos;a 3</translation>
+        <translation>Plik nieskompresowany MuseScore&apos;a 3</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="548"/>
@@ -13944,7 +13954,7 @@ przed zamknięciem?</translation>
         <location filename="../../mscore/file.cpp" line="1267"/>
         <location filename="../../mscore/musescore.cpp" line="6454"/>
         <source>Load Style</source>
-        <translation>Wczytaj styl</translation>
+        <translation>Załaduj styl</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1242"/>
@@ -13975,7 +13985,7 @@ przed zamknięciem?</translation>
         <location filename="../../mscore/file.cpp" line="1320"/>
         <location filename="../../mscore/file.cpp" line="1348"/>
         <source>Load Chord Symbols Style</source>
-        <translation>Wczytaj styl symboli akordów</translation>
+        <translation>Załaduj styl symboli akordów</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1327"/>
@@ -14016,7 +14026,7 @@ przed zamknięciem?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1575"/>
         <source>Load Palette</source>
-        <translation>Wczytaj zakładkę palety</translation>
+        <translation>Załaduj zakładkę palety</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1576"/>
@@ -14032,7 +14042,7 @@ przed zamknięciem?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1656"/>
         <source>Load Plugin</source>
-        <translation>Wczytaj wtyczkę</translation>
+        <translation>Załaduj wtyczkę</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1657"/>
@@ -14053,7 +14063,7 @@ przed zamknięciem?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1739"/>
         <source>Load Drumset</source>
-        <translation>Wczytaj zestaw perkusji</translation>
+        <translation>Załaduj zestaw perkusji</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1740"/>
@@ -14073,12 +14083,12 @@ przed zamknięciem?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="2583"/>
         <source>Bitmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki grafiki bitmapowej BMP</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2584"/>
         <source>TIFF</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki grafiki bitmapowej TIFF</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="3506"/>
@@ -14108,12 +14118,12 @@ przed zamknięciem?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="2582"/>
         <source>PNG Bitmap Graphic</source>
-        <translation>Grafika bitmapowa</translation>
+        <translation>Pliki grafiki bitmapowej PNG</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2580"/>
         <source>Scalable Vector Graphics</source>
-        <translation>Grafika wektorowa</translation>
+        <translation>Pliki grafiki wektorowej SVG</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2509"/>
@@ -14206,13 +14216,13 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="2835"/>
         <source>Images</source>
-        <translation>Obrazy</translation>
+        <translation>Pliki graficzne</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2585"/>
         <location filename="../../mscore/file.cpp" line="2835"/>
         <source>All</source>
-        <translation>Wszystko</translation>
+        <translation>Wszystkie pliki</translation>
     </message>
     <message>
         <location filename="../../mscore/help.cpp" line="163"/>
@@ -14357,7 +14367,7 @@ Zaznacz takt i spróbuj ponownie.</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2115"/>
         <source>&amp;Preferences…</source>
-        <translation>W&amp;łaściwości…</translation>
+        <translation>&amp;Ustawienia…</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2173"/>
@@ -14367,7 +14377,7 @@ Zaznacz takt i spróbuj ponownie.</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2174"/>
         <source>&amp;Toolbars</source>
-        <translation>Paski &amp;narzędziowe</translation>
+        <translation>Paski &amp;narzędzi</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2183"/>
@@ -14486,7 +14496,7 @@ Zaznacz takt i spróbuj ponownie.</translation>
         <location filename="../../mscore/musescore.cpp" line="1018"/>
         <location filename="../../mscore/musescore.cpp" line="2150"/>
         <source>Floating</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruchomy</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2032"/>
@@ -14501,7 +14511,7 @@ Zaznacz takt i spróbuj ponownie.</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2347"/>
         <source>Are you sure?</source>
-        <translation>Jesteś pewny/a?</translation>
+        <translation>Na pewno?</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2348"/>
@@ -14522,7 +14532,7 @@ Na pewno chcesz kontynuować?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2606"/>
         <source>No recent files</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak ostatnich plików</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4184"/>
@@ -14633,7 +14643,7 @@ Przywrócić sesję?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6455"/>
         <source>MuseScore may not be able to load this style file: %1</source>
-        <translation>MuseScore nie jest w stanie wczytać tego pliku stylów: %1.</translation>
+        <translation>MuseScore nie jest w stanie załadować tego pliku stylów: %1.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6758"/>
@@ -14678,7 +14688,7 @@ Przywrócić sesję?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="8203"/>
         <source>Initializing preferences…</source>
-        <translation>Inicjowanie właściwości…</translation>
+        <translation>Inicjowanie ustawień…</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="8244"/>
@@ -14693,7 +14703,7 @@ Przywrócić sesję?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="8300"/>
         <source>Loading scores…</source>
-        <translation>Wczytywanie partytur…</translation>
+        <translation>Ładowanie partytur…</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="8311"/>
@@ -14738,28 +14748,29 @@ Przywrócić sesję?</translation>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="32"/>
         <source>Save online</source>
-        <translation type="unfinished">Zapisz na MuseScore.com</translation>
+        <translation>Zapisz na MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="32"/>
         <source>Saving scores online is disabled in this unstable prerelease version of MuseScore.</source>
-        <translation type="unfinished">Zapisywanie partytur na MuseScore.com w tej niestabilnej, testowej wersji MuseScore&apos;a jest wyłączone.</translation>
+        <translation>Zapisywanie partytur na MuseScore.com w tej niestabilnej, testowej wersji MuseScore&apos;a jest wyłączone.</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="39"/>
         <source>Upload Error</source>
-        <translation type="unfinished">Błąd przesyłania</translation>
+        <translation>Błąd przesyłania</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="40"/>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
-        <translation type="unfinished">Ta partytura nie może być zapisana na MuseScore.com. Popraw uszkodzone takty i spróbuj ponownie.</translation>
+        <translation>Ta partytura nie może być zapisana na MuseScore.com. Popraw uszkodzone takty i spróbuj ponownie.</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/mscorePlugins.cpp" line="445"/>
         <source>No score open.
 This plugin requires an open score to run.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak otwartej partytury.
+Do uruchomienia tej wtyczki wymagana jest otwarta partytura.</translation>
     </message>
 </context>
 <context>
@@ -15206,12 +15217,12 @@ połączenie internetowe.</translation>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="123"/>
         <source>Add Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj nutę</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="127"/>
         <source>Change Playback Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień długość odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="128"/>
@@ -15420,14 +15431,15 @@ Zapisać przed zamknięciem?</translation>
         <location filename="../../mscore/plugin/pluginCreator.cpp" line="330"/>
         <source>No score open.
 This plugin requires an open score to run.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak otwartej partytury.
+Do uruchomienia tej wtyczki wymagana jest otwarta partytura.</translation>
     </message>
     <message>
         <source>No score open.
 This plugin requires an open score to run.
 </source>
         <translation type="vanished">Brak otwartej partytury.
-Ta wtyczka wymaga otwartej partytury do działania.
+Do uruchomienia tej wtyczki wymagana jest otwarta partytura.
 </translation>
     </message>
     <message>
@@ -15659,7 +15671,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="865"/>
         <source>Load Shortcuts</source>
-        <translation>Wczytaj skróty</translation>
+        <translation>Załaduj skróty</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="941"/>
@@ -15758,7 +15770,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1651"/>
         <source>Choose Score Fonts Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz folder czcionek partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1667"/>
@@ -15802,7 +15814,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
         <source>Preference</source>
-        <translation>Właściwość</translation>
+        <translation>Ustawienie</translation>
     </message>
     <message>
         <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
@@ -15812,12 +15824,12 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/preferenceslistwidget.cpp" line="33"/>
         <source>Advanced preferences</source>
-        <translation>Właściwości zaawansowane</translation>
+        <translation>Ustawienia zaawansowane</translation>
     </message>
     <message>
         <location filename="../../mscore/preferenceslistwidget.cpp" line="34"/>
         <source>Access to more advanced preferences</source>
-        <translation>Dostęp do właściwości bardziej zaawansowanych</translation>
+        <translation>Dostęp do ustawień bardziej zaawansowanych</translation>
     </message>
 </context>
 <context>
@@ -15957,7 +15969,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../libmscore/edit.cpp" line="3318"/>
         <source>Please select the complete tuplet and retry the command</source>
-        <translation>Zaznacz pełną grupę niemiarową i powtórz polecenie.</translation>
+        <translation>Zaznacz pełną grupę niemiarową i spróbuj ponownie.</translation>
     </message>
 </context>
 <context>
@@ -16164,7 +16176,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="494"/>
         <source>PNG Bitmap Graphic</source>
-        <translation>Grafika bitmapowa</translation>
+        <translation>Plik grafiki bitmapowej PNG</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="495"/>
@@ -16174,7 +16186,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="496"/>
         <source>Scalable Vector Graphics</source>
-        <translation>Grafika wektorowa</translation>
+        <translation>Plik grafiki wektorowej SVG</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="525"/>
@@ -16383,7 +16395,7 @@ Zaznacz takt i spróbuj ponownie.</translation>
     <message>
         <location filename="../../mscore/searchComboBox.cpp" line="12"/>
         <source>Type to search. Press Enter to return to score.</source>
-        <translation>Wpisz, aby wyszukać. Wciśnij klawisz &quot;Enter&quot;, aby powrócić do partytury.</translation>
+        <translation>Wpisz, aby wyszukać. Naciśnij klawisz &quot;Enter&quot;, aby powrócić do partytury.</translation>
     </message>
 </context>
 <context>
@@ -16665,12 +16677,12 @@ Chcesz widzieć wskazówki?</translation>
     <message>
         <location filename="../../mscore/texttools.cpp" line="131"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>Podkreślona</translation>
     </message>
     <message>
         <location filename="../../mscore/texttools.cpp" line="132"/>
         <source>Strike-through</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekreślona</translation>
     </message>
     <message>
         <location filename="../../mscore/texttools.cpp" line="133"/>
@@ -17151,7 +17163,7 @@ Wybierz inną nazwę:</translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="42"/>
         <source>Open/Atonal</source>
-        <translation>Otwarta/atonalna</translation>
+        <translation>Otwarte/atonalne</translation>
     </message>
     <message>
         <source>Save online</source>
@@ -18052,7 +18064,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/menus.cpp" line="1358"/>
         <source>Dynamic + hairpin</source>
-        <translation>Dynamika</translation>
+        <translation>Dynamika + (de)crescendo</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1367"/>
@@ -18309,7 +18321,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../mscore/qml/palettes/PaletteTree.qml" line="29"/>
         <source>Palettes Tree, contains %n palette(s)</source>
         <translation>
-            <numerusform>Drzewo palety, zawiera %n zakładkę palety</numerusform>
+            <numerusform>Drzewo palety, zawiera 1 zakładkę palety</numerusform>
             <numerusform>Drzewo palety, zawiera %n zakładki palety</numerusform>
             <numerusform>Drzewo palety, zawiera %n zakładek palety</numerusform>
         </translation>
@@ -18319,7 +18331,7 @@ zakończone niepowodzeniem.</translation>
         <source>%1, contains %n matching element(s)</source>
         <comment>palette</comment>
         <translation>
-            <numerusform>%1, zawiera %n pasujący element</numerusform>
+            <numerusform>%1, zawiera 1 pasujący element</numerusform>
             <numerusform>%1, zawiera %n pasujące elementy</numerusform>
             <numerusform>%1, zawiera %n pasujących elementów</numerusform>
         </translation>
@@ -18397,7 +18409,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="134"/>
         <source>%n palette(s) match(es)</source>
         <translation>
-            <numerusform>%n zakładka palety pasuje</numerusform>
+            <numerusform>1 zakładka palety pasuje</numerusform>
             <numerusform>%n zakładki palety pasują</numerusform>
             <numerusform>%n zakładek palety pasuje</numerusform>
         </translation>
@@ -18900,17 +18912,17 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
         <location filename="../../mscore/prefsdialog.ui" line="20"/>
         <location filename="../../mscore/prefsdialog.ui" line="23"/>
         <source>MuseScore Preferences</source>
-        <translation>Właściwości MuseScore&apos;a</translation>
+        <translation>Ustawienia MuseScore&apos;a</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="46"/>
         <source>Reset All Preferences to Default</source>
-        <translation>Przywróć właściwości domyślne</translation>
+        <translation>Przywróć ustawienia domyślne</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="90"/>
         <source>Preferences Tab Manager</source>
-        <translation>Właściwości Menedżera zakładek</translation>
+        <translation>Ustawienia Menedżera zakładek</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="100"/>
@@ -18970,12 +18982,12 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="682"/>
         <source>Show splash screen</source>
-        <translation>Pokazuj ekran powitalny</translation>
+        <translation>Pokaż ekran powitalny</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="618"/>
         <source>Show start center</source>
-        <translation>Pokazuj centrum startowe</translation>
+        <translation>Pokaż centrum startowe</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="97"/>
@@ -18995,17 +19007,17 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="696"/>
         <source>Show play panel</source>
-        <translation>Pokazuj panel odtwarzania</translation>
+        <translation>Pokaż panel odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="703"/>
         <source>Show navigator</source>
-        <translation>Pokazuj nawigatora</translation>
+        <translation>Pokaż nawigatora</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="710"/>
         <source>Show tours</source>
-        <translation>Pokazuj wskazówki</translation>
+        <translation>Pokaż wskazówki</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="537"/>
@@ -19390,7 +19402,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1311"/>
         <source>Enable MIDI input</source>
-        <translation>Włącz wejście MIDI</translation>
+        <translation>Wejście MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1318"/>
@@ -19418,17 +19430,17 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="392"/>
         <source>Score Fonts:</source>
-        <translation type="unfinished"></translation>
+        <translation>Czcionki partytury:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="402"/>
         <source>Choose score fonts folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz folder czcionek partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="405"/>
         <source>Opens a dialog for selecting the score fonts folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwiera okno dialogowe umożliwiające wybór folderu czcionek partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="422"/>
@@ -19438,7 +19450,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="491"/>
         <source>pt</source>
-        <translation>pkt</translation>
+        <translation>pt.</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="515"/>
@@ -19512,7 +19524,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1447"/>
         <source>Enable MIDI remote control</source>
-        <translation>Włącz zdalne sterowanie MIDI</translation>
+        <translation>Zdalne sterowanie MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1450"/>
@@ -19544,7 +19556,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
         <location filename="../../mscore/prefsdialog.ui" line="2317"/>
         <location filename="../../mscore/prefsdialog.ui" line="2359"/>
         <source>Is active</source>
-        <translation>Jest aktywny</translation>
+        <translation>Jest aktywne</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1487"/>
@@ -19576,17 +19588,17 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1508"/>
         <source>Rewind record</source>
-        <translation>Przewiń nagranie</translation>
+        <translation>Przewijanie jest nagrywane</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1523"/>
         <source>Toggle play</source>
-        <translation>Włącz odtwarzanie</translation>
+        <translation>Przełącz odtwarzanie</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1554"/>
         <source>Toggle play record</source>
-        <translation>Włączanie odtwarzania jest nagrywane</translation>
+        <translation>Przełącz odtwarzanie jest nagrywane</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1582"/>
@@ -19731,7 +19743,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2082"/>
         <source>Play is active</source>
-        <translation>Nagrywanie jest aktywne</translation>
+        <translation>Odtwarzanie jest aktywne</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2103"/>
@@ -19741,12 +19753,12 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2124"/>
         <source>Play record</source>
-        <translation>Rozpocznij nagrywanie</translation>
+        <translation>Odtwarzanie jest nagrywane</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2145"/>
         <source>Stop record</source>
-        <translation>Zatrzymaj nagrywanie</translation>
+        <translation>Zatrzymanie jest nagrywane</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2160"/>
@@ -19816,7 +19828,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2383"/>
         <source>Undo record</source>
-        <translation>Cofnij nagrywanie</translation>
+        <translation>Cofanie jest nagrywane</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2398"/>
@@ -19827,7 +19839,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
         <location filename="../../mscore/prefsdialog.ui" line="2405"/>
         <location filename="../../mscore/prefsdialog.ui" line="2412"/>
         <source>Advance on release?</source>
-        <translation>Postęp przy opadaniu?</translation>
+        <translation>Postęp przy zwalnianiu?</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2419"/>
@@ -20133,12 +20145,12 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3308"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
-        <translation>Używaj domyślnej czcionki (Edwin) w importowanych partyturach</translation>
+        <translation>Zastosuj czcionkę domyślną (Edwin) w zaimportowanych partyturach</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3315"/>
         <source>Infer text types based on content where possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeśli to możliwe, wywnioskuj typ tekstu w oparciu o zawartość</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3325"/>
@@ -20429,7 +20441,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3530"/>
         <source>Show option to apply improved engraving and style settings</source>
-        <translation>Pokazuj opcje dotyczące użycia ulepszonych zasad układu nut i stylów</translation>
+        <translation>Pokaż opcje dotyczące użycia ulepszonych zasad układu nut i stylów</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3671"/>
@@ -20459,7 +20471,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4037"/>
         <source>Load…</source>
-        <translation>Wczytaj…</translation>
+        <translation>Załaduj…</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4103"/>
@@ -20485,7 +20497,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
         <location filename="../../mscore/prefsdialog.ui" line="4165"/>
         <location filename="../../mscore/prefsdialog.ui" line="4168"/>
         <source>Select a preference to reset to default value</source>
-        <translation>Zaznacz właściwość, aby przywrócić wartość domyślną</translation>
+        <translation>Zaznacz ustawienie, aby przywrócić wartość domyślną</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4171"/>
@@ -20518,12 +20530,12 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3636"/>
         <source>Expand repeats</source>
-        <translation>Dołączaj repetycje</translation>
+        <translation>Dołącz repetycje</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3646"/>
         <source>Export RPNs</source>
-        <translation>Eksportuj odwrotną notację polską</translation>
+        <translation>Eksportuj RPN-y</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3678"/>
@@ -20617,7 +20629,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4034"/>
         <source>Loads a Shortcut List</source>
-        <translation>Wczytuje listę skrótów</translation>
+        <translation>Ładuje listę skrótów</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4044"/>
@@ -20832,7 +20844,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1362"/>
         <source>Tab. 6-str. common</source>
-        <translation>Tab. 6-str. zwykła</translation>
+        <translation>Tab. 6-str. podstawowa</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1363"/>
@@ -20847,7 +20859,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1365"/>
         <source>Tab. 4-str. common</source>
-        <translation>Tab. 4-str. zwykła</translation>
+        <translation>Tab. 4-str. podstawowa</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1366"/>
@@ -20862,7 +20874,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1368"/>
         <source>Tab. 5-str. common</source>
-        <translation>Tab. 5-str. zwykła</translation>
+        <translation>Tab. 5-str. podstawowa</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1369"/>
@@ -20897,12 +20909,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1377"/>
         <source>Tab. 7-str. common</source>
-        <translation>Tab. 7-str. zwykła</translation>
+        <translation>Tab. 7-str. podstawowa</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1378"/>
         <source>Tab. 8-str. common</source>
-        <translation>Tab. 8-str. zwykła</translation>
+        <translation>Tab. 8-str. podstawowa</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="163"/>
@@ -20974,21 +20986,21 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
     <message>
         <location filename="../../mscore/file.cpp" line="363"/>
         <source>Would you like to apply our default typeface (%1) to this score?</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcesz zastosować w tej partyturze naszą czcionkę domyślną (%1)?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="364"/>
         <source>No</source>
-        <translation type="unfinished">Nie</translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="365"/>
         <source>Yes</source>
-        <translation type="unfinished">Tak</translation>
+        <translation>Tak</translation>
     </message>
     <message>
         <source>Would you like to apply our default typeface (Edwin) to this score?</source>
-        <translation type="vanished">Chcesz użyć w tej partyturze naszej domyślnej czcionki (Edwin)?</translation>
+        <translation type="vanished">Chcesz zastosować w tej partyturze naszą czcionkę domyślną (Edwin)?</translation>
     </message>
     <message>
         <source>Do not apply Edwin</source>
@@ -21022,12 +21034,12 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
         <location filename="../../importexport/musicxml/importmxml.cpp" line="86"/>
         <location filename="../../importexport/musicxml/importxml.cpp" line="114"/>
         <source>Do you want to try to load this file anyway?</source>
-        <translation>Chcesz spróbować wczytać ten plik?</translation>
+        <translation>Chcesz spróbować załadować ten plik?</translation>
     </message>
     <message>
         <location filename="../../importexport/musicxml/importmxml.cpp" line="137"/>
         <source>Error(s) found, import may be incomplete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Znaleziono błędy. Import może być niekompletny.</translation>
     </message>
     <message>
         <location filename="../../importexport/musicxml/importxml.cpp" line="139"/>
@@ -21060,7 +21072,7 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
         <location filename="../../importexport/musicxml/importxml.cpp" line="304"/>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation>Nie można otworzyć skompresowanego pliku MusicXML
+        <translation>Nie można otworzyć pliku skompresowanego MusicXML
 %1.</translation>
     </message>
     <message>
@@ -21156,7 +21168,7 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
         <location filename="../../libmscore/chordrest.cpp" line="720"/>
         <source>%1 note tuplet</source>
         <extracomment>%1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 w grupie niemiarowej</translation>
     </message>
     <message>
         <source>Custom tuplet</source>
@@ -21302,7 +21314,7 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
     <message>
         <location filename="../../libmscore/note.cpp" line="3163"/>
         <source>%1 head %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Główka %1 %2</translation>
     </message>
     <message>
         <location filename="../../libmscore/read206.cpp" line="3662"/>
@@ -21468,12 +21480,12 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4607"/>
         <source>Load Shortcuts</source>
-        <translation>Wczytaj skróty</translation>
+        <translation>Załaduj skróty</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4607"/>
         <source>Can&apos;t load shortcuts file: %1</source>
-        <translation>Nie można wczytać pliku skrótów: %1.</translation>
+        <translation>Nie można załadować pliku skrótów: %1.</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="251"/>
@@ -21646,17 +21658,17 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
     <message>
         <location filename="../../avsomr/ui/recognitionproccessdialog.cpp" line="83"/>
         <source>Loading…</source>
-        <translation>Wczytywanie…</translation>
+        <translation>Ładowanie…</translation>
     </message>
     <message>
         <location filename="../../avsomr/ui/recognitionproccessdialog.cpp" line="86"/>
         <source>Successfully loaded</source>
-        <translation>Wczytywanie zakończone pomyślnie</translation>
+        <translation>Ładowanie zakończone pomyślnie</translation>
     </message>
     <message>
         <location filename="../../avsomr/ui/recognitionproccessdialog.cpp" line="88"/>
         <source>Failed to load</source>
-        <translation>Wczytywanie zakończone niepowodzeniem</translation>
+        <translation>Ładowanie zakończone niepowodzeniem</translation>
     </message>
     <message>
         <location filename="../../libmscore/fret.cpp" line="1461"/>
@@ -21695,9 +21707,9 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation>
-            <numerusform>%n kropka na progu(ach) %1</numerusform>
-            <numerusform>%n kropki na progu(ach) %1</numerusform>
-            <numerusform>%n kropek na progu(ach) %1</numerusform>
+            <numerusform>Kropka na progu %1</numerusform>
+            <numerusform>%n kropki na progach %1</numerusform>
+            <numerusform>%n kropek na progach %1</numerusform>
         </translation>
     </message>
     <message>
@@ -21734,7 +21746,7 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
         <location filename="../../libmscore/fret.cpp" line="1557"/>
         <source>%n string(s) total</source>
         <translation>
-            <numerusform>%n struna ogółem</numerusform>
+            <numerusform>1 struna ogółem</numerusform>
             <numerusform>%n struny ogółem</numerusform>
             <numerusform>%n strun ogółem</numerusform>
         </translation>
@@ -21878,27 +21890,27 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
     <message>
         <location filename="../../importexport/musicxml/musicxmlsupport.cpp" line="308"/>
         <source>line %1 column %2</source>
-        <translation type="unfinished"></translation>
+        <translation>wiersz %1, kolumna %2:</translation>
     </message>
     <message>
         <location filename="../../importexport/musicxml/musicxmlsupport.cpp" line="320"/>
         <source>expected token type and name &apos;EndElement %1&apos;, actual &apos;%2 %3&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>oczekiwany typ i nazwa tokena: &apos;EndElement %1&apos;, faktyczny: &apos;%2 %3&apos;</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="2649"/>
         <source>Measure: %1</source>
-        <translation type="unfinished">Takt: %1</translation>
+        <translation>Takt: %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="2651"/>
         <source>Beat: %1</source>
-        <translation type="unfinished">Miara: %1</translation>
+        <translation>Miara: %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="2654"/>
         <source>Staff: %1</source>
-        <translation type="unfinished">Pięciolinia: %1</translation>
+        <translation>Pięciolinia: %1</translation>
     </message>
 </context>
 <context>
@@ -21907,7 +21919,7 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
         <location filename="../../importexport/capella/capella.cpp" line="2789"/>
         <location filename="../../importexport/midiimport/importmidi.cpp" line="1205"/>
         <source>Load failed: %1</source>
-        <translation>Wczytywanie zakończone niepowodzeniem: %1.</translation>
+        <translation>Ładowanie zakończone niepowodzeniem: %1.</translation>
     </message>
     <message>
         <location filename="../../importexport/capella/capella.cpp" line="2790"/>
@@ -21957,12 +21969,12 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../importexport/midiimport/importmidi.cpp" line="1204"/>
         <source>Load MIDI</source>
-        <translation>Wczytaj MIDI</translation>
+        <translation>Załaduj MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="167"/>
         <source>Load Style Failed</source>
-        <translation>Wczytywanie stylu zakończone niepowodzeniem</translation>
+        <translation>Ładowanie stylu zakończone niepowodzeniem</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="669"/>
@@ -22025,12 +22037,12 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4195"/>
         <source>Load Languages Failed:</source>
-        <translation>Wczytywanie języków zakończone niepowodzeniem.</translation>
+        <translation>Ładowanie języków zakończone niepowodzeniem.</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="174"/>
         <source>Are you sure?</source>
-        <translation>Jesteś pewny/a?</translation>
+        <translation>Na pewno?</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="175"/>
@@ -22051,7 +22063,7 @@ Chcesz go zastąpić?</translation>
         <location filename="../../omr/omr.cpp" line="57"/>
         <location filename="../../omr/omr.cpp" line="66"/>
         <source>Loading PDF</source>
-        <translation>Wczytywanie PDF</translation>
+        <translation>Ładowanie PDF</translation>
     </message>
     <message>
         <location filename="../../omr/omr.cpp" line="57"/>
@@ -22068,7 +22080,7 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../omr/omr.cpp" line="66"/>
         <source>Load Parameters</source>
-        <translation>Wczytaj parametry</translation>
+        <translation>Załaduj parametry</translation>
     </message>
     <message>
         <location filename="../../omr/omr.cpp" line="144"/>
@@ -22328,12 +22340,12 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="88"/>
         <source>Our new professional notation font, %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nasza nowa czcionka nutowa %1</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="97"/>
         <source>Our improved text font, %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nasza nowa czcionka tekstowa %1</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="107"/>
@@ -22605,7 +22617,7 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="29"/>
         <source>Load</source>
-        <translation>Wczytaj</translation>
+        <translation>Załaduj</translation>
     </message>
     <message>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="30"/>
@@ -22623,7 +22635,7 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../audio/midi/zerberus/zerberusgui.cpp" line="33"/>
         <source>Load</source>
-        <translation>Wczytaj</translation>
+        <translation>Załaduj</translation>
     </message>
     <message>
         <location filename="../../audio/midi/zerberus/zerberusgui.cpp" line="34"/>
@@ -22644,7 +22656,7 @@ Chcesz go zastąpić?</translation>
 A key sequence can be implemented into another: Ctrl+B, and then Ctrl+C is a valid shortcut.
 Up to four combinations can be used: Ctrl+A then Ctrl+B then Ctrl+C then Ctrl+D is also a valid shortcut.
 Note: this last shortcut would be noted &quot;Ctrl+A,Ctrl+B,Ctrl+C,Ctrl+D&quot;</source>
-        <translation>Aby wprowadzić skrót, wybierz sekwencję klawiszy, na przykład Ctrl+A i wciśnij ją na klawiaturze.
+        <translation>Aby wprowadzić skrót, wybierz sekwencję klawiszy, na przykład Ctrl+A i naciśnij ją na klawiaturze.
 Sekwencję klawiszy można zaimplementować do innej: Ctrl+B, a następnie Ctrl+C jest poprawnym skrótem.
 Można użyć do czterech kombinacji: Ctrl+A, Ctrl+B, Ctrl+C, a także Ctrl+D.
 Uwaga: Ten ostatni skrót będzie oznaczony jako &quot;Ctrl+A, Ctrl+B, Ctrl+C, Ctrl+D&quot;.</translation>
@@ -22709,7 +22721,7 @@ Uwaga: Ten ostatni skrót będzie oznaczony jako &quot;Ctrl+A, Ctrl+B, Ctrl+C, C
         <location filename="../../mscore/shortcutcapturedialog.ui" line="44"/>
         <source>Press up to four key combinations to enter shortcut sequence.
 Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
-        <translation>Wciśnij kombinację do czterech klawiszy, aby wprowadzić sekwencję skrótów.
+        <translation>Naciśnij kombinację do czterech klawiszy, aby wprowadzić sekwencję skrótów.
 Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     </message>
     <message>
@@ -22788,7 +22800,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/stafftext.ui" line="56"/>
         <source>Switch one or more voices to a specified channel:</source>
-        <translation>Włącz jeden lub więcej głosów na określonym kanale</translation>
+        <translation>Przełącz jeden lub więcej głosów na określonym kanale</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="65"/>
@@ -22977,7 +22989,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/stafftypetemplates.ui" line="48"/>
         <source>Load Templates</source>
-        <translation>Wczytaj szablony</translation>
+        <translation>Załaduj szablony</translation>
     </message>
 </context>
 <context>
@@ -23051,17 +23063,17 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="73"/>
         <source>Load from score</source>
-        <translation>Wczytaj z partytury</translation>
+        <translation>Załaduj z partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="76"/>
         <source>Load from Score</source>
-        <translation>Wczytaj z partytury</translation>
+        <translation>Załaduj z partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="86"/>
         <source>Load Default</source>
-        <translation>Wczytaj domyślny</translation>
+        <translation>Załaduj domyślny</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="100"/>
@@ -23258,7 +23270,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="153"/>
         <source>(You can change this behaviour any time in &apos;Preferences… &gt; General &gt; Telemetry&apos;)</source>
-        <translation>(Możesz to zmienić w oknie &quot;Właściwości… &gt; Ogólne &gt; Telemetria&quot;)</translation>
+        <translation>(Możesz to zmienić w oknie &quot;Ustawienia… &gt; Ogólne &gt; Telemetria&quot;)</translation>
     </message>
     <message>
         <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="170"/>
@@ -23537,7 +23549,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="2474"/>
         <source>Hairpin</source>
-        <translation>Crescendo/diminuendo</translation>
+        <translation>(De)crescendo</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2494"/>
@@ -23661,7 +23673,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/timedialog.ui" line="141"/>
         <source>128</source>
-        <translation type="unfinished">128</translation>
+        <translation>128</translation>
     </message>
     <message>
         <location filename="../../mscore/timedialog.ui" line="159"/>
@@ -23827,7 +23839,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="148"/>
         <source>128</source>
-        <translation type="unfinished">128</translation>
+        <translation>128</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="177"/>
@@ -23953,7 +23965,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
         <location filename="../../mscore/timesigwizard.ui" line="350"/>
         <location filename="../../mscore/timesigwizard.ui" line="416"/>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
-        <translation>Podpowiedź: Możesz również dodać lub usunąć takty po stworzeniu partytury.</translation>
+        <translation>Podpowiedź: Możesz również dodać lub usunąć takty po utworzeniu partytury.</translation>
     </message>
 </context>
 <context>
@@ -23961,12 +23973,12 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/toolbarEditor.ui" line="14"/>
         <source>Edit Toolbar</source>
-        <translation>Edytuj pasek narzędziowy</translation>
+        <translation>Edytuj pasek narzędzi</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.ui" line="26"/>
         <source>Toolbar</source>
-        <translation>Pasek narzędziowy:</translation>
+        <translation>Pasek narzędzi:</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.ui" line="39"/>
@@ -24103,7 +24115,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="162"/>
         <source>By Interval</source>
-        <translation>Przez interwał</translation>
+        <translation>O interwał</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="194"/>
@@ -24228,7 +24240,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="314"/>
         <source>Diminished Octave</source>
-        <translation>Oktawa zwiększona</translation>
+        <translation>Oktawa zmniejszona</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="319"/>
@@ -24278,7 +24290,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="422"/>
         <source>Keep degree alterations</source>
-        <translation>Pozostaw zmiany stopnia</translation>
+        <translation>Zachowaj zmiany stopnia</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="435"/>
@@ -24356,7 +24368,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="189"/>
         <source>Load Palette…</source>
-        <translation>Wczytaj zakładkę palety…</translation>
+        <translation>Załaduj zakładkę palety…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="194"/>
@@ -24634,12 +24646,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/workspacedialog.ui" line="68"/>
         <source>Toolbars</source>
-        <translation>Paski narzędziowe</translation>
+        <translation>Paski narzędzi</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.ui" line="75"/>
         <source>GUI Preferences</source>
-        <translation>Właściwości GUI</translation>
+        <translation>Ustawienia GUI</translation>
     </message>
 </context>
 <context>
@@ -24677,7 +24689,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../audio/midi/zerberus/zerberusgui.cpp" line="106"/>
         <source>Loading…</source>
-        <translation>Wczytywanie…</translation>
+        <translation>Ładowanie…</translation>
     </message>
     <message>
         <location filename="../../audio/midi/zerberus/zerberusgui.cpp" line="106"/>
@@ -24726,7 +24738,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="48"/>
         <source>Load score from file</source>
-        <translation>Wczytaj partyturę z pliku</translation>
+        <translation>Załaduj partyturę z pliku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="58"/>
@@ -24914,7 +24926,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="294"/>
         <source>Enter durations with a single click or keypress</source>
-        <translation>Wprowadź wartości rytmiczne przez pojedyncze kliknięcie lub wciśnięcie klawisza</translation>
+        <translation>Wprowadź wartości rytmiczne przez pojedyncze kliknięcie lub naciśnięcie klawisza</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="336"/>
@@ -24929,12 +24941,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="346"/>
         <source>Unison Above</source>
-        <translation>Pryma powyżej</translation>
+        <translation>Pryma</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="347"/>
         <source>Enter unison above</source>
-        <translation>Wpisz prymę powyżej</translation>
+        <translation>Wpisz prymę</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="353"/>
@@ -26409,37 +26421,37 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1964"/>
         <source>Toggle &apos;MIDI Input&apos;</source>
-        <translation>Włącz &quot;Wejście MIDI&quot;</translation>
+        <translation>Wejście MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2069"/>
         <source>Toggle &apos;Play Panel&apos;</source>
-        <translation>Włącz &quot;Panel odtwarzania&quot;</translation>
+        <translation>Pokaż/ukryj panel odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2109"/>
         <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation>Włącz &quot;Panel importu MIDI&quot;</translation>
+        <translation>Pokaż/ukryj panel importu MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2141"/>
         <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation>Włącz pasek narzędziowy &quot;Kontrola odtwarzania&quot;</translation>
+        <translation>Pokaż/ukryj pasek narzędzi kontroli odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2148"/>
         <source>Toggle &apos;Concert Pitch&apos; toolbar</source>
-        <translation>Włącz pasek narzędziowy &quot;Bez transpozycji&quot;</translation>
+        <translation>Pokaż/ukryj pasek narzędzi bez transpozycji</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2155"/>
         <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation>Włącz pasek narzędziowy &quot;Przechwytywanie obrazu&quot;</translation>
+        <translation>Pokaż/ukryj pasek narzędzi przechwytywania obrazu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2183"/>
         <source>Toggle &apos;Status Bar&apos;</source>
-        <translation>Włącz &quot;Pasek stanu&quot;</translation>
+        <translation>Pokaż/ukryj pasek stanu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2343"/>
@@ -26484,27 +26496,27 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2428"/>
         <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation>Włącz &quot;Odtwarzaj repetycje&quot;</translation>
+        <translation>Odtwarzaj repetycje</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2438"/>
         <source>Pan Score</source>
-        <translation>Włącz &quot;Rolka podczas odtwarzania&quot;</translation>
+        <translation>Rolka podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2439"/>
         <source>Toggle &apos;Pan Score&apos;</source>
-        <translation>Włącz &quot;Rolka podczas odtwarzania&quot;</translation>
+        <translation>Rolka podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2440"/>
         <source>Pan score automatically</source>
-        <translation>Włącz &quot;Rolka podczas odtwarzania&quot;</translation>
+        <translation>Rolka podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2573"/>
         <source>Toggle &apos;Concert Pitch&apos;</source>
-        <translation>Włącz &quot;Bez transpozycji&quot;</translation>
+        <translation>Włącz/wyłącz bez transpozycji</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2574"/>
@@ -26514,17 +26526,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2603"/>
         <source>Toggle &apos;System Break&apos;</source>
-        <translation>Włącz &quot;Łamanie systemu&quot;</translation>
+        <translation>Dodaj/usuń łamanie systemu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2613"/>
         <source>Toggle &apos;Page Break&apos;</source>
-        <translation>Włącz &quot;Łamanie strony&quot;</translation>
+        <translation>Dodaj/usuń łamanie strony</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2623"/>
         <source>Toggle &apos;Section Break&apos;</source>
-        <translation>Włącz &quot;Łamanie sekcji&quot;</translation>
+        <translation>Dodaj/usuń łamanie sekcji</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2639"/>
@@ -26539,7 +26551,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2641"/>
         <source>Reset shapes and positions of selected elements to their defaults</source>
-        <translation>Przywróć kształty i pozycje zaznaczonych elementów do ich wartości domyślnych</translation>
+        <translation>Resetuj kształty i pozycje zaznaczonych elementów do ich wartości domyślnych</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2653"/>
@@ -26639,7 +26651,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2972"/>
         <source>Toggle &apos;Image Capture&apos;</source>
-        <translation>Włącz &quot;Przechwytywanie obrazu&quot;</translation>
+        <translation>Przechwytywanie obrazu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2983"/>
@@ -26689,27 +26701,27 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3156"/>
         <source>Loop Playback</source>
-        <translation>Włącz &quot;Odtwarzaj w pętli&quot;</translation>
+        <translation>Odtwarzaj w pętli</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3157"/>
         <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation>Włącz &quot;Odtwarzaj w pętli&quot;</translation>
+        <translation>Odtwarzaj w pętli</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3199"/>
         <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation>Włącz &quot;Wybijanie taktu od początku odtwarzania&quot;</translation>
+        <translation>Wybijanie taktu od początku odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3299"/>
         <source>Toggle &apos;View Mode&apos;</source>
-        <translation>Włącz &quot;Tryb widoku&quot;</translation>
+        <translation>Przełącz tryb widoku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3324"/>
         <source>Toggle &apos;Visibility&apos;</source>
-        <translation>Włącz &quot;Widoczny&quot;</translation>
+        <translation>Przełącz widoczność elementów</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3733"/>
@@ -26735,18 +26747,18 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../mscore/shortcut.cpp" line="3763"/>
         <location filename="../../mscore/shortcut.cpp" line="3764"/>
         <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation>Włącz &quot;Utwórz pauzę wielotaktową&quot;</translation>
+        <translation>Włącz/wyłącz pauzy wielotaktowe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3773"/>
         <location filename="../../mscore/shortcut.cpp" line="3774"/>
         <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation>Włącz &quot;Ukrywaj puste pięciolinie&quot;</translation>
+        <translation>Pokaż/ukryj puste pięciolinie</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3871"/>
         <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation>Włącz &quot;Utwórz notację rytmiczną&quot;</translation>
+        <translation>Włącz/wyłącz notację rytmiczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3880"/>
@@ -26906,7 +26918,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="316"/>
         <source>Enter notes while tapping a key or pedal to set the tempo</source>
-        <translation>Wprowadź nuty, wciskając klawisz lub pedał, aby ustawić tempo</translation>
+        <translation>Wprowadź nuty, naciskając klawisz lub pedał, aby ustawić tempo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="325"/>
@@ -27016,12 +27028,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="746"/>
         <source>Reset Text Style Overrides</source>
-        <translation>Resetuj nadpisania stylu tekstu</translation>
+        <translation>Resetuj nadpisania stylów tekstu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="747"/>
         <source>Reset text style overrides</source>
-        <translation>Resetuj nadpisania stylu tekstu</translation>
+        <translation>Resetuj nadpisania stylów tekstu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="748"/>
@@ -27031,12 +27043,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="797"/>
         <source>Diatonic Up (Keep Degree Alterations)</source>
-        <translation>Diatonicznie w górę (pozostaw zmiany stopnia)</translation>
+        <translation>Diatonicznie w górę (zachowaj zmiany stopnia)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="798"/>
         <source>Diatonic pitch up (Keep degree alterations)</source>
-        <translation>Diatonicznie wysokość w górę (pozostaw zmiany stopnia)</translation>
+        <translation>Diatonicznie wysokość w górę (zachowaj zmiany stopnia)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="839"/>
@@ -27046,12 +27058,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="870"/>
         <source>Diatonic Down (Keep Degree Alterations)</source>
-        <translation>Diatonicznie w dół (pozostaw zmiany stopnia)</translation>
+        <translation>Diatonicznie w dół (zachowaj zmiany stopnia)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="871"/>
         <source>Diatonic pitch down (Keep degree alterations)</source>
-        <translation>Diatonicznie wysokość w dół (pozostaw zmiany stopnia)</translation>
+        <translation>Diatonicznie wysokość w dół (zachowaj zmiany stopnia)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="947"/>
@@ -27444,22 +27456,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2040"/>
         <source>Feathered Beam, Slower</source>
-        <translation>Belka - ritardando</translation>
+        <translation>Belka - zmniejsz tempo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2041"/>
         <source>Feathered beam, slower</source>
-        <translation>Belka - ritardando</translation>
+        <translation>Belka - zmniejsz tempo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2049"/>
         <source>Feathered Beam, Faster</source>
-        <translation>Belka - accelerando</translation>
+        <translation>Belka - zwiększ tempo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2050"/>
         <source>Feathered beam, faster</source>
-        <translation>Belka - accelerando</translation>
+        <translation>Belka - zwiększ tempo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2058"/>
@@ -27469,7 +27481,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2059"/>
         <source>Toggle &apos;Palettes&apos;</source>
-        <translation>Włącz &quot;Paleta&quot;</translation>
+        <translation>Pokaż/ukryj paletę</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2068"/>
@@ -27484,7 +27496,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2079"/>
         <source>Toggle &apos;Selection Filter&apos;</source>
-        <translation>Włącz &quot;Filtr zaznaczenia&quot;</translation>
+        <translation>Pokaż/ukryj filtr zaznaczenia</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2088"/>
@@ -27494,7 +27506,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2089"/>
         <source>Toggle &apos;Navigator&apos;</source>
-        <translation>Włącz &quot;Nawigator&quot;</translation>
+        <translation>Pokaż/ukryj nawigatora</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2098"/>
@@ -27504,7 +27516,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2099"/>
         <source>Toggle &apos;Timeline&apos;</source>
-        <translation>Włącz &quot;Oś czasu&quot;</translation>
+        <translation>Pokaż/ukryj oś czasu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2108"/>
@@ -27519,7 +27531,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2124"/>
         <source>Toggle &apos;Mixer&apos;</source>
-        <translation>Włącz &quot;Mikser&quot;</translation>
+        <translation>Pokaż/ukryj mikser</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2133"/>
@@ -27529,7 +27541,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2134"/>
         <source>Toggle &apos;File Operations&apos; toolbar</source>
-        <translation>Włącz pasek narzędziowy &quot;Operacje na plikach&quot;</translation>
+        <translation>Pokaż/ukryj pasek narzędzi operacji na plikach</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2140"/>
@@ -27551,7 +27563,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2162"/>
         <source>Toggle &apos;Note Input&apos; toolbar</source>
-        <translation>Włącz pasek narzędziowy &quot;Wprowadzanie nut&quot;</translation>
+        <translation>Pokaż/ukryj pasek narzędzi wprowadzania nut</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2168"/>
@@ -27562,7 +27574,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2169"/>
         <source>Toggle &apos;Feedback&apos; toolbar</source>
-        <translation>Włącz pasek narzędziowy &quot;Opinia&quot;</translation>
+        <translation>Pokaż/ukryj pasek narzędzi opinii</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2175"/>
@@ -27572,7 +27584,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2176"/>
         <source>Toggle &apos;Workspaces&apos; toolbar</source>
-        <translation>Włącz pasek narzędziowy &quot;Obszary robocze&quot;</translation>
+        <translation>Pokaż/ukryj pasek narzędzi obszarów roboczych</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2182"/>
@@ -27782,12 +27794,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4000"/>
         <source>Apply Input State</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastosuj stan wejściowy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4001"/>
         <source>Apply input state</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastosuj stan wejściowy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4017"/>
@@ -27838,13 +27850,13 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../mscore/shortcut.cpp" line="1941"/>
         <location filename="../../mscore/shortcut.cpp" line="1942"/>
         <source>Toggle mouse for note entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Przełącz myszką, aby wprowadzać nuty</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1952"/>
         <location filename="../../mscore/shortcut.cpp" line="1953"/>
         <source>Toggle editing sound playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Przełącz edytowanie odtwarzania dźwięku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2352"/>
@@ -27904,22 +27916,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2427"/>
         <source>Play Repeats</source>
-        <translation>Włącz &quot;Odtwarzaj repetycje&quot;</translation>
+        <translation>Odtwarzaj repetycje</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2429"/>
         <source>Play repeats</source>
-        <translation>Włącz &quot;Odtwarzaj repetycje&quot;</translation>
+        <translation>Odtwarzaj repetycje</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2449"/>
         <source>Load Style…</source>
-        <translation>Wczytaj styl…</translation>
+        <translation>Załaduj styl…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2450"/>
         <source>Load style</source>
-        <translation>Wczytaj styl</translation>
+        <translation>Załaduj styl</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2460"/>
@@ -28054,17 +28066,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2602"/>
         <source>Toggle System Break</source>
-        <translation>Włącz łamanie systemu</translation>
+        <translation>Dodaj/usuń łamanie systemu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2612"/>
         <source>Toggle Page Break</source>
-        <translation>Włącz łamanie strony</translation>
+        <translation>Dodaj/usuń łamanie strony</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2622"/>
         <source>Toggle Section Break</source>
-        <translation>Włącz łamanie sekcji</translation>
+        <translation>Dodaj/usuń łamanie sekcji</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2632"/>
@@ -28320,12 +28332,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2917"/>
         <source>Toggle pan piano roll</source>
-        <translation>Włącz &quot;Rolka podczas odtwarzania&quot;</translation>
+        <translation>Rolka podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2918"/>
         <source>Pan roll during playback</source>
-        <translation>Włącz &quot;Rolka podczas odtwarzania&quot;</translation>
+        <translation>Rolka podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2927"/>
@@ -28545,12 +28557,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3188"/>
         <source>Toggle metronome playback</source>
-        <translation>Włącz &quot;Metronom podczas odtwarzania&quot;</translation>
+        <translation>Metronom podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3189"/>
         <source>Play metronome during playback</source>
-        <translation>Włącz &quot;Metronom podczas odtwarzania&quot;</translation>
+        <translation>Metronom podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3198"/>
@@ -28560,7 +28572,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3200"/>
         <source>Play count-in at playback start</source>
-        <translation>Włącz &quot;Wybijanie taktu od początku odtwarzania&quot;</translation>
+        <translation>Wybijanie taktu od początku odtwarzania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3209"/>
@@ -28680,7 +28692,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3298"/>
         <source>Toggle View Mode</source>
-        <translation>Włącz &quot;Tryb widoku&quot;</translation>
+        <translation>Przełącz tryb widoku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3309"/>
@@ -28740,12 +28752,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3351"/>
         <source>Lock Score</source>
-        <translation>Zablokuj partyturę</translation>
+        <translation>Przełącz blokadę partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3352"/>
         <source>Lock score</source>
-        <translation>Zablokuj partyturę</translation>
+        <translation>Przełącz blokadę partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
@@ -29231,7 +29243,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3802"/>
         <source>Strike-through</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekreślona</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3840"/>
@@ -29256,12 +29268,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3922"/>
         <source>Customize Toolbars…</source>
-        <translation>Dostosuj paski narzędziowe…</translation>
+        <translation>Dostosuj paski narzędzi…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3923"/>
         <source>Customize toolbars</source>
-        <translation>Dostosuj paski narzędziowe</translation>
+        <translation>Dostosuj paski narzędzi</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3932"/>
@@ -29290,12 +29302,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3952"/>
         <source>Show Tours</source>
-        <translation>Pokazuj wskazówki</translation>
+        <translation>Pokaż wskazówki</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3953"/>
         <source>Show tours</source>
-        <translation>Pokazuj wskazówki</translation>
+        <translation>Pokaż wskazówki</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3954"/>
@@ -29315,22 +29327,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3973"/>
         <source>Toggle Automatic Placement</source>
-        <translation>Włącz Autopołożenie</translation>
+        <translation>Przełącz autopołożenie</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3974"/>
         <source>Toggle &apos;Automatic Placement&apos; for selected elements</source>
-        <translation>Włącz Autopołożenie dla zaznaczonych elementów</translation>
+        <translation>Przełącz autopołożenie dla zaznaczonych elementów</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3980"/>
         <source>Toggle Automatic Placement Globally</source>
-        <translation>Włącz Autopołożenie globalnie</translation>
+        <translation>Przełącz autopołożenie dla całej partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3981"/>
         <source>Toggle &apos;Automatic Placement&apos; globally</source>
-        <translation>Włącz Autopołożenie globalnie</translation>
+        <translation>Przełącz autopołożenie dla całej partytury</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3990"/>
@@ -29422,7 +29434,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3870"/>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation>Utwórz notację rytmiczną</translation>
+        <translation>Włącz/wyłącz notację rytmiczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3891"/>
@@ -29578,12 +29590,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="25"/>
         <source>Single grace low G</source>
-        <translation>Pojedyncza przednutka dolnego G</translation>
+        <translation>Pojedyncza przednutka G niskiego</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="26"/>
         <source>Single grace low A</source>
-        <translation>Pojedyncza przednutka dolnego A</translation>
+        <translation>Pojedyncza przednutka A niskiego</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="27"/>
@@ -29613,12 +29625,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="32"/>
         <source>Single grace high G</source>
-        <translation>Pojedyncza przednutka górnego G</translation>
+        <translation>Pojedyncza przednutka G wysokiego</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="33"/>
         <source>Single grace high A</source>
-        <translation>Pojedyncza przednutka górnego A</translation>
+        <translation>Pojedyncza przednutka A wysokiego</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="36"/>
@@ -29657,12 +29669,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="71"/>
         <source>Half doubling on low G</source>
-        <translation>Pół dublingu na dolnym G</translation>
+        <translation>Pół dublingu na G niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="72"/>
         <source>Half doubling on low A</source>
-        <translation>Pół dublingu na dolnym A</translation>
+        <translation>Pół dublingu na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="73"/>
@@ -29692,17 +29704,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="82"/>
         <source>Doubling on high G</source>
-        <translation>Dubling na górnym G</translation>
+        <translation>Dubling na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="83"/>
         <source>Doubling on high A</source>
-        <translation>Dubling na górnym A</translation>
+        <translation>Dubling na A wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="86"/>
         <source>Half strike on low A</source>
-        <translation>Pół uderzenia na dolnym A</translation>
+        <translation>Pół uderzenia na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="87"/>
@@ -29733,7 +29745,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="93"/>
         <source>Half strike on high G</source>
-        <translation>Pół uderzenia na górnym G</translation>
+        <translation>Pół uderzenia na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="96"/>
@@ -29750,12 +29762,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="102"/>
         <source>Doubling on low G</source>
-        <translation>Dubling na dolnym G</translation>
+        <translation>Dubling na G niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="103"/>
         <source>Doubling on low A</source>
-        <translation>Dubling na dolnym A</translation>
+        <translation>Dubling na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="104"/>
@@ -29785,12 +29797,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="111"/>
         <source>Thumb doubling on low G</source>
-        <translation>Dubling kciukiem na dolnym G</translation>
+        <translation>Dubling kciukiem na G niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="112"/>
         <source>Thumb doubling on low A</source>
-        <translation>Dubling kciukiem na dolnym A</translation>
+        <translation>Dubling kciukiem na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="113"/>
@@ -29820,7 +29832,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="121"/>
         <source>G grace note on low A</source>
-        <translation>Przednutka G na dolnym A</translation>
+        <translation>Przednutka G na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="122"/>
@@ -29851,7 +29863,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="130"/>
         <source>Double strike on low A</source>
-        <translation>Podwójne uderzenie na dolnym A</translation>
+        <translation>Podwójne uderzenie na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="131"/>
@@ -29882,17 +29894,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="137"/>
         <source>Double strike on high G</source>
-        <translation>Podwójne uderzenie na górnym G</translation>
+        <translation>Podwójne uderzenie na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="138"/>
         <source>Double strike on high A</source>
-        <translation>Podwójne uderzenie na górnym A</translation>
+        <translation>Podwójne uderzenie na A wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="141"/>
         <source>Thumb strike on low A</source>
-        <translation>Uderzenie kciukiem na dolnym A</translation>
+        <translation>Uderzenie kciukiem na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="142"/>
@@ -29923,7 +29935,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="148"/>
         <source>Thumb strike on high G</source>
-        <translation>Uderzenie kciukiem na górnym G</translation>
+        <translation>Uderzenie kciukiem na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="155"/>
@@ -29964,7 +29976,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="168"/>
         <source>Half double strike on low A</source>
-        <translation>Pół podwójnego uderzenia na dolnym A</translation>
+        <translation>Pół podwójnego uderzenia na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="169"/>
@@ -29995,17 +30007,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="175"/>
         <source>Half double strike on high G</source>
-        <translation>Pół podwójnego uderzenia na górnym G</translation>
+        <translation>Pół podwójnego uderzenia na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="176"/>
         <source>Half double strike on high A</source>
-        <translation>Pół podwójnego uderzenia na górnym A</translation>
+        <translation>Pół podwójnego uderzenia na A wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="179"/>
         <source>Half grip on low A</source>
-        <translation>Half grip na dolnym A</translation>
+        <translation>Half grip na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="180"/>
@@ -30036,17 +30048,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="186"/>
         <source>Half grip on high G</source>
-        <translation>Half grip na górnym G</translation>
+        <translation>Half grip na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="187"/>
         <source>Half grip on high A</source>
-        <translation>Half grip na górnym A</translation>
+        <translation>Half grip na A wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="190"/>
         <source>Half pele on low A</source>
-        <translation>Half pele na dolnym A</translation>
+        <translation>Half pele na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="191"/>
@@ -30077,12 +30089,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="197"/>
         <source>Half pele on high G</source>
-        <translation>Half pele na górnym G</translation>
+        <translation>Half pele na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="200"/>
         <source>G grace note grip on low A</source>
-        <translation>Grip przednutki G na dolnym A</translation>
+        <translation>Grip przednutki G na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="201"/>
@@ -30113,7 +30125,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="209"/>
         <source>Thumb grip on low A</source>
-        <translation>Grip kciukiem na dolnym A</translation>
+        <translation>Grip kciukiem na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="210"/>
@@ -30144,12 +30156,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="216"/>
         <source>Thumb grip on high G</source>
-        <translation>Grip kciukiem na górnym G</translation>
+        <translation>Grip kciukiem na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="226"/>
         <source>Pele on low A</source>
-        <translation>Pele na dolnym A</translation>
+        <translation>Pele na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="227"/>
@@ -30180,7 +30192,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="235"/>
         <source>Thumb grace note pele on low A</source>
-        <translation>Thumb grace note pele na dolnym A</translation>
+        <translation>Thumb grace note pele na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="236"/>
@@ -30211,12 +30223,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="242"/>
         <source>Thumb grace note pele on high G</source>
-        <translation>Thumb grace note pele na górnym G</translation>
+        <translation>Thumb grace note pele na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="245"/>
         <source>G grace note double strike on low A</source>
-        <translation>Podwójne uderzenie przednutki G na dolnym A</translation>
+        <translation>Podwójne uderzenie przednutki G na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="246"/>
@@ -30247,7 +30259,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="254"/>
         <source>Thumb double strike on low A</source>
-        <translation>Podwójne uderzenie kciukiem na dolnym A</translation>
+        <translation>Podwójne uderzenie kciukiem na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="255"/>
@@ -30278,12 +30290,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="261"/>
         <source>Thumb double strike on high G</source>
-        <translation>Podwójne uderzenie kciukiem na górnym G</translation>
+        <translation>Podwójne uderzenie kciukiem na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="264"/>
         <source>Triple strike on low A</source>
-        <translation>Potrójne uderzenie na dolnym A</translation>
+        <translation>Potrójne uderzenie na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="265"/>
@@ -30314,17 +30326,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="271"/>
         <source>Triple strike on high G</source>
-        <translation>Potrójne uderzenie na górnym G</translation>
+        <translation>Potrójne uderzenie na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="272"/>
         <source>Triple strike on high A</source>
-        <translation>Potrójne uderzenie na górnym A</translation>
+        <translation>Potrójne uderzenie na A wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="275"/>
         <source>Half triple strike on low A</source>
-        <translation>Pół potrójnego uderzenia na dolnym A</translation>
+        <translation>Pół potrójnego uderzenia na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="276"/>
@@ -30355,17 +30367,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="282"/>
         <source>Half triple strike on high G</source>
-        <translation>Pół potrójnego uderzenia na górnym G</translation>
+        <translation>Pół potrójnego uderzenia na G wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="283"/>
         <source>Half triple strike on high A</source>
-        <translation>Pół potrójnego uderzenia na górnym A</translation>
+        <translation>Pół potrójnego uderzenia na A wysokim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="286"/>
         <source>G grace note triple strike on low A</source>
-        <translation>Potrójne uderzenie przednutki G na dolnym A</translation>
+        <translation>Potrójne uderzenie przednutki G na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="287"/>
@@ -30396,7 +30408,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="295"/>
         <source>Thumb triple strike on low A</source>
-        <translation>Potrójne uderzenie kciukiem na dolnym A</translation>
+        <translation>Potrójne uderzenie kciukiem na A niskim</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="296"/>
@@ -30427,7 +30439,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="302"/>
         <source>Thumb triple strike on high G</source>
-        <translation>Potrójne uderzenie kciukiem na górnym G</translation>
+        <translation>Potrójne uderzenie kciukiem na G wysokim</translation>
     </message>
 </context>
 <context>
@@ -30465,7 +30477,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="44"/>
         <source>Treble clef optional 8va bassa</source>
-        <translation>Opcjonalny klucz wiolinowy 8va bassa</translation>
+        <translation>Klucz wiolinowy 8va bassa opcjonalnie</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="45"/>
@@ -30500,7 +30512,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="51"/>
         <source>C clef, H shape (19th century)</source>
-        <translation>Klucz C, H-kształtny (XIX wiek)</translation>
+        <translation>Klucz C, w kształcie H (XIX wiek)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="52"/>
@@ -30565,7 +30577,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="64"/>
         <source>Subbass clef</source>
-        <translation>Klucz subbasowy</translation>
+        <translation>Klucz subbasowy (kontrabasowy)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="65"/>
@@ -30610,7 +30622,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="73"/>
         <source>Tenor clef 8va bassa</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucz tenorowy 8va bassa</translation>
     </message>
 </context>
 <context>
@@ -30932,7 +30944,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="353"/>
         <source>Mark Tree</source>
-        <translation type="unfinished"></translation>
+        <translation>Drzewo rurowe</translation>
     </message>
     <message>
         <source>Bell Tree</source>
@@ -31350,7 +31362,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="83"/>
         <source>Hairpin Segment</source>
-        <translation>Segment crescendo/decrescendo</translation>
+        <translation>Segment (de)crescendo</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="84"/>
@@ -31365,7 +31377,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="86"/>
         <source>Let Ring Segment</source>
-        <translation>Segment let ringu</translation>
+        <translation>Segment wybrzmienia</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="87"/>
@@ -31490,7 +31502,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="108"/>
         <source>Hairpin</source>
-        <translation>Crescendo/decrescendo</translation>
+        <translation>(De)crescendo</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="109"/>
@@ -31510,7 +31522,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="112"/>
         <source>Let Ring</source>
-        <translation>Let ring</translation>
+        <translation>Wybrzmienie</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="113"/>
@@ -31640,7 +31652,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../libmscore/mscore.cpp" line="135"/>
         <source>No chord/rest selected:
 Please select a chord or rest and retry</source>
-        <translation>Nie zaznaczono akordu/pauzy.
+        <translation>Nie zaznaczono akordu lub pauzy.
 Zaznacz akord lub pauzę i spróbuj ponownie.</translation>
     </message>
     <message>
@@ -31688,7 +31700,7 @@ Zaznacz nutę lub basso continuo i spróbuj ponownie.</translation>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="142"/>
         <source>Cannot insert chord/rest in tuplet</source>
-        <translation>Nie można wstawić akordu/pauzy do grupy niemiarowej.</translation>
+        <translation>Nie można wstawić akordu lub pauzy do grupy niemiarowej.</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="143"/>
@@ -31713,7 +31725,8 @@ Nie można podzielić grupy niemiarowej.</translation>
         <location filename="../../libmscore/mscore.cpp" line="146"/>
         <source>Cannot split measure here:
 Measure would be too short</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można podzielić taktu w tym miejscu.
+Takt byłby za krótki.</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="148"/>
@@ -31761,12 +31774,13 @@ Takt nie jest pusty.</translation>
         <location filename="../../libmscore/mscore.cpp" line="156"/>
         <source>Cannot change local time signature:
 This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można zmienić lokalnego oznaczenia metrycznego.
+Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne są partie, nie jest jeszcze obsługiwana.</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="159"/>
         <source>Cannot change time signature in front of a corrupted measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można zmienić oznaczenia metrycznego przed uszkodzonym taktem.</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="464"/>
@@ -32093,12 +32107,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/note.cpp" line="246"/>
         <source>XCircle</source>
-        <translation>X-kółko</translation>
+        <translation>Kółko z krzyżykiem</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="247"/>
         <source>With X</source>
-        <translation>X</translation>
+        <translation>Z krzyżykiem</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="248"/>
@@ -32143,7 +32157,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/note.cpp" line="260"/>
         <source>Large Diamond</source>
-        <translation type="unfinished"></translation>
+        <translation>Duży romb</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="267"/>
@@ -32158,12 +32172,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/note.cpp" line="271"/>
         <source>Heavy Cross</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruby krzyżyk</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="272"/>
         <source>Heavy Cross Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruby krzyżyk z daszkiem</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="275"/>
@@ -32353,12 +32367,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/note.cpp" line="318"/>
         <source>Swiss Rudiments Flam</source>
-        <translation type="unfinished"></translation>
+        <translation>Swiss Rudiments Flam</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="319"/>
         <source>Swiss Rudiments Doublé</source>
-        <translation type="unfinished"></translation>
+        <translation>Swiss Rudiments Doublé</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="321"/>
@@ -32482,7 +32496,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/preferences.cpp" line="135"/>
         <source>Score Fonts</source>
-        <translation type="unfinished"></translation>
+        <translation>Czcionki partytury</translation>
     </message>
 </context>
 <context>
@@ -32573,7 +32587,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="39"/>
         <source>Hairpins</source>
-        <translation>Crescenda/diminuenda</translation>
+        <translation>(De)crescendo</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="44"/>
@@ -32668,12 +32682,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3053"/>
         <source>11 large diesis down, 3° down [46 EDO]</source>
-        <translation>11 dużych diesis, 3° niżej [46 równych podziałów oktawowych]</translation>
+        <translation>11 dużych diesis niżej, 3° niżej [46 równych podziałów oktawy]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3054"/>
         <source>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</source>
-        <translation>11 dużych diesis wyżej, (11L), (krzyżyk mniej 11M), 3° wyżej [46 równych podziałów oktawowych]</translation>
+        <translation>11 dużych diesis wyżej, (11L), (krzyżyk mniej 11M), 3° wyżej [46 równych podziałów oktawy]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3055"/>
@@ -32688,17 +32702,17 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3081"/>
         <source>25 small diesis down, 2° down [53 EDO]</source>
-        <translation>25 małych diesis niżej, 2° niżej [53 równych podziałów oktawowych]</translation>
+        <translation>25 małych diesis niżej, 2° niżej [53 równe podziały oktawy]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3082"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation>25 małych diesis wyżej, (25S, ~5:13S, ~37S, 5C plus 5C), 2° wyżej [53 równych podziałów oktawowych]</translation>
+        <translation>25 małych diesis wyżej, (25S, ~5:13S, ~37S, 5C plus 5C), 2° wyżej [53 równe podziały oktawy]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3087"/>
         <source>35 large diesis down, 2° down [50 EDO], 5/18-tone down</source>
-        <translation>35 dużych diesis niżej, 2° niżej [50 równych podziałów oktawowych], 5/18-tonu niżej</translation>
+        <translation>35 dużych diesis niżej, 2° niżej [50 równych podziałów oktawy], 5/18-tonu niżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3088"/>
@@ -32718,12 +32732,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3103"/>
         <source>5 comma down, 1° down [22 27 29 34 41 46 53 96 EDOs], 1/12-tone down</source>
-        <translation>5 komat niżej, 1° niżej [22 27 29 34 41 46 53 96 równych podziałów oktawowych], 1/12-tonu niżej</translation>
+        <translation>5 komat niżej, 1° niżej [22 27 29 34 41 46 53 96 równych podziałów oktawy], 1/12-tonu niżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3104"/>
         <source>5 comma up, (5C), 1° up [22 27 29 34 41 46 53 96 EDOs], 1/12-tone up</source>
-        <translation>5 komat wyżej, (5C), 1° wyżej [22 27 29 34 41 46 53 96 równych podziałów oktawowych], 1/12-tonu wyżej</translation>
+        <translation>5 komat wyżej, (5C), 1° wyżej [22 27 29 34 41 46 53 96 równych podziałów oktawy], 1/12-tonu wyżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3119"/>
@@ -32738,22 +32752,22 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3123"/>
         <source>7 comma down, 1° down [43 EDO], 2° down [72 EDO], 1/6-tone down</source>
-        <translation>7 komat niżej, 1° niżej [43 równych podziałów oktawowych], 2° niżej [72 równych podziałów oktawowych], 1/6-tonu niżej</translation>
+        <translation>7 komat niżej, 1° niżej [43 równe podziały oktawy], 2° niżej [72 równe podziały oktawy], 1/6-tonu niżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3124"/>
         <source>7 comma up, (7C), 1° up [43 EDO], 2° up [72 EDO], 1/6-tone up</source>
-        <translation>7 komat wyżej, (7C), 1° wyżej [43 równych podziałów oktawowych], 2° wyżej [72 równych podziałów oktawowych], 1/6-tonu wyżej</translation>
+        <translation>7 komat wyżej, (7C), 1° wyżej [43 równe podziały oktawy], 2° wyżej [72 równe podziały oktawy], 1/6-tonu wyżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3180"/>
         <source>Flat, (apotome down)[almost all EDOs], 1/2-tone down</source>
-        <translation>Bemol, (półton chromatyczny niżej)[prawie wszystkie równe podziały oktawowe], 1/2-tonu niżej</translation>
+        <translation>Bemol, (półton chromatyczny niżej)[prawie wszystkie równe podziały oktawy], 1/2-tonu niżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3202"/>
         <source>Flat 25S-up, 3° down [53 EDO]</source>
-        <translation>Bemol 25S-wyżej, 3° niżej [53 równych podziałów oktawowych]</translation>
+        <translation>Bemol 25S-wyżej, 3° niżej [53 równe podziały oktawy]</translation>
     </message>
     <message>
         <source>Flat 5C-up, 2°[22,29] 3°[34 41] 4°[46 53 60] down, 5/12-tone down</source>
@@ -32767,17 +32781,17 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3225"/>
         <source>Flat 7C-up, 2° down [43 EDO], 4° down [72 EDO], 1/3-tone down</source>
-        <translation>Bemol 7C-wyżej, 2° niżej [43 równych podziałów oktawowych], 4° niżej [72 równych podziałów oktawowych], 1/3-tonu niżej</translation>
+        <translation>Bemol 7C-wyżej, 2° niżej [43 równe podziały oktawy], 4° niżej [72 równe podziały oktawy], 1/3-tonu niżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3237"/>
         <source>Sharp, (apotome up)[almost all EDOs], 1/2-tone up</source>
-        <translation>Krzyżyk, (półton chromatyczny wyżej)[prawie wszystkie równe podziały oktawowe], 1/2-tonu wyżej</translation>
+        <translation>Krzyżyk, (półton chromatyczny wyżej)[prawie wszystkie równe podziały oktawy], 1/2-tonu wyżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3258"/>
         <source>Sharp 25S-down, 3° up [53 EDO]</source>
-        <translation>Krzyżyk 25S-niżej, 3° wyżej [53 równych podziałów oktawowych]</translation>
+        <translation>Krzyżyk 25S-niżej, 3° wyżej [53 równe podziały oktawy]</translation>
     </message>
     <message>
         <source>Sharp 5C-down, 2°[22 29] 3°[34 41] 4°[46 53 60] up, 5/12-tone up</source>
@@ -32791,32 +32805,32 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3281"/>
         <source>Sharp 7C-down, 2° up [43 EDO], 4° up [72 EDO], 1/3-tone up</source>
-        <translation>Krzyżyk 7C-niżej, 2° wyżej [43 równych podziałów oktawowych], 4° wyżej [72 równych podziałów oktawowych], 1/3-tonu wyżej</translation>
+        <translation>Krzyżyk 7C-niżej, 2° wyżej [43 równe podziały oktawy], 4° wyżej [72 równe podziały oktawy], 1/3-tonu wyżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3293"/>
         <source>Combining accordion coupler dot</source>
-        <translation>Combining kropka sprzęgu akordeonowego</translation>
+        <translation>Składająca kropka sprzęgu akordeonowego</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3294"/>
         <source>Combining left hand, 2 ranks, empty</source>
-        <translation>Combining lewa ręka, 2 chóry, pusty</translation>
+        <translation>Składająca lewa ręka, 2 chóry, pusty</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3295"/>
         <source>Combining left hand, 3 ranks, empty (square)</source>
-        <translation>Combining lewa ręka, 3 chóry, pusty (kwadrat)</translation>
+        <translation>Składająca lewa ręka, 3 chóry, pusty (kwadrat)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3296"/>
         <source>Combining right hand, 3 ranks, empty</source>
-        <translation>Combining prawa ręka, 3 chóry, pusty</translation>
+        <translation>Składająca prawa ręka, 3 chóry, pusty</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3297"/>
         <source>Combining right hand, 4 ranks, empty</source>
-        <translation>Combining prawa ręka, 4 chóry, pusty</translation>
+        <translation>Składająca prawa ręka, 4 chóry, pusty</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3298"/>
@@ -33051,67 +33065,67 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3344"/>
         <source>Combining ricochet for stem (2 tones)</source>
-        <translation>Combining rykoszet dla laseczki (2 tony)</translation>
+        <translation>Składający rykoszet dla laseczki (2 tony)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3345"/>
         <source>Combining ricochet for stem (3 tones)</source>
-        <translation>Combining rykoszet dla laseczki (3 tony)</translation>
+        <translation>Składający rykoszet dla laseczki (3 tony)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3346"/>
         <source>Combining ricochet for stem (4 tones)</source>
-        <translation>Combining rykoszet dla laseczki (4 tony)</translation>
+        <translation>Składający rykoszet dla laseczki (4 tony)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3347"/>
         <source>Combining ricochet for stem (5 tones)</source>
-        <translation>Combining rykoszet dla laseczki (5 tonów)</translation>
+        <translation>Składający rykoszet dla laseczki (5 tonów)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3348"/>
         <source>Combining ricochet for stem (6 tones)</source>
-        <translation>Combining rykoszet dla laseczki (6 tonów)</translation>
+        <translation>Składający rykoszet dla laseczki (6 tonów)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3349"/>
         <source>1-comma flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Bemol 1-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3350"/>
         <source>1-comma sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Krzyżyk 1-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3351"/>
         <source>2-comma flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Bemol 2-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3352"/>
         <source>2-comma sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Krzyżyk 2-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3353"/>
         <source>3-comma flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Bemol 3-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3354"/>
         <source>3-comma sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Krzyżyk 3-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3355"/>
         <source>4-comma flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Bemol 4-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3356"/>
         <source>5-comma sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Krzyżyk 5-komatowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3357"/>
@@ -33194,7 +33208,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3391"/>
         <source>Double flat equal tempered semitone</source>
-        <translation>Podwójny bemol półtonu równomiernie temperowanego </translation>
+        <translation>Podwójny bemol półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3392"/>
@@ -33234,7 +33248,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3402"/>
         <source>Double sharp equal tempered semitone</source>
-        <translation>Podwójny krzyżyk półtonu równomiernie temperowanego </translation>
+        <translation>Podwójny krzyżyk półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3403"/>
@@ -33269,17 +33283,17 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3409"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmonicznie reinterpretowany prawie równy znak chromatyczny</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3410"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmonicznie reinterpretowany równy znak chromatyczny</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3411"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmonicznie reinterpretowana tylda znaku chromatycznego</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3417"/>
@@ -33299,7 +33313,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3421"/>
         <source>Flat equal tempered semitone</source>
-        <translation>Bemol półtonu równomiernie temperowanego </translation>
+        <translation>Bemol półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3423"/>
@@ -33369,7 +33383,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3464"/>
         <source>Natural equal tempered semitone</source>
-        <translation>Kasownik półtonu równomiernie temperowanego </translation>
+        <translation>Kasownik półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3465"/>
@@ -33471,7 +33485,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3514"/>
         <source>Sharp equal tempered semitone</source>
-        <translation>Krzyżyk półtonu równomiernie temperowanego </translation>
+        <translation>Krzyżyk półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3516"/>
@@ -33933,7 +33947,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3755"/>
         <source>C clef ottava bassa</source>
-        <translation type="unfinished"></translation>
+        <translation>C clef ottava bassa</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3762"/>
@@ -33954,7 +33968,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3765"/>
         <source>Single stroke caesura</source>
-        <translation type="unfinished"></translation>
+        <translation>Pojedyncza cezura</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3766"/>
@@ -34099,7 +34113,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="4249"/>
         <source>Volume swell</source>
-        <translation>Zgłośnienie/ściszenie</translation>
+        <translation>Zgłośnienie i ściszenie</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4458"/>
@@ -34204,7 +34218,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="5221"/>
         <source>Pincé (Couperin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pincé (Couperin)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5235"/>
@@ -34219,12 +34233,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="5253"/>
         <source>Shake</source>
-        <translation type="unfinished"></translation>
+        <translation>Shake</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5254"/>
         <source>Shake (Muffat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Shake (Muffat)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5257"/>
@@ -34239,7 +34253,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="5263"/>
         <source>Tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tremblement appuyé (Couperin)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5264"/>
@@ -34462,22 +34476,22 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="5835"/>
         <source>Divide measured tremolo by 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Podziel miarowo tremolo przez 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5836"/>
         <source>Divide measured tremolo by 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Podziel miarowo tremolo przez 3</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5837"/>
         <source>Divide measured tremolo by 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Podziel miarowo tremolo przez 4</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5838"/>
         <source>Divide measured tremolo by 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Podziel miarowo tremolo przez 6</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5903"/>
@@ -34532,22 +34546,22 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="3212"/>
         <source>Flat 5C-up, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°72 7°[96] down, 5/12-tone down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bemol 5C-wyżej, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°72 7°[96] niżej, 5/12-tonu niżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3268"/>
         <source>Sharp 5C-down, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°[72] 7°[96] up, 5/12-tone up</source>
-        <translation type="unfinished"></translation>
+        <translation>Krzyżyk 5C-niżej, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°[72] 7°[96] wyżej, 5/12-tonu wyżej</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3368"/>
         <source>Combining lower by one 23-limit comma</source>
-        <translation type="unfinished">Składające obniżenie o jedną schizmę 53-limitową {23-?}</translation>
+        <translation>Składające obniżenie o jedną schizmę 23-limitową</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3379"/>
         <source>Combining raise by one 23-limit comma</source>
-        <translation type="unfinished">Składające podwyższenie o jedną schizmę 53-limitową {23-?}</translation>
+        <translation>Składające podwyższenie o jedną schizmę 23-limitową</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="6007"/>
@@ -34678,7 +34692,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="62"/>
         <source>Syriac Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełnienie syryjskiego</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="63"/>
@@ -34893,12 +34907,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="105"/>
         <source>Cyrillic Extended-C</source>
-        <translation type="unfinished"></translation>
+        <translation>Cyrylica rozszerzona C</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="106"/>
         <source>Georgian Extended</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruziński rozszerzony</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="107"/>
@@ -34957,7 +34971,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="117"/>
         <source>Combining Diacritical Marks for Symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Składające znaki diakrytyczne dla symboli</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="118"/>
@@ -35307,7 +35321,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="187"/>
         <source>Cherokee Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełnienie czirokeskiego</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="188"/>
@@ -35327,17 +35341,17 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="191"/>
         <source>High Surrogates</source>
-        <translation type="unfinished"></translation>
+        <translation>Starsze surogaty</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="192"/>
         <source>High Private Use Surrogates</source>
-        <translation type="unfinished"></translation>
+        <translation>Starsze surogaty prywatnego użytku</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="193"/>
         <source>Low Surrogates</source>
-        <translation type="unfinished"></translation>
+        <translation>Młodsze surogaty</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="194"/>
@@ -35487,7 +35501,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="223"/>
         <source>Osage</source>
-        <translation type="unfinished"></translation>
+        <translation>Osedżyjski</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="224"/>
@@ -35527,7 +35541,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="231"/>
         <source>Hatran</source>
-        <translation type="unfinished"></translation>
+        <translation>Hatrański</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="232"/>
@@ -35597,12 +35611,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="245"/>
         <source>Old Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Rowasz</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="246"/>
         <source>Hanifi Rohingya</source>
-        <translation type="unfinished"></translation>
+        <translation>Hanifi rohingya</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="247"/>
@@ -35612,27 +35626,27 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="248"/>
         <source>Yezidi</source>
-        <translation type="unfinished"></translation>
+        <translation>Jezydzki</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="249"/>
         <source>Old Sogdian</source>
-        <translation type="unfinished"></translation>
+        <translation>Starosogdyjski</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="250"/>
         <source>Sogdian</source>
-        <translation type="unfinished"></translation>
+        <translation>Sogdyjski</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="251"/>
         <source>Chorasmian</source>
-        <translation type="unfinished"></translation>
+        <translation>Chorezmijski</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="252"/>
         <source>Elymaic</source>
-        <translation type="unfinished"></translation>
+        <translation>Elamicki</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="253"/>
@@ -35677,7 +35691,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="261"/>
         <source>Multani</source>
-        <translation type="unfinished"></translation>
+        <translation>Multani</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="262"/>
@@ -35692,7 +35706,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="264"/>
         <source>Newa</source>
-        <translation type="unfinished"></translation>
+        <translation>Newarski</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="265"/>
@@ -35712,7 +35726,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="268"/>
         <source>Mongolian Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełnienie mongolskiego</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="269"/>
@@ -35722,12 +35736,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="270"/>
         <source>Ahom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ahom</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="271"/>
         <source>Dogra</source>
-        <translation type="unfinished"></translation>
+        <translation>Dogri</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="272"/>
@@ -35737,22 +35751,22 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="273"/>
         <source>Dives Akuru</source>
-        <translation type="unfinished"></translation>
+        <translation>Dives akuru</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="274"/>
         <source>Nandinagari</source>
-        <translation type="unfinished"></translation>
+        <translation>Nandinagari</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="275"/>
         <source>Zanabazer Square</source>
-        <translation type="unfinished"></translation>
+        <translation>Zanabazar square</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="276"/>
         <source>Soyombo</source>
-        <translation type="unfinished"></translation>
+        <translation>Sojombo</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="277"/>
@@ -35762,37 +35776,37 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="278"/>
         <source>Bhaiksuki</source>
-        <translation type="unfinished"></translation>
+        <translation>Bhaiksuki</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="279"/>
         <source>Marchen</source>
-        <translation type="unfinished"></translation>
+        <translation>Marchen</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="280"/>
         <source>Masaram Gondi</source>
-        <translation type="unfinished"></translation>
+        <translation>Masaram gondi</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="281"/>
         <source>Gunjala Gondi</source>
-        <translation type="unfinished"></translation>
+        <translation>Gunjala gondi</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="282"/>
         <source>Makasar</source>
-        <translation type="unfinished"></translation>
+        <translation>Makasarski</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="283"/>
         <source>Lisu Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełnienie lisu</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="284"/>
         <source>Tamil Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełnienie tamil</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="285"/>
@@ -35807,7 +35821,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="287"/>
         <source>Early Dynastic Cuneiform</source>
-        <translation type="unfinished"></translation>
+        <translation>Wczesnodynastyczne klinowe</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="288"/>
@@ -35817,12 +35831,12 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="289"/>
         <source>Egyptian Hieroglyph Format Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Egipskie hieroglify kontrolki formatowania</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="290"/>
         <source>Anatolian Hieroglyphs</source>
-        <translation type="unfinished"></translation>
+        <translation>Hieroglify anatolijskie</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="291"/>
@@ -35847,7 +35861,7 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="295"/>
         <source>Medefaidrin</source>
-        <translation type="unfinished"></translation>
+        <translation>Medefaidrin</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="296"/>
@@ -35857,22 +35871,22 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="297"/>
         <source>Ideographic Symbols and Punctuation</source>
-        <translation type="unfinished"></translation>
+        <translation>Ideograficzne symbole i znaki interpunkcyjne</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="298"/>
         <source>Tangut Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponenty tangut</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="299"/>
         <source>Khitan Small Script</source>
-        <translation type="unfinished"></translation>
+        <translation>Mały skrypt khitański</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="300"/>
         <source>Tangut Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełnienie tangut</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="301"/>
@@ -35882,17 +35896,17 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="302"/>
         <source>Kana Extended-A</source>
-        <translation type="unfinished"></translation>
+        <translation>Kana rozszerzona A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="303"/>
         <source>Small Kana Extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Małe rozszerzenie kana</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="304"/>
         <source>Nushu</source>
-        <translation type="unfinished"></translation>
+        <translation>Nüshu</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="305"/>
@@ -35937,22 +35951,22 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="313"/>
         <source>Sutton SignWriting</source>
-        <translation type="unfinished"></translation>
+        <translation>SignWriting</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="314"/>
         <source>Glagolitic Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełnienie głagolicy</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="315"/>
         <source>Nyiakeng Puachue Hmong</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyiakeng puachue hmong</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="316"/>
         <source>Wancho</source>
-        <translation type="unfinished"></translation>
+        <translation>Wancho</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="317"/>
@@ -35962,17 +35976,17 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="318"/>
         <source>Adlam</source>
-        <translation type="unfinished"></translation>
+        <translation>Adlam</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="319"/>
         <source>Indic Siyaq Numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Indyjskie liczby Siyaq</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="320"/>
         <source>Ottoman Siyaq Numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Osmańskie liczby Siyaq</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="321"/>
@@ -36042,62 +36056,62 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../mscore/textpalette.cpp" line="334"/>
         <source>Supplemental Symbols and Pictographs</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodatkowe symbole i piktogramy</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="335"/>
         <source>Chess Symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbole szachowe</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="336"/>
         <source>Symbols and Pictographs Extended-A</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbole i piktogramy rozszerzone A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="337"/>
         <source>Symbols for Legacy Computing</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbole dla starszych komputerów</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="338"/>
         <source>CJK Unified Ideographs Extension B</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozszerzenie B ujednoliconych ideogramów CJK</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="339"/>
         <source>CJK Unified Ideographs Extension C</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozszerzenie C ujednoliconych ideogramów CJK</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="340"/>
         <source>CJK Unified Ideographs Extension D</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozszerzenie D ujednoliconych ideogramów CJK</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="341"/>
         <source>CJK Compatibility Ideographs Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodatkowe ideogramy zgodne z CJK</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="342"/>
         <source>Tags</source>
-        <translation type="unfinished">Tagi</translation>
+        <translation>Tagi</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="343"/>
         <source>Variation Selectors Supplement</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodatkowe przełączniki wariantów glifów</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="344"/>
         <source>Supplementary Private Use Area-A</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodatkowy obszar użytku prywatnego A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="345"/>
         <source>Supplementary Private Use Area-B</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodatkowy obszar użytku prywatnego B</translation>
     </message>
 </context>
 <context>

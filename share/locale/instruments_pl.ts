@@ -7013,32 +7013,32 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>SATB + Organ</source>
-        <translation>SATB + Organy</translation>
+        <translation>SATB + organy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
         <source>SATB + Piano</source>
-        <translation>SATB + Fortepian</translation>
+        <translation>SATB + fortepian</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="10"/>
         <source>SATB Closed Score</source>
-        <translation>SATB Closed Score</translation>
+        <translation>Partytura zamknięta SATB</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="11"/>
         <source>SATB Closed Score + Organ</source>
-        <translation>SATB Closed Score + Organy</translation>
+        <translation>Partytura zamknięta SATB + organy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
         <source>SATB Closed Score + Piano</source>
-        <translation>SATB Closed Score + Fortepian</translation>
+        <translation>Partytura zamknięta SATB + fortepian</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="13"/>
         <source>Voice + Piano</source>
-        <translation>Wokal + Fortepian</translation>
+        <translation>Wokal + fortepian</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="14"/>
@@ -7058,7 +7058,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>
         <source>Liturgical Unmetrical + Organ</source>
-        <translation>Liturgiczna niemetryczna + Organy</translation>
+        <translation>Liturgiczna niemetryczna + organy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="18"/>
@@ -7108,7 +7108,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="27"/>
         <source>Guitar + Tablature</source>
-        <translation>Gitara + Tabulatura</translation>
+        <translation>Gitara + tabulatura</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="28"/>
