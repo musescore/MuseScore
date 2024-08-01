@@ -883,7 +883,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
     }
 
     double spatium = item->spatium();
-    double lw = item->lineWidth();
+    double lw = item->point(item->lineWidth());
 
     Pen pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
