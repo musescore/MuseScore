@@ -159,12 +159,12 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
                        + QDateTime::currentDateTime().toString("yyMMdd")
                        + ".log";
     } else {
-        logFileNamePattern = u"MuseScore_yyMMdd_HHmmss.log";
+        logFileNamePattern = BaseApplication::appName() + u"_yyMMdd_HHmmss.log";
 
-        //! This creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
-        logFilePath += "/MuseScore_"
-                       + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
-                       + ".log";
+        //! This creates a file named "data/logs/AppName_yyMMdd_HHmmss.log"
+        logFilePath += u"/" + BaseApplication::appName() + u"_"
+                       + String::fromQString(QDateTime::currentDateTime().toString("yyMMdd_HHmmss"))
+                       + u".log";
     }
 
     //! Remove old logs
@@ -186,7 +186,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     }
 
     LOGI() << "log path: " << logFilePath;
-    LOGI() << "=== Started " << m_application->name()
+    LOGI() << "=== Started " << m_application->title()
            << " " << m_application->fullVersion().toString()
            << ", build: " << m_application->build() << " ===";
 

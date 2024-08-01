@@ -32,6 +32,7 @@ public:
     BaseApplication(const modularity::ContextPtr& ctx);
 
     static String appName();
+    static String appTitle();
     static bool appUnstable();
     static Version appVersion();
     static Version appFullVersion();
@@ -39,6 +40,7 @@ public:
     static String appRevision();
 
     String name() const override { return appName(); }
+    String title() const override { return appTitle(); }
     bool unstable() const override { return appUnstable(); }
     Version version() const override { return appVersion(); }
     Version fullVersion() const override { return appFullVersion(); }
