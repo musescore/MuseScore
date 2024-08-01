@@ -2756,7 +2756,7 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
 
     PointF anchor2SystPos = anchor2PagePos - system2PagePos;
     RectF r = RectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
-    double lw = item->lineWidth() * .5;
+    double lw = item->point(item->lineWidth()) * .5;
     ldata->setBbox(r.adjusted(-lw, -lw, lw, lw));
 
     const_cast<Glissando*>(item)->addLineAttachPoints();
@@ -2779,7 +2779,7 @@ void TLayout::layoutGlissandoSegment(GlissandoSegment* item, LayoutContext&)
         ldata->setMag(item->staff()->staffMag(item->tick()));
     }
     RectF r = RectF(0.0, 0.0, item->pos2().x(), item->pos2().y()).normalized();
-    double lw = item->glissando()->lineWidth() * .5;
+    double lw = item->point(item->lineWidth()) * .5;
     item->setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
@@ -5573,7 +5573,7 @@ Shape TLayout::textLineBaseSegmentShape(const TextLineBaseSegment* item)
     if (!item->endText()->empty()) {
         shape.add(item->endText()->ldata()->bbox().translated(item->endText()->pos()));
     }
-    double lw2 = 0.5 * item->textLineBase()->lineWidth();
+    double lw2 = 0.5 * item->point(item->lineWidth());
     bool isDottedLine = item->textLineBase()->lineStyle() == LineType::DOTTED;
     if (item->twoLines()) {     // hairpins
         shape.add(item->boundingBoxOfLine(item->points()[0], item->points()[1], lw2, isDottedLine));
@@ -5663,7 +5663,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
-        PointF widthCorrection(0.0, tl->lineWidth() / 2);
+        PointF widthCorrection(0.0, tl->point(tl->lineWidth()) / 2);
         switch (text->align().vertical) {
         case AlignV::TOP:
             pp1 += widthCorrection;
@@ -5739,7 +5739,8 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->pointsRef()[1] = pp2;
         item->setLineLength(sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1)));
 
-        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
+        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->point(tl->lineWidth()) / 2,
+                                                             tl->lineStyle() == LineType::DOTTED));
         return;
     }
 
@@ -5747,7 +5748,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 
     double x1 = std::min(0.0, pp2.x());
     double x2 = std::max(0.0, pp2.x());
-    double y0 = -tl->lineWidth();
+    double y0 = -tl->point(tl->lineWidth());
     double y1 = std::min(0.0, pp2.y()) + y0;
     double y2 = std::max(0.0, pp2.y()) - y0;
 
@@ -5856,7 +5857,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->lineWidth() * item->mag(), checkAngle);
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->point(tl->lineWidth()) * item->mag(), checkAngle);
                 }
             }
         }
@@ -5880,7 +5881,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
-                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->lineWidth() * item->mag(), checkAngle);
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->point(tl->lineWidth()) * item->mag(), checkAngle);
                 }
             }
 
