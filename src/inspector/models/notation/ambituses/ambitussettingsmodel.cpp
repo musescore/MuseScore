@@ -59,7 +59,7 @@ void AmbitusSettingsModel::createProperties()
     });
 
     m_direction = buildPropertyItem(mu::engraving::Pid::MIRROR_HEAD);
-    m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH_SPATIUM);
+    m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
 }
 
 void AmbitusSettingsModel::requestElements()

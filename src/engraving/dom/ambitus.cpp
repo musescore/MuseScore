@@ -424,7 +424,7 @@ PropertyValue Ambitus::getProperty(Pid propertyId) const
         return int(direction());
     case Pid::GHOST:                         // recycled property = _hasLine
         return hasLine();
-    case Pid::LINE_WIDTH_SPATIUM:
+    case Pid::LINE_WIDTH:
         return lineWidth();
     case Pid::TPC1:
         return topTpc();
@@ -462,7 +462,7 @@ bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::GHOST:                         // recycled property = _hasLine
         setHasLine(v.toBool());
         break;
-    case Pid::LINE_WIDTH_SPATIUM:
+    case Pid::LINE_WIDTH:
         setLineWidth(v.value<Spatium>());
         break;
     case Pid::TPC1:
@@ -505,7 +505,7 @@ PropertyValue Ambitus::propertyDefault(Pid id) const
         return int(DIRECTION_DEFAULT);
     case Pid::GHOST:
         return HASLINE_DEFAULT;
-    case Pid::LINE_WIDTH_SPATIUM:
+    case Pid::LINE_WIDTH:
         return Spatium(LINEWIDTH_DEFAULT);
     case Pid::TPC1:
         return estimateRanges().topTpc;
