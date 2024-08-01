@@ -30,7 +30,24 @@
 #include "dom/text.h"
 
 namespace mu::engraving::rendering::dev {
-void AlignmentLayout::alignItems(const std::vector<EngravingItem*>& elements, const System* system)
+void AlignmentLayout::alignItemsGroup(const std::vector<EngravingItem*>& elements, const System* system)
+{
+    if (elements.empty()) {
+        return;
+    }
+
+    double outermostY = yOpticalCenter(elements.front());
+    for (const EngravingItem* element : elements) {
+        double curY = yOpticalCenter(element);
+        outermostY = element->placeAbove() ? std::min(outermostY, curY) : std::max(outermostY, curY);
+    }
+
+    for (EngravingItem* element : elements) {
+        moveItemToY(element, outermostY, system);
+    }
+}
+
+void AlignmentLayout::alignItemsWithTheirSnappingChain(const std::vector<EngravingItem*>& elements, const System* system)
 {
     std::set<EngravingItem*> alignedItems;
 
@@ -47,7 +64,8 @@ void AlignmentLayout::alignItems(const std::vector<EngravingItem*>& elements, co
     };
 
     auto moveElementsToOutermostY = [&outermostY, &alignedItems, system](EngravingItem* item) {
-        moveItemToY(item, outermostY, system, alignedItems);
+        alignedItems.insert(item);
+        moveItemToY(item, outermostY, system);
     };
 
     for (EngravingItem* item : elements) {
@@ -83,7 +101,8 @@ void AlignmentLayout::alignStaffCenteredItems(const std::vector<EngravingItem*>&
 
     std::set<EngravingItem*> alignedItems;
     auto moveElementsToAverageY = [&averageY, &alignedItems, system](EngravingItem* item) {
-        moveItemToY(item, averageY, system, alignedItems);
+        alignedItems.insert(item);
+        moveItemToY(item, averageY, system);
     };
 
     for (EngravingItem* item : elements) {
@@ -98,12 +117,11 @@ void AlignmentLayout::alignStaffCenteredItems(const std::vector<EngravingItem*>&
     }
 }
 
-void AlignmentLayout::moveItemToY(EngravingItem* item, double y, const System* system, std::set<EngravingItem*>& alignedItems)
+void AlignmentLayout::moveItemToY(EngravingItem* item, double y, const System* system)
 {
     double curY = yOpticalCenter(item);
     double yDiff = y - curY;
     item->mutldata()->moveY(yDiff);
-    alignedItems.insert(item);
     SystemLayout::updateSkylineForElement(item, system, yDiff);
 }
 

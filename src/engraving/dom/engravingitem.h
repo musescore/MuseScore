@@ -588,6 +588,7 @@ public:
         void disconnectItemSnappedBefore();
         void connectItemSnappedAfter(EngravingItem* itemAfter);
         void disconnectItemSnappedAfter();
+        void disconnectSnappedItems() { disconnectItemSnappedBefore(); disconnectItemSnappedAfter(); }
         EngravingItem* itemSnappedBefore() const { return m_itemSnappedBefore; }
         EngravingItem* itemSnappedAfter() const { return m_itemSnappedAfter; }
 

@@ -1873,8 +1873,7 @@ void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const Lay
 {
     LAYOUT_CALL_ITEM(item);
 
-    ldata->disconnectItemSnappedAfter();
-    ldata->disconnectItemSnappedBefore();
+    ldata->disconnectSnappedItems();
 
     HairpinSegment* snapBeforeHairpinAcrossSysBreak = item->findSnapBeforeHairpinAcrossSystemBreak();
     if (snapBeforeHairpinAcrossSysBreak) {
@@ -1978,8 +1977,7 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
         }
     }
 
-    ldata->disconnectItemSnappedAfter();
-    ldata->disconnectItemSnappedBefore();
+    ldata->disconnectSnappedItems();
 
     if (!item->autoplace()) {
         return;
@@ -3022,8 +3020,7 @@ void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, L
 
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
 
-    ldata->disconnectItemSnappedBefore();
-    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectSnappedItems();
 
     layoutTextLineBaseSegment(item, ctx);
 
@@ -3113,8 +3110,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
     const double _spatium = item->spatium();
 
-    ldata->disconnectItemSnappedBefore();
-    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectSnappedItems();
 
     EngravingItem* possibleSnapBeforeElement = nullptr;
     EngravingItem* possibleSnapAfterElement = nullptr;
@@ -5322,6 +5318,27 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
     LAYOUT_CALL_ITEM(item);
     layoutBaseTextBase(item, ldata);
 
+    AlignH itemAlign =  item->align().horizontal;
+    if (itemAlign != AlignH::LEFT) {
+        const Segment* seg = item->segment();
+        const Chord* chord = nullptr;
+        track_idx_t sTrack = trackZeroVoice(item->track());
+        track_idx_t eTrack = sTrack + VOICES;
+        for (track_idx_t track = sTrack; track < eTrack; ++track) {
+            EngravingItem* el = seg->element(track);
+            if (el && el->isChord()) {
+                chord = toChord(el);
+                break;
+            }
+        }
+
+        if (chord) {
+            const Note* refNote = item->placeAbove() ? chord->upNote() : chord->downNote();
+            double noteWidth = refNote->ldata()->bbox().width();
+            ldata->moveX(itemAlign == AlignH::HCENTER ? 0.5 * noteWidth : noteWidth);
+        }
+    }
+
     if (item->autoplace() && item->explicitParent()) {
         const Segment* s = toSegment(item->explicitParent());
         const Measure* m = s->measure();
@@ -5604,8 +5621,7 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
         return;
     }
 
-    ldata->disconnectItemSnappedBefore();
-    ldata->disconnectItemSnappedAfter();
+    ldata->disconnectSnappedItems();
 
     layoutBaseTextBase(item, ldata);
 
