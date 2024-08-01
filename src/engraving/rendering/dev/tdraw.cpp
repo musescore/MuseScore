@@ -1580,7 +1580,7 @@ void TDraw::draw(const StretchedBend* item, Painter* painter)
     const Color& color = item->curColor();
     const int textFlags = item->textFlags();
 
-    Pen pen(color, item->lineWidth(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    Pen pen(color, item->point(item->lineWidth()), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Brush(color));
     Font f = item->font(sp * MScore::pixelRatio);
