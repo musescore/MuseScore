@@ -473,7 +473,10 @@ Hairpin::Hairpin(Segment* parent)
     initElementStyle(&hairpinStyle);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
+    resetProperty(Pid::END_TEXT_PLACE);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);
+    resetProperty(Pid::BEGIN_HOOK_HEIGHT);
+    resetProperty(Pid::END_HOOK_HEIGHT);
     resetProperty(Pid::HAIRPIN_TYPE);
     resetProperty(Pid::LINE_VISIBLE);
 
@@ -657,6 +660,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
+    case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
 
     case Pid::BEGIN_TEXT_OFFSET:
@@ -670,7 +674,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::BEGIN_HOOK_HEIGHT:
     case Pid::END_HOOK_HEIGHT:
-        return Spatium(0.0);
+        return Spatium(1.9);
 
     case Pid::LINE_VISIBLE:
         return true;
