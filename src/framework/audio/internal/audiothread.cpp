@@ -30,9 +30,18 @@
 #include <emscripten/html5.h>
 #endif
 
+#ifdef Q_OS_WIN
+#include "global/platform/win/waitabletimer.h"
+#endif
+
 #include "log.h"
 
 using namespace muse::audio;
+
+static uint64_t toWinTime(const msecs_t msecs)
+{
+    return msecs * 10000;
+}
 
 std::thread::id AudioThread::ID;
 
@@ -43,11 +52,12 @@ AudioThread::~AudioThread()
     }
 }
 
-void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const uint64_t intervalMsecs)
+void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const msecs_t interval)
 {
     m_onStart = onStart;
     m_mainLoopBody = loopBody;
-    m_intervalMsecs = intervalMsecs;
+    m_intervalMsecs = interval;
+    m_intervalInWinTime = toWinTime(interval);
 
 #ifndef Q_OS_WASM
     m_running = true;
@@ -62,11 +72,12 @@ void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const u
 #endif
 }
 
-void AudioThread::setInterval(const uint64_t intervalMsecs)
+void AudioThread::setInterval(const msecs_t interval)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_intervalMsecs = intervalMsecs;
+    m_intervalMsecs = interval;
+    m_intervalInWinTime = toWinTime(interval);
 }
 
 void AudioThread::stop(const Runnable& onFinished)
@@ -93,6 +104,14 @@ void AudioThread::main()
         m_onStart();
     }
 
+#ifdef Q_OS_WIN
+    WaitableTimer timer;
+    bool timerValid = timer.init();
+    if (timerValid) {
+        LOGI() << "Waitable timer successfully created, interval: " << m_intervalMsecs << " ms";
+    }
+#endif
+
     while (m_running) {
         async::processEvents();
 
@@ -100,7 +119,13 @@ void AudioThread::main()
             m_mainLoopBody();
         }
 
+#ifdef Q_OS_WIN
+        if (!timerValid || !timer.setAndWait(m_intervalInWinTime)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(m_intervalMsecs));
+        }
+#else
         std::this_thread::sleep_for(std::chrono::milliseconds(m_intervalMsecs));
+#endif
     }
 
     if (m_onFinished) {
