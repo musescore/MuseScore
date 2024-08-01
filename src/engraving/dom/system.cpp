@@ -323,7 +323,11 @@ staff_idx_t System::nextVisibleStaff(staff_idx_t staffIdx) const
 
 staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
 {
-    for (staff_idx_t i = startStaffIdx;; --i) {
+    if (startStaffIdx == 0) {
+        return muse::nidx;
+    }
+
+    for (staff_idx_t i = startStaffIdx - 1;; --i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = m_staves[i];
 
