@@ -6194,7 +6194,7 @@ void TLayout::fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata)
             return r;
         };
 
-        double w = item->bracketWidth().val() * item->mag();
+        double w = item->point(item->bracketWidth()) * item->mag();
         s.add(tupletRect(item->bracketL[0], item->bracketL[1], w));
         s.add(tupletRect(item->bracketL[1], item->bracketL[2], w));
         if (item->number()) {

@@ -27,6 +27,7 @@
 
 #include "durationelement.h"
 #include "property.h"
+#include "score.h"
 #include "types.h"
 
 namespace mu::engraving {
@@ -84,8 +85,10 @@ public:
     void setBracketType(TupletBracketType val) { m_bracketType = val; }
     bool hasBracket() const { return m_hasBracket; }
     void setHasBracket(bool b) { m_hasBracket = b; }
-    Millimetre bracketWidth() const { return m_bracketWidth; }
-    void setBracketWidth(Millimetre s) { m_bracketWidth = s; }
+    Spatium bracketWidth() const { return m_bracketWidth; }
+    void setBracketWidth(Spatium s) { m_bracketWidth = s; }
+
+    double point(Spatium sp) const override { return sp.val() * score()->style().spatium(); }
 
     const Fraction& ratio() const { return m_ratio; }
     void setRatio(const Fraction& r) { m_ratio = r; }
@@ -178,7 +181,7 @@ private:
     DirectionV m_direction = DirectionV::AUTO;
     TupletNumberType m_numberType = TupletNumberType::SHOW_NUMBER;
     TupletBracketType m_bracketType = TupletBracketType::AUTO_BRACKET;
-    Millimetre m_bracketWidth;
+    Spatium m_bracketWidth;
 
     bool m_hasBracket = false;
     Fraction m_ratio;
