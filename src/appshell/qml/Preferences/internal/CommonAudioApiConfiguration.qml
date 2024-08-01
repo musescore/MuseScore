@@ -99,6 +99,8 @@ Item {
             onValueEdited: function(newIndex, newValue) {
                 apiModel.sampleRateSelected(newValue)
             }
+
+            visible: Qt.platform.os === "linux"
         }
     }
 }
