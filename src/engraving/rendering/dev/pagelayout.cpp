@@ -37,6 +37,7 @@
 #include "dom/measurebase.h"
 #include "dom/note.h"
 #include "dom/page.h"
+#include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/slur.h"
 #include "dom/spacer.h"
@@ -233,9 +234,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
             }
         }
 
-        if (engravingProgressNotifier()) {
+        if (ctx.dom().lastSegment()) {
             float curPercent = static_cast<float>(ctx.state().measureNo()) / ctx.dom().lastSegment()->measure()->index();
-            engravingProgressNotifier()->notify();
+            page->score()->layoutProgressChannel().send(curPercent);
         }
 
         ctx.mutState().setPrevSystem(ctx.mutState().curSystem());

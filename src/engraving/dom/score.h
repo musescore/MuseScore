@@ -277,6 +277,7 @@ public:
     void notifyLoopBoundaryTickChanged(LoopBoundaryType type, unsigned ticks);
 
     mu::async::Channel<EngravingItem*> elementDestroyed();
+    mu::async::Channel<float> layoutProgressChannel() const;
 
     void rebuildBspTree();
     bool noStaves() const { return m_staves.empty(); }
@@ -1097,6 +1098,7 @@ private:
     ShadowNote* m_shadowNote = nullptr;
 
     mu::async::Channel<LoopBoundaryType, unsigned> m_loopBoundaryTickChanged;
+    async::Channel<float> m_layoutProgressChannel;
 
     PaddingTable m_paddingTable;
     double m_minimumPaddingUnit = 0.0;

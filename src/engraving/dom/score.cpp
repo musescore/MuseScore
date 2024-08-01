@@ -279,6 +279,11 @@ mu::async::Channel<EngravingItem*> Score::elementDestroyed()
     return m_elementDestroyed;
 }
 
+mu::async::Channel<float> Score::layoutProgressChannel() const
+{
+    return m_layoutProgressChannel;
+}
+
 //---------------------------------------------------------
 //   Score::clone
 //         To create excerpt clone to show when changing PageSettings

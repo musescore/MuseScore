@@ -24,9 +24,6 @@
 
 #include "layoutcontext.h"
 
-#include <global/modularity/ioc.h>
-#include <engraving/iengravingprogressnotifier.h>
-
 namespace mu::engraving {
 class Page;
 class System;
@@ -35,7 +32,6 @@ class System;
 namespace mu::engraving::rendering::dev {
 class PageLayout
 {
-    INJECT_STATIC(mu::engraving::IEngravingProgressNotifier, engravingProgressNotifier)
 public:
 
     static void getNextPage(LayoutContext& ctx);
