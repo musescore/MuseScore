@@ -845,7 +845,7 @@ void SingleDraw::draw(const Bend* item, Painter* painter)
 
     const Bend::LayoutData* ldata = item->ldata();
     double _spatium = item->spatium();
-    double _lw = item->lineWidth();
+    double _lw = item->point(item->lineWidth());
 
     Pen pen(item->curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);

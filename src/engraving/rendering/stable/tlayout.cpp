@@ -1175,7 +1175,7 @@ void TLayout::layoutBend(const Bend* item, Bend::LayoutData* ldata)
     LD_CONDITION(item->note()->ldata()->isSetBbox());
 
     double spatium = item->spatium();
-    double lw = item->lineWidth();
+    double lw = item->point(item->lineWidth());
 
     const Note::LayoutData* noteLD = item->note()->ldata();
     PointF notePos = noteLD->pos();

@@ -605,7 +605,7 @@ void SingleLayout::layout(Bend* item, const Context&)
 {
     Bend::LayoutData* ldata = item->mutldata();
     double spatium = item->spatium();
-    double lw = item->lineWidth();
+    double lw = item->point(item->lineWidth());
 
     ldata->noteWidth = 0.0;
     ldata->notePos = PointF();

@@ -208,7 +208,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::DIAGONAL,                false, 0,                       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "diagonal") },
     { Pid::GROUP_NODES,             false, 0,                       P_TYPE::GROUPS,             PropertyGroup::NONE      ,      DUMMY_QT_TR_NOOP("propertyName", "groups") },
     { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::LINE_TYPE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "line style") },
-    { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "line width") },
+    { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "line width") },
     { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "line width (spatium)") },
     { Pid::TIME_STRETCH,            true,  "timeStretch",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "time stretch") },
     { Pid::ORNAMENT_STYLE,          true,  "ornamentStyle",         P_TYPE::ORNAMENT_STYLE,     PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "ornament style") },
