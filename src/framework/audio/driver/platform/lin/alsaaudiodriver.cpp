@@ -463,11 +463,10 @@ static void alsaPollWriteLoop(ALSAData* data, std::vector<struct pollfd> ufds)
         return;
     }
 
-    std::vector<float> buffer(periodSize * channels);
+    auto buffer = std::vector<float>(periodSize * channels);
 
     // Start the loop
     while (!data->audioProcessingDone) {
-
         uint8_t* stream = reinterpret_cast<uint8_t*>(&buffer[0]);
         const auto len = buffer.size() * sizeof(float);
 
