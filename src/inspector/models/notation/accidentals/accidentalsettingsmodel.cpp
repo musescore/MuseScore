@@ -126,7 +126,7 @@ void AccidentalSettingsModel::updateIsStackingOrderAvailableAndEnabled()
     setIsStackingOrderEnabled(m_elementList.size() == 1);
 
     for (EngravingItem* item : m_elementList) {
-        if (!item->isAccidental()) {
+        if (!item->isAccidental() || !toAccidental(item)->note()) {
             continue;
         }
         setIsStackingOrderEnabled(item->addToSkyline());
