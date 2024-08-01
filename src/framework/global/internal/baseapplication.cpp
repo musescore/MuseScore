@@ -36,6 +36,15 @@ using namespace muse;
 
 String BaseApplication::appName()
 {
+#ifdef MUSE_APP_NAME
+    return String::fromAscii(MUSE_APP_NAME);
+#else
+    return String();
+#endif
+}
+
+String BaseApplication::appTitle()
+{
 #ifdef MUSE_APP_TITLE
     return String::fromAscii(MUSE_APP_TITLE);
 #else

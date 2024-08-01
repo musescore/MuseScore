@@ -32,6 +32,7 @@ class ApplicationMock : public IApplication
 public:
 
     MOCK_METHOD(String, name, (), (const, override));
+    MOCK_METHOD(String, title, (), (const, override));
 
     MOCK_METHOD(bool, unstable, (), (const, override));
     MOCK_METHOD(Version, version, (), (const, override));
