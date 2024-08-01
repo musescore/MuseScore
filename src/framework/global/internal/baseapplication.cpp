@@ -46,7 +46,11 @@ String BaseApplication::appName()
 String BaseApplication::appTitle()
 {
 #ifdef MUSE_APP_TITLE
+#ifdef MUSE_APP_UNSTABLE
+    return String::fromAscii(MUSE_APP_TITLE) + u" Development";
+#else
     return String::fromAscii(MUSE_APP_TITLE);
+#endif
 #else
     return String();
 #endif
