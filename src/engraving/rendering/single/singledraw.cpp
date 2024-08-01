@@ -2476,7 +2476,7 @@ void SingleDraw::draw(const Tuplet* item, Painter* painter)
         painter->translate(-pos);
     }
     if (item->hasBracket()) {
-        painter->setPen(Pen(color, item->bracketWidth().val() * item->mag()));
+        painter->setPen(Pen(color, item->point(item->bracketWidth()) * item->mag()));
         if (!item->number()) {
             painter->drawPolyline(item->bracketL, 4);
         } else {
