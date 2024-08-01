@@ -1806,7 +1806,7 @@ bool TRead::readProperties(Ambitus* a, XmlReader& e, ReadContext& ctx)
     } else if (tag == "hasLine") {
         a->setHasLine(e.readInt());
     } else if (tag == "lineWidth") {
-        TRead::readProperty(a, e, ctx, Pid::LINE_WIDTH_SPATIUM);
+        TRead::readProperty(a, e, ctx, Pid::LINE_WIDTH);
     } else if (tag == "topPitch") {
         a->setTopPitch(e.readInt(), false);
     } else if (tag == "bottomPitch") {
