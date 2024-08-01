@@ -37,6 +37,7 @@
 #include "dom/measurebase.h"
 #include "dom/note.h"
 #include "dom/page.h"
+#include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/slur.h"
 #include "dom/spacer.h"
@@ -225,6 +226,12 @@ void PageLayout::collectPage(LayoutContext& ctx)
                 collected = true;
             }
         }
+
+        if (ctx.dom().lastSegment()) {
+            float curPercent = static_cast<float>(ctx.state().measureNo()) / ctx.dom().lastSegment()->measure()->index();
+            page->score()->layoutProgressChannel().send(curPercent);
+        }
+
         ctx.mutState().setPrevSystem(ctx.mutState().curSystem());
         assert(ctx.state().curSystem() != nextSystem);
         ctx.mutState().setCurSystem(nextSystem);
