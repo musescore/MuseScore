@@ -36,12 +36,14 @@
 #include <sched.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstring>
+#include <vector>
 
 #define DEBUG_AUDIO
 // #define ALSA_REALTIME
-#define ALSA_POLL_MMAP
+#define ALSA_POLL
 // #define ALSA_PERIOD_EVENT
 // #define MIMIC_MASTER
 
@@ -53,14 +55,14 @@
 
 #ifdef MIMIC_MASTER
 #undef ALSA_REALTIME
-#undef ALSA_POLL_MMAP
+#undef ALSA_POLL
 #endif
 
-#ifdef ALSA_POLL_MMAP
+#ifdef ALSA_POLL
 #undef ALSA_REALTIME
 #endif
 
-#ifndef ALSA_POLL_MMAP
+#ifndef ALSA_POLL
 #undef ALSA_PERIOD_EVENT
 #endif
 
@@ -125,6 +127,11 @@ static bool alsaAcquireRealtime(pthread_t th, const std::vector<float>& buffer)
 
 #endif
 
+inline bool accessIsSupported(snd_pcm_access_t access)
+{
+    return access == SND_PCM_ACCESS_RW_INTERLEAVED || access == SND_PCM_ACCESS_MMAP_INTERLEAVED;
+}
+
 static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
 {
     snd_pcm_hw_params_t* hwparams;
@@ -136,15 +143,37 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         return false;
     }
 
-#ifdef ALSA_POLL_MMAP
     const snd_pcm_access_t access = SND_PCM_ACCESS_MMAP_INTERLEAVED;
+    if (!accessIsSupported(params.access)) {
+        LOGE() << "Unsupported requested access type: " << snd_pcm_access_name(params.access);
+        return false;
+    }
+
+#ifdef ALSA_POLL
+    auto supportedAccess = std::array<snd_pcm_access_t, 2> {
+        params.access,
+        params.access == SND_PCM_ACCESS_MMAP_INTERLEAVED
+        ? SND_PCM_ACCESS_RW_INTERLEAVED
+        : SND_PCM_ACCESS_MMAP_INTERLEAVED,
+    };
 #else
-    const snd_pcm_access_t access = SND_PCM_ACCESS_RW_INTERLEAVED;
+    auto supportedAccess = std::array<snd_pcm_access_t, 1> {
+        SND_PCM_ACCESS_RW_INTERLEAVED,
+    };
 #endif
 
-    rc = snd_pcm_hw_params_set_access(deviceHandle, hwparams, access);
-    if (rc < 0) {
-        LOGE() << "Access type not available for playback: " << snd_strerror(rc);
+    bool accessSet = false;
+    for (const auto access : supportedAccess) {
+        rc = snd_pcm_hw_params_set_access(deviceHandle, hwparams, access);
+        if (rc >= 0) {
+            params.access = access;
+            accessSet = true;
+            break;
+        }
+        LOGW() << "Access type not available for playback: " << snd_pcm_access_name(access) << ": " << snd_strerror(rc);
+    }
+    if (!accessSet) {
+        LOGE() << "Could not find suitable access for playback";
         return false;
     }
 
@@ -186,7 +215,6 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
 
     unsigned int nperiods = params.periods;
     snd_pcm_hw_params_get_periods_min(hwparams, &nperiods, 0);
-    LOGI() << "nperiods: " << nperiods;
     nperiods = std::max(params.periods, nperiods);
 
     rc = snd_pcm_hw_params_set_periods_near(deviceHandle, hwparams, &nperiods, 0);
@@ -242,7 +270,8 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
     const snd_pcm_uframes_t availMin = params.ringBufferSize;
 #else
     const snd_pcm_uframes_t availMin = params.periodSize * (nperiods - params.periods + 1);
-#endif
+#endif //ALSA_PERIOD_EVENT
+
     rc = snd_pcm_sw_params_set_avail_min(deviceHandle, swparams, availMin);
     if (rc < 0) {
         LOGE() << "Unable to set avail min for playback: " << snd_strerror(rc);
@@ -299,7 +328,7 @@ static int xrunRecovery(snd_pcm_t* deviceHandle, int err)
     return err;
 }
 
-#ifdef ALSA_POLL_MMAP
+#ifdef ALSA_POLL
 
 // returns true if success
 static bool waitForPoll(snd_pcm_t* deviceHandle, struct pollfd* ufds,
@@ -332,31 +361,14 @@ static bool waitForPoll(snd_pcm_t* deviceHandle, struct pollfd* ufds,
     }
 }
 
-static void alsaPollLoop(ALSAData* data)
+static void alsaPollMmapLoop(ALSAData* data, std::vector<struct pollfd> ufds)
 {
+    LOGI() << "Entering poll mmap loop";
+
     auto deviceHandle = data->alsaDeviceHandle;
     auto callback = data->callback;
     const auto periodSize = data->params.periodSize;
     const auto channels = data->params.channels;
-
-    const auto count = snd_pcm_poll_descriptors_count(deviceHandle);
-    if (count <= 0) {
-        LOGE() << "Invalid poll descriptors count";
-        return;
-    }
-    auto ufds = std::vector<struct pollfd>(count);
-
-    int err = snd_pcm_poll_descriptors(deviceHandle, &ufds[0], count);
-    if (err < 0) {
-        LOGE() << "Unable to obtain poll descriptors for playback: " << snd_strerror(err);
-        return;
-    }
-
-    err = snd_pcm_prepare(deviceHandle);
-    if (err < 0) {
-        LOGE() << "Unable to prepare device: " << snd_strerror(err);
-        return;
-    }
 
     const auto avail = snd_pcm_avail_update(deviceHandle);
     if (static_cast<snd_pcm_uframes_t>(avail) != data->params.ringBufferSize) {
@@ -388,7 +400,8 @@ static void alsaPollLoop(ALSAData* data)
 
     snd_pcm_mmap_commit(deviceHandle, offset, frames);
 
-    if ((err = snd_pcm_start(deviceHandle)) < 0) {
+    int err = snd_pcm_start(deviceHandle);
+    if (err < 0) {
         LOGE() << "Unable to start device: " << snd_strerror(err);
         return;
     }
@@ -406,7 +419,7 @@ static void alsaPollLoop(ALSAData* data)
             if (restartPcm) {
                 snd_pcm_start(deviceHandle);
             }
-            waitForPoll(deviceHandle, &ufds[0], count);
+            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()));
             continue;
         }
 
@@ -417,7 +430,7 @@ static void alsaPollLoop(ALSAData* data)
                 xrunRecovery(deviceHandle, err);
                 restartPcm = true;
                 break;
-            };
+            }
 
             uint8_t* stream = reinterpret_cast<uint8_t*>(areas[0].addr) + offset * channels * sizeof(float);
             const auto len = contiguous * channels * sizeof(float);
@@ -432,33 +445,96 @@ static void alsaPollLoop(ALSAData* data)
             }
             frames -= contiguous;
         }
-
-
-    //     snd_pcm_uframes_t frames = periodSize;
-
-    //     while (frames > 0) {
-    //         const auto rc = snd_pcm_writei(deviceHandle, ptr, frames);
-    //         if (rc < 0) {
-    //             xrunRecovery(deviceHandle, rc);
-    //             break;
-    //         }
-    //         frames -= rc;
-    //         ptr += rc * channels;
-
-    //         if (frames == 0) {
-    //             break;
-    //         }
-
-    //         waitForPoll(deviceHandle, &ufds[0], count);
-    //     }
-
-    //     if (snd_pcm_state(deviceHandle) == SND_PCM_STATE_RUNNING) {
-    //         waitForPoll(deviceHandle, &ufds[0], count);
-    //     }
     }
 }
 
-#else // ALSA_POLL_MMAP
+static void alsaPollWriteLoop(ALSAData* data, std::vector<struct pollfd> ufds)
+{
+    LOGI() << "Entering poll write loop";
+
+    auto deviceHandle = data->alsaDeviceHandle;
+    auto callback = data->callback;
+    const auto periodSize = data->params.periodSize;
+    const auto channels = data->params.channels;
+
+    int err = snd_pcm_start(deviceHandle);
+    if (err < 0) {
+        LOGE() << "Unable to start device: " << snd_strerror(err);
+        return;
+    }
+
+    std::vector<float> buffer(periodSize * channels);
+
+    // Start the loop
+    while (!data->audioProcessingDone) {
+
+        uint8_t* stream = reinterpret_cast<uint8_t*>(&buffer[0]);
+        const auto len = buffer.size() * sizeof(float);
+
+        callback(stream, len);
+
+        snd_pcm_uframes_t frames = periodSize;
+        float* ptr = &buffer[0];
+
+        while (frames > 0) {
+            const auto rc = snd_pcm_writei(deviceHandle, ptr, frames);
+            if (rc < 0) {
+                xrunRecovery(deviceHandle, rc);
+                break;
+            }
+            frames -= rc;
+            ptr += rc * channels;
+
+            if (frames == 0) {
+                break;
+            }
+
+            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()));
+        }
+
+        if (snd_pcm_state(deviceHandle) == SND_PCM_STATE_RUNNING) {
+            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()));
+        }
+    }
+}
+
+static void alsaPollLoop(ALSAData* data)
+{
+    auto deviceHandle = data->alsaDeviceHandle;
+
+    int err = snd_pcm_prepare(deviceHandle);
+    if (err < 0) {
+        LOGE() << "Unable to prepare device: " << snd_strerror(err);
+        return;
+    }
+
+    const auto count = snd_pcm_poll_descriptors_count(deviceHandle);
+    if (count <= 0) {
+        LOGE() << "Invalid poll descriptors count";
+        return;
+    }
+    auto ufds = std::vector<struct pollfd>(count);
+
+    err = snd_pcm_poll_descriptors(deviceHandle, &ufds[0], count);
+    if (err < 0) {
+        LOGE() << "Unable to obtain poll descriptors for playback: " << snd_strerror(err);
+        return;
+    }
+
+    switch (data->params.access) {
+    case SND_PCM_ACCESS_MMAP_INTERLEAVED:
+        alsaPollMmapLoop(data, std::move(ufds));
+        break;
+    case SND_PCM_ACCESS_RW_INTERLEAVED:
+        alsaPollWriteLoop(data, std::move(ufds));
+        break;
+    default:
+        LOGE() << "Unsupported access type: " << data->params.access;
+        break;
+    }
+}
+
+#else // ALSA_POLL
 
 void alsaWriteLoop(ALSAData* data, std::vector<float> buffer)
 {
@@ -501,7 +577,7 @@ void alsaWriteLoop(ALSAData* data, std::vector<float> buffer)
     }
 }
 
-#endif // ALSA_POLL_MMAP
+#endif // ALSA_POLL
 
 static void* alsaThread(void* aParam)
 {
@@ -513,8 +589,7 @@ static void* alsaThread(void* aParam)
         return nullptr;
     }
 
-
-#ifdef ALSA_POLL_MMAP
+#ifdef ALSA_POLL
     alsaPollLoop(data);
 #else
     auto buffer = std::vector<float>(data->params.periodSize * data->params.channels);
@@ -589,7 +664,7 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     }
 
     AlsaParams params {
-        .access = SND_PCM_ACCESS_RW_INTERLEAVED,
+        .access = SND_PCM_ACCESS_MMAP_INTERLEAVED,
         .format = SND_PCM_FORMAT_FLOAT_LE,
         .channels = spec.output.audioChannelCount,
         .sampleRate = spec.output.sampleRate,
@@ -599,6 +674,7 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     };
     if (!alsaConfigureDevice(deviceHandle, params)) {
         LOGE() << "Could not configure ALSA device";
+        return false;
     }
     s_alsaData = new ALSAData {};
     s_alsaData->params = params;
