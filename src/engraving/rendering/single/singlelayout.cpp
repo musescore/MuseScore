@@ -954,7 +954,7 @@ void SingleLayout::layout(GlissandoSegment* item, const Context&)
     }
 
     RectF r = RectF(0.0, 0.0, item->pos2().x(), item->pos2().y()).normalized();
-    double lw = item->glissando()->lineWidth() * .5;
+    double lw = item->point(item->lineWidth()) * .5;
     item->setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
@@ -1846,7 +1846,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     }
 
     auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
-        PointF widthCorrection(0.0, tl->lineWidth() / 2);
+        PointF widthCorrection(0.0, tl->point(tl->lineWidth()) / 2);
         switch (text->align().vertical) {
         case AlignV::TOP:
             pp1 += widthCorrection;
@@ -1920,7 +1920,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         item->pointsRef()[1] = pp2;
         item->setLineLength(sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1)));
 
-        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
+        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->point(tl->lineWidth()) / 2,
+                                                             tl->lineStyle() == LineType::DOTTED));
         return;
     }
 
@@ -1928,7 +1929,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
     double x1 = std::min(0.0, pp2.x());
     double x2 = std::max(0.0, pp2.x());
-    double y0 = -tl->lineWidth();
+    double y0 = -tl->point(tl->lineWidth());
     double y1 = std::min(0.0, pp2.y()) + y0;
     double y2 = std::max(0.0, pp2.y()) - y0;
 
@@ -2056,7 +2057,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->lineWidth() * item->mag(), checkAngle);
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->point(tl->lineWidth()) * item->mag(), checkAngle);
                 }
             }
         }
@@ -2080,7 +2081,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
-                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->lineWidth() * item->mag(), checkAngle);
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->point(tl->lineWidth()) * item->mag(), checkAngle);
                 }
             }
 

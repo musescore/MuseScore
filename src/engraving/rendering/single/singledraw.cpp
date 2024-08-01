@@ -1335,7 +1335,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter)
     const Glissando* glissando = item->glissando();
 
     Pen pen(item->curColor(item->visible(), glissando->lineColor()));
-    pen.setWidthF(glissando->lineWidth());
+    pen.setWidthF(item->point(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
 
@@ -1623,7 +1623,7 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     // color for line (text color comes from the text properties)
     Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    double lineWidth = tl->lineWidth() * item->mag();
+    double lineWidth = tl->point(tl->lineWidth()) * item->mag();
 
     const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
     Pen pen(solidPen);
@@ -1740,7 +1740,7 @@ void SingleDraw::draw(const HairpinSegment* item, Painter* painter)
 
     if (item->drawCircledTip()) {
         Color color = item->curColor(item->hairpin()->visible(), item->hairpin()->lineColor());
-        double w = item->hairpin()->lineWidth();
+        double w = item->point(item->lineWidth());
         if (item->staff()) {
             w *= item->staff()->staffMag(item->hairpin()->tick());
         }

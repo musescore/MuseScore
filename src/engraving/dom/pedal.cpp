@@ -146,7 +146,7 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return style().styleMM(Sid::pedalLineWidth);              // return point, not spatium
+        return style().styleS(Sid::pedalLineWidth);              // return point, not spatium
 
     case Pid::LINE_STYLE:
         return style().styleV(Sid::pedalLineStyle);
@@ -224,7 +224,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         if (beginText() == "<sym>keyboardPedalPed</sym>") {
             x -= 0.5 * spatium();
         } else if (beginHookType() == HookType::HOOK_90 || beginHookType() == HookType::HOOK_90T) {
-            x += 0.5 * lineWidth();
+            x += 0.5 * point(lineWidth());
         } else if (beginHookType() == HookType::HOOK_45) {
             EngravingItem* item = startElement();
             if (item && item->isChord()) {

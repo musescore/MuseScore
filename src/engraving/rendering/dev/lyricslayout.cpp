@@ -206,7 +206,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
     if (item->isEndMelisma()) {           // melisma
-        item->setLineWidth(ctx.conf().styleMM(Sid::lyricsLineThickness));
+        item->setLineWidth(ctx.conf().styleS(Sid::lyricsLineThickness));
     } else { // dash(es)
         item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
                                              item->staffIdx(),
@@ -235,7 +235,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         layoutDashes(item);
     }
 
-    double halfLineWidth = item->lyricsLine()->lineWidth();
+    double halfLineWidth = item->point(item->lineWidth());
     RectF rect(PointF(), item->pos2());
     rect.adjust(0.0, -halfLineWidth, 0.0, halfLineWidth);
 

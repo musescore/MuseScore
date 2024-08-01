@@ -1478,7 +1478,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
     const Glissando* glissando = item->glissando();
 
     Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>()));
-    pen.setWidthF(glissando->lineWidth());
+    pen.setWidthF(item->point(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
 
@@ -1712,7 +1712,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     // color for line (text color comes from the text properties)
     Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    double lineWidth = tl->lineWidth() * item->mag();
+    double lineWidth = tl->point(tl->lineWidth()) * item->mag();
 
     const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
     Pen pen(solidPen);
@@ -1823,7 +1823,7 @@ void TDraw::draw(const HairpinSegment* item, Painter* painter)
 
     if (item->drawCircledTip()) {
         Color color = item->curColor(item->hairpin()->visible(), item->hairpin()->lineColor());
-        double w = item->hairpin()->lineWidth();
+        double w = item->point(item->lineWidth());
         if (item->staff()) {
             w *= item->staff()->staffMag(item->hairpin()->tick());
         }
@@ -2094,7 +2094,7 @@ void TDraw::draw(const LyricsLineSegment* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     Pen pen(item->lyricsLine()->lyrics()->curColor());
-    pen.setWidthF(item->lyricsLine()->lineWidth());
+    pen.setWidthF(item->point(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
     for (const LineF& dash : item->ldata()->dashes()) {
