@@ -1064,7 +1064,7 @@ RectF Dynamic::adjustedBoundingRect() const
     r = canvasBoundingRect();
     r.setWidth(width() + m * 2);
     r.setHeight(m * 4.5);
-    r.translate(-m , -m);
+    r.translate(-m, -m);
 
     return r;
 }
