@@ -3315,8 +3315,8 @@ void TextBase::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     p->setPen(pen);
 
-    // Don't draw cursor if there is a selection
-    if (!cursor->hasSelection()) {
+    // Don't draw cursor if it's dynamic or if there is a selection
+    if (!ed.element->isDynamic() && !cursor->hasSelection()) {
         p->drawRect(cursor->cursorRect());
     }
 
@@ -3324,8 +3324,14 @@ void TextBase::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
     p->setPen(Pen(configuration()->formattingColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
-    double m = spatium();
-    RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
+    RectF r;
+
+    if (ed.element->isDynamic()) {
+        r = toDynamic(ed.element)->adjustedBoundingRect();
+    } else {
+        double m = spatium();
+        r = canvasBoundingRect().adjusted(-m, -m, m, m);
+    }
 
     p->drawRect(r);
     pen = Pen(configuration()->defaultColor(), 0.0);

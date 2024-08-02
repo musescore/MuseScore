@@ -214,7 +214,17 @@ const mu::engraving::ElementTypeSet& AbstractElementPopupModel::dependentElement
 
 void AbstractElementPopupModel::updateItemRect()
 {
-    QRect rect = m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
+    QRect rect;
+
+    if (!m_item) {
+        rect = QRect();
+    } else {
+        if (m_item->isDynamic()) {
+            rect = fromLogical(toDynamic(m_item)->adjustedBoundingRect()).toQRect();
+        } else {
+            rect = fromLogical(m_item->canvasBoundingRect()).toQRect();
+        }
+    }
 
     if (m_itemRect != rect) {
         m_itemRect = rect;

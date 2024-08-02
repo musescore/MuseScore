@@ -4183,7 +4183,7 @@ void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic)
         startEditGrip(segment, Grip::END);
     }
 
-    // Left grip - TODO
+    // Left grip
     if (abs(dynamic->leftDragOffset()) >= pin->spatium() * 0.8) {
         pin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
 

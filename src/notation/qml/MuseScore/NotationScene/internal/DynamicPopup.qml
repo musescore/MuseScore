@@ -27,7 +27,7 @@ StyledPopupView {
 
     function updatePosition() {
         root.x = root.parent.width / 2 - root.contentWidth / 2
-        root.y = root.parent.height / 2 + root.margins * 2
+        root.y = root.parent.height - root.padding + root.margins
     }
 
     RowLayout {

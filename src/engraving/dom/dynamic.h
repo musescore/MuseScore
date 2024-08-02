@@ -151,6 +151,8 @@ public:
 
     void findAdjacentHaipins();
 
+    RectF adjustedBoundingRect() const;
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
