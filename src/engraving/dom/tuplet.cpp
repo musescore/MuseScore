@@ -32,6 +32,7 @@
 #include "rest.h"
 #include "score.h"
 #include "text.h"
+#include "segment.h"
 
 #include "log.h"
 
@@ -850,5 +851,13 @@ EngravingItem* Tuplet::nextElement()
         return toRest(firstElement);
     }
     return firstElement;
+}
+
+EngravingItem* Tuplet::prevElement()
+{
+    ChordRest* firstElement = toChordRest(elements().front());
+    staff_idx_t staffId = firstElement->staffIdx();
+    EngravingItem* prevItem = firstElement->segment()->prevElement(staffId);
+    return prevItem;
 }
 } // namespace mu::engraving
