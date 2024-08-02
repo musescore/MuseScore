@@ -94,7 +94,7 @@ void Box::startEditDrag(EditData& ed)
 
 void Box::editDrag(EditData& ed)
 {
-    const double sp = sizeIsSpatiumDependent() ? spatium() : SPATIUM20;
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isVBox()) {
         m_boxHeight += Spatium(ed.delta.y() / sp);
         if (ed.vRaster) {
@@ -154,7 +154,7 @@ void Box::add(EngravingItem* e)
 
 double Box::point(const Spatium val) const
 {
-    const double sp = sizeIsSpatiumDependent() ? spatium() : SPATIUM20;
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     return val.val() * sp;
 }
 
@@ -655,7 +655,7 @@ PropertyValue VBox::propertyDefault(Pid id) const
 
 void VBox::startEditDrag(EditData& ed)
 {
-    const double sp = sizeIsSpatiumDependent() ? spatium() : SPATIUM20;
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isAutoSizeEnabled()) {
         setAutoSizeEnabled(false);
         setBoxHeight(Spatium(height() / sp));
