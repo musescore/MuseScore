@@ -6067,7 +6067,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->point(tl->lineWidth()) * item->mag(), checkAngle);
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->point(tl->lineWidth()), checkAngle);
                 }
             }
         }
@@ -6090,7 +6090,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->point(tl->lineWidth()) * item->mag(), checkAngle);
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->point(tl->lineWidth()), checkAngle);
                 }
             }
 
