@@ -475,7 +475,7 @@ static void alsaCleanup()
             ts.tv_nsec += 200 * 1000 * 1000;
             int rt = pthread_timedjoin_np(s_alsaData->threadHandle, nullptr, &ts);
             if (rt == ETIMEDOUT) {
-                pthread_cancel(s_alsaData->threadHandle); 
+                pthread_cancel(s_alsaData->threadHandle);
             }
         }
     }
