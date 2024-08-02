@@ -42,10 +42,6 @@
 #include <vector>
 
 #define DEBUG_AUDIO
-// #define ALSA_REALTIME
-#define ALSA_POLL
-// #define ALSA_PERIOD_EVENT
-// #define MIMIC_MASTER
 
 #ifdef DEBUG_AUDIO
 #define LOG_AUDIO LOGD
@@ -53,18 +49,7 @@
 #define LOG_AUDIO LOGN
 #endif
 
-#ifdef MIMIC_MASTER
-#undef ALSA_REALTIME
-#undef ALSA_POLL
-#endif
-
-#ifdef ALSA_POLL
-#undef ALSA_REALTIME
-#endif
-
-#ifndef ALSA_POLL
-#undef ALSA_PERIOD_EVENT
-#endif
+static constexpr char DEFAULT_DEVICE_ID[] = "default";
 
 using namespace muse;
 using namespace muse::audio;
@@ -81,7 +66,7 @@ struct AlsaParams
     snd_pcm_uframes_t ringBufferSize;
 };
 
-struct ALSAData
+struct AlsaData
 {
     snd_pcm_t* alsaDeviceHandle = nullptr;
     AlsaParams params;
@@ -90,42 +75,8 @@ struct ALSAData
     IAudioDriver::Callback callback;
 };
 
-static ALSAData* s_alsaData{ nullptr };
+static AlsaData* s_alsaData{ nullptr };
 static muse::audio::IAudioDriver::Spec s_format;
-
-#ifdef ALSA_REALTIME
-static bool alsaAcquireRealtime(pthread_t th, const std::vector<float>& buffer)
-{
-    const int min_prio = sched_get_priority_min(SCHED_FIFO);
-    const int max_prio = sched_get_priority_max(SCHED_FIFO);
-    // priority is normally anything from 0 to 99
-    // No need to have a too high value though as it can make problems in the kernel scheduling.
-    const int desired_prio = 20;
-    const int sched_prio = std::max(min_prio, std::min(max_prio, desired_prio));
-    struct sched_param param = {
-        .sched_priority = sched_prio,
-    };
-    LOGD() << "Requesting RT priority " << sched_prio;
-
-    /* Set scheduler policy and priority of pthread */
-    int ret = pthread_setschedparam(th, SCHED_FIFO, &param);
-    if (ret) {
-        LOGW() << "pthread setschedparam failed: " << strerror(ret);
-        return false;
-    }
-
-    // Pinning to RAM the buffer accessed during the realtime thread
-    // (optional and require CAP_IPC_LOCK capability)
-    const void* addr = static_cast<const void*>(&buffer[0]);
-    const auto len = buffer.capacity() * sizeof(float);
-    if (mlock(addr, len)) {
-        LOGW() << "Could not lock ALSA buffer to RAM: " << strerror(errno);
-    }
-
-    return true;
-}
-
-#endif
 
 inline bool accessIsSupported(snd_pcm_access_t access)
 {
@@ -149,18 +100,12 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         return false;
     }
 
-#ifdef ALSA_POLL
-    auto supportedAccess = std::array<snd_pcm_access_t, 2> {
+    const auto supportedAccess = std::array<snd_pcm_access_t, 2> {
         params.access,
         params.access == SND_PCM_ACCESS_MMAP_INTERLEAVED
         ? SND_PCM_ACCESS_RW_INTERLEAVED
         : SND_PCM_ACCESS_MMAP_INTERLEAVED,
     };
-#else
-    auto supportedAccess = std::array<snd_pcm_access_t, 1> {
-        SND_PCM_ACCESS_RW_INTERLEAVED,
-    };
-#endif
 
     bool accessSet = false;
     for (const auto access : supportedAccess) {
@@ -189,10 +134,6 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         return false;
     }
 
-#ifdef MIMIC_MASTER
-    params.sampleRate = 48000;
-#endif
-
     unsigned int rate = params.sampleRate;
     rc = snd_pcm_hw_params_set_rate_near(deviceHandle, hwparams, &rate, nullptr);
     if (rc < 0) {
@@ -204,9 +145,6 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         params.sampleRate = rate;
     }
 
-#ifdef MIMIC_MASTER
-    snd_pcm_hw_params_set_buffer_size_near(deviceHandle, hwparams, &params.periodSize);
-#else
     rc = snd_pcm_hw_params_set_period_size_near(deviceHandle, hwparams, &params.periodSize, 0);
     if (rc < 0) {
         LOGE() << "Could not set period size (" << params.periodSize << "): " << snd_strerror(rc);
@@ -226,14 +164,14 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         LOGE() << "Could not get requested periods";
         return false;
     }
+    params.periods = nperiods;
 
-    params.ringBufferSize = nperiods * params.periodSize;
+    params.ringBufferSize = params.periods * params.periodSize;
     rc = snd_pcm_hw_params_set_buffer_size(deviceHandle, hwparams, params.ringBufferSize);
     if (rc < 0) {
         LOGE() << "Could not set ring buffer size (" << params.ringBufferSize << "): " << snd_strerror(rc);
         return false;
     }
-#endif // MIMIC_MASTER
 
     rc = snd_pcm_hw_params(deviceHandle, hwparams);
     if (rc < 0) {
@@ -241,7 +179,6 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         return false;
     }
 
-#ifndef MIMIC_MASTER
     snd_pcm_sw_params_t* swparams;
     snd_pcm_sw_params_alloca(&swparams);
 
@@ -264,29 +201,13 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         return false;
     }
 
-    /* allow the transfer when at least period_size samples can be processed */
-    /* or disable this mechanism when period event is enabled (aka interrupt like style processing) */
-#ifdef ALSA_PERIOD_EVENT
-    const snd_pcm_uframes_t availMin = params.ringBufferSize;
-#else
-    const snd_pcm_uframes_t availMin = params.periodSize * (nperiods - params.periods + 1);
-#endif //ALSA_PERIOD_EVENT
-
+    /* allow the transfer when at least periodSize samples can be processed */
+    const snd_pcm_uframes_t availMin = params.periodSize;
     rc = snd_pcm_sw_params_set_avail_min(deviceHandle, swparams, availMin);
     if (rc < 0) {
         LOGE() << "Unable to set avail min for playback: " << snd_strerror(rc);
         return false;
     }
-    params.periods = nperiods;
-
-    /* enable period events when requested */
-#ifdef ALSA_PERIOD_EVENT
-    rc = snd_pcm_sw_params_set_period_event(deviceHandle, swparams, 1);
-    if (rc < 0) {
-        LOGE() << "Unable to set period event for playback: " << snd_strerror(rc);
-        return false;
-    }
-#endif //ALSA_PERIOD_EVENT
 
     /* write the parameters to the playback device */
     rc = snd_pcm_sw_params(deviceHandle, swparams);
@@ -294,7 +215,6 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         LOGE() << "Unable to set sw params for playback: " << snd_strerror(rc);
         return false;
     }
-#endif // MIMIC_MASTER
 
     return true;
 }
@@ -328,8 +248,6 @@ static int xrunRecovery(snd_pcm_t* deviceHandle, int err)
     return err;
 }
 
-#ifdef ALSA_POLL
-
 // returns true if success
 static bool waitForPoll(snd_pcm_t* deviceHandle, struct pollfd* ufds,
                         unsigned int count)
@@ -361,7 +279,7 @@ static bool waitForPoll(snd_pcm_t* deviceHandle, struct pollfd* ufds,
     }
 }
 
-static void alsaPollMmapLoop(ALSAData* data, std::vector<struct pollfd> ufds)
+static void alsaPollMmapLoop(AlsaData* data, std::vector<struct pollfd> ufds)
 {
     LOGI() << "Entering poll mmap loop";
 
@@ -448,7 +366,7 @@ static void alsaPollMmapLoop(ALSAData* data, std::vector<struct pollfd> ufds)
     }
 }
 
-static void alsaPollWriteLoop(ALSAData* data, std::vector<struct pollfd> ufds)
+static void alsaPollWriteLoop(AlsaData* data, std::vector<struct pollfd> ufds)
 {
     LOGI() << "Entering poll write loop";
 
@@ -497,27 +415,29 @@ static void alsaPollWriteLoop(ALSAData* data, std::vector<struct pollfd> ufds)
     }
 }
 
-static void alsaPollLoop(ALSAData* data)
+static void* alsaThread(void* aParam)
 {
+    muse::runtime::setThreadName("audio_driver");
+    AlsaData* data = static_cast<AlsaData*>(aParam);
     auto deviceHandle = data->alsaDeviceHandle;
 
     int err = snd_pcm_prepare(deviceHandle);
     if (err < 0) {
         LOGE() << "Unable to prepare device: " << snd_strerror(err);
-        return;
+        return nullptr;
     }
 
     const auto count = snd_pcm_poll_descriptors_count(deviceHandle);
     if (count <= 0) {
         LOGE() << "Invalid poll descriptors count";
-        return;
+        return nullptr;
     }
     auto ufds = std::vector<struct pollfd>(count);
 
     err = snd_pcm_poll_descriptors(deviceHandle, &ufds[0], count);
     if (err < 0) {
         LOGE() << "Unable to obtain poll descriptors for playback: " << snd_strerror(err);
-        return;
+        return nullptr;
     }
 
     switch (data->params.access) {
@@ -531,69 +451,6 @@ static void alsaPollLoop(ALSAData* data)
         LOGE() << "Unsupported access type: " << data->params.access;
         break;
     }
-}
-
-#else // ALSA_POLL
-
-void alsaWriteLoop(ALSAData* data, std::vector<float> buffer)
-{
-    auto callback = data->callback;
-    auto userdata = data->userdata;
-    auto deviceHandle = data->alsaDeviceHandle;
-    const auto periodSize = data->params.periodSize;
-    const auto channels = data->params.channels;
-
-#ifdef ALSA_REALTIME
-    if (!alsaAcquireRealtime(data->threadHandle, buffer)) {
-        LOGW() << "Could not acquire realtime priority";
-    } else {
-        LOGI() << "Successfully acquired realtime priority";
-    }
-#endif
-
-    while (!data->audioProcessingDone) {
-        uint8_t* stream = reinterpret_cast<uint8_t*>(&buffer[0]);
-        const auto len = buffer.size() * sizeof(float);
-
-        callback(userdata, stream, len);
-
-        snd_pcm_uframes_t frames = periodSize;
-        float* ptr = &buffer[0];
-
-        while (frames > 0) {
-            const auto rc = snd_pcm_writei(deviceHandle, ptr, frames);
-            if (rc < 0) {
-                xrunRecovery(deviceHandle, rc);
-                break;
-            }
-            frames -= rc;
-            ptr += rc * channels;
-
-            if (frames == 0) {
-                break;
-            }
-        }
-    }
-}
-
-#endif // ALSA_POLL
-
-static void* alsaThread(void* aParam)
-{
-    muse::runtime::setThreadName("audio_driver");
-    ALSAData* data = static_cast<ALSAData*>(aParam);
-
-    int ret = snd_pcm_wait(data->alsaDeviceHandle, 1000);
-    IF_ASSERT_FAILED(ret > 0) {
-        return nullptr;
-    }
-
-#ifdef ALSA_POLL
-    alsaPollLoop(data);
-#else
-    auto buffer = std::vector<float>(data->params.periodSize * data->params.channels);
-    alsaWriteLoop(data, std::move(buffer));
-#endif
 
     LOGI() << "Exiting ALSA thread";
     return nullptr;
@@ -616,7 +473,7 @@ static void alsaCleanup()
             ts.tv_nsec += 200 * 1000 * 1000;
             int rt = pthread_timedjoin_np(s_alsaData->threadHandle, nullptr, &ts);
             if (rt == ETIMEDOUT) {
-                pthread_cancel(s_alsaData->threadHandle); 
+                pthread_cancel(s_alsaData->threadHandle);
             }
         }
     }
@@ -667,7 +524,7 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     }
 
     snd_pcm_t* deviceHandle;
-    int rc = snd_pcm_open(&deviceHandle, spec.deviceId.c_str(), SND_PCM_STREAM_PLAYBACK, 0);
+    int rc = snd_pcm_open(&deviceHandle, spec.deviceId.c_str(), SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK);
     if (rc < 0) {
         LOGE() << "Could not open ALSA device (" << spec.deviceId << "): " << snd_strerror(rc);
         return false;
@@ -686,7 +543,8 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
         LOGE() << "Could not configure ALSA device";
         return false;
     }
-    s_alsaData = new ALSAData {};
+
+    s_alsaData = new AlsaData {};
     s_alsaData->params = params;
     s_alsaData->callback = spec.callback;
     s_alsaData->alsaDeviceHandle = deviceHandle;
