@@ -308,6 +308,8 @@ public:
 
     muse::async::Channel<EngravingItem*> elementDestroyed();
 
+    muse::async::Channel<float> layoutProgressChannel() const;
+
     void rebuildBspTree();
     bool noStaves() const { return m_staves.empty(); }
     void insertPart(Part*, size_t targetPartIdx);
@@ -1143,6 +1145,8 @@ private:
     ShadowNote* m_shadowNote = nullptr;
 
     muse::async::Channel<LoopBoundaryType, unsigned> m_loopBoundaryTickChanged;
+
+    muse::async::Channel<float> m_layoutProgressChannel;
 
     PaddingTable m_paddingTable;
     double m_minimumPaddingUnit = 0.0;
