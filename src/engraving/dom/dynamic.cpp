@@ -1021,6 +1021,10 @@ void Dynamic::findAdjacentHaipins()
 
 int Dynamic::gripsCount() const
 {
+    if (empty()) {
+        return 0;
+    }
+
     if (!hasLeftHairpin() && !hasRightHairpin()) {
         return 2;
     } else if (hasLeftHairpin() ^ hasRightHairpin()) {
@@ -1039,8 +1043,10 @@ std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
     const LayoutData* ldata = this->ldata();
     const PointF pp(pagePos());
     double md = score()->style().styleS(Sid::hairpinMinDistance).val() * spatium(); // Minimum distance between dynamic and grip
+
     PointF leftOffset(-ldata->bbox().width() / 2 - md + m_leftDragOffset, -11.408);
     PointF rightOffset(ldata->bbox().width() / 2 + md + m_rightDragOffset, -11.408);
+
     if (!hasLeftHairpin() && hasRightHairpin()) {
         return { pp + leftOffset };
     }
@@ -1048,5 +1054,18 @@ std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
         return { pp + rightOffset };
     }
     return { pp + leftOffset, pp + rightOffset };
+}
+
+RectF Dynamic::adjustedBoundingRect() const
+{
+    RectF r;
+    double m = spatium();
+
+    r = canvasBoundingRect();
+    r.setWidth(width() + m * 2);
+    r.setHeight(m * 4.5);
+    r.translate(-m , -m);
+
+    return r;
 }
 }

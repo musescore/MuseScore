@@ -71,7 +71,6 @@ Item {
 
     function show(elementType, elementRect) {
         close()
-
         var popup = loader.loadPopup(prv.componentByType(elementType), elementRect)
         popup.open()
     }
