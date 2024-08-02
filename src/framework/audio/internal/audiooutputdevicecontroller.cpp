@@ -51,6 +51,16 @@ void AudioOutputDeviceController::init()
             }, AudioThread::ID);
         }
     });
+
+    configuration()->sampleRateChanged().onNotify(this, [this]() {
+        unsigned int sampleRate = configuration()->sampleRate();
+        bool ok = audioDriver()->setOutputDeviceSampleRate(sampleRate);
+        if (ok) {
+            async::Async::call(this, [this, sampleRate](){
+                audioEngine()->setSampleRate(sampleRate);
+            }, AudioThread::ID);
+        }
+    });
 }
 
 void AudioOutputDeviceController::checkConnection()

@@ -88,7 +88,7 @@ sample_rate_t AudioEngine::sampleRate() const
     return m_sampleRate;
 }
 
-void AudioEngine::setSampleRate(unsigned int sampleRate)
+void AudioEngine::setSampleRate(sample_rate_t sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
 

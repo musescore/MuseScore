@@ -282,6 +282,44 @@ std::vector<unsigned int> WasapiAudioDriver::availableOutputDeviceBufferSizes() 
     return result;
 }
 
+unsigned int WasapiAudioDriver::outputDeviceSampleRate() const
+{
+    return m_activeSpec.sampleRate;
+}
+
+bool WasapiAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+{
+    bool result = true;
+
+    if (isOpened()) {
+        close();
+
+        m_activeSpec.sampleRate = sampleRate;
+        result = open(m_activeSpec, &m_activeSpec);
+    } else {
+        m_desiredSpec.sampleRate = sampleRate;
+    }
+
+    m_outputDeviceSampleRateChanged.notify();
+
+    return result;
+}
+
+async::Notification WasapiAudioDriver::outputDeviceSampleRateChanged() const
+{
+    return m_outputDeviceSampleRateChanged;
+}
+
+std::vector<unsigned int> WasapiAudioDriver::availableOutputDeviceSampleRates() const
+{
+    return {
+        44100,
+        48000,
+        88200,
+        96000,
+    };
+}
+
 void WasapiAudioDriver::resume()
 {
 }
