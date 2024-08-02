@@ -606,8 +606,19 @@ static void alsaCleanup()
     }
 
     s_alsaData->audioProcessingDone = true;
+
     if (s_alsaData->threadHandle) {
-        pthread_join(s_alsaData->threadHandle, nullptr);
+        struct timespec ts;
+        if (clock_gettime(CLOCK_REALTIME, &ts)) {
+            LOGE() << "Unable to get current time: " << strerror(errno);
+            pthread_join(s_alsaData->threadHandle, nullptr);
+        } else {
+            ts.tv_nsec += 200 * 1000 * 1000;
+            int rt = pthread_timedjoin_np(s_alsaData->threadHandle, nullptr, &ts);
+            if (rt == ETIMEDOUT) {
+                pthread_cancel(s_alsaData->threadHandle); 
+            }
+        }
     }
     if (nullptr != s_alsaData->alsaDeviceHandle) {
         snd_pcm_drain(s_alsaData->alsaDeviceHandle);
