@@ -27,6 +27,7 @@ class Chord;
 class EngravingItem;
 class Lyrics;
 class Note;
+class NoteDot;
 class Rest;
 class Shape;
 class StemSlash;
@@ -69,6 +70,7 @@ private:
 
     static KerningType doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
+    static KerningType computeNoteDotKerningType(const NoteDot* noteDot, const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
 };

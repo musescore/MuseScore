@@ -562,12 +562,12 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         return item2->isBarLine() ? KerningType::ALLOW_COLLISION : KerningType::KERNING;
     case ElementType::HARMONY:
         return item2->isHarmony() ? KerningType::NON_KERNING : KerningType::KERNING;
-    case ElementType::NOTEDOT:
-        return item2->isNote() ? KerningType::NON_KERNING : KerningType::KERNING;
     case ElementType::LYRICS:
         return computeLyricsKerningType(toLyrics(item1), item2);
     case ElementType::NOTE:
         return computeNoteKerningType(toNote(item1), item2);
+    case ElementType::NOTEDOT:
+        return computeNoteDotKerningType(toNoteDot(item1), item2);
     case ElementType::STEM_SLASH:
         return computeStemSlashKerningType(toStemSlash(item1), item2);
     default:
@@ -607,6 +607,17 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
         return KerningType::NON_KERNING;
     }
 
+    return KerningType::KERNING;
+}
+
+KerningType HorizontalSpacing::computeNoteDotKerningType(const NoteDot* noteDot, const EngravingItem* item2)
+{
+    if (item2->isNote()) {
+        bool sameVoice = noteDot->track() == item2->track();
+        if (sameVoice) {
+            return KerningType::NON_KERNING;
+        }
+    }
     return KerningType::KERNING;
 }
 
