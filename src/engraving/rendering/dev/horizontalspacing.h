@@ -69,7 +69,6 @@ private:
 
     static KerningType doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
-    static KerningType computeNoteDotKerningType(const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
 };
