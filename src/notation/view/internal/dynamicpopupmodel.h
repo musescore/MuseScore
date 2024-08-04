@@ -45,8 +45,8 @@ signals:
     void pagesChanged();
 
 private:
-    QVariantList m_pages; // Represents different pages of the popup, each containing dynamic/hairpin symbols as strings, width, offset and ItemType
-    bool isDynamicCommitted = false;
+    // Represents different pages of the popup, each containing dynamic/hairpin symbols as strings, width, offset and ItemType
+    QVariantList m_pages;
 };
 } // namespace mu::notation
 

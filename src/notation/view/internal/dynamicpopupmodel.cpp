@@ -72,7 +72,9 @@ void DynamicPopupModel::init()
 
     // If popup opened on clicking an already existing dynamic then dont't show the preview on hover
     if (!toDynamic(m_item)->empty()) {
-        isDynamicCommitted = true;
+        m_item->setFlag(ElementFlag::IS_PREVIEW, false);
+    } else {
+        m_item->setFlag(ElementFlag::IS_PREVIEW, true);
     }
 
     IEngravingFontPtr engravingFont = m_item->score()->engravingFont();
@@ -110,7 +112,7 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
     m_item->undoChangeProperty(Pid::DYNAMIC_TYPE, DYN_POPUP_PAGES[page][index].dynType);
     endCommand();
 
-    isDynamicCommitted = true;
+    m_item->setFlag(ElementFlag::IS_PREVIEW, false);
     INotationInteractionPtr interaction = currentNotation()->interaction();
 
     // Hide the bounding box which appears when called using Ctrl+D shortcut
@@ -153,7 +155,7 @@ void DynamicPopupModel::showPreview(int page, int index)
         return;
     }
 
-    if (!m_item->isDynamic() || isDynamicCommitted) {
+    if (!m_item->isDynamic() || !m_item->flag(ElementFlag::IS_PREVIEW)) {
         return;
     }
 
@@ -170,7 +172,7 @@ void DynamicPopupModel::hidePreview()
         return;
     }
 
-    if (!m_item->isDynamic() || isDynamicCommitted) {
+    if (!m_item->isDynamic() || !m_item->flag(ElementFlag::IS_PREVIEW)) {
         return;
     }
 
