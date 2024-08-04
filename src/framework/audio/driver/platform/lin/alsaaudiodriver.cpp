@@ -250,12 +250,14 @@ static int xrunRecovery(snd_pcm_t* deviceHandle, int err)
 
 // returns true if success
 static bool waitForPoll(snd_pcm_t* deviceHandle, struct pollfd* ufds,
-                        unsigned int count)
+                        unsigned int count, int timeout = -1)
 {
     unsigned short revents;
 
     while (true) {
-        poll(ufds, count, -1);
+        if (poll(ufds, count, timeout) == 0) {
+            LOG_AUDIO() << "poll timeout " << timeout;
+        }
         snd_pcm_poll_descriptors_revents(deviceHandle, ufds, count, &revents);
 
         if (revents & POLLERR) {
@@ -326,6 +328,8 @@ static void alsaPollMmapLoop(AlsaData* data, std::vector<struct pollfd> ufds)
 
     bool restartPcm = false;
 
+    int waitTimeout = 4 * 1000 * data->params.periodSize / data->params.sampleRate;
+
     // Start the loop
     while (!data->audioProcessingDone) {
         const auto avail = snd_pcm_avail_update(deviceHandle);
@@ -337,7 +341,7 @@ static void alsaPollMmapLoop(AlsaData* data, std::vector<struct pollfd> ufds)
             if (restartPcm) {
                 snd_pcm_start(deviceHandle);
             }
-            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()));
+            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()), waitTimeout);
             continue;
         }
 
@@ -383,6 +387,8 @@ static void alsaPollWriteLoop(AlsaData* data, std::vector<struct pollfd> ufds)
 
     auto buffer = std::vector<float>(periodSize * channels);
 
+    int waitTimeout = 4 * 1000 * data->params.periodSize / data->params.sampleRate;
+
     // Start the loop
     while (!data->audioProcessingDone) {
         uint8_t* stream = reinterpret_cast<uint8_t*>(&buffer[0]);
@@ -406,11 +412,11 @@ static void alsaPollWriteLoop(AlsaData* data, std::vector<struct pollfd> ufds)
                 break;
             }
 
-            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()));
+            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()), waitTimeout);
         }
 
         if (snd_pcm_state(deviceHandle) == SND_PCM_STATE_RUNNING) {
-            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()));
+            waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()), waitTimeout);
         }
     }
 }
@@ -539,10 +545,21 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
         .periods = 2u,
         .ringBufferSize = 0u,
     };
+
     if (!alsaConfigureDevice(deviceHandle, params)) {
         LOGE() << "Could not configure ALSA device";
         return false;
     }
+
+    std::ostringstream configStr;
+    configStr << "    access         = " << snd_pcm_access_name(params.access) << "\n";
+    configStr << "    format         = " << snd_pcm_format_name(params.format) << "\n";
+    configStr << "    channels       = " << params.channels << "\n";
+    configStr << "    periodSize     = " << params.periodSize << "\n";
+    configStr << "    periods        = " << params.periods << "\n";
+    configStr << "    ringBufferSize = " << params.ringBufferSize;
+
+    LOGI() << "Configured ALSA device " << outputDevice() << ":\n" << configStr.str();
 
     s_alsaData = new AlsaData {};
     s_alsaData->params = params;
