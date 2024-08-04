@@ -2175,7 +2175,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="456"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Obnovit tloušťku čáry osnovy</translation>
+        <translation>Obnovit tloušťku linky osnovy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="468"/>
@@ -3338,7 +3338,7 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5069"/>
         <source>Double barline thickness:</source>
-        <translation>Tloušťka čar u dvojité taktové čáry:</translation>
+        <translation>Tloušťka linek u dvojité taktové čáry:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5095"/>
@@ -3373,7 +3373,7 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5249"/>
         <source>Thick barline distance:</source>
-        <translation>Odstup mezi čárami tlusté taktové čáry:</translation>
+        <translation>Odstup mezi linkami tlusté taktové čáry:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5259"/>
@@ -3383,7 +3383,7 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5269"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation>Obnovit odstup mezi čárami dvojité taktové čáry</translation>
+        <translation>Obnovit odstup mezi linkami dvojité taktové čáry</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5282"/>
@@ -3398,7 +3398,7 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5321"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
-        <translation>Obnovit tloušťku čar u dvojité taktové čáry</translation>
+        <translation>Obnovit tloušťku linek u dvojité taktové čáry</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5331"/>
@@ -3503,7 +3503,7 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5981"/>
         <source>H-bar horizontal stroke thickness:</source>
-        <translation>Tloušťka vodorovné čáry H pomlky:</translation>
+        <translation>Tloušťka vodorovné linky H pomlky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6020"/>
@@ -3513,12 +3513,12 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6062"/>
         <source>H-bar vertical stroke thickness:</source>
-        <translation>Tloušťka svislé čáry H pomlky:</translation>
+        <translation>Tloušťka svislé linky H pomlky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6101"/>
         <source>H-bar vertical stroke height:</source>
-        <translation>Výška svislé čáry H pomlky:</translation>
+        <translation>Výška svislé linky H pomlky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6165"/>
@@ -3871,7 +3871,7 @@ na první notě systému</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9968"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12038"/>
         <source>Line thickness:</source>
-        <translation>Tloušťka čáry:</translation>
+        <translation>Tloušťka linky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7314"/>
@@ -3887,7 +3887,7 @@ na první notě systému</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7466"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7665"/>
         <source>Dotted line thickness:</source>
-        <translation>Tloušťka tečkované čáry:</translation>
+        <translation>Tloušťka tečkované linky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7508"/>
@@ -3904,13 +3904,13 @@ na první notě systému</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7382"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7581"/>
         <source>Line thickness at end:</source>
-        <translation>Tloušťka čáry na koncích:</translation>
+        <translation>Tloušťka linky na koncích:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7424"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7623"/>
         <source>Line thickness middle:</source>
-        <translation>Tloušťka čáry uprostřed:</translation>
+        <translation>Tloušťka linky uprostřed:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7788"/>
@@ -3931,19 +3931,19 @@ na první notě systému</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7414"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7613"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>Obnovit tloušťku čáry na koncích</translation>
+        <translation>Obnovit tloušťku linky na koncích</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7456"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7655"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>Obnovit tloušťku čáry uprostřed</translation>
+        <translation>Obnovit tloušťku linky uprostřed</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7498"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7697"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation>Obnovit tloušťku tečkované čáry</translation>
+        <translation>Obnovit tloušťku tečkované linky</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7826"/>
@@ -4012,7 +4012,7 @@ na první notě systému</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9367"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11989"/>
         <source>Reset &apos;Line thickness&apos; value</source>
-        <translation>Obnovit tloušťku čáry</translation>
+        <translation>Obnovit tloušťku linky</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7944"/>
@@ -4031,7 +4031,7 @@ na první notě systému</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9481"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9500"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation>Obnovit styl čáry</translation>
+        <translation>Obnovit styl linky</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8524"/>
@@ -4136,12 +4136,12 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9835"/>
         <source>Line thickness on standard staves:</source>
-        <translation>Tloušťka čáry standardních osnov:</translation>
+        <translation>Tloušťka linky standardních osnov:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9858"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
-        <translation>Obnovit tloušťku čáry standardních osnov:</translation>
+        <translation>Obnovit tloušťku linky standardních osnov:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9890"/>
@@ -4161,12 +4161,12 @@ na první notě systému</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9965"/>
         <source>Line thickness on tablature staves:</source>
-        <translation>Tloušťka čáry tabulaturních osnov:</translation>
+        <translation>Tloušťka linky tabulaturových osnov:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10003"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
-        <translation>Obnovit tloušťku čáry tabulaturních osnov</translation>
+        <translation>Obnovit tloušťku linky tabulaturových osnov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10348"/>
@@ -4414,7 +4414,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11962"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>Výdržová linka</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
@@ -4429,7 +4429,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12048"/>
         <source>Line gap:</source>
-        <translation>Mezera linky:</translation>
+        <translation>Odsazení linky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12080"/>
@@ -4439,12 +4439,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12097"/>
         <source>Omit extension line when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>Vynechat výdržovou linku při nedostatku místa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12107"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Obnovit výchozí hodnotu vynechání výdržové linky při nedostatku místa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
@@ -4750,7 +4750,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9871"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13372"/>
         <source>Tablature</source>
-        <translation>Tabulatura</translation>
+        <translation>Tabulatury</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13805"/>
@@ -8204,12 +8204,12 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1719"/>
         <source>Add extension line</source>
-        <translation type="unfinished"/>
+        <translation>Přidat výdržovou linku</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1720"/>
         <source>Lyrics: enter extension line</source>
-        <translation type="unfinished"/>
+        <translation>Zpěvní text: vložit výdržovou linku</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1732"/>
@@ -10089,7 +10089,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload Muse Sampler</source>
-        <translation>Nahrát Muse Sampler znovu</translation>
+        <translation>Znovu nahrát Muse Sampler</translation>
     </message>
 </context>
 <context>
@@ -11364,7 +11364,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
-        <translation>Přepnout ztlumení stopy zobrazením/skrytím nástrojů na panelu Nástroje</translation>
+        <translation>Přepnout ztlumení stopy zobrazením/skrytím nástrojů v panelu Nástroje</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="102"/>
@@ -11605,27 +11605,27 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
         <translation>Začátek a konec %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3495"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Stávající obsah taktů bude nahrazen</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3497"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Pokračovat ve vkládání opakování taktu?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2507"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2508"/>
         <source>Measure: %1</source>
         <translation>Takt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2510"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2511"/>
         <source>Displayed measure: %1</source>
         <translation>Zobrazený takt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2514"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2515"/>
         <source>Beat: %1</source>
         <translation>Doba: %1</translation>
     </message>
@@ -11749,103 +11749,103 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
         <translation>%1 (zní jako %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2221"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
         <source>Acciaccatura</source>
         <translation>Příraz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2223"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
         <source>Appoggiatura</source>
         <translation>Opora</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
         <source>Grace note after</source>
         <translation>Odraz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
         <source>Grace note before</source>
         <translation>Opora</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3145"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3183"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Hlas: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3153"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation> (zapnuto %1 ‰ vypnuto %2 ‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Beat slash</source>
         <translation>Lomítka na dobách</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Rhythm slash</source>
         <translation>Lomítka na rytmu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3163"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3192"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Struna %2; Pražec: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3169"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Výška tónu: %2; Délka: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 hlavička %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>Přes osnovy nahoře</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3202"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>Přes osnovy dole</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3206"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
         <source>too low</source>
         <translation>příliš nízko</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3208"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
         <source>too high</source>
         <translation>příliš vysoko</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3210"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
         <source>too low for amateurs</source>
         <translation>příliš nízko pro amatéry</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3212"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
         <source>too high for amateurs</source>
         <translation>příliš vysoko pro amatéry</translation>
     </message>
@@ -11909,8 +11909,8 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3250"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
         <source>Start of %1</source>
         <translation>Začátek %1</translation>
@@ -11919,8 +11919,8 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3242"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3258"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
         <source>End of %1</source>
         <translation>Konec %1</translation>
@@ -12855,12 +12855,12 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
         <source>Extension line segment</source>
-        <translation type="unfinished"/>
+        <translation>Výdržová linka (segment)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>Výdržová linka</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
@@ -13127,12 +13127,12 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1955"/>
         <source>Up arpeggio straight</source>
-        <translation>Arpeggio nahoru (čára)</translation>
+        <translation>Arpeggio nahoru (linka)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1956"/>
         <source>Down arpeggio straight</source>
-        <translation>Arpeggio dolů (čára)</translation>
+        <translation>Arpeggio dolů (linka)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2312"/>
@@ -13197,7 +13197,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2442"/>
         <source>Straight glissando</source>
-        <translation>Glissando (čára)</translation>
+        <translation>Glissando (linka)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2443"/>
@@ -13515,14 +13515,24 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
         <translation>&lt;b&gt;Příliš dlouhý hlas&lt;/b&gt;: %1, takt %2, osnova %3, hlas %4. Nalezeno: %5. Očekáváno: %6.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="78"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
         <translation>Barva hlasu %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="93"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
         <translation>Všechny barvy hlasů</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
+        <source>Formatting color</source>
+        <translation>Barva formátování</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
+        <source>Desynchronized color</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -16534,12 +16544,12 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation>Enharmonicky přehodnotit význam téměř srovnatelných protějšků posuvek</translation>
+        <translation>Enharmonicky zaměnit téměř srovnatelné posuvky</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3459"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation>Enharmonicky přehodnotit význam srovnatelných protějšků posuvek</translation>
+        <translation>Enharmonicky zaměnit srovnatelné posuvky</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3460"/>
@@ -17739,12 +17749,12 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5952"/>
         <source>Sawtooth line segment</source>
-        <translation>Část křivky pilového zubu (segment)</translation>
+        <translation>Pilovitá linka (segment)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5954"/>
         <source>Wide sawtooth line segment</source>
-        <translation>Část křivky širokého pilového zubu (segment)</translation>
+        <translation>Široká pilovitá linka (segment)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5971"/>
@@ -18707,7 +18717,7 @@ Pražec %1 na strunách %2</translation>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="60"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="101"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18716,7 +18726,7 @@ Pražec %1 na strunách %2</translation>
         <translation>Nasazený</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="61"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="103"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="78"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18760,12 +18770,12 @@ Pražec %1 na strunách %2</translation>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2840"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
         <source>Import Capella</source>
         <translation>Zavedení Capella</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2841"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
         <source>Import failed: %1</source>
         <translation>Nepodařilo se zavést: %1</translation>
     </message>
@@ -22279,8 +22289,8 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
-        <source>Voices visible on this score</source>
-        <translation>Hlasy viditelné v tomto notovém zápisu</translation>
+        <source>Voices visible on this stave</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -22949,7 +22959,7 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="256"/>
         <source>Line thickness:</source>
-        <translation>Tloušťka čáry:</translation>
+        <translation>Tloušťka linky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="263"/>
@@ -22969,12 +22979,12 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="291"/>
         <source>Trimmed</source>
-        <translation type="unfinished"/>
+        <translation>Zkrácené</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="292"/>
         <source>Extended</source>
-        <translation type="unfinished"/>
+        <translation>Rozšířené</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="320"/>
@@ -23475,9 +23485,14 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
         <translation>Dole</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="173"/>
         <source>Smooth panning</source>
         <translation>Plynulé panorámování</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="220"/>
+        <source>Anchor color</source>
+        <translation>Barva kotvy</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="74"/>
@@ -23527,22 +23542,22 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
         <source>Keep accidentals close to offset notes</source>
-        <translation type="unfinished"/>
+        <translation>Umístit posuvky blízko k odsazeným notám</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
         <source>Pair accidentals on seconds</source>
-        <translation type="unfinished"/>
+        <translation>Párovat posuvky u sekund</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation type="unfinished"/>
+        <translation>Zarovnat posuvky u oktáv napříč subakordy</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
-        <translation type="unfinished"/>
+        <translation>Zarovnat posuvky při odsazených notách oktávy</translation>
     </message>
 </context>
 <context>
