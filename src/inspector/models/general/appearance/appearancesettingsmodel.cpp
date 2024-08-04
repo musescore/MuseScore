@@ -45,7 +45,10 @@ void AppearanceSettingsModel::createProperties()
     m_leadingSpace = buildPropertyItem(Pid::LEADING_SPACE);
     m_measureWidth = buildPropertyItem(Pid::USER_STRETCH);
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
-    m_color = buildPropertyItem(Pid::COLOR);
+    m_color = buildPropertyItem(Pid::COLOR, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        setPropertyValue(m_elementsForColorProperty, Pid::COLOR, newValue);
+        loadProperties();
+    });
     m_arrangeOrder = buildPropertyItem(Pid::Z);
     m_offset = buildPointFPropertyItem(Pid::OFFSET, [this](const mu::engraving::Pid, const QVariant& newValue) {
         setPropertyValue(m_elementsForOffsetProperty, Pid::OFFSET, newValue);
@@ -96,6 +99,8 @@ void AppearanceSettingsModel::requestElements()
         }
     }
     m_elementsForOffsetProperty = elementsForOffsetProperty.values();
+
+    m_elementsForColorProperty = QList<EngravingItem*>(selection()->elements().begin(), selection()->elements().end());
 }
 
 void AppearanceSettingsModel::loadProperties()
@@ -144,7 +149,7 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (muse::contains(propertyIdSet, Pid::COLOR)) {
-        loadPropertyItem(m_color);
+        loadPropertyItem(m_color, m_elementsForColorProperty);
     }
 
     if (muse::contains(propertyIdSet, Pid::Z)) {
