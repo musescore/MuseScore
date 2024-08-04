@@ -33,8 +33,11 @@ public:
     };
 
     Q_INVOKABLE void init() override;
-    Q_INVOKABLE void changeDynamic(int page, int index);
+    Q_INVOKABLE void addOrChangeDynamic(int page, int index);
     Q_INVOKABLE void addHairpinToDynamic(ItemType itemType);
+
+    Q_INVOKABLE void showPreview(int page, int index);
+    Q_INVOKABLE void hidePreview();
 
     QVariantList pages() const;
 
@@ -42,8 +45,8 @@ signals:
     void pagesChanged();
 
 private:
-    // Represents different pages of the popup, each containing dynamic/hairpin symbols as strings, width, offset and ItemType
-    QVariantList m_pages;
+    QVariantList m_pages; // Represents different pages of the popup, each containing dynamic/hairpin symbols as strings, width, offset and ItemType
+    bool isDynamicCommitted = false;
 };
 } // namespace mu::notation
 

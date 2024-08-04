@@ -70,6 +70,11 @@ void DynamicPopupModel::init()
         return;
     }
 
+    // If popup opened on clicking an already existing dynamic then dont't show the preview on hover
+    if (!toDynamic(m_item)->empty()) {
+        isDynamicCommitted = true;
+    }
+
     IEngravingFontPtr engravingFont = m_item->score()->engravingFont();
 
     for (const QList<DynamicPopupModel::PageItem>& page : DYN_POPUP_PAGES) {
@@ -90,7 +95,7 @@ void DynamicPopupModel::init()
     emit pagesChanged();
 }
 
-void DynamicPopupModel::changeDynamic(int page, int index)
+void DynamicPopupModel::addOrChangeDynamic(int page, int index)
 {
     IF_ASSERT_FAILED(m_item) {
         return;
@@ -104,6 +109,16 @@ void DynamicPopupModel::changeDynamic(int page, int index)
     m_item->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(DYN_POPUP_PAGES[page][index].dynType));
     m_item->undoChangeProperty(Pid::DYNAMIC_TYPE, DYN_POPUP_PAGES[page][index].dynType);
     endCommand();
+
+    isDynamicCommitted = true;
+    INotationInteractionPtr interaction = currentNotation()->interaction();
+
+    // Hide the bounding box which appears when called using Ctrl+D shortcut
+    if (interaction->isTextEditingStarted()) {
+        interaction->endEditText();
+        interaction->startEditGrip(m_item, Grip::DRAG);
+    }
+
     updateNotation();
 }
 
@@ -131,3 +146,37 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
     endCommand();
     updateNotation();
 }
+
+void DynamicPopupModel::showPreview(int page, int index) {
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    if (!m_item->isDynamic() || isDynamicCommitted) {
+        return;
+    }
+
+    beginCommand();
+    m_item->setProperty(Pid::TEXT, Dynamic::dynamicText(DYN_POPUP_PAGES[page][index].dynType));
+    m_item->setProperty(Pid::DYNAMIC_TYPE, DYN_POPUP_PAGES[page][index].dynType);
+    endCommand();
+    updateNotation();
+}
+
+void DynamicPopupModel::hidePreview() {
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    if (!m_item->isDynamic() || isDynamicCommitted) {
+        return;
+    }
+
+    beginCommand();
+    m_item->setProperty(Pid::TEXT, String());
+    m_item->setProperty(Pid::DYNAMIC_TYPE, DynamicType::OTHER);
+    endCommand();
+    updateNotation();
+}
+
+

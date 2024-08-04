@@ -167,8 +167,14 @@ StyledPopupView {
                     }
                 }
 
+                mouseArea.onContainsMouseChanged: {
+                    if (modelData.type === DynamicPopupModel.Dynamic) {
+                        mouseArea.containsMouse ? dynamicModel.showPreview(currentPage, index) : dynamicModel.hidePreview()
+                    }
+                }
+
                 onClicked: {
-                    modelData.type === DynamicPopupModel.Dynamic ? dynamicModel.changeDynamic(currentPage, index) : dynamicModel.addHairpinToDynamic(modelData.type);
+                    modelData.type === DynamicPopupModel.Dynamic ? dynamicModel.addOrChangeDynamic(currentPage, index) : dynamicModel.addHairpinToDynamic(modelData.type);
                 }
             }
         }
