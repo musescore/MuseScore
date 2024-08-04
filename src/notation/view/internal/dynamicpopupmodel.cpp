@@ -147,7 +147,8 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
     updateNotation();
 }
 
-void DynamicPopupModel::showPreview(int page, int index) {
+void DynamicPopupModel::showPreview(int page, int index)
+{
     IF_ASSERT_FAILED(m_item) {
         return;
     }
@@ -163,7 +164,8 @@ void DynamicPopupModel::showPreview(int page, int index) {
     updateNotation();
 }
 
-void DynamicPopupModel::hidePreview() {
+void DynamicPopupModel::hidePreview()
+{
     IF_ASSERT_FAILED(m_item) {
         return;
     }
@@ -178,5 +180,3 @@ void DynamicPopupModel::hidePreview() {
     endCommand();
     updateNotation();
 }
-
-
