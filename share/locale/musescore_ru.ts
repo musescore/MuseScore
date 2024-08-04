@@ -11607,27 +11607,27 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <translation>Начало и конец %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3495"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Текущее содержимое тактов будет заменено</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3497"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Продолжить вставку репризы?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2507"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2508"/>
         <source>Measure: %1</source>
         <translation>Такт: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2510"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2511"/>
         <source>Displayed measure: %1</source>
         <translation>Отображемый такт: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2514"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2515"/>
         <source>Beat: %1</source>
         <translation>Доля: %1</translation>
     </message>
@@ -11751,103 +11751,103 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <translation>%1 (звучит как %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2221"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
         <source>Acciaccatura</source>
         <translation>Короткий форшлаг</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2223"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
         <source>Appoggiatura</source>
         <translation>Долгий форшлаг</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
         <source>Grace note after</source>
         <translation>Форшлаг после ноты</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
         <source>Grace note before</source>
         <translation>Форшлаг перед нотой</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>Нота</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3145"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3183"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Голос: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3153"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation> (вкл. %1‰ выкл. %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Beat slash</source>
         <translation>Долевые наклонные черты</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Rhythm slash</source>
         <translation>Ритмические наклонные черты</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3163"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3192"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Струна: %2; Лад: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3169"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Высота: %2; Длительность: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 головка %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>Крест-накрест на нотоносец вверх</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3202"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>Крест-накрест на нотоносец вниз</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3206"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
         <source>too low</source>
         <translation>слишком низко</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3208"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
         <source>too high</source>
         <translation>слишком высоко</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3210"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
         <source>too low for amateurs</source>
         <translation>слишком низко для непрофессионалов</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3212"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
         <source>too high for amateurs</source>
         <translation>слишком высоко для непрофессионалов</translation>
     </message>
@@ -11911,8 +11911,8 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3250"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
         <source>Start of %1</source>
         <translation>Начало %1</translation>
@@ -11921,8 +11921,8 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3242"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3258"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
         <source>End of %1</source>
         <translation>Конец %1</translation>
@@ -13517,14 +13517,24 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <translation>&lt;b&gt;Голос слишком длинный&lt;/b&gt;: %1, такт %2, нотоносец %3, голос %4. Обнаружено: %5. Ожидалось: %6.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="78"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
         <translation>Цвет голоса %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="93"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
         <translation>Цвет для всех голосов</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
+        <source>Formatting color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
+        <source>Desynchronized color</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -18709,7 +18719,7 @@ Fret %1 on strings %2</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="60"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="101"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18718,7 +18728,7 @@ Fret %1 on strings %2</source>
         <translation>На</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="61"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="103"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="78"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18762,12 +18772,12 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2840"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
         <source>Import Capella</source>
         <translation>Импорт Capella</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2841"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
         <source>Import failed: %1</source>
         <translation>Импорт не удался: %1</translation>
     </message>
@@ -22283,8 +22293,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
-        <source>Voices visible on this score</source>
-        <translation>Голоса, отображаемые в партитуре</translation>
+        <source>Voices visible on this stave</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -23479,9 +23489,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Под нотоносцем</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="173"/>
         <source>Smooth panning</source>
         <translation>Плавная прокрутка</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="220"/>
+        <source>Anchor color</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="74"/>

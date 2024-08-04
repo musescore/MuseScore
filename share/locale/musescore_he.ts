@@ -1714,7 +1714,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14118"/>
         <source>Reset &apos;Padding&apos; value</source>
-        <translation>איפוס ערך &quot;ריווח&quot;</translation>
+        <translation>איפוס ערך ”ריווח“</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="64"/>
@@ -2195,7 +2195,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="525"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation>איפוס את ערך &quot;הזחת סיסטמה ראשונה&quot;</translation>
+        <translation>איפוס את ערך ”הזחת סיסטמה ראשונה“</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="551"/>
@@ -5468,7 +5468,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="259"/>
         <source>Millimeter (mm)</source>
-        <translation>מילימטר (מ&quot;מ)</translation>
+        <translation>מילימטר (מ״מ)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="288"/>
@@ -10368,17 +10368,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="59"/>
         <source>MusicXML is an open file format for exchanging digital sheet music, supported by many applications.</source>
-        <translation>MusicXML הוא פורמט קובץ פתוח להעברת תווים דיגיטלים, הנתמך ע&quot;י אפליקציות רבות</translation>
+        <translation>MusicXML הוא פורמט קובץ פתוח להעברת תווים דיגיטלים, הנתמך ע״י אפליקציות רבות</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>זכויות יוצרים 2004 - 2021 לתורמים של ספציפיקציית MusicXML, שפורסמה ע&quot;י &quot;קבוצת הקהילת תווי המוזיקה&quot; של W3C תחת &quot;הסכם הספציפיקציה הסופי של קהילת W3C&quot; - (FSA)</translation>
+        <translation>זכויות יוצרים 2004 – 2021 לתורמים של ספציפיקציית MusicXML, שפורסמה ע״י ”קבוצת הקהילת תווי המוזיקה“ של W3C תחת ”הסכם הספציפיקציה הסופי של קהילת W3C“ – (FSA)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
         <source>A human-readable summary is available:</source>
-        <translation>זמינה גרסה שניתנת לקרוא ע&quot;י אנשים:</translation>
+        <translation>זמינה גרסה שניתנת לקרוא ע״י אנשים:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/aboutmodel.cpp" line="41"/>
@@ -11600,27 +11600,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>בהתחלה ובסוף של %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3495"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
         <source>Current contents of measures will be replaced</source>
         <translation>התוכן הנוכחי של התיבות יוחלף</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3497"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>להמשיך עם הוספת חזרת תיבה?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2507"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2508"/>
         <source>Measure: %1</source>
         <translation>תיבה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2510"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2511"/>
         <source>Displayed measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2514"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2515"/>
         <source>Beat: %1</source>
         <translation>פעמה: %1</translation>
     </message>
@@ -11744,103 +11744,103 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1 (נשמע כמו %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2221"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
         <source>Acciaccatura</source>
         <translation>אצ&apos;יקטורה</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2223"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
         <source>Appoggiatura</source>
         <translation>אפוג&apos;יטורה</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
         <source>Grace note after</source>
         <translation>תו קישוט אחרי</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
         <source>Grace note before</source>
         <translation>תו קישוט לפני</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>תו</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3145"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3183"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>קול: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3153"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(%1‰ פעיל %2‰ כבוי)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Beat slash</source>
         <translation>לוכסן פעמה</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Rhythm slash</source>
         <translation>לוכסן מקצב</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3163"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3192"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; מיתר %2; סריג: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3169"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; גובה צליל: %2; משך: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>ראש תו %1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>הצטלבות חמשות מעל</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3202"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>הצטלבות חמשות מתחת</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3206"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
         <source>too low</source>
         <translation>נמוך מידי</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3208"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
         <source>too high</source>
         <translation>גבוה מידי</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3210"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
         <source>too low for amateurs</source>
         <translation>נמוך מידי בשביל חובבנים</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3212"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
         <source>too high for amateurs</source>
         <translation>גבוה מידי בשביל חובבנים</translation>
     </message>
@@ -11904,8 +11904,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3250"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
         <source>Start of %1</source>
         <translation>התחלה %1</translation>
@@ -11914,8 +11914,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3242"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3258"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
         <source>End of %1</source>
         <translation>סוף %1</translation>
@@ -13510,13 +13510,23 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>&lt;b&gt;קול יותר מידי ארוך&lt;/b&gt;: %1, תיבה %2, חמשה %3, קול %4. נמצא: %5. מצופה: %6.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="78"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
         <translation>צבע קול %1 </translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="93"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
+        <source>Formatting color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
+        <source>Desynchronized color</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -18575,7 +18585,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2703"/>
         <source>mm</source>
-        <translation>מ&quot;מ</translation>
+        <translation>מ״מ</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="56"/>
@@ -18702,7 +18712,7 @@ Fret %1 on strings %2</translation>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="60"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="101"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18711,7 +18721,7 @@ Fret %1 on strings %2</translation>
         <translation>פעיל</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="61"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="103"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="78"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18755,12 +18765,12 @@ Fret %1 on strings %2</translation>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2840"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
         <source>Import Capella</source>
         <translation>ייבוא קפלה</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2841"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
         <source>Import failed: %1</source>
         <translation>ייבוא נכשל: %1</translation>
     </message>
@@ -22272,8 +22282,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
-        <source>Voices visible on this score</source>
-        <translation>קולות המוצגים בפרטיטורה</translation>
+        <source>Voices visible on this stave</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -23468,9 +23478,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>מתחת</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="173"/>
         <source>Smooth panning</source>
         <translation>גליבה בגלילה</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="220"/>
+        <source>Anchor color</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="74"/>
@@ -27757,7 +27772,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
         <source>Your musescore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>תחילה יש לאמת את חשבון ה־musescore.com שלכם. אנא הפעילו את חשבונכם באמצעות הקישור בדוא&quot;ל ההפעלה שנשלח אליכם.</translation>
+        <translation>תחילה יש לאמת את חשבון ה־musescore.com שלכם. אנא הפעילו את חשבונכם באמצעות הקישור בדוא״ל ההפעלה שנשלח אליכם.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
@@ -28920,7 +28935,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="630"/>
         <source>Your audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>עליכם קודם לאמת את חשבון audio.com שלכם. אנא הפעילו את חשבונכם באמצעות הקישור בדוא&quot;ל ההפעלה שנשלח אליכם.</translation>
+        <translation>עליכם קודם לאמת את חשבון audio.com שלכם. אנא הפעילו את חשבונכם באמצעות הקישור בדוא״ל ההפעלה שנשלח אליכם.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="637"/>

@@ -11604,27 +11604,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1&apos;in başlangıcı ve bitişi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3495"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Ölçülerin şu anki içeriği değiştirilecek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3497"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Ölçü tekrarı eklemeye devam edilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2507"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2508"/>
         <source>Measure: %1</source>
         <translation>Ölçü: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2510"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2511"/>
         <source>Displayed measure: %1</source>
         <translation>Görüntülenen ölçü: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2514"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2515"/>
         <source>Beat: %1</source>
         <translation>Vuruş: %1</translation>
     </message>
@@ -11748,103 +11748,103 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1 (ses %2%3 olarak)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2221"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
         <source>Acciaccatura</source>
         <translation>Çarpma (Acciaccatura)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2223"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
         <source>Appoggiatura</source>
         <translation>Abantı (Apojatür)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
         <source>Grace note after</source>
         <translation>Sonrasında süsleme notası</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
         <source>Grace note before</source>
         <translation> Öncesinde süsleme notası</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3145"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3183"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Ses: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3153"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(açık %1‰ kapalı %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Beat slash</source>
         <translation>Eğik  vuruş çizgisi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Rhythm slash</source>
         <translation>Eğik tartım çizgisi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3163"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3192"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Tel: %2; Perde: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3169"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Perdesi: %2; Süresi: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 notabaşı %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>Yukarı çaprazlama dizek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3202"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>Altına çaprazlama dizek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3206"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
         <source>too low</source>
         <translation>çok pes</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3208"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
         <source>too high</source>
         <translation>çok tiz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3210"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
         <source>too low for amateurs</source>
         <translation>amatörler için çok pes</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3212"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
         <source>too high for amateurs</source>
         <translation>amatörler için çok tiz</translation>
     </message>
@@ -11908,8 +11908,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3250"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
         <source>Start of %1</source>
         <translation>%1 başlangıcı</translation>
@@ -11918,8 +11918,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3242"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3258"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
         <source>End of %1</source>
         <translation>%1 sonu</translation>
@@ -13514,14 +13514,24 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>&lt;b&gt;Ses çok uzun&lt;/b&gt;: %1, ölçü %2, dizek %3, ses %4. Bulunan: %5. Beklenen: %6.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="78"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
         <translation>Ses %1 rengi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="93"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
         <translation>Tüm seslerin rengi</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
+        <source>Formatting color</source>
+        <translation>Biçimlendirme rengi</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
+        <source>Desynchronized color</source>
+        <translation>Senkronize edilmemiş renk</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -18706,7 +18716,7 @@ Perde %1 teller %2</translation>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="60"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="101"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18715,7 +18725,7 @@ Perde %1 teller %2</translation>
         <translation>Açık</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="61"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="103"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="78"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18759,12 +18769,12 @@ Perde %1 teller %2</translation>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2840"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
         <source>Import Capella</source>
         <translation>Capella içe aktarma</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2841"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
         <source>Import failed: %1</source>
         <translation>İçe aktarma hatası: %1</translation>
     </message>
@@ -22278,8 +22288,8 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
-        <source>Voices visible on this score</source>
-        <translation>Bu partisyonda görünen sesler</translation>
+        <source>Voices visible on this stave</source>
+        <translation>Bu dizekte görülebilen sesler</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -23474,9 +23484,14 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
         <translation>Altında</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="173"/>
         <source>Smooth panning</source>
         <translation>Pürüzsüz kaydırma</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="220"/>
+        <source>Anchor color</source>
+        <translation>Bağlantı rengi</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="74"/>
@@ -27848,7 +27863,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="38"/>
         <source>Sample rate:</source>
-        <translation>Örnekleme oranı:</translation>
+        <translation>Örnekleme hızı:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="49"/>

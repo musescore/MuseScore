@@ -16484,7 +16484,7 @@
         <source>ITB</source>
         <comment>irish-tenor-banjo shortName</comment>
         <extracomment>shortName for Irish Tenor Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>בט&quot;א</translation>
+        <translation>בט״א</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5455"/>

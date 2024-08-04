@@ -3171,7 +3171,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7893"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation type="unfinished"/>
+        <translation>強弱記号と松葉のデフォルトの位置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7921"/>
@@ -3181,12 +3181,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation type="unfinished"/>
+        <translation>声楽楽器では譜表の上に配置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7963"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation type="unfinished"/>
+        <translation>大譜表楽器では自動的に中央に配置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
@@ -3262,7 +3262,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11921"/>
         <source>Dash placement at the start of the system:</source>
-        <translation type="unfinished"/>
+        <translation>段の始めでの破線の配置:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
@@ -4044,7 +4044,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8777"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9413"/>
         <source>Dash size:</source>
-        <translation>ダッシュの大きさ:</translation>
+        <translation>破線の大きさ:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7904"/>
@@ -4263,42 +4263,42 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11742"/>
         <source>Dash thickness:</source>
-        <translation>ダッシュの太さ:</translation>
+        <translation>破線の太さ:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11790"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>「最大のダッシュの間隔」の値をリセット</translation>
+        <translation>「最大の破線の間隔」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11931"/>
         <source>Reset &apos;Always force dash&apos; value</source>
-        <translation>「常にダッシュを表示」の値をリセット</translation>
+        <translation>「常に破線を表示」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11845"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation>「最小のダッシュの長さ」の値をリセット</translation>
+        <translation>「最小の破線の長さ」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11832"/>
         <source>Max. dash length:</source>
-        <translation>最大のダッシュの長さ:</translation>
+        <translation>最大の破線の長さ:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11755"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
-        <translation>「最大のダッシュの長さ」の値をリセット</translation>
+        <translation>「最大の破線の長さ」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11690"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation>「ダッシュの太さ」の値をリセット</translation>
+        <translation>「破線の太さ」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
         <source>Min. dash length:</source>
-        <translation>最小のダッシュの長さ:</translation>
+        <translation>最小の破線の長さ:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11438"/>
@@ -4387,7 +4387,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「破線間隔」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11855"/>
@@ -4403,17 +4403,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11903"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「スペースが限られているとき破線を省略」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11947"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「段の始めでの破線の配置」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11962"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>延長線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
@@ -4438,12 +4438,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12097"/>
         <source>Omit extension line when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>スペースが限られているとき延長線を省略</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12107"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「スペースが限られているとき延長線を省略」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
@@ -4845,12 +4845,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14436"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation type="unfinished"/>
+        <translation>連符の数字に音楽記号フォントを使用</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「連符の数字に音楽記号フォントを使用」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
@@ -5053,7 +5053,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/DebugWindow.cpp" line="123"/>
         <source>DockWidget unique name</source>
-        <translation type="unfinished"/>
+        <translation>DockWidget unique name</translation>
     </message>
 </context>
 <context>
@@ -5066,7 +5066,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="612"/>
         <source>Detach</source>
-        <translation type="unfinished"/>
+        <translation>Detach</translation>
     </message>
 </context>
 <context>
@@ -5097,12 +5097,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="265"/>
         <source>Auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>Auto-hide</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="268"/>
         <source>Disable auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>Disable auto-hide</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
@@ -7554,7 +7554,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="518"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="519"/>
         <source>Floating</source>
-        <translation type="unfinished"/>
+        <translation>フローティング</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="526"/>
@@ -7953,7 +7953,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
         <source>Enter tuplet: other…</source>
-        <translation type="unfinished"/>
+        <translation>連符を入力: その他...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1396"/>
@@ -8202,12 +8202,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1719"/>
         <source>Add extension line</source>
-        <translation type="unfinished"/>
+        <translation>延長線を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1720"/>
         <source>Lyrics: enter extension line</source>
-        <translation type="unfinished"/>
+        <translation>歌詞: 延長線を入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1732"/>
@@ -11364,7 +11364,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="102"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>声部の割り当て</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="106"/>
@@ -11600,27 +11600,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1の開始と終了</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3495"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
         <source>Current contents of measures will be replaced</source>
         <translation>現在の小節の内容は置き換えられます</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3496"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3497"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>小節の繰り返しを挿入して続行しますか？</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2507"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2508"/>
         <source>Measure: %1</source>
         <translation>小節: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2510"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2511"/>
         <source>Displayed measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2514"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2515"/>
         <source>Beat: %1</source>
         <translation>拍: %1</translation>
     </message>
@@ -11744,103 +11744,103 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1 (%2%3 として鳴る)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2221"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
         <source>Acciaccatura</source>
         <translation>短前打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2223"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
         <source>Appoggiatura</source>
         <translation>前打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
         <source>Grace note after</source>
         <translation>後打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
         <source>Grace note before</source>
         <translation>前打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3145"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3183"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>声部: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3153"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation> (オン %1‰ オフ %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Beat slash</source>
         <translation>拍 スラッシュ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
         <source>Rhythm slash</source>
         <translation>リズムスラッシュ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3163"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3192"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; 弦: %2; フレット: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3169"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; 音高: %2; 長さ: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1符頭%2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>譜表を上にまたぐ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3202"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>譜表を下にまたぐ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3206"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
         <source>too low</source>
         <translation>音が低すぎる</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3208"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
         <source>too high</source>
         <translation>音が高すぎる</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3210"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
         <source>too low for amateurs</source>
         <translation>アマチュアには低すぎる</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3212"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
         <source>too high for amateurs</source>
         <translation>アマチュアには高すぎる</translation>
     </message>
@@ -11904,8 +11904,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3250"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
         <source>Start of %1</source>
         <translation>%1の開始</translation>
@@ -11914,8 +11914,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3242"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3258"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
         <source>End of %1</source>
         <translation>%1の終了</translation>
@@ -12850,12 +12850,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
         <source>Extension line segment</source>
-        <translation type="unfinished"/>
+        <translation>延長線セグメント</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>延長線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
@@ -12880,7 +12880,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1148"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>ページ番号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1156"/>
@@ -13510,14 +13510,24 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>&lt;b&gt;長すぎる声部&lt;/b&gt;: %1、%2小節目、譜表%3、声部%4。検出: %5。想定: %6。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="78"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
         <translation>声部 %1 の色</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="93"/>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
         <translation>すべての声部の色</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
+        <source>Formatting color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
+        <source>Desynchronized color</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -18532,7 +18542,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="81"/>
         <source>Collapse</source>
         <extracomment>Collapse a tree item</extracomment>
-        <translation>折りたたむ</translation>
+        <translation>畳む</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
@@ -18702,7 +18712,7 @@ Fret %1 on strings %2</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="60"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="101"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18711,7 +18721,7 @@ Fret %1 on strings %2</source>
         <translation>オン</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="61"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="103"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="78"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
@@ -18755,12 +18765,12 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2840"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
         <source>Import Capella</source>
         <translation>Capella をインポート</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2841"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
         <source>Import failed: %1</source>
         <translation>インポート失敗: %1</translation>
     </message>
@@ -19070,7 +19080,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="57"/>
         <source>Export invisible elements to MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>不可視の要素を MusicXML にエクスポート</translation>
     </message>
 </context>
 <context>
@@ -20311,7 +20321,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
         <source>Move cross-staff beam</source>
-        <translation type="unfinished"/>
+        <translation>譜表をまたぐ連桁を移動</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="227"/>
@@ -21585,7 +21595,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="46"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>声部の割り当て</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="71"/>
@@ -21595,12 +21605,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="106"/>
         <source>All voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>楽器のすべての声部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="112"/>
         <source>All voices on this staff only</source>
-        <translation type="unfinished"/>
+        <translation>この譜表のみのすべての声部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="187"/>
@@ -21852,12 +21862,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="192"/>
         <source>Expand all instruments</source>
-        <translation type="unfinished"/>
+        <translation>すべての楽器を広げる</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="193"/>
         <source>Collapse all instruments</source>
-        <translation type="unfinished"/>
+        <translation>すべての楽器を畳む</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
@@ -22274,8 +22284,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
-        <source>Voices visible on this score</source>
-        <translation>このスコアで可視な声部</translation>
+        <source>Voices visible on this stave</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -22929,7 +22939,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="220"/>
         <source>Appearance:</source>
-        <translation type="unfinished"/>
+        <translation>見た目:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="227"/>
@@ -23470,9 +23480,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="173"/>
         <source>Smooth panning</source>
         <translation>滑らかなパン</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="220"/>
+        <source>Anchor color</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="74"/>
@@ -23969,12 +23984,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="588"/>
         <source>Expand meta rows</source>
-        <translation>メタ行の展開</translation>
+        <translation>メタ行を広げる</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="591"/>
         <source>Collapse meta rows</source>
-        <translation>メタ行の折りたたみ</translation>
+        <translation>メタ行を畳む</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="594"/>
@@ -25356,12 +25371,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="130"/>
         <source>Expand all palettes</source>
-        <translation>すべてのパレットを開く</translation>
+        <translation>すべてのパレットを広げる</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="131"/>
         <source>Collapse all palettes</source>
-        <translation>すべてのパレットを閉じる</translation>
+        <translation>すべてのパレットを畳む</translation>
     </message>
 </context>
 <context>
@@ -27152,7 +27167,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>サウンドフラグはリセットされる可能性がありますが、譜表テキストは残ります。この操作はもとに戻せません。</translation>
     </message>
 </context>
 <context>
