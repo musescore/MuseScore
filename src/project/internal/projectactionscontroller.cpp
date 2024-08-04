@@ -34,6 +34,7 @@
 #include "translation.h"
 
 #include "cloud/clouderrors.h"
+#include "cloud/cloudqmltypes.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 

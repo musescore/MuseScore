@@ -169,16 +169,16 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
 
     QString start = muse::qtrc("engraving", "Start measure: %1").arg(String::number(startBarbeat.bar));
     if (startBarbeat.displayedBar != startBarbeat.bar) {
-        start += u"; " + muse::qtrc("engraving", "Start displayed measure: %1").arg(startBarbeat.displayedBar);
+        start += "; " + muse::qtrc("engraving", "Start displayed measure: %1").arg(startBarbeat.displayedBar);
     }
-    start += u"; " + muse::qtrc("engraving", "Start beat: %1").arg(startBarbeat.beat);
+    start += "; " + muse::qtrc("engraving", "Start beat: %1").arg(startBarbeat.beat);
 
     EngravingItem::BarBeat endBarbeat = endSegment->barbeat();
     QString end = muse::qtrc("engraving", "End measure: %1").arg(String::number(endBarbeat.bar));
     if (endBarbeat.displayedBar != endBarbeat.bar) {
-        end += u"; " + muse::qtrc("engraving", "End displayed measure: %1").arg(endBarbeat.displayedBar);
+        end += "; " + muse::qtrc("engraving", "End displayed measure: %1").arg(endBarbeat.displayedBar);
     }
-    end += u"; " + muse::qtrc("engraving", "End beat: %1").arg(endBarbeat.beat);
+    end += "; " + muse::qtrc("engraving", "End beat: %1").arg(endBarbeat.beat);
 
     return muse::qtrc("notation", "Range selection; %1; %2")
            .arg(start)
