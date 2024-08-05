@@ -403,13 +403,13 @@ TextBlock Page::replaceTextMacros(bool isHeader, const String& s) const
                 }
             // FALLTHROUGH
             case 'I':
-                fragments.back().text += score()->metaTag(u"partName").toXmlEscaped();
+                fragments.back().text += score()->metaTag(u"partName");
                 break;
             case 'f':
-                fragments.back().text += masterScore()->fileInfo()->fileName(false).toString().toXmlEscaped();
+                fragments.back().text += masterScore()->fileInfo()->fileName(false).toString();
                 break;
             case 'F':
-                fragments.back().text += masterScore()->fileInfo()->path().toString().toXmlEscaped();
+                fragments.back().text += masterScore()->fileInfo()->path().toString();
                 break;
             case 'd':
                 fragments.back().text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
@@ -449,7 +449,7 @@ TextBlock Page::replaceTextMacros(bool isHeader, const String& s) const
             // FALLTHROUGH
             case 'c':
             {
-                const String copyrightString = score()->metaTag(u"copyright").toXmlEscaped();
+                const String copyrightString = score()->metaTag(u"copyright");
                 const CharFormat copyrightFormat = formatForMacro(String('$' + nc));
                 // If the default format equals the format for this macro, we don't need to create a new fragment...
                 if (defaultFormat == copyrightFormat) {
@@ -495,7 +495,7 @@ TextBlock Page::replaceTextMacros(bool isHeader, const String& s) const
                     tag += s.at(k);
                 }
                 if (k != n) {       // found ':' ?
-                    fragments.back().text += score()->metaTag(tag).toXmlEscaped();
+                    fragments.back().text += score()->metaTag(tag);
                     i = k - 1;
                 }
             }
@@ -506,8 +506,6 @@ TextBlock Page::replaceTextMacros(bool isHeader, const String& s) const
                 break;
             }
             ++i;
-        } else if (c == '&') {
-            fragments.back().text += u"&amp;";
         } else {
             fragments.back().text += c;
         }
