@@ -39,10 +39,10 @@ if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
 MUSE_APP_BUILD_MODE=dev
-if [ "$BUILD_MODE" == "devel_build" ]; then MUSE_APP_BUILD_MODE=dev; fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then MUSE_APP_BUILD_MODE=dev; fi
-if [ "$BUILD_MODE" == "testing_build" ]; then MUSE_APP_BUILD_MODE=testing; fi
-if [ "$BUILD_MODE" == "stable_build" ]; then MUSE_APP_BUILD_MODE=release; fi
+if [ "$BUILD_MODE" == "devel" ]; then MUSE_APP_BUILD_MODE=dev; fi
+if [ "$BUILD_MODE" == "nightly" ]; then MUSE_APP_BUILD_MODE=dev; fi
+if [ "$BUILD_MODE" == "testing" ]; then MUSE_APP_BUILD_MODE=testing; fi
+if [ "$BUILD_MODE" == "stable" ]; then MUSE_APP_BUILD_MODE=release; fi
 
 if [ -z "$VST3_SDK_PATH" ]; then 
     echo "warning: not set VST3_SDK_PATH, build VST module disabled"

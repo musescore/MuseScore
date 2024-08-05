@@ -31,7 +31,7 @@ source $BUILD_TOOLS/environment.sh
 
 # =========== Build =======================
 
-bash ./buildscripts/ci/tools/make_build_mode_env.sh -m devel_build
+bash ./buildscripts/ci/tools/make_build_mode_env.sh -m devel
 bash ./buildscripts/ci/tools/make_build_number.sh
 BUILD_MODE=$(cat ./$ARTIFACTS_DIR/env/build_mode.env)
 BUILD_NUMBER=$(cat ./$ARTIFACTS_DIR/env/build_number.env)
