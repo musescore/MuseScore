@@ -2356,10 +2356,12 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                     m->setSqueezableSpace(m->squeezableSpace() - (ww - w));
                     double d = (ww - w) / n;
                     double xx = ps->x();
+                    bool foundAtLeastOneCrSegment = false;
                     for (Segment* ss = ps; ss != s;) {
                         Segment* ns1 = ss->nextActive();
                         double ww1 = ss->width(LD_ACCESS::BAD);
                         if (ss->isChordRestType()) {
+                            foundAtLeastOneCrSegment = true;
                             ww1 += d;
                             ss->setWidth(ww1);
                         }
@@ -2367,7 +2369,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                         ns1->mutldata()->setPosX(xx);
                         ss = ns1;
                     }
-                    if (s->isChordRestType() || ps == s) {
+                    if (s->isChordRestType() || ps == s || !foundAtLeastOneCrSegment) {
                         w += d;
                     }
                     x = xx;
