@@ -3524,7 +3524,7 @@ void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata)
 {
     Shape shape(Shape::Type::Composite);
 
-    if (!item->isGap()) {
+    if (!item->isGap() && !item->shouldNotBeDrawn()) {
         shape.add(chordRestShape(item));
         shape.add(item->symBbox(ldata->sym), item);
         for (const NoteDot* dot : item->dotList()) {
