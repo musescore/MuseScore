@@ -4414,11 +4414,25 @@ void NotationInteraction::toggleDynamicPopup()
         return;
     }
 
-    if (selection()->elements().size() != 1) {
+    // If multiple selected selection()->element() returns null
+    if (!selection()->element()) {
         return;
     }
 
-    addTextToItem(TextStyleType::DYNAMICS, selection()->element());
+    EngravingItem* selectedElement = selection()->element();
+
+    if (selectedElement->isHairpinSegment()) {
+        HairpinSegment* hairpinSeg = toHairpinSegment(selectedElement);
+        Grip curGrip = m_editData.curGrip;
+        ChordRest* cr =  curGrip == Grip::START ? hairpinSeg->spanner()->startCR()
+                        : curGrip == Grip::END ? hairpinSeg->spanner()->endCR()
+                        : nullptr;
+        if (cr) {
+            addTextToItem(TextStyleType::DYNAMICS, cr);
+        }
+    } else {
+        addTextToItem(TextStyleType::DYNAMICS, selection()->element());
+    }
 }
 
 bool NotationInteraction::toggleLayoutBreakAvailable() const
