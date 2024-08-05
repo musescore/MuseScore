@@ -95,7 +95,6 @@ enum class P_TYPE {
     CLEF_TYPE,
     CLEF_TO_BARLINE_POS,
     DYNAMIC_TYPE,
-    DYNAMIC_RANGE,
     DYNAMIC_SPEED,
     LINE_TYPE,
     HOOK_TYPE,
@@ -246,8 +245,6 @@ public:
 
     PropertyValue(DynamicType v)
         : m_type(P_TYPE::DYNAMIC_TYPE), m_data(make_data<DynamicType>(v)) {}
-    PropertyValue(DynamicRange v)
-        : m_type(P_TYPE::DYNAMIC_RANGE), m_data(make_data<DynamicRange>(v)) {}
     PropertyValue(DynamicSpeed v)
         : m_type(P_TYPE::DYNAMIC_SPEED), m_data(make_data<DynamicSpeed>(v)) {}
 

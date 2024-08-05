@@ -79,36 +79,6 @@ TEST_F(Engraving_DynamicTests, test1)
     EXPECT_EQ(d->velocity(), 57);
     delete d;
 
-    dynamic->setDynRange(DynamicRange::STAFF);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), DynamicRange::STAFF);
-    delete d;
-
-    dynamic->setDynRange(DynamicRange::PART);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), DynamicRange::PART);
-    delete d;
-
-    dynamic->setDynRange(DynamicRange::SYSTEM);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), DynamicRange::SYSTEM);
-    delete d;
-
-    dynamic->setProperty(Pid::DYNAMIC_RANGE, DynamicRange::STAFF);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), DynamicRange::STAFF);
-    delete d;
-
-    dynamic->setProperty(Pid::DYNAMIC_RANGE, DynamicRange::PART);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), DynamicRange::PART);
-    delete d;
-
-    dynamic->setDynRange(DynamicRange::SYSTEM);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), DynamicRange::SYSTEM);
-    delete d;
-
     dynamic->setProperty(Pid::AVOID_BARLINES, false);
     dynamic->setPropertyFlags(Pid::AVOID_BARLINES, PropertyFlags::UNSTYLED);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));

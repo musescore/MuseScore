@@ -179,7 +179,6 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "velocity change method") }, // left as a compatibility property - we need to be able to read it correctly
     { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::DYNAMIC_SPEED,      PropertyGroup::APPEARANCE,       DUMMY_QT_TR_NOOP("propertyName", "velocity change speed") },
     { Pid::DYNAMIC_TYPE,            true,  "subtype",               P_TYPE::DYNAMIC_TYPE,       PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "dynamic type") },
-    { Pid::DYNAMIC_RANGE,           true,  "dynType",               P_TYPE::DYNAMIC_RANGE,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "dynamic range") },
 
     { Pid::SINGLE_NOTE_DYNAMICS,    true,  "singleNoteDynamics",    P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "single note dynamics") },
     { Pid::CHANGE_METHOD,           true,  "changeMethod",          P_TYPE::CHANGE_METHOD,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "change method") }, // the new, more general version of VELO_CHANGE_METHOD

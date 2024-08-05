@@ -151,6 +151,13 @@ int Dynamic::velocity() const
     return m_velocity <= 0 ? DYN_LIST[int(dynamicType())].velocity : m_velocity;
 }
 
+void Dynamic::setDynRange(DynamicRange range)
+{
+    m_dynRange = range;
+
+    setVoiceAssignment(dynamicRangeToVoiceAssignment(range));
+}
+
 //---------------------------------------------------------
 //   changeInVelocity
 //---------------------------------------------------------
@@ -799,15 +806,6 @@ std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Eng
 }
 
 //---------------------------------------------------------
-//   undoSetDynRange
-//---------------------------------------------------------
-
-void Dynamic::undoSetDynRange(DynamicRange v)
-{
-    TextBase::undoChangeProperty(Pid::DYNAMIC_RANGE, v);
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -816,8 +814,6 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
         return m_dynamicType;
-    case Pid::DYNAMIC_RANGE:
-        return m_dynRange;
     case Pid::VELOCITY:
         return velocity();
     case Pid::SUBTYPE:
@@ -854,9 +850,6 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
         m_dynamicType = v.value<DynamicType>();
-        break;
-    case Pid::DYNAMIC_RANGE:
-        m_dynRange = v.value<DynamicRange>();
         break;
     case Pid::VELOCITY:
         m_velocity = v.toInt();
@@ -906,8 +899,6 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
     switch (id) {
     case Pid::TEXT_STYLE:
         return TextStyleType::DYNAMICS;
-    case Pid::DYNAMIC_RANGE:
-        return DynamicRange::PART;
     case Pid::VELOCITY:
         return -1;
     case Pid::VELO_CHANGE:

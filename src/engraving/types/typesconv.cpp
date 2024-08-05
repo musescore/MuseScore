@@ -998,22 +998,6 @@ DynamicType TConv::fromXml(const AsciiStringView& tag, DynamicType def)
     return it->type;
 }
 
-static const std::vector<Item<DynamicRange> > DYNAMIC_RANGES = {
-    { DynamicRange::STAFF,  "staff" },
-    { DynamicRange::PART,   "part" },
-    { DynamicRange::SYSTEM, "system" },
-};
-
-String TConv::translatedUserName(DynamicRange v)
-{
-    return findUserNameByType<DynamicRange>(DYNAMIC_RANGES, v).translated();
-}
-
-String TConv::toXml(DynamicRange v)
-{
-    return String::number(static_cast<int>(v));
-}
-
 DynamicRange TConv::fromXml(const AsciiStringView& tag, DynamicRange def)
 {
     bool ok = false;
