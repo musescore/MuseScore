@@ -770,6 +770,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
         textBox = Factory::createDynamic(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
+        textBox->setFlag(ElementFlag::IS_PREVIEW, true);
         break;
     }
     case TextStyleType::INSTRUMENT_CHANGE: {

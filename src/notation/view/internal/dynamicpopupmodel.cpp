@@ -70,13 +70,6 @@ void DynamicPopupModel::init()
         return;
     }
 
-    // If popup opened on clicking an already existing dynamic then dont't show the preview on hover
-    if (!toDynamic(m_item)->empty()) {
-        m_item->setFlag(ElementFlag::IS_PREVIEW, false);
-    } else {
-        m_item->setFlag(ElementFlag::IS_PREVIEW, true);
-    }
-
     IEngravingFontPtr engravingFont = m_item->score()->engravingFont();
 
     for (const QList<DynamicPopupModel::PageItem>& page : DYN_POPUP_PAGES) {

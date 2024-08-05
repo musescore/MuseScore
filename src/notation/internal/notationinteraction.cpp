@@ -4427,19 +4427,35 @@ void NotationInteraction::toggleDynamicPopup()
         return;
     }
 
-    EngravingItem* selectedElement = selection()->element();
+    EngravingItem* el = selection()->element();
 
-    if (selectedElement->isHairpinSegment()) {
-        HairpinSegment* hairpinSeg = toHairpinSegment(selectedElement);
-        Grip curGrip = m_editData.curGrip;
-        ChordRest* cr =  curGrip == Grip::START ? hairpinSeg->spanner()->startCR()
-                        : curGrip == Grip::END ? hairpinSeg->spanner()->endCR()
-                        : nullptr;
-        if (cr) {
-            addTextToItem(TextStyleType::DYNAMICS, cr);
+    if (el->isHairpinSegment()) {
+        HairpinSegment* hairpinSeg = toHairpinSegment(el);
+
+        switch (m_editData.curGrip) {
+        case Grip::START: {
+            EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore();
+            if (startDynOrExp != nullptr) {
+                select({ startDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+            } else {
+                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->startCR());
+            }
+        }
+            return;
+        case Grip::END: {
+            EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter();
+            if (endDynOrExp != nullptr) {
+                select({ endDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+            } else {
+                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->endCR());
+            }
+        }
+            return;
+        default:
+            return;
         }
     } else {
-        addTextToItem(TextStyleType::DYNAMICS, selection()->element());
+        addTextToItem(TextStyleType::DYNAMICS, el);
     }
 }
 
