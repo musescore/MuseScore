@@ -25,7 +25,7 @@ SOFTWARE.
 #define KORS_MODULARITY_IOC_H
 
 #include <memory>
-#include <mutex>
+#include <shared_mutex>
 
 #include "context.h"
 #include "modulesioc.h"
@@ -37,7 +37,7 @@ void removeIoC(const ContextPtr& ctx = nullptr);
 
 struct StaticMutex
 {
-    static std::mutex mutex;
+    static std::shared_mutex mutex;
 };
 
 template<class I>
@@ -73,18 +73,28 @@ public:
 
     const std::shared_ptr<I>& get() const
     {
-        if (!m_i) {
-            const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
-            if (!m_i) {
-                static std::string_view module = "";
-                m_i = _ioc(iocContext())->template resolve<I>(module);
+        {
+            std::shared_lock lock(StaticMutex::mutex);
+            if (m_i) {
+                return m_i;
             }
         }
+
+        std::unique_lock lock(StaticMutex::mutex);
+
+        // Need to check again, because between the release of the shared lock and the acquisition
+        // of the unique lock, another thread could have already created the instance.
+        if (!m_i) {
+            static std::string_view module = "";
+            m_i = _ioc(iocContext())->template resolve<I>(module);
+        }
+
         return m_i;
     }
 
     void set(std::shared_ptr<I> impl)
     {
+        std::unique_lock lock(StaticMutex::mutex);
         m_i = impl;
     }
 
