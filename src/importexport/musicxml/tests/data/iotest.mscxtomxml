@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # simple standalone iotest for MusicXML import
-# run in mtest/musicxml/io directory as "./iotest.mscxtomxml"
+# run in src/importexport/musicxml/tests/data directory as "./iotest.mscxtomxml"
 
 # Linux
 #MSCORE=../../../build.debug/mscore/mscore
@@ -10,7 +10,9 @@
 # OS X Xcode build
 #MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
 # OS X Xcode build (since early 2020)
-MSCORE=../../../build.xcode/main/Debug/mscore.app/Contents/MacOS/mscore
+#MSCORE=../../../build.xcode/main/Debug/mscore.app/Contents/MacOS/mscore
+# OS X Qt Creator build (since early 2024)
+MSCORE=../../../../../builds/Mac-Qtlibexec-qt5-Make-RelWithDebInfo/install/mscore.app/Contents/MacOS/mscore
 
 echo "----------------------------------------------"
 echo "Regression Tests for MuseScore MusicXML import"
@@ -19,7 +21,7 @@ echo
 $MSCORE -v
 echo
 
-musicxml_files=`cat tst_mxml_io.cpp | grep "{ mxmlMscxExportTestRef" | awk -F\" '{print $2}' | sort`
+musicxml_files=`cat ../musicxml_tests.cpp | grep mxmlMscxExportTestRef | awk -F\" '{print $2}' | sort`
 testcount=0
 failures=0
 
