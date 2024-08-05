@@ -39,6 +39,8 @@ public:
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 
     PropertyItem* style() const;
     PropertyItem* direction() const;
