@@ -261,7 +261,8 @@ public:
 
     Staff* findLinkedInScore(const Score* score) const override;
 
-    std::vector<track_idx_t> getLinkedTracksInStaff(const Staff* linkedStaff, const track_idx_t strack) const;
+    track_idx_t getLinkedTrackInStaff(const Staff* linkedStaff, const track_idx_t strack) const;
+    bool trackHasLinksInVoiceZero(track_idx_t track);
 
 private:
 

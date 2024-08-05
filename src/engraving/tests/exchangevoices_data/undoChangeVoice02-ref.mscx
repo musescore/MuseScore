@@ -211,6 +211,9 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
           </voice>
         </Measure>
       <Measure>
@@ -769,6 +772,9 @@
                 <tpc>15</tpc>
                 </Note>
               </Chord>
+            <location>
+              <fractions>1/4</fractions>
+              </location>
             </voice>
           </Measure>
         <Measure>

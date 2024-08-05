@@ -288,6 +288,9 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
           </voice>
         </Measure>
       </Staff>
