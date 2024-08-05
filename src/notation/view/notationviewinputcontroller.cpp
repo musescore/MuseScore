@@ -881,6 +881,10 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
     if (interaction->isDragStarted()) {
         interaction->endDrag();
+        // When dragging of hairpin ends on a note or rest, open dynamic popup
+        if (interaction->selection()->element()->isHairpinSegment() ) {
+            interaction->toggleDynamicPopup();
+        }
     }
 
     if (interaction->isDragCopyStarted()) {
