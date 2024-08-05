@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       build_mode:
-        description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
+        description: 'Build mode: devel, nightly, testing, stable'
         required: true
-        default: 'devel_build'
+        default: 'devel'
       publish:
         description: 'Publish to FTP: on - publish'
         required: false
@@ -68,7 +68,7 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
+        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -77,14 +77,14 @@ jobs:
         fi
 
         DO_BUILD='true'
-        if [ "$BUILD_MODE" == "nightly_build" ]; then 
+        if [ "$BUILD_MODE" == "nightly" ]; then 
           if [ "${{ github.repository }}" != "musescore/MuseScore" ]; then 
             DO_BUILD='false'
           fi
         fi
 
         DO_UPDATE_TS='false'
-        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
             DO_UPDATE_TS='true'
             if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
               echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
@@ -94,7 +94,7 @@ jobs:
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
         if [[ "$DO_BUILD" == "true" ]]; then
-          if [[ "$BUILD_MODE" == "nightly_build" || "$BUILD_MODE" == "devel_build" ]]; then
+          if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
             DO_PLACEHOLDER_TRANSLATIONS='true'
           fi
         fi
@@ -103,7 +103,7 @@ jobs:
         SENTRY_URL=""
 
         if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then 
-          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable_build" ]; then 
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then 
             SENTRY_PROJECT="mu4"
           fi
 
@@ -113,7 +113,7 @@ jobs:
           fi
         fi
 
-        if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly_build" ]; then
+        if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly" ]; then
           SENTRY_PROJECT="sandbox"
         fi
 
@@ -192,7 +192,7 @@ jobs:
       run: |
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
-        IF ${{ env.BUILD_MODE }} == stable_build ( SET GUID=${{ secrets.WIN_MSI_STABLE_MU4_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_MU4_GUID }} )
+        IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_MU4_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_MU4_GUID }} )
         buildscripts\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum 
       if: env.DO_BUILD == 'true'
@@ -255,15 +255,15 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_BUILD='false'
-        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
           DO_BUILD='true'  
         fi
-        if [[ "$BUILD_MODE" == "nightly_build" && "${{ github.repository }}" == "musescore/MuseScore" ]]; then 
+        if [[ "$BUILD_MODE" == "nightly" && "${{ github.repository }}" == "musescore/MuseScore" ]]; then 
           DO_BUILD='true'
         fi
 
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
+        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -272,7 +272,7 @@ jobs:
         fi
 
         DO_UPDATE_TS='false'
-        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
             DO_UPDATE_TS='true'
             if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
               echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 

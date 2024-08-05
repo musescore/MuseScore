@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       build_mode:
-        description: 'Build mode: devel_build, testing_build, stable_build'
+        description: 'Build mode: devel, testing, stable'
         required: true
-        default: 'devel_build'
+        default: 'devel'
       publish:
         description: 'Publish: on - publish'
         required: false

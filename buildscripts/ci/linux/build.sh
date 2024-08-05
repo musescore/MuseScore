@@ -48,10 +48,10 @@ if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env
 MUSE_APP_BUILD_MODE=dev
 
 case "${BUILD_MODE}" in
-"devel_build")   MUSE_APP_BUILD_MODE=dev; SUFFIX=dev;;
-"nightly_build") MUSE_APP_BUILD_MODE=dev; SUFFIX=nightly;;
-"testing_build") MUSE_APP_BUILD_MODE=testing; SUFFIX=testing;;
-"stable_build")  MUSE_APP_BUILD_MODE=release; SUFFIX="";;
+"devel")   MUSE_APP_BUILD_MODE=dev; SUFFIX=dev;;
+"nightly") MUSE_APP_BUILD_MODE=dev; SUFFIX=nightly;;
+"testing") MUSE_APP_BUILD_MODE=testing; SUFFIX=testing;;
+"stable")  MUSE_APP_BUILD_MODE=release; SUFFIX="";;
 esac
 
 echo "MUSE_APP_BUILD_MODE: $MUSE_APP_BUILD_MODE"
