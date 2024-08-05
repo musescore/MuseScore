@@ -6018,11 +6018,6 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         Score* score = staff->score();
         staff_idx_t staffIdx = staff->idx();
 
-        track_idx_t linkedTrack = ostaff->getLinkedTrackInStaff(staff, strack);
-        if (linkedTrack == muse::nidx) {
-            continue;
-        }
-
         // Some elements in voice 1 of a staff should be copied to every track which has a linked voice in this staff
         static const std::set<ElementType> VOICE1_COPY_TYPES = {
             ElementType::SYMBOL,
@@ -6046,6 +6041,15 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::PEDAL,
             ElementType::LYRICS
         };
+
+        track_idx_t linkedTrack = ostaff->getLinkedTrackInStaff(staff, strack);
+        if (linkedTrack == muse::nidx) {
+            if (track2voice(strack) == 0 && muse::contains(VOICE1_COPY_TYPES, et)) {
+                linkedTrack = staff2track(staffIdx);
+            } else {
+                continue;
+            }
+        }
 
         EngravingItem* ne;
         if (staff == ostaff) {
