@@ -20,6 +20,8 @@
       <trillPosAbove x="0" y="0"/>
       <minMMRestWidth>0</minMMRestWidth>
       <dynamicsFontStyle>0</dynamicsFontStyle>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

@@ -1288,10 +1288,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(useCueSizeFretForGraceBends,                false),
 
     styleDef(headerFontFace,                             "Edwin"),
-    styleDef(headerFontSize,                             11.0),
+    styleDef(headerFontSize,                             9.0),
     styleDef(headerLineSpacing,                          1.0),
     styleDef(headerFontSpatiumDependent,                 false),
-    styleDef(headerFontStyle,                            1),
+    styleDef(headerFontStyle,                            int(FontStyle::Normal)),
     styleDef(headerColor,                                PropertyValue::fromValue(Color::BLACK)),
     styleDef(headerAlign,                                Align(AlignH::HCENTER, AlignV::TOP)),
     styleDef(headerOffset,                               PointF()),
@@ -1333,7 +1333,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(copyrightFrameFgColor,                      PropertyValue::fromValue(Color::BLACK)),
     styleDef(copyrightFrameBgColor,                      PropertyValue::fromValue(Color::transparent)),
 
-    // New for 4.4 - defaults taken from header
+    // New for 4.4 - defaults taken from pre-4.4 header
     styleDef(pageNumberFontFace,                         "Edwin"),
     styleDef(pageNumberFontSize,                         11.0),
     styleDef(pageNumberLineSpacing,                      1.0),

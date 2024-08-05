@@ -8,6 +8,8 @@
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <minSystemDistance>6</minSystemDistance>
       <maxSystemDistance>6</maxSystemDistance>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

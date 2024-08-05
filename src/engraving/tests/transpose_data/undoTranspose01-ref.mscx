@@ -10,6 +10,8 @@
       <barNoteDistance>0.6</barNoteDistance>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

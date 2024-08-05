@@ -18,6 +18,8 @@
       <evenFooterL>$:copyright:</evenFooterL>
       <evenFooterC>$:plate:</evenFooterC>
       <evenFooterR>Version $:version:</evenFooterR>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
