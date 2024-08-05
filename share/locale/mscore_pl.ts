@@ -439,7 +439,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="88"/>
         <source>Release</source>
-        <translation>Zanikanie</translation>
+        <translation>Opadanie</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="103"/>
@@ -475,12 +475,12 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="202"/>
         <source>Release time (ms)</source>
-        <translation>Czas zanikania od poziomu podtrzymania do zera (ms)</translation>
+        <translation>Czas opadania od poziomu podtrzymania do zera (ms)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="205"/>
         <source>The release time in milliseconds.</source>
-        <translation>Czas zanikania w milisekundach.</translation>
+        <translation>Czas opadania w milisekundach.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="312"/>
@@ -5232,7 +5232,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="250"/>
         <source>Export each score</source>
-        <translation>Eksportuj każdą partyturę</translation>
+        <translation>Eksportuj każdą partyturę:</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="257"/>
@@ -8129,7 +8129,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="82"/>
         <source>Reset &apos;Key signature mode&apos; value</source>
-        <translation>Resetuj wartość &quot;Tryb oznaczenia tonacji&quot;</translation>
+        <translation>Resetuj wartość &quot;Skala oznaczenia tonacji&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="92"/>
@@ -8144,12 +8144,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="106"/>
         <source>Key signature mode:</source>
-        <translation>Tryb oznaczenia tonacji:</translation>
+        <translation>Skala oznaczenia tonacji:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="122"/>
         <source>Key signature mode</source>
-        <translation>Tryb oznaczenia tonacji</translation>
+        <translation>Skala oznaczenia tonacji</translation>
     </message>
 </context>
 <context>
@@ -12062,7 +12062,7 @@ Grupa niemiarowa przekracza takt.</translation>
     <message>
         <location filename="../../mscore/mixer/mixertrackchannel.ui" line="206"/>
         <source>Mute</source>
-        <translation>Wycisz</translation>
+        <translation>Cisza</translation>
     </message>
     <message>
         <location filename="../../mscore/mixer/mixertrackchannel.ui" line="264"/>
@@ -12090,7 +12090,7 @@ Grupa niemiarowa przekracza takt.</translation>
     <message>
         <location filename="../../mscore/mixer/mixertrackpart.ui" line="241"/>
         <source>Mute</source>
-        <translation>Wycisz</translation>
+        <translation>Cisza</translation>
     </message>
     <message>
         <location filename="../../mscore/mixer/mixertrackpart.ui" line="299"/>
@@ -15085,7 +15085,7 @@ połączenie internetowe.</translation>
         <location filename="../../mscore/parteditbase.cpp" line="471"/>
         <source>Mute: %1 vs. %2
 </source>
-        <translation>Wycisz: %1 kontra %2
+        <translation>Cisza: %1 kontra %2
 </translation>
     </message>
     <message>
@@ -18500,7 +18500,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../mscore/parteditbase.ui" line="431"/>
         <location filename="../../mscore/parteditbase.ui" line="434"/>
         <source>Mute</source>
-        <translation>Wycisz</translation>
+        <translation>Cisza</translation>
     </message>
     <message>
         <location filename="../../mscore/partedit.ui" line="342"/>
@@ -19839,7 +19839,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
         <location filename="../../mscore/prefsdialog.ui" line="2405"/>
         <location filename="../../mscore/prefsdialog.ui" line="2412"/>
         <source>Advance on release?</source>
-        <translation>Postęp przy zwalnianiu?</translation>
+        <translation>Postęp przy opadaniu?</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2419"/>
@@ -20725,7 +20725,7 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../libmscore/jump.cpp" line="95"/>
         <location filename="../../libmscore/scoreOrder.cpp" line="397"/>
         <source>Custom</source>
-        <translation>Niestandardowa</translation>
+        <translation>Niestandardowe</translation>
     </message>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="798"/>
@@ -24006,7 +24006,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="23"/>
         <source>Transpose Chromatically</source>
-        <translation>Transpozycja chromatyczna</translation>
+        <translation>Transponuj chromatycznie</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="32"/>
@@ -24255,7 +24255,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="350"/>
         <source>Transpose Diatonically</source>
-        <translation>Transpozycja diatoniczna</translation>
+        <translation>Transponuj diatonicznie</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="382"/>
@@ -32512,7 +32512,7 @@ Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne 
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="33"/>
         <source>All</source>
-        <translation>Wszystko</translation>
+        <translation>Wszystkie</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="34"/>
@@ -34602,7 +34602,7 @@ Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne 
     <message>
         <location filename="../../mscore/textpalette.cpp" line="44"/>
         <source>Latin-1 Supplement</source>
-        <translation>Łaciński 1</translation>
+        <translation>Uzupełnienie łacińskiego 1</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="45"/>
@@ -34966,7 +34966,7 @@ Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne 
     </message>
     <message>
         <source>Combining Diacritical Marks for Symbol</source>
-        <translation type="vanished">Składające symbole diakrytyczne</translation>
+        <translation type="vanished">Składające znaki diakrytyczne dla symboli</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="117"/>
@@ -35051,7 +35051,7 @@ Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne 
     <message>
         <location filename="../../mscore/textpalette.cpp" line="133"/>
         <source>Braille Patterns</source>
-        <translation>Znaki Braille&apos;a</translation>
+        <translation>Pismo Braille&apos;a</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="134"/>

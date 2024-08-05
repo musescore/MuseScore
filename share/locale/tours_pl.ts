@@ -252,7 +252,7 @@
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>Aby dodać znak chromatyczny do nuty, naciśnij klawisz &quot;Góra&quot; lub &quot;Dół&quot;, aby podnieść lub obniżyć jej wysokość lub kliknij jedną z tych ikon.</translation>
+        <translation>Aby dodać znak chromatyczny do nuty, naciśnij klawisz &quot;Góra&quot; lub &quot;Dół&quot;, aby podwyższyć lub obniżyć jej wysokość lub kliknij jedną z tych ikon.</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
