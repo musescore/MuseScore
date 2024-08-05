@@ -767,6 +767,45 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
     ne->setScore(score);
 }
 
+static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* score)
+{
+    if (originalNote->tieFor()) {
+        Tie* tie = toTie(originalNote->tieFor()->linkedClone());
+        tie->setScore(score);
+        newNote->setTieFor(tie);
+        tie->setStartNote(newNote);
+        tie->setTrack(newNote->track());
+        tieMap.add(originalNote->tieFor(), tie);
+    }
+    if (originalNote->tieBack()) {
+        Tie* tie = tieMap.findNew(originalNote->tieBack());
+        if (tie) {
+            newNote->setTieBack(tie);
+            tie->setEndNote(newNote);
+        } else {
+            LOGD("addTiesToMap: cannot find tie");
+        }
+    }
+}
+
+static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
+{
+    for (Chord* oldGrace : originalGraceNotes) {
+        Chord* newGrace = newChord->graceNoteAt(oldGrace->graceIndex());
+        if (!newGrace) {
+            continue;
+        }
+
+        size_t notes = oldGrace->notes().size();
+        for (size_t i = 0; i < notes; ++i) {
+            Note* originalNote = oldGrace->notes().at(i);
+            Note* newNote = newGrace->notes().at(i);
+
+            addTies(originalNote, newNote, tieMap, score);
+        }
+    }
+}
+
 static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* oscore,
                                  const std::vector<staff_idx_t>& sourceStavesIndexes,
                                  const TracksMap& trackList, TieMap& tieMap)
@@ -934,28 +973,13 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                             if (oe->isChord()) {
                                 Chord* och = toChord(ocr);
                                 Chord* nch = toChord(ncr);
-
+                                addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
                                 size_t n = och->notes().size();
                                 for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
-                                    if (on->tieFor()) {
-                                        Tie* tie = toTie(on->tieFor()->linkedClone());
-                                        tie->setScore(score);
-                                        nn->setTieFor(tie);
-                                        tie->setStartNote(nn);
-                                        tie->setTrack(nn->track());
-                                        tieMap.add(on->tieFor(), tie);
-                                    }
-                                    if (on->tieBack()) {
-                                        Tie* tie = tieMap.findNew(on->tieBack());
-                                        if (tie) {
-                                            nn->setTieBack(tie);
-                                            tie->setEndNote(nn);
-                                        } else {
-                                            LOGD("cloneStaves: cannot find tie");
-                                        }
-                                    }
+
+                                    addTies(on, nn, tieMap, score);
                                     // add back spanners (going back from end to start spanner element
                                     // makes sure the 'other' spanner anchor element is already set up)
                                     // 'on' is the old spanner end note and 'nn' is the new spanner end note
@@ -988,6 +1012,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                         }
                                     }
                                 }
+                                addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
                                 // two note tremolo
                                 if (och->tremoloTwoChord()) {
                                     if (och == och->tremoloTwoChord()->chord1()) {
@@ -1298,27 +1323,12 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
+                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
-                            if (on->tieFor()) {
-                                Tie* tie = toTie(on->tieFor()->linkedClone());
-                                tie->setScore(score);
-                                nn->setTieFor(tie);
-                                tie->setStartNote(nn);
-                                tie->setTrack(nn->track());
-                                tieMap.add(on->tieFor(), tie);
-                            }
-                            if (on->tieBack()) {
-                                Tie* tie = tieMap.findNew(on->tieBack());
-                                if (tie) {
-                                    nn->setTieBack(tie);
-                                    tie->setEndNote(nn);
-                                } else {
-                                    LOGD("cloneStaff: cannot find tie");
-                                }
-                            }
+                            addTies(on, nn, tieMap, score);
                             // add back spanners (going back from end to start spanner element
                             // makes sure the 'other' spanner anchor element is already set up)
                             // 'on' is the old spanner end note and 'nn' is the new spanner end note
@@ -1333,6 +1343,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                                 }
                             }
                         }
+                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
                         // two note tremolo
                         if (och->tremoloTwoChord()) {
                             if (och == och->tremoloTwoChord()->chord1()) {
@@ -1569,27 +1580,12 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
+                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
-                            if (on->tieFor()) {
-                                Tie* tie = toTie(on->tieFor()->linkedClone());
-                                tie->setScore(score);
-                                nn->setTieFor(tie);
-                                tie->setStartNote(nn);
-                                tie->setTrack(nn->track());
-                                tieMap.add(on->tieFor(), tie);
-                            }
-                            if (on->tieBack()) {
-                                Tie* tie = tieMap.findNew(on->tieBack());
-                                if (tie) {
-                                    nn->setTieBack(tie);
-                                    tie->setEndNote(nn);
-                                } else {
-                                    LOGD("cloneStaff2: cannot find tie");
-                                }
-                            }
+                            addTies(on, nn, tieMap, score);
                             // add back spanners (going back from end to start spanner element
                             // makes sure the 'other' spanner anchor element is already set up)
                             // 'on' is the old spanner end note and 'nn' is the new spanner end note
@@ -1629,6 +1625,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 nn->addSpannerFor(newBend);
                             }
                         }
+                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
                         // two note tremolo
                         if (och->tremoloTwoChord()) {
                             if (och == och->tremoloTwoChord()->chord1()) {

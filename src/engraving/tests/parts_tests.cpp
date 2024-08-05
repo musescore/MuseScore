@@ -38,6 +38,7 @@
 #include "dom/part.h"
 #include "dom/segment.h"
 #include "dom/spanner.h"
+#include "dom/staff.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -53,6 +54,7 @@ public:
     Score* createPart(MasterScore* score);
     void createParts(MasterScore* score);
     void testPartCreation(const String& test);
+    void createLinkedStaff(MasterScore* score);
 
     MasterScore* doAddBreath();
     MasterScore* doRemoveBreath();
@@ -129,6 +131,19 @@ void Engraving_PartsTests::createParts(MasterScore* masterScore)
     //nscore->setName(parts.front()->partName());
 
     masterScore->setExcerptsChanged(true);
+}
+
+void Engraving_PartsTests::createLinkedStaff(MasterScore* masterScore)
+{
+    masterScore->startCmd();
+    Staff* sourceStaff = masterScore->staff(0);
+    EXPECT_TRUE(sourceStaff);
+    Staff* linkedStaff = Factory::createStaff(sourceStaff->part());
+    linkedStaff->setPart(sourceStaff->part());
+    masterScore->undoInsertStaff(linkedStaff, 1, false);
+    Excerpt::cloneStaff(sourceStaff, linkedStaff);
+    masterScore->endCmd();
+    EXPECT_TRUE(masterScore->staff(1));
 }
 
 //---------------------------------------------------------
@@ -1268,6 +1283,17 @@ TEST_F(Engraving_PartsTests, partSpanners)
     testPartCreation(u"part-spanners");
 
     MScore::useRead302InTestMode = useRead302;
+}
+
+TEST_F(Engraving_PartsTests, partTies) {
+    const String test = u"linked-ties";
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + test + u".mscx");
+    ASSERT_TRUE(score);
+    createLinkedStaff(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-1.mscx", PARTS_DATA_DIR + test + u"-1.mscx"));
+    createPart(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-parts.mscx", PARTS_DATA_DIR + test + u"-parts.mscx"));
+    delete score;
 }
 
 TEST_F(Engraving_PartsTests, partVisibleTracks) {
