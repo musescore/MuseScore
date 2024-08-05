@@ -65,6 +65,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 
     Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
     Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
+    Q_PROPERTY(Placement placement READ placement WRITE setPlacement NOTIFY placementChanged)
 
     Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
     Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
@@ -114,6 +115,12 @@ public:
     Q_DECLARE_FLAGS(ClosePolicies, ClosePolicy)
     Q_FLAG(ClosePolicies)
 
+    enum Placement {
+        Below,
+        Above
+    };
+    Q_ENUM(Placement)
+
     QQuickItem* parentItem() const;
 
     QQuickItem* contentItem() const;
@@ -140,6 +147,7 @@ public:
 
     OpenPolicies openPolicies() const;
     ClosePolicies closePolicies() const;
+    Placement placement() const;
 
     bool activateParentOnClose() const;
 
@@ -175,6 +183,7 @@ public slots:
     void setLocalY(qreal y);
     void setOpenPolicies(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void setClosePolicies(muse::uicomponents::PopupView::ClosePolicies closePolicies);
+    void setPlacement(muse::uicomponents::PopupView::Placement newPlacement);
     void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
@@ -202,6 +211,7 @@ signals:
     void yChanged(qreal y);
     void openPoliciesChanged(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
+    void placementChanged(muse::uicomponents::PopupView::Placement placement);
     void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
@@ -280,6 +290,8 @@ protected:
     bool m_isContentReady = false;
 
     ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
+
+    Placement m_placement = { Placement::Below };
 
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
