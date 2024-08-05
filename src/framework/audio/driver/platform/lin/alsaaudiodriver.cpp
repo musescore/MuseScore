@@ -42,6 +42,7 @@
 #include <vector>
 
 #define DEBUG_AUDIO
+// #define ALSA_POLL
 
 #ifdef DEBUG_AUDIO
 #define LOG_AUDIO LOGD
@@ -80,7 +81,11 @@ static muse::audio::IAudioDriver::Spec s_format;
 
 inline bool accessIsSupported(snd_pcm_access_t access)
 {
+#ifdef ALSA_POLL
     return access == SND_PCM_ACCESS_RW_INTERLEAVED || access == SND_PCM_ACCESS_MMAP_INTERLEAVED;
+#else
+    return access == SND_PCM_ACCESS_RW_INTERLEAVED;
+#endif
 }
 
 static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
@@ -100,12 +105,16 @@ static bool alsaConfigureDevice(snd_pcm_t* deviceHandle, AlsaParams& params)
         return false;
     }
 
+#ifdef ALSA_POLL
     const auto supportedAccess = std::array<snd_pcm_access_t, 2> {
         params.access,
         params.access == SND_PCM_ACCESS_MMAP_INTERLEAVED
         ? SND_PCM_ACCESS_RW_INTERLEAVED
         : SND_PCM_ACCESS_MMAP_INTERLEAVED,
     };
+#else
+    const auto supportedAccess = std::array<snd_pcm_access_t, 1> { params.access };
+#endif
 
     bool accessSet = false;
     for (const auto access : supportedAccess) {
@@ -226,16 +235,19 @@ static int xrunRecovery(snd_pcm_t* deviceHandle, int err)
 {
     LOG_AUDIO() << "xrun recovery";
 
-    if (err == -EPIPE) {   /* under-run */
+    switch (err) {
+    case -EPIPE:
+        // underrun
         err = snd_pcm_prepare(deviceHandle);
         if (err < 0) {
             LOGE() << "Can't recovery from underrun, prepare failed: " << snd_strerror(err);
         }
         return 0;
-    } else if (err == -ESTRPIPE) {
+    case -ESTRPIPE:
         // hardware is suspended, possibly due to low battery
+        LOGW() << "Suspended, waiting for resume";
         while ((err = snd_pcm_resume(deviceHandle)) == -EAGAIN) {
-            sleep(1);       /* wait until the suspend flag is released */
+            sleep(1);       // wait until the suspend flag is released
         }
         if (err < 0) {
             err = snd_pcm_prepare(deviceHandle);
@@ -244,10 +256,13 @@ static int xrunRecovery(snd_pcm_t* deviceHandle, int err)
             }
         }
         return 0;
+    default:
+        LOGE() << "Unexpected error: " << snd_strerror(err);
+        return err;
     }
-    return err;
 }
 
+#ifdef ALSA_POLL
 // returns true if success
 static bool waitForPoll(snd_pcm_t* deviceHandle, struct pollfd* ufds,
                         unsigned int count, int timeout = -1)
@@ -283,7 +298,7 @@ static bool waitForPoll(snd_pcm_t* deviceHandle, struct pollfd* ufds,
 
 static void alsaPollMmapLoop(AlsaData* data, std::vector<struct pollfd> ufds)
 {
-    LOGI() << "Entering poll mmap loop";
+    LOGI() << "Entering ALSA poll mmap loop";
 
     auto deviceHandle = data->alsaDeviceHandle;
     auto callback = data->callback;
@@ -334,12 +349,18 @@ static void alsaPollMmapLoop(AlsaData* data, std::vector<struct pollfd> ufds)
     while (!data->audioProcessingDone) {
         const auto avail = snd_pcm_avail_update(deviceHandle);
         if (avail < 0) {
+            LOG_AUDIO() << "Error in snd_pcm_avail_update: " << snd_strerror(avail);
             xrunRecovery(deviceHandle, avail);
             continue;
         }
         if (static_cast<snd_pcm_uframes_t>(avail) < periodSize) {
             if (restartPcm) {
-                snd_pcm_start(deviceHandle);
+                LOG_AUDIO() << "Restarting PCM";
+                err = snd_pcm_start(deviceHandle);
+                if (err < 0) {
+                    LOGE() << "Unable to restart device: " << snd_strerror(err);
+                }
+                restartPcm = false;
             }
             waitForPoll(deviceHandle, &ufds[0], static_cast<unsigned int>(ufds.size()), waitTimeout);
             continue;
@@ -372,7 +393,7 @@ static void alsaPollMmapLoop(AlsaData* data, std::vector<struct pollfd> ufds)
 
 static void alsaPollWriteLoop(AlsaData* data, std::vector<struct pollfd> ufds)
 {
-    LOGI() << "Entering poll write loop";
+    LOGI() << "Entering ALSA poll write loop";
 
     auto deviceHandle = data->alsaDeviceHandle;
     auto callback = data->callback;
@@ -421,29 +442,21 @@ static void alsaPollWriteLoop(AlsaData* data, std::vector<struct pollfd> ufds)
     }
 }
 
-static void* alsaThread(void* aParam)
+void alsaPollLoop(AlsaData* data)
 {
-    muse::runtime::setThreadName("audio_driver");
-    AlsaData* data = static_cast<AlsaData*>(aParam);
     auto deviceHandle = data->alsaDeviceHandle;
-
-    int err = snd_pcm_prepare(deviceHandle);
-    if (err < 0) {
-        LOGE() << "Unable to prepare device: " << snd_strerror(err);
-        return nullptr;
-    }
 
     const auto count = snd_pcm_poll_descriptors_count(deviceHandle);
     if (count <= 0) {
         LOGE() << "Invalid poll descriptors count";
-        return nullptr;
+        return;
     }
     auto ufds = std::vector<struct pollfd>(count);
 
-    err = snd_pcm_poll_descriptors(deviceHandle, &ufds[0], count);
+    int err = snd_pcm_poll_descriptors(deviceHandle, &ufds[0], count);
     if (err < 0) {
         LOGE() << "Unable to obtain poll descriptors for playback: " << snd_strerror(err);
-        return nullptr;
+        return;
     }
 
     switch (data->params.access) {
@@ -457,6 +470,63 @@ static void* alsaThread(void* aParam)
         LOGE() << "Unsupported access type: " << data->params.access;
         break;
     }
+}
+
+#endif
+
+void alsaWriteLoop(AlsaData* data)
+{
+    LOGI() << "Entering ALSA write loop";
+
+    auto deviceHandle = data->alsaDeviceHandle;
+    auto callback = data->callback;
+    const auto periodSize = data->params.periodSize;
+    const auto channels = data->params.channels;
+
+    int err = snd_pcm_start(deviceHandle);
+    if (err < 0) {
+        LOGE() << "Unable to start device: " << snd_strerror(err);
+        return;
+    }
+
+    auto buffer = std::vector<float>(periodSize * channels);
+
+    while (!data->audioProcessingDone) {
+        uint8_t* stream = reinterpret_cast<uint8_t*>(&buffer[0]);
+        const auto len = buffer.size() * sizeof(float);
+
+        callback(stream, len);
+
+        auto count = periodSize;
+        while (count > 0) {
+            const auto rc = snd_pcm_writei(deviceHandle, stream, count);
+            if (rc < 0) {
+                xrunRecovery(deviceHandle, rc);
+                break;
+            }
+            count -= rc;
+            stream += rc * channels;
+        }
+    }
+}
+
+static void* alsaThread(void* aParam)
+{
+    muse::runtime::setThreadName("audio_driver");
+    AlsaData* data = static_cast<AlsaData*>(aParam);
+    auto deviceHandle = data->alsaDeviceHandle;
+
+    int err = snd_pcm_prepare(deviceHandle);
+    if (err < 0) {
+        LOGE() << "Unable to prepare device: " << snd_strerror(err);
+        return nullptr;
+    }
+
+#ifdef ALSA_POLL
+    alsaPollLoop(data);
+#else
+    alsaWriteLoop(data);
+#endif
 
     LOGI() << "Exiting ALSA thread";
     return nullptr;
@@ -479,6 +549,7 @@ static void alsaCleanup()
             ts.tv_nsec += 200 * 1000 * 1000;
             int rt = pthread_timedjoin_np(s_alsaData->threadHandle, nullptr, &ts);
             if (rt == ETIMEDOUT) {
+                LOGE() << "Timeout while waiting for ALSA thread to join";
                 pthread_cancel(s_alsaData->threadHandle);
             }
         }
@@ -529,15 +600,23 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
+#ifdef ALSA_POLL
+    const auto flags = SND_PCM_NONBLOCK;
+    const auto preferredAccess = SND_PCM_ACCESS_MMAP_INTERLEAVED;
+#else
+    const auto flags = 0;
+    const auto preferredAccess = SND_PCM_ACCESS_RW_INTERLEAVED;
+#endif
+
     snd_pcm_t* deviceHandle;
-    int rc = snd_pcm_open(&deviceHandle, spec.deviceId.c_str(), SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK);
+    int rc = snd_pcm_open(&deviceHandle, spec.deviceId.c_str(), SND_PCM_STREAM_PLAYBACK, flags);
     if (rc < 0) {
         LOGE() << "Could not open ALSA device (" << spec.deviceId << "): " << snd_strerror(rc);
         return false;
     }
 
     AlsaParams params {
-        .access = SND_PCM_ACCESS_MMAP_INTERLEAVED,
+        .access = preferredAccess,
         .format = SND_PCM_FORMAT_FLOAT_LE,
         .channels = spec.output.audioChannelCount,
         .sampleRate = spec.output.sampleRate,
@@ -559,7 +638,7 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     configStr << "    periods        = " << params.periods << "\n";
     configStr << "    ringBufferSize = " << params.ringBufferSize;
 
-    LOGI() << "Configured ALSA device " << outputDevice() << ":\n" << configStr.str();
+    LOGI() << "Configured ALSA device " << spec.deviceId << ":\n" << configStr.str();
 
     s_alsaData = new AlsaData {};
     s_alsaData->params = params;
