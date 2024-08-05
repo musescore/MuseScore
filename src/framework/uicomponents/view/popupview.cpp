@@ -333,6 +333,11 @@ PopupView::ClosePolicies PopupView::closePolicies() const
     return m_closePolicies;
 }
 
+PopupView::Placement PopupView::placement() const
+{
+    return m_placement;
+}
+
 bool PopupView::activateParentOnClose() const
 {
     return m_activateParentOnClose;
@@ -481,6 +486,16 @@ void PopupView::setClosePolicies(ClosePolicies closePolicies)
     }
 
     emit closePoliciesChanged(closePolicies);
+}
+
+void PopupView::setPlacement(Placement placement)
+{
+    if (m_placement == placement) {
+        return;
+    }
+
+    m_placement = placement;
+    emit placementChanged(placement);
 }
 
 void PopupView::setObjectId(QString objectId)
@@ -729,21 +744,28 @@ void PopupView::updateGeometry()
         viewRect.moveTopLeft(m_globalPos);
     };
 
+    bool canFitAbove = viewRect.height() < parentTopLeft.y();
+    bool canFitBelow = viewRect.bottom() < anchorRect.bottom();
+
+    if (canFitAbove && (placement() == Above || !canFitBelow)) {
+        // place above the parent
+        qreal newY = parentTopLeft.y() - viewRect.height();
+        movePos(m_globalPos.x(), newY);
+        setOpensUpward(true);
+    } else {
+        // place below the parent
+        movePos(m_globalPos.x(), parentTopLeft.y() + parent->height());
+
+        if (!canFitBelow) {
+            // adjust if below placement goes out of bounds
+            movePos(m_globalPos.x(), anchorRect.bottom() - viewRect.height());
+        }
+        setOpensUpward(false);
+    }
+
     if (viewRect.left() < anchorRect.left()) {
         // move to the right to an area that doesn't fit
         movePos(m_globalPos.x() + anchorRect.left() - viewRect.left(), m_globalPos.y());
-    }
-
-    if (viewRect.bottom() > anchorRect.bottom()) {
-        qreal newY = parentTopLeft.y() - viewRect.height();
-        if (anchorRect.top() < newY) {
-            // move to the top of the parent
-            movePos(m_globalPos.x(), newY);
-            setOpensUpward(true);
-        } else {
-            // move to the right of the parent and move to top to an area that doesn't fit
-            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
-        }
     }
 
     if (viewRect.right() > anchorRect.right()) {
