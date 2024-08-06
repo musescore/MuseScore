@@ -1201,7 +1201,12 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
         s2 = measure->findSegment(SegmentType::EndBarLine, measure->endTick());
     }
 
-    double x1 = s1 ? s1->x() + s1->minRight() : 0;
+    double x1 = 0.0;
+    while (s1) {
+        x1 = std::max(x1, s1->x() + s1->minRight());
+        s1 = s1->prevActive();
+    }
+
     double x2 = s2 ? s2->x() - s2->minLeft() : measure->width();
 
     bool headerException = measure->header() && firstCrSeg->prev() && !firstCrSeg->prev()->isStartRepeatBarLineType()
