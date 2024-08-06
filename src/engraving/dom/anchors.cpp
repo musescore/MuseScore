@@ -86,7 +86,8 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
     for (Fraction tick = startTick; tick <= endTick; tick += halfDivision) {
         anchorTicks.insert(tick);
     }
-    for (Segment* seg = measure->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+    for (Segment* seg = measure->first(SegmentType::ChordRest | SegmentType::TimeTick); seg;
+         seg = seg->next(SegmentType::ChordRest | SegmentType::TimeTick)) {
         anchorTicks.insert(seg->rtick());
     }
 
