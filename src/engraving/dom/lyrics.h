@@ -84,9 +84,6 @@ public:
     void setNeedRemoveInvalidSegments() { m_needRemoveInvalidSegments = true; }
     void removeInvalidSegments();
 
-    bool even() const { return m_even; }
-    void setEven(bool val) { m_even = val; }
-
     LyricsLine* separator() const { return m_separator; }
     void setSeparator(LyricsLine* s) { m_separator = s; }
 
@@ -105,7 +102,6 @@ public:
 
 protected:
     int m_no = 0;  // row index
-    bool m_even = false;
 
 private:
 

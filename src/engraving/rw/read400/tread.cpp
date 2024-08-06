@@ -3005,7 +3005,6 @@ bool TRead::readProperties(Lyrics* l, XmlReader& e, ReadContext& ctx)
     if (tag == "no") {
         l->setNo(e.readInt());
         if (l->isEven()) {
-            l->setEven(true);
             l->initTextStyleType(TextStyleType::LYRICS_EVEN);
         }
     } else if (tag == "syllabic") {

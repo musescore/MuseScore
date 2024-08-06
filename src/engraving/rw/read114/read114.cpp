@@ -1865,7 +1865,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 if (t == "no") {
                     l->setNo(e.readInt());
                     if (l->isEven()) {
-                        l->setEven(true);
                         l->initTextStyleType(TextStyleType::LYRICS_EVEN);
                     }
                 } else if (t == "syllabic") {
