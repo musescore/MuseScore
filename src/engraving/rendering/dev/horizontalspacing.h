@@ -27,7 +27,6 @@ class Chord;
 class EngravingItem;
 class Lyrics;
 class Note;
-class NoteDot;
 class Rest;
 class Shape;
 class StemSlash;
