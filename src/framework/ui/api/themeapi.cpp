@@ -393,13 +393,14 @@ void ThemeApi::setupUiFonts()
         { &m_titleBoldFont, { QFont::DemiBold, FontSizeType::TITLE } },
     };
 
+    QString family = QString::fromStdString(configuration()->fontFamily());
     for (QFont* font : fonts.keys()) {
-        std::string family = configuration()->fontFamily();
+
         int size = configuration()->fontSize(fonts[font].sizeType);
         QFont::Weight weight = fonts[font].weight;
 
         font->setPixelSize(size);
-        font->setFamily(QString::fromStdString(family));
+        font->setFamily(family);
         font->setWeight(weight);
     }
 
