@@ -111,6 +111,8 @@ public:
     virtual async::Notification toolConfigChanged(const QString& toolName) const = 0;
 
     virtual int flickableMaxVelocity() const = 0;
+
+    virtual int tooltipDelay() const = 0;
 };
 }
 

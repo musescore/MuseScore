@@ -117,6 +117,8 @@ public:
 
     int flickableMaxVelocity() const override;
 
+    int tooltipDelay() const override;
+
 private:
     void initThemes();
     void notifyAboutCurrentThemeChanged();

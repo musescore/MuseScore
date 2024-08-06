@@ -55,6 +55,8 @@ static const QString WINDOW_GEOMETRY_KEY("window");
 
 static const int FLICKABLE_MAX_VELOCITY = 1500;
 
+static const int TOOLTIP_DELAY = 500;
+
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
@@ -782,4 +784,9 @@ void UiConfiguration::updateToolConfig(const QString& toolName, ToolConfig& user
 int UiConfiguration::flickableMaxVelocity() const
 {
     return FLICKABLE_MAX_VELOCITY;
+}
+
+int UiConfiguration::tooltipDelay() const
+{
+    return TOOLTIP_DELAY;
 }
