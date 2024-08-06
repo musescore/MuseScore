@@ -522,6 +522,7 @@ bool HorizontalSpacing::isSameVoiceKerningLimited(const EngravingItem* item)
 
     switch (type) {
     case ElementType::NOTE:
+    case ElementType::NOTEDOT:
     case ElementType::REST:
     case ElementType::STEM:
     case ElementType::CHORDLINE:
@@ -566,8 +567,6 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         return computeLyricsKerningType(toLyrics(item1), item2);
     case ElementType::NOTE:
         return computeNoteKerningType(toNote(item1), item2);
-    case ElementType::NOTEDOT:
-        return computeNoteDotKerningType(toNoteDot(item1), item2);
     case ElementType::STEM_SLASH:
         return computeStemSlashKerningType(toStemSlash(item1), item2);
     default:
@@ -607,17 +606,6 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
         return KerningType::NON_KERNING;
     }
 
-    return KerningType::KERNING;
-}
-
-KerningType HorizontalSpacing::computeNoteDotKerningType(const NoteDot* noteDot, const EngravingItem* item2)
-{
-    if (item2->isNote()) {
-        bool sameVoice = noteDot->track() == item2->track();
-        if (sameVoice) {
-            return KerningType::NON_KERNING;
-        }
-    }
     return KerningType::KERNING;
 }
 
