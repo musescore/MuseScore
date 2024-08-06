@@ -344,6 +344,11 @@ int ThemeApi::flickableMaxVelocity() const
     return configuration()->flickableMaxVelocity();
 }
 
+int ThemeApi::tooltipDelay() const
+{
+    return configuration()->tooltipDelay();
+}
+
 void ThemeApi::initUiFonts()
 {
     setupUiFonts();

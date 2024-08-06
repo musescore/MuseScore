@@ -23,6 +23,7 @@ set(MODULE_TEST muse_ui_tests)
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mocks/navigationmocks.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/uiconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/mainwindowmock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/navigationcontroller_tests.cpp
