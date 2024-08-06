@@ -54,7 +54,6 @@ static const ElementStyle lyricsElementStyle {
 Lyrics::Lyrics(ChordRest* parent)
     : TextBase(ElementType::LYRICS, parent, TextStyleType::LYRICS_ODD)
 {
-    m_even       = false;
     m_separator  = 0;
     initElementStyle(&lyricsElementStyle);
     m_no         = 0;
@@ -65,7 +64,6 @@ Lyrics::Lyrics(ChordRest* parent)
 Lyrics::Lyrics(const Lyrics& l)
     : TextBase(l)
 {
-    m_even      = l.m_even;
     m_no        = l.m_no;
     m_ticks     = l.m_ticks;
     m_syllabic  = l.m_syllabic;

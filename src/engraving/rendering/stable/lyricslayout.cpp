@@ -120,14 +120,12 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     bool styleDidChange = false;
-    if (item->isEven() && !item->even()) {
+    if (item->isEven() && (item->textStyleType() != TextStyleType::LYRICS_EVEN)) {
         item->initTextStyleType(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
-        item->setEven(true);
         styleDidChange = true;
     }
-    if (!item->isEven() && item->even()) {
+    if (!item->isEven() && (item->textStyleType() != TextStyleType::LYRICS_ODD)) {
         item->initTextStyleType(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
-        item->setEven(false);
         styleDidChange = true;
     }
 
