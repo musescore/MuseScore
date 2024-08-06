@@ -731,7 +731,7 @@ void Score::dragPosition(const PointF& p, staff_idx_t* rst, Segment** seg, doubl
     }
     track_idx_t etrack = staff2track(i + 1);
 
-    SegmentType st = allowTimeAnchor ? SegmentType::ChordRest | SegmentType::TimeTick : SegmentType::ChordRest;
+    SegmentType st = allowTimeAnchor ? Segment::CHORD_REST_OR_TIME_TICK_TYPE : SegmentType::ChordRest;
     Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
     if (segment) {
         *rst = i;

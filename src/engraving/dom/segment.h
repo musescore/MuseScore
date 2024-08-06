@@ -304,7 +304,8 @@ public:
 
     void checkEmpty() const;
 
-    static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest | SegmentType::TimeTick;   // segment types which may have non-zero tick length
+    static constexpr SegmentType CHORD_REST_OR_TIME_TICK_TYPE = SegmentType::ChordRest | SegmentType::TimeTick;
+    static constexpr SegmentType durationSegmentsMask = CHORD_REST_OR_TIME_TICK_TYPE; // segment types which may have non-zero tick length
 
 private:
 

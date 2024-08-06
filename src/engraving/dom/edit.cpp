@@ -3812,7 +3812,7 @@ void Score::addHairpin(Hairpin* hairpin, ChordRest* cr1, ChordRest* cr2)
         }
         const Segment* startSegment = cr2 ? cr2->segment() : cr1->segment();
         for (const Segment* segment = startSegment; segment && segment->tick() < endTick;
-             segment = segment->next1(SegmentType::ChordRest | SegmentType::TimeTick)) {
+             segment = segment->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
             if (segment == startSegment) {
                 continue;
             }
@@ -3853,7 +3853,7 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
     Fraction endTick = startChord ? startChord->endTickIncludingTied() : dynamic->segment()->measure()->endTick();
 
     for (Segment* segment = dynamicSegment; segment && segment->tick() < endTick;
-         segment = segment->next1(SegmentType::ChordRest | SegmentType::TimeTick)) {
+         segment = segment->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
         if (segment == dynamicSegment) {
             continue;
         }
