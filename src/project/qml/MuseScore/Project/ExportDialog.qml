@@ -38,6 +38,16 @@ StyledDialogView {
     contentHeight: 372
     margins: 24
 
+    onConfirmRequested: {
+        if (exportModel.selectionLength <= 0) {
+            return
+        }
+
+        if (exportModel.exportScores()) {
+            root.hide()
+        }
+    }
+
     ExportDialogModel {
         id: exportModel
     }
@@ -158,15 +168,13 @@ StyledDialogView {
                         accentButton: true
 
                         onClicked: {
-                            if (exportModel.exportScores()) {
-                                root.hide();
-                            }
+                            root.confirmRequested()
                         }
                     }
 
                     onStandardButtonClicked: function(buttonId) {
                         if (buttonId === ButtonBoxModel.Cancel) {
-                            root.hide()
+                            root.rejectRequested()
                         }
                     }
                 }

@@ -36,6 +36,14 @@ StyledDialogView {
 
     property var properties
 
+    onConfirmRequested: {
+        root.hide()
+    }
+
+    onRejectRequested: {
+        propertiesModel.reject()
+    }
+
     PalettePropertiesModel {
         id: propertiesModel
     }
@@ -165,10 +173,9 @@ StyledDialogView {
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    propertiesModel.reject()
-                    root.hide()
+                    root.rejectRequested()
                 } else if (buttonId === ButtonBoxModel.Ok) {
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

@@ -35,6 +35,10 @@ StyledDialogView {
     contentHeight: 424
     contentWidth: 480
 
+    onConfirmRequested: {
+        root.hide()
+    }
+
     AboutModel {
         id: aboutModel
     }
@@ -157,7 +161,7 @@ StyledDialogView {
                 text: qsTrc("global", "OK")
 
                 onClicked: {
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

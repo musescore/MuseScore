@@ -116,6 +116,8 @@ FocusScope {
         name: root.objectName !== "" ? root.objectName : "FlatButton"
         enabled: root.enabled && root.visible
 
+        isButtonNavigation: true
+
         accessible.role: MUAccessible.Button
         accessible.name: Boolean(root.text) ? root.text : root.toolTipTitle
         accessible.description: root.toolTipDescription

@@ -36,6 +36,11 @@ StyledDialogView {
     property string selectedDirectories: ""
     property string startDir: ""
 
+    onConfirmRequested: {
+        root.ret = { errcode: 0, value: directoriesModel.directories() }
+        root.hide()
+    }
+
     SelectMultipleDirectoriesModel {
         id: directoriesModel
     }
@@ -110,10 +115,9 @@ StyledDialogView {
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 } else if (buttonId === ButtonBoxModel.Ok) {
-                    root.ret = { errcode: 0, value: directoriesModel.directories() }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

@@ -43,7 +43,11 @@ StyledDialogView {
         instrumentsPage.focusOnFirst()
     }
 
-    function submit() {
+    onConfirmRequested: {
+        if (!instrumentsPage.hasSelectedInstruments) {
+            return
+        }
+
         var result = {}
         result["instruments"] = instrumentsPage.instruments()
         result["scoreOrder"] = instrumentsPage.currentOrder()
@@ -68,7 +72,7 @@ StyledDialogView {
             navigationSection: root.navigationSection
 
             onSubmitRequested: {
-                root.submit()
+                root.confirmRequested()
             }
         }
 
@@ -106,13 +110,13 @@ StyledDialogView {
                     accentButton: true
 
                     onClicked: {
-                        root.submit()
+                        root.confirmRequested()
                     }
                 }
 
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {
-                        root.reject()
+                        root.rejectRequested()
                     }
                 }
             }

@@ -114,6 +114,7 @@ public:
     virtual ~INavigationControl() = default;
 
     virtual INavigationPanel* panel() const = 0;
+    virtual bool isButtonNavigation() const = 0;
 
     virtual void trigger() = 0;
     virtual void requestActive(bool enableHighlight = false) = 0;

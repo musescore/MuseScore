@@ -46,6 +46,14 @@ StyledDialogView {
         root.hide()
     }
 
+    onConfirmRequested: {
+        root.done({ share: true, remember: checkbox.checked })
+    }
+
+    onRejectRequested: {
+        root.done({ share: false, remember: checkbox.checked })
+    }
+
     onNavigationActivateRequested: {
         var btn = buttonBox.firstFocusBtn
         if (btn) {

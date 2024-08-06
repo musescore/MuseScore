@@ -33,6 +33,11 @@ StyledDialogView {
     contentHeight: 146
     margins: 16
 
+    onConfirmRequested: {
+        model.apply()
+        root.hide()
+    }
+
     EditGridSizeDialogModel {
         id: model
     }
@@ -146,10 +151,9 @@ StyledDialogView {
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 } else if (buttonId === ButtonBoxModel.Ok) {
-                    model.apply()
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }
