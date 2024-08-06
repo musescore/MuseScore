@@ -4979,8 +4979,16 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
                 Measure* oldMeas = oldSeg->measure();
                 Measure* newMeas = linkedScore->tick2measure(oldMeas->tick());
                 linkedParent = newMeas->tick2segment(oldSeg->tick(), oldSeg->segmentType());
+                if (!linkedParent && oldSeg->isChordRestType()) {
+                    // A ChordRest segment that exists in the score may not exist in the part.
+                    // In that case we create a TimeTick segment as new parent for the linked item.
+                    linkedParent = newMeas->getSegment(SegmentType::TimeTick, oldSeg->tick());
+                }
             } else {
                 linkedParent = parent->findLinkedInScore(linkedScore);
+            }
+            IF_ASSERT_FAILED(linkedParent) {
+                continue;
             }
             linkedScore->undo(new ChangeParent(item, linkedParent, linkedScore->staffIdx(linkedDest)));
         } else if (linkedOrigin && !linkedDest) {
