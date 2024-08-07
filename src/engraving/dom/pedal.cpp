@@ -224,7 +224,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         if (beginText() == "<sym>keyboardPedalPed</sym>") {
             x -= 0.5 * spatium();
         } else if (beginHookType() == HookType::HOOK_90 || beginHookType() == HookType::HOOK_90T) {
-            x += 0.5 * point(lineWidth());
+            x += 0.5 * absoluteFromSpatium(lineWidth());
         } else if (beginHookType() == HookType::HOOK_45) {
             EngravingItem* item = startElement();
             if (item && item->isChord()) {

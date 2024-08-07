@@ -523,7 +523,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             }
         } else if (mb->isHBox()) {
             HBox* curHBox = toHBox(mb);
-            curHBox->setPos(pos + PointF(curHBox->point(curHBox->topGap()), 0.0));
+            curHBox->setPos(pos + PointF(curHBox->absoluteFromSpatium(curHBox->topGap()), 0.0));
             TLayout::layoutMeasureBase(curHBox, ctx);
             createBrackets = curHBox->createSystemHeader();
         } else if (mb->isVBox()) {
@@ -2721,11 +2721,11 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     const Box* bottomVBox = bottom->vbox();
 
     if (topVBox && !bottomVBox) {
-        return std::max(topVBox->point(topVBox->bottomGap()), bottom->minTop());
+        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()), bottom->minTop());
     } else if (!topVBox && bottomVBox) {
-        return std::max(bottomVBox->point(bottomVBox->topGap()), top->minBottom());
+        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()), top->minBottom());
     } else if (topVBox && bottomVBox) {
-        return bottomVBox->point(bottomVBox->topGap()) + topVBox->point(topVBox->bottomGap());
+        return bottomVBox->absoluteFromSpatium(bottomVBox->topGap()) + topVBox->absoluteFromSpatium(topVBox->bottomGap());
     }
 
     if (top->staves().empty() || bottom->staves().empty()) {

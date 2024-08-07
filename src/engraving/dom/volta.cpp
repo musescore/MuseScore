@@ -357,17 +357,17 @@ PointF Volta::linePos(Grip grip, System** system) const
         } else if (segment->segmentType() & SegmentType::BarLineType && !isAtSystemStart) {
             x += segment->width();
         }
-        x += (isAtSystemStart ? 0.5 : -0.5) * point(lineWidth());
+        x += (isAtSystemStart ? 0.5 : -0.5) * absoluteFromSpatium(lineWidth());
     } else {
         if ((*system) && segment->tick() == (*system)->endTick()) {
             x += segment->staffShape(0).right();
-            x -= 0.5 * point(lineWidth());
+            x -= 0.5 * absoluteFromSpatium(lineWidth());
         } else if (segment->segmentType() & SegmentType::BarLineType) {
             BarLine* barLine = toBarLine(segment->elementAt(track()));
             if (barLine->barLineType() == BarLineType::END_REPEAT || barLine->barLineType() == BarLineType::END_START_REPEAT) {
                 x += symWidth(SymId::repeatDot) + style().styleMM(Sid::repeatBarlineDotSeparation);
             }
-            x += 0.5 * point(lineWidth());
+            x += 0.5 * absoluteFromSpatium(lineWidth());
         }
     }
 

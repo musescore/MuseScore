@@ -849,7 +849,7 @@ double System::minTop() const
 double System::minBottom() const
 {
     if (const Box* vb = vbox()) {
-        return vb->point(vb->bottomGap());
+        return vb->absoluteFromSpatium(vb->bottomGap());
     }
     staff_idx_t si = lastVisibleSysStaff();
     SysStaff* s = si == muse::nidx ? nullptr : staff(si);

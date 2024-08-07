@@ -88,7 +88,7 @@ public:
     Spatium bracketWidth() const { return m_bracketWidth; }
     void setBracketWidth(Spatium s) { m_bracketWidth = s; }
 
-    double point(Spatium sp) const override { return sp.val() * score()->style().spatium(); }
+    double absoluteFromSpatium(const Spatium& sp) const override { return sp.val() * score()->style().spatium(); }
 
     const Fraction& ratio() const { return m_ratio; }
     void setRatio(const Fraction& r) { m_ratio = r; }

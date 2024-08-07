@@ -77,7 +77,7 @@ public:
 
     Spatium lineWidth() const;
 
-    double point(Spatium sp) const override;
+    double absoluteFromSpatium(const Spatium& sp) const override;
 
 private:
     Segment* findNewAnchorSegment(const EditData& ed, const Segment* curSeg);

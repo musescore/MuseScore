@@ -636,7 +636,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
     // Note: manages colliding accidentals
     //
     {
-        double accNoteDist = item->point(ctx.conf().styleS(Sid::accidentalNoteDistance));
+        double accNoteDist = item->absoluteFromSpatium(ctx.conf().styleS(Sid::accidentalNoteDistance));
         double xAccidOffTop = topAccData->bbox().width() + accNoteDist;
         double xAccidOffBottom = bottomAccData->bbox().width() + accNoteDist;
 
@@ -1211,7 +1211,7 @@ void TLayout::layoutBend(const Bend* item, Bend::LayoutData* ldata)
     LD_CONDITION(item->note()->ldata()->isSetBbox());
 
     double spatium = item->spatium();
-    double lw = item->point(item->lineWidth());
+    double lw = item->absoluteFromSpatium(item->lineWidth());
 
     const Note::LayoutData* noteLD = item->note()->ldata();
     PointF notePos = noteLD->pos();
@@ -1340,7 +1340,7 @@ void TLayout::layoutHBox(const HBox* item, HBox::LayoutData* ldata, const Layout
 
         double x = parentVBox->leftMargin() * DPMM;
         double y = parentVBox->topMargin() * DPMM;
-        double w = item->point(item->boxWidth());
+        double w = item->absoluteFromSpatium(item->boxWidth());
         double h = parentVBox->ldata()->bbox().height() - (parentVBox->topMargin() + parentVBox->bottomMargin()) * DPMM;
         ldata->setPos(x, y);
         ldata->setBbox(0.0, 0.0, w, h);
@@ -1352,7 +1352,7 @@ void TLayout::layoutHBox(const HBox* item, HBox::LayoutData* ldata, const Layout
         if (!ldata->isSetPos()) {
             ldata->setPos(PointF());
         }
-        ldata->setBbox(0.0, 0.0, item->point(item->boxWidth()), parentSystem->ldata()->bbox().height());
+        ldata->setBbox(0.0, 0.0, item->absoluteFromSpatium(item->boxWidth()), parentSystem->ldata()->bbox().height());
     } else {
         ldata->setPos(PointF());
         ldata->setBbox(0.0, 0.0, 50, 50);
@@ -1376,7 +1376,7 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
 
         LD_CONDITION(parentSystem->ldata()->isSetBbox());
 
-        ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), item->point(item->boxHeight()));
+        ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), item->absoluteFromSpatium(item->boxHeight()));
     } else {
         ldata->setBbox(0.0, 0.0, 50, 50);
     }
@@ -1434,7 +1434,7 @@ void TLayout::layoutFBox(const FBox* item, EngravingItem::LayoutData* ldata, con
     LD_CONDITION(parentSystem->ldata()->isSetBbox());
 
     ldata->setPos(PointF());
-    ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), item->point(item->boxHeight()));
+    ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), item->absoluteFromSpatium(item->boxHeight()));
     layoutBaseBox(item, ldata, ctx);
 }
 
@@ -2896,7 +2896,7 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
 
     PointF anchor2SystPos = anchor2PagePos - system2PagePos;
     RectF r = RectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
-    double lw = item->point(item->lineWidth()) * .5;
+    double lw = item->absoluteFromSpatium(item->lineWidth()) * .5;
     ldata->setBbox(r.adjusted(-lw, -lw, lw, lw));
 
     const_cast<Glissando*>(item)->addLineAttachPoints();
@@ -2921,7 +2921,7 @@ void TLayout::layoutGlissandoSegment(GlissandoSegment* item, LayoutContext&)
         ldata->setMag(item->staff()->staffMag(item->tick()));
     }
     RectF r = RectF(0.0, 0.0, item->pos2().x(), item->pos2().y()).normalized();
-    double lw = item->point(item->lineWidth()) * .5;
+    double lw = item->absoluteFromSpatium(item->lineWidth()) * .5;
     item->setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
@@ -3279,7 +3279,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         if (!item->endText()->empty()) {
             r.unite(item->endText()->ldata()->bbox().translated(x + item->endText()->ldata()->bbox().width(), 0.0));
         }
-        double w  = item->point(ctx.conf().styleS(Sid::hairpinLineWidth));
+        double w  = item->absoluteFromSpatium(ctx.conf().styleS(Sid::hairpinLineWidth));
         item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
     }
 
@@ -5228,7 +5228,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
         }
 
         if (beam) {
-            y2 -= _up * beam->point(conf.styleS(Sid::beamWidth)) * .5 * beam->mag();
+            y2 -= _up * beam->absoluteFromSpatium(conf.styleS(Sid::beamWidth)) * .5 * beam->mag();
         }
     }
 
@@ -5770,7 +5770,7 @@ Shape TLayout::textLineBaseSegmentShape(const TextLineBaseSegment* item)
     if (!item->endText()->empty()) {
         shape.add(item->endText()->ldata()->bbox().translated(item->endText()->pos()), item->endText());
     }
-    double lw2 = 0.5 * item->point(item->lineWidth());
+    double lw2 = 0.5 * item->absoluteFromSpatium(item->lineWidth());
     bool isDottedLine = item->textLineBase()->lineStyle() == LineType::DOTTED;
     if (item->twoLines()) {     // hairpins
         shape.add(item->boundingBoxOfLine(item->points()[0], item->points()[1], lw2, isDottedLine), item);
@@ -5863,7 +5863,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
-        PointF widthCorrection(0.0, tl->point(tl->lineWidth()) / 2);
+        PointF widthCorrection(0.0, tl->absoluteFromSpatium(tl->lineWidth()) / 2);
         switch (text->align().vertical) {
         case AlignV::TOP:
             pp1 += widthCorrection;
@@ -5934,7 +5934,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->pointsRef()[1] = pp2;
         item->setLineLength(sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1)));
 
-        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->point(tl->lineWidth()) / 2,
+        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()) / 2,
                                                              tl->lineStyle() == LineType::DOTTED));
         return;
     }
@@ -5943,7 +5943,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 
     double x1 = std::min(0.0, pp2.x());
     double x2 = std::max(0.0, pp2.x());
-    const double y0 = -tl->point(tl->lineWidth());
+    const double y0 = -tl->absoluteFromSpatium(tl->lineWidth());
     double y1 = std::min(0.0, pp2.y()) + y0;
     double y2 = std::max(0.0, pp2.y()) - y0;
 
@@ -6072,7 +6072,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->point(tl->lineWidth()), checkAngle);
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()), checkAngle);
                 }
             }
         }
@@ -6095,7 +6095,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->point(tl->lineWidth()), checkAngle);
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->absoluteFromSpatium(tl->lineWidth()), checkAngle);
                 }
             }
 

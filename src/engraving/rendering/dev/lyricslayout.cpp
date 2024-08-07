@@ -235,7 +235,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         layoutDashes(item);
     }
 
-    double halfLineWidth = item->point(item->lineWidth());
+    double halfLineWidth = item->absoluteFromSpatium(item->lineWidth());
     RectF rect(PointF(), item->pos2());
     rect.adjust(0.0, -halfLineWidth, 0.0, halfLineWidth);
 

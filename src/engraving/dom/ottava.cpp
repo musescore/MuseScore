@@ -435,7 +435,7 @@ PointF Ottava::linePos(Grip grip, System** system) const
         x = std::min(x, followingCRseg->x() + followingCRseg->measure()->x());
     }
 
-    x -= 0.5 * point(lineWidth());
+    x -= 0.5 * absoluteFromSpatium(lineWidth());
 
     return PointF(x, 0.0);
 }

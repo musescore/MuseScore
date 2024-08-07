@@ -877,13 +877,13 @@ Spatium LineSegment::lineWidth() const
     return line()->lineWidth();
 }
 
-double LineSegment::point(Spatium sp) const
+double LineSegment::absoluteFromSpatium(const Spatium& sp) const
 {
     if (!line()) {
-        return EngravingItem::point(sp);
+        return EngravingItem::absoluteFromSpatium(sp);
     }
 
-    return line()->point(sp);
+    return line()->absoluteFromSpatium(sp);
 }
 
 void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2)

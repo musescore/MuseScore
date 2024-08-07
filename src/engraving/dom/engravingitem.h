@@ -403,7 +403,7 @@ public:
 
     bool isPrintable() const;
     bool isPlayable() const;
-    virtual double point(const Spatium sp) const { return sp.val() * spatium(); }
+    virtual double absoluteFromSpatium(const Spatium& sp) const { return sp.val() * spatium(); }
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
