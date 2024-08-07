@@ -29,6 +29,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/spanner.h"
+#include "engraving/dom/staff.h"
 
 using namespace mu::engraving;
 
@@ -98,39 +99,42 @@ void EngravingCompat::undoStaffTextExcludeFromPart(MasterScore* masterScore)
 
 void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
 {
+    auto migrateVoiceAssignmentAndPosition = [](EngravingItem* item) {
+        if (item->voice() != 0) {
+            item->setProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
+        }
+        // Migrate position on vocal staves (to match old default, which used to be below)
+        Staff* staff = item->staff();
+        Part* part = staff ? staff->part() : nullptr;
+        Instrument* instrument = part ? part->instrument() : nullptr;
+        if (instrument && instrument->isVocalInstrument()
+            && item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION)) {
+            item->setProperty(Pid::DIRECTION, DirectionV::DOWN);
+            item->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+        }
+    };
+
     for (Score* score : masterScore->scoreList()) {
-        for (Part* part : score->parts()) {
-            if (!part->instrument()->isVocalInstrument()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
                 continue;
             }
-            for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-                if (!mb->isMeasure()) {
+            for (Segment& segment : toMeasure(mb)->segments()) {
+                if (!segment.isChordRestType()) {
                     continue;
                 }
-                for (Segment& segment : toMeasure(mb)->segments()) {
-                    if (!segment.isChordRestType()) {
-                        continue;
-                    }
-                    for (EngravingItem* item : segment.annotations()) {
-                        if (!item || !item->hasVoiceAssignmentProperties()) {
-                            continue;
-                        }
-                        if (item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION)) {
-                            item->setProperty(Pid::DIRECTION, DirectionV::DOWN);
-                            item->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
-                        }
+                for (EngravingItem* item : segment.annotations()) {
+                    if (item && item->hasVoiceAssignmentProperties()) {
+                        migrateVoiceAssignmentAndPosition(item);
                     }
                 }
             }
         }
+
         for (auto pair : score->spanner()) {
             Spanner* spanner = pair.second;
-            if (!spanner->isHairpin()) {
-                continue;
-            }
-            if (spanner->getProperty(Pid::DIRECTION) == spanner->propertyDefault(Pid::DIRECTION)) {
-                spanner->setProperty(Pid::DIRECTION, DirectionV::DOWN);
-                spanner->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+            if (spanner->isHairpin()) {
+                migrateVoiceAssignmentAndPosition(spanner);
             }
         }
     }
