@@ -34,7 +34,6 @@ struct pw_context;
 struct pw_core;
 
 namespace muse::audio {
-
 class PwRegistry;
 class PwStream;
 
@@ -44,7 +43,8 @@ public:
     PwAudioDriver();
     ~PwAudioDriver();
 
-    bool connectedToPwServer() const {
+    bool connectedToPwServer() const
+    {
         return m_core != nullptr;
     }
 
@@ -86,9 +86,9 @@ private:
 
     Spec m_formatSpec;
 
-    pw_thread_loop *m_loop;
-    pw_context *m_context;
-    pw_core *m_core;
+    pw_thread_loop* m_loop;
+    pw_context* m_context;
+    pw_core* m_core;
 
     std::unique_ptr<PwRegistry> m_registry;
     std::unique_ptr<PwStream> m_stream;
@@ -96,4 +96,3 @@ private:
 }
 
 #endif // MUSE_AUDIO_LINUXAUDIODRIVER_H
-

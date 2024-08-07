@@ -748,7 +748,6 @@ PwAudioDriver::availableOutputDeviceBufferSizes() const
     return result;
 }
 
-
 unsigned int PwAudioDriver::outputDeviceSampleRate() const
 {
     return m_stream ? m_stream->spec().sampleRate : 0;
@@ -785,7 +784,7 @@ async::Notification PwAudioDriver::outputDeviceSampleRateChanged() const
 std::vector<unsigned int>
 PwAudioDriver::availableOutputDeviceSampleRates() const
 {
-    return { 
+    return {
         44100,
         48000,
         88200,

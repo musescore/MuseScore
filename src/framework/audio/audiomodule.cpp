@@ -127,6 +127,7 @@ std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
 #endif // Q_OS_LINUX && MUSE_MODULE_AUDIO_PW
     return std::make_shared<LinuxAudioDriver>();
 }
+
 #endif // Q_OS_LINUX || Q_OS_FREEBSD
 
 void AudioModule::registerExports()
