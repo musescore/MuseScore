@@ -311,7 +311,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
 
     item->setBeamSpacing(ctx.conf().styleB(Sid::useWideBeams) ? 4 : 3);
     item->setBeamDist((item->beamSpacing() / 4.0) * item->spatium() * item->mag());
-    item->setBeamWidth(item->point(ctx.conf().styleS(Sid::beamWidth)) * item->mag());
+    item->setBeamWidth(item->absoluteFromSpatium(ctx.conf().styleS(Sid::beamWidth)) * item->mag());
 
     item->setStartAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), startChord, ChordBeamAnchorType::Start));
     item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), endChord, ChordBeamAnchorType::End));

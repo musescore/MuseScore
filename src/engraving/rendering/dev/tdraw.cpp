@@ -883,7 +883,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
     }
 
     double spatium = item->spatium();
-    double lw = item->point(item->lineWidth());
+    double lw = item->absoluteFromSpatium(item->lineWidth());
 
     Pen pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
@@ -1478,7 +1478,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
     const Glissando* glissando = item->glissando();
 
     Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>()));
-    pen.setWidthF(item->point(item->lineWidth()));
+    pen.setWidthF(item->absoluteFromSpatium(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
 
@@ -1580,7 +1580,7 @@ void TDraw::draw(const StretchedBend* item, Painter* painter)
     const Color& color = item->curColor();
     const int textFlags = item->textFlags();
 
-    Pen pen(color, item->point(item->lineWidth()), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    Pen pen(color, item->absoluteFromSpatium(item->lineWidth()), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Brush(color));
     Font f = item->font(sp * MScore::pixelRatio);
@@ -1712,7 +1712,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     // color for line (text color comes from the text properties)
     Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    double lineWidth = tl->point(tl->lineWidth());
+    double lineWidth = tl->absoluteFromSpatium(tl->lineWidth());
 
     const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
     Pen pen(solidPen);
@@ -1823,7 +1823,7 @@ void TDraw::draw(const HairpinSegment* item, Painter* painter)
 
     if (item->drawCircledTip()) {
         Color color = item->curColor(item->hairpin()->visible(), item->hairpin()->lineColor());
-        double w = item->point(item->lineWidth());
+        double w = item->absoluteFromSpatium(item->lineWidth());
         if (item->staff()) {
             w *= item->staff()->staffMag(item->hairpin()->tick());
         }
@@ -2094,7 +2094,7 @@ void TDraw::draw(const LyricsLineSegment* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     Pen pen(item->lyricsLine()->lyrics()->curColor());
-    pen.setWidthF(item->point(item->lineWidth()));
+    pen.setWidthF(item->absoluteFromSpatium(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
     for (const LineF& dash : item->ldata()->dashes()) {
@@ -3163,7 +3163,7 @@ void TDraw::draw(const Tuplet* item, Painter* painter)
         painter->translate(-pos);
     }
     if (item->hasBracket()) {
-        Pen pen(color, item->point(item->bracketWidth()) * item->mag());
+        Pen pen(color, item->absoluteFromSpatium(item->bracketWidth()) * item->mag());
         pen.setJoinStyle(PenJoinStyle::MiterJoin);
         pen.setCapStyle(PenCapStyle::FlatCap);
         painter->setPen(pen);

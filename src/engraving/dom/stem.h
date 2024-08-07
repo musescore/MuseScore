@@ -68,10 +68,10 @@ public:
     Millimetre userLength() const { return m_userLength; }
     void setUserLength(Millimetre userLength) { m_userLength = userLength; }
 
-    double point(Spatium sp) const override { return sp.val() * score()->style().spatium(); }
+    double absoluteFromSpatium(const Spatium& sp) const override { return sp.val() * score()->style().spatium(); }
 
     Spatium lineWidth() const { return m_lineWidth; }
-    double lineWidthMag() const { return point(m_lineWidth) * mag(); }
+    double lineWidthMag() const { return absoluteFromSpatium(m_lineWidth) * mag(); }
     void setLineWidth(Spatium lineWidth) { m_lineWidth = lineWidth; }
 
     PointF flagPosition() const;

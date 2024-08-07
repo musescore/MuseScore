@@ -145,7 +145,7 @@ LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
 double LyricsLineSegment::baseLineShift() const
 {
     if (lyricsLine()->isEndMelisma()) {
-        return -0.5 * point(lineWidth());
+        return -0.5 * absoluteFromSpatium(lineWidth());
     }
 
     Lyrics* lyrics = lyricsLine()->lyrics();

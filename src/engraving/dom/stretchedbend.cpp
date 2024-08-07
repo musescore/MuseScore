@@ -542,7 +542,7 @@ RectF StretchedBend::calculateBoundingRect() const
         }
     }
 
-    double lw = point(lineWidth());
+    double lw = absoluteFromSpatium(lineWidth());
     bRect.adjust(-lw, -lw, lw, lw);
 
     return bRect;
