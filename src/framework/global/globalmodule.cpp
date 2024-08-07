@@ -59,7 +59,7 @@
 #endif
 
 #ifdef Q_OS_WIN
-#include <windows.h>
+#include "platform/win/waitabletimer.h"
 #endif
 
 #include "log.h"
@@ -239,12 +239,19 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
     m_systemInfo->init();
 
+    m_endTimePeriod = false;
+
 #ifdef Q_OS_WIN
-    // Improves the accuracy of Sleep() on Windows
-    // Without it, errors up to 15 ms are possible, which is critical for the audio thread
-    // and can significantly degrade sound quality
-    // However, this approach may result in higher CPU usage as a trade-off
-    timeBeginPeriod(1);
+    WaitableTimer timer;
+    if (m_configuration->highResolutionTimers() || !timer.init()) {
+        // Improves the accuracy of Sleep() on Windows
+        // Without it, errors up to 15 ms are possible, which is critical for the audio thread
+        // and can significantly degrade sound quality
+        // However, this approach may result in higher CPU usage as a trade-off
+        LOGI() << "Use timeBeginPeriod(1)";
+        timeBeginPeriod(1);
+        m_endTimePeriod = true;
+    }
 #endif
 }
 
@@ -253,7 +260,9 @@ void GlobalModule::onDeinit()
     invokeQueuedCalls();
 
 #ifdef Q_OS_WIN
-    timeEndPeriod(1);
+    if (m_endTimePeriod) {
+        timeEndPeriod(1);
+    }
 #endif
 }
 
