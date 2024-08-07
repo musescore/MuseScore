@@ -144,7 +144,7 @@ void PopupView::init()
     //connect(m_window, &IPopupWindow::aboutToClose, this, &PopupView::aboutToClose);
     connect(m_window, SIGNAL(aboutToClose(QQuickCloseEvent*)), this, SIGNAL(aboutToClose(QQuickCloseEvent*)));
 
-    connect(this, &PopupView::isContentReadyChanged, this, [this](){
+    connect(this, &PopupView::isContentReadyChanged, this, [this]() {
         if (isContentReady() && m_shouldOpenOnReady) {
             doOpen();
         }
@@ -168,7 +168,7 @@ void PopupView::initCloseController()
     m_closeController->setParentItem(parentItem());
     m_closeController->setWindow(window());
     m_closeController->setPopupHasFocus(!(m_openPolicies & OpenPolicy::NoActivateFocus));
-    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicies & CloseOnPressOutsideParent);
+    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicies & ClosePolicy::CloseOnPressOutsideParent);
 
     m_closeController->closeNotification().onNotify(this, [this]() {
         close(true);
@@ -196,7 +196,7 @@ QWindow* PopupView::qWindow() const
 
 void PopupView::open()
 {
-    if ((m_openPolicies & OpenOnContentReady) && !m_isContentReady) {
+    if ((m_openPolicies & OpenPolicy::OpenOnContentReady) && !m_isContentReady) {
         m_shouldOpenOnReady = true;
         return;
     }
@@ -482,7 +482,7 @@ void PopupView::setClosePolicies(ClosePolicies closePolicies)
     m_closePolicies = closePolicies;
 
     if (m_closeController) {
-        m_closeController->setIsCloseOnPressOutsideParent(closePolicies & CloseOnPressOutsideParent);
+        m_closeController->setIsCloseOnPressOutsideParent(closePolicies & ClosePolicy::CloseOnPressOutsideParent);
     }
 
     emit closePoliciesChanged(closePolicies);
@@ -747,20 +747,20 @@ void PopupView::updateGeometry()
     bool canFitAbove = viewRect.height() < parentTopLeft.y();
     bool canFitBelow = viewRect.bottom() < anchorRect.bottom();
 
-    if (canFitAbove && (placement() == Above || !canFitBelow)) {
-        // place above the parent
-        qreal newY = parentTopLeft.y() - viewRect.height();
-        movePos(m_globalPos.x(), newY);
+    if (placement() == Placement::PreferAbove && canFitAbove) {
+        movePos(m_globalPos.x(), parentTopLeft.y() - viewRect.height());
         setOpensUpward(true);
-    } else {
-        // place below the parent
+    } else if (placement() == Placement::PreferBelow && canFitBelow) {
         movePos(m_globalPos.x(), parentTopLeft.y() + parent->height());
-
-        if (!canFitBelow) {
-            // adjust if below placement goes out of bounds
-            movePos(m_globalPos.x(), anchorRect.bottom() - viewRect.height());
+    } else if (!canFitBelow) {
+        if (canFitAbove) {
+            // move to the top of the parent
+            movePos(m_globalPos.x(), parentTopLeft.y() - viewRect.height());
+            setOpensUpward(true);
+        } else {
+            // move to the right of the parent and move to top to an area that doesn't fit
+            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
         }
-        setOpensUpward(false);
     }
 
     if (viewRect.left() < anchorRect.left()) {
