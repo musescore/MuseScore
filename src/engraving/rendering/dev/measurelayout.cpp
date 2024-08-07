@@ -1201,7 +1201,12 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
         s2 = measure->findSegment(SegmentType::EndBarLine, measure->endTick());
     }
 
-    double x1 = s1 ? s1->x() + s1->minRight() : 0;
+    double x1 = 0.0;
+    while (s1) {
+        x1 = std::max(x1, s1->x() + s1->minRight());
+        s1 = s1->prevActive();
+    }
+
     double x2 = s2 ? s2->x() - s2->minLeft() : measure->width();
 
     bool headerException = measure->header() && firstCrSeg->prev() && !firstCrSeg->prev()->isStartRepeatBarLineType()
@@ -2356,10 +2361,12 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                     m->setSqueezableSpace(m->squeezableSpace() - (ww - w));
                     double d = (ww - w) / n;
                     double xx = ps->x();
+                    bool foundAtLeastOneCrSegment = false;
                     for (Segment* ss = ps; ss != s;) {
                         Segment* ns1 = ss->nextActive();
                         double ww1 = ss->width(LD_ACCESS::BAD);
                         if (ss->isChordRestType()) {
+                            foundAtLeastOneCrSegment = true;
                             ww1 += d;
                             ss->setWidth(ww1);
                         }
@@ -2367,7 +2374,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                         ns1->mutldata()->setPosX(xx);
                         ss = ns1;
                     }
-                    if (s->isChordRestType() || ps == s) {
+                    if (s->isChordRestType() || ps == s || !foundAtLeastOneCrSegment) {
                         w += d;
                     }
                     x = xx;
