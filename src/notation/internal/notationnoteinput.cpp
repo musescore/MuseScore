@@ -455,12 +455,6 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
 
     mu::engraving::InputState& inputState = score()->inputState();
     inputState.setVoice(voiceIndex);
-
-    if (inputState.segment()) {
-        mu::engraving::Segment* segment = inputState.segment()->measure()->first(mu::engraving::SegmentType::ChordRest);
-        inputState.setSegment(segment);
-    }
-
     notifyAboutStateChanged();
 }
 
