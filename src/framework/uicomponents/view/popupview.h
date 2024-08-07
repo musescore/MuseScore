@@ -100,7 +100,7 @@ public:
     explicit PopupView(QQuickItem* parent = nullptr);
     ~PopupView() override;
 
-    enum OpenPolicy {
+    enum class OpenPolicy {
         Default = 0x00000000,
         NoActivateFocus = 0x00000001,
         OpenOnContentReady = 0x00000002
@@ -108,16 +108,17 @@ public:
     Q_DECLARE_FLAGS(OpenPolicies, OpenPolicy)
     Q_FLAG(OpenPolicies)
 
-    enum ClosePolicy {
+    enum class ClosePolicy {
         NoAutoClose = 0x00000000,
         CloseOnPressOutsideParent = 0x00000001,
     };
     Q_DECLARE_FLAGS(ClosePolicies, ClosePolicy)
     Q_FLAG(ClosePolicies)
 
-    enum Placement {
-        Below,
-        Above
+    enum class Placement {
+        Default,
+        PreferBelow,
+        PreferAbove
     };
     Q_ENUM(Placement)
 
@@ -291,7 +292,7 @@ protected:
 
     ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
 
-    Placement m_placement = { Placement::Below };
+    Placement m_placement = { Placement::Default };
 
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
