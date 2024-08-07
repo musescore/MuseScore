@@ -427,9 +427,6 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
-constexpr SegmentType SPANNER_ANCHOR_SEG_TYPE = SegmentType::ChordRest | SegmentType::BeginBarLine | SegmentType::BarLine
-                                                | SegmentType::EndBarLine;
-
 //---------------------------------------------------------
 //   FontStyle
 //---------------------------------------------------------

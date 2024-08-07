@@ -320,15 +320,15 @@ Segment* Segment::next1(SegmentType types) const
 
 Segment* Segment::next1ChordRestOrTimeTick() const
 {
-    Segment* nextSeg = next1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* nextSeg = next1(CHORD_REST_OR_TIME_TICK_TYPE);
     while (nextSeg && nextSeg->tick() == tick()) {
-        nextSeg = nextSeg->next1(SegmentType::ChordRest | SegmentType::TimeTick);
+        nextSeg = nextSeg->next1(CHORD_REST_OR_TIME_TICK_TYPE);
     }
     if (!nextSeg) {
         return nullptr;
     }
 
-    Segment* nextNextSeg = nextSeg->next1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* nextNextSeg = nextSeg->next1(CHORD_REST_OR_TIME_TICK_TYPE);
     if (!nextNextSeg) {
         return nextSeg;
     }
@@ -435,15 +435,15 @@ Segment* Segment::prev1() const
 
 Segment* Segment::prev1ChordRestOrTimeTick() const
 {
-    Segment* prevSeg = prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* prevSeg = prev1(CHORD_REST_OR_TIME_TICK_TYPE);
     while (prevSeg && prevSeg->tick() == tick()) {
-        prevSeg = prevSeg->prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+        prevSeg = prevSeg->prev1(CHORD_REST_OR_TIME_TICK_TYPE);
     }
     if (!prevSeg) {
         return nullptr;
     }
 
-    Segment* prevPrevSeg = prevSeg->prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* prevPrevSeg = prevSeg->prev1(CHORD_REST_OR_TIME_TICK_TYPE);
     if (!prevPrevSeg) {
         return prevSeg;
     }

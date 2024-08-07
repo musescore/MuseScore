@@ -299,7 +299,7 @@ Segment* nextSeg1(Segment* seg)
 {
     Segment* nextSeg = seg;
     while (nextSeg && nextSeg->rtick() == seg->rtick()) {
-        nextSeg = nextSeg->next1(SegmentType::ChordRest | SegmentType::TimeTick);
+        nextSeg = nextSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
     }
     return nextSeg;
 }
@@ -312,7 +312,7 @@ Segment* prevSeg1(Segment* seg)
 {
     Segment* prevSeg = seg;
     while (prevSeg && prevSeg->rtick() == seg->rtick()) {
-        prevSeg = prevSeg->prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+        prevSeg = prevSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
     }
     return prevSeg;
 }
