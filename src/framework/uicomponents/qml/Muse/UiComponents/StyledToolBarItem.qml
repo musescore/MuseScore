@@ -36,7 +36,7 @@ FlatButton {
     width: (Boolean(itemData) && Boolean(itemData.showTitle)) ? implicitWidth : 32
     height: (Boolean(itemData) && Boolean(itemData.showTitle)) ? implicitHeight : 32
 
-    accentButton: Boolean(itemData) && (itemData.checked || menuLoader.isMenuOpened)
+    accentButton: !transparent && Boolean(itemData) && (itemData.checked || menuLoader.isMenuOpened)
 
     text: Boolean(itemData) && itemData.showTitle ? itemData.title : ""
 
