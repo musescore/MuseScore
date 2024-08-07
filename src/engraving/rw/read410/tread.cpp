@@ -767,14 +767,20 @@ bool TRead::readProperties(StaffTextBase* t, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
 {
+    int mscVersion = ctx.score()->mscVersion();
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "subtype") {
             d->setDynamicType(e.readText());
         } else if (tag == "velocity") {
             d->setVelocity(e.readInt());
-        } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF));
+        } else if (tag == "dynType") { // obsolete
+            if (mscVersion < 440) {
+                d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+            } else {
+                e.skipCurrentElement();
+            }
         } else if (tag == "veloChange") {
             d->setChangeInVelocity(e.readInt());
         } else if (tag == "veloChangeSpeed") {
@@ -3047,6 +3053,8 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
 {
     h->eraseSpannerSegments();
 
+    int mscVersion = ctx.score()->mscVersion();
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
@@ -3056,8 +3064,12 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             h->setHairpinCircledTip(e.readInt());
         } else if (tag == "veloChange") {
             h->setVeloChange(e.readInt());
-        } else if (tag == "dynType") {
-            h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF));
+        } else if (tag == "dynType") { // obsolete
+            if (mscVersion < 440) {
+                h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+            } else {
+                e.skipCurrentElement();
+            }
         } else if (tag == "useTextLine") {        // obsolete
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {

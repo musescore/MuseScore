@@ -85,8 +85,7 @@ public:
     void setVelocity(int v) { m_velocity = v; }
     int velocity() const;
     DynamicRange dynRange() const { return m_dynRange; }
-    void setDynRange(DynamicRange t) { m_dynRange = t; }
-    void undoSetDynRange(DynamicRange t);
+    void setDynRange(DynamicRange t);
 
     int changeInVelocity() const;
     void setChangeInVelocity(int val);

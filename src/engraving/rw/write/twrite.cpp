@@ -1119,7 +1119,6 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperty(item, xml, Pid::DYNAMIC_TYPE);
     writeProperty(item, xml, Pid::VELOCITY);
-    writeProperty(item, xml, Pid::DYNAMIC_RANGE);
     writeProperty(item, xml, Pid::AVOID_BARLINES);
     writeProperty(item, xml, Pid::DYNAMICS_SIZE);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
@@ -1597,7 +1596,6 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("subtype", int(item->hairpinType()));
     writeProperty(item, xml, Pid::VELO_CHANGE);
     writeProperty(item, xml, Pid::HAIRPIN_CIRCLEDTIP);
-    writeProperty(item, xml, Pid::DYNAMIC_RANGE);
     writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
     writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
 
