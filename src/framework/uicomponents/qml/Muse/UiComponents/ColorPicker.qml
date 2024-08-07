@@ -35,7 +35,7 @@ Rectangle {
 
     signal newColorSelected(var newColor)
 
-    height: 30
+    implicitHeight: 30
     width: parent.width
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
