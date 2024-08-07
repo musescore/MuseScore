@@ -27,6 +27,8 @@
 #include <QTimer>
 #include <QtMath>
 
+#include "async/async.h"
+
 #include "commonscene/commonscenetypes.h"
 #include "abstractelementpopupmodel.h"
 
@@ -963,9 +965,9 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
     }
 
     if (!actionCode.empty()) {
-        //! NOTE: call with delay because the action can open dialogs,
-        //! but we need to finish events processing first
-        QTimer::singleShot(100, [this, actionCode]() {
+        muse::async::Async::call(this, [this, actionCode]() {
+            qApp->processEvents();
+
             dispatcher()->dispatch(actionCode, ActionData::make_arg1<PointF>(m_logicalBeginPoint));
         });
     }
