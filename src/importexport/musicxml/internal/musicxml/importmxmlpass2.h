@@ -349,6 +349,7 @@ private:
     void measChordNote(/*, const MxmlPhase2Note note, ChordRest& currChord */);
     void measChordFlush(/*, ChordRest& currChord */);
     void measure(const String& partId, const Fraction time);
+    void measureLayout(Measure* measure);
     void setMeasureRepeats(const staff_idx_t scoreRelStaff, Measure* measure);
     void attributes(const String& partId, Measure* measure, const Fraction& tick);
     void measureStyle(Measure* measure);

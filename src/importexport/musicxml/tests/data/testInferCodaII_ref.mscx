@@ -169,6 +169,9 @@
           <text>James M</text>
           </Text>
         </VBox>
+      <HBox>
+        <width>5</width>
+        </HBox>
       <Measure>
         <voice>
           <Clef>
