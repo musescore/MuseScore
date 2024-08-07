@@ -80,6 +80,9 @@ int main(int argc, char** argv)
     signal(SIGFPE, crashCallback);
 #endif
 
+    // Fix for bug https://github.com/musescore/MuseScore/issues/18701
+    qunsetenv("PIPEWIRE_QUANTUM");
+
     // ====================================================
     // Setup global Qt application variables
     // ====================================================
