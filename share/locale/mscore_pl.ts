@@ -5699,12 +5699,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="88"/>
         <source>Bracket type</source>
-        <translation>Typ klamry</translation>
+        <translation>Typ nawiasów</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="95"/>
         <source>Bracket type:</source>
-        <translation>Typ klamry:</translation>
+        <translation>Typ nawiasów:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="111"/>
@@ -5714,12 +5714,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="124"/>
         <source>Reset &apos;Small&apos; value</source>
-        <translation>Resetuj wartość &quot;Mała&quot;</translation>
+        <translation>Resetuj wartość &quot;Mały&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="137"/>
         <source>Reset &apos;Bracket type&apos; value</source>
-        <translation>Resetuj wartość &quot;Typ klamry&quot;</translation>
+        <translation>Resetuj wartość &quot;Typ nawiasów&quot;</translation>
     </message>
 </context>
 <context>
@@ -12518,13 +12518,13 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../mscore/editstyle.cpp" line="435"/>
         <location filename="../../mscore/editstyle.cpp" line="801"/>
         <source>Brackets</source>
-        <translation>klamry</translation>
+        <translation>nawiasy kwadratowe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="436"/>
         <location filename="../../mscore/editstyle.cpp" line="802"/>
         <source>Parentheses</source>
-        <translation>nawiasy</translation>
+        <translation>nawiasy okrągłe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="439"/>
@@ -13016,17 +13016,17 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="1055"/>
         <source>Parenthesis</source>
-        <translation>nawias</translation>
+        <translation>nawiasy okrągłe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="1056"/>
         <source>Bracket</source>
-        <translation>klamra</translation>
+        <translation>nawiasy kwadratowe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="1057"/>
         <source>Brace</source>
-        <translation>Akolada</translation>
+        <translation>nawiasy klamrowe</translation>
     </message>
 </context>
 <context>
@@ -26726,22 +26726,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3733"/>
         <source>Add Brackets to Accidental</source>
-        <translation>Dodaj klamry do znaku chromatycznego</translation>
+        <translation>Dodaj nawiasy kwadratowe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3734"/>
         <source>Add brackets to accidental</source>
-        <translation>Dodaj klamry do znaku chromatycznego</translation>
+        <translation>Dodaj nawiasy kwadratowe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3743"/>
         <source>Add Parentheses to Element</source>
-        <translation>Dodaj nawiasy do elementu</translation>
+        <translation>Dodaj nawiasy okrągłe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3744"/>
         <source>Add parentheses to element</source>
-        <translation>Dodaj nawiasy do elementu</translation>
+        <translation>Dodaj nawiasy okrągłe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3763"/>
@@ -29233,12 +29233,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3753"/>
         <source>Add Braces to Element</source>
-        <translation>Dodaj klamry do elementu</translation>
+        <translation>Dodaj nawiasy klamrowe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3754"/>
         <source>Add Braces to element</source>
-        <translation>Dodaj klamry do elementu</translation>
+        <translation>Dodaj nawiasy klamrowe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3802"/>
@@ -34273,7 +34273,7 @@ Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne 
     <message>
         <location filename="../../libmscore/sym.cpp" line="5267"/>
         <source>Turn with slash</source>
-        <translation>Obiegnik dolny</translation>
+        <translation>Obiegnik dolny (przekreślony)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5565"/>
