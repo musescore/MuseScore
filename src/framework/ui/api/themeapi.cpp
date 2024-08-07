@@ -395,7 +395,6 @@ void ThemeApi::setupUiFonts()
 
     QString family = QString::fromStdString(configuration()->fontFamily());
     for (QFont* font : fonts.keys()) {
-
         int size = configuration()->fontSize(fonts[font].sizeType);
         QFont::Weight weight = fonts[font].weight;
 
