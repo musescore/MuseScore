@@ -1062,6 +1062,11 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
     tuplet->setBaseLen(td);
     Fraction f(normalNotes, td.fraction().denominator());
     f.reduce();
+    if (!f.isValid()) {
+        LOGD("MusicXML::import: tuplet stop but note values too small");
+        tuplet = nullptr;
+        return;
+    }
     tuplet->setTicks(f);
     // TODO determine usefulness of following check
     int totalDuration = 0;
