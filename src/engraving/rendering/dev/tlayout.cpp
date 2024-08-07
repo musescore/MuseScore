@@ -5221,12 +5221,14 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
             ldata->setPosY(note->ldata()->pos().y());
         }
 
-        if (item->chord()->hook() && !item->chord()->beam()) {
-            y2 += item->chord()->hook()->smuflAnchor().y();
+        const Hook* hook = item->chord()->hook();
+        const Beam* beam = item->chord()->beam();
+        if (hook && !beam) {
+            y2 += hook->smuflAnchor().y();
         }
 
-        if (item->chord()->beam()) {
-            y2 -= _up * item->point(conf.styleS(Sid::beamWidth)) * .5 * item->chord()->beam()->mag();
+        if (beam) {
+            y2 -= _up * beam->point(conf.styleS(Sid::beamWidth)) * .5 * beam->mag();
         }
     }
 
