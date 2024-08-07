@@ -474,6 +474,10 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
         sys = foundSystems[0];
     }
 
+    if (!sys) {
+        return nullptr;
+    }
+
     // Restrict searching segment to the correct staff
     pos.setY(sys->staffCanvasYpage(oldStaffIndex));
 
