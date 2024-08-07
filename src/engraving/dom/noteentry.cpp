@@ -25,6 +25,7 @@
 
 #include "accidental.h"
 #include "chord.h"
+#include "chordline.h"
 #include "drumset.h"
 #include "excerpt.h"
 #include "factory.h"
@@ -617,6 +618,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
 
     Note* firstTiedNote = 0;
     Note* lastTiedNote = note;
+    ChordLine* chordLine = nullptr;
     if (replace) {
         std::vector<Note*> notes = chord->notes();
         // break all ties into current chord
@@ -625,6 +627,14 @@ Ret Score::repitchNote(const Position& p, bool replace)
         for (Note* n : notes) {
             if (n->tieBack()) {
                 undoRemoveElement(n->tieBack());
+            }
+        }
+        // Keep first chordline only
+        chordLine = chord->chordLine() ? chord->chordLine()->clone() : nullptr;
+        std::vector<EngravingItem*> chordEls = chord->el();
+        for (EngravingItem* e : chordEls) {
+            if (e->isChordLine()) {
+                undoRemoveElement(e);
             }
         }
         // for single note chords only, preserve ties by changing pitch of all forward notes
@@ -659,6 +669,12 @@ Ret Score::repitchNote(const Position& p, bool replace)
     }
     // add new note to chord
     undoAddElement(note);
+
+    if (chordLine) {
+        chordLine->setNote(note);
+        undoAddElement(chordLine);
+    }
+
     bool forceAccidental = false;
     if (m_is.accidentalType() != AccidentalType::NONE) {
         NoteVal nval2 = noteValForPosition(p, AccidentalType::NONE, error);
