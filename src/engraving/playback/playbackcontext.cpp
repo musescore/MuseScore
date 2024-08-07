@@ -54,6 +54,17 @@ static bool soundFlagPlayable(const SoundFlag* flag)
     return false;
 }
 
+static mu::engraving::DynamicType findEndDynamicType(const Hairpin* hairpin)
+{
+    const mu::engraving::DynamicType textDynamicType = hairpin->dynamicTypeTo();
+    if (textDynamicType != mu::engraving::DynamicType::OTHER) {
+        return textDynamicType;
+    }
+
+    const Dynamic* snappedDynamic = hairpin->dynamicSnappedAfter();
+    return snappedDynamic ? snappedDynamic->dynamicType() : mu::engraving::DynamicType::OTHER;
+}
+
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const
 {
     auto dynamicsIt = m_dynamicsByTrack.find(trackIdx);
@@ -357,7 +368,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
 
-        if (!spanner->isHairpin() || !spanner->playSpanner()) {
+        if (!spanner->isHairpin() || !spanner->playSpanner() || spanner->segmentsEmpty()) {
             continue;
         }
 
@@ -368,52 +379,52 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
         int spannerFrom = spanner->tick().ticks();
         int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
 
-        int spannerDurationTicks = spannerTo - spannerFrom;
-
-        if (spannerDurationTicks <= 0) {
-            continue;
-        }
-
         const Hairpin* hairpin = toHairpin(spanner);
         const track_idx_t trackIdx = hairpin->track();
 
         {
-            Segment* startSegment = hairpin->startSegment();
-            Dynamic* startDynamic = startSegment
-                                    ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
-                                    : nullptr;
+            const Segment* startSegment = hairpin->startSegment();
+            const Dynamic* startDynamic = startSegment
+                                          ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
+                                          : nullptr;
             if (startDynamic) {
-                if (startDynamic->dynamicType() != DynamicType::OTHER
-                    && !isOrdinaryDynamicType(startDynamic->dynamicType())
-                    && !isSingleNoteDynamicType(startDynamic->dynamicType())) {
+                const DynamicType dynamicType = startDynamic->dynamicType();
+
+                if (dynamicType != DynamicType::OTHER
+                    && !isOrdinaryDynamicType(dynamicType)
+                    && !isSingleNoteDynamicType(dynamicType)) {
                     // The hairpin starts with a transition dynamic; we should start the hairpin after the transition is complete
                     // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
                     spannerFrom += startDynamic->velocityChangeLength().ticks();
-
-                    spannerDurationTicks = spannerTo - spannerFrom;
-
-                    if (spannerDurationTicks <= 0) {
-                        continue;
-                    }
                 }
             }
         }
 
-        // First, check if hairpin has its own start/end dynamics in the begin/end text
         const DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
-        const DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
+        const DynamicType dynamicTypeTo = findEndDynamicType(hairpin);
 
-        // If it doesn't:
-        // - for the start level, use the currently-applicable level at the start tick of the hairpin
-        // - for the end level, check if there is a dynamic marking at the end of the hairpin
+        const dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo);
+        const bool hasNominalLevelTo = nominalLevelTo != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+
+        if (hasNominalLevelTo) {
+            const dynamic_level_t dynamicLevelAtEndTick = nominalDynamicLevel(trackIdx, spannerTo + tickPositionOffset);
+            if (dynamicLevelAtEndTick != nominalLevelTo) {
+                // Fix overlap with the following dynamic by subtracting a small fraction
+                spannerTo -= Fraction::eps().ticks();
+            }
+        }
+
+        const int spannerDurationTicks = spannerTo - spannerFrom;
+        if (spannerDurationTicks <= 0) {
+            continue;
+        }
+
+        // For the start level, use the currently-applicable level at the start tick of the hairpin
         const dynamic_level_t levelFrom
             = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(trackIdx, spannerFrom + tickPositionOffset));
-        const dynamic_level_t nominalLevelTo
-            = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(trackIdx, spannerTo + tickPositionOffset));
 
         // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs decresc.)
         const bool isCrescendo = hairpin->isCrescendo();
-        const bool hasNominalLevelTo = nominalLevelTo != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
         const bool useNominalLevelTo = hasNominalLevelTo && (isCrescendo
                                                              ? nominalLevelTo > levelFrom
                                                              : nominalLevelTo < levelFrom);
@@ -570,7 +581,7 @@ void PlaybackContext::applyDynamic(const EngravingItem* dynamicItem, const dynam
         }
 
         DynamicInfo& dynamic = m_dynamicsByTrack[trackIdx][positionTick];
-        if (dynamic.priority < dynamicPriority) {
+        if (dynamic.priority <= dynamicPriority) {
             dynamic.level = dynamicLevel;
             dynamic.priority = dynamicPriority;
         }
