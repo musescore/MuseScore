@@ -1,4 +1,4 @@
-name: Collect playlists for Home->Learn page
+name: 'Update: Learn playlists'
 
 on:
   workflow_dispatch:

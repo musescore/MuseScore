@@ -1,4 +1,4 @@
-name: CI_codestyle
+name: 'Check: Codestyle'
 
 on:
   pull_request:

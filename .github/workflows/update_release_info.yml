@@ -1,4 +1,4 @@
-name: Collect release info
+name: 'Update: Release Info'
 
 on:
   workflow_dispatch:

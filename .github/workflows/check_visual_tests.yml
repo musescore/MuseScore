@@ -1,4 +1,4 @@
-name: CI_vtests
+name: 'Check: Visual Tests (vtest)'
 
 on:
   pull_request:

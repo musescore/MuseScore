@@ -1,4 +1,4 @@
-name: CI_Linux_ARM MU4
+name: 'Build: Linux ARM'
 
 on:
   schedule:

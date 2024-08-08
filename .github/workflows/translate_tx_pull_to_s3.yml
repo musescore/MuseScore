@@ -1,4 +1,4 @@
-name: Pull translations from Transifex and upload to S3
+name: 'Translate: tx pull translations to S3'
 
 on:
   schedule:

@@ -1,4 +1,4 @@
-name: CI_Backend
+name: 'Build: Backend'
 
 on:
   schedule:
