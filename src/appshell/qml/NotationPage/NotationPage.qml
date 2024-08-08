@@ -345,6 +345,11 @@ DockPage {
                     mixerPanel.toolbarComponent = toolbarComponent
                 }
 
+                Component.onDestruction: {
+                    mixerPanel.contextMenuModel = null
+                    mixerPanel.toolbarComponent = null
+                }
+
                 onResizeRequested: function(newWidth, newHeight) {
                     mixerPanel.resize(newWidth, newHeight)
                 }
