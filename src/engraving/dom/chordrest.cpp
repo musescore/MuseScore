@@ -995,6 +995,12 @@ EngravingItem* ChordRest::prevElement()
         break;
     }
     }
+
+    Tuplet* tuplet = this->tuplet();
+    if (tuplet && this == tuplet->elements().front()) {
+        return tuplet;
+    }
+
     staff_idx_t staffId = e->staffIdx();
     EngravingItem* prevItem = segment()->prevElement(staffId);
     if (prevItem && prevItem->isNote()) {

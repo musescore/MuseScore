@@ -28,6 +28,7 @@
 #include "durationelement.h"
 #include "property.h"
 #include "types.h"
+#include "note.h"
 
 namespace mu::engraving {
 class Text;
@@ -158,6 +159,10 @@ public:
 
     PointF bracketL[4];
     PointF bracketR[3];
+
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+
 private:
 
     friend class DurationElement;

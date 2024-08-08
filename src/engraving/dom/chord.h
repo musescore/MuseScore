@@ -283,6 +283,8 @@ public:
 
     String accessibleExtraInfo() const override;
 
+    Note* firstNoteOfChord();
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
