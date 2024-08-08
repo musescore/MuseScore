@@ -376,6 +376,11 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
             continue;
         }
 
+        const Staff* staff = spanner->staff();
+        if (staff && !staff->isPrimaryStaff()) {
+            continue; // ignore linked staves
+        }
+
         int spannerFrom = spanner->tick().ticks();
         int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
 
