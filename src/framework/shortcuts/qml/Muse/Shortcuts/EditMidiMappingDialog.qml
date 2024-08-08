@@ -38,12 +38,23 @@ StyledDialogView {
 
     signal mapToEventRequested(var event)
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+                name: "EditMidiMappingDialog"
+                section: root.navigationSection
+                order: 1
+                direction: NavigationPanel.Horizontal
+    }
+
     function startEdit(action) {
         model.load(action.mappedType, action.mappedValue)
         actionNameLabel.text = action.title
         actionIconLabel.iconCode = action.icon
 
         open()
+    }
+
+    onNavigationActivateRequested: {
+        mappingField.navigation.requestActive()
     }
 
 
@@ -105,6 +116,9 @@ StyledDialogView {
 
                     //: The app is waiting for the user to trigger a valid MIDI remote event
                     hint: qsTrc("shortcuts", "Waiting…")
+
+                    navigation.panel: root.navigationPanel
+                    navigation.order: 1
                 }
             }
 
@@ -112,6 +126,8 @@ StyledDialogView {
                 width: parent.width
 
                 buttons: [ ButtonBoxModel.Cancel ]
+
+                navigationPanel.section: root.navigationSection
 
                 FlatButton {
                     text: qsTrc("global", "Add")
@@ -131,6 +147,13 @@ StyledDialogView {
                         root.reject()
                     }
                 }
+            }
+
+            Keys.onShortcutOverride: function(event) {
+                if(event.key === Qt.Key_Tab) {
+                    focus = false
+                }
+                event.accepted = event.key !== Qt.Key_Tab
             }
         }
     }
