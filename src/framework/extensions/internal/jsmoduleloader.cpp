@@ -29,8 +29,8 @@
 
 using namespace muse::extensions;
 
-JsModuleLoader::JsModuleLoader(QObject* parent)
-    : QObject(parent)
+JsModuleLoader::JsModuleLoader(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : QObject(parent), muse::Injectable(iocCtx)
 {
 }
 

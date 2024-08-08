@@ -116,7 +116,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -151,7 +151,7 @@ TEST_F(Engraving_PlaybackModelTests, Two_Ending_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -210,7 +210,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -272,7 +272,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -320,7 +320,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Fine)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -356,7 +356,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Coda)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -391,7 +391,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Fine)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -426,7 +426,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Coda)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -465,7 +465,7 @@ TEST_F(Engraving_PlaybackModelTests, Spanners)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -540,7 +540,7 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -628,7 +628,7 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -689,7 +689,7 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -763,7 +763,7 @@ TEST_F(Engraving_PlaybackModelTests, Single_Measure_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -800,7 +800,7 @@ TEST_F(Engraving_PlaybackModelTests, Multi_Measure_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -837,7 +837,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     int expectedChangedEventsCount = 24;
 
     // [GIVEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -882,7 +882,7 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -1008,7 +1008,7 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_4_4)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -1043,7 +1043,7 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -1090,7 +1090,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     mpe::timestamp_t firstNoteTimestamp = 0;
 
     // [GIVEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -1155,7 +1155,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     ASSERT_TRUE(thirdChord->notes().size() == expectedNoteCount);
 
     // [GIVEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -1242,7 +1242,7 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 

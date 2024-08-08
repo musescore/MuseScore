@@ -32,13 +32,13 @@
 #include "global/iapplication.h"
 
 namespace muse::workspace {
-class Workspace : public IWorkspace, public async::Asyncable
+class Workspace : public IWorkspace, public Injectable, public async::Asyncable
 {
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
-    Inject<IApplication> application;
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    Inject<IApplication> application = { this };
 
 public:
-    Workspace(const io::path_t& filePath);
+    Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx);
 
     std::string name() const override;
     std::string title() const override;

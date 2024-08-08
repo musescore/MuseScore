@@ -29,7 +29,7 @@ using namespace muse::audio;
 using namespace muse::midi;
 
 AudioMidiPreferencesModel::AudioMidiPreferencesModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

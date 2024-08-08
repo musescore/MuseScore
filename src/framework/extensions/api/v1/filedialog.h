@@ -29,7 +29,7 @@
 #include "global/iinteractive.h"
 
 namespace muse::extensions::apiv1 {
-class FileDialog : public QObject
+class FileDialog : public QObject, public Injectable
 {
     Q_OBJECT
     Q_PROPERTY(Type type READ type WRITE setType NOTIFY typeChanged FINAL)
@@ -38,7 +38,7 @@ class FileDialog : public QObject
     Q_PROPERTY(QString folder READ folder WRITE setFolder NOTIFY folderChanged FINAL)
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged FINAL)
 
-    Inject<IInteractive> interactive;
+    Inject<IInteractive> interactive = { this };
 
 public:
     FileDialog(QObject* parent = nullptr);

@@ -47,19 +47,19 @@ class AppMenuModel : public muse::uicomponents::AbstractMenuModel
     Q_OBJECT
 
 public:
-    INJECT(muse::ui::IMainWindow, mainWindow)
-    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(muse::ui::INavigationController, navigationController)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(muse::workspace::IWorkspaceManager, workspacesManager)
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(project::IRecentFilesController, recentFilesController)
-    INJECT(IAppMenuModelHook, appMenuModelHook)
-    INJECT(muse::extensions::IExtensionsProvider, extensionsProvider)
-    INJECT(muse::update::IUpdateConfiguration, updateConfiguration)
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(project::IProjectConfiguration, projectConfiguration)
+    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::Inject<muse::ui::INavigationController> navigationController = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::Inject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<project::IRecentFilesController> recentFilesController = { this };
+    muse::Inject<IAppMenuModelHook> appMenuModelHook = { this };
+    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

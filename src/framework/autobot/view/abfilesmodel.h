@@ -29,13 +29,16 @@
 #include "async/asyncable.h"
 
 namespace muse::autobot {
-class AbFilesModel : public QAbstractListModel, public async::Asyncable
+class AbFilesModel : public QAbstractListModel, public Injectable, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(IAutobot, autobot)
+
+    Inject<IAutobot> autobot = { this };
 
 public:
     explicit AbFilesModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void init();
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;

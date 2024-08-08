@@ -33,7 +33,7 @@ using namespace muse::diagnostics;
 using namespace muse::accessibility;
 
 DiagnosticAccessibleModel::DiagnosticAccessibleModel(QObject* parent)
-    : QAbstractItemModel(parent)
+    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     m_refresher.setInterval(1000);
     m_refresher.setSingleShot(false);

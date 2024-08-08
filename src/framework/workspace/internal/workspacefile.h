@@ -36,7 +36,7 @@ class MQZipWriter;
 namespace muse::workspace {
 class WorkspaceFile
 {
-    INJECT(io::IFileSystem, fileSystem)
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     WorkspaceFile(const io::path_t& filePath);

@@ -37,12 +37,12 @@ namespace muse::cloud {
 class MuseScoreComService : public IMuseScoreComService, public AbstractCloudService,
     public std::enable_shared_from_this<MuseScoreComService>
 {
-    Inject<ICloudConfiguration> configuration;
-    Inject<network::INetworkManagerCreator> networkManagerCreator;
-    Inject<IApplication> application;
+    Inject<ICloudConfiguration> configuration = { this };
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    Inject<IApplication> application = { this };
 
 public:
-    explicit MuseScoreComService(QObject* parent = nullptr);
+    explicit MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
 
     IAuthorizationServicePtr authorization() override;
 

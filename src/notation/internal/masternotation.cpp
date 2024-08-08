@@ -69,7 +69,7 @@ MasterNotation::MasterNotation(const muse::modularity::ContextPtr& iocCtx)
     : Notation(iocCtx)
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
-    m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged);
+    m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged, iocCtx);
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();

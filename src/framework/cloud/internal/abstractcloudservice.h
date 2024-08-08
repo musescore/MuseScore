@@ -53,19 +53,19 @@ int generateFileNameNumber();
 
 class OAuthHttpServerReplyHandler;
 
-class AbstractCloudService : public QObject, public IAuthorizationService, public async::Asyncable
+class AbstractCloudService : public QObject, public IAuthorizationService, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 public:
-    INJECT(ICloudConfiguration, configuration)
-    INJECT(ui::IUiConfiguration, uiConfig)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(IInteractive, interactive)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    muse::Inject<ICloudConfiguration> configuration = { this };
+    muse::Inject<ui::IUiConfiguration> uiConfig = { this };
+    muse::Inject<io::IFileSystem> fileSystem = { this };
+    muse::Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::Inject<IInteractive> interactive = { this };
+    muse::Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
-    explicit AbstractCloudService(QObject* parent = nullptr);
+    explicit AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
 
     void init();
 

@@ -27,7 +27,7 @@ using namespace mu::appshell;
 using namespace muse::ui;
 
 ThemesPageModel::ThemesPageModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -29,11 +29,14 @@
 #include "global/types/config.h"
 
 namespace muse::languages {
-class LanguagesConfiguration : public ILanguagesConfiguration
+class LanguagesConfiguration : public ILanguagesConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
+    LanguagesConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     ValCh<QString> currentLanguageCode() const override;

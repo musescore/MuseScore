@@ -112,7 +112,7 @@ IWorkspacePtr WorkspaceManager::newWorkspace(const std::string& workspaceName) c
 WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) const
 {
     io::path_t filePath = configuration()->userWorkspacesPath() + "/" + workspaceName + WORKSPACE_EXT;
-    return std::make_shared<Workspace>(filePath);
+    return std::make_shared<Workspace>(filePath, iocContext());
 }
 
 void WorkspaceManager::appendNewWorkspace(WorkspacePtr workspace)
@@ -217,7 +217,7 @@ void WorkspaceManager::load()
 
     io::paths_t files = findWorkspaceFiles();
     for (const io::path_t& file : files) {
-        auto workspace = std::make_shared<Workspace>(file);
+        auto workspace = std::make_shared<Workspace>(file, iocContext());
         appendNewWorkspace(workspace);
     }
 

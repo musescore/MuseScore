@@ -33,7 +33,7 @@ using namespace muse::async;
 static constexpr int INVALID_INDEX = -1;
 
 ExtensionsListModel::ExtensionsListModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
     m_roles.insert(rCode, "codeKey");
     m_roles.insert(rName, "name");
@@ -43,14 +43,14 @@ ExtensionsListModel::ExtensionsListModel(QObject* parent)
     m_roles.insert(rCategory, "category");
     m_roles.insert(rVersion, "version");
     m_roles.insert(rShortcuts, "shortcuts");
-
-    provider()->manifestListChanged().onNotify(this, [this]() {
-        load();
-    });
 }
 
 void ExtensionsListModel::load()
 {
+    provider()->manifestListChanged().onNotify(this, [this]() {
+        load();
+    });
+
     beginResetModel();
 
     m_plugins = provider()->manifestList();

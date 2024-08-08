@@ -31,8 +31,8 @@
 using namespace muse;
 using namespace muse::workspace;
 
-Workspace::Workspace(const io::path_t& filePath)
-    : m_file(filePath)
+Workspace::Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_file(filePath)
 {
     multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName){
         if (resourceName == fileResourceName()) {

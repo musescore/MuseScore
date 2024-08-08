@@ -31,7 +31,7 @@ using namespace muse::extensions;
 
 void ExtensionsActionController::init()
 {
-    m_uiActions = std::make_shared<ExtensionsUiActions>();
+    m_uiActions = std::make_shared<ExtensionsUiActions>(iocContext());
     registerPlugins();
 
     provider()->manifestListChanged().onNotify(this, [this](){

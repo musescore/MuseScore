@@ -31,13 +31,16 @@
 #include "imusesamplerinfo.h"
 
 namespace muse::musesampler {
-class MuseSamplerActionController : public muse::actions::Actionable, public async::Asyncable
+class MuseSamplerActionController : public Injectable, public actions::Actionable, public async::Asyncable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(IInteractive, interactive)
-    INJECT(IMuseSamplerInfo, museSamplerInfo)
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<IMuseSamplerInfo> museSamplerInfo = { this };
 
 public:
+    MuseSamplerActionController(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     using ReloadMuseSamplerFunc = std::function<bool ()>;
 
     void init(const ReloadMuseSamplerFunc& reloadMuseSampler);

@@ -39,15 +39,16 @@ class XmlWriter;
 }
 
 namespace muse::shortcuts {
-class MidiRemote : public IMidiRemote, public async::Asyncable
+class MidiRemote : public IMidiRemote, public Injectable, public async::Asyncable
 {
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(IShortcutsConfiguration, configuration)
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    Inject<IShortcutsConfiguration> configuration = { this };
 
 public:
-    MidiRemote() = default;
+    MidiRemote(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     void init();
 

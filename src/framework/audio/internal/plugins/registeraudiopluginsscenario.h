@@ -35,17 +35,20 @@
 #include "iaudiopluginmetareaderregister.h"
 
 namespace muse::audio {
-class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public async::Asyncable
+class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public Injectable, public async::Asyncable
 {
 public:
-    INJECT(IKnownAudioPluginsRegister, knownPluginsRegister)
-    INJECT(IAudioPluginsScannerRegister, scannerRegister)
-    INJECT(IAudioPluginMetaReaderRegister, metaReaderRegister)
-    INJECT(IGlobalConfiguration, globalConfiguration)
-    INJECT(IInteractive, interactive)
-    INJECT(IProcess, process)
+    Inject<IKnownAudioPluginsRegister> knownPluginsRegister = { this };
+    Inject<IAudioPluginsScannerRegister> scannerRegister = { this };
+    Inject<IAudioPluginMetaReaderRegister> metaReaderRegister = { this };
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<IProcess> process = { this };
 
 public:
+    RegisterAudioPluginsScenario(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     Ret registerNewPlugins() override;

@@ -40,7 +40,7 @@ class NotationPlayback : public INotationPlayback, public muse::async::Asyncable
     INJECT(INotationConfiguration, configuration)
 
 public:
-    NotationPlayback(IGetScore* getScore, muse::async::Notification notationChanged);
+    NotationPlayback(IGetScore* getScore, muse::async::Notification notationChanged, const muse::modularity::ContextPtr& iocCtx);
 
     void init() override;
 
