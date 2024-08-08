@@ -84,6 +84,18 @@ void NavigableAppMenuModel::handleMenuItem(const QString& itemId)
     AppMenuModel::handleMenuItem(itemId);
 }
 
+void NavigableAppMenuModel::openPrevMenu()
+{
+    navigate(Qt::Key_Left);
+    activateHighlightedMenu();
+}
+
+void NavigableAppMenuModel::openNextMenu()
+{
+    navigate(Qt::Key_Right);
+    activateHighlightedMenu();
+}
+
 void NavigableAppMenuModel::openMenu(const QString& menuId, bool byHover)
 {
     bool navigationStarted = isNavigationStarted();
@@ -330,7 +342,6 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
     default:
         break;
     }
-
     return false;
 }
 
