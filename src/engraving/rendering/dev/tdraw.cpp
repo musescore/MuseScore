@@ -3163,7 +3163,7 @@ void TDraw::draw(const Tuplet* item, Painter* painter)
         painter->translate(-pos);
     }
     if (item->hasBracket()) {
-        Pen pen(color, item->absoluteFromSpatium(item->bracketWidth()) * item->mag());
+        Pen pen(color, item->absoluteFromSpatium(item->bracketWidth()));
         pen.setJoinStyle(PenJoinStyle::MiterJoin);
         pen.setCapStyle(PenCapStyle::FlatCap);
         painter->setPen(pen);

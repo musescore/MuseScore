@@ -27,7 +27,6 @@
 
 #include "durationelement.h"
 #include "property.h"
-#include "score.h"
 #include "types.h"
 
 namespace mu::engraving {
@@ -87,8 +86,6 @@ public:
     void setHasBracket(bool b) { m_hasBracket = b; }
     Spatium bracketWidth() const { return m_bracketWidth; }
     void setBracketWidth(Spatium s) { m_bracketWidth = s; }
-
-    double absoluteFromSpatium(const Spatium& sp) const override { return sp.val() * score()->style().spatium(); }
 
     const Fraction& ratio() const { return m_ratio; }
     void setRatio(const Fraction& r) { m_ratio = r; }

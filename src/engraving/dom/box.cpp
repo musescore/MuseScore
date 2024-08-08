@@ -61,7 +61,7 @@ Box::Box(const ElementType& type, System* parent)
 
 void HBox::computeMinWidth()
 {
-    setWidth(absoluteFromSpatium(boxWidth()) + topGap() + bottomGap());    // top/bottom is really left/right
+    setWidth(absoluteFromSpatium(boxWidth() + topGap() + bottomGap()));    // top/bottom is really left/right
 }
 
 bool Box::isEditAllowed(EditData&) const
