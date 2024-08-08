@@ -14,6 +14,8 @@ declare_muse_module_opt(AUDIO ON)
 option(MUSE_MODULE_AUDIO_JACK "Enable jack support" OFF)
 option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 
+declare_muse_module_opt(AUDIOPLUGINS ON)
+
 declare_muse_module_opt(AUTOBOT ON)
 declare_muse_module_opt(CLOUD ON)
 option(MUSE_MODULE_CLOUD_MUSESCORECOM "Enable MuseScore.com account" ON)

@@ -35,6 +35,10 @@ if (MUSE_MODULE_AUDIO)
     add_subdirectory(audio)
 endif()
 
+if (MUSE_MODULE_AUDIOPLUGINS)
+    add_subdirectory(audioplugins)
+endif()
+
 if (MUSE_MODULE_AUTOBOT)
     add_subdirectory(autobot)
 endif()

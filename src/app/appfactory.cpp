@@ -19,6 +19,10 @@
 #include "framework/stubs/audio/audiostubmodule.h"
 #endif
 
+#ifdef MUSE_MODULE_AUDIOPLUGINS
+#include "framework/audioplugins/audiopluginsmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_CLOUD
 #include "framework/cloud/cloudmodule.h"
 #else
@@ -218,6 +222,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::accessibility::AccessibilityModule());
     app->addModule(new muse::actions::ActionsModule());
     app->addModule(new muse::audio::AudioModule());
+#ifdef MUSE_MODULE_AUDIOPLUGINS
+    app->addModule(new muse::audioplugins::AudioPluginsModule());
+#endif
     app->addModule(new muse::draw::DrawModule());
     app->addModule(new muse::midi::MidiModule());
     app->addModule(new muse::mpe::MpeModule());
