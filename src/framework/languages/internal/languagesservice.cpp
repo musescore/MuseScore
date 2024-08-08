@@ -141,9 +141,12 @@ void LanguagesService::loadLanguages()
 
     QJsonObject languagesObject = jsonDoc.object();
     for (auto it = languagesObject.begin(); it != languagesObject.end(); ++it) {
+        QJsonObject langObject = it.value().toObject();
+
         Language lang;
         lang.code = it.key();
-        lang.name = it.value().toString();
+        lang.name = langObject.value("name").toString();
+        lang.fallbackLanguages = langObject.value("fallbackLanguages").toVariant().toStringList();
 
         m_languagesHash.insert(it.key(), lang);
     }
@@ -174,23 +177,35 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
         loadLanguage(lang);
     }
 
-    for (QTranslator* t : m_translators) {
+    for (QTranslator* t : std::as_const(m_translators)) {
         qApp->removeTranslator(t);
         delete t;
     }
     m_translators.clear();
 
-    for (const io::path_t& file : lang.files) {
-        QTranslator* translator = new QTranslator();
-        bool ok = translator->load(file.toQString());
-        if (ok) {
-            qApp->installTranslator(translator);
-            m_translators << translator;
-        } else {
-            LOGE() << "Error loading translator " << file.toQString();
-            delete translator;
+    auto installTranslatorsForLanguage = [this](const Language& l) {
+        for (const io::path_t& file : l.files) {
+            QTranslator* translator = new QTranslator();
+            bool ok = translator->load(file.toQString());
+            if (ok) {
+                qApp->installTranslator(translator);
+                m_translators << translator;
+            } else {
+                LOGE() << "Error loading translator " << file.toQString();
+                delete translator;
+            }
         }
+    };
+
+    // Install translators for fallback languages in reverse order:
+    // Qt searches the most recently installed translator first,
+    // and the least recently installed translator last.
+    for (auto it = lang.fallbackLanguages.crbegin(); it != lang.fallbackLanguages.crend(); ++it) {
+        Language& fallbackLang = m_languagesHash[*it];
+        installTranslatorsForLanguage(fallbackLang);
     }
+
+    installTranslatorsForLanguage(lang);
 
     QLocale locale(lang.code);
     QLocale::setDefault(locale);
@@ -271,6 +286,27 @@ QString LanguagesService::effectiveLanguageCode(QString languageCode) const
 }
 
 Ret LanguagesService::loadLanguage(Language& lang)
+{
+    Ret ret = doLoadLanguage(lang);
+    if (!ret) {
+        LOGE() << "Failed to load language " << lang.code << ": " << ret.toString();
+        return ret;
+    }
+
+    for (const QString& fallbackCode : lang.fallbackLanguages) {
+        Language& fallbackLang = m_languagesHash[fallbackCode];
+
+        if (!fallbackLang.isLoaded()) {
+            ret = doLoadLanguage(fallbackLang);
+            if (!ret) {
+                LOGE() << "Failed to load fallback language " << fallbackLang.code << ": " << ret.toString();
+                return ret;
+            }
+        }
+    }
+}
+
+Ret LanguagesService::doLoadLanguage(Language& lang)
 {
     io::path_t languagesAppDataPath = configuration()->languagesAppDataPath();
     io::path_t languagesUserAppDataPath = configuration()->languagesUserAppDataPath();
