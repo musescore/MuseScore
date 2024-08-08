@@ -72,6 +72,7 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
     m_sampleRate = sampleRate;
 
     if (isOffline) {
+        LOGD() << "Start offline mode, sampleRate: " << m_sampleRate;
         m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
         m_offlineModeStarted = true;
     }
@@ -276,7 +277,7 @@ bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const sampl
             LOGE() << "Unable to init MuseSampler";
             return false;
         } else {
-            LOGD() << "Successfully initialized sampler";
+            LOGD() << "Successfully initialized sampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
         }
     }
 
