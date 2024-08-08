@@ -1,4 +1,4 @@
-name: CI_utests
+name: 'Check: Unit Tests (utest)'
 
 on:
   pull_request:

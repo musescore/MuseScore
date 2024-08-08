@@ -1,4 +1,4 @@
-name: "Issue triage"
+name: 'Triage: Issues'
 on:
   issues:
     types: [opened, labeled, unlabeled]

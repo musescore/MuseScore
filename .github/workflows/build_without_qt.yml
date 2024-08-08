@@ -1,4 +1,4 @@
-name: CI_Without Qt
+name: 'Build: Without Qt'
 
 on:
   pull_request:

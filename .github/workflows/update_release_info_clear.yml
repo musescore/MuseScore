@@ -1,4 +1,4 @@
-name: Clear release info
+name: 'Update: Release Info (clear)'
 
 on:
   workflow_dispatch:

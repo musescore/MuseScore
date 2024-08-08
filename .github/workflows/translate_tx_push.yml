@@ -1,4 +1,4 @@
-name: Push translatable strings to Transifex
+name: 'Translate: tx push new strings to Transifex'
 
 on:
   workflow_dispatch:

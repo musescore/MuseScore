@@ -1,4 +1,4 @@
-name: Update translatable strings
+name: 'Translate: lupdate source TS in repo'
 
 on:
   workflow_dispatch:

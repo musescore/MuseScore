@@ -1,4 +1,4 @@
-name: CI_Windows
+name: 'Build: Windows'
 
 on:
   pull_request:
