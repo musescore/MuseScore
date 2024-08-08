@@ -140,6 +140,7 @@ set(LINK_LIB
     muse::workspace
     workspacescene
     muse::audio
+    muse::audioplugins
     muse::mpe
     muse::midi
     muse::learn
