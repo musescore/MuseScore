@@ -191,6 +191,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/groupnode.h
     ${CMAKE_CURRENT_LIST_DIR}/types/propertyvalue.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/propertyvalue.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/accessibilitystyle.h
 
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h

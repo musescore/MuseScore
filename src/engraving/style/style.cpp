@@ -108,6 +108,34 @@ int MStyle::defaultStyleVersion() const
     return styleI(Sid::defaultsVersion);
 }
 
+void MStyle::setStylePreset(AccessibilityStylePreset preset)
+{
+    m_stylepreset = preset;
+}
+
+void MStyle::setStylePresetEdited(bool isEdited)
+{
+    m_stylepresetedited = isEdited;
+}
+
+String MStyle::stylePreset2Name(AccessibilityStylePreset preset) const
+{
+    switch (preset) {
+    case AccessibilityStylePreset::MSN_16MM:
+        return String(u"16mm MSN");
+    case AccessibilityStylePreset::MSN_18MM:
+        return String(u"18mm MSN");
+    case AccessibilityStylePreset::MSN_20MM:
+        return String(u"20mm MSN");
+    case AccessibilityStylePreset::MSN_22MM:
+        return String(u"22mm MSN");
+    case AccessibilityStylePreset::MSN_25MM:
+        return String(u"25mm MSN");
+    default:
+        return String(u"Default");
+    }
+}
+
 bool MStyle::readProperties(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
@@ -279,6 +307,31 @@ void MStyle::readVersion(String versionTag)
     m_version = versionTag.toInt();
 }
 
+void MStyle::readStylePreset(String presetTag)
+{
+    String suffix = u" (edited)";
+    bool isEdited = presetTag.endsWith(suffix);
+    if (isEdited) {
+        setStylePresetEdited(true);
+        presetTag.chop(suffix.size());
+    } else {
+        setStylePresetEdited(false);
+    }
+    if (presetTag == "16mm MSN") {
+        m_stylepreset = AccessibilityStylePreset::MSN_16MM;
+    } else if (presetTag == "18mm MSN") {
+        m_stylepreset = AccessibilityStylePreset::MSN_18MM;
+    } else if (presetTag == "20mm MSN") {
+        m_stylepreset = AccessibilityStylePreset::MSN_20MM;
+    } else if (presetTag == "22mm MSN") {
+        m_stylepreset = AccessibilityStylePreset::MSN_22MM;
+    } else if (presetTag == "25mm MSN") {
+        m_stylepreset = AccessibilityStylePreset::MSN_25MM;
+    } else {
+        m_stylepreset = AccessibilityStylePreset::DEFAULT;
+    }
+}
+
 bool MStyle::read(IODevice* device, bool ign)
 {
     UNUSED(ign);
@@ -288,6 +341,7 @@ bool MStyle::read(IODevice* device, bool ign)
             readVersion(e.attribute("version"));
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
+                    readStylePreset(e.attribute("preset", String(u"Default")));
                     read(e, nullptr);
                 } else {
                     e.unknown();
@@ -535,8 +589,11 @@ bool MStyle::write(IODevice* device)
 
 void MStyle::save(XmlWriter& xml, bool optimize)
 {
-    xml.startElement("Style");
-
+    if (stylePresetEdited()) {
+        xml.startElement("Style", { { "preset", stylePreset2Name(stylePreset()) + String(u" (edited)") } });
+    } else {
+        xml.startElement("Style", { { "preset", stylePreset2Name(stylePreset()) } });
+    }
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         Sid idx = st.styleIdx();
         if (idx == Sid::spatium) {         // special handling for spatium

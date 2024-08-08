@@ -31,6 +31,7 @@
 
 #include "../types/dimension.h"
 #include "../types/propertyvalue.h"
+#include "../types/accessibilitystyle.h"
 
 #include "styledef.h"
 
@@ -73,6 +74,12 @@ public:
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
 
+    AccessibilityStylePreset stylePreset() const { return m_stylepreset; }
+    void setStylePreset(AccessibilityStylePreset preset);
+    bool stylePresetEdited() const { return m_stylepresetedited; }
+    void setStylePresetEdited(bool isEdited);
+    String stylePreset2Name(AccessibilityStylePreset preset) const;
+
     bool read(muse::io::IODevice* device, bool ign = false);
     bool write(muse::io::IODevice* device);
     void save(XmlWriter& xml, bool optimize);
@@ -98,7 +105,10 @@ private:
     std::array<Millimetre, size_t(Sid::STYLES)> m_precomputedValues;
 
     void readVersion(String versionTag);
+    void readStylePreset(String presetTag);
     int m_version = 0;
+    AccessibilityStylePreset m_stylepreset = AccessibilityStylePreset::DEFAULT;
+    bool m_stylepresetedited = false;
 };
 } // namespace mu::engraving
 
