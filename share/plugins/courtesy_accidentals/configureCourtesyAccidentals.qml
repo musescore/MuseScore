@@ -22,8 +22,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.2
 import MuseScore 3.0
-import MuseScore.UiComponents 1.0 as MU
-import MuseScore.Ui 1.0
+import Muse.UiComponents 1.0 as MU
+import Muse.Ui 1.0
 import "assets"
 import "assets/defaultsettings.js" as DSettings
 
@@ -35,7 +35,7 @@ MuseScore {
     thumbnailName: "assets/accidentals.png"
     requiresScore: false
 
-    //onRun: mainWindow.show()
+    onRun: mainWindow.show()
 
     ApplicationWindow {
         id: mainWindow
