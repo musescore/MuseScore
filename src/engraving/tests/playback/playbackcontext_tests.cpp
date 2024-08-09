@@ -67,6 +67,9 @@ protected:
     }
 };
 
+//! Checks that hairpins outside/inside repeats don't overlap. See:
+//! https://github.com/musescore/MuseScore/issues/16167
+//! https://github.com/musescore/MuseScore/issues/23940
 TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
 {
     // [GIVEN] Score with hairpins and repeats
@@ -87,29 +90,47 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
     // [GIVEN]
     DynamicLevelMap expectedDynamics;
 
-    // [GIVEN] 1st hairpin (inside the repeat): f -> fff
+    // [GIVEN] 1st hairpin (before the repeat): p -> f
+    constexpr mpe::dynamic_level_t p = dynamicLevelFromType(mpe::DynamicType::p);
     constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
-    constexpr mpe::dynamic_level_t fff = dynamicLevelFromType(mpe::DynamicType::fff);
-    constexpr int f_to_fff_startTick = 0;
 
-    std::map<int, int> f_to_fff_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(fff - f), ChangeMethod::NORMAL);
+    const std::map<int, int> p_to_f_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(f - p),
+                                                                    ChangeMethod::NORMAL);
+
+    for (const auto& pair : p_to_f_curve) {
+        mpe::timestamp_t time = timestampFromTicks(score, pair.first);
+        ASSERT_FALSE(muse::contains(expectedDynamics, time));
+        expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
+    }
+
+    // [GIVEN] 2nd hairpin (inside the repeat): f -> fff
+    constexpr mpe::dynamic_level_t fff = dynamicLevelFromType(mpe::DynamicType::fff);
+    constexpr int f_to_fff_startTick = 1920;
+
+    const std::map<int, int> f_to_fff_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(fff - f),
+                                                                      ChangeMethod::NORMAL);
 
     for (const mu::engraving::RepeatSegment* repeatSegment : repeats) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const auto& pair : f_to_fff_curve) {
-            mpe::timestamp_t time = timestampFromTicks(score, f_to_fff_startTick + pair.first + tickPositionOffset);
-            ASSERT_FALSE(muse::contains(expectedDynamics, time));
+            int tick = f_to_fff_startTick + pair.first + tickPositionOffset;
+            mpe::timestamp_t time = timestampFromTicks(score, tick);
+
+            if (tick != f_to_fff_startTick) { // f already added by the previous hairpin
+                ASSERT_FALSE(muse::contains(expectedDynamics, time));
+            }
+
             expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
         }
     }
 
-    // [GIVEN] 2nd hairpin (right after the repeat): ppp -> p
+    // [GIVEN] 3rd hairpin (right after the repeat): ppp -> p
     constexpr mpe::dynamic_level_t ppp = dynamicLevelFromType(mpe::DynamicType::ppp);
-    constexpr mpe::dynamic_level_t p = dynamicLevelFromType(mpe::DynamicType::p);
-    constexpr int ppp_to_p_startTick = 1920 + 1920; // real tick + repeat tick
+    constexpr int ppp_to_p_startTick = 3840 + 1920; // real tick + repeat tick
 
-    std::map<int, int> ppp_to_p_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(p - ppp), ChangeMethod::NORMAL);
+    const std::map<int, int> ppp_to_p_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(p - ppp),
+                                                                      ChangeMethod::NORMAL);
 
     for (const auto& pair : ppp_to_p_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
@@ -292,8 +313,8 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
     constexpr mpe::dynamic_level_t ff = dynamicLevelFromType(mpe::DynamicType::ff);
     constexpr mpe::dynamic_level_t pp = dynamicLevelFromType(mpe::DynamicType::pp);
 
-    std::map<int, int> ff_to_pp_curve = TConv::easingValueCurve(1920 - Fraction::eps().ticks(),
-                                                                HAIRPIN_STEPS, static_cast<int>(pp - ff), ChangeMethod::NORMAL);
+    const std::map<int, int> ff_to_pp_curve = TConv::easingValueCurve(1920 - Fraction::eps().ticks(),
+                                                                      HAIRPIN_STEPS, static_cast<int>(pp - ff), ChangeMethod::NORMAL);
     for (const auto& pair : ff_to_pp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first);
         expectedDynamics.emplace(time, ff + static_cast<dynamic_level_t>(pair.second));

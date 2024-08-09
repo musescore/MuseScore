@@ -364,7 +364,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
         return;
     }
 
-    auto intervals = spannerMap.findOverlapping(segmentStartTick, segmentEndTick - 1);
+    auto intervals = spannerMap.findOverlapping(segmentStartTick + 1, segmentEndTick - 1);
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
 
@@ -374,6 +374,11 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
 
         if (spanner->part()->id() != partId.toUint64()) {
             continue;
+        }
+
+        const Staff* staff = spanner->staff();
+        if (staff && !staff->isPrimaryStaff()) {
+            continue; // ignore linked staves
         }
 
         int spannerFrom = spanner->tick().ticks();
