@@ -90,7 +90,12 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     }
 
     // ... and use that here
-    int stepsCount = overallDurationTicks / stepDurationTicks;
+    const int stepsCount = std::round(overallDurationTicks / (float)stepDurationTicks);
+    if (stepsCount == 0) {
+        return;
+    }
+
+    stepDurationTicks = overallDurationTicks / stepsCount;
 
     if (tremolo.two) {
         const Chord* firstTremoloChord = tremolo.two->chord1();
