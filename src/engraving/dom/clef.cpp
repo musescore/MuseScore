@@ -479,6 +479,11 @@ void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
     }
 }
 
+bool Clef::isMidMeasureClef() const
+{
+    return segment() && segment()->rtick().isNotZero();
+}
+
 void Clef::manageExclusionFromParts(bool exclude)
 {
     if (exclude) {

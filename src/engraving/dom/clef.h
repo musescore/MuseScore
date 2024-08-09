@@ -146,6 +146,8 @@ public:
     bool isHeader() const { return m_isHeader; }
     void setIsHeader(bool val) { m_isHeader = val; }
 
+    bool isMidMeasureClef() const;
+
     bool canBeExcludedFromOtherParts() const override { return !isHeader(); }
     void manageExclusionFromParts(bool exclude) override;
 
