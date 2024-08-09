@@ -1993,6 +1993,9 @@ void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
     if (b->score()->mscVersion() < 302) {
         b->setAutoSizeEnabled(false);    // disable auto-size for older scores by default.
     }
+    if (b->score()->mscVersion() < 440) {
+        b->setSizeIsSpatiumDependent(true);
+    }
 }
 
 void TRead::read(HBox* b, XmlReader& e, ReadContext& ctx)
@@ -2004,6 +2007,9 @@ void TRead::read(HBox* b, XmlReader& e, ReadContext& ctx)
     }
     if (b->score()->mscVersion() < 302) {
         b->setAutoSizeEnabled(false);    // disable auto-size for older scores by default.
+    }
+    if (b->score()->mscVersion() < 440) {
+        b->setSizeIsSpatiumDependent(true);
     }
 }
 
