@@ -47,6 +47,7 @@
 #include "chordlayout.h"
 #include "beamtremololayout.h"
 #include "tremololayout.h"
+#include "systemlayout.h"
 
 #include "log.h"
 
@@ -1011,6 +1012,7 @@ void BeamLayout::checkCrossPosAndStemConsistency(Beam* beam, LayoutContext& ctx)
     if (inconsistencyFound) {
         BeamLayout::layout(beam, ctx);
     }
+    SystemLayout::layoutSystemElements(beam->system(), ctx);
 }
 
 void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests)
