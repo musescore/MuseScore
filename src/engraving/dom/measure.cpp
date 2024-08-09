@@ -1508,7 +1508,7 @@ EngravingItem* Measure::drop(EditData& data)
             score()->undoChangeKeySig(staff, tick(), k);
         } else {
             // apply to all staves:
-            for (Staff* s : score()->staves()) {
+            for (Staff* s : score()->masterScore()->staves()) {
                 score()->undoChangeKeySig(s, tick(), k);
             }
         }
