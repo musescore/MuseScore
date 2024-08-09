@@ -42,7 +42,7 @@ void ModifyDom::connectTremolo(Measure* m)
 
 void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
 {
-    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         const Staff* staff = dom.staff(staffIdx);
         if (!staff->show()) {
             continue;
@@ -85,8 +85,8 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
             } else if (segment.isJustType(SegmentType::ChordRest)) {
                 for (track_idx_t t = startTrack; t < endTrack; ++t) {
                     Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
-                    if (chord && chord->vStaffIdx() == staffIdx) {
-                        chord->cmdUpdateNotes(&as);
+                    if (chord) {
+                        chord->cmdUpdateNotes(&as, staffIdx);
                     }
                 }
             }
@@ -97,7 +97,7 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
 void ModifyDom::createStems(const Measure* measure, LayoutContext& ctx)
 {
     const DomAccessor& dom = ctx.dom();
-    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         const Staff* staff = dom.staff(staffIdx);
         if (!staff->show()) {
             continue;
@@ -145,7 +145,7 @@ void ModifyDom::createStems(const Measure* measure, LayoutContext& ctx)
 
 void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& dom)
 {
-    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         track_idx_t startTrack = staffIdx * VOICES;
         track_idx_t endTrack  = startTrack + VOICES;
 
