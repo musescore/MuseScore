@@ -281,10 +281,10 @@ void SpannerSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
 
 void SpannerSegment::setSelected(bool f)
 {
-    for (SpannerSegment* ss : m_spanner->spannerSegments()) {
-        ss->EngravingItem::setSelected(f);
+    EngravingItem::setSelected(f);
+    if (spanner()->selected() != f) {
+        spanner()->setSelected(f);
     }
-    m_spanner->setSelected(f);
 }
 
 //---------------------------------------------------------
@@ -1155,10 +1155,13 @@ Measure* Spanner::endMeasure() const
 
 void Spanner::setSelected(bool f)
 {
-    for (SpannerSegment* ss : spannerSegments()) {
-        ss->EngravingItem::setSelected(f);
-    }
     EngravingItem::setSelected(f);
+
+    for (SpannerSegment* ss : spannerSegments()) {
+        if (ss->selected() != f) {
+            ss->setSelected(f);
+        }
+    }
 }
 
 //---------------------------------------------------------
