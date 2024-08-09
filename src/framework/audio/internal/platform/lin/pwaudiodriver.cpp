@@ -540,8 +540,9 @@ void PwStream::process()
         return;
     }
 
-    const auto maxFrames = buf->datas[0].maxsize / m_stride;
-    const auto numFrames = b->requested ? SPA_MIN(b->requested, maxFrames) : maxFrames;
+    // const auto maxFrames = buf->datas[0].maxsize / m_stride;
+    // const auto numFrames = b->requested ? SPA_MIN(b->requested, maxFrames) : maxFrames;
+    const auto numFrames = buf->datas[0].maxsize / m_stride;
     const auto len = numFrames * m_stride;
 
     m_spec.callback(m_spec.userdata, dst, len);
