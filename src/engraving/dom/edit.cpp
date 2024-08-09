@@ -5684,28 +5684,28 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
         ElementType::LEDGER_LINE, // temporary objects, impossible to change visibility
     };
 
-    for (Chord* chord : chords) {
-        if (chord != noteChord) {
-            chordHasVisibleNote_ = chordHasVisibleNote(chord);
-        }
+    for (const Chord* chord : chords) {
+        for (const EngravingObject* obj : chord->linkList()) {
+            const Chord* linkedChord = toChord(obj);
+            chordHasVisibleNote_ = chordHasVisibleNote(linkedChord);
+            for (EngravingObject* child : linkedChord->scanChildren()) {
+                const ElementType type = child->type();
 
-        for (EngravingObject* child : chord->scanChildren()) {
-            ElementType type = child->type();
-
-            if (muse::contains(IGNORED_TYPES, type)) {
-                continue;
-            }
-
-            if (beam) {
-                if (type == ElementType::STEM || type == ElementType::BEAM) {
-                    child->undoChangeProperty(Pid::VISIBLE, beamHasVisibleNote_);
+                if (muse::contains(IGNORED_TYPES, type)) {
                     continue;
                 }
-            }
-            if (child->isOrnament()) {
-                undoChangeOrnamentVisibility(toOrnament(child), visible);
-            } else {
-                child->undoChangeProperty(Pid::VISIBLE, chordHasVisibleNote_);
+
+                if (beam) {
+                    if (type == ElementType::STEM || type == ElementType::BEAM) {
+                        child->undoChangeProperty(Pid::VISIBLE, beamHasVisibleNote_);
+                        continue;
+                    }
+                }
+                if (child->isOrnament()) {
+                    undoChangeOrnamentVisibility(toOrnament(child), visible);
+                } else {
+                    child->undoChangeProperty(Pid::VISIBLE, chordHasVisibleNote_);
+                }
             }
         }
     }

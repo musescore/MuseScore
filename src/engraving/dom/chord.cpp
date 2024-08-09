@@ -2572,6 +2572,15 @@ GraceNotesGroup& Chord::graceNotesAfter(bool filterUnplayable) const
     return m_graceNotesAfter;
 }
 
+Chord* Chord::graceNoteAt(size_t idx) const
+{
+    if (idx > m_graceNotes.size()) {
+        return nullptr;
+    }
+
+    return m_graceNotes.at(idx);
+}
+
 //---------------------------------------------------------
 //   setShowStemSlashInAdvance
 //---------------------------------------------------------
