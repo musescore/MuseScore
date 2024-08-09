@@ -231,7 +231,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
     bool tempMelismaTicks = (item->lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
     if (item->isEndMelisma()) {           // melisma
-        item->setLineWidth(ctx.conf().styleMM(Sid::lyricsLineThickness));
+        item->setLineWidth(ctx.conf().styleS(Sid::lyricsLineThickness));
         // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
         if (tempMelismaTicks) {
             item->lyrics()->setTicks(Fraction(0, 1));

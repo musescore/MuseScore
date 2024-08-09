@@ -65,6 +65,11 @@ void Stem::setBaseLength(Millimetre baseLength)
     m_baseLength = Millimetre(std::abs(baseLength.val()));
 }
 
+double Stem::lineWidthMag() const
+{
+    return absoluteFromSpatium(m_lineWidth) * chord()->intrinsicMag();
+}
+
 void Stem::spatiumChanged(double oldValue, double newValue)
 {
     m_userLength = (m_userLength / oldValue) * newValue;
@@ -163,7 +168,7 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(v.value<Millimetre>());
+        setLineWidth(v.value<Spatium>());
         break;
     case Pid::USER_LEN:
         setUserLength(v.value<Millimetre>());

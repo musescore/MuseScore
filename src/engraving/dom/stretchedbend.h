@@ -48,7 +48,7 @@ class StretchedBend final : public EngravingItem
     M_PROPERTY(String,     fontFace,  setFontFace)
     M_PROPERTY(double,     fontSize,  setFontSize)
     M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
-    M_PROPERTY(Millimetre, lineWidth, setLineWidth)
+    M_PROPERTY(Spatium,    lineWidth, setLineWidth)
 
 public:
 

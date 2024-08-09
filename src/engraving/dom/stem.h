@@ -67,9 +67,9 @@ public:
     Millimetre userLength() const { return m_userLength; }
     void setUserLength(Millimetre userLength) { m_userLength = userLength; }
 
-    Millimetre lineWidth() const { return m_lineWidth; }
-    double lineWidthMag() const { return m_lineWidth * mag(); }
-    void setLineWidth(Millimetre lineWidth) { m_lineWidth = lineWidth; }
+    Spatium lineWidth() const { return m_lineWidth; }
+    double lineWidthMag() const;
+    void setLineWidth(Spatium lineWidth) { m_lineWidth = lineWidth; }
 
     PointF flagPosition() const;
     double length() const { return m_baseLength + m_userLength; }
@@ -92,7 +92,7 @@ private:
     Millimetre m_baseLength = Millimetre(0.0);
     Millimetre m_userLength = Millimetre(0.0);
 
-    Millimetre m_lineWidth = Millimetre(0.0);
+    Spatium m_lineWidth = Spatium(0.0);
 };
 }
 #endif

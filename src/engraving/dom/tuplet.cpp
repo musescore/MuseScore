@@ -589,7 +589,7 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
         setBracketType(TupletBracketType(v.toInt()));
         break;
     case Pid::LINE_WIDTH:
-        setBracketWidth(v.value<Millimetre>());
+        setBracketWidth(v.value<Spatium>());
         break;
     case Pid::NORMAL_NOTES:
         m_ratio.setDenominator(v.toInt());

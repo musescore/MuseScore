@@ -1146,7 +1146,7 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
         } else if (tag == "subtype") {
             e.readInt();
         } else if (tag == "lineWidth") {
-            volta->setLineWidth(Millimetre(e.readDouble() * volta->spatium()));
+            volta->setLineWidth(Spatium(e.readDouble()));
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (!readTextLineProperties114(e, ctx, volta)) {
             e.unknown();
@@ -1295,7 +1295,7 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
             pedal->setEndHookHeight(Spatium(e.readDouble()));
             pedal->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
         } else if (tag == "lineWidth") {
-            pedal->setLineWidth(Millimetre(e.readDouble()));
+            pedal->setLineWidth(Spatium(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
             read400::TRead::readProperty(pedal, e, ctx, Pid::LINE_STYLE);
