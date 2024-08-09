@@ -1327,6 +1327,77 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
                                             PARTS_DATA_DIR + u"part-visible-tracks-score-ref.mscx"));
 }
 
+TEST_F(Engraving_PartsTests, inputFromParts) {
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    // Enter notes *in parts* and check that they are correctly cloned to the score.
+
+    Score* score = ScoreRW::readScore(PARTS_DATA_DIR + u"input-from-parts.mscz");
+    EXPECT_TRUE(score);
+    staff_idx_t fluteStaff = 0;
+    staff_idx_t oboeStaff = 1;
+    staff_idx_t clarinetStaff = 2;
+    staff_idx_t bassoonStaff = 3;
+
+    Score* flutePart = nullptr;
+    Score* oboePart = nullptr;
+    Score* clarinetPart = nullptr;
+    Score* bassoonPart = nullptr;
+    for (Score* part : score->scoreList()) {
+        String partName = part->name();
+        if (partName == u"Flute") {
+            flutePart = part;
+        } else if (partName == u"Oboe") {
+            oboePart = part;
+        } else if (partName == u"Clarinet in B♭") {
+            clarinetPart = part;
+        } else if (partName == u"Bassoon") {
+            bassoonPart = part;
+        }
+    }
+    EXPECT_TRUE(flutePart && oboePart && clarinetPart && bassoonPart);
+
+    track_idx_t voice = 3;
+    Segment* partSegment = flutePart->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    EXPECT_TRUE(partSegment);
+    flutePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    Segment* scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    Chord* chord = toChord(scoreSegment->elementAt(staff2track(fluteStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    voice = 2;
+    partSegment = oboePart->firstMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    EXPECT_TRUE(partSegment);
+    oboePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    chord = toChord(scoreSegment->elementAt(staff2track(oboeStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    voice = 1;
+    partSegment = clarinetPart->firstMeasure()->nextMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    EXPECT_TRUE(partSegment);
+    clarinetPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    chord = toChord(scoreSegment->elementAt(staff2track(clarinetStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    voice = 0;
+    partSegment = bassoonPart->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0,
+                                                                                                                                        1));
+    EXPECT_TRUE(partSegment);
+    bassoonPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    chord = toChord(scoreSegment->elementAt(staff2track(bassoonStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    MScore::useRead302InTestMode = useRead302;
+}
+
 //---------------------------------------------------------
 //   staffStyles
 //---------------------------------------------------------
