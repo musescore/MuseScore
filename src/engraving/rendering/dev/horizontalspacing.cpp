@@ -522,6 +522,7 @@ bool HorizontalSpacing::isSameVoiceKerningLimited(const EngravingItem* item)
 
     switch (type) {
     case ElementType::NOTE:
+    case ElementType::NOTEDOT:
     case ElementType::REST:
     case ElementType::STEM:
     case ElementType::CHORDLINE:
