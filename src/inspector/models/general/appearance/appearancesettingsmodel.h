@@ -98,6 +98,7 @@ private:
 
     QList<engraving::EngravingItem*> m_elementsForOffsetProperty;
     QList<engraving::EngravingItem*> m_elementsForArrangeProperty;
+    QList<engraving::EngravingItem*> m_elementsForColorProperty;
 };
 }
 
