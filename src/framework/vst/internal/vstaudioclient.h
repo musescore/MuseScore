@@ -22,7 +22,7 @@
 #ifndef MUSE_VST_VSTAUDIOCLIENT_H
 #define MUSE_VST_VSTAUDIOCLIENT_H
 
-#include "audio/audiotypes.h"
+#include "audioplugins/audiopluginstypes.h"
 
 #include "vstplugin.h"
 #include "vsttypes.h"
@@ -34,7 +34,7 @@ public:
     VstAudioClient() = default;
     ~VstAudioClient();
 
-    void init(muse::audio::AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t audioChannelsCount = 2);
+    void init(audioplugins::AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t audioChannelsCount = 2);
 
     void loadSupportedParams();
 
@@ -103,8 +103,8 @@ private:
 
     bool m_needUnprepareProcessData = false;
 
-    muse::audio::AudioPluginType m_type = muse::audio::AudioPluginType::Undefined;
-    muse::audio::audioch_t m_audioChannelsCount = 0;
+    audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
+    audio::audioch_t m_audioChannelsCount = 0;
 };
 }
 

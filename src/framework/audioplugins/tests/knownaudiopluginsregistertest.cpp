@@ -24,27 +24,28 @@
 
 #include "global/serialization/json.h"
 
-#include "internal/plugins/knownaudiopluginsregister.h"
+#include "audioplugins/internal/knownaudiopluginsregister.h"
 
 #include "global/tests/mocks/filesystemmock.h"
-#include "tests/mocks/audioconfigurationmock.h"
+#include "mocks/audiopluginsconfigurationmock.h"
 
 using ::testing::_;
 using ::testing::Return;
 
 using namespace muse;
+using namespace muse::audioplugins;
 using namespace muse::audio;
 using namespace muse::io;
 
-namespace muse::audio {
-class Audio_KnownAudioPluginsRegisterTest : public ::testing::Test
+namespace muse::audioplugins {
+class AudioPlugins_KnownAudioPluginsRegisterTest : public ::testing::Test
 {
 protected:
     void SetUp() override
     {
         m_knownPlugins = std::make_shared<KnownAudioPluginsRegister>();
         m_fileSystem = std::make_shared<FileSystemMock>();
-        m_configuration = std::make_shared<AudioConfigurationMock>();
+        m_configuration = std::make_shared<AudioPluginsConfigurationMock>();
 
         m_knownPlugins->fileSystem.set(m_fileSystem);
         m_knownPlugins->configuration.set(m_configuration);
@@ -148,7 +149,7 @@ protected:
 
     std::shared_ptr<KnownAudioPluginsRegister> m_knownPlugins;
     std::shared_ptr<FileSystemMock> m_fileSystem;
-    std::shared_ptr<AudioConfigurationMock> m_configuration;
+    std::shared_ptr<AudioPluginsConfigurationMock> m_configuration;
 
     path_t m_knownAudioPluginsFilePath;
 };
@@ -165,7 +166,7 @@ inline bool operator==(const AudioPluginInfo& info1, const AudioPluginInfo& info
 }
 }
 
-TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
+TEST_F(AudioPlugins_KnownAudioPluginsRegisterTest, PluginInfoList)
 {
     // [GIVEN] All known plugins
     std::vector<AudioPluginInfo> expectedPluginInfoList = setupTestData();

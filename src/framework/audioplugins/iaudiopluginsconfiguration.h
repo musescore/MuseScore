@@ -19,20 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_AUDIOPLUGINMETAREADERREGISTERMOCK_H
-#define MUSE_AUDIO_AUDIOPLUGINMETAREADERREGISTERMOCK_H
+#pragma once
 
-#include <gmock/gmock.h>
+#include "modularity/imoduleinterface.h"
 
-#include "audio/iaudiopluginmetareaderregister.h"
+#include "global/io/path.h"
 
-namespace muse::audio {
-class AudioPluginMetaReaderRegisterMock : public IAudioPluginMetaReaderRegister
+namespace muse::audioplugins {
+class IAudioPluginsConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAudioPluginsConfiguration)
+
 public:
-    MOCK_METHOD(const std::vector<IAudioPluginMetaReaderPtr>&, readers, (), (const, override));
-    MOCK_METHOD(void, registerReader, (IAudioPluginMetaReaderPtr), (override));
+    virtual ~IAudioPluginsConfiguration() = default;
+
+    virtual io::path_t knownAudioPluginsFilePath() const = 0;
 };
 }
-
-#endif // MUSE_AUDIO_AUDIOPLUGINMETAREADERREGISTERMOCK_H

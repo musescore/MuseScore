@@ -20,24 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
-#define MUSE_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
+#pragma once
 
-#include "modularity/imoduleinterface.h"
+#include "../iaudiopluginsscannerregister.h"
 
-#include "iaudiopluginmetareader.h"
-
-namespace muse::audio {
-class IAudioPluginMetaReaderRegister : MODULE_EXPORT_INTERFACE
+namespace muse::audioplugins {
+class AudioPluginsScannerRegister : public IAudioPluginsScannerRegister
 {
-    INTERFACE_ID(IAudioPluginMetaReaderRegister)
-
 public:
-    virtual ~IAudioPluginMetaReaderRegister() = default;
+    const std::vector<IAudioPluginsScannerPtr>& scanners() const override;
+    void registerScanner(IAudioPluginsScannerPtr scanner) override;
 
-    virtual const std::vector<IAudioPluginMetaReaderPtr>& readers() const = 0;
-    virtual void registerReader(IAudioPluginMetaReaderPtr reader) = 0;
+private:
+    std::vector<IAudioPluginsScannerPtr> m_scanners;
 };
 }
-
-#endif // MUSE_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H

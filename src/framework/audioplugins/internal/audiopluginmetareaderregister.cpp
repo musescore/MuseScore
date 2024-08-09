@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,18 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_VST_VSTPLUGINMETAREADER_H
-#define MUSE_VST_VSTPLUGINMETAREADER_H
+#include "audiopluginmetareaderregister.h"
 
-#include "audioplugins/iaudiopluginmetareader.h"
+using namespace muse::audioplugins;
 
-namespace muse::vst {
-class VstPluginMetaReader : public audioplugins::IAudioPluginMetaReader
+const std::vector<IAudioPluginMetaReaderPtr>& AudioPluginMetaReaderRegister::readers() const
 {
-public:
-    bool canReadMeta(const io::path_t& pluginPath) const override;
-    RetVal<muse::audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const override;
-};
+    return m_readers;
 }
 
-#endif // MUSE_VST_VSTPLUGINMETAREADER_H
+void AudioPluginMetaReaderRegister::registerReader(IAudioPluginMetaReaderPtr reader)
+{
+    m_readers.push_back(reader);
+}

@@ -22,18 +22,19 @@
 
 #include <gtest/gtest.h>
 
-#include "audio/audioutils.h"
+#include "audioplugins/internal/audiopluginsutils.h"
+#include "audioplugins/audiopluginstypes.h"
 
-using namespace muse::audio;
+using namespace muse::audioplugins;
 
-namespace muse::audio {
-class Audio_AudioUtilsTest : public ::testing::Test
+namespace muse::audioplugins {
+class AudioPlugins_AudioUtilsTest : public ::testing::Test
 {
 public:
 };
 }
 
-TEST_F(Audio_AudioUtilsTest, AudioPluginTypeFromCategoriesString)
+TEST_F(AudioPlugins_AudioUtilsTest, AudioPluginTypeFromCategoriesString)
 {
     EXPECT_EQ(AudioPluginType::Fx, audioPluginTypeFromCategoriesString(u"Fx|Delay"));
     EXPECT_EQ(AudioPluginType::Fx, audioPluginTypeFromCategoriesString(u"Test|Fx"));

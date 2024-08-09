@@ -21,6 +21,13 @@
  */
 #include "audiopluginsmodule.h"
 
+#include "internal/audiopluginsconfiguration.h"
+#include "internal/knownaudiopluginsregister.h"
+#include "internal/audiopluginsscannerregister.h"
+#include "internal/audiopluginmetareaderregister.h"
+#include "internal/registeraudiopluginsscenario.h"
+
+#include "diagnostics/idiagnosticspathsregister.h"
 
 #include "log.h"
 
@@ -30,7 +37,6 @@ using namespace muse::audioplugins;
 
 AudioPluginsModule::AudioPluginsModule()
 {
-
 }
 
 std::string AudioPluginsModule::moduleName() const
@@ -40,34 +46,35 @@ std::string AudioPluginsModule::moduleName() const
 
 void AudioPluginsModule::registerExports()
 {
+    m_configuration = std::make_shared<AudioPluginsConfiguration>();
+    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
+    ioc()->registerExport<IAudioPluginsConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>());
+    ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
+    ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
+    ioc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), m_registerAudioPluginsScenario);
 }
 
 void AudioPluginsModule::resolveImports()
 {
-
 }
 
-void AudioPluginsModule::onInit(const IApplication::RunMode& mode)
+void AudioPluginsModule::onInit(const IApplication::RunMode&)
 {
-
+    m_registerAudioPluginsScenario->init();
 
     //! --- Diagnostics ---
-    // auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
-    // if (pr) {
-    //     std::vector<io::path_t> paths = m_configuration->soundFontDirectories();
-    //     for (const io::path_t& p : paths) {
-    //         pr->reg("soundfonts", p);
-    //     }
-    //     pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
-    // }
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
+    }
 }
 
 void AudioPluginsModule::onDelayedInit()
 {
-    // Ret ret = m_registerAudioPluginsScenario->registerNewPlugins();
-    // if (!ret) {
-    //     LOGE() << ret.toString();
-    // }
+    Ret ret = m_registerAudioPluginsScenario->registerNewPlugins();
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
-

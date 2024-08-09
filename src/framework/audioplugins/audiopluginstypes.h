@@ -19,24 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
-#define MUSE_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
+#pragma once
 
-#include "modularity/imoduleinterface.h"
+#include "audio/audiotypes.h"
 
-#include "iaudiopluginsscanner.h"
+namespace muse::audioplugins {
+enum class AudioPluginType {
+    Undefined = -1,
+    Instrument,
+    Fx,
+};
 
-namespace muse::audio {
-class IAudioPluginsScannerRegister : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(IAudioPluginsScannerRegister)
-
-public:
-    virtual ~IAudioPluginsScannerRegister() = default;
-
-    virtual const std::vector<IAudioPluginsScannerPtr>& scanners() const = 0;
-    virtual void registerScanner(IAudioPluginsScannerPtr scanner) = 0;
+struct AudioPluginInfo {
+    AudioPluginType type = AudioPluginType::Undefined;
+    audio::AudioResourceMeta meta;
+    io::path_t path;
+    bool enabled = false;
+    int errorCode = 0;
 };
 }
-
-#endif // MUSE_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H

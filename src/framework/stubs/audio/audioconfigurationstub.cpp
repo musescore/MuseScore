@@ -135,11 +135,6 @@ async::Channel<io::paths_t> AudioConfigurationStub::soundFontDirectoriesChanged(
     return async::Channel<io::paths_t>();
 }
 
-io::path_t AudioConfigurationStub::knownAudioPluginsFilePath() const
-{
-    return {};
-}
-
 bool AudioConfigurationStub::shouldMeasureInputLag() const
 {
     return false;

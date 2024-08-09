@@ -72,8 +72,6 @@ public:
     virtual void setUserSoundFontDirectories(const io::paths_t& paths) = 0;
     virtual async::Channel<io::paths_t> soundFontDirectoriesChanged() const = 0;
 
-    virtual io::path_t knownAudioPluginsFilePath() const = 0;
-
     virtual bool shouldMeasureInputLag() const = 0;
 };
 }

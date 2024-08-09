@@ -38,22 +38,6 @@ inline AudioResourceMeta makeReverbMeta()
     return meta;
 }
 
-inline AudioPluginType audioPluginTypeFromCategoriesString(const String& categoriesStr)
-{
-    static const std::vector<std::pair<String, AudioPluginType> > STRING_TO_PLUGIN_TYPE_LIST = {
-        { u"Instrument", AudioPluginType::Instrument },
-        { u"Fx", AudioPluginType::Fx },
-    };
-
-    for (auto it = STRING_TO_PLUGIN_TYPE_LIST.cbegin(); it != STRING_TO_PLUGIN_TYPE_LIST.cend(); ++it) {
-        if (categoriesStr.contains(it->first)) {
-            return it->second;
-        }
-    }
-
-    return AudioPluginType::Undefined;
-}
-
 inline String audioSourceName(const AudioInputParams& params)
 {
     if (params.type() == AudioSourceType::MuseSampler) {

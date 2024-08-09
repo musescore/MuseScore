@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
-#define MUSE_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
+#pragma once
 
 #include "global/modularity/ioc.h"
 #include "global/iprocess.h"
@@ -29,21 +28,21 @@
 #include "global/iinteractive.h"
 #include "global/async/asyncable.h"
 
-#include "iregisteraudiopluginsscenario.h"
-#include "iknownaudiopluginsregister.h"
-#include "iaudiopluginsscannerregister.h"
-#include "iaudiopluginmetareaderregister.h"
+#include "../iregisteraudiopluginsscenario.h"
+#include "../iknownaudiopluginsregister.h"
+#include "../iaudiopluginsscannerregister.h"
+#include "../iaudiopluginmetareaderregister.h"
 
-namespace muse::audio {
+namespace muse::audioplugins {
 class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public async::Asyncable
 {
 public:
-    INJECT(IKnownAudioPluginsRegister, knownPluginsRegister)
-    INJECT(IAudioPluginsScannerRegister, scannerRegister)
-    INJECT(IAudioPluginMetaReaderRegister, metaReaderRegister)
-    INJECT(IGlobalConfiguration, globalConfiguration)
-    INJECT(IInteractive, interactive)
-    INJECT(IProcess, process)
+    Inject<IKnownAudioPluginsRegister> knownPluginsRegister;
+    Inject<IAudioPluginsScannerRegister> scannerRegister;
+    Inject<IAudioPluginMetaReaderRegister> metaReaderRegister;
+    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<IInteractive> interactive;
+    Inject<IProcess> process;
 
 public:
     void init();
@@ -60,5 +59,3 @@ private:
     bool m_aborted = false;
 };
 }
-
-#endif // MUSE_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H

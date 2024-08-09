@@ -19,20 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_AUDIOPLUGINSCANNERREGISTERMOCK_H
-#define MUSE_AUDIO_AUDIOPLUGINSCANNERREGISTERMOCK_H
 
-#include <gmock/gmock.h>
+#pragma once
 
-#include "audio/iaudiopluginsscannerregister.h"
+#include "global/types/retval.h"
+#include "audio/audiotypes.h"
 
-namespace muse::audio {
-class AudioPluginsScannerRegisterMock : public IAudioPluginsScannerRegister
+namespace muse::audioplugins {
+class IAudioPluginMetaReader
 {
 public:
-    MOCK_METHOD(const std::vector<IAudioPluginsScannerPtr>&, scanners, (), (const, override));
-    MOCK_METHOD(void, registerScanner, (IAudioPluginsScannerPtr), (override));
-};
-}
+    virtual ~IAudioPluginMetaReader() = default;
 
-#endif // MUSE_AUDIO_AUDIOPLUGINSCANNERREGISTERMOCK_H
+    virtual bool canReadMeta(const io::path_t& pluginPath) const = 0;
+    virtual RetVal<audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const = 0;
+};
+
+using IAudioPluginMetaReaderPtr = std::shared_ptr<IAudioPluginMetaReader>;
+}

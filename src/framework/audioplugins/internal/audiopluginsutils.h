@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,19 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#ifndef MUSE_VST_VSTPLUGINMETAREADER_H
-#define MUSE_VST_VSTPLUGINMETAREADER_H
+#include "../audiopluginstypes.h"
 
-#include "audioplugins/iaudiopluginmetareader.h"
-
-namespace muse::vst {
-class VstPluginMetaReader : public audioplugins::IAudioPluginMetaReader
+namespace muse::audioplugins {
+inline AudioPluginType audioPluginTypeFromCategoriesString(const String& categoriesStr)
 {
-public:
-    bool canReadMeta(const io::path_t& pluginPath) const override;
-    RetVal<muse::audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const override;
-};
-}
+    static const std::vector<std::pair<String, AudioPluginType> > STRING_TO_PLUGIN_TYPE_LIST = {
+        { u"Instrument", AudioPluginType::Instrument },
+        { u"Fx", AudioPluginType::Fx },
+    };
 
-#endif // MUSE_VST_VSTPLUGINMETAREADER_H
+    for (auto it = STRING_TO_PLUGIN_TYPE_LIST.cbegin(); it != STRING_TO_PLUGIN_TYPE_LIST.cend(); ++it) {
+        if (categoriesStr.contains(it->first)) {
+            return it->second;
+        }
+    }
+
+    return AudioPluginType::Undefined;
+}
+}
