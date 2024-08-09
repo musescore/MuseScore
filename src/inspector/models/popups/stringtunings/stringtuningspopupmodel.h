@@ -20,23 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_STRINGTUNINGSSETTINGSMODEL_H
-#define MU_NOTATION_STRINGTUNINGSSETTINGSMODEL_H
-
-#include "view/abstractelementpopupmodel.h"
-
-#include "modularity/ioc.h"
-#include "iinstrumentsrepository.h"
+#pragma once
 
 #include <QObject>
+
+#include "../abstractelementpopupmodel.h"
+
+#include "modularity/ioc.h"
+#include "notation/iinstrumentsrepository.h"
 
 namespace mu::engraving {
 class StringTunings;
 }
 
-namespace mu::notation {
+namespace mu::inspector {
 class StringTuningsItem;
-class StringTuningsSettingsModel : public AbstractElementPopupModel
+class StringTuningsPopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
@@ -48,10 +47,10 @@ class StringTuningsSettingsModel : public AbstractElementPopupModel
 
     Q_PROPERTY(QList<StringTuningsItem*> strings READ strings NOTIFY stringsChanged)
 
-    muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
+    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository = { this };
 
 public:
-    explicit StringTuningsSettingsModel(QObject* parent = nullptr);
+    explicit StringTuningsPopupModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init() override;
     Q_INVOKABLE QString pitchToString(int pitch);
@@ -131,6 +130,4 @@ private:
     int m_value = 0;
     bool m_useFlat = false;
 };
-} //namespace mu::notation
-
-#endif // MU_NOTATION_STRINGTUNINGSSETTINGSMODEL_H
+}

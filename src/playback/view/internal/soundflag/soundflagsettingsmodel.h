@@ -31,10 +31,10 @@
 
 #include "uicomponents/view/menuitem.h"
 
-#include "notation/view/abstractelementpopupmodel.h"
+#include "inspector/models/popups/abstractelementpopupmodel.h"
 
 namespace mu::playback {
-class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
+class SoundFlagSettingsModel : public inspector::AbstractElementPopupModel
 {
     Q_OBJECT
 
