@@ -38,6 +38,13 @@ StyledDialogView {
 
     margins: 24
 
+    onConfirmRequested: {
+        if (workspaceModel.isWorkspaceNameAllowed) {
+            root.ret = { errcode: 0, value: workspaceModel.createWorkspace() }
+            root.hide()
+        }
+    }
+
     NewWorkspaceModel {
         id: workspaceModel
     }
@@ -208,14 +215,13 @@ StyledDialogView {
                 enabled: workspaceModel.isWorkspaceNameAllowed
 
                 onClicked: {
-                    root.ret = { errcode: 0, value: workspaceModel.createWorkspace() }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 }
             }
         }

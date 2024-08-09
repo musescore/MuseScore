@@ -143,6 +143,11 @@ void NavigationControl::setPanel(NavigationPanel* panel)
     setAccessibleParent(m_panel ? m_panel->accessible() : nullptr);
 }
 
+void NavigationControl::setIsButtonNavigation(bool isButton)
+{
+    m_isButtonNavigation = isButton;
+}
+
 void NavigationControl::onPanelDestroyed()
 {
     m_panel = nullptr;
@@ -157,4 +162,9 @@ NavigationPanel* NavigationControl::panel_property() const
 INavigationPanel* NavigationControl::panel() const
 {
     return m_panel;
+}
+
+bool NavigationControl::isButtonNavigation() const
+{
+    return m_isButtonNavigation;
 }

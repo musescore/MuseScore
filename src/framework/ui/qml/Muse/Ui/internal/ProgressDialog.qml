@@ -40,6 +40,10 @@ StyledDialogView {
 
     margins: 16
 
+    onRejectRequested: {
+        model.cancel()
+    }
+
     ProgressDialogModel {
         id: model
 
@@ -98,8 +102,7 @@ StyledDialogView {
             text: qsTrc("global", "Cancel")
 
             onClicked: {
-                model.cancel()
-                root.reject()
+                root.rejectRequested()
             }
         }
     }

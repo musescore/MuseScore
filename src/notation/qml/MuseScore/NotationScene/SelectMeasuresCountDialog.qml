@@ -36,6 +36,13 @@ StyledDialogView {
 
     property int measuresCount: 1
 
+    onConfirmRequested: {
+        if (root.measuresCount > 0) {
+            root.ret = { errcode: 0, value: root.measuresCount }
+            root.hide()
+        }
+    }
+
     ColumnLayout {
         id: content
         anchors.fill: parent
@@ -102,14 +109,13 @@ StyledDialogView {
                 accentButton: true
 
                 onClicked: {
-                    root.ret = { errcode: 0, value: root.measuresCount }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 }
             }
         }

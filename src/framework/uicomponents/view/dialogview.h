@@ -35,6 +35,8 @@ class DialogView : public PopupView
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool closeOnEscape READ closeOnEscape WRITE setCloseOnEscape NOTIFY closeOnEscapeChanged)
+
     Inject<IApplication> application;
 
 public:
@@ -48,7 +50,20 @@ public:
     Q_INVOKABLE void accept();
     Q_INVOKABLE void reject(int code = -1);
 
+    bool closeOnEscape();
+    void setCloseOnEscape(bool close);
+
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+signals:
+    void closeOnEscapeChanged();
+    void confirmRequested();
+    void rejectRequested();
+
 private:
+    bool shortcutOverrideIsAllowed() const;
+
     bool isDialog() const override;
     void beforeOpen() override;
     void onHidden() override;
@@ -58,6 +73,8 @@ private:
     void updateGeometry() override;
 
     QRect viewGeometry() const override;
+
+    bool m_closeOnEscape = true;
 
     QEventLoop m_loop;
 };

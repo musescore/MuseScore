@@ -35,6 +35,7 @@ class NavigationControl : public AbstractNavigation, public INavigationControl
 {
     Q_OBJECT
     Q_PROPERTY(muse::ui::NavigationPanel * panel READ panel_property WRITE setPanel NOTIFY panelChanged)
+    Q_PROPERTY(bool isButtonNavigation READ isButtonNavigation WRITE setIsButtonNavigation NOTIFY isButtonNavigationChanged)
 
 public:
     explicit NavigationControl(QObject* parent = nullptr);
@@ -42,6 +43,8 @@ public:
 
     NavigationPanel* panel_property() const;
     INavigationPanel* panel() const override;
+
+    bool isButtonNavigation() const override;
 
     QString name() const override;
 
@@ -67,9 +70,11 @@ public:
 
 public slots:
     void setPanel(NavigationPanel* panel);
+    void setIsButtonNavigation(bool isButton);
 
 signals:
     void panelChanged(NavigationPanel* panel);
+    void isButtonNavigationChanged(bool isButton);
     void triggered();
 
 private slots:
@@ -77,6 +82,7 @@ private slots:
 
 private:
     NavigationPanel* m_panel = nullptr;
+    bool m_isButtonNavigation = false;
 };
 }
 

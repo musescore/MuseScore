@@ -46,6 +46,13 @@ StyledDialogView {
         open()
     }
 
+    onConfirmRequested: {
+        if (mappingField.hasText) {
+            root.mapToEventRequested(model.inputtedEvent())
+            root.close()
+        }
+    }
+
 
     Rectangle {
         anchors.fill: parent
@@ -121,14 +128,13 @@ StyledDialogView {
                     accentButton: true
 
                     onClicked: {
-                        root.mapToEventRequested(model.inputtedEvent())
-                        root.close()
+                        root.confirmRequested()
                     }
                 }
 
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {
-                        root.reject()
+                        root.rejectRequested()
                     }
                 }
             }

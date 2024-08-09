@@ -39,6 +39,13 @@ StyledDialogView {
     modal: true
     resizable: true
 
+    onConfirmRequested: {
+        if (partsModel.hasSelection) {
+            partsModel.openSelectedParts()
+            root.hide()
+        }
+    }
+
     PartListModel {
         id: partsModel
     }
@@ -104,7 +111,7 @@ StyledDialogView {
                 isLeftSide: true
 
                 onClicked: {
-                    root.hide()
+                    root.rejectRequested()
                 }
             }
 
@@ -127,8 +134,7 @@ StyledDialogView {
                 enabled: partsModel.hasSelection
 
                 onClicked: {
-                    partsModel.openSelectedParts()
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

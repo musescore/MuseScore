@@ -35,6 +35,15 @@ StyledDialogView {
     contentHeight: 558
     resizable: true
 
+    onConfirmRequested: {
+        if (!workspacesModel.apply()) {
+            return
+        }
+
+        root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
+        root.hide()
+    }
+
     WorkspaceListModel {
         id: workspacesModel
     }
@@ -113,18 +122,13 @@ StyledDialogView {
                 accentButton: true
 
                 onClicked: {
-                    if (!workspacesModel.apply()) {
-                        return
-                    }
-
-                    root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 }
             }
         }

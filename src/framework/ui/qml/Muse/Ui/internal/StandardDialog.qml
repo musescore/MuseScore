@@ -59,6 +59,13 @@ StyledDialogView {
 
     margins: 16
 
+    onConfirmRequested: {
+        var accentButton = mainPanel.buttonBox.accentButton()
+        if (accentButton) {
+            accentButton.clicked(undefined)
+        }
+    }
+
     onDetailedTextChanged: {
         if (root.detailedText.length <= 0) {
             return

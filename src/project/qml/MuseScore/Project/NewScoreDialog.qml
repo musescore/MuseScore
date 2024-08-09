@@ -39,7 +39,11 @@ StyledDialogView {
 
     objectName: "NewScoreDialog"
 
-    function onDone() {
+    onConfirmRequested: {
+        if (!chooseInstrumentsAndTemplatePage.hasSelection) {
+            return
+        }
+
         var result = {}
 
         var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
@@ -94,7 +98,7 @@ StyledDialogView {
             }
 
             onDone: {
-                root.onDone()
+                root.confirmRequested()
             }
         }
 
@@ -147,7 +151,7 @@ StyledDialogView {
                 buttonId: ButtonBoxModel.CustomButton + 1
 
                 onClicked: {
-                    root.reject()
+                    root.rejectRequested()
                 }
             }
 
@@ -182,7 +186,7 @@ StyledDialogView {
                 enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
                 onClicked: {
-                    root.onDone()
+                    root.confirmRequested()
                 }
             }
         }

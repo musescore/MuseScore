@@ -35,6 +35,11 @@ StyledDialogView {
 
     objectName: "AudioGenerationSettingsDialog"
 
+    onConfirmRequested: {
+        root.ret = { "errcode": 0 }
+        root.hide()
+    }
+
     onNavigationActivateRequested: {
         settingsOptions.focusOnDefaultSettingControl()
     }
@@ -135,8 +140,7 @@ StyledDialogView {
                 navigation.order: 1
 
                 onClicked: {
-                    root.ret = { "errcode": 0 }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

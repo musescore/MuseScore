@@ -35,6 +35,10 @@ StyledDialogView {
     contentWidth: 896
     contentHeight: 424
 
+    onConfirmRequested: {
+        root.hide()
+    }
+
     SoundProfilesModel {
         id: profilesListModel
     }
@@ -254,7 +258,7 @@ StyledDialogView {
                 navigation.order: 2
 
                 onClicked: {
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

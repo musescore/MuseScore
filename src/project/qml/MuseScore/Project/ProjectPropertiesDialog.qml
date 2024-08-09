@@ -53,6 +53,11 @@ StyledDialogView {
         }
     }
 
+    onConfirmRequested: {
+        projectPropertiesModel.saveProperties()
+        root.hide()
+    }
+
     ProjectPropertiesModel {
         id: projectPropertiesModel
     }
@@ -121,10 +126,9 @@ StyledDialogView {
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Ok) {
-                    projectPropertiesModel.saveProperties()
-                    root.hide()
+                    root.confirmRequested()
                 } else if (buttonId === ButtonBoxModel.Cancel) {
-                    root.hide()
+                    root.rejectRequested()
                 }
             }
         }
