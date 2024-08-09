@@ -523,7 +523,9 @@ void Selection::appendChord(Chord* chord)
                 Note* endNote = toNote(note->tieFor()->endElement());
                 Segment* s = endNote->chord()->segment();
                 if (!s || s->tick() < tickEnd()) {
-                    m_el.push_back(note->tieFor());
+                    for (auto seg : note->tieFor()->spannerSegments()) {
+                        appendFiltered(seg);
+                    }
                 }
             }
         }
@@ -711,14 +713,16 @@ void Selection::updateSelectedElements()
         if (sp->isVolta()) {
             continue;
         }
-        if (sp->isSlur()) {
+        if (sp->isSlur() || sp->isHairpin()) {
             // ignore if start & end elements not calculated yet
             if (!sp->startElement() || !sp->endElement()) {
                 continue;
             }
             if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)) {
                 if (canSelect(sp->startCR()) && canSelect(sp->endCR())) {
-                    appendFiltered(sp);               // slur with start or end in range selection
+                    for (auto seg : sp->spannerSegments()) {
+                        appendFiltered(seg);               // slur with start or end in range selection
+                    }
                 }
             }
         } else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick)) {
