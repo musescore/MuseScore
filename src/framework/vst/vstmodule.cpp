@@ -25,13 +25,13 @@
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiengine.h"
-#include "log.h"
-#include "settings.h"
+
 #include "modularity/ioc.h"
 #include "audio/isynthresolver.h"
 #include "audio/ifxresolver.h"
-#include "audio/iaudiopluginsscannerregister.h"
-#include "audio/iaudiopluginmetareaderregister.h"
+
+#include "audioplugins/iaudiopluginsscannerregister.h"
+#include "audioplugins/iaudiopluginmetareaderregister.h"
 
 #include "internal/vstconfiguration.h"
 #include "internal/vstpluginsregister.h"
@@ -45,11 +45,14 @@
 #include "view/vstieditorview.h"
 #include "view/vstfxeditorview.h"
 
+#include "log.h"
+
 using namespace muse::vst;
 using namespace muse::modularity;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 using namespace muse::audio;
+using namespace muse::audioplugins;
 using namespace muse::ui;
 
 static std::shared_ptr<VstConfiguration> s_configuration = std::make_shared<VstConfiguration>();

@@ -18,15 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST muse_audio_test)
+set(MODULE_TEST muse_audioplugins_test)
 
-if (NOT MUSE_MODULE_AUDIO_JACK)
-
-if(OS_IS_FBSD)
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /usr/local/lib/libasound.so")
-endif()
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/audioconfigurationmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/audiopluginsconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/knownaudiopluginsregistermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/audiopluginsscannerregistermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/audiopluginsscannermock.h
@@ -35,11 +30,10 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/knownaudiopluginsregistertest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/registeraudiopluginsscenariotest.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/audioutilstest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/audiopluginsutilstest.cpp
 )
 
-set(MODULE_TEST_LINK muse_audio)
+set(MODULE_TEST_LINK muse_audioplugins)
 
 include(SetupGTest)
 
-endif()

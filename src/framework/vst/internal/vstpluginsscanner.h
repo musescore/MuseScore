@@ -22,14 +22,14 @@
 #ifndef MUSE_VST_VSTPLUGINSSCANNER_H
 #define MUSE_VST_VSTPLUGINSSCANNER_H
 
-#include "audio/iaudiopluginsscanner.h"
+#include "audioplugins/iaudiopluginsscanner.h"
 
 #include "modularity/ioc.h"
 #include "ivstconfiguration.h"
 #include "io/ifilesystem.h"
 
 namespace muse::vst {
-class VstPluginsScanner : public muse::audio::IAudioPluginsScanner
+class VstPluginsScanner : public audioplugins::IAudioPluginsScanner
 {
     INJECT(IVstConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)

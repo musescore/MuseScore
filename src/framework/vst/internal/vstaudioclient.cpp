@@ -27,6 +27,7 @@ using namespace muse;
 using namespace muse::vst;
 using namespace muse::mpe;
 using namespace muse::audio;
+using namespace muse::audioplugins;
 
 static size_t noteEventKey(int pitch, int channel)
 {

@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#include "audiopluginsscannerregister.h"
+#include <gmock/gmock.h>
 
-using namespace muse::audio;
+#include "audioplugins/iaudiopluginsconfiguration.h"
 
-const std::vector<IAudioPluginsScannerPtr>& AudioPluginsScannerRegister::scanners() const
+namespace muse::audioplugins {
+class AudioPluginsConfigurationMock : public IAudioPluginsConfiguration
 {
-    return m_scanners;
-}
+public:
 
-void AudioPluginsScannerRegister::registerScanner(IAudioPluginsScannerPtr scanner)
-{
-    m_scanners.push_back(scanner);
+    MOCK_METHOD(io::path_t, knownAudioPluginsFilePath, (), (const, override));
+};
 }

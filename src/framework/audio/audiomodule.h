@@ -59,7 +59,6 @@ public:
     void registerUiTypes() override;
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
     void onDeinit() override;
     void onDestroy() override;
 
@@ -79,9 +78,6 @@ private:
     std::shared_ptr<Playback> m_playbackFacade;
 
     std::shared_ptr<SoundFontRepository> m_soundFontRepository;
-
-    std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
-    std::shared_ptr<RegisterAudioPluginsScenario> m_registerAudioPluginsScenario;
 
     std::shared_ptr<IAudioDriver> m_audioDriver;
 };

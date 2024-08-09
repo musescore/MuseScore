@@ -179,20 +179,6 @@ using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
 static const AudioResourceId MUSE_REVERB_ID("Muse Reverb");
 
-enum class AudioPluginType {
-    Undefined = -1,
-    Instrument,
-    Fx,
-};
-
-struct AudioPluginInfo {
-    AudioPluginType type = AudioPluginType::Undefined;
-    AudioResourceMeta meta;
-    io::path_t path;
-    bool enabled = false;
-    int errorCode = 0;
-};
-
 enum class AudioFxType {
     Undefined = -1,
     VstFx,

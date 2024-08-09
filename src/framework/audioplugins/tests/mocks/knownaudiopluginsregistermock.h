@@ -19,20 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_AUDIOPLUGINMETAREADERMOCK_H
-#define MUSE_AUDIO_AUDIOPLUGINMETAREADERMOCK_H
+#pragma once
 
 #include <gmock/gmock.h>
 
-#include "audio/iaudiopluginmetareader.h"
+#include "audioplugins/iknownaudiopluginsregister.h"
 
-namespace muse::audio {
-class AudioPluginMetaReaderMock : public IAudioPluginMetaReader
+namespace muse::audioplugins {
+class KnownAudioPluginsRegisterMock : public IKnownAudioPluginsRegister
 {
 public:
-    MOCK_METHOD(bool, canReadMeta, (const io::path_t&), (const, override));
-    MOCK_METHOD(RetVal<AudioResourceMetaList>, readMeta, (const io::path_t&), (const, override));
+    MOCK_METHOD(Ret, load, (), (override));
+
+    MOCK_METHOD(std::vector<AudioPluginInfo>, pluginInfoList, (PluginInfoAccepted), (const, override));
+    MOCK_METHOD(const io::path_t&, pluginPath, (const audio::AudioResourceId&), (const, override));
+
+    MOCK_METHOD(bool, exists, (const io::path_t&), (const, override));
+    MOCK_METHOD(bool, exists, (const audio::AudioResourceId&), (const, override));
+
+    MOCK_METHOD(Ret, registerPlugin, (const AudioPluginInfo&), (override));
+    MOCK_METHOD(Ret, unregisterPlugin, (const audio::AudioResourceId&), (override));
 };
 }
-
-#endif // MUSE_AUDIO_AUDIOPLUGINMETAREADERMOCK_H

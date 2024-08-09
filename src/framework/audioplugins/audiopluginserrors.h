@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,19 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#ifndef MUSE_VST_VSTPLUGINMETAREADER_H
-#define MUSE_VST_VSTPLUGINMETAREADER_H
+#include "global/types/ret.h"
 
-#include "audioplugins/iaudiopluginmetareader.h"
+namespace muse::audioplugins {
+enum class Err {
+    Undefined       = int(Ret::Code::Undefined),
+    NoError         = int(Ret::Code::Ok),
+    UnknownError    = int(Ret::Code::AudioFirst),
 
-namespace muse::vst {
-class VstPluginMetaReader : public audioplugins::IAudioPluginMetaReader
-{
-public:
-    bool canReadMeta(const io::path_t& pluginPath) const override;
-    RetVal<muse::audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const override;
+    UnknownPluginType = 351,
 };
-}
 
-#endif // MUSE_VST_VSTPLUGINMETAREADER_H
+inline Ret make_ret(Err e)
+{
+    return Ret(static_cast<int>(e));
+}
+}

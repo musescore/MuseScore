@@ -234,11 +234,6 @@ async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() co
     return m_soundFontDirsChanged;
 }
 
-io::path_t AudioConfiguration::knownAudioPluginsFilePath() const
-{
-    return globalConfiguration()->userAppDataPath() + "/known_audio_plugins.json";
-}
-
 bool AudioConfiguration::shouldMeasureInputLag() const
 {
     return settings()->value(AUDIO_MEASURE_INPUT_LAG).toBool();

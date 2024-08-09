@@ -20,23 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_IAUDIOPLUGINMETAREADER_H
-#define MUSE_AUDIO_IAUDIOPLUGINMETAREADER_H
+#pragma once
 
-#include "global/types/retval.h"
-#include "audiotypes.h"
+#include "../iaudiopluginmetareaderregister.h"
 
-namespace muse::audio {
-class IAudioPluginMetaReader
+namespace muse::audioplugins {
+class AudioPluginMetaReaderRegister : public IAudioPluginMetaReaderRegister
 {
 public:
-    virtual ~IAudioPluginMetaReader() = default;
+    const std::vector<IAudioPluginMetaReaderPtr>& readers() const override;
+    void registerReader(IAudioPluginMetaReaderPtr reader) override;
 
-    virtual bool canReadMeta(const io::path_t& pluginPath) const = 0;
-    virtual RetVal<AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const = 0;
+private:
+    std::vector<IAudioPluginMetaReaderPtr> m_readers;
 };
-
-using IAudioPluginMetaReaderPtr = std::shared_ptr<IAudioPluginMetaReader>;
 }
-
-#endif // MUSE_AUDIO_IAUDIOPLUGINMETAREADER_H

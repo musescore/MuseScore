@@ -26,6 +26,9 @@
 #include "modularity/imodulesetup.h"
 
 namespace muse::audioplugins {
+class AudioPluginsConfiguration;
+class KnownAudioPluginsRegister;
+class RegisterAudioPluginsScenario;
 class AudioPluginsModule : public modularity::IModuleSetup
 {
 public:
@@ -40,7 +43,8 @@ public:
 
 private:
 
+    std::shared_ptr<AudioPluginsConfiguration> m_configuration;
+    std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
+    std::shared_ptr<RegisterAudioPluginsScenario> m_registerAudioPluginsScenario;
 };
 }
-
-

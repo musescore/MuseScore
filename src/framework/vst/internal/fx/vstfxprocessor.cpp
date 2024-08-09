@@ -25,6 +25,7 @@
 using namespace muse;
 using namespace muse::vst;
 using namespace muse::audio;
+using namespace muse::audioplugins;
 
 VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr, const AudioFxParams& params)
     : m_pluginPtr(pluginPtr),

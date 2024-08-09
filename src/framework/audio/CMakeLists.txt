@@ -99,12 +99,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
-    ${CMAKE_CURRENT_LIST_DIR}/iknownaudiopluginsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscanner.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscannerregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareader.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareaderregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/iregisteraudiopluginsscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
 
     # Common internal
@@ -125,16 +119,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractsynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractsynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstracteventsequencer.h
-
-    # Plugins
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/knownaudiopluginsregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/knownaudiopluginsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginsscannerregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginsscannerregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/registeraudiopluginsscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/registeraudiopluginsscenario.h
 
     # Driver
     ${DRIVER_SRC}
@@ -337,5 +321,5 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 setup_module()
 
 if (MUSE_MODULE_AUDIO_TESTS)
-    add_subdirectory(tests)
+    #add_subdirectory(tests) no tests
 endif()

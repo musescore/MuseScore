@@ -22,16 +22,16 @@
 
 #include <gtest/gtest.h>
 
-#include "audio/internal/plugins/registeraudiopluginsscenario.h"
+#include "audioplugins/internal/registeraudiopluginsscenario.h"
 
 #include "global/tests/mocks/globalconfigurationmock.h"
 #include "global/tests/mocks/interactivemock.h"
 #include "global/tests/mocks/processmock.h"
-#include "audio/tests/mocks/knownaudiopluginsregistermock.h"
-#include "audio/tests/mocks/audiopluginsscannerregistermock.h"
-#include "audio/tests/mocks/audiopluginsscannermock.h"
-#include "audio/tests/mocks/audiopluginmetareaderregistermock.h"
-#include "audio/tests/mocks/audiopluginmetareadermock.h"
+#include "mocks/knownaudiopluginsregistermock.h"
+#include "mocks/audiopluginsscannerregistermock.h"
+#include "mocks/audiopluginsscannermock.h"
+#include "mocks/audiopluginmetareaderregistermock.h"
+#include "mocks/audiopluginmetareadermock.h"
 
 #include "translation.h"
 
@@ -41,10 +41,11 @@ using ::testing::ReturnRef;
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audioplugins;
 using namespace muse::io;
 
-namespace muse::audio {
-class Audio_RegisterAudioPluginsScenarioTest : public ::testing::Test
+namespace muse::audioplugins {
+class AudioPlugins_RegisterAudioPluginsScenarioTest : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -101,7 +102,7 @@ inline bool operator==(const AudioPluginInfo& info1, const AudioPluginInfo& info
 }
 }
 
-TEST_F(Audio_RegisterAudioPluginsScenarioTest, Init)
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, Init)
 {
     // [THEN] The register is inited
     EXPECT_CALL(*m_knownPlugins, load())
@@ -111,7 +112,7 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, Init)
     m_scenario->init();
 }
 
-TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
 {
     // [GIVEN] All found plugins
     paths_t foundPluginPaths = {
@@ -195,7 +196,7 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
     EXPECT_TRUE(ret);
 }
 
-TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins_NoNewPlugins)
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins_NoNewPlugins)
 {
     // [GIVEN] All found plugins (all are already registered)
     paths_t foundPluginPaths = {
@@ -234,7 +235,7 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins_NoNewPlugins)
     EXPECT_TRUE(ret);
 }
 
-TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterPlugin)
 {
     // [GIVEN] Some plugin we want to register
     path_t pluginPath = "/some/test/path/to/plugin/AAA.vst3";
@@ -281,7 +282,7 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
     EXPECT_TRUE(ret);
 }
 
-TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterFailedPlugin)
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterFailedPlugin)
 {
     // [GIVEN] Some incompatible plugin we want to register
     path_t pluginPath = "/some/test/path/to/plugin/AAA.vst3";

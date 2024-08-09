@@ -33,11 +33,6 @@
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
 
-#include "internal/plugins/knownaudiopluginsregister.h"
-#include "internal/plugins/audiopluginsscannerregister.h"
-#include "internal/plugins/audiopluginmetareaderregister.h"
-#include "internal/plugins/registeraudiopluginsscenario.h"
-
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
 
@@ -124,7 +119,6 @@ void AudioModule::registerExports()
     m_synthResolver = std::make_shared<SynthResolver>();
     m_playbackFacade = std::make_shared<Playback>(iocContext());
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
-    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -160,11 +154,6 @@ void AudioModule::registerExports()
     ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
 
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
-
-    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>());
-    ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
-    ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
-    ioc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), m_registerAudioPluginsScenario);
 }
 
 void AudioModule::registerResources()
@@ -216,7 +205,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     // Init configuration
     m_configuration->init();
-    m_registerAudioPluginsScenario->init();
 
     if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
@@ -238,15 +226,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         for (const io::path_t& p : paths) {
             pr->reg("soundfonts", p);
         }
-        pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
-    }
-}
-
-void AudioModule::onDelayedInit()
-{
-    Ret ret = m_registerAudioPluginsScenario->registerNewPlugins();
-    if (!ret) {
-        LOGE() << ret.toString();
     }
 }
 

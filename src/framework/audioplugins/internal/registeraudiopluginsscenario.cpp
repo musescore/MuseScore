@@ -26,13 +26,12 @@
 
 #include "global/translation.h"
 
-#include "audioutils.h"
-#include "audioerrors.h"
+#include "audiopluginserrors.h"
 
 #include "log.h"
 
 using namespace muse;
-using namespace muse::audio;
+using namespace muse::audioplugins;
 
 void RegisterAudioPluginsScenario::init()
 {
@@ -121,7 +120,7 @@ Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)
 
     IAudioPluginMetaReaderPtr reader = metaReader(pluginPath);
     if (!reader) {
-        return make_ret(audio::Err::UnknownPluginType);
+        return make_ret(Err::UnknownPluginType);
     }
 
     RetVal<AudioResourceMetaList> metaList = reader->readMeta(pluginPath);
