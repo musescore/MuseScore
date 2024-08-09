@@ -27,10 +27,12 @@
 #include "global/translation.h"
 
 #include "audiopluginserrors.h"
+#include "audiopluginsutils.h"
 
 #include "log.h"
 
 using namespace muse;
+using namespace muse::audio;
 using namespace muse::audioplugins;
 
 void RegisterAudioPluginsScenario::init()
