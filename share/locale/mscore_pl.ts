@@ -7453,7 +7453,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="207"/>
         <source>Portamento</source>
-        <translation>Portamento</translation>
+        <translation>portamento</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="318"/>
@@ -12228,8 +12228,8 @@ Group under the W3C Community Contributor License Agreement
 %1
 A human-readable summary is available:
 %2</source>
-        <translation type="vanished">MusicXML jest obsługiwanym przez wiele aplikacji
-otwartym formatem plików do wymiany cyfrowych partytur.
+        <translation type="vanished">MusicXML jest obsługiwanym przez wiele aplikacji otwartym
+formatem plików do wymiany cyfrowych partytur.
 Prawa autorskie © 2004-2017 Współtwórcy specyfikacji MusicXML
 opublikowanej przez W3C Music Notation Community Group na
 licencji W3C Community Contributor License Agreement (CLA):
@@ -12247,8 +12247,8 @@ Group under the W3C Community Final Specification Agreement:
 %1
 A human-readable summary is available:
 %2</source>
-        <translation>MusicXML jest obsługiwanym przez wiele aplikacji
-otwartym formatem plików do wymiany cyfrowych partytur.
+        <translation>MusicXML jest obsługiwanym przez wiele aplikacji otwartym
+formatem plików do wymiany cyfrowych partytur.
 Prawa autorskie © 2004-2017 Współtwórcy specyfikacji MusicXML
 opublikowanej przez W3C Music Notation Community Group na
 licencji W3C Community Contributor License Agreement (CLA):
@@ -13650,7 +13650,7 @@ Zapisać?</translation>
     <message>
         <location filename="../../mscore/mixer/mixerdetails.cpp" line="281"/>
         <source>Staff %1:</source>
-        <translation>Pięciolinia %1:</translation>
+        <translation>Pięciolinia: %1</translation>
     </message>
 </context>
 <context>
@@ -17581,7 +17581,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/menus.cpp" line="800"/>
         <source>Fingering</source>
-        <translation>Palcowanie</translation>
+        <translation>Palcowania</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1146"/>
@@ -17611,7 +17611,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../libmscore/arpeggio.cpp" line="34"/>
         <source>Bracket arpeggio</source>
-        <translation>Arpeggio - klamra</translation>
+        <translation>Klamra arpeggio</translation>
     </message>
     <message>
         <location filename="../../libmscore/arpeggio.cpp" line="35"/>
@@ -17914,37 +17914,37 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/menus.cpp" line="1558"/>
         <source>Quarter note = dotted quarter note metric modulation</source>
-        <translation>Modulacja metryczna ćwierćnuta = ćwierćnuta z kropką</translation>
+        <translation>Modulacja metryczna: ćwierćnuta = ćwierćnuta z kropką</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1559"/>
         <source>Dotted quarter note = quarter note metric modulation</source>
-        <translation>Modulacja metryczna ćwierćnuta z kropką = ćwierćnuta</translation>
+        <translation>Modulacja metryczna: ćwierćnuta z kropką = ćwierćnuta</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1560"/>
         <source>Half note = quarter note metric modulation</source>
-        <translation>Modulacja metryczna półnuta = ćwierćnuta</translation>
+        <translation>Modulacja metryczna: półnuta = ćwierćnuta</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1561"/>
         <source>Quarter note = half note metric modulation</source>
-        <translation>Modulacja metryczna ćwierćnuta = półnuta</translation>
+        <translation>Modulacja metryczna: ćwierćnuta = półnuta</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1562"/>
         <source>Eighth note = eighth note metric modulation</source>
-        <translation>Modulacja metryczna ósemka = ósemka</translation>
+        <translation>Modulacja metryczna: ósemka = ósemka</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1563"/>
         <source>Quarter note = quarter note metric modulation</source>
-        <translation>Modulacja metryczna ćwierćnuta = ćwierćnuta</translation>
+        <translation>Modulacja metryczna: ćwierćnuta = ćwierćnuta</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1564"/>
         <source>Dotted eighth note = quarter note metric modulation</source>
-        <translation>Modulacja metryczna ósemka z kropką = ćwierćnuta</translation>
+        <translation>Modulacja metryczna: ósemka z kropką = ćwierćnuta</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1646"/>
@@ -18029,7 +18029,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/menus.cpp" line="1301"/>
         <source>Bagpipe Embellishments</source>
-        <translation>Dudy</translation>
+        <translation>Ozdobniki dudowe</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1321"/>
@@ -19455,7 +19455,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="515"/>
         <source>Theme:</source>
-        <translation>Temat:</translation>
+        <translation>Motyw:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1061"/>
@@ -20135,7 +20135,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3214"/>
         <source>Use JACK MIDI</source>
-        <translation>Używaj wyjścia JACK MIDI</translation>
+        <translation>Użyj wyjścia JACK MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3273"/>
@@ -20301,12 +20301,12 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3162"/>
         <source>Use JACK transport</source>
-        <translation>Używaj JACK transport</translation>
+        <translation>Użyj JACK transport</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3169"/>
         <source>Use JACK audio</source>
-        <translation>Używaj JACK audio</translation>
+        <translation>Użyj JACK audio</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3233"/>
@@ -20819,7 +20819,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1352"/>
         <source>Standard</source>
-        <translation>Standardowa</translation>
+        <translation>Standardowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1354"/>
@@ -22777,12 +22777,12 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="38"/>
         <source>Standard</source>
-        <translation>Standardowy klucz</translation>
+        <translation>Standardowy</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="39"/>
         <source>Percussion</source>
-        <translation>Klucz perkusyjny</translation>
+        <translation>Perkusja</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="40"/>
@@ -26773,7 +26773,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1974"/>
         <source>Beam Start</source>
-        <translation>Początek belki</translation>
+        <translation>Złam belkę po lewej</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="47"/>
@@ -27401,17 +27401,17 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1975"/>
         <source>Beam start</source>
-        <translation>Początek belki</translation>
+        <translation>Złam belkę po lewej</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1985"/>
         <source>Beam Middle</source>
-        <translation>Środek belki</translation>
+        <translation>Połącz belki</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1986"/>
         <source>Beam middle</source>
-        <translation>Środek belki</translation>
+        <translation>Połącz belki</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1996"/>
@@ -27426,22 +27426,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2007"/>
         <source>Beam 16th Sub</source>
-        <translation>Belka - szesnastka</translation>
+        <translation>Złam belki wewnętrzne (ósemki)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2008"/>
         <source>Beam 16th sub</source>
-        <translation>Belka - szesnastka</translation>
+        <translation>Złam belki wewnętrzne (ósemki)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2018"/>
         <source>Beam 32nd Sub</source>
-        <translation>Belka - trzydziestodwójka</translation>
+        <translation>Złam belki wewnętrzne (szesnastki)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2019"/>
         <source>Beam 32nd sub</source>
-        <translation>Belka - trzydziestodwójka</translation>
+        <translation>Złam belki wewnętrzne (szesnastki)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2029"/>
@@ -27861,7 +27861,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2352"/>
         <source>Start or stop playback</source>
-        <translation>Rozpocznij lub zatrzymaj odtwarzanie</translation>
+        <translation>Odtwarzaj</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2361"/>
@@ -27911,7 +27911,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2413"/>
         <source>Rewind to start position</source>
-        <translation>Przewiń na początek</translation>
+        <translation>Przewiń</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2427"/>
@@ -31643,7 +31643,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="136"/>
         <source>Bagpipe Embellishment</source>
-        <translation>Dudy</translation>
+        <translation>Ozdobnik dudowy</translation>
     </message>
 </context>
 <context>

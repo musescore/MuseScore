@@ -5715,12 +5715,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1422"/>
         <source>5-str. Electric Bass (High C/Tenor)</source>
-        <translation>Basso elettrico 5 corde (C alto/tenore)</translation>
+        <translation>Basso elettrico 5 corde (C wysokie/tenor)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1425"/>
         <source>5-str. Electric Bass (High C/Tenor) (Tablature)</source>
-        <translation>Basso elettrico 5 corde (C alto/tenore) (tabulatura)</translation>
+        <translation>Basso elettrico 5 corde (C wysokie/tenor) (tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1426"/>
@@ -6138,12 +6138,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1254"/>
         <source>Bouzouki (3-course)</source>
-        <translation>Bouzouki (tríchordo)</translation>
+        <translation>Bouzouki (3-chórowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1257"/>
         <source>Bouzouki (4-course)</source>
-        <translation>Bouzouki (tetráchordo)</translation>
+        <translation>Bouzouki (4-chórowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1258"/>
