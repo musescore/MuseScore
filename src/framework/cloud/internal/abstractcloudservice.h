@@ -143,6 +143,8 @@ private:
 
     network::RequestHeaders headers() const;
 
+    void th_downloadAccountInfo();
+
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;
 

@@ -29,12 +29,13 @@
 #include <QHttpMultiPart>
 #include <QRandomGenerator>
 
-#include "clouderrors.h"
+#include "global/iapplication.h"
+#include "global/concurrency/concurrent.h"
 #include "multiinstances/resourcelockguard.h"
 #include "network/networkerrors.h"
-#include "global/iapplication.h"
 
 #include "oauthhttpserverreplyhandler.h"
+#include "clouderrors.h"
 
 #include "log.h"
 
@@ -90,7 +91,7 @@ void AbstractCloudService::init()
     });
 
     if (readTokens()) {
-        executeRequest([this]() { return downloadAccountInfo(); });
+        Concurrent::run(this, &AbstractCloudService::th_downloadAccountInfo);
     }
 }
 
@@ -454,6 +455,11 @@ void AbstractCloudService::openUrl(const QUrl& url)
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+void AbstractCloudService::th_downloadAccountInfo()
+{
+    executeRequest([this]() { return downloadAccountInfo(); });
 }
 
 QString AbstractCloudService::logoColorForTheme(const ui::ThemeInfo& theme) const
