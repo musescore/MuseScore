@@ -546,7 +546,11 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
 
     PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
 
-    emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRectF());
+    if (elementType == ElementType::DYNAMIC) {
+        emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRect()); // toQRect() is used in AbstractElementPopupModel::updateItemRect()
+    } else {
+        emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRectF());
+    }
 }
 
 void AbstractNotationPaintView::hideElementPopup()

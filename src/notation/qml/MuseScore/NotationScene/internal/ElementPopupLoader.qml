@@ -53,6 +53,7 @@ Item {
             case Notation.TYPE_CAPO: return capoComp
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
             case Notation.TYPE_SOUND_FLAG: return soundFlagComp
+            case Notation.TYPE_DYNAMIC: return dynamicComp
             }
 
             return null
@@ -70,7 +71,6 @@ Item {
 
     function show(elementType, elementRect) {
         close()
-
         var popup = loader.loadPopup(prv.componentByType(elementType), elementRect)
         popup.open()
     }
@@ -148,6 +148,12 @@ Item {
     Component {
         id: soundFlagComp
         SoundFlagPopup {
+        }
+    }
+
+    Component {
+        id: dynamicComp
+        DynamicPopup {
         }
     }
 }

@@ -138,7 +138,11 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideElementPopup();
 
         if (AbstractElementPopupModel::supportsPopup(type)) {
-            m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
+            if (selectedItem->isDynamic()) {
+                m_view->showElementPopup(type, toDynamic(selectedItem)->adjustedBoundingRect());
+            } else {
+                m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
+            }
         }
     });
 }
@@ -877,6 +881,10 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
     if (interaction->isDragStarted()) {
         interaction->endDrag();
+        // When dragging of hairpin ends on a note or rest, open dynamic popup
+        if (interaction->selection()->element()->isHairpinSegment()) {
+            interaction->toggleDynamicPopup();
+        }
     }
 
     if (interaction->isDragCopyStarted()) {
@@ -1197,7 +1205,11 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     ElementType type = item->type();
 
     if (AbstractElementPopupModel::supportsPopup(type)) {
-        m_view->toggleElementPopup(type, item->canvasBoundingRect());
+        if (item->isDynamic()) {
+            m_view->toggleElementPopup(type, toDynamic(item)->adjustedBoundingRect());
+        } else {
+            m_view->toggleElementPopup(type, item->canvasBoundingRect());
+        }
     }
 }
 

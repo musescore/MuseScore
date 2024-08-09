@@ -49,6 +49,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/dynamic.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
@@ -839,12 +840,12 @@ void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
 {
     if (element->isSpanner() && !toSpanner(element)->segmentsEmpty()) {
         SpannerSegment* frontSeg = toSpanner(element)->frontSegment();
-        select({ frontSeg });
+        doSelect({ frontSeg }, SelectType::SINGLE);
         if (frontSeg->needStartEditingAfterSelecting()) {
             startEditElement(frontSeg, false);
         }
     } else {
-        select({ element });
+        doSelect({ element }, SelectType::SINGLE);
         if (element->needStartEditingAfterSelecting()) {
             startEditElement(element, false);
         }
@@ -1080,6 +1081,10 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
+
+        if (m_editData.element->isDynamic()) {
+            addHairpinOnGripDrag(toDynamic(m_editData.element));
+        }
     } else if (m_editData.element && !m_editData.element->hasGrips()) {
         m_dragData.ed.delta = evtDelta;
         m_editData.element->editDrag(m_dragData.ed);
@@ -1095,7 +1100,11 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     score()->update();
 
     if (isGripEditStarted()) {
-        updateGripAnchorLines();
+        if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
+            updateDragAnchorLines();
+        } else {
+            updateGripAnchorLines();
+        }
     } else {
         updateDragAnchorLines();
     }
@@ -2590,6 +2599,11 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     mu::engraving::EngravingItem* editedElement = m_editData.element;
+
+    if (editedElement && editedElement->isDynamic()) {
+        toDynamic(editedElement)->findAdjacentHaipins();
+    }
+
     int gripsCount = editedElement ? editedElement->gripsCount() : 0;
 
     if (gripsCount == 0) {
@@ -3425,6 +3439,7 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
 
     m_editData.element = element;
     m_editData.curGrip = grip;
+    m_editData.editTextualProperties = false;
 
     updateGripAnchorLines();
     m_editData.element->startEdit(m_editData);
@@ -3566,8 +3581,22 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
     m_editData.modifiers = keyboardModifier(event->modifiers());
 
+    bool isHairpinStartEndGrip = m_editData.element->isHairpinSegment() && m_editData.isStartEndGrip();
+
     if (isDragStarted()) {
-        return; // ignore all key strokes while dragging
+        if (isHairpinStartEndGrip && (m_editData.modifiers & ShiftModifier)) {
+            HairpinSegment* seg = toHairpinSegment(m_editData.element);
+            HairpinType type = seg->hairpin()->hairpinType();
+
+            startEdit();
+            if (type == HairpinType::CRESC_HAIRPIN) {
+                seg->hairpin()->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+            } else if (type == HairpinType::DECRESC_HAIRPIN) {
+                seg->hairpin()->setHairpinType(HairpinType::CRESC_HAIRPIN);
+            }
+            apply();
+        }
+        return; // ignore all key strokes while dragging except for the shift key functionality on hairpin grips to change type
     }
 
     m_editData.key = event->key();
@@ -3624,7 +3653,11 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
         if (!isShiftRelease) {
             if (isGripEditStarted()) {
-                updateGripAnchorLines();
+                if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
+                    updateDragAnchorLines();
+                } else {
+                    updateGripAnchorLines();
+                }
             } else if (isElementEditStarted() && !m_editData.editTextualProperties) {
                 updateDragAnchorLines();
             }
@@ -4138,6 +4171,42 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     apply();
 }
 
+void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic)
+{
+    const PointF pos = m_dragData.ed.pos;
+    Hairpin* pin = Factory::createHairpin(score()->dummy()->segment());
+
+    // Right grip
+    if (dynamic->rightDragOffset() >= pin->spatium() * 0.8) {
+        pin->setHairpinType(HairpinType::CRESC_HAIRPIN);
+
+        startEdit();
+        score()->addHairpinOnGripDrag(pin, dynamic, pos, Dynamic::Grip::RIGHT);
+        apply();
+
+        dynamic->resetRightDragOffset(); // Reset grip offset to zero after drawing the hairpin
+
+        LineSegment* segment = pin->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::END);
+    }
+
+    // Left grip
+    if (abs(dynamic->leftDragOffset()) >= pin->spatium() * 0.8) {
+        pin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
+
+        startEdit();
+        score()->addHairpinOnGripDrag(pin, dynamic, pos, Dynamic::Grip::LEFT);
+        apply();
+
+        dynamic->resetLeftDragOffset(); // Reset grip offset to zero after drawing the hairpin
+
+        LineSegment* segment = pin->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::START);
+    }
+}
+
 void NotationInteraction::addHairpinsToSelection(HairpinType type)
 {
     if (selection()->isNone()) {
@@ -4345,6 +4414,49 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
     startEdit();
     score()->cmdIncDecDuration(steps, stepByDots);
     apply();
+}
+
+void NotationInteraction::toggleDynamicPopup()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    // If multiple selected selection()->element() returns null
+    if (!selection()->element()) {
+        return;
+    }
+
+    EngravingItem* el = selection()->element();
+
+    if (el->isHairpinSegment()) {
+        HairpinSegment* hairpinSeg = toHairpinSegment(el);
+
+        switch (m_editData.curGrip) {
+        case Grip::START: {
+            EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore();
+            if (startDynOrExp != nullptr) {
+                select({ startDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+            } else {
+                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->startCR());
+            }
+        }
+            return;
+        case Grip::END: {
+            EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter();
+            if (endDynOrExp != nullptr) {
+                select({ endDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+            } else {
+                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->endCR());
+            }
+        }
+            return;
+        default:
+            return;
+        }
+    } else {
+        addTextToItem(TextStyleType::DYNAMICS, el);
+    }
 }
 
 bool NotationInteraction::toggleLayoutBreakAvailable() const
