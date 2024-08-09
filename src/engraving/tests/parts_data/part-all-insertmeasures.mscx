@@ -104,6 +104,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <linkedMain/>
         <Text>
           <linkedMain/>
@@ -1126,6 +1127,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <linked>
             </linked>
           <Text>
@@ -1837,6 +1839,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <linked>
             <location>
               <staves>-1</staves>

@@ -83,10 +83,9 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
-                TRead::readItem(mb, e, ctx);
                 mb->setTick(ctx.tick());
                 score->measures()->add(mb);
-                mb->setSizeIsSpatiumDependent(!toBox(mb)->isTitleFrame());
+                TRead::readItem(mb, e, ctx);
             } else if (tag == "tick") {
                 ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             } else {

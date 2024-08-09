@@ -83,6 +83,7 @@
       <VBox>
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <linkedMain/>
         <Text>
           <linkedMain/>
@@ -670,6 +671,7 @@
         <VBox>
           <height>10</height>
           <boxAutoSize>0</boxAutoSize>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <linked>
             </linked>
           <Text>
