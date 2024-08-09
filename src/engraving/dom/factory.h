@@ -269,6 +269,8 @@ public:
 
     static VBox* createVBox(const ElementType& type, System* parent, bool isAccessibleEnabled = true);
 
+    static VBox* createTitleVBox(System* parent, bool isAccessibleEnabled = true);
+
     static HBox* createHBox(System* parent, bool isAccessibleEnabled = true);
 
     static TBox* createTBox(System* parent, bool isAccessibleEnabled = true);

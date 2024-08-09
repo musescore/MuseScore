@@ -191,6 +191,7 @@
         <height>25.5926</height>
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <Text>
           <style>frame</style>
           <text>îèéààéà</text>

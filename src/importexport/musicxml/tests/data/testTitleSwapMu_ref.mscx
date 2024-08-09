@@ -430,6 +430,7 @@
         </Measure>
       <VBox>
         <height>19.5</height>
+        <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
         <Text>
           <offset x="0" y="-0.0942"/>
           <text><font size="10"/><font face="Edwin"/>2</text>

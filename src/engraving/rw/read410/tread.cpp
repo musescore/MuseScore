@@ -2183,6 +2183,9 @@ void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
     if (b->score()->mscVersion() < 302) {
         b->setAutoSizeEnabled(false);    // disable auto-size for older scores by default.
     }
+    if (b->score()->mscVersion() < 440) {
+        b->setSizeIsSpatiumDependent(true);
+    }
 }
 
 void TRead::read(HBox* b, XmlReader& e, ReadContext& ctx)
@@ -2194,6 +2197,9 @@ void TRead::read(HBox* b, XmlReader& e, ReadContext& ctx)
     }
     if (b->score()->mscVersion() < 302) {
         b->setAutoSizeEnabled(false);    // disable auto-size for older scores by default.
+    }
+    if (b->score()->mscVersion() < 440) {
+        b->setSizeIsSpatiumDependent(true);
     }
 }
 
@@ -2248,16 +2254,16 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
         b->setBoxWidth(Spatium(e.readDouble()));
     } else if (tag == "topGap") {
         double gap = e.readDouble();
-        b->setTopGap(Millimetre(gap));
+        b->setTopGap(Spatium(gap));
         if (b->score()->mscVersion() >= 206) {
-            b->setTopGap(Millimetre(gap * b->style().spatium()));
+            b->setTopGap(Spatium(gap));
         }
         b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
     } else if (tag == "bottomGap") {
         double gap = e.readDouble();
-        b->setBottomGap(Millimetre(gap));
+        b->setBottomGap(Spatium(gap));
         if (b->score()->mscVersion() >= 206) {
-            b->setBottomGap(Millimetre(gap * b->style().spatium()));
+            b->setBottomGap(Spatium(gap));
         }
         b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
     } else if (tag == "leftMargin") {

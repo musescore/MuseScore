@@ -730,7 +730,7 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 
 VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score, const int miny, const int maxy)
 {
-    VBox* vbox = Factory::createVBox(score->dummy()->system());
+    VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
     double vboxHeight = 10;                           // default height in tenths
     double diff = maxy - miny;                       // calculate height in tenths
     if (diff > vboxHeight) {                         // and size is reasonable

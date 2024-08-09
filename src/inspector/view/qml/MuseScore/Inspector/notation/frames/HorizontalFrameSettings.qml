@@ -23,6 +23,7 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 import "../../common"
 import "internal"
@@ -44,6 +45,17 @@ Column {
         widthSection.focusOnFirst()
     }
 
+    PropertyCheckBox {
+        id: matchStaffSize
+
+        navigation.name: "Scale with staff size"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 1
+
+        text: qsTrc("inspector", "Scale with staff size")
+        propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
+    }
+
     SpinBoxPropertyView {
         id: widthSection
         anchors.left: parent.left
@@ -58,8 +70,6 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
     }
-
-    SeparatorLine { anchors.margins: -12 }
 
     HorizontalGapsSection {
         id: horizontalGapsSection

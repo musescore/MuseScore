@@ -36,6 +36,7 @@ class VerticalFrameSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * frameRightMargin READ frameRightMargin CONSTANT)
     Q_PROPERTY(PropertyItem * frameTopMargin READ frameTopMargin CONSTANT)
     Q_PROPERTY(PropertyItem * frameBottomMargin READ frameBottomMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
 
 public:
     explicit VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -47,6 +48,7 @@ public:
     PropertyItem* frameRightMargin() const;
     PropertyItem* frameTopMargin() const;
     PropertyItem* frameBottomMargin() const;
+    PropertyItem* isSizeSpatiumDependent() const;
 
 private:
     void createProperties() override;
@@ -65,6 +67,7 @@ private:
     PropertyItem* m_frameRightMargin = nullptr;
     PropertyItem* m_frameTopMargin = nullptr;
     PropertyItem* m_frameBottomMargin = nullptr;
+    PropertyItem* m_isSizeSpatiumDependent = nullptr;
 };
 }
 

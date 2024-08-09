@@ -3058,7 +3058,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
         if (mb->isVBox()) {
             VBox* b  = toVBox(mb);
-            Millimetre y = masterScore->style().styleMM(Sid::staffUpperBorder);
+            Spatium y = masterScore->style().styleS(Sid::staffUpperBorder);
             b->setBottomGap(y);
         }
     }
