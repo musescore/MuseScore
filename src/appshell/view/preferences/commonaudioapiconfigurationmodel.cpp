@@ -44,6 +44,7 @@ void CommonAudioApiConfigurationModel::load()
     audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
         emit currentDeviceIdChanged();
         emit sampleRateChanged();
+        emit bufferSizeListChanged();
         emit bufferSizeChanged();
     });
 

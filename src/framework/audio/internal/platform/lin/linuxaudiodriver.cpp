@@ -207,6 +207,11 @@ bool LinuxAudioDriver::isOpened() const
     return s_alsaData != nullptr;
 }
 
+const LinuxAudioDriver::Spec& LinuxAudioDriver::activeSpec() const
+{
+    return s_format;
+}
+
 AudioDeviceID LinuxAudioDriver::outputDevice() const
 {
     return m_deviceId;

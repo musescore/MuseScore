@@ -192,6 +192,11 @@ bool JackAudioDriver::isOpened() const
     return s_jackData != nullptr;
 }
 
+const JackAudioDriver::Spec& JackAudioDriver::activeSpec() const
+{
+    return s_format2;
+}
+
 AudioDeviceID JackAudioDriver::outputDevice() const
 {
     return m_deviceId;

@@ -167,6 +167,7 @@ public:
         int versionMinor = getVersionMinor();
 
         bool at_least_v_0_100 = (versionMajor == 0 && versionMinor >= 100) || versionMajor > 0;
+        m_supportsReinit = at_least_v_0_100;
 
         containsInstrument = (ms_contains_instrument)muse::getLibFunc(m_lib, "ms_contains_instrument");
         getMatchingInstrumentId = (ms_get_matching_instrument_id)muse::getLibFunc(m_lib, "ms_get_matching_instrument_id");
@@ -388,6 +389,11 @@ public:
                && allNotesOff;
     }
 
+    bool supportsReinit() const
+    {
+        return m_supportsReinit;
+    }
+
 private:
     void printApiStatus() const
     {
@@ -448,6 +454,7 @@ private:
     }
 
     MuseSamplerLib m_lib = nullptr;
+    bool m_supportsReinit = false;
 };
 
 using MuseSamplerLibHandlerPtr = std::shared_ptr<MuseSamplerLibHandler>;

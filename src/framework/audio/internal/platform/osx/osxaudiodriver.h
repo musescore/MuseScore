@@ -28,9 +28,6 @@
 
 #include <MacTypes.h>
 
-#include "global/modularity/ioc.h"
-#include "iaudioconfiguration.h"
-
 #include "iaudiodriver.h"
 
 struct AudioTimeStamp;
@@ -40,8 +37,6 @@ struct OpaqueAudioQueue;
 namespace muse::audio {
 class OSXAudioDriver : public IAudioDriver
 {
-    INJECT(IAudioConfiguration, configuration)
-
 public:
     OSXAudioDriver();
     ~OSXAudioDriver();
@@ -52,6 +47,9 @@ public:
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+
+    const Spec& activeSpec() const override;
+
     void resume() override;
     void suspend() override;
 

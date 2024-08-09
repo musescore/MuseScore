@@ -35,6 +35,8 @@ public:
     void close() override;
     bool isOpened() const override;
 
+    const Spec& activeSpec() const override;
+
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& id) override;
     bool resetToDefaultOutputDevice() override;

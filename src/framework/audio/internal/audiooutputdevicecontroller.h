@@ -45,8 +45,7 @@ public:
 
 private:
     void checkConnection();
-
-    void connectCurrentOutputDevice();
+    void onOutputDeviceChanged();
 };
 }
 
