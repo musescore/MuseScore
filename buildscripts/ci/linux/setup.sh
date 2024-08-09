@@ -75,9 +75,11 @@ apt_packages_standard=(
   libgl1-mesa-dev
   libjack-dev
   libnss3-dev
+  libpipewire-0.3-dev
   libportmidi-dev
   libpulse-dev
   libsndfile1-dev
+  libspa-0.2-dev
   make
   wget
   )
@@ -89,7 +91,12 @@ apt_packages_runtime=(
   libdbus-1-3
   libegl1-mesa-dev
   libodbc1
+  libpipewire-0.3-common
+  libpipewire-0.3-modules
   libpq-dev
+  libspa-0.2-bluetooth
+  libspa-0.2-jack
+  libspa-0.2-modules
   libssl-dev
   libxcomposite-dev
   libxcursor-dev

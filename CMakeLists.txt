@@ -113,6 +113,9 @@ option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
 
+if (OS_IS_LIN)
+    option(MUSE_MODULE_AUDIO_PW "Build PipeWire audio module" ON)
+endif()
 
 ###########################################
 # Setup Configure
