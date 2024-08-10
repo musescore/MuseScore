@@ -19,6 +19,7 @@
 
 #include "measureproperties.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurebase.h"
 #include "libmscore/sig.h"
 #include "libmscore/score.h"
 #include "libmscore/repeat.h"
@@ -257,12 +258,13 @@ void MeasureProperties::apply()
                   propertiesChanged = true;
                   }
             }
-
+      int measureOffset = measureNumberOffset->value();
+      bool offsetChanged = (measureOffset != m->noOffset()) ? true : false;
       m->undoChangeProperty(Pid::REPEAT_COUNT, repeatCount());
       m->undoChangeProperty(Pid::BREAK_MMR, breakMultiMeasureRest->isChecked());
       m->undoChangeProperty(Pid::USER_STRETCH, layoutStretch->value());
       m->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
-      m->undoChangeProperty(Pid::NO_OFFSET, measureNumberOffset->value());
+      m->undoChangeProperty(Pid::NO_OFFSET, measureOffset);
       m->undoChangeProperty(Pid::IRREGULAR, isIrregular());
 
       if (m->ticks() != len()) {
@@ -283,6 +285,9 @@ void MeasureProperties::apply()
 
       if (propertiesChanged) {
             m->triggerLayout();
+            }
+      if (offsetChanged) {
+            score->doLayoutRange(m->tick(), score->lastMeasure()->tick());
             }
 
       score->select(m, SelectType::SINGLE, 0);
