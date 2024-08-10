@@ -402,6 +402,9 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, QPointF pos) const
       if (!foundSystems.empty() && !foundSystems.contains(sys) && foundSystems[0]->staves()->size())
             sys = foundSystems[0];
 
+      if (!sys)
+            return nullptr;
+
       // Restrict searching segment to the correct staff
       pos.setY(sys->staffCanvasYpage(oldStaffIndex));
 
