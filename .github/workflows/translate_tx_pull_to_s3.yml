@@ -1,11 +1,11 @@
-name: CI_Run_tx2s3
+name: 'Translate: tx pull translations to S3'
 
 on:
   pull_request:
     branches:
     - 3.x_off
-  schedule:
-    - cron: '*/15 * * * *' # Every 15 minutes
+  #schedule:
+  #  - cron: '*/15 * * * *' # Every 15 minutes
   workflow_dispatch:
 
 jobs:

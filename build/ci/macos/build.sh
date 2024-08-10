@@ -25,10 +25,10 @@ if [ -z "$TELEMETRY_TRACK_ID" ]; then TELEMETRY_TRACK_ID=""; fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
 MUSESCORE_BUILD_CONFIG=dev
-if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
-if [ "$BUILD_MODE" == "stable_build" ]; then 
+if [ "$BUILD_MODE" == "devel" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
+if [ "$BUILD_MODE" == "nightly" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
+if [ "$BUILD_MODE" == "testing" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
+if [ "$BUILD_MODE" == "stable" ]; then 
     MUSESCORE_BUILD_CONFIG=release; 
     BUILD_AUTOUPDATE=ON
 fi

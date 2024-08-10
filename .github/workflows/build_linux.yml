@@ -1,4 +1,4 @@
-name: CI_Linux
+name: 'Build: Linux and run the unit tests (mtests)'
 
 on:
   push:
@@ -12,9 +12,9 @@ on:
   workflow_dispatch:
     inputs:
       build_mode:
-        description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
+        description: 'Build mode: devel, nightly, testing, stable'
         required: true
-        default: 'devel_build'
+        default: 'devel'
       publish:
         description: 'Publish to FTP: on - publish'
         required: false
@@ -38,7 +38,7 @@ jobs:
         DO_BUILD='true'
 
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
+        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 

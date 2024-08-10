@@ -33,11 +33,11 @@ if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env
 MUSESCORE_BUILD_CONFIG=dev
 
 case "${BUILD_MODE}" in
-"devel_build")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-dev;;
-"nightly_build") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-nightly;;
-"testing_build") MUSESCORE_BUILD_CONFIG=testing; SUFFIX=-testing;;
-"stable_build")  MUSESCORE_BUILD_CONFIG=release; SUFFIX="";;
-"mtests")        MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
+"devel")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-dev;;
+"nightly") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-nightly;;
+"testing") MUSESCORE_BUILD_CONFIG=testing; SUFFIX=-testing;;
+"stable")  MUSESCORE_BUILD_CONFIG=release; SUFFIX="";;
+"mtests")  MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
 esac
 
 if [ "${BUILDTYPE}" == "portable" ]; then

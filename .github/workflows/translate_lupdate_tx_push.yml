@@ -1,4 +1,4 @@
-name: CI_Run_lupdate_to_tx
+name: 'Translate: lupdate source TS in repo and tx push new strings to Transifex'
 
 on:
   # pull_request:

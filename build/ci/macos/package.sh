@@ -58,19 +58,19 @@ VERSION_PATCH="$(cut -d'.' -f3 <<<"$BUILD_VERSION")"
 
 APP_LONGER_NAME="MuseScore $VERSION_MAJOR"
 PACKAGE_VERSION="$BUILD_VERSION"
-if [ "$BUILD_MODE" == "devel_build" ]; then
+if [ "$BUILD_MODE" == "devel" ]; then
   APP_LONGER_NAME="MuseScore $BUILD_VERSION Devel"
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then
+if [ "$BUILD_MODE" == "nightly" ]; then
   APP_LONGER_NAME="MuseScore $BUILD_VERSION Nightly";
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
-if [ "$BUILD_MODE" == "testing_build" ]; then
+if [ "$BUILD_MODE" == "testing" ]; then
   APP_LONGER_NAME="MuseScore $BUILD_VERSION Testing";
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
-if [ "$BUILD_MODE" == "stable_build" ]; then
+if [ "$BUILD_MODE" == "stable" ]; then
   APP_LONGER_NAME="MuseScore $VERSION_MAJOR";
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 fi
@@ -80,7 +80,7 @@ build/package_mac --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
 DMGFILE="$(ls applebuild/*.dmg)"
 echo "DMGFILE: $DMGFILE"
 
-if [ "$BUILD_MODE" == "nightly_build" ]; then
+if [ "$BUILD_MODE" == "nightly" ]; then
 
   BUILD_DATETIME=$(cat $ARTIFACTS_DIR/env/build_datetime.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
