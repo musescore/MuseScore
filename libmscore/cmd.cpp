@@ -2462,7 +2462,9 @@ Element* Score::move(const QString& cmd)
             // find next chordrest, which might be a grace note
             // this may override note input cursor
             el = nextChordRest(cr);
-            while (el && el->isRest() && toRest(el)->isGap())
+
+            // Skip gap rests if we're not in note entry mode...
+            while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap())
                   el = nextChordRest(toChordRest(el));
             if (el && noteEntryMode()) {
                   // do not use if not in original or new measure (don't skip measures)
@@ -2501,7 +2503,9 @@ Element* Score::move(const QString& cmd)
             // find previous chordrest, which might be a grace note
             // this may override note input cursor
             el = prevChordRest(cr);
-            while (el && el->isRest() && toRest(el)->isGap())
+
+            // Skip gap rests if we're not in note entry mode...
+            while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap())
                   el = prevChordRest(toChordRest(el));
             if (el && noteEntryMode()) {
                   // do not use if not in original or new measure (don't skip measures)
