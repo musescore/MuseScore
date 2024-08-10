@@ -1609,7 +1609,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="967"/>
         <source>Bowl Gongs</source>
-        <translation>Bowl gongs</translation>
+        <translation>Campana tibetana</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="969"/>
@@ -4494,12 +4494,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="906"/>
         <source>Marimba (Grand Staff)</source>
-        <translation>Marimba (podwójna pięciolinia)</translation>
+        <translation>Marimba (klucz wiolinowy i basowy)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="909"/>
         <source>Marimba (Single Staff)</source>
-        <translation>Marimba (pojedyncza pięciolinia)</translation>
+        <translation>Marimba (klucz wiolinowy)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="911"/>
@@ -4584,7 +4584,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="931"/>
         <source>standard</source>
-        <translation>standard</translation>
+        <translation>standardowy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="932"/>
@@ -4736,7 +4736,7 @@
         <location filename="../instruments/instrumentsxml.h" line="968"/>
         <source>Bw. Gon.</source>
         <comment>Bowl Gongs</comment>
-        <translation>B. g.</translation>
+        <translation>Camp. tib.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="970"/>
@@ -5567,7 +5567,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1202"/>
         <source>Ondes Martenot</source>
-        <translation>Ondes Martenot</translation>
+        <translation>Onde Martenot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1367"/>
@@ -5630,7 +5630,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1388"/>
         <source>Ukulele (Low G)</source>
-        <translation>Ukulele (G basso)</translation>
+        <translation>Ukulele (G niskie)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1389"/>
@@ -6138,12 +6138,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1254"/>
         <source>Bouzouki (3-course)</source>
-        <translation>Bouzouki (3-chórowa)</translation>
+        <translation>Bouzouki (3-strunowe)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1257"/>
         <source>Bouzouki (4-course)</source>
-        <translation>Bouzouki (4-chórowa)</translation>
+        <translation>Bouzouki (4-strunowe)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1258"/>

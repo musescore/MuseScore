@@ -2112,7 +2112,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="603"/>
         <source>Numbers</source>
-        <translation>Numerami</translation>
+        <translation>Liczbami</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="625"/>
@@ -2127,7 +2127,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="648"/>
         <source>Above lines</source>
-        <translation>Pod liniami</translation>
+        <translation>Nad liniami</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="661"/>
@@ -2545,7 +2545,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="2608"/>
         <location filename="../../mscore/editstyle.ui" line="2944"/>
         <source>Page</source>
-        <translation>Strona</translation>
+        <translation>Strony</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="970"/>
@@ -3093,7 +3093,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8019"/>
         <source>Numbers only</source>
-        <translation>Tylko numery</translation>
+        <translation>Pokaż tylko liczbę</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8046"/>
@@ -3295,17 +3295,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="133"/>
         <source>Pedal</source>
-        <translation>Pedalizacja</translation>
+        <translation>Linie pedalizacji</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="138"/>
         <source>Trill</source>
-        <translation>Tryle</translation>
+        <translation>Linie trylów</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="143"/>
         <source>Vibrato</source>
-        <translation>Vibrato</translation>
+        <translation>Linie vibrato</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="188"/>
@@ -4535,7 +4535,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="7909"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>Resetuj wartość &quot;Tylko numery&quot;</translation>
+        <translation>Resetuj wartość &quot;Pokaż tylko liczbę&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7867"/>
@@ -6718,12 +6718,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="107"/>
         <source>Pause:</source>
-        <translation>Pauza:</translation>
+        <translation>Czas pauzy:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="126"/>
         <source>Reset &apos;Pause&apos; value</source>
-        <translation>Resetuj wartość &quot;Pauza&quot;</translation>
+        <translation>Resetuj wartość &quot;Czas pauzy&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="133"/>
@@ -6796,7 +6796,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="179"/>
         <source>Reset &apos;Small&apos; value</source>
-        <translation>Resetuj wartość &quot;Mała&quot;</translation>
+        <translation>Resetuj wartość &quot;Mały&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="217"/>
@@ -8930,7 +8930,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="177"/>
         <source>Numbers only</source>
-        <translation>Tylko numery</translation>
+        <translation>Pokaż tylko liczbę</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="190"/>
@@ -8940,7 +8940,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="203"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>Resetuj wartość &quot;Tylko numery&quot;</translation>
+        <translation>Resetuj wartość &quot;Pokaż tylko liczbę&quot;</translation>
     </message>
 </context>
 <context>
@@ -9062,7 +9062,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="121"/>
         <source>Pause:</source>
-        <translation>Pauza:</translation>
+        <translation>Czas pauzy:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="137"/>
@@ -9127,7 +9127,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="114"/>
         <source>Reset &apos;Pause&apos; value</source>
-        <translation>Resetuj wartość &quot;Pauza&quot;</translation>
+        <translation>Resetuj wartość &quot;Czas pauzy&quot;</translation>
     </message>
 </context>
 <context>
@@ -18781,7 +18781,7 @@ ogólna</translation>
         <location filename="../../mscore/plugin/pluginCreator.ui" line="49"/>
         <location filename="../../mscore/plugin/pluginCreator.ui" line="194"/>
         <source>Run</source>
-        <translation>Zacznij</translation>
+        <translation>Uruchom</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/pluginCreator.ui" line="62"/>
@@ -26026,7 +26026,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1475"/>
         <source>Other…</source>
-        <translation>Inne…</translation>
+        <translation>Pozostałe…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1476"/>
@@ -29243,7 +29243,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3802"/>
         <source>Strike-through</source>
-        <translation>Przekreślona</translation>
+        <translation>Format tekstu: przekreślona</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3840"/>
@@ -29362,22 +29362,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3783"/>
         <source>Bold Face</source>
-        <translation>Styl: pogrubiona</translation>
+        <translation>Format tekstu: pogrubiona</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3784"/>
         <source>Bold face</source>
-        <translation>Styl: pogrubiona</translation>
+        <translation>Format tekstu: pogrubiona</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3790"/>
         <source>Italic</source>
-        <translation>Styl: kursywa</translation>
+        <translation>Format tekstu: kursywa</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3796"/>
         <source>Underline</source>
-        <translation>Styl: podkreślona</translation>
+        <translation>Format tekstu: podkreślona</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3808"/>
