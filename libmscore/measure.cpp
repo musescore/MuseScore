@@ -3622,7 +3622,12 @@ void Measure::stretchMeasure(qreal targetWidth)
                               if (!s2->isChordRestType() && s2->element(staffIdx * VOICES))
                                     break;
                               }
-                        qreal x1 = s1 ? s1->x() + s1->minRight() : 0;
+                        qreal x1 = 0.0;
+                        while (s1) {
+                              x1 = std::max(x1, s1->x() + s1->minRight());
+                              s1 = s1->prevActive();
+                              }
+
                         qreal x2 = s2 ? s2->x() - s2->minLeft() : targetWidth;
 
                         if (isMMRest()) {
@@ -4562,10 +4567,12 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
                               qreal d = (ww - w) / n;
                               qreal xx = ps->x();
+                              bool foundAtLeastOneCrSegment = false;
                               for (Segment* ss = ps; ss != s;) {
                                     Segment* ns1 = ss->nextActive();
                                     qreal ww1    = ss->width();
                                     if (ss->isChordRestType()) {
+                                          foundAtLeastOneCrSegment = true;
                                           ww1 += d;
                                           ss->setWidth(ww1);
                                           }
@@ -4573,7 +4580,8 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                                     ns1->rxpos() = xx;
                                     ss = ns1;
                                     }
-                              w += d;
+                              if (s->isChordRestType() || ps == s || !foundAtLeastOneCrSegment)
+                                    w += d;
                               x = xx;
                               break;
                               }
