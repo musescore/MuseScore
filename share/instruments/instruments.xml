@@ -12872,7 +12872,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <family>viols</family>
                   <longName>Treble Viol</longName>
                   <shortName>Tr. Vl.</shortName>
-                  <description>Treble Viol</description>
+                  <description>Treble viola da gamba. Second highest member of the viol family.</description>
                   <musicXMLid>strings.viol.treble</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -12905,7 +12905,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <family>viols</family>
                   <longName>Alto Viol</longName>
                   <shortName>A. Vl.</shortName>
-                  <description>Alto Viol (a smaller version of the tenor viol tuned higher)</description>
+                  <description>Alto viola da gamba. Third highest member of the viol family.</description>
                   <musicXMLid>strings.viol.alto</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -12938,7 +12938,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <family>viols</family>
                   <longName>Tenor Viol</longName>
                   <shortName>T. Vl.</shortName>
-                  <description>Tenor Viol</description>
+                  <description>Tenor viola da gamba. Middle member of the viol family.</description>
                   <musicXMLid>strings.viol.tenor</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -12969,9 +12969,9 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="viola-da-gamba">
                   <family>viols</family>
-                  <longName>Viola da gamba</longName>
-                  <shortName>Vla. d. g.</shortName>
-                  <description>Viola da gamba</description>
+                  <longName>Bass Viol</longName>
+                  <shortName>B. Vl.</shortName>
+                  <description>Bass viola da gamba (staff notation). Third lowest member of the viol family.</description>
                   <StringData>
                         <frets>13</frets>
                         <string>33</string>
@@ -13002,11 +13002,11 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="viola-da-gamba-tablature">
                   <family>viols</family>
-                  <trackName>Viola da gamba (Tablature)</trackName>
-                  <longName>Viola da gamba (Tab)</longName>
-                  <shortName>Vla. d. g.</shortName>
+                  <trackName>Bass Viol (Tablature)</trackName>
+                  <longName>Bass Viol</longName>
+                  <shortName>>B. Vl.</shortName>
                   <init>viola-da-gamba</init>
-                  <description>Viola da gamba (Tablature)</description>
+                  <description>Bass viola da gamba (tablature). Third lowest member of the viol family.</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -13043,9 +13043,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="violone">
-                  <longName>Violone</longName>
-                  <shortName>Vne.</shortName>
-                  <description>Violone</description>
+                  <longName>G Violone</longName>
+                  <shortName>G Vne.</shortName>
+                  <description>arge viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13077,7 +13077,7 @@ Aeolus organ synthesizer, currently disabled -->
             <Instrument id="d-violone">
                   <longName>D Violone</longName>
                   <shortName>D Vne.</shortName>
-                  <description>Violone</description>
+                  <description>>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
                         <frets>13</frets>
