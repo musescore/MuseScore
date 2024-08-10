@@ -171,8 +171,23 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="27"/>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          </Channel>
+        <Channel name="harmonics">
+          <program value="31"/>
+          </Channel>
+        <Channel name="distortion">
+          <program value="30"/>
+          </Channel>
+        <Channel name="overdriven">
+          <program value="29"/>
           </Channel>
         </Instrument>
       </Part>
@@ -749,8 +764,23 @@
             <velocity>120</velocity>
             <gateTime>100</gateTime>
             </Articulation>
-          <Channel>
+          <Channel name="open">
             <program value="27"/>
+            </Channel>
+          <Channel name="mute">
+            <program value="28"/>
+            </Channel>
+          <Channel name="jazz">
+            <program value="26"/>
+            </Channel>
+          <Channel name="harmonics">
+            <program value="31"/>
+            </Channel>
+          <Channel name="distortion">
+            <program value="30"/>
+            </Channel>
+          <Channel name="overdriven">
+            <program value="29"/>
             </Channel>
           </Instrument>
         </Part>

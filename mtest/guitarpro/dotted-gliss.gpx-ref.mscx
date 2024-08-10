@@ -93,10 +93,35 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="30"/>
           <midiPort>0</midiPort>
           <midiChannel>3</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        <Channel name="harmonics">
+          <program value="31"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
+          </Channel>
+        <Channel name="distortion">
+          <program value="30"/>
+          <midiPort>0</midiPort>
+          <midiChannel>4</midiChannel>
+          </Channel>
+        <Channel name="overdriven">
+          <program value="29"/>
+          <midiPort>0</midiPort>
+          <midiChannel>5</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -328,8 +353,23 @@ Innuendo</text>
             <velocity>120</velocity>
             <gateTime>100</gateTime>
             </Articulation>
-          <Channel>
+          <Channel name="open">
             <program value="30"/>
+            </Channel>
+          <Channel name="mute">
+            <program value="28"/>
+            </Channel>
+          <Channel name="jazz">
+            <program value="26"/>
+            </Channel>
+          <Channel name="harmonics">
+            <program value="31"/>
+            </Channel>
+          <Channel name="distortion">
+            <program value="30"/>
+            </Channel>
+          <Channel name="overdriven">
+            <program value="29"/>
             </Channel>
           </Instrument>
         </Part>

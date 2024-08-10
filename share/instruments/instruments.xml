@@ -11200,12 +11200,12 @@ Aeolus organ synthesizer, currently disabled -->
                   <musicXMLid>pluck.guitar.electric</musicXMLid>
                   <StringData>
                         <frets>24</frets>
-                        <string>40</string>
-                        <string>45</string>
-                        <string>50</string>
-                        <string>55</string>
-                        <string>59</string>
-                        <string>64</string>
+                        <string>52</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                        <string>71</string>
+                        <string>76</string>
                   </StringData>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
@@ -11215,9 +11215,29 @@ Aeolus organ synthesizer, currently disabled -->
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <!--MIDI: Bank 0, Prog 27; MS General: Clean Guitar-->
                         <program value="27"/> <!--Electric Guitar (clean)-->
+                  </Channel>
+                  <Channel name="mute">
+                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
+                        <program value="28"/> <!--Electric Guitar (muted)-->
+                  </Channel>
+                  <Channel name="jazz">
+                        <!--MIDI: Bank 0, Prog 26; MS General: Jazz Guitar-->
+                        <program value="26"/> <!--Electric Guitar (jazz)-->
+                  </Channel>
+                  <Channel name="harmonics">
+                        <!--MIDI: Bank 0, Prog 31; MS General: Guitar Harmonics-->
+                        <program value="31"/> <!--Guitar Harmonics-->
+                  </Channel>
+                  <Channel name="distortion">
+                        <!--MIDI: Bank 0, Prog 30; MS General: Distortion Guitar-->
+                        <program value="30"/> <!--Distortion Guitar-->
+                  </Channel>
+                  <Channel name="overdriven">
+                        <!--MIDI: Bank 0, Prog 29; MS General: Overdrive Guitar-->
+                        <program value="29"/> <!--Overdriven Guitar-->
                   </Channel>
             </Instrument>
             <Instrument id="electric-guitar-tablature">
