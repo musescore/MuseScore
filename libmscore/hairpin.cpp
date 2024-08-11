@@ -585,7 +585,10 @@ Hairpin::Hairpin(Score* s)
       initElementStyle(&hairpinStyle);
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::END_TEXT_PLACE);
       resetProperty(Pid::CONTINUE_TEXT_PLACE);
+      resetProperty(Pid::BEGIN_HOOK_HEIGHT);
+      resetProperty(Pid::END_HOOK_HEIGHT);
       resetProperty(Pid::HAIRPIN_TYPE);
       resetProperty(Pid::LINE_VISIBLE);
 
@@ -671,18 +674,11 @@ void Hairpin::write(XmlWriter& xml) const
       writeProperty(xml, Pid::VELO_CHANGE);
       writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
       writeProperty(xml, Pid::DYNAMIC_RANGE);
-//      writeProperty(xml, Pid::BEGIN_TEXT);
-      writeProperty(xml, Pid::END_TEXT);
-//      writeProperty(xml, Pid::CONTINUE_TEXT);
-      writeProperty(xml, Pid::LINE_VISIBLE);
       writeProperty(xml, Pid::SINGLE_NOTE_DYNAMICS);
       writeProperty(xml, Pid::VELO_CHANGE_METHOD);
+      //writeProperty(xml, Pid::PLACEMENT);
 
-      for (const StyledProperty& spp : *styledProperties()) {
-            if (!isStyled(spp.pid))
-                  writeProperty(xml, spp.pid);
-            }
-      SLine::writeProperties(xml);
+      TextLineBase::writeProperties(xml);
       xml.etag();
       }
 
@@ -840,6 +836,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
             case Pid::BEGIN_TEXT_PLACE:
             case Pid::CONTINUE_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
                   return int(PlaceText::LEFT);
 
             case Pid::BEGIN_TEXT_OFFSET:
@@ -853,7 +850,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
             case Pid::BEGIN_HOOK_HEIGHT:
             case Pid::END_HOOK_HEIGHT:
-                  return Spatium(0.0);
+                  return Spatium(1.9);
 
             case Pid::LINE_VISIBLE:
                   return true;
