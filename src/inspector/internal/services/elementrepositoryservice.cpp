@@ -182,7 +182,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findChords() cons
                 if (!chordRest->isChord()) {
                     continue;
                 }
-                elements << mu::engraving::toChord(chordRest);
+                elements << chordRest;
             }
             continue;
         }
@@ -418,7 +418,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findRests() const
                 if (!chordRest->isRest()) {
                     continue;
                 }
-                resultList << (EngravingItem*)(mu::engraving::toRest(chordRest));
+                resultList << chordRest;
             }
         }
     }
