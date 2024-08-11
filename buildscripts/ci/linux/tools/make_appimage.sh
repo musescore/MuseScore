@@ -210,6 +210,7 @@ done
 fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
   libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
+  libpipewire-0.3.so.0
 )
 
 for fb_lib in "${fallback_libraries[@]}"; do
@@ -220,6 +221,12 @@ for fb_lib in "${fallback_libraries[@]}"; do
   # Use the AppRun script to check at runtime whether the user has a copy of
   # this library. If not then add our copy's directory to $LD_LIBRARY_PATH.
 done
+
+# pipewire is still packaged by linuxdeploy, 
+# so we need to remove it as it is in the fallback mechanism
+if [[ -f "${appdir}/lib/libpipewire-0.3.so.0" ]]; then
+  rm -f "${appdir}/lib/libpipewire-0.3.so.0"
+fi
 
 # APPIMAGEUPDATETOOL
 # Bundled uncompressed, to avoid creating a double layer of compression
