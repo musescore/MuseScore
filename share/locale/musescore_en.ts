@@ -22459,8 +22459,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
-        <source>Voices visible on this stave</source>
-        <translation type="unfinished">Voices visible on this stave</translation>
+        <source>Voices visible on this staff</source>
+        <translation type="unfinished">Voices visible on this staff</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
