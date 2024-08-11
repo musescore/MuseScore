@@ -39,7 +39,7 @@ StyledPopupView {
         spacing: 18
 
         StyledTextLabel {
-            text: qsTrc("notation", "Voices visible on this stave")
+            text: qsTrc("notation", "Voices visible on this staff")
         }
 
         ListView {
