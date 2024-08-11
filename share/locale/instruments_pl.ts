@@ -10569,7 +10569,7 @@
         <source>Marimba (single staff)</source>
         <comment>marimba-single trackName</comment>
         <extracomment>trackName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marimba (pojedyncza pięciolinia)</translation>
+        <translation>Marimba (klucz wiolinowy)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3570"/>
@@ -11836,28 +11836,28 @@
         <source>Bowl gongs.</source>
         <comment>bowl-gongs description</comment>
         <extracomment>description for Bowl Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gongi miskowe.</translation>
+        <translation>Misa dźwiękowa (tybetańska).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3985"/>
         <source>Bowl Gongs</source>
         <comment>bowl-gongs trackName</comment>
         <extracomment>trackName for Bowl Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bowl gongs</translation>
+        <translation>Campana tibetana</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3987"/>
         <source>Bowl Gongs</source>
         <comment>bowl-gongs longName</comment>
         <extracomment>longName for Bowl Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bowl gongs</translation>
+        <translation>Campana tibetana</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3989"/>
         <source>Bw. Gon.</source>
         <comment>bowl-gongs shortName</comment>
         <extracomment>shortName for Bowl Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B.g.</translation>
+        <translation>Camp. tib.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3992"/>
@@ -14153,14 +14153,14 @@
         <source>Ondes Martenot</source>
         <comment>ondes-martenot trackName</comment>
         <extracomment>trackName for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ondes Martenot</translation>
+        <translation>Onde Martenot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4766"/>
         <source>Ondes Martenot</source>
         <comment>ondes-martenot longName</comment>
         <extracomment>longName for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ondes Martenot</translation>
+        <translation>Onde Martenot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4768"/>
@@ -15280,21 +15280,21 @@
         <source>harmonics</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>harmoniczny</translation>
+        <translation>flażolety</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5123"/>
         <source>distortion</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>zniekształcony</translation>
+        <translation>zniekształcenie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5125"/>
         <source>overdriven</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>przesterowany</translation>
+        <translation>przesterowanie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5128"/>
@@ -16974,7 +16974,7 @@
         <source>6-course lute (staff notation).</source>
         <comment>lute description</comment>
         <extracomment>description for Lute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Lutnia 6-chórowa (pięciolinia).</translation>
+        <translation>Lutnia 6-strunowa (pięciolinia).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5616"/>
@@ -17002,7 +17002,7 @@
         <source>6-course lute (tablature).</source>
         <comment>lute-tablature description</comment>
         <extracomment>description for Lute (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Lutnia 6-chórowa (tabulatura).</translation>
+        <translation>Lutnia 6-strunowa (tabulatura).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5625"/>
@@ -17023,7 +17023,7 @@
         <source>5-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-5-course description</comment>
         <extracomment>description for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renesansowa lutnia tenorowa 5-chórowa.</translation>
+        <translation>Renesansowa lutnia tenorowa 5-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5632"/>
@@ -17051,14 +17051,14 @@
         <source>5-course</source>
         <comment>ren.-tenor-lute-5-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5-chórowa</translation>
+        <translation>5-strunowa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5641"/>
         <source>6-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-6-course description</comment>
         <extracomment>description for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renesansowa lutnia tenorowa 6-chórowa.</translation>
+        <translation>Renesansowa lutnia tenorowa 6-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5643"/>
@@ -17086,14 +17086,14 @@
         <source>6-course</source>
         <comment>ren.-tenor-lute-6-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6-chórowa</translation>
+        <translation>6-strunowa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5652"/>
         <source>7-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-7-course description</comment>
         <extracomment>description for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renesansowa lutnia tenorowa 7-chórowa.</translation>
+        <translation>Renesansowa lutnia tenorowa 7-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5654"/>
@@ -17121,14 +17121,14 @@
         <source>7-course</source>
         <comment>ren.-tenor-lute-7-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>7-chórowa</translation>
+        <translation>7-strunowa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5663"/>
         <source>8-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-8-course description</comment>
         <extracomment>description for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renesansowa lutnia tenorowa 8-chórowa.</translation>
+        <translation>Renesansowa lutnia tenorowa 8-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5665"/>
@@ -17156,14 +17156,14 @@
         <source>8-course</source>
         <comment>ren.-tenor-lute-8-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>8-chórowa</translation>
+        <translation>8-strunowa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5674"/>
         <source>9-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-9-course description</comment>
         <extracomment>description for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renesansowa lutnia tenorowa 9-chórowa.</translation>
+        <translation>Renesansowa lutnia tenorowa 9-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5676"/>
@@ -17191,14 +17191,14 @@
         <source>9-course</source>
         <comment>ren.-tenor-lute-9-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>9-chórowa</translation>
+        <translation>9-strunowa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5685"/>
         <source>10-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-10-course description</comment>
         <extracomment>description for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renesansowa lutnia tenorowa 10-chórowa.</translation>
+        <translation>Renesansowa lutnia tenorowa 10-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5687"/>
@@ -17226,14 +17226,14 @@
         <source>10-course</source>
         <comment>ren.-tenor-lute-10-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>10-chórowa</translation>
+        <translation>10-strunowa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5696"/>
         <source>13-course Baroque lute.</source>
         <comment>baroque-lute-13-course description</comment>
         <extracomment>description for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Barokowa lutnia 13-chórowa.</translation>
+        <translation>Barokowa lutnia 13-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5698"/>
@@ -17261,14 +17261,14 @@
         <source>13-course</source>
         <comment>baroque-lute-13-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>13-chórowa</translation>
+        <translation>13-strunowa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5707"/>
         <source>14-course theorbo.</source>
         <comment>theorbo-14-course description</comment>
         <extracomment>description for Theorbo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Teorba 14-chórowa.</translation>
+        <translation>Teorba 14-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5709"/>
@@ -17296,7 +17296,7 @@
         <source>14-course archlute.</source>
         <comment>archlute-14-course description</comment>
         <extracomment>description for Archlute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Arcylutnia 14-chórowa.</translation>
+        <translation>Arcylutnia 14-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5718"/>
@@ -17520,7 +17520,7 @@
         <source>Greek lute, with 3 courses.</source>
         <comment>bouzouki-3-course description</comment>
         <extracomment>description for Bouzouki; course: 3-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Grecka lutnia 3-chórowa.</translation>
+        <translation>Grecka lutnia 3-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5790"/>
@@ -17548,14 +17548,14 @@
         <source>3-course</source>
         <comment>bouzouki-3-course traitName</comment>
         <extracomment>traitName for Bouzouki; course: 3-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>3-chórowa</translation>
+        <translation>3-strunowe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5799"/>
         <source>Greek lute, with 4 courses.</source>
         <comment>bouzouki-4-course description</comment>
         <extracomment>description for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Grecka lutnia 4-chórowa.</translation>
+        <translation>Grecka lutnia 4-strunowa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5801"/>
@@ -17583,7 +17583,7 @@
         <source>4-course</source>
         <comment>bouzouki-4-course traitName</comment>
         <extracomment>traitName for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>4-chórowa</translation>
+        <translation>4-strunowe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5810"/>
