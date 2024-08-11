@@ -38,21 +38,24 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
 elseif(OS_IS_LIN OR OS_IS_FBSD)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
+    )
+    if (MUSE_PIPEWIRE_AUDIO_DRIVER)
+        set(DRIVER_SRC
+            ${DRIVER_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/pwaudiodriver.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/pwaudiodriver.h
+        )
+    endif()
     if (MUSE_MODULE_AUDIO_JACK)
         set(DRIVER_SRC
+            ${DRIVER_SRC}
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.h
-        )
-    else()
-        set(DRIVER_SRC
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
         )
     endif()
 elseif(OS_IS_MAC)

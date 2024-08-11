@@ -64,6 +64,9 @@ using namespace muse::audio::fx;
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
+#ifdef MUSE_PIPEWIRE_AUDIO_DRIVER
+#include "internal/platform/lin/pwaudiodriver.h"
+#endif
 #endif
 
 #ifdef Q_OS_FREEBSD
@@ -110,6 +113,20 @@ std::string AudioModule::moduleName() const
     return "audio_engine";
 }
 
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
+{
+#if defined(Q_OS_LINUX) && defined(MUSE_PIPEWIRE_AUDIO_DRIVER)
+    auto driver = std::make_shared<PwAudioDriver>();
+    if (driver->connectedToPwServer()) {
+        return driver;
+    }
+#endif // Q_OS_LINUX && MUSE_PIPEWIRE_AUDIO_DRIVER
+    return std::make_shared<LinuxAudioDriver>();
+}
+
+#endif // Q_OS_LINUX || Q_OS_FREEBSD
+
 void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
@@ -130,7 +147,7 @@ void AudioModule::registerExports()
 #else
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
+    m_audioDriver = makeLinuxAudioDriver();
 #endif
 
 #ifdef Q_OS_WIN
