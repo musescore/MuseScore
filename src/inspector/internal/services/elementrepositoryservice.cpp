@@ -160,14 +160,6 @@ const
         }
 
         resultList << element;
-
-        if (elementType == mu::engraving::ElementType::BEAM) {
-            const mu::engraving::Beam* beam = mu::engraving::toBeam(element);
-
-            for (mu::engraving::ChordRest* chordRest : beam->elements()) {
-                resultList << chordRest;
-            }
-        }
     }
 
     return resultList;
@@ -180,6 +172,18 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findChords() cons
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
         if (element->type() == mu::engraving::ElementType::CHORD) {
             elements << element;
+            continue;
+        }
+
+        if (element->type() == mu::engraving::ElementType::BEAM) {
+            const mu::engraving::Beam* beam = mu::engraving::toBeam(element);
+
+            for (mu::engraving::ChordRest* chordRest : beam->elements()) {
+                if (!chordRest->isChord()) {
+                    continue;
+                }
+                elements << mu::engraving::toChord(chordRest);
+            }
             continue;
         }
 
