@@ -1110,7 +1110,8 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
             cr->el().push_back(na);       // store for later move to segment
       else if (seg)
             seg->add(na);
-      else
+
+      if (!seg)
             return;
 
       // Move or hide fermata based on existing fermatas.
