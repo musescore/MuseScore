@@ -1484,17 +1484,22 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 
 static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2)
       {
+      bool concertPitch = n->concertPitch();
+      AccidentalVal noteAccVal = tpc2alter(concertPitch ? tpc1 : tpc2);
+      AccidentalVal accState = AccidentalVal::NATURAL;
+      if (Measure* m = n->findMeasure())
+            accState = m->findAccidental(n);
       if (up && pitch < 127) {
             newPitch = pitch + 1;
-            if (n->concertPitch()) {
-                  if (tpc1 > Tpc::TPC_A + int(key))
+            if (concertPitch) {
+                  if (tpc1 > Tpc::TPC_A + int(key) && noteAccVal >= accState)
                         newTpc1 = tpc1 - 5;   // up semitone diatonic
                   else
                         newTpc1 = tpc1 + 7;   // up semitone chromatic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > Tpc::TPC_A + int(key))
+                  if (tpc2 > Tpc::TPC_A + int(key) && noteAccVal >= accState)
                         newTpc2 = tpc2 - 5;   // up semitone diatonic
                   else
                         newTpc2 = tpc2 + 7;   // up semitone chromatic
@@ -1503,15 +1508,15 @@ static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int 
             }
       else if (!up && pitch > 0) {
             newPitch = pitch - 1;
-            if (n->concertPitch()) {
-                  if (tpc1 > Tpc::TPC_C + int(key))
+            if (concertPitch) {
+                  if (tpc1 > Tpc::TPC_C + int(key) || noteAccVal > accState)
                         newTpc1 = tpc1 - 7;   // down semitone chromatic
                   else
                         newTpc1 = tpc1 + 5;   // down semitone diatonic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > Tpc::TPC_C + int(key))
+                  if (tpc2 > Tpc::TPC_C + int(key) || noteAccVal > accState)
                         newTpc2 = tpc2 - 7;   // down semitone chromatic
                   else
                         newTpc2 = tpc2 + 5;   // down semitone diatonic
