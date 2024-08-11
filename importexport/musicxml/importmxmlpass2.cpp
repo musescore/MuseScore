@@ -1096,6 +1096,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
       const SymId articSym = notation.symId();
       const QString direction = notation.attribute("type");
       const QColor color { notation.attribute("color") };
+      Segment* seg = cr->segment();
       Fermata* na = new Fermata(articSym, cr->score());
       na->setTrack(cr->track());
       if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
@@ -1105,15 +1106,17 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
       else
             na->setPlacement(na->propertyDefault(Pid::PLACEMENT).value<Placement>());
       setElementPropertyFlags(na, Pid::PLACEMENT, direction);
-      if (cr->segment() == nullptr && cr->isGrace())
+      if (!seg && cr->isGrace())
             cr->el().push_back(na);       // store for later move to segment
+      else if (seg)
+            seg->add(na);
       else
-            cr->segment()->add(na);
+            return;
 
       // Move or hide fermata based on existing fermatas.
       bool alreadyAbove = false;
       bool alreadyBelow = false;
-      for (Element* e: cr->segment()->annotations()) {
+      for (Element* e: seg->annotations()) {
             if (e->isFermata() && e != na
             && e->staffIdx() == na->staffIdx() && e->track() != na->track()) {
                   Element* otherCr = cr->segment()->elist()[e->track()];
