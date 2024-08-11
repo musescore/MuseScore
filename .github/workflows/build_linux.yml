@@ -1,4 +1,4 @@
-name: 'Build: Linux and run the unit tests (mtests)'
+name: 'Build: Linux / Check: Unit tests (mtests)'
 
 on:
   push:
