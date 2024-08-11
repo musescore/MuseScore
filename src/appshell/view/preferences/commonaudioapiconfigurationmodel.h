@@ -38,6 +38,9 @@ class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable
     Q_PROPERTY(QString currentDeviceId READ currentDeviceId NOTIFY currentDeviceIdChanged)
     Q_PROPERTY(QVariantList deviceList READ deviceList NOTIFY deviceListChanged)
 
+    Q_PROPERTY(QString bufferSize READ bufferSize NOTIFY bufferSizeChanged)
+    Q_PROPERTY(QStringList bufferSizeList READ bufferSizeList NOTIFY bufferSizeListChanged)
+
     Q_PROPERTY(unsigned int sampleRate READ sampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
 
@@ -56,8 +59,8 @@ public:
     QVariantList deviceList() const;
     Q_INVOKABLE void deviceSelected(const QString& deviceId);
 
-    unsigned int bufferSize() const;
-    QList<unsigned int> bufferSizeList() const;
+    QString bufferSize() const;
+    QStringList bufferSizeList() const;
     Q_INVOKABLE void bufferSizeSelected(const QString& bufferSizeStr);
 
     unsigned int sampleRate() const;
