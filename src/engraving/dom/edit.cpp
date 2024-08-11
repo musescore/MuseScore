@@ -3567,6 +3567,25 @@ void Score::cmdDeleteSelection()
             for (EngravingObject* se : links) {
                 deletedElements.insert(se);
             }
+
+            // when deleting "global key signature" in part,
+            // make sure all key signatures in score will be deleted too
+            // (part score doesn't need to contain all staves)
+            if (e->isKeySig() && !score()->isMaster() && toSegment(e->explicitParent())->empty()) {
+                for (EngravingObject* linkedSig : links) {
+                    Score* score = linkedSig->score();
+                    if (score->isMaster()) {
+                        Segment* keySeg = toSegment(linkedSig->explicitParent());
+                        for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+                            track_idx_t track = i * VOICES;
+                            if (EngravingItem* sig = keySeg->element(track)) {
+                                score->deleteItem(sig);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
         }
     }
 
