@@ -103,7 +103,7 @@ StyledPopupView {
                     StyledTextLabel {
                         id: dynamicLabel
                         text: modelData.symbol
-                        font.family: ui.theme.musicalFont.family
+                        font.family: dynamicModel.fontFamily
                         font.pixelSize: 30
 
                         anchors.centerIn: parent

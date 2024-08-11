@@ -55,6 +55,11 @@ DynamicPopupModel::DynamicPopupModel(QObject* parent)
 {
 }
 
+QString DynamicPopupModel::fontFamily() const
+{
+    return QString::fromStdString(m_item->score()->engravingFont()->family());
+}
+
 QVariantList DynamicPopupModel::pages() const
 {
     return m_pages;

@@ -12,6 +12,7 @@ class DynamicPopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString fontFamily READ fontFamily CONSTANT)
     Q_PROPERTY(QVariantList pages READ pages NOTIFY pagesChanged)
 
 public:
@@ -39,6 +40,7 @@ public:
     Q_INVOKABLE void showPreview(int page, int index);
     Q_INVOKABLE void hidePreview();
 
+    QString fontFamily() const;
     QVariantList pages() const;
 
 signals:
