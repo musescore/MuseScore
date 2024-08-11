@@ -411,6 +411,15 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findRests() const
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
         if (element->isRest()) {
             resultList << element;
+        } else if (element->isBeam()) {
+            const mu::engraving::Beam* beam = mu::engraving::toBeam(element);
+
+            for (mu::engraving::ChordRest* chordRest : beam->elements()) {
+                if (!chordRest->isRest()) {
+                    continue;
+                }
+                resultList << (EngravingItem*)(mu::engraving::toRest(chordRest));
+            }
         }
     }
 
