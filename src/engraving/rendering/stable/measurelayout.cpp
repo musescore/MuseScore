@@ -948,7 +948,7 @@ void MeasureLayout::layoutChordDrumset(const Staff* staff, const Segment& segmen
 
 void MeasureLayout::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
 {
-    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         const Staff* staff = dom.staff(staffIdx);
         if (!staff->show()) {
             continue;
@@ -991,7 +991,7 @@ void MeasureLayout::cmdUpdateNotes(const Measure* measure, const DomAccessor& do
                 for (track_idx_t t = track; t < endTrack; ++t) {
                     Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
                     if (chord) {
-                        chord->cmdUpdateNotes(&as);
+                        chord->cmdUpdateNotes(&as, staffIdx);
                     }
                 }
             }
@@ -1002,7 +1002,7 @@ void MeasureLayout::cmdUpdateNotes(const Measure* measure, const DomAccessor& do
 void MeasureLayout::createStems(const Measure* measure, LayoutContext& ctx)
 {
     const DomAccessor& dom = ctx.dom();
-    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         const Staff* staff = dom.staff(staffIdx);
         if (!staff->show()) {
             continue;
@@ -1106,7 +1106,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     const DomAccessor& dom = ctx.dom();
     const LayoutConfiguration& conf = ctx.conf();
 
-    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         const Staff* staff = dom.staff(staffIdx);
         if (!staff->show()) {
             continue;

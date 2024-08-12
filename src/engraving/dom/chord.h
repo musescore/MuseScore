@@ -214,7 +214,7 @@ public:
     Note* selectedNote() const;
 
     PointF pagePos() const override;        ///< position in page coordinates
-    void cmdUpdateNotes(AccidentalState*);
+    void cmdUpdateNotes(AccidentalState*, staff_idx_t staffIdx);
 
     NoteType noteType() const { return m_noteType; }
     void setNoteType(NoteType t);
