@@ -559,7 +559,7 @@ enum class Sid {
       keySigNaturals,
 
       tupletMaxSlope,
-      tupletOufOfStaff,
+      tupletOutOfStaff,
       tupletVHeadDistance,
       tupletVStemDistance,
       tupletStemLeftDistance,
@@ -1485,7 +1485,12 @@ class MStyle {
       void applyNewDefaults(const MStyle& other, const int defaultsVersion);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
-      void readProperties400(XmlReader& e, int mscVersion);
+      bool readProperties400(XmlReader& e, int mscVersion);
+      //bool readProperties410(XmlReader& e, int mscVersion);
+      //bool readProperties420(XmlReader& e, int mscVersion);
+      //bool readProperties430(XmlReader& e, int mscVersion);
+      bool readProperties440(XmlReader& e, int mscVersion);
+      bool readProperties450(XmlReader& e, int mscVersion);
       bool readStyleValCompat(XmlReader&);
       bool readTextStyleValCompat(XmlReader&);
 

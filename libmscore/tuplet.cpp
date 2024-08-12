@@ -304,7 +304,7 @@ void Tuplet::layout()
       //    calculate bracket start and end point p1 p2
       //
       qreal maxSlope      = score()->styleD(Sid::tupletMaxSlope);
-      bool outOfStaff     = score()->styleB(Sid::tupletOufOfStaff);
+      bool outOfStaff     = score()->styleB(Sid::tupletOutOfStaff);
       qreal vHeadDistance = score()->styleP(Sid::tupletVHeadDistance);
       qreal vStemDistance = score()->styleP(Sid::tupletVStemDistance);
       qreal stemLeft      = score()->styleP(Sid::tupletStemLeftDistance);

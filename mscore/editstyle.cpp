@@ -290,7 +290,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType         },
       { Sid::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType        },
       { Sid::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope           },
-      { Sid::tupletOufOfStaff,        false, tupletOutOfStaff,        0                             },
+      { Sid::tupletOutOfStaff,        false, tupletOutOfStaff,        0                             },
 
       { Sid::repeatBarTips,            false, showRepeatBarTips,            resetShowRepeatBarTips },
       { Sid::startBarlineSingle,       false, showStartBarlineSingle,       resetShowStartBarlineSingle },
