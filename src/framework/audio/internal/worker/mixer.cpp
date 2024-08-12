@@ -162,6 +162,14 @@ void Mixer::setSampleRate(unsigned int sampleRate)
     for (auto& channel : m_trackChannels) {
         channel.second->setSampleRate(sampleRate);
     }
+
+    for (AuxChannelInfo& aux : m_auxChannelInfoList) {
+        aux.channel->setSampleRate(sampleRate);
+    }
+
+    for (IFxProcessorPtr& fx : m_masterFxProcessors) {
+        fx->setSampleRate(sampleRate);
+    }
 }
 
 unsigned int Mixer::audioChannelsCount() const

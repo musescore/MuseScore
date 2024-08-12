@@ -53,9 +53,9 @@ public:
 
     sample_rate_t sampleRate() const override;
 
-    void setSampleRate(sample_rate_t sampleRate) override;
-    void setReadBufferSize(uint16_t readBufferSize) override;
-    void setAudioChannelsCount(const audioch_t count);
+    void setSampleRate(const sample_rate_t sampleRate) override;
+    void setReadBufferSize(const uint16_t readBufferSize) override;
+    void setAudioChannelsCount(const audioch_t count) override;
 
     RenderMode mode() const override;
     void setMode(const RenderMode newMode) override;

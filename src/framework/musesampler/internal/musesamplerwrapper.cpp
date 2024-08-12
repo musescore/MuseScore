@@ -58,24 +58,21 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
 
 void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 {
-    m_sampleRate = sampleRate;
+    const bool isOffline = currentRenderMode() == RenderMode::OfflineMode;
+    const bool shouldUpdateSampleRate = m_samplerSampleRate != sampleRate && !isOffline;
 
-    if (!m_sampler) {
-        m_sampler = m_samplerLib->create();
-
-        samples_t defaultSize = config()->samplesToPreallocate();
-
-        if (!m_samplerLib->initSampler(m_sampler, m_sampleRate, defaultSize, AUDIO_CHANNELS_COUNT)) {
-            LOGE() << "Unable to init MuseSampler";
+    if (!m_sampler || shouldUpdateSampleRate) {
+        if (!initSampler(sampleRate, config()->samplesToPreallocate())) {
             return;
-        } else {
-            LOGD() << "Successfully initialized sampler";
         }
 
-        prepareOutputBuffer(defaultSize);
+        m_samplerSampleRate = sampleRate;
     }
 
-    if (currentRenderMode() == RenderMode::OfflineMode) {
+    m_sampleRate = sampleRate;
+
+    if (isOffline) {
+        LOGD() << "Start offline mode, sampleRate: " << m_sampleRate;
         m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
         m_offlineModeStarted = true;
     }
@@ -262,6 +259,33 @@ void MuseSamplerWrapper::setIsActive(bool arg)
     }
 }
 
+bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const samples_t blockSize)
+{
+    TRACEFUNC;
+
+    const bool isFirstInit = m_sampler == nullptr;
+
+    if (isFirstInit) {
+        m_sampler = m_samplerLib->create();
+        IF_ASSERT_FAILED(m_sampler) {
+            return false;
+        }
+    }
+
+    if (isFirstInit || m_samplerLib->supportsReinit()) {
+        if (!m_samplerLib->initSampler(m_sampler, sampleRate, blockSize, AUDIO_CHANNELS_COUNT)) {
+            LOGE() << "Unable to init MuseSampler";
+            return false;
+        } else {
+            LOGD() << "Successfully initialized sampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
+        }
+    }
+
+    prepareOutputBuffer(blockSize);
+
+    return true;
+}
+
 InstrumentInfo MuseSamplerWrapper::resolveInstrument(const mpe::PlaybackSetupData& setupData) const
 {
     IF_ASSERT_FAILED(m_samplerLib) {
@@ -316,7 +340,7 @@ std::string MuseSamplerWrapper::resolveDefaultPresetCode(const InstrumentInfo& i
     return std::string();
 }
 
-void MuseSamplerWrapper::prepareOutputBuffer(const muse::audio::samples_t samples)
+void MuseSamplerWrapper::prepareOutputBuffer(const samples_t samples)
 {
     if (m_leftChannel.size() < samples) {
         m_leftChannel.resize(samples, 0.f);

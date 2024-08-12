@@ -70,6 +70,8 @@ private:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
+    bool initSampler(const muse::audio::sample_rate_t sampleRate, const muse::audio::samples_t blockSize);
+
     InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
@@ -87,6 +89,7 @@ private:
     ms_OutputBuffer m_bus;
 
     muse::audio::samples_t m_currentPosition = 0;
+    muse::audio::sample_rate_t m_samplerSampleRate = 0;
 
     std::vector<float> m_leftChannel;
     std::vector<float> m_rightChannel;
