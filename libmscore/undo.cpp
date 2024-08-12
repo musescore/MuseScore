@@ -1688,8 +1688,8 @@ void ChangeStyle::flip(EditData*)
 
       if (score->styleV(Sid::concertPitch) != style.value(Sid::concertPitch))
             score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool(), true);
-      if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
-            score->setScoreFont(ScoreFont::fontFactory(style.value(Sid::MusicalSymbolFont).toString()));
+      if (score->styleV(Sid::musicalSymbolFont) != style.value(Sid::musicalSymbolFont)) {
+            score->setScoreFont(ScoreFont::fontFactory(style.value(Sid::musicalSymbolFont).toString()));
             }
 
       score->setStyle(style, overlap);

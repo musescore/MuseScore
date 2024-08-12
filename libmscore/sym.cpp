@@ -6845,8 +6845,8 @@ void ScoreFont::load(bool system)
             { "pedalLineThickness",            Sid::pedalLineWidth },
             { "repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
             { "repeatEndingLineThickness",     Sid::voltaLineWidth },
-            { "slurEndpointThickness",         Sid::SlurEndWidth },
-            { "slurMidpointThickness",         Sid::SlurMidWidth },
+            { "slurEndpointThickness",         Sid::slurEndWidth },
+            { "slurMidpointThickness",         Sid::slurMidWidth },
             { "staffLineThickness",            Sid::staffLineWidth },
             { "stemThickness",                 Sid::stemWidth },
             // "subBracketThickness" not supported
@@ -6855,8 +6855,8 @@ void ScoreFont::load(bool system)
             { "thickBarlineThickness",         Sid::endBarWidth },
             { "thinBarlineThickness",          Sid::barWidth },
             { "thinBarlineThickness",          Sid::doubleBarWidth },
-            { "tieEndpointThickness",          Sid::TieEndWidth },
-            { "tieMidpointThickness",          Sid::TieMidWidth },
+            { "tieEndpointThickness",          Sid::tieEndWidth },
+            { "tieMidpointThickness",          Sid::tieMidWidth },
             { "tupletBracketThickness",        Sid::tupletBracketWidth }
             };
       for (const auto &i : oo.keys()) {
@@ -6873,7 +6873,7 @@ void ScoreFont::load(bool system)
                         _textEnclosureThickness = oo.value(i).toDouble();
                   }
             }
-      _engravingDefaults.push_back(std::make_pair(Sid::MusicalTextFont, QString("%1 Text").arg(_family)));
+      _engravingDefaults.push_back(std::make_pair(Sid::musicalTextFont, QString("%1 Text").arg(_family)));
 
       // create missing composed glyphs
       struct Composed {

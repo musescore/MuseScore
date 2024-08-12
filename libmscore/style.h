@@ -429,26 +429,26 @@ enum class Sid {
       staccatoGateTime,
       slurGateTime,
 
-      ArpeggioNoteDistance,
-      ArpeggioAccidentalDistance,
-      ArpeggioAccidentalDistanceMin,
-      ArpeggioLineWidth,
-      ArpeggioHookLen,
-      ArpeggioHiddenInStdIfTab,
+      arpeggioNoteDistance,
+      arpeggioAccidentalDistance,
+      arpeggioAccidentalDistanceMin,
+      arpeggioLineWidth,
+      arpeggioHookLen,
+      arpeggioHiddenInStdIfTab,
 
-      SlurEndWidth,
-      SlurMidWidth,
-      SlurDottedWidth,
-      TieEndWidth,
-      TieMidWidth,
-      TieDottedWidth,
-      MinTieLength,
-      SlurMinDistance,
-      TieMinDistance,
+      slurEndWidth,
+      slurMidWidth,
+      slurDottedWidth,
+      tieEndWidth,
+      tieMidWidth,
+      tieDottedWidth,
+      minTieLength,
+      slurMinDistance,
+      tieMinDistance,
 
-      SectionPause,
-      MusicalSymbolFont,
-      MusicalTextFont,
+      sectionPause,
+      musicalSymbolFont,
+      musicalTextFont,
 
       showHeader,
       headerFirstPage,
@@ -548,7 +548,7 @@ enum class Sid {
 
       tremoloWidth,
       tremoloBoxHeight,
-      tremoloStrokeWidth,
+      tremoloLineWidth,
       tremoloDistance,
       tremoloStyle,
       tremoloStrokeLengthMultiplier,
@@ -1485,6 +1485,7 @@ class MStyle {
       void applyNewDefaults(const MStyle& other, const int defaultsVersion);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
+      void readProperties400(XmlReader& e, int mscVersion);
       bool readStyleValCompat(XmlReader&);
       bool readTextStyleValCompat(XmlReader&);
 

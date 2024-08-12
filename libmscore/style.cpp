@@ -448,24 +448,24 @@ static const StyleType styleTypes[] {
       { Sid::staccatoGateTime,        "staccatoGateTime",        QVariant(50) },
       { Sid::slurGateTime,            "slurGateTime",            QVariant(100) },
 
-      { Sid::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
-      { Sid::ArpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.5) },
-      { Sid::ArpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(.33) },
-      { Sid::ArpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
-      { Sid::ArpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
-      { Sid::ArpeggioHiddenInStdIfTab,"ArpeggioHiddenInStdIfTab",QVariant(false)},
-      { Sid::SlurEndWidth,            "slurEndWidth",            Spatium(.07) },
-      { Sid::SlurMidWidth,            "slurMidWidth",            Spatium(.21) },
-      { Sid::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
-      { Sid::TieEndWidth,             "tieEndWidth",             Spatium(.07) },
-      { Sid::TieMidWidth,             "tieMidWidth",             Spatium(.21) },
-      { Sid::TieDottedWidth,          "tieDottedWidth",          Spatium(.10) },
-      { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
-      { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
-      { Sid::TieMinDistance,          "tieMinDistance",          Spatium(0.5) },
-      { Sid::SectionPause,            "sectionPause",            QVariant(qreal(3.0)) },
-      { Sid::MusicalSymbolFont,       "musicalSymbolFont",       QVariant(QString("Leland")) },
-      { Sid::MusicalTextFont,         "musicalTextFont",         QVariant(QString("Leland Text")) },
+      { Sid::arpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
+      { Sid::arpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.5) },
+      { Sid::arpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(.33) },
+      { Sid::arpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
+      { Sid::arpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
+      { Sid::arpeggioHiddenInStdIfTab,"ArpeggioHiddenInStdIfTab",QVariant(false)},
+      { Sid::slurEndWidth,            "slurEndWidth",            Spatium(.07) },
+      { Sid::slurMidWidth,            "slurMidWidth",            Spatium(.21) },
+      { Sid::slurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
+      { Sid::tieEndWidth,             "tieEndWidth",             Spatium(.07) },
+      { Sid::tieMidWidth,             "tieMidWidth",             Spatium(.21) },
+      { Sid::tieDottedWidth,          "tieDottedWidth",          Spatium(.10) },
+      { Sid::minTieLength,            "minTieLength",            Spatium(1.0) },
+      { Sid::slurMinDistance,         "slurMinDistance",         Spatium(0.5) },
+      { Sid::tieMinDistance,          "tieMinDistance",          Spatium(0.5) },
+      { Sid::sectionPause,            "sectionPause",            QVariant(qreal(3.0)) },
+      { Sid::musicalSymbolFont,       "musicalSymbolFont",       QVariant(QString("Leland")) },
+      { Sid::musicalTextFont,         "musicalTextFont",         QVariant(QString("Leland Text")) },
 
       { Sid::showHeader,              "showHeader",              QVariant(true) },
       { Sid::headerFirstPage,         "headerFirstPage",         QVariant(false) },
@@ -565,7 +565,7 @@ static const StyleType styleTypes[] {
 
       { Sid::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: notehead width
       { Sid::tremoloBoxHeight,        "tremoloBoxHeight",        Spatium(0.65) },
-      { Sid::tremoloStrokeWidth,      "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
+      { Sid::tremoloLineWidth,        "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
       { Sid::tremoloDistance,         "tremoloDistance",         Spatium(0.8) },
       { Sid::tremoloStyle,            "tremoloStrokeStyle",      int(TremoloStyle::DEFAULT) },
       { Sid::tremoloStrokeLengthMultiplier, "tremoloStrokeLengthMultiplier", 0.62 },
@@ -3037,9 +3037,9 @@ void MStyle::load(XmlReader& e, int mscVersion)
             const QStringRef& tag(e.name());
 
             if (tag == "TextStyle")
-                  //readTextStyle206(this, e);        // obsolete
+                  //readTextStyle206(this, e); // obsolete
                   e.readElementText();
-            else if (tag == "ottavaHook") {           // obsolete, for 3.0dev bw. compatibility, should be removed in final release
+            else if (tag == "ottavaHook") {    // obsolete, for 3.0dev bw. compatibility, should be removed in final release
                   qreal y = qAbs(e.readDouble());
                   set(Sid::ottavaHookAbove, y);
                   set(Sid::ottavaHookBelow, -y);
@@ -3059,482 +3059,16 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   }
             else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo, now: "lyricsDashMaxLength"
                   set(Sid::lyricsDashMaxLength, Spatium(e.readDouble()));
-// start 4.x compat, in order of appearance in the style file score_style.mss
-// fixing some Mu4 defaults to their Mu3.6 counterparts, skipping/ignoring others or letting them pass
-            //else if (mscVersion >= 400 && tag == "pageWidth")          //  8.27 ->   8.27662, rounding issue, and depends on locale, printer setup, so let's pass
-            //else if (mscVersion >= 400 && tag == "pageHeight")         // 11.69 ->  11.6929,  rounding issue, and depends on locale, printer setup, so let's pass
-            //else if (mscVersion >= 400 && tag == "pagePrintableWidth") //  7.0889 -> 7.08661, rounding issue, and depends on locale, printer setup, so let's pass
-            else if (mscVersion >= 400
-                     && (tag == "staffHeaderFooterPadding" // Mu4 only, let's skip
-                      || tag == "instrumentNameOffset"     // Mu4 only, let's skip
-                      || tag == "alignSystemToMargin"))    // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            //else if (mscVersion >= 400 && tag == "lyricsMinBottomDistance") // 1.5 -> 2,   Mu4's    default seems better, so let's pass
-            //else if (mscVersion >= 440 && tag == "lyricsDashMaxLength")     // 0.6 -> 0.5, Mu4.4+'s default seems better, so let's pass
-            //else if (mscVersion >= 400 && tag == "lyricsMinBottomDistance") // 1.5 -> 2,   Mu4's    default seems better, so let's pass
-            else if (mscVersion >= 400 && tag == "lyricsDashLineThickness") { // 0.1 -> 0.15
-                  qreal lyricsDashLineThickness = e.readDouble();
-                  if (qFuzzyCompare(lyricsDashLineThickness, 0.1)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::lyricsDashLineThickness, Spatium(lyricsDashLineThickness));
+            else if (tag == "dontHidStavesInFirstSystem") // pre-3.6.3/4.0 typo, now "dontHideStavesInFirstSystem"
+                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
+            else if (mscVersion < MSCVERSION && tag == "staffTextPosAbove") { // Got lost some time between 3.0.0 and 3.5.2
+                  double staffTextPosAboveY = e.readDouble();
+                  set(Sid::staffTextPosAbove, QPointF(0.0, staffTextPosAboveY));
                   }
-            //else if (mscVersion >= 440 && tag == "lyricsDashYposRatio") // 0.6 -> 0.5, Mu4.4+'s default seems better, so let's pass
-            else if (mscVersion >= 440
-                     && (tag == "lyricsShowDashIfSyllableOnFirstNote" // Mu4.4+ only, let's skip
-                      || tag == "lyricsMelismaForce"                  // Mu4.4+ only, let's skip
-                      || tag == "lyricsMelismaMinLength"              // Mu4.4+ only, let's skip
-                      || tag == "lyricsDashPosAtStartOfSystem"))      // Mu4.4+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "minMeasureWidth") { // 8 -> 5
-                  qreal minMeasureWidth = e.readDouble();
-                  if (qFuzzyCompare(minMeasureWidth, 8.0)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::minMeasureWidth, Spatium(minMeasureWidth));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "doubleBarDistance"            // 0.37 -> 0.55, depends on font's `engravingDefaults`! Let's skip, i.e. reset back
-                      || tag == "endBarDistance"               // 0.37 -> 0.7,  depends on font's `engravingDefaults`! Let's skip, i.e. reset back
-                      || tag == "repeatBarlineDotSeparation")) // 0.37 -> 0.7,  depends on font's `engravingDefaults`! Let's skip, i.e. reset back
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "bracketWidth") { // 0.45 -> 0.44
-                  qreal bracketWidth = e.readDouble();
-                  if (qFuzzyCompare(bracketWidth, 0.45)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::bracketWidth, Spatium(bracketWidth));
-                  }
-            else if (mscVersion >= 400 && tag == "bracketDistance") {// 0.45 -> 0.1
-                  qreal bracketDistance = e.readDouble();
-                  if (qFuzzyCompare(bracketDistance, 0.45)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::bracketDistance, Spatium(bracketDistance));
-                  }
-            else if (mscVersion >= 400 && tag == "akkoladeWidth") { // 1.5 -> 1.6
-                  qreal akkoladeWidth = e.readDouble();
-                  if (qFuzzyCompare(akkoladeWidth, 1.5)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::akkoladeWidth, Spatium(akkoladeWidth));
-                  }
-            else if (mscVersion >= 400 && tag == "akkoladeBarDistance") { // 0.35 -> 0.4
-                  qreal akkoladeBarDistance = e.readDouble();
-                  if (qFuzzyCompare(akkoladeBarDistance, 0.35)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::akkoladeBarDistance, Spatium(akkoladeBarDistance));
-                  }
-            else if (mscVersion >= 400 && tag == "clefLeftMargin") { // 0.75 -> 0.8
-                  qreal clefLeftMargin = e.readDouble();
-                  if (qFuzzyCompare(clefLeftMargin, 0.75)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::clefLeftMargin, Spatium(clefLeftMargin));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "systemTrailerRightMargin" // Mu4 only, let's skip
-                      || tag == "useStraightNoteFlags"))   // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "stemWidth") // 0.1 -> 0.11, depends on font's `engravingDefaults`! Let's skip.
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400
-                     && (tag == "stemLength"               // Mu4 only, let's skip
-                      || tag == "stemLengthSmall"          // Mu4 only, let's skip
-                      || tag == "shortStemStartLocation")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "shortestStem") { // 2.5 -> 2.25
-                  qreal shortestStem = e.readDouble();
-                  if (qFuzzyCompare(shortestStem, 2.5)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::shortestStem, Spatium(shortestStem));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "minStaffSizeForAutoStems"  // Mu4.0 only, let's skip
-                      || tag == "smallStaffStemDirection")) // Mu4.0 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "minNoteDistance") { // 0.5 -> 0.2
-                  qreal minNoteDistance = e.readDouble();
-                  if (qFuzzyCompare(minNoteDistance, 0.5)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::minNoteDistance, Spatium(minNoteDistance));
-                  }
-            else if (mscVersion >= 400 && tag == "measureSpacing") // 1.5 -> 1.2, let's skip, i.e. reset back
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400
-                     && (tag == "measureRepeatNumberPos"           // Mu4 only, let's skip
-                      || tag == "mrNumberSeries"                   // Mu4 only, let's skip
-                      || tag == "mrNumberEveryXMeasures"           // Mu4 only, let's skip
-                      || tag == "mrNumberSeriesWithParentheses"    // Mu4 only, let's skip
-                      || tag == "oneMeasureRepeatShow1"            // Mu4 only, let's skip
-                      || tag == "fourMeasureRepeatShowExtenders")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "ledgerLineLength") // 0.33 -> 0.35, depends on font's `engravingDefaults`! Let's skip.
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400
-                     && (tag == "stemSlashPosition"        // Mu4 only, let's skip
-                      || tag == "stemSlashAngle"           // Mu4 only, let's skip
-                      || tag == "stemSlashThickness"       // Mu4 only, let's skip
-                      || tag == "keysigAccidentalDistance" // Mu4 only, let's skip
-                      || tag == "keysigNaturalDistance"))  // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "useWideBeams") // Mu4 for beamDistance, default depends on font's `engravingDefaults`! Maybe better skip?
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "beamMinLen") { // 1.1 -> 1.3
-                  qreal beamMinLen = e.readDouble();
-                  if (qFuzzyCompare(beamMinLen, 1.1)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::beamMinLen, Spatium(beamMinLen));
-                  }
-            else if ((mscVersion >= 400 && tag == "snapCustomBeamsToGrid") // Mu4 only, let's skip
-                  || (mscVersion >= 440 && tag == "frenchStyleBeams"))     // Mu4.4+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400
-                     && (tag == "propertyDistanceHead" // 0.4 -> 1,   articulation/ornaments distance, let's skip, i.e. reset back
-                      || tag == "propertyDistanceStem" // 0.4 -> 1.8, articulation/ornaments distance, let's skip, i.e. reset back
-                      || tag == "propertyDistance"))   // 0.4 -> 1,   articulation/ornaments distance, let's skip, i.e. reset back
-                  e.skipCurrentElement();
-            //else if (mscVersion >= 400 && tag == "articulationAnchorLuteFingering") // 1 ? ToDo
-            //else if (mscVersion >= 410 && tag == "articulationAnchorLuteFingering") // 4 ? ToDo
-            else if (mscVersion >= 410
-                     && (tag == "articulationStemHAlign"     // Mu4.1+ only let's skip
-                      || tag == "articulationKeepTogether")) // Mu4.1+ only let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 420 && tag == "hairpinLinePosAbove") { // y: -1.5 -> -3
-                  QPointF hairpinLinePosAbove = e.readPoint();
-                  if (qFuzzyCompare(hairpinLinePosAbove.y(), -1.5)) // 4.2+ default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::hairpinLinePosAbove, QPointF(hairpinLinePosAbove));
-                  }
-            else if (mscVersion >= 420 && tag == "hairpinLinePosBelow") { // y: 4 (Mu4.0-4.1), 2.5 (Mu4.2+) -> 4
-                  QPointF hairpinLinePosBelow = e.readPoint();
-                  if (qFuzzyCompare(hairpinLinePosBelow.y(), 2.5)) // 4.2+ default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::hairpinLinePosBelow, QPointF(hairpinLinePosBelow));
-                  }
-            else if (mscVersion >= 400 && tag == "hairpinLineStyle") {
-                  int _lineStyle = Qt::SolidLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "dashed")
-                        _lineStyle = Qt::DashLine;
-                  set(Sid::hairpinLineStyle, QVariant(_lineStyle));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "hairpinDashLineLen"  // Mu4 only, let's skip
-                      || tag == "hairpinDashGapLen")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "hairpinLineLineStyle") {
-                  int _lineStyle = Qt::CustomDashLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "solid")
-                        _lineStyle = Qt::SolidLine;
-                  set(Sid::hairpinLineLineStyle, QVariant(_lineStyle));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "hairpinLineDashLineLen"  // Mu4 only, let's skip
-                      || tag == "hairpinLineDashGapLen")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if ((mscVersion >= 400 && tag == "pedalListStyle") // Mu4 only, pre-4.1 typo: "pedalListStyle"
-                  || (mscVersion >= 410 && tag == "pedalLineStyle")) {
-                  int _lineStyle = Qt::SolidLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "dashed")
-                        _lineStyle = Qt::DashLine;
-                  set(Sid::pedalLineStyle, QVariant(_lineStyle));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "pedalDashLineLen"  // Mu4 only, let's skip
-                      || tag == "pedalDashGapLen")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 440 && tag == "pedalFontSize") { // 12 -> 10
-                  qreal pedalFontSize = e.readDouble();
-                  if (qFuzzyCompare(pedalFontSize, 10.0)) // 4.4+ default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::pedalFontSize, pedalFontSize);
-                  }
-            else if ((mscVersion >= 440 && tag == "pedalMusicalSymbolsScale") // Mu4.4+ only, let's skip
-                  || (mscVersion >= 410 && tag == "pedalText") // Mu4.1+ only, let's skip
-                  || (mscVersion >= 420 && tag == "pedalHookText") // Mu4.2+ only, let's skip
-                  || (mscVersion >= 410 && tag == "pedalContinueText") // Mu4.1+ only, let's skip
-                  || (mscVersion >= 420 && tag == "pedalContinueHookText") // Mu4.2+ only, let's skip
-                  || (mscVersion >= 410 && tag == "pedalEndText") // Mu4.1+ only, let's skip
-                  || (mscVersion >= 420 && tag == "pedalRosetteEndText")) // Mu4.2+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "chordSymbolAFontSize") { // 10 -> 11
-                  qreal chordSymbolAFontSize = e.readDouble();
-                  if (qFuzzyCompare(chordSymbolAFontSize, 10.0)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::chordSymbolAFontSize, QVariant(chordSymbolAFontSize));
-                  }
-            else if (mscVersion >= 400 && tag == "chordSymbolBFontSize") { // 10 -> 11
-                  qreal chordSymbolBFontSize = e.readDouble();
-                  if (qFuzzyCompare(chordSymbolBFontSize, 10.0)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::chordSymbolBFontSize, QVariant(chordSymbolBFontSize));
-                  }
-            else if ((mscVersion >= 400 && tag == "graceToMainNoteDist")         // Mu4 only,    let's skip
-                  || (mscVersion >= 400 && tag == "graceToGraceNoteDist")        // Mu4 only,    let's skip
-                  || (mscVersion >= 430 && tag == "hideTabClefAfterFirst")       // Mu4.3+ only, let's skip
-                  || (mscVersion >= 440 && tag == "keySigCourtesyBarlineMode")   // Mu4.4+ only, let's skip
-                  || (mscVersion >= 440 && tag == "timeSigCourtesyBarlineMode")) // Mu4.4+ only, let's skip
-                  e.skipCurrentElement();
-            //else if (mscVersion >= 400 && tag == "useStandardNoteNames") // 1 -> 0, why??? Seems a mistake, let's pass
-            else if (tag == "multiVoiceRestTwoSpaceOffset") // Mu4.1+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 410 && tag == "minMMRestWidth") { // 4. resp. 6 -> 4
-                  qreal minMMRestWidth = e.readDouble();
-                  if (qFuzzyCompare(minMMRestWidth, 6.0)) // 4.1 default (4.0 same as 3.6), let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::minMMRestWidth, Spatium(minMMRestWidth));
-                  }
-            else if (mscVersion >= 400 && tag == "mmRestNumberPos") { // -0.5 -> -1.5, maybe keep the Mu4 default?
-                  qreal mmRestNumberPos = e.readDouble();
-                  if (qFuzzyCompare(mmRestNumberPos, -0.5)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::mmRestNumberPos, Spatium(mmRestNumberPos));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "mmRestNumberMaskHBar"       // Mu4 only, let's skip
-                      || tag == "multiMeasureRestMargin"     // Mu4 only, let's skip
-                      || tag == "mmRestHBarThickness"        // Mu4 only, let's skip
-                      || tag == "mmRestHBarVStrokeThickness" // Mu4 only, let's skip
-                      || tag == "mmRestHBarVStrokeHeight"    // Mu4 only, let's skip
-                      || tag == "oldStyleMultiMeasureRests"  // Mu4 only, let's skip
-                      || tag == "mmRestOldStyleMaxMeasures"  // Mu4 only, let's skip
-                      || tag == "mmRestOldStyleSpacing"))    // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo: "dontHidStavesInFirstSystm"
-                  set(Sid::dontHideStavesInFirstSystem, QVariant(e.readBool()));
-            else if (mscVersion >= 400
-                     && (tag == "alwaysShowSquareBracketsWhenEmptyStavesAreHidden" // Mu4 only, let's skip
-                      || tag == "ArpeggioAccidentalDistance"                       // Mu4 only, let's skip
-                      || tag == "ArpeggioAccidentalDistanceMin"))                  // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 420 && tag == "ArpeggioNoteDistance") { // 0.4 (Mu4.2+) -> 0.5 (Mu3.7)
-                  qreal ArpeggioNoteDistance = e.readDouble();
-                  if (qFuzzyCompare(ArpeggioNoteDistance, 0.4)) // 4.2+ default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::ArpeggioNoteDistance, Spatium(ArpeggioNoteDistance));
-                  }
-            else if (mscVersion >= 420 && tag == "ArpeggioAccidentalDistance") { // 0.3 (Mu4.2+) -> 0.5 (Mu3.7)
-                  qreal ArpeggioAccidentalDistance = e.readDouble();
-                  if (qFuzzyCompare(ArpeggioAccidentalDistance, 0.3)) // 4.2+ default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::ArpeggioAccidentalDistance, Spatium(ArpeggioAccidentalDistance));
-                  }
-            else if (mscVersion >= 400 && tag == "slurEndWidth") // 0.05 -> 0.07, depends on font's `engravingDefaults`! Let's skip.
-                  e.skipCurrentElement();
-            else if ((mscVersion >= 410 && tag == "minStraightGlissandoLength") // Mu4.1+ only, let's skip
-                  || (mscVersion >= 410 && tag == "minWigglyGlissandoLength")   // Mu4.1+ only, let's skip
-                  || (mscVersion >= 400 &&  tag == "headerSlurTieDistance")     // Mu4 only,    let's skip
-                  || (mscVersion >= 420 &&  tag == "tiePlacementSingleNote")    // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 &&  tag == "tiePlacementChord")         // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 &&  tag == "tieMinShoulderHeight")      // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 &&  tag == "tieMaxShoulderHeight"))     // Mu4.2+ only, let's skip
-                  e.skipCurrentElement();
-            //else if (mscVersion >= 400 && tag == "evenFooterC") // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
-            //else if (mscVersion >= 400 && tag == "oddFooterC")  // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
-            // actually changed the default for Mu3.7 to match that of Mu4 now
-            else if (mscVersion >= 400 && tag == "voltaLineStyle") {
-                  int _lineStyle = Qt::SolidLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "dashed")
-                        _lineStyle = Qt::DashLine;
-                  set(Sid::ottavaLineStyle, QVariant(_lineStyle));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "voltaDashLineLen"  // Mu4 only, let's skip
-                      || tag == "voltaDashGapLen")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "ottavaLineStyle") {
-                  int _lineStyle = Qt::DashLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "solid")
-                        _lineStyle = Qt::SolidLine;
-                  set(Sid::ottavaLineStyle, QVariant(_lineStyle));
-                  }
-            else if ((mscVersion >= 400 && tag == "ottavaDashLineLen")          // Mu4 only,    let's skip
-                  || (mscVersion >= 400 && tag == "ottavaDashGapLen")           // Mu4 only,    let's skip
-                  || (mscVersion >= 440 && tag == "ottavaMusicalSymbolsScale")  // Mu4.4+ only, let's skip
-                  || (mscVersion >= 400 && tag == "ottavaTextAlignAbove")       // Mu4 only,    let's skip
-                  || (mscVersion >= 400 && tag == "ottavaTextAlignBelow")       // Mu4 only,    let's skip
-                  || (mscVersion >= 400 && tag == "tremoloNoteSidePadding")     // Mu4 only,    let's skip
-                  || (mscVersion >= 400 && tag == "tremoloOutSidePadding")      // Mu4 only,    let's skip
-                  || (mscVersion >= 440 && tag == "ottavaMusicalSymbolsScale")) // Mu4.4+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "tupletStemLeftDistance") { // 0.5 -> 0
-                  qreal tupletStemLeftDistance = e.readDouble();
-                  if (qFuzzyCompare(tupletStemLeftDistance, 0.5)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::tupletStemLeftDistance, Spatium(tupletStemLeftDistance));
-                  }
-            else if (mscVersion >= 400 && tag == "tupletNoteLeftDistance") { // 0 -> -0.5
-                  qreal tupletNoteLeftDistance = e.readDouble();
-                  if (qFuzzyCompare(tupletNoteLeftDistance, 0.0)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::tupletNoteLeftDistance, Spatium(tupletNoteLeftDistance));
-                  }
-            else if (mscVersion >= 400 && tag == "scaleBarlines") { // 0 -> 1, why???
-                  bool scaleBarlines = e.readInt();
-                  if (!scaleBarlines) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::scaleBarlines, QVariant(scaleBarlines));
-                  }
-            else if (mscVersion >= 410
-                     && (tag == "dynamicsOverrideFont" // Mu4.1+ only, let's skip
-                      || tag == "dynamicsFont"         // Mu4.1+ only, let's skip
-                      || tag == "dynamicsSize"         // Mu4.1+ only, let's skip
-                      || tag == "avoidBarLines"        // Mu4.1+ only, let's skip
-                      || tag == "snapToDynamics"       // Mu4.1+ only, let's skip
-                      || tag == "centerOnNotehead"))   // Mu4.1+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 440
-                     && (tag == "tupletMusicalSymbolsScale" // Mu4.4+ only, let's skip
-                      || tag == "tupletUseSymbols"))        // Mu4.4+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "subTitleFontSize") { // 14 -> 16
-                  qreal subTitleFontSize = e.readDouble();
-                  if (qFuzzyCompare(subTitleFontSize, 14.0)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::subTitleFontSize, QVariant(subTitleFontSize));
-                  }
-            else if ((mscVersion >= 410 && tag == "preferSameStringForTranspose") // Mu4.1+ only, let's skip
-                  || (mscVersion >= 420 && tag == "stringTuningsFontSize")        // Mu4.2+ only, let's skip
-                  || (mscVersion >= 410 && tag.startsWith("harpPedal")))          // Mu4.1+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "dynamicsFontSize") // 10 -> 11, Mu4 uses the musical font's ones, maybe that's the reason, so let's skip, i.e. reset back
-                  e.skipCurrentElement();
-            else if (tag.startsWith("tempoChange")) // Mu4.1+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "measureNumberPosBelow") { // y: 1 -> 2
-                  QPointF measureNumberPosBelow = e.readPoint();
-                  if (qFuzzyCompare(measureNumberPosBelow.y(), 1.0)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::measureNumberPosBelow, QPointF(measureNumberPosBelow));
-                  }
-            else if (mscVersion >= 410
-                     && (tag == "expressionPosAbove"       // Mu4.1+ only, let's skip
-                      || tag == "expressionPosBelow"       // Mu4.1+ only, let's skip
-                      || tag == "expressionMinDistance" )) // Mu4.1+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 440 && tag == "repeatLeftFontSize") { // 18 -> 11
-                  qreal repeatLeftFontSize = e.readDouble();
-                  if (qFuzzyCompare(repeatLeftFontSize, 11)) // 4.4+ default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::repeatLeftFontSize, repeatLeftFontSize);
-                  }
-            else if ((mscVersion >= 440 && tag == "repeatsMusicalSymbolsScale")   // Mu4.4+ only, let's skip
-                  || (mscVersion >= 420 && tag == "glissandoStyle")               // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 && tag == "glissandoStyleHarp")           // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 && tag.startsWith("guitarBend"))          // Mu4.2+ only, let's skip
-                  || (mscVersion >= 420 && tag == "useCueSizeFretForGraceBends")) // Mu4.2+ only, let's skip
-                  e.skipCurrentElement();
-            //else if (tag == "headerAlign") // center,top -> center,center ToDo
-            //else if (tag == "footerAlign") // center,bottom -> center,center Todo
-            else if (mscVersion >= 400 && tag == "footerOffset") { // y: 0 -> 5, better use Mu3's default to prevent collisions.
-                  QPointF footerOffset = e.readPoint();
-                  if (qFuzzyCompare(footerOffset.y(), 0.0)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::footerOffset, QPointF(footerOffset));
-                  }
-            else if (mscVersion >= 400 && tag == "letRingLineWidth") { // 0.11 -> 0.15
-                  qreal letRingLineWidth = e.readDouble();
-                  if (qFuzzyCompare(letRingLineWidth, 0.11)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::letRingLineWidth, Spatium(letRingLineWidth));
-                  }
-            else if (mscVersion >= 400 && tag == "letRingLineStyle") {
-                  int _lineStyle = Qt::DashLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "solid")
-                        _lineStyle = Qt::SolidLine;
-                  set(Sid::letRingLineStyle, QVariant(_lineStyle));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "letRingDashLineLen" // Mu4 only, let's skip
-                     || tag == "letRingDashGapLen")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 410 && tag == "palmMutePosAbove") { // y: -4 resp. 0 -> -4
-                  QPointF palmMutePosAbove = e.readPoint();
-                  if (qFuzzyCompare(palmMutePosAbove.y(), 0.0)) // 4.1 default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::palmMutePosAbove, QPointF(palmMutePosAbove));
-                  }
-            else if (mscVersion >= 410 && tag == "palmMutePosBelow") { // y: 4 resp. 0 -> 4
-                  QPointF palmMutePosBelow = e.readPoint();
-                  if (qFuzzyCompare(palmMutePosBelow.y(), 0.0)) // 4.1 default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::palmMutePosBelow, QPointF(palmMutePosBelow));
-                  }
-            else if (mscVersion >= 400 && tag == "palmMuteLineWidth") { // 0.11 -> 0.15
-                  qreal palmMuteLineWidth = e.readDouble();
-                  if (qFuzzyCompare(palmMuteLineWidth, 0.11)) // 4.x default, let's skip, i.e. reset back
-                        continue;
-                  else
-                        set(Sid::palmMuteLineWidth, Spatium(palmMuteLineWidth));
-                  }
-            else if (mscVersion >= 400 && tag == "palmMuteLineStyle") {
-                  int _lineStyle = Qt::DashLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "solid")
-                        _lineStyle = Qt::SolidLine;
-                  set(Sid::palmMuteLineStyle, QVariant(_lineStyle));
-                  }
-            else if (mscVersion >= 400
-                     && (tag == "palmMuteDashLineLen"  // Mu4 only, let's skip
-                      || tag == "palmMuteDashGapLen")) // Mu4 only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "articulationMinDistance") // 0.4 -> 0.5, let's sip, i.e. reset back to Mu3
-                  e.skipCurrentElement();
-            else if ((mscVersion >= 400 && tag.contains("ShowTab"))                     // Mu4 only,    let's skip
-                  || (mscVersion >= 400 && tag == "chordlineThickness")                 // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
-                  || (mscVersion >= 430 && tag == "tabShowTiedFret")                    // Mu4.3+ only, let's skip
-                  || (mscVersion >= 430 && tag == "tabParenthesizeTiedFret")            // Mu4.3+ only, let's skip
-                  || (mscVersion >= 430 && tag == "parenthesizeTiedFretIfArticulation") // Mu4.3+ only, let's skip
-                  || (mscVersion >= 400 && tag == "chordlineThickness")                 // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
-                  || (mscVersion >= 440 && tag == "dummyMusicalSymbolsScale"))          // Mu4.4+ only, let's skip
-                  e.skipCurrentElement();
-            else if (mscVersion >= 400 && tag == "defaultsVersion") // 4nn -> 302, let's sip, i.e. reset to Mu3
-                  e.skipCurrentElement();
-            //else if (mscVersion >= 400 && tag == "Spatium") { // 1.74978 -> 1.75, rounding issue, has been read further up already
-// end 4.x compat: WARNING: we're reaching MSVC's limit for nesting :-(
+            else if (mscVersion < MSCVERSION && tag == "staffTextMinDistance" ) // Got lost some time between 3.0.0 and 3.5.2
+                  set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
+            else if (mscVersion > MSCVERSION)
+                  readProperties400(e, mscVersion);
             else if (!readProperties(e))
                   e.unknown();
             }
@@ -3561,6 +3095,526 @@ void MStyle::load(XmlReader& e, int mscVersion)
 
       if (!chordListTag)
             checkChordList();
+      }
+
+// start 4.x compat, in order of appearance in the style file score_style.mss
+// fixing some Mu4 defaults to their Mu3.6 counterparts, skipping/ignoring others or letting them pass
+void MStyle::readProperties400(XmlReader& e, int mscVersion)
+      {
+            const QStringRef& tag(e.name());
+
+            if (mscVersion >= 440 && tag == "spatium") // Mu4.4+
+                  set(Sid::spatium, e.readDouble() * DPMM);
+            //else if (tag == "pageWidth")          //  8.27 ->   8.27662, rounding issue, and depends on locale, printer setup, so let's pass
+            //else if (tag == "pageHeight")         // 11.69 ->  11.6929,  rounding issue, and depends on locale, printer setup, so let's pass
+            //else if (tag == "pagePrintableWidth") //  7.0889 -> 7.08661, rounding issue, and depends on locale, printer setup, so let's pass
+            else if (tag == "staffHeaderFooterPadding" // Mu4 only, let's skip
+                  || tag == "instrumentNameOffset"     // Mu4 only, let's skip
+                  || tag == "alignSystemToMargin")     // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            //else if (tag == "lyricsMinBottomDistance") // 1.5 -> 2, Mu4's default seems better, so let's pass
+            //else if (mscVersion >= 440 && tag == "lyricsDashMaxLength") // 0.8 -> 0.6, Mu4.4+'s default seems better, so let's pass
+            //else if (tag == "lyricsMinBottomDistance") // 1.5 -> 2, Mu4's default seems better, so let's pass
+            //else if (mscVersion >= 440 && tag == "lyricsMelismaPad")    // 0.1 -> 0.2, Mu4.4+'s default seems better, so let's pass
+            else if (tag == "lyricsDashLineThickness") { // 0.1 -> 0.15
+                  qreal lyricsDashLineThickness = e.readDouble();
+                  if (!qFuzzyCompare(lyricsDashLineThickness, 0.1)) // Changed from 4.x default
+                        set(Sid::lyricsDashLineThickness, Spatium(lyricsDashLineThickness));
+                  }
+            //else if (mscVersion >= 440 && tag == "lyricsDashYposRatio") // 0.6 -> 0.5, Mu4.4+'s default seems better, so let's pass
+            else if (mscVersion >= 440
+                     && (tag == "lyricsShowDashIfSyllableOnFirstNote" // Mu4.4+ only, let's skip
+                      || tag == "lyricsMelismaForce"                  // Mu4.4+ only, let's skip
+                      || tag == "lyricsMelismaMinLength"              // Mu4.4+ only, let's skip
+                      || tag == "lyricsDashPosAtStartOfSystem"))      // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "minMeasureWidth") { // 8 -> 5
+                  qreal minMeasureWidth = e.readDouble();
+                  if (!qFuzzyCompare(minMeasureWidth, 8.0)) // Changed from 4.x default
+                        set(Sid::minMeasureWidth, Spatium(minMeasureWidth));
+                  }
+            else if (tag == "doubleBarDistance"            // 0.37 -> 0.55, depends on font's `engravingDefaults`! Let's skip, i.e. reset back
+                  || tag == "endBarDistance"               // 0.37 -> 0.7,  depends on font's `engravingDefaults`! Let's skip, i.e. reset back
+                  || tag == "repeatBarlineDotSeparation")  // 0.37 -> 0.7,  depends on font's `engravingDefaults`! Let's skip, i.e. reset back
+                  e.skipCurrentElement();
+            else if (tag == "bracketWidth") { // 0.45 -> 0.44
+                  qreal bracketWidth = e.readDouble();
+                  if (!qFuzzyCompare(bracketWidth, 0.45)) // Changed from 4.x default
+                        set(Sid::bracketWidth, Spatium(bracketWidth));
+                  }
+            else if (tag == "bracketDistance") { // 0.45 -> 0.1
+                  qreal bracketDistance = e.readDouble();
+                  if (!qFuzzyCompare(bracketDistance, 0.45)) // Changed from 4.x default
+                        set(Sid::bracketDistance, Spatium(bracketDistance));
+                  }
+            else if (tag == "akkoladeWidth") { // 1.5 -> 1.6
+                  qreal akkoladeWidth = e.readDouble();
+                  if (!qFuzzyCompare(akkoladeWidth, 1.5)) // Changed from 4.x default
+                        set(Sid::akkoladeWidth, Spatium(akkoladeWidth));
+                  }
+            else if (tag == "akkoladeBarDistance") { // 0.35 -> 0.4
+                  qreal akkoladeBarDistance = e.readDouble();
+                  if (!qFuzzyCompare(akkoladeBarDistance, 0.35)) // Changed from 4.x default
+                        set(Sid::akkoladeBarDistance, Spatium(akkoladeBarDistance));
+                  }
+            else if (tag == "clefLeftMargin") { // 0.75 -> 0.8
+                  qreal clefLeftMargin = e.readDouble();
+                  if (!qFuzzyCompare(clefLeftMargin, 0.75)) // Changed from 4.x default
+                       set(Sid::clefLeftMargin, Spatium(clefLeftMargin));
+                  }
+            else if (mscVersion >= 440 && tag == "clefKeyDistance") { // 1 -> 0.75
+                  qreal clefKeyDistance = e.readDouble();
+                  if (!qFuzzyCompare(clefKeyDistance, 0.75)) // Changed from 4.4+ default
+                       set(Sid::clefKeyDistance, Spatium(clefKeyDistance));
+                  }
+            else if (tag == "systemTrailerRightMargin" // Mu4 only, let's skip
+                  || tag == "useStraightNoteFlags"     // Mu4 only, let's skip
+                  || tag == "stemWidth" // 0.1 -> 0.11, depends on font's `engravingDefaults`! Let's skip.
+                  || tag == "stemLength"               // Mu4 only, let's skip
+                  || tag == "stemLengthSmall"          // Mu4 only, let's skip
+                  || tag == "shortStemStartLocation")  // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "shortestStem") { // 2.5 -> 2.25
+                  qreal shortestStem = e.readDouble();
+                  if (!qFuzzyCompare(shortestStem, 2.5)) // Changed from 4.x default
+                        set(Sid::shortestStem, Spatium(shortestStem));
+                  }
+            else if (mscVersion >= 440 && tag == "combineVoice") // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "barNoteDistance") { // 1.3 -> 1.25
+                  qreal barNoteDistance = e.readDouble();
+                  if (!qFuzzyCompare(barNoteDistance, 1.25)) // Changed from 4.4+ default
+                        set(Sid::barNoteDistance, Spatium(barNoteDistance));
+                  }
+            else if (tag == "minStaffSizeForAutoStems"  // Mu4.0 only, let's skip
+                  || tag == "smallStaffStemDirection")  // Mu4.0 only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "minNoteDistance") { // 0.5 -> 0.2
+                  qreal minNoteDistance = e.readDouble();
+                  if (!qFuzzyCompare(minNoteDistance, 0.5)) // Changed from 4.x default
+                        set(Sid::minNoteDistance, Spatium(minNoteDistance));
+                  }
+            else if (tag == "measureSpacing") // 1.5 -> 1.2, let's skip, i.e. reset back
+                  e.skipCurrentElement();
+            else if (tag == "measureRepeatNumberPos"           // Mu4 only, let's skip
+                  || tag == "mrNumberSeries"                   // Mu4 only, let's skip
+                  || tag == "mrNumberEveryXMeasures"           // Mu4 only, let's skip
+                  || tag == "mrNumberSeriesWithParentheses"    // Mu4 only, let's skip
+                  || tag == "oneMeasureRepeatShow1"            // Mu4 only, let's skip
+                  || tag == "fourMeasureRepeatShowExtenders"   // Mu4 only, let's skip
+                  || tag == "ledgerLineLength" // 0.33 -> 0.35, depends on font's `engravingDefaults`! Let's skip.
+                  || tag == "stemSlashPosition"                // Mu4 only, let's skip
+                  || tag == "stemSlashAngle"                   // Mu4 only, let's skip
+                  || tag == "stemSlashThickness"               // Mu4 only, let's skip
+                  || tag == "keysigAccidentalDistance"         // Mu4 only, let's skip
+                  || tag == "keysigNaturalDistance")           // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 440 && tag == "minStaffSpread") // pre-4.4 typo
+                  set(Sid::minStaffSpread, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "maxStaffSpread") // pre-4.4 typo
+                  set(Sid::maxStaffSpread, Spatium(e.readDouble()));
+            else if (tag == "useWideBeams") // Mu4 for beamDistance, default depends on font's `engravingDefaults`! Maybe better skip?
+                  e.skipCurrentElement();
+            else if (tag == "beamMinLen") { // 1.1 -> 1.3
+                  qreal beamMinLen = e.readDouble();
+                  if (!qFuzzyCompare(beamMinLen, 1.1)) // Changed from 4.x default
+                        set(Sid::beamMinLen, Spatium(beamMinLen));
+                  }
+            else if ((mscVersion >= 400 && tag == "snapCustomBeamsToGrid") // Mu4 only, let's skip
+                  || (mscVersion >= 440 && tag == "frenchStyleBeams"))     // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 440 && tag == "hairpinLineWidth")       // pre-4.4 typo
+                  set(Sid::hairpinLineWidth, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "chordSymbolAPosAbove")   // pre-4.4 typo
+                  set(Sid::chordSymbolAPosAbove, e.readPoint());
+            else if (mscVersion >= 440 && tag == "chordSymbolAPosBelow")   // pre-4.4 typo
+                  set(Sid::chordSymbolAPosBelow, e.readPoint());
+            else if (mscVersion >= 440 && tag == "measureNumberAllStaves") // pre-4.4 typo
+                  set(Sid::measureNumberAllStaves, e.readBool());
+            else if (mscVersion >= 440 && tag == "firstSystemInstNameVisibility")  // pre-4.4 typo, doesn't exist in Mu3, so ignore
+                  e.skipCurrentElement();
+            else if (tag == "propertyDistanceHead" // 0.4 -> 1,   articulation/ornaments distance, let's skip, i.e. reset back
+                  || tag == "propertyDistanceStem" // 0.4 -> 1.8, articulation/ornaments distance, let's skip, i.e. reset back
+                  || tag == "propertyDistance")    // 0.4 -> 1,   articulation/ornaments distance, let's skip, i.e. reset back
+                  e.skipCurrentElement();
+            //else if (mscVersion >= 400 && tag == "articulationAnchorLuteFingering") // 1 ? ToDo
+            //else if (mscVersion >= 410 && tag == "articulationAnchorLuteFingering") // 4 ? ToDo
+            else if (mscVersion >= 410
+                     && (tag == "articulationStemHAlign"     // Mu4.1+ only let's skip
+                      || tag == "articulationKeepTogether")) // Mu4.1+ only let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 420 && tag == "hairpinLinePosAbove") { // y: -1.5 -> -3
+                  QPointF hairpinLinePosAbove = e.readPoint();
+                  if (!qFuzzyCompare(hairpinLinePosAbove.y(), -1.5)) // Changed from 4.2+ default
+                        set(Sid::hairpinLinePosAbove, hairpinLinePosAbove);
+                  }
+            else if (mscVersion >= 420 && tag == "hairpinLinePosBelow") { // y: 4 (Mu4.0-4.1), 2.5 (Mu4.2+) -> 4
+                  QPointF hairpinLinePosBelow = e.readPoint();
+                  if (!qFuzzyCompare(hairpinLinePosBelow.y(), 2.5)) // Changed from 4.2+ default
+                        set(Sid::hairpinLinePosBelow, hairpinLinePosBelow);
+                  }
+            else if (tag == "hairpinLineStyle") {
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::hairpinLineStyle, _lineStyle);
+                  }
+            else if (tag == "hairpinDashLineLen" // Mu4 only, let's skip
+                  || tag == "hairpinDashGapLen") // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "hairpinLineLineStyle") {
+                  int _lineStyle = Qt::CustomDashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::hairpinLineLineStyle, _lineStyle);
+                  }
+            else if (tag == "hairpinLineDashLineLen" // Mu4 only, let's skip
+                  || tag == "hairpinLineDashGapLen") // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if ((mscVersion >= 400 && tag == "pedalListStyle") // Mu4 only, pre-4.1 typo: "pedalListStyle"
+                  || (mscVersion >= 410 && tag == "pedalLineStyle")) {
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::pedalLineStyle, _lineStyle);
+                  }
+            else if (tag == "pedalDashLineLen" // Mu4 only, let's skip
+                  || tag == "pedalDashGapLen") // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 440 && tag == "pedalFontSize") { // 12 -> 10
+                  qreal pedalFontSize = e.readDouble();
+                  if (!qFuzzyCompare(pedalFontSize, 10.0)) // Changed from 4.4+ default
+                        set(Sid::pedalFontSize, pedalFontSize);
+                  }
+            else if ((mscVersion >= 440 && tag == "pedalMusicalSymbolsScale") // Mu4.4+ only, let's skip
+                  || (mscVersion >= 410 && tag == "pedalText") // Mu4.1+ only, let's skip
+                  || (mscVersion >= 420 && tag == "pedalHookText") // Mu4.2+ only, let's skip
+                  || (mscVersion >= 410 && tag == "pedalContinueText") // Mu4.1+ only, let's skip
+                  || (mscVersion >= 420 && tag == "pedalContinueHookText") // Mu4.2+ only, let's skip
+                  || (mscVersion >= 410 && tag == "pedalEndText") // Mu4.1+ only, let's skip
+                  || (mscVersion >= 420 && tag == "pedalRosetteEndText")) // Mu4.2+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "chordSymbolAFontSize") { // 10 -> 11
+                  qreal chordSymbolAFontSize = e.readDouble();
+                  if (!qFuzzyCompare(chordSymbolAFontSize, 10.0)) // Changed from 4.x default
+                        set(Sid::chordSymbolAFontSize, chordSymbolAFontSize);
+                  }
+            else if (tag == "chordSymbolBFontSize") { // 10 -> 11
+                  qreal chordSymbolBFontSize = e.readDouble();
+                  if (!qFuzzyCompare(chordSymbolBFontSize, 10.0)) // Changed from 4.x default
+                        set(Sid::chordSymbolBFontSize, chordSymbolBFontSize);
+                  }
+            else if ((mscVersion >= 400 && tag == "graceToMainNoteDist")         // Mu4 only,    let's skip
+                  || (mscVersion >= 400 && tag == "graceToGraceNoteDist")        // Mu4 only,    let's skip
+                  || (mscVersion >= 430 && tag == "hideTabClefAfterFirst")       // Mu4.3+ only, let's skip
+                  || (mscVersion >= 440 && tag == "keySigCourtesyBarlineMode")   // Mu4.4+ only, let's skip
+                  || (mscVersion >= 440 && tag == "timeSigCourtesyBarlineMode")) // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            //else if (tag == "useStandardNoteNames") // 1 -> 0, why??? Seems a mistake, let's pass
+            else if (mscVersion >= 410 && tag == "multiVoiceRestTwoSpaceOffset") // Mu4.1+ only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 410 && tag == "minMMRestWidth") { // 4. resp. 6 -> 4
+                  qreal minMMRestWidth = e.readDouble();
+                  if (!qFuzzyCompare(minMMRestWidth, 6.0)) // Changed from 4.1 default
+                        set(Sid::minMMRestWidth, Spatium(minMMRestWidth));
+                  }
+            else if (tag == "mmRestNumberPos") { // -0.5 -> -1.5, maybe keep the Mu4 default?
+                  qreal mmRestNumberPos = e.readDouble();
+                  if (!qFuzzyCompare(mmRestNumberPos, -0.5)) // Changed from 4.x default
+                        set(Sid::mmRestNumberPos, Spatium(mmRestNumberPos));
+                  }
+            else if (tag == "mmRestNumberMaskHBar"       // Mu4 only, let's skip
+                  || tag == "multiMeasureRestMargin"     // Mu4 only, let's skip
+                  || tag == "mmRestHBarThickness"        // Mu4 only, let's skip
+                  || tag == "mmRestHBarVStrokeThickness" // Mu4 only, let's skip
+                  || tag == "mmRestHBarVStrokeHeight"    // Mu4 only, let's skip
+                  || tag == "oldStyleMultiMeasureRests"  // Mu4 only, let's skip
+                  || tag == "mmRestOldStyleMaxMeasures"  // Mu4 only, let's skip
+                  || tag == "mmRestOldStyleSpacing"      // Mu4 only, let's skip
+                  || tag == "alwaysShowSquareBracketsWhenEmptyStavesAreHidden" // Mu4 only, let's skip
+                  || tag == "ArpeggioAccidentalDistance"                       // Mu4 only, let's skip
+                  || tag == "ArpeggioAccidentalDistanceMin")                   // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 440
+                     && (tag == "arpeggioAccidentalDistance"                   // Mu4.4+ only, let's skip
+                      || tag == "arpeggioAccidentalDistanceMin"))              // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if ((mscVersion >= 420 && tag == "ArpeggioNoteDistance") ||
+                     (mscVersion >= 440 && tag == "arpeggioNoteDistance")) { // 0.4 (Mu4.2+) -> 0.5 (Mu3.7)
+                  qreal arpeggioNoteDistance = e.readDouble();
+                  if (!qFuzzyCompare(arpeggioNoteDistance, 0.4)) // Changed from 4.2+ default
+                       set(Sid::arpeggioNoteDistance, Spatium(arpeggioNoteDistance));
+                  }
+            else if ((mscVersion >= 420 && tag == "ArpeggioAccidentalDistance") ||
+                     (mscVersion >= 440 && tag == "arpeggioAccidentalDistance")) { // 0.3 (Mu4.2+) -> 0.5 (Mu3.7)
+                  qreal arpeggioAccidentalDistance = e.readDouble();
+                  if (!qFuzzyCompare(arpeggioAccidentalDistance, 0.3)) // Changed from 4.2+ default
+                        set(Sid::arpeggioAccidentalDistance, Spatium(arpeggioAccidentalDistance));
+                  }
+            else if (mscVersion >= 440 && tag == "arpeggioAccidentalDistanceMin") // pre-4.4 typo
+                  set(Sid::arpeggioAccidentalDistanceMin, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "arpeggioLineWidth") // pre-x.4 typo
+                  set(Sid::arpeggioLineWidth, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "arpeggioHookLen") // pre-x.4 typo
+                  set(Sid::arpeggioHookLen, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "arpeggioHiddenInStdIfTab") // pre-x.4 typo
+                  set(Sid::arpeggioHiddenInStdIfTab, e.readBool());
+            else if (tag == "slurEndWidth") // 0.05 -> 0.07, depends on font's `engravingDefaults`! Let's skip.
+                  e.skipCurrentElement();
+            else if ((mscVersion >= 440 && tag == "tieEndWidth")                // Mu4.4+ only, let's skip
+                  || (mscVersion >= 440 && tag == "tieMidWidth")                // Mu4.4+ only, let's skip
+                  || (mscVersion >= 440 && tag == "tieDottedWidth")             // Mu4.4+ only, let's skip
+                  || (mscVersion >= 410 && tag == "minStraightGlissandoLength") // Mu4.1+ only, let's skip
+                  || (mscVersion >= 410 && tag == "minWigglyGlissandoLength")   // Mu4.1+ only, let's skip
+                  || (mscVersion >= 400 && tag == "headerSlurTieDistance")      // Mu4 only,    let's skip
+                  || (mscVersion >= 440 && tag == "tieMinDistance")             // Mu4.4+ only, let's skip
+                  || (mscVersion >= 420 && tag == "tiePlacementSingleNote")     // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "tiePlacementChord")          // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "tieMinShoulderHeight")       // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "tieMaxShoulderHeight"))      // Mu4.2+ only, let's skip
+                  e.skipCurrentElement();
+            //else if (tag == "evenFooterC") // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
+            //else if (tag == "oddFooterC")  // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
+            // actually changed the default for Mu3.7 to match that of Mu4 now
+            else if (tag == "voltaLineStyle") {
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::ottavaLineStyle, _lineStyle);
+                  }
+            else if (tag == "voltaDashLineLen"  // Mu4 only, let's skip
+                  || tag == "voltaDashGapLen")  // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "ottavaLineStyle") {
+                  int _lineStyle = Qt::DashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::ottavaLineStyle, _lineStyle);
+                  }
+            else if ((mscVersion >= 400 && tag == "ottavaDashLineLen")          // Mu4 only,    let's skip
+                  || (mscVersion >= 400 && tag == "ottavaDashGapLen")           // Mu4 only,    let's skip
+                  || (mscVersion >= 440 && tag == "ottavaMusicalSymbolsScale")  // Mu4.4+ only, let's skip
+                  || (mscVersion >= 400 && tag == "ottavaTextAlignAbove")       // Mu4 only,    let's skip
+                  || (mscVersion >= 400 && tag == "ottavaTextAlignBelow")       // Mu4 only,    let's skip
+                  || (mscVersion >= 400 && tag == "tremoloNoteSidePadding")     // Mu4 only,    let's skip
+                  || (mscVersion >= 400 && tag == "tremoloOutSidePadding")      // Mu4 only,    let's skip
+                  || (mscVersion >= 440 && tag == "ottavaMusicalSymbolsScale")) // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "tupletStemLeftDistance") { // 0.5 -> 0
+                  qreal tupletStemLeftDistance = e.readDouble();
+                  if (!qFuzzyCompare(tupletStemLeftDistance, 0.5)) // Changed from 4.x default
+                        set(Sid::tupletStemLeftDistance, Spatium(tupletStemLeftDistance));
+                  }
+            else if (tag == "tupletNoteLeftDistance") { // 0 -> -0.5
+                  qreal tupletNoteLeftDistance = e.readDouble();
+                  if (!qFuzzyCompare(tupletNoteLeftDistance, 0.0)) // Changed from 4.x default
+                        set(Sid::tupletNoteLeftDistance, Spatium(tupletNoteLeftDistance));
+                  }
+            else if ((mscVersion >= 440 && tag == "tupletMusicalSymbolsScale")  // Mu4.4+ only,    let's skip
+                  || (mscVersion >= 440 && tag == "tupletUseSymbols"))          // Mu4.4+ only,    let's skip
+                  e.skipCurrentElement();
+            else if (tag == "scaleBarlines") { // 0 -> 1, why???
+                  bool scaleBarlines = e.readInt();
+                  if (scaleBarlines) // Changed from 4.x default
+                        set(Sid::scaleBarlines, scaleBarlines);
+                  }
+            else if (mscVersion >= 410
+                     && (tag == "dynamicsOverrideFont" // Mu4.1+ only, let's skip
+                      || tag == "dynamicsFont"         // Mu4.1+ only, let's skip
+                      || tag == "dynamicsSize"         // Mu4.1+ only, let's skip
+                      || tag == "avoidBarLines"        // Mu4.1+ only, let's skip
+                      || tag == "snapToDynamics"       // Mu4.1+ only, let's skip
+                      || tag == "centerOnNotehead"))   // Mu4.1+ only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 440
+                     && (tag == "tupletMusicalSymbolsScale" // Mu4.4+ only, let's skip
+                      || tag == "tupletUseSymbols"))        // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "subTitleFontSize") { // 14 -> 16
+                  qreal subTitleFontSize = e.readDouble();
+                  if (!qFuzzyCompare(subTitleFontSize, 14.0)) // Changed from 4.x default
+                        set(Sid::subTitleFontSize, QVariant(subTitleFontSize));
+                  }
+            else if ((mscVersion >= 410 && tag == "preferSameStringForTranspose") // Mu4.1+ only, let's skip
+                  || (mscVersion >= 420 && tag == "stringTuningsFontSize")        // Mu4.2+ only, let's skip
+                  || (mscVersion >= 410 && tag.startsWith("harpPedal")))          // Mu4.1+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "dynamicsFontSize") // 10 -> 11, Mu4 uses the musical font's ones, maybe that's the reason, so let's skip, i.e. reset back
+                  e.skipCurrentElement();
+            else if (mscVersion >= 410 && tag.startsWith("tempoChange")) // Mu4.1+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "measureNumberPosBelow") { // y: 1 -> 2
+                  QPointF measureNumberPosBelow = e.readPoint();
+                  if (!qFuzzyCompare(measureNumberPosBelow.y(), 1.0)) // Changed from 4.x default
+                        set(Sid::measureNumberPosBelow, measureNumberPosBelow);
+                  }
+            else if (mscVersion >= 410
+                     && (tag == "expressionPosAbove"       // Mu4.1+ only, let's skip
+                      || tag == "expressionPosBelow"       // Mu4.1+ only, let's skip
+                      || tag == "expressionMinDistance" )) // Mu4.1+ only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 440 && tag == "repeatLeftFontSize") { // 18 -> 11
+                  qreal repeatLeftFontSize = e.readDouble();
+                  if (!qFuzzyCompare(repeatLeftFontSize, 11)) // Changed from 4.4+ default
+                        set(Sid::repeatLeftFontSize, repeatLeftFontSize);
+                  }
+            else if ((mscVersion >= 440 && tag == "repeatsMusicalSymbolsScale")   // Mu4.4+ only, let's skip
+                  || (mscVersion >= 420 && tag == "glissandoStyle")               // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "glissandoStyleHarp")           // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag.startsWith("guitarBend"))          // Mu4.2+ only, let's skip
+                  || (mscVersion >= 420 && tag == "useCueSizeFretForGraceBends")) // Mu4.2+ only, let's skip
+                  e.skipCurrentElement();
+            //else if (tag == "headerAlign") // center,top -> center,center ToDo
+            //else if (tag == "footerAlign") // center,bottom -> center,center Todo
+            else if (tag == "footerOffset") { // y: 0 -> 5, better use Mu3's default to prevent collisions.
+                  QPointF footerOffset = e.readPoint();
+                  if (!qFuzzyCompare(footerOffset.y(), 0.0)) // Changed from 4.x default
+                        set(Sid::footerOffset, footerOffset);
+                  }
+            else if (tag == "letRingLineWidth") { // 0.11 -> 0.15
+                  qreal letRingLineWidth = e.readDouble();
+                  if (!qFuzzyCompare(letRingLineWidth, 0.11)) // Changed from 4.x default
+                        set(Sid::letRingLineWidth, Spatium(letRingLineWidth));
+                  }
+            else if (tag == "letRingLineStyle") {
+                  int _lineStyle = Qt::DashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::letRingLineStyle, _lineStyle);
+                  }
+            else if (tag == "letRingDashLineLen" // Mu4 only, let's skip
+                  || tag == "letRingDashGapLen") // Mu4 only, let's skip
+                  e.skipCurrentElement();
+            else if (mscVersion >= 410 && tag == "palmMutePosAbove") { // y: -4 resp. 0 -> -4
+                  QPointF palmMutePosAbove = e.readPoint();
+                  if (!qFuzzyCompare(palmMutePosAbove.y(), 0.0)) // Changed from 4.1+ default
+                        set(Sid::palmMutePosAbove, palmMutePosAbove);
+                  }
+            else if (mscVersion >= 410 && tag == "palmMutePosBelow") { // y: 4 resp. 0 -> 4
+                  QPointF palmMutePosBelow = e.readPoint();
+                  if (!qFuzzyCompare(palmMutePosBelow.y(), 0.0)) // Changed from 4.1+ default
+                        set(Sid::palmMutePosBelow, palmMutePosBelow);
+                  }
+            else if (tag == "palmMuteLineWidth") { // 0.11 -> 0.15
+                  qreal palmMuteLineWidth = e.readDouble();
+                  if (!qFuzzyCompare(palmMuteLineWidth, 0.11)) // Changed from 4.x default
+                        set(Sid::palmMuteLineWidth, Spatium(palmMuteLineWidth));
+                  }
+            else if (tag == "palmMuteLineStyle") {
+                  int _lineStyle = Qt::DashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::palmMuteLineStyle, _lineStyle);
+                  }
+            else if (tag == "palmMuteDashLineLen" // Mu4 only, let's skip
+                  || tag == "palmMuteDashGapLen" // Mu4 only, let's skip
+                  || tag == "articulationMinDistance") // 0.4 -> 0.5, let's sip, i.e. reset back to Mu3
+                  e.skipCurrentElement();
+            else if ((mscVersion >= 400 && tag.contains("ShowTab"))                     // Mu4 only,    let's skip
+                  || (mscVersion >= 400 && tag == "chordlineThickness")                 // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
+                  || (mscVersion >= 430 && tag == "tabShowTiedFret")                    // Mu4.3+ only, let's skip
+                  || (mscVersion >= 430 && tag == "tabParenthesizeTiedFret")            // Mu4.3+ only, let's skip
+                  || (mscVersion >= 430 && tag == "parenthesizeTiedFretIfArticulation") // Mu4.3+ only, let's skip
+                  || (mscVersion >= 400 && tag == "chordlineThickness")                 // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
+                  || (mscVersion >= 440 && tag == "dummyMusicalSymbolsScale"))          // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "defaultsVersion") // 4nn -> 302, let's sip, i.e. reset to Mu3
+                  e.skipCurrentElement();
+            //else if (tag == "Spatium") { // 1.74978 -> 1.75, rounding issue, has been read further up already
+            else if (mscVersion < 440 && tag == "measureNumberOffset") // pre-4.4 typo
+                  set(Sid::measureNumberPosAbove, e.readPoint());
+            else if (mscVersion < 440 && tag == "measureNumberPosAbove") // pre-4.4 typo
+                  set(Sid::mmRestRangePosAbove, e.readPoint());
+            else if (mscVersion >= 440 && tag == "tremoloStrokeStyle") // pre-4.4 typo
+                  set(Sid::tremoloStyle, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemTextFontFace") // pre-4.4 typo
+                  set(Sid::systemTextFontFace, e.readElementText());
+            else if (mscVersion >= 440 && tag == "systemTextFontSize") // pre-4.4 typo
+                  set(Sid::systemTextFontSize, e.readDouble());
+            else if (mscVersion >= 440 && tag == "systemTextFontSpatiumDependent") // pre-4.4 typo
+                  set(Sid::systemTextFontSpatiumDependent, QVariant(e.readInt()));
+            else if (mscVersion >= 440 && tag == "systemTextFontStyle") // pre-4.4 typo
+                  set(Sid::systemTextFontStyle, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemTextAlign") // pre-4.4 typo
+                  set(Sid::systemTextAlign, QVariant::fromValue(e.readElementText()));
+            else if (mscVersion >= 440 && tag == "systemTextOffsetType") // pre-4.4 typo
+                  set(Sid::systemTextOffsetType, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemTextPlacement") // pre-4.4 typo
+                  set(Sid::systemTextPlacement, e.readElementText().toInt());
+            else if (mscVersion >= 440 && tag == "systemTextPosAbove") // pre-4.4 typo
+                  set(Sid::systemTextPosAbove, e.readPoint());
+            else if (mscVersion >= 440 && tag == "systemPosBelow") // pre-4.4 typo
+                  set(Sid::systemTextPosBelow, e.readPoint());
+            else if (mscVersion >= 440 && tag == "systemMinDistance") // pre-4.4 typo
+                  set(Sid::systemTextMinDistance, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "systemFrameType") // pre-4.4 typo
+                  set(Sid::systemTextFrameType, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemFramePadding") // pre-4.4 typo
+                  set(Sid::systemTextFramePadding, e.readDouble());
+            else if (mscVersion >= 440 && tag == "systemFrameWidth") // pre-4.4 typo
+                  set(Sid::systemTextFrameWidth, e.readDouble());
+            else if (mscVersion >= 440 && tag == "systemFrameRound") // pre-4.4 typo
+                  set(Sid::systemTextFrameRound, e.readInt());
+            else if (mscVersion >= 440 && tag == "systemFrameFgColor") // pre-4.4 typo
+                  set(Sid::systemTextFrameFgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "systemFrameBgColor") // pre-4.4 typo
+                  set(Sid::systemTextFrameBgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "staffTextFontFace") // pre-4.4 typo
+                  set(Sid::staffTextFontFace, e.readElementText());
+            else if (mscVersion >= 440 && tag == "staffTextFontSize") // pre-4.4 typo
+                  set(Sid::staffTextFontSize, e.readDouble());
+            else if (mscVersion >= 440 && tag == "staffFontSpatiumDependent") // pre-4.4 typo
+                  set(Sid::staffTextFontSpatiumDependent, e.readBool());
+            else if (mscVersion >= 440 && tag == "staffTextFontStyle") // pre-4.4 typo
+                  set(Sid::staffTextFontStyle, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextAlign") // pre-4.4 typo
+                  set(Sid::staffTextAlign, QVariant::fromValue(e.readElementText()));
+            else if (mscVersion >= 440 && tag == "staffTextOffsetType") // pre-4.4 typo
+                  set(Sid::staffTextOffsetType, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextPlacement") // pre-4.4 typo
+                  set(Sid::staffTextPlacement, e.readElementText().toInt());
+            else if (mscVersion >= 440 && tag == "staffTextPosAbove") // pre-4.4 typo
+                  set(Sid::staffTextPosAbove, e.readPoint());
+            else if (mscVersion >= 440 && tag == "staffTextPosBelow") // pre-4.4 typo
+                  set(Sid::staffTextPosBelow, e.readPoint());
+            else if (mscVersion >= 440 && tag == "staffTextMinDistance") // pre-4.4 typo
+                  set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
+            else if (mscVersion >= 440 && tag == "staffTextFrameType") // pre-4.4 typo
+                  set(Sid::staffTextFrameType, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextFramePadding") // pre-4.4 typo
+                  set(Sid::staffTextFramePadding, e.readDouble());
+            else if (mscVersion >= 440 && tag == "staffTextFrameWidth") // pre-4.4 typo
+                  set(Sid::staffTextFrameWidth, e.readDouble());
+            else if (mscVersion >= 440 && tag == "staffTextFrameRound") // pre-4.4 typo
+                  set(Sid::staffTextFrameRound, e.readInt());
+            else if (mscVersion >= 440 && tag == "staffTextFrameFgColor") // pre-4.4 typo
+                  set(Sid::staffTextFrameFgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "staffTextFrameBgColor") // pre-4.4 typo
+                  set(Sid::staffTextFrameBgColor, e.readColor());
+            else if (mscVersion >= 440 && tag == "dymanicsShowTabCommon") // pre-4.4 typo in gp-style.mss, doesn't exist in Mu3, so ignore
+                  e.skipCurrentElement();
+// end 4.x compat: WARNING: we're reaching MSVC's limit for nesting :-(
       }
 
 void MStyle::applyNewDefaults(const MStyle& other, const int defaultsVersion)

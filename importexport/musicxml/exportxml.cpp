@@ -1303,12 +1303,12 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
             xml.tag("line-width type=\"leger\"", s->styleS(Sid::ledgerLineWidth) * 10);
             xml.tag("line-width type=\"pedal\"", s->styleS(Sid::pedalLineWidth) * 10);
             xml.tag("line-width type=\"octave shift\"", s->styleS(Sid::ottavaLineWidth) * 10);
-            xml.tag("line-width type=\"slur middle\"", s->styleS(Sid::SlurMidWidth) * 10);
-            xml.tag("line-width type=\"slur tip\"", s->styleS(Sid::SlurEndWidth) * 10);
+            xml.tag("line-width type=\"slur middle\"", s->styleS(Sid::slurMidWidth) * 10);
+            xml.tag("line-width type=\"slur tip\"", s->styleS(Sid::slurEndWidth) * 10);
             xml.tag("line-width type=\"staff\"", s->styleS(Sid::staffLineWidth) * 10);
             xml.tag("line-width type=\"stem\"", s->styleS(Sid::stemWidth) * 10);
-            xml.tag("line-width type=\"tie middle\"", s->styleS(Sid::TieMidWidth) * 10);
-            xml.tag("line-width type=\"tie tip\"", s->styleS(Sid::TieEndWidth) * 10);
+            xml.tag("line-width type=\"tie middle\"", s->styleS(Sid::tieMidWidth) * 10);
+            xml.tag("line-width type=\"tie tip\"", s->styleS(Sid::tieEndWidth) * 10);
             xml.tag("line-width type=\"tuplet bracket\"", s->styleS(Sid::tupletBracketWidth) * 10);
             xml.tag("line-width type=\"wedge\"", s->styleS(Sid::hairpinLineWidth) * 10);
             // note size values in percent
@@ -1327,7 +1327,7 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
       // for music, words and lyrics, use Tid STAFF (typically used for words)
       // and LYRIC1 to get MusicXML defaults
 
-      xml.tagE(QString("music-font font-family=\"%1\"").arg(s->styleSt(Sid::MusicalSymbolFont)));
+      xml.tagE(QString("music-font font-family=\"%1\"").arg(s->styleSt(Sid::musicalSymbolFont)));
       xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::staffTextFontFace)).arg(s->styleD(Sid::staffTextFontSize)));
       xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::lyricsOddFontFace)).arg(s->styleD(Sid::lyricsOddFontSize)));
       xml.etag();
@@ -1357,7 +1357,7 @@ static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
       if (words.isEmpty())
             return;
 
-      const QString mtf = s->styleSt(Sid::MusicalTextFont);
+      const QString mtf = s->styleSt(Sid::musicalTextFont);
       const CharFormat defFmt = formatForWords(s);
 
       // export formatted
@@ -4534,7 +4534,7 @@ static void wordsMetronome(XmlWriter& xml, Score* s, TextBase const* const text,
       QList<TextFragment>       wordsRight; // words right of metronome
 
       // set the default words format
-      const QString mtf = s->styleSt(Sid::MusicalTextFont);
+      const QString mtf = s->styleSt(Sid::musicalTextFont);
       const CharFormat defFmt = formatForWords(s);
 
       if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
@@ -4719,7 +4719,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const int staff
             }
 
       // set the default words format
-      const QString mtf = _score->styleSt(Sid::MusicalTextFont);
+      const QString mtf = _score->styleSt(Sid::musicalTextFont);
       const CharFormat defFmt = formatForWords(_score);
 
       QString tagname { "direction" };
@@ -4764,7 +4764,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       attr += color2xml(rmk);
       attr += positioningAttributes(rmk);
       // set the default words format
-      const QString mtf = _score->styleSt(Sid::MusicalTextFont);
+      const QString mtf = _score->styleSt(Sid::musicalTextFont);
       const CharFormat defFmt = formatForWords(_score);
       // write formatted
       MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
@@ -5394,7 +5394,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                         _xml.tag("syllabic", s);
                         QString attr; // TODO TBD
                         // set the default words format
-                        const QString mtf       = _score->styleSt(Sid::MusicalTextFont);
+                        const QString mtf       = _score->styleSt(Sid::musicalTextFont);
                         CharFormat defFmt;
                         defFmt.setFontFamily(_score->styleSt(l->isEven() ? Sid::lyricsEvenFontFace : Sid::lyricsOddFontFace));
                         defFmt.setFontSize(_score->styleD(l->isEven() ? Sid::lyricsEvenFontSize : Sid::lyricsOddFontSize));

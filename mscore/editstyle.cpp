@@ -10,27 +10,25 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "libmscore/score.h"
-#include "scoreview.h"
-#include "libmscore/style.h"
 #include "editstyle.h"
-#include "libmscore/articulation.h"
-#include "libmscore/sym.h"
 #include "icons.h"
 #include "musescore.h"
-#include "libmscore/undo.h"
-#include "icons.h"
-#include "libmscore/harmony.h"
-#include "libmscore/chordlist.h"
-#include "libmscore/figuredbass.h"
+#include "preferences.h"
+#include "scoreview.h"
+
 #include "libmscore/clef.h"
 #include "libmscore/excerpt.h"
-#include "libmscore/tuplet.h"
+#include "libmscore/figuredbass.h"
 #include "libmscore/layout.h"
+#include "libmscore/score.h"
+#include "libmscore/style.h"
+#include "libmscore/sym.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/undo.h"
+
 #include "inspector/alignSelect.h"
-#include "inspector/offsetSelect.h"
 #include "inspector/fontStyleSelect.h"
-#include "preferences.h"
+#include "inspector/offsetSelect.h"
 
 namespace Ms {
 
@@ -221,19 +219,19 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::ledgerLineLength,        false, ledgerLineLength,        0 },
       { Sid::shortStemProgression,    false, shortStemProgression,    0 },
       { Sid::shortestStem,            false, shortestStem,            0 },
-      { Sid::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
-      { Sid::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
-      { Sid::ArpeggioHookLen,         false, arpeggioHookLen,         0 },
-      { Sid::ArpeggioHiddenInStdIfTab,false, arpeggioHiddenInStdIfTab,0 },
-      { Sid::SlurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth    },
-      { Sid::SlurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth    },
-      { Sid::SlurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
-      { Sid::SlurMinDistance,         false, slurMinDistance,         resetSlurMinDistance     },
-      { Sid::TieEndWidth,             false, tieEndLineWidth,         resetTieEndLineWidth     },
-      { Sid::TieMidWidth,             false, tieMidLineWidth,         resetTieMidLineWidth     },
-      { Sid::TieDottedWidth,          false, tieDottedLineWidth,      resetTieDottedLineWidth  },
-      { Sid::TieMinDistance,          false, tieMinDistance,          resetTieMinDistance      },
-      { Sid::MinTieLength,            false, minTieLength,            resetMinTieLength        },
+      { Sid::arpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
+      { Sid::arpeggioLineWidth,       false, arpeggioLineWidth,       0 },
+      { Sid::arpeggioHookLen,         false, arpeggioHookLen,         0 },
+      { Sid::arpeggioHiddenInStdIfTab,false, arpeggioHiddenInStdIfTab,0 },
+      { Sid::slurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth    },
+      { Sid::slurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth    },
+      { Sid::slurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
+      { Sid::slurMinDistance,         false, slurMinDistance,         resetSlurMinDistance     },
+      { Sid::tieEndWidth,             false, tieEndLineWidth,         resetTieEndLineWidth     },
+      { Sid::tieMidWidth,             false, tieMidLineWidth,         resetTieMidLineWidth     },
+      { Sid::tieDottedWidth,          false, tieDottedLineWidth,      resetTieDottedLineWidth  },
+      { Sid::tieMinDistance,          false, tieMinDistance,          resetTieMinDistance      },
+      { Sid::minTieLength,            false, minTieLength,            resetMinTieLength        },
       { Sid::bracketWidth,            false, bracketWidth,            0 },
       { Sid::bracketDistance,         false, bracketDistance,         0 },
       { Sid::akkoladeWidth,           false, akkoladeWidth,           0 },
@@ -369,8 +367,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::scaleBarlines,            false, scaleBarlines,                resetScaleBarlines},
       { Sid::crossMeasureValues,       false, crossMeasureValues,           0 },
 
-      { Sid::MusicalSymbolFont,        false, musicalSymbolFontComboBox,    0 },
-      { Sid::MusicalTextFont,          false, musicalTextFontComboBox,      0 },
+      { Sid::musicalSymbolFont,        false, musicalSymbolFontComboBox,    0 },
+      { Sid::musicalTextFont,          false, musicalTextFontComboBox,      0 },
       { Sid::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance, resetAutoplaceHairpinDynamicsDistance },
 
       { Sid::dynamicsPlacement,       false, dynamicsPlacement,          resetDynamicsPlacement },
@@ -1433,8 +1431,8 @@ void EditStyle::setValues()
 
 void EditStyle::fillScoreFontsComboBoxes()
       {
-      QString selectedMusicalSymbolFontName = cs->styleSt(Sid::MusicalSymbolFont);
-      QString selectedMusicalTextFontFamily = cs->styleSt(Sid::MusicalTextFont);
+      QString selectedMusicalSymbolFontName = cs->styleSt(Sid::musicalSymbolFont);
+      QString selectedMusicalTextFontFamily = cs->styleSt(Sid::musicalTextFont);
 
       musicalSymbolFontComboBox->blockSignals(true);
       musicalSymbolFontComboBox->clear();
@@ -1698,7 +1696,7 @@ void EditStyle::valueChanged(int i)
       Sid idx       = (Sid)i;
       QVariant val  = getValue(idx);
       bool setValue = false;
-      if (idx == Sid::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
+      if (idx == Sid::musicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
             ScoreFont* scoreFont = ScoreFont::fontFactory(val.toString());
             if (scoreFont) {
                   for (auto j : scoreFont->engravingDefaults()) {

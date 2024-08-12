@@ -10,16 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "tremolo.h"
+#include "chord.h"
+#include "measure.h"
+#include "note.h"
 #include "score.h"
 #include "staff.h"
-#include "style.h"
-#include "chord.h"
-#include "note.h"
-#include "measure.h"
-#include "segment.h"
 #include "stem.h"
+#include "style.h"
 #include "sym.h"
+#include "tremolo.h"
 #include "xml.h"
 
 namespace Ms {
@@ -87,7 +86,7 @@ qreal Tremolo::mag() const
 
 qreal Tremolo::minHeight() const
       {
-      const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+      const qreal sw = score()->styleS(Sid::tremoloLineWidth).val() * chordMag();
       const qreal td = score()->styleS(Sid::tremoloDistance).val() * chordMag();
       return (lines() - 1) * td + sw;
       }
@@ -193,7 +192,7 @@ QPainterPath Tremolo::basePath() const
       // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
       qreal w2  = sp * score()->styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
       qreal nw2 = w2 * score()->styleD(Sid::tremoloStrokeLengthMultiplier);
-      qreal lw  = sp * score()->styleS(Sid::tremoloStrokeWidth).val();
+      qreal lw  = sp * score()->styleS(Sid::tremoloLineWidth).val();
       qreal td  = sp * score()->styleS(Sid::tremoloDistance).val();
 
       QPainterPath ppath;
@@ -259,7 +258,7 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
             t = up ? -3.0 * chordMag() - 2.0 * minHeight() : 3.0 * chordMag();
             }
       else {
-            const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
+            const qreal offset = 2.0 * score()->styleS(Sid::tremoloLineWidth).val();
 
             if (!up && !(line & 1)) // stem is down; even line
                   t = qMax((4.0 + offset) * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
@@ -342,7 +341,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
             y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
             }
 
-      qreal lw = spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
+      qreal lw = spatium * score()->styleS(Sid::tremoloLineWidth).val();
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             // improve the case when one stem is up and another is down
             if (defaultStyle && _chord1->up() != _chord2->up() && !crossStaffBeamBetween()) {
