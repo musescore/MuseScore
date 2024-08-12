@@ -497,34 +497,35 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         m_needSetUpTempoMap = false;
     }
 
-    {
-        MasterScore* ms = masterScore();
-        CmdState& cs = ms->cmdState();
-        if (updateAll || cs.updateAll()) {
-            for (Score* s : scoreList()) {
-                for (MuseScoreView* v : s->m_viewer) {
-                    v->updateAll();
-                }
+    MasterScore* ms = masterScore();
+    CmdState& cs = ms->cmdState();
+    if (updateAll || cs.updateAll()) {
+        for (Score* s : scoreList()) {
+            for (MuseScoreView* v : s->m_viewer) {
+                v->updateAll();
             }
-        } else if (cs.updateRange()) {
-            // updateRange updates only current score
-            double d = style().spatium() * .5;
-            m_updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-            for (MuseScoreView* v : m_viewer) {
-                v->dataChanged(m_updateState.refresh);
-            }
-            m_updateState.refresh = RectF();
         }
-        if (playlistDirty()) {
-            masterScore()->setPlaylistClean();
+    } else if (cs.updateRange()) {
+        // updateRange updates only current score
+        double d = style().spatium() * .5;
+        m_updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
+        for (MuseScoreView* v : m_viewer) {
+            v->dataChanged(m_updateState.refresh);
         }
-        if (resetCmdState) {
-            cs.reset();
-        }
+        m_updateState.refresh = RectF();
+    }
+    if (playlistDirty()) {
+        masterScore()->setPlaylistClean();
+    }
+    if (resetCmdState) {
+        cs.reset();
     }
 
-    if (m_selection.isRange() && !m_selection.isLocked()) {
-        m_selection.updateSelectedElements();
+    for (Score* score : ms->scoreList()) {
+        Selection& sel = score->selection();
+        if (sel.isRange() && !sel.isLocked()) {
+            sel.updateSelectedElements();
+        }
     }
 }
 
