@@ -1,6 +1,6 @@
 import QtQuick 2.15
 
-import Muse.Controls 1.0
+import MuseApi.Controls 1.0
 
 Rectangle {
 
