@@ -6419,7 +6419,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
     }
 
     Staff* ostaff = cr->staff();
-    track_idx_t strack = ostaff->idx() * VOICES + cr->voice();
+    track_idx_t strack = cr->track();
 
     SegmentType segmentType = SegmentType::ChordRest;
 
