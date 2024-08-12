@@ -1060,7 +1060,7 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
         }
 
         if (!vBox) {
-            vBox = Factory::createVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score->dummy()->system());
         }
 
         Text* text = Factory::createText(vBox, textStyle);
@@ -3207,7 +3207,7 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 {
     if (!str.isEmpty()) {
         if (vBox == nullptr) {
-            vBox = Factory::createVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score->dummy()->system());
         }
         Text* text = Factory::createText(vBox, textStyleType);
         text->setPlainText(str);

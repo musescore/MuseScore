@@ -708,6 +708,16 @@ VBox* Factory::createVBox(const ElementType& type, System * parent, bool isAcces
     return b;
 }
 
+VBox* Factory::createTitleVBox(System* parent, bool isAccessibleEnabled)
+{
+    VBox* b = new VBox(ElementType::VBOX, parent);
+    b->setAccessibleEnabled(isAccessibleEnabled);
+    b->setSizeIsSpatiumDependent(false);
+    b->setTick(Fraction(0, 1));
+
+    return b;
+}
+
 CREATE_ITEM_IMPL(HBox, ElementType::HBOX, System, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TBox, ElementType::TBOX, System, isAccessibleEnabled)

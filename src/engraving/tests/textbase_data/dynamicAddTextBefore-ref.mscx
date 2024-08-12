@@ -108,6 +108,7 @@
       <VBox>
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <Text>
           <style>title</style>
           <text>Test</text>

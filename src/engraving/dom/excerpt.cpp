@@ -815,7 +815,11 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     if (mb->isHBox()) {
         nmb = Factory::createHBox(score->dummy()->system());
     } else if (mb->isVBox()) {
-        nmb = Factory::createVBox(score->dummy()->system());
+        if (toBox(mb)->isTitleFrame()) {
+            nmb = Factory::createTitleVBox(score->dummy()->system());
+        } else {
+            nmb = Factory::createVBox(score->dummy()->system());
+        }
     } else if (mb->isTBox()) {
         nmb = Factory::createTBox(score->dummy()->system());
         Text* text = toTBox(mb)->text();

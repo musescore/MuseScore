@@ -83,6 +83,11 @@ void MStyle::set(const Sid t, const PropertyValue& val)
     }
 }
 
+double MStyle::defaultSpatium() const
+{
+    return DefaultStyle::resolveStyleDefaults(defaultStyleVersion()).spatium();
+}
+
 void MStyle::precomputeValues()
 {
     double _spatium = value(Sid::spatium).toReal();

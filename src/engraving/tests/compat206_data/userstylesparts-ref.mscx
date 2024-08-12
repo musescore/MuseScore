@@ -227,6 +227,7 @@
       <VBox>
         <height>36.9323</height>
         <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <linkedMain/>
         <Text>
           <linkedMain/>
@@ -501,6 +502,7 @@
         <VBox>
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <linked>
             </linked>
           <Text>
@@ -734,6 +736,7 @@
         <VBox>
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <linked>
             <location>
               <staves>-1</staves>
@@ -991,6 +994,7 @@
         <VBox>
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <linked>
             <location>
               <staves>-2</staves>

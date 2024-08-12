@@ -23,8 +23,10 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 import "internal"
+import "../../common"
 
 Column {
     id: root
@@ -42,6 +44,17 @@ Column {
         verticalGapsSection.focusOnFirst()
     }
 
+    PropertyCheckBox {
+        id: matchStaffSize
+
+        navigation.name: "Scale with staff size"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 1
+
+        text: qsTrc("inspector", "Scale with staff size")
+        propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
+    }
+
     VerticalGapsSection {
         id: verticalGapsSection
         gapAbove: root.model ? root.model.gapAbove : null
@@ -50,8 +63,6 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
     }
-
-    SeparatorLine { anchors.margins: -12 }
 
     HorizontalMarginsSection {
         id: horizontalMarginsSection
