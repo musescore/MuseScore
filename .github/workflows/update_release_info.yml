@@ -27,7 +27,7 @@ jobs:
           S3_URL="s3://musescore-updates/feed/latest.xml"
           S3_ALL_URL="s3://musescore-updates/feed/all.xml"
           
-          if [ ${{ github.event.inputs.mode }} == "testing" ]; then
+          if [ ${{ inputs.mode }} == "testing" ]; then
             S3_URL="s3://musescore-updates/feed/latest.test.xml"
             S3_ALL_URL="s3://musescore-updates/feed/all.test.xml"
           fi
@@ -35,7 +35,7 @@ jobs:
           sudo bash ./buildscripts/ci/release/make_release_info_file.sh \
             --token ${{ secrets.GITHUB_TOKEN }} \
             --repo ${{ github.repository }} \
-            --release_tag ${{ github.event.inputs.tag }}
+            --release_tag ${{ inputs.tag }}
 
           sudo bash ./buildscripts/ci/release/push_file_to_s3.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \

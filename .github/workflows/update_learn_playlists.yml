@@ -22,7 +22,7 @@ jobs:
       - name: Update info about the get started playlist in s3
         run: |
           S3_URL="s3://extensions.musescore.org/4.0/learn/started_playlist.json"
-          if [ ${{ github.event.inputs.mode }} == "testing" ]; then
+          if [ ${{ inputs.mode }} == "testing" ]; then
             S3_URL="s3://extensions.musescore.org/4.0/learn/started_playlist.test.json"
           fi
 
@@ -45,7 +45,7 @@ jobs:
       - name: Update info about the advanced playlist in s3
         run: |
           S3_URL="s3://extensions.musescore.org/4.0/learn/advanced_playlist.json"
-          if [ ${{ github.event.inputs.mode }} == "testing" ]; then
+          if [ ${{ inputs.mode }} == "testing" ]; then
             S3_URL="s3://extensions.musescore.org/4.0/learn/advanced_playlist.test.json"
           fi
 

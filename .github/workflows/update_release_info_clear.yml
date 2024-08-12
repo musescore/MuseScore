@@ -22,7 +22,7 @@ jobs:
       - name: Clear info about the latest release in musescore-updates
         run: |
           S3_URL="s3://musescore-updates/feed/latest.xml"
-          if [ ${{ github.event.inputs.mode }} == "testing" ]; then
+          if [ ${{ inputs.mode }} == "testing" ]; then
             S3_URL="s3://musescore-updates/feed/latest.test.xml"
           fi
 
