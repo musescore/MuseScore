@@ -845,7 +845,7 @@ void SingleDraw::draw(const Bend* item, Painter* painter)
 
     const Bend::LayoutData* ldata = item->ldata();
     double _spatium = item->spatium();
-    double _lw = item->lineWidth();
+    double _lw = item->absoluteFromSpatium(item->lineWidth());
 
     Pen pen(item->curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
@@ -1335,7 +1335,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter)
     const Glissando* glissando = item->glissando();
 
     Pen pen(item->curColor(item->visible(), glissando->lineColor()));
-    pen.setWidthF(glissando->lineWidth());
+    pen.setWidthF(item->absoluteFromSpatium(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
 
@@ -1490,7 +1490,7 @@ void SingleDraw::draw(const StretchedBend* item, Painter* painter)
     const Color& color = item->curColor();
     const int textFlags = item->textFlags();
 
-    Pen pen(color, item->lineWidth(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    Pen pen(color, item->absoluteFromSpatium(item->lineWidth()), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Brush(color));
     Font f = item->font(sp * MScore::pixelRatio);
@@ -1623,7 +1623,7 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     // color for line (text color comes from the text properties)
     Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    double lineWidth = tl->lineWidth() * item->mag();
+    double lineWidth = tl->absoluteFromSpatium(tl->lineWidth());
 
     const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
     Pen pen(solidPen);
@@ -1740,7 +1740,7 @@ void SingleDraw::draw(const HairpinSegment* item, Painter* painter)
 
     if (item->drawCircledTip()) {
         Color color = item->curColor(item->hairpin()->visible(), item->hairpin()->lineColor());
-        double w = item->hairpin()->lineWidth();
+        double w = item->absoluteFromSpatium(item->lineWidth());
         if (item->staff()) {
             w *= item->staff()->staffMag(item->hairpin()->tick());
         }
@@ -2415,7 +2415,7 @@ void SingleDraw::draw(const TremoloSingleChord* item, Painter* painter)
     // vertical line (stem)
     {
         double x = 0.0;     // bbox().width() * .25;
-        Pen pen(item->curColor(), item->point(item->style().styleS(Sid::stemWidth)));
+        Pen pen(item->curColor(), item->absoluteFromSpatium(item->style().styleS(Sid::stemWidth)));
         painter->setPen(pen);
         const double sp = item->spatium();
         if (item->isBuzzRoll()) {
@@ -2476,7 +2476,7 @@ void SingleDraw::draw(const Tuplet* item, Painter* painter)
         painter->translate(-pos);
     }
     if (item->hasBracket()) {
-        painter->setPen(Pen(color, item->bracketWidth().val() * item->mag()));
+        painter->setPen(Pen(color, item->absoluteFromSpatium(item->bracketWidth()) * item->mag()));
         if (!item->number()) {
             painter->drawPolyline(item->bracketL, 4);
         } else {

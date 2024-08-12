@@ -1715,7 +1715,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     downOffset = maxUpWidth;
                     // align stems if present
                     if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
-                        downOffset -= topDownNote->chord()->stem()->lineWidth();
+                        const Stem* topDownStem = topDownNote->chord()->stem();
+                        downOffset -= topDownStem->lineWidthMag();
                     } else if (topDownNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS
                                && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
                         // stemless notes should be aligned as is they were stemmed
@@ -1946,21 +1947,21 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     double clearLeft = isTab ? bottomUpNote->chord()->stemPosX() : 0.0;
                     double clearRight = isTab ? bottomUpNote->chord()->stemPosX() : 0.0;
                     double overlapPadding = (isTab ? 0 : 0.3) * sp;
-                    if (topDownNote->chord()->stem()) {
+                    if (const Stem* topDownStem = topDownNote->chord()->stem()) {
                         if (ledgerOverlapBelow) {
                             // Create space between stem and ledger line below staff
-                            clearLeft += ledgerLen + ledgerGap + topDownNote->chord()->stem()->lineWidth();
+                            clearLeft += ledgerLen + ledgerGap + topDownStem->lineWidthMag();
                         } else {
-                            clearLeft += topDownNote->chord()->stem()->lineWidth() + overlapPadding;
+                            clearLeft += topDownStem->lineWidthMag() + overlapPadding;
                         }
                     }
-                    if (bottomUpNote->chord()->stem()) {
+                    if (const Stem* bottomUpStem = bottomUpNote->chord()->stem()) {
                         if (ledgerOverlapAbove) {
                             // Create space between stem and ledger line above staff
-                            clearRight += maxDownWidth + ledgerLen + ledgerGap - maxUpWidth + bottomUpNote->chord()->stem()->lineWidth();
+                            clearRight += maxDownWidth + ledgerLen + ledgerGap - maxUpWidth
+                                          + bottomUpStem->lineWidthMag();
                         } else {
-                            clearRight += bottomUpNote->chord()->stem()->lineWidth()
-                                          + std::max(maxDownWidth - maxUpWidth, 0.0) + overlapPadding;
+                            clearRight += bottomUpStem->lineWidthMag() + std::max(maxDownWidth - maxUpWidth, 0.0) + overlapPadding;
                         }
                     } else {
                         downDots = 0;             // no need to adjust for dots in this case
@@ -2483,7 +2484,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
         double overlapMirror;
         Stem* stem = chord->stem();
         if (stem) {
-            overlapMirror = stem->lineWidth() * chord->mag();
+            overlapMirror = stem->lineWidthMag();
         } else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE) {
             overlapMirror = style.styleMM(Sid::stemWidth) * chord->mag();
         } else {

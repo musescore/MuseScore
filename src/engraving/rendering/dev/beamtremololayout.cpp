@@ -1279,8 +1279,9 @@ double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, co
         return stemPosX;
     }
     const Chord* chord = toChord(cr);
+    const Stem* stem = chord->stem();
 
-    double stemWidth = chord->stem()->lineWidth().val() * chord->mag();
+    double stemWidth = stem->lineWidthMag();
 
     switch (anchorType) {
     case ChordBeamAnchorType::Start:

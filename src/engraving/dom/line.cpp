@@ -815,7 +815,6 @@ void LineSegment::spatiumChanged(double ov, double nv)
 {
     EngravingItem::spatiumChanged(ov, nv);
     double scale = nv / ov;
-    line()->setLineWidth(line()->lineWidth() * scale);
     m_offset2 *= scale;
 }
 
@@ -869,6 +868,24 @@ RectF LineSegment::drag(EditData& ed)
     return canvasBoundingRect();
 }
 
+Spatium LineSegment::lineWidth() const
+{
+    if (!line()) {
+        return Spatium(0.0);
+    }
+
+    return line()->lineWidth();
+}
+
+double LineSegment::absoluteFromSpatium(const Spatium& sp) const
+{
+    if (!line()) {
+        return EngravingItem::absoluteFromSpatium(sp);
+    }
+
+    return line()->absoluteFromSpatium(sp);
+}
+
 void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2)
 {
     SLine* thisLine = line();
@@ -911,7 +928,7 @@ SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
 {
     setTrack(0);
     m_lineColor = configuration()->defaultColor();
-    m_lineWidth = 0.15 * spatium();
+    m_lineWidth = Spatium(0.15);
 }
 
 SLine::SLine(const SLine& s)
@@ -1038,9 +1055,9 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::LINE_WIDTH:
         if (v.type() == P_TYPE::MILLIMETRE) {
-            m_lineWidth = v.value<Millimetre>();
+            m_lineWidth = Spatium::fromMM(v.value<Millimetre>(), spatium());
         } else if (v.type() == P_TYPE::SPATIUM) {
-            m_lineWidth = v.value<Spatium>().toMM(spatium());
+            m_lineWidth = v.value<Spatium>();
         }
         break;
     case Pid::LINE_STYLE:
@@ -1074,7 +1091,7 @@ PropertyValue SLine::propertyDefault(Pid pid) const
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);
         }
-        return Millimetre(0.15 * spatium());
+        return Spatium(0.15);
     case Pid::LINE_STYLE:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);

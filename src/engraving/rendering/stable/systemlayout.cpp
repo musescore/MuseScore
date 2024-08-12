@@ -2529,11 +2529,11 @@ double SystemLayout::minDistance(const System* top, const System* bottom, Layout
     const Box* bottomVBox = bottom->vbox();
 
     if (topVBox && !bottomVBox) {
-        return std::max(topVBox->point(topVBox->bottomGap()), bottom->minTop());
+        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()), bottom->minTop());
     } else if (!topVBox && bottomVBox) {
-        return std::max(bottomVBox->point(bottomVBox->topGap()), top->minBottom());
+        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()), top->minBottom());
     } else if (topVBox && bottomVBox) {
-        return bottomVBox->point(bottomVBox->topGap()) + topVBox->point(topVBox->bottomGap());
+        return bottomVBox->absoluteFromSpatium(bottomVBox->topGap()) + topVBox->absoluteFromSpatium(topVBox->bottomGap());
     }
 
     if (top->staves().empty() || bottom->staves().empty()) {

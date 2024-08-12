@@ -61,7 +61,7 @@ Box::Box(const ElementType& type, System* parent)
 
 void HBox::computeMinWidth()
 {
-    setWidth(point(boxWidth() + topGap() + bottomGap()));    // top/bottom is really left/right
+    setWidth(absoluteFromSpatium(boxWidth() + topGap() + bottomGap()));    // top/bottom is really left/right
 }
 
 bool Box::isEditAllowed(EditData&) const
@@ -102,7 +102,7 @@ void Box::editDrag(EditData& ed)
             int n = lrint(m_boxHeight.val() / vRaster);
             m_boxHeight = Spatium(vRaster * n);
         }
-        mutldata()->setBbox(0.0, 0.0, system()->width(), point(boxHeight()));
+        mutldata()->setBbox(0.0, 0.0, system()->width(), absoluteFromSpatium(boxHeight()));
         system()->setHeight(height());
         triggerLayout();
     } else {
@@ -152,7 +152,7 @@ void Box::add(EngravingItem* e)
     MeasureBase::add(e);
 }
 
-double Box::point(const Spatium val) const
+double Box::absoluteFromSpatium(const Spatium& val) const
 {
     const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     return val.val() * sp;
@@ -617,12 +617,12 @@ VBox::VBox(System* parent)
 
 double VBox::minHeight() const
 {
-    return point(Spatium(10));
+    return absoluteFromSpatium(Spatium(10));
 }
 
 double VBox::maxHeight() const
 {
-    return point(Spatium(30));
+    return absoluteFromSpatium(Spatium(30));
 }
 
 PropertyValue VBox::getProperty(Pid propertyId) const

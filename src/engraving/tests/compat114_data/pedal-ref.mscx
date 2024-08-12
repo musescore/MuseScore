@@ -85,8 +85,6 @@
             <Pedal>
               <continueText>&lt;font size=&quot;11&quot;/&gt;</continueText>
               <endHookHeight>-1.5</endHookHeight>
-              <lineWidth>0.006</lineWidth>
-              <lineWidth>0.006</lineWidth>
               </Pedal>
             <next>
               <location>
