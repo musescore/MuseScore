@@ -47,6 +47,8 @@ void ExtensionsConfiguration::init()
     if (!pluginsUserPath().empty()) {
         io::Dir::mkpath(pluginsUserPath());
     }
+
+    io::Dir::mkpath(userPath());
 }
 
 io::path_t ExtensionsConfiguration::defaultPath() const
@@ -104,7 +106,7 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
     ByteArray data = JsonDocument(arr).toJson();
     {
         mi::WriteResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
-        ret = io::File::writeFile(pluginsUserPath() + "/config.json", data);
+        ret = io::File::writeFile(userPath() + "/config.json", data);
     }
 
     if (!ret) {
@@ -116,7 +118,7 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
 
 std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs() const
 {
-    const io::path_t configPath = pluginsUserPath() + "/config.json";
+    const io::path_t configPath = userPath() + "/config.json";
     const io::path_t oldPluginsConfigPath = globalConfiguration()->userAppDataPath() + "/plugins/plugins.json";
 
     //! NOTE Load current config
@@ -165,6 +167,8 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
 
                 c.actions[code] = ac;
             }
+
+            result.insert({ uri, c });
         }
 
         return result;
