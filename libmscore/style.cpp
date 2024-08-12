@@ -3112,9 +3112,10 @@ void MStyle::readProperties400(XmlReader& e, int mscVersion)
                   || tag == "instrumentNameOffset"     // Mu4 only, let's skip
                   || tag == "alignSystemToMargin")     // Mu4 only, let's skip
                   e.skipCurrentElement();
-            //else if (tag == "lyricsMinBottomDistance") // 1.5 -> 2,   Mu4's    default seems better, so let's pass
-            //else if (mscVersion >= 440 && tag == "lyricsDashMaxLength")     // 0.6 -> 0.5, Mu4.4+'s default seems better, so let's pass
-            //else if (tag == "lyricsMinBottomDistance") // 1.5 -> 2,   Mu4's    default seems better, so let's pass
+            //else if (tag == "lyricsMinBottomDistance") // 1.5 -> 2, Mu4's default seems better, so let's pass
+            //else if (mscVersion >= 440 && tag == "lyricsDashMaxLength") // 0.8 -> 0.6, Mu4.4+'s default seems better, so let's pass
+            //else if (tag == "lyricsMinBottomDistance") // 1.5 -> 2, Mu4's default seems better, so let's pass
+            //else if (mscVersion >= 440 && tag == "lyricsMelismaPad")    // 0.1 -> 0.2, Mu4.4+'s default seems better, so let's pass
             else if (tag == "lyricsDashLineThickness") { // 0.1 -> 0.15
                   qreal lyricsDashLineThickness = e.readDouble();
                   if (!qFuzzyCompare(lyricsDashLineThickness, 0.1)) // Changed from 4.x default
@@ -3161,6 +3162,11 @@ void MStyle::readProperties400(XmlReader& e, int mscVersion)
                   if (!qFuzzyCompare(clefLeftMargin, 0.75)) // Changed from 4.x default
                        set(Sid::clefLeftMargin, Spatium(clefLeftMargin));
                   }
+            else if (mscVersion >= 440 && tag == "clefKeyDistance") { // 1 -> 0.75
+                  qreal clefKeyDistance = e.readDouble();
+                  if (!qFuzzyCompare(clefKeyDistance, 0.75)) // Changed from 4.4+ default
+                       set(Sid::clefKeyDistance, Spatium(clefKeyDistance));
+                  }
             else if (tag == "systemTrailerRightMargin" // Mu4 only, let's skip
                   || tag == "useStraightNoteFlags"     // Mu4 only, let's skip
                   || tag == "stemWidth" // 0.1 -> 0.11, depends on font's `engravingDefaults`! Let's skip.
@@ -3172,6 +3178,13 @@ void MStyle::readProperties400(XmlReader& e, int mscVersion)
                   qreal shortestStem = e.readDouble();
                   if (!qFuzzyCompare(shortestStem, 2.5)) // Changed from 4.x default
                         set(Sid::shortestStem, Spatium(shortestStem));
+                  }
+            else if (mscVersion >= 440 && tag == "combineVoice") // Mu4.4+ only, let's skip
+                  e.skipCurrentElement();
+            else if (tag == "barNoteDistance") { // 1.3 -> 1.25
+                  qreal barNoteDistance = e.readDouble();
+                  if (!qFuzzyCompare(barNoteDistance, 1.25)) // Changed from 4.4+ default
+                        set(Sid::barNoteDistance, Spatium(barNoteDistance));
                   }
             else if (tag == "minStaffSizeForAutoStems"  // Mu4.0 only, let's skip
                   || tag == "smallStaffStemDirection")  // Mu4.0 only, let's skip
@@ -3332,8 +3345,8 @@ void MStyle::readProperties400(XmlReader& e, int mscVersion)
                   || tag == "ArpeggioAccidentalDistanceMin")                   // Mu4 only, let's skip
                   e.skipCurrentElement();
             else if (mscVersion >= 440
-                     && (tag == "arpeggioAccidentalDistance"                       // Mu4.4+ only, let's skip
-                      || tag == "arpeggioAccidentalDistanceMin"))                  // Mu4.4+ only, let's skip
+                     && (tag == "arpeggioAccidentalDistance"                   // Mu4.4+ only, let's skip
+                      || tag == "arpeggioAccidentalDistanceMin"))              // Mu4.4+ only, let's skip
                   e.skipCurrentElement();
             else if ((mscVersion >= 420 && tag == "ArpeggioNoteDistance") ||
                      (mscVersion >= 440 && tag == "arpeggioNoteDistance")) { // 0.4 (Mu4.2+) -> 0.5 (Mu3.7)
@@ -3357,9 +3370,13 @@ void MStyle::readProperties400(XmlReader& e, int mscVersion)
                   set(Sid::arpeggioHiddenInStdIfTab, e.readBool());
             else if (tag == "slurEndWidth") // 0.05 -> 0.07, depends on font's `engravingDefaults`! Let's skip.
                   e.skipCurrentElement();
-            else if ((mscVersion >= 410 && tag == "minStraightGlissandoLength") // Mu4.1+ only, let's skip
+            else if ((mscVersion >= 440 && tag == "tieEndWidth")                // Mu4.4+ only, let's skip
+                  || (mscVersion >= 440 && tag == "tieMidWidth")                // Mu4.4+ only, let's skip
+                  || (mscVersion >= 440 && tag == "tieDottedWidth")             // Mu4.4+ only, let's skip
+                  || (mscVersion >= 410 && tag == "minStraightGlissandoLength") // Mu4.1+ only, let's skip
                   || (mscVersion >= 410 && tag == "minWigglyGlissandoLength")   // Mu4.1+ only, let's skip
                   || (mscVersion >= 400 && tag == "headerSlurTieDistance")      // Mu4 only,    let's skip
+                  || (mscVersion >= 440 && tag == "tieMinDistance")             // Mu4.4+ only, let's skip
                   || (mscVersion >= 420 && tag == "tiePlacementSingleNote")     // Mu4.2+ only, let's skip
                   || (mscVersion >= 420 && tag == "tiePlacementChord")          // Mu4.2+ only, let's skip
                   || (mscVersion >= 420 && tag == "tieMinShoulderHeight")       // Mu4.2+ only, let's skip
@@ -3408,6 +3425,9 @@ void MStyle::readProperties400(XmlReader& e, int mscVersion)
                   if (!qFuzzyCompare(tupletNoteLeftDistance, 0.0)) // Changed from 4.x default
                         set(Sid::tupletNoteLeftDistance, Spatium(tupletNoteLeftDistance));
                   }
+            else if ((mscVersion >= 440 && tag == "tupletMusicalSymbolsScale")  // Mu4.4+ only,    let's skip
+                  || (mscVersion >= 440 && tag == "tupletUseSymbols"))          // Mu4.4+ only,    let's skip
+                  e.skipCurrentElement();
             else if (tag == "scaleBarlines") { // 0 -> 1, why???
                   bool scaleBarlines = e.readInt();
                   if (scaleBarlines) // Changed from 4.x default
