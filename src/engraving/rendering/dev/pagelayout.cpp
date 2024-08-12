@@ -420,14 +420,18 @@ void PageLayout::collectPage(LayoutContext& ctx)
             continue;
         }
 
-        long int stick = system->firstMeasure()->tick().ticks();
-        long int etick = system->endTick().ticks();
+        Fraction stick = system->firstMeasure()->tick();
+        Fraction etick = system->endTick();
 
         IF_ASSERT_FAILED(stick < etick) {
             continue;
         }
 
-        auto spanners = ctx.dom().spannerMap().findOverlapping(stick, etick);
+        if (stick >= ctx.state().endTick() || etick <= ctx.state().startTick()) {
+            continue;
+        }
+
+        auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
         for (auto interval : spanners) {
             Spanner* sp = interval.value;
             if (!sp->isSlur() || sp->tick() == system->endTick()) {
