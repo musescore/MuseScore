@@ -284,6 +284,10 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             break;
         }
 
+        if (oldSystem && system != oldSystem && muse::contains(ctx.state().systemList(), oldSystem)) {
+            oldSystem->clear();
+        }
+
         if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure() && ctx.state().prevMeasure()->system() == system) {
             //
             // now we know that the previous measure is not the last
