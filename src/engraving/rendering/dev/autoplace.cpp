@@ -76,10 +76,11 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         SkylineLine& staffSkyline = above ? ss->skyline().north() : ss->skyline().south();
 
         SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
-            const EngravingItem* shapeItem = shapeEl.item();
-            return shapeItem && shapeItem->parent() == item->parent()
-                   && (item->isDynamic() || item->isExpression())
-                   && (shapeItem->isDynamic() || shapeItem->isExpression());
+            const EngravingItem* skylineItem = shapeEl.item();
+            if (!skylineItem) {
+                return false;
+            }
+            return itemsShouldIgnoreEachOther(item, skylineItem);
         });
 
         double d = above ? filteredSkyline.minDistanceToShapeAbove(shape, minSkylineHorizontalClearance)
@@ -210,8 +211,11 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         const Skyline& staffSkyline = system->staff(stfIdx)->skyline();
         const SkylineLine& skyline = above ? staffSkyline.north() : staffSkyline.south();
         SkylineLine filteredSkyline = skyline.getFilteredCopy([item](const ShapeElement& shapeEl){
-            const EngravingItem* el = shapeEl.item();
-            return el && (el == item->ldata()->itemSnappedBefore() || el == item->ldata()->itemSnappedAfter());
+            const EngravingItem* skylineItem = shapeEl.item();
+            if (!skylineItem) {
+                return false;
+            }
+            return itemsShouldIgnoreEachOther(item, skylineItem);
         });
 
         if (above) {
@@ -416,4 +420,28 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
         }
     }
     setOffsetChanged(item, ldata, false);
+}
+
+bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline)
+{
+    ElementType type1 = itemToAutoplace->type();
+    ElementType type2 = itemInSkyline->type();
+
+    if (type1 == type2) {
+        // Items of same type should ignore each other in most cases
+        static const std::set<ElementType> TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER {
+            ElementType::DYNAMIC,
+            ElementType::EXPRESSION,
+            ElementType::STICKING,
+        };
+        return !itemToAutoplace->isTextBase() || muse::contains(TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER, type1);
+    }
+
+    if ((type1 == ElementType::DYNAMIC || type1 == ElementType::EXPRESSION)
+        && (type2 == ElementType::DYNAMIC || type2 == ElementType::EXPRESSION)) {
+        // Dynamics and expressions should ignore each other if on the same segment
+        return itemToAutoplace->parent() == itemInSkyline->parent();
+    }
+
+    return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;
 }
