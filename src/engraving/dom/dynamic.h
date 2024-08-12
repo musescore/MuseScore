@@ -140,8 +140,11 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
-    bool hasLeftHairpin() const { return m_hasLeftHairpin; }
-    bool hasRightHairpin() const { return m_hasRightHairpin; }
+    Hairpin* leftHairpin() const { return m_leftHairpin; }
+    Hairpin* rightHairpin() const { return m_rightHairpin; }
+
+    bool hasLeftGrip() const;
+    bool hasRightGrip() const;
 
     void resetLeftDragOffset() { m_leftDragOffset = 0.0; }
     void resetRightDragOffset() { m_rightDragOffset = 0.0; }
@@ -149,7 +152,7 @@ public:
     double leftDragOffset() const { return m_leftDragOffset; }
     double rightDragOffset() const { return m_rightDragOffset; }
 
-    void findAdjacentHaipins();
+    void findAdjacentHairpins();
 
     RectF adjustedBoundingRect() const;
 
@@ -180,8 +183,8 @@ private:
     double m_leftDragOffset = 0.0;
     double m_rightDragOffset = 0.0;
 
-    bool m_hasLeftHairpin = false;
-    bool m_hasRightHairpin = false;
+    Hairpin* m_leftHairpin = nullptr;
+    Hairpin* m_rightHairpin = nullptr;
 };
 } // namespace mu::engraving
 

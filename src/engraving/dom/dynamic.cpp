@@ -731,7 +731,7 @@ void Dynamic::editDrag(EditData& ed)
     EditTimeTickAnchors::updateAnchors(this, track());
 
     // Right grip (when two grips)
-    if (int(ed.curGrip) == 1 && !hasLeftHairpin() && !hasRightHairpin()) {
+    if (int(ed.curGrip) == 1 && hasLeftGrip() && hasRightGrip()) {
         m_rightDragOffset += ed.evtDelta.x();
         if (rightDragOffset() < 0) {
             m_rightDragOffset = 0;
@@ -740,7 +740,7 @@ void Dynamic::editDrag(EditData& ed)
     }
 
     // Right grip (when single grip)
-    if (int(ed.curGrip) == 0 && hasLeftHairpin() && !hasRightHairpin()) {
+    if (int(ed.curGrip) == 0 && !hasLeftGrip() && hasRightGrip()) {
         m_rightDragOffset += ed.evtDelta.x();
         if (rightDragOffset() < 0) {
             m_rightDragOffset = 0;
@@ -749,7 +749,7 @@ void Dynamic::editDrag(EditData& ed)
     }
 
     // Left grip (when two grips or single grip)
-    if (int(ed.curGrip) == 0 && !hasLeftHairpin()) {
+    if (int(ed.curGrip) == 0 && hasLeftGrip()) {
         m_leftDragOffset += ed.evtDelta.x();
         if (leftDragOffset() > 0) {
             m_leftDragOffset = 0;
@@ -984,13 +984,34 @@ void Dynamic::drawEditMode(muse::draw::Painter* p, EditData& ed, double currentV
 }
 
 //---------------------------------------------------------
+//   hasLeftHairpin
+//---------------------------------------------------------
+
+bool Dynamic::hasLeftGrip() const
+{
+    if (segment()->tick().isZero()) {
+        return false; // Don't show the left grip for the leftmost dynamic with tick zero
+    }
+    return m_leftHairpin == nullptr;
+}
+
+//---------------------------------------------------------
+//   hasRightHairpin
+//---------------------------------------------------------
+
+bool Dynamic::hasRightGrip() const
+{
+    return m_rightHairpin == nullptr;
+}
+
+//---------------------------------------------------------
 //   findAdjacentHairpins
 //---------------------------------------------------------
 
-void Dynamic::findAdjacentHaipins()
+void Dynamic::findAdjacentHairpins()
 {
-    m_hasLeftHairpin = false;
-    m_hasRightHairpin = false;
+    m_leftHairpin = nullptr;
+    m_rightHairpin = nullptr;
 
     const Fraction tick = segment()->tick();
     const int intTick = tick.ticks();
@@ -1001,15 +1022,11 @@ void Dynamic::findAdjacentHaipins()
         if (sp->track() == track() && sp->isHairpin()) {
             Hairpin* hp = toHairpin(sp);
             if (hp->tick() == tick) {
-                m_hasRightHairpin = true;
+                m_rightHairpin = hp;
             } else if (hp->tick2() == tick) {
-                m_hasLeftHairpin = true;
+                m_leftHairpin = hp;
             }
         }
-    }
-
-    if (tick.isZero()) {
-        m_hasLeftHairpin = true;
     }
 
     return;
@@ -1025,9 +1042,9 @@ int Dynamic::gripsCount() const
         return 0;
     }
 
-    if (!hasLeftHairpin() && !hasRightHairpin()) {
+    if (hasLeftGrip() && hasRightGrip()) {
         return 2;
-    } else if (hasLeftHairpin() ^ hasRightHairpin()) {
+    } else if (hasLeftGrip() ^ hasRightGrip()) {
         return 1;
     } else {
         return 0;
@@ -1047,10 +1064,10 @@ std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
     PointF leftOffset(-ldata->bbox().width() / 2 - md + m_leftDragOffset, -11.408);
     PointF rightOffset(ldata->bbox().width() / 2 + md + m_rightDragOffset, -11.408);
 
-    if (!hasLeftHairpin() && hasRightHairpin()) {
+    if (hasLeftGrip() && !hasRightGrip()) {
         return { pp + leftOffset };
     }
-    if (hasLeftHairpin() && !hasRightHairpin()) {
+    if (!hasLeftGrip() && hasRightGrip()) {
         return { pp + rightOffset };
     }
     return { pp + leftOffset, pp + rightOffset };

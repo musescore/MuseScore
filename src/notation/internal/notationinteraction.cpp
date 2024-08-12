@@ -2601,7 +2601,7 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     mu::engraving::EngravingItem* editedElement = m_editData.element;
 
     if (editedElement && editedElement->isDynamic()) {
-        toDynamic(editedElement)->findAdjacentHaipins();
+        toDynamic(editedElement)->findAdjacentHairpins();
     }
 
     int gripsCount = editedElement ? editedElement->gripsCount() : 0;
