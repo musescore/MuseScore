@@ -1667,13 +1667,18 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
         }
         return false;
     });
-    x += item->isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
+
+    const RectF r = item->isWavy() ? conf.engravingFont()->bbox(item->waveSym(), item->magS()) : ldata->path.boundingRect();
+
     y += item->isBelow() ? vertOffset : -vertOffset;
 
+    const double yBelow = y + r.height();
+    const double chordEdge
+        = item->isToTheLeft() ? chordShape.leftMostEdgeAtHeight(y, yBelow) : chordShape.rightMostEdgeAtHeight(y, yBelow);
+    x += item->isToTheLeft() ? chordEdge - horOffset : chordEdge + horOffset;
     ldata->setPos(x, y);
 
     if (!item->isWavy()) {
-        RectF r = ldata->path.boundingRect();
         int x1 = 0, y1 = 0, width = 0, height = 0;
 
         x1 = r.x();
@@ -1682,8 +1687,6 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
         height = r.height();
         ldata->setBbox(x1, y1, width, height);
     } else {
-        RectF r = conf.engravingFont()->bbox(item->waveSym(), item->magS());
-
         // Align an eighth space above/below the centre of the note
         if (item->isBelow()) {
             ldata->moveY(r.height() - spatium * 0.125);

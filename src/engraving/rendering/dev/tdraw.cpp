@@ -1101,9 +1101,9 @@ void TDraw::draw(const ChordLine* item, Painter* painter)
         return;
     }
 
+    painter->setPen(Pen(item->curColor(), item->style().styleMM(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
+    painter->setBrush(BrushStyle::NoBrush);
     if (!item->isWavy()) {
-        painter->setPen(Pen(item->curColor(), item->style().styleMM(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
-        painter->setBrush(BrushStyle::NoBrush);
         painter->drawPath(ldata->path);
     } else {
         painter->save();
