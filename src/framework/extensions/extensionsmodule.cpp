@@ -41,6 +41,11 @@
 
 #include "devtools/devextensionslistmodel.h"
 
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_DIAGNOSTICS
+#include "diagnostics/idiagnosticspathsregister.h"
+#endif
+
 #include "log.h"
 
 using namespace muse::extensions;
@@ -106,6 +111,16 @@ void ExtensionsModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
     m_actionController->init();
+
+#ifdef MUSE_MODULE_DIAGNOSTICS
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        pr->reg("extensions: defaultPath", m_configuration->defaultPath());
+        pr->reg("extensions: userPath", m_configuration->userPath());
+        pr->reg("plugins (legacy): defaultPath", m_configuration->pluginsDefaultPath());
+        pr->reg("plugins (legacy): userPath", m_configuration->pluginsUserPath());
+    }
+#endif
 }
 
 void ExtensionsModule::onDelayedInit()

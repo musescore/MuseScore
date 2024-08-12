@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>api/Muse/Controls/qmldir</file>
+        <file>api/MuseApi/Controls/qmldir</file>
         <file>qml/Muse/UiComponents/Border.qml</file>
         <file>qml/Muse/UiComponents/ButtonBox.qml</file>
         <file>qml/Muse/UiComponents/CheckBox.qml</file>
