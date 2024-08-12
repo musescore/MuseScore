@@ -22,7 +22,7 @@ jobs:
       - name: Configure workflow
         run: |
           LUPDATE_ARGS=''
-          if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event.inputs.cleanup_obsolete }}" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "schedule" || "${{ inputs.cleanup_obsolete }}" == "true" ]]; then
             LUPDATE_ARGS='-no-obsolete'
           fi
 

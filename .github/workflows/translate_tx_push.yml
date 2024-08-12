@@ -15,7 +15,7 @@ jobs:
       - name: Check preconditions
         env:
           GITHUB_REF: ${{ github.ref }}
-          RETYPED_BRANCH_NAME: ${{ github.event.inputs.retyped_branch_name }}
+          RETYPED_BRANCH_NAME: ${{ inputs.retyped_branch_name }}
         run: |
           if [ "${GITHUB_REF}" != "refs/heads/${RETYPED_BRANCH_NAME}" ]; then
             echo "::error::Retyped branch name does not match actual branch name. Please make sure you have selected the correct branch."
