@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+trap 'echo Build failed; exit 1' ERR
+
 if [ $(which nproc) ]; then
     JOBS=$(nproc --all)
 else
@@ -59,24 +61,21 @@ done
 
 if [ $SHOW_HELP -eq 1 ]; then
     echo -e "Usage: ${0}\n" \
-	 "\t-t, --target <string> [default: ${TARGET}]\n" \
-	 "\t\tProvided targets: \n" \
-	 "\t\trelease, debug, relwithdebinfo, install, installrelwithdebinfo, \n" \
-	 "\t\tinstalldebug, clean, compile_commands, revision, appimage\n" \
-	 "\t-j, --jobs <number> [default: ${JOBS}]\n" \
-	 "\t\t Number of parallel compilations jobs\n" \
-	 "\t-h, --help\n"\
-	 "\t\t Show this help"
+        "\t-t, --target <string> [default: ${TARGET}]\n" \
+        "\t\tProvided targets: \n" \
+        "\t\trelease, debug, relwithdebinfo, install, installrelwithdebinfo, \n" \
+        "\t\tinstalldebug, clean, compile_commands, revision, appimage\n" \
+        "\t-j, --jobs <number> [default: ${JOBS}]\n" \
+        "\t\t Number of parallel compilations jobs\n" \
+        "\t-h, --help\n" \
+        "\t\t Show this help"
     exit 0
 fi
 
 cmake --version
 echo "ninja version $(ninja --version)"
 
-
-
 function do_build() {
-
     BUILD_TYPE=$1
 
     cmake .. -GNinja \
@@ -99,15 +98,12 @@ function do_build() {
         -DMUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL="${MUSESCORE_DEBUGLEVEL_ENABLED}" \
         -DMUSE_MODULE_VST="${MUSESCORE_BUILD_VST_MODULE}" \
         -DMUSE_MODULE_VST_VST3_SDK_PATH="${MUSESCORE_VST3_SDK_PATH}" \
-        -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}" \
-
+        -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}"
 
     ninja -j $JOBS
 }
 
-
 case $TARGET in
-
     release)
         mkdir -p build.release
         cd build.release
@@ -177,11 +173,11 @@ case $TARGET in
             -DMUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL="${MUSESCORE_DEBUGLEVEL_ENABLED}" \
             -DMUSE_MODULE_VST="${MUSESCORE_BUILD_VST_MODULE}" \
             -DMUSE_MODULE_VST_VST3_SDK_PATH="${MUSESCORE_VST3_SDK_PATH}" \
-            -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}" \
+            -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}"
         ;;
 
     revision)
-	    git rev-parse --short=7 HEAD | tr -d '\n' > local_build_revision.env
+        git rev-parse --short=7 HEAD | tr -d '\n' >local_build_revision.env
         ;;
 
     appimage)
@@ -205,7 +201,7 @@ case $TARGET in
         mani="install_manifest.txt"
         cp "share/applications/${desktop}" "${desktop}"
         cp "share/icons/hicolor/128x128/apps/${icon}" "${icon}"
-        <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
+        sed <"$build_dir/${mani}" >"${mani}" -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
         ;;
 
     appimagedebug)
@@ -229,11 +225,11 @@ case $TARGET in
         mani="install_manifest.txt"
         cp "share/applications/${desktop}" "${desktop}"
         cp "share/icons/hicolor/128x128/apps/${icon}" "${icon}"
-        <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
+        sed <"$build_dir/${mani}" >"${mani}" -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
         ;;
 
     *)
-        echo "Unknown target: $TARGET";
-        exit 1;
+        echo "Unknown target: $TARGET"
+        exit 1
         ;;
 esac
