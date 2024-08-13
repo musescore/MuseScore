@@ -2838,7 +2838,7 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
 
 bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system)
 {
-    if (item->offset() != item->propertyDefault(Pid::OFFSET).value<PointF>()) {
+    if (item->offset().y() != item->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
         // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
         return false;
     }
