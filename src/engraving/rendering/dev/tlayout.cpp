@@ -1794,10 +1794,15 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     }
     // clefs on palette or at start of system/measure are left aligned
     // other clefs are right aligned
-    RectF r(item->symBbox(ldata->symId));
-    double x = item->segment() && item->segment()->rtick().isNotZero() ? -r.right() : 0.0;
+    Shape shape(item->symShapeWithCutouts(ldata->symId));
+    bool isMidMeasureClef = item->isMidMeasureClef();
+    double x = isMidMeasureClef ? -shape.right() : 0.0;
     ldata->setPos(PointF(x, yoff * _spatium + (stepOffset * 0.5 * _spatium)));
-    ldata->setBbox(r);
+    if (item->isMidMeasureClef()) {
+        ldata->setShape(shape);
+    } else {
+        ldata->setBbox(item->symBbox(ldata->symId));
+    }
 }
 
 void TLayout::layoutCapo(const Capo* item, Capo::LayoutData* ldata, const LayoutContext&)
