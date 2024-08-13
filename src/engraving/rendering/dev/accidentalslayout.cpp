@@ -261,10 +261,8 @@ void AccidentalsLayout::createChordsShape(AccidentalsLayoutContext& ctx)
 
     for (const Chord* chord : ctx.chords) {
         PointF chordPos = keepAccidentalsCloseToChord(chord) ? PointF() : chord->pos();
-        const LedgerLine* ledger = chord->ledgerLines();
-        while (ledger) {
+        for (const LedgerLine* ledger : chord->ledgerLines()) {
             ctx.chordsShape.add(ledger->shape().translate(ledger->pos() + chordPos));
-            ledger = ledger->next();
         }
         for (const Note* note : chord->notes()) {
             SymId noteSym = note->ldata()->cachedNoteheadSym;

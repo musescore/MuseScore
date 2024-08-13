@@ -260,7 +260,6 @@ std::vector<int> Chord::noteDistances() const
 Chord::Chord(Segment* parent)
     : ChordRest(ElementType::CHORD, parent)
 {
-    m_ledgerLines      = 0;
     m_stem             = 0;
     m_hook             = 0;
     m_stemDirection    = DirectionV::AUTO;
@@ -285,7 +284,6 @@ Chord::Chord(const Chord& c, bool link)
     if (link) {
         score()->undo(new Link(this, const_cast<Chord*>(&c)));
     }
-    m_ledgerLines = 0;
 
     for (Note* onote : c.m_notes) {
         Note* nnote = Factory::copyNote(*onote, link);
@@ -426,11 +424,7 @@ Chord::~Chord()
     delete m_stemSlash;
     delete m_stem;
     delete m_hook;
-    for (LedgerLine* ll = m_ledgerLines; ll;) {
-        LedgerLine* llNext = ll->next();
-        delete ll;
-        ll = llNext;
-    }
+    muse::DeleteAll(m_ledgerLines);
     muse::DeleteAll(m_graceNotes);
     muse::DeleteAll(m_notes);
 }
@@ -918,7 +912,7 @@ double Chord::maxHeadWidth() const
 //   addLedgerLines
 //---------------------------------------------------------
 
-void Chord::addLedgerLines()
+void Chord::updateLedgerLines()
 {
     // initialize for palette
     track_idx_t track = 0;                     // the track lines belong to
@@ -957,6 +951,7 @@ void Chord::addLedgerLines()
     // notes are scanned twice from outside (bottom or top) toward the staff
     // each pass stops at the first note without ledger lines
     size_t n = m_notes.size();
+    std::vector<LedgerLineData> ledgerLineData;
     for (size_t j = 0; j < 2; j++) {               // notes are scanned twice...
         int from, delta;
         std::vector<LedgerLineData> vecLines;
@@ -1053,22 +1048,24 @@ void Chord::addLedgerLines()
             }
         }
         if (minLine < 0 || maxLine > lineBelow) {
-            double _spatium = spatium();
-            double stepDistance = lineDistance * 0.5;
-            for (auto lld : vecLines) {
-                LedgerLine* h = new LedgerLine(score()->dummy());
-                h->setParent(this);
-                h->setTrack(track);
-                h->setVisible(lld.visible && staffVisible);
-                h->setLen(lld.maxX - lld.minX);
-                h->setPos(lld.minX, lld.line * _spatium * stepDistance);
-                h->setNext(m_ledgerLines);
-                m_ledgerLines = h;
-            }
+            ledgerLineData.insert(ledgerLineData.end(), vecLines.begin(), vecLines.end());
         }
     }
 
-    for (LedgerLine* ll = m_ledgerLines; ll; ll = ll->next()) {
+    double _spatium = spatium();
+    double stepDistance = lineDistance * 0.5;
+    resizeLedgerLinesTo(ledgerLineData.size());
+    for (size_t i = 0; i < ledgerLineData.size(); ++i) {
+        LedgerLineData lld = ledgerLineData[i];
+        LedgerLine* h = m_ledgerLines[i];
+        h->setParent(this);
+        h->setTrack(track);
+        h->setVisible(lld.visible && staffVisible);
+        h->setLen(lld.maxX - lld.minX);
+        h->setPos(lld.minX, lld.line * _spatium * stepDistance);
+    }
+
+    for (LedgerLine* ll : m_ledgerLines) {
         renderer()->layoutItem(ll);
     }
 }
@@ -1155,7 +1152,7 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func, bool inclu
         func(m_tremoloSingleChord);
     }
     if (includeTemporarySiblings) {
-        for (LedgerLine* ll = m_ledgerLines; ll; ll = ll->next()) {
+        for (LedgerLine* ll : m_ledgerLines) {
             func(ll);
         }
     }
@@ -1552,6 +1549,23 @@ Chord* Chord::next() const
     return nullptr;
 }
 
+void Chord::resizeLedgerLinesTo(size_t newSize)
+{
+    int ledgerLineCountDiff = newSize - m_ledgerLines.size();
+    if (ledgerLineCountDiff > 0) {
+        for (int i = 0; i < ledgerLineCountDiff; ++i) {
+            m_ledgerLines.push_back(new LedgerLine(score()->dummy()));
+        }
+    } else {
+        for (int i = 0; i < std::abs(ledgerLineCountDiff); ++i) {
+            delete m_ledgerLines.back();
+            m_ledgerLines.pop_back();
+        }
+    }
+
+    assert(m_ledgerLines.size() == newSize);
+}
+
 void Chord::setBeamExtension(double extension)
 {
     if (m_stem) {
@@ -1812,7 +1826,7 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
     }
     const Staff* st = staff();
     if ((st && st->showLedgerLines(tick())) || !st) {       // also for palette
-        for (LedgerLine* ll = m_ledgerLines; ll; ll = ll->next()) {
+        for (LedgerLine* ll : m_ledgerLines) {
             func(data, ll);
         }
     }
