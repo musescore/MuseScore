@@ -711,13 +711,12 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
             score->setLayout(dstTick, dstTick + tickLen, dstStaff, endStaff, dst);
         }
 
-        //check and add truly invisible rests instead of gaps
         //TODO: look if this could be done different
         Measure* dstM = score->tick2measure(dstTick);
         Measure* endM = score->tick2measure(dstTick + tickLen);
         for (staff_idx_t i = dstStaff; i < endStaff; i++) {
             for (Measure* m = dstM; m && m != endM->nextMeasure(); m = m->nextMeasure()) {
-                m->checkMeasure(i, false);
+                m->checkMeasure(i);
             }
         }
         score->m_selection.setRangeTicks(dstTick, dstTick + tickLen, dstStaff, endStaff);
