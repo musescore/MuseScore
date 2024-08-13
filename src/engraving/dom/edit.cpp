@@ -3932,7 +3932,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
 //   cmdExchangeVoice
 //---------------------------------------------------------
 
-void Score::cmdExchangeVoice(int s, int d)
+void Score::cmdExchangeVoice(voice_idx_t s, voice_idx_t d)
 {
     if (!selection().isRange()) {
         MScore::setError(MsError::NO_STAFF_SELECTED);
