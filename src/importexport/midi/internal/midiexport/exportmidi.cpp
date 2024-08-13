@@ -23,6 +23,7 @@
 #include "exportmidi.h"
 
 #include "engraving/dom/key.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
@@ -366,6 +367,31 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                         } else {
                             LOGD("writeMidi: unknown midi event 0x%02x", event.type());
                         }
+                    }
+                }
+            }
+        }
+
+        // Export lyrics
+        SegmentType st = SegmentType::ChordRest;
+        for (Segment* seg = m_score->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (track_idx_t i = part->startTrack(); i < part->endTrack(); ++i) {
+                ChordRest* cr = toChordRest(seg->element(i));
+                if (cr) {
+                    for (const auto& lyric : cr->lyrics()) {
+                        muse::ByteArray lyricText = lyric->plainText().toUtf8();
+                        size_t len = lyricText.size() + 1;
+                        unsigned char* data = new unsigned char[len];
+
+                        memcpy(data, lyricText.constData(), len);
+
+                        MidiEvent ev;
+                        ev.setType(ME_META);
+                        ev.setMetaType(META_LYRIC);
+                        ev.setEData(data);
+                        ev.setLen(static_cast<int>(len));
+
+                        track.insert(cr->tick().ticks(), ev);
                     }
                 }
             }
