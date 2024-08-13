@@ -38,11 +38,6 @@ if (MUE_COMPILE_USE_SYSTEM_OPUS)
     message(WARNING "Set MUE_COMPILE_USE_SYSTEM_OPUS=ON, but system opus not found, built-in will be used")
 endif ()
 
-include(GetPlatformInfo)
-if (ARCH_IS_ARMV7L)
-    target_compile_options(opus PRIVATE -mfpu=neon)
-endif()
-
 set(OPUS_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../opus/opus-1.4)
 add_subdirectory(${OPUS_LIB_DIR} opus)
 

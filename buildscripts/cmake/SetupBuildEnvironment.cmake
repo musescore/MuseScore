@@ -10,6 +10,10 @@ set(CMAKE_UNITY_BUILD_BATCH_SIZE 12)
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
+    if (ARCH_IS_ARMV7L)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpu=neon")
+    endif()
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
@@ -65,6 +69,10 @@ elseif(CC_IS_MINGW)
 elseif(CC_IS_CLANG)
     message(STATUS "Using Compiler CLANG ${CMAKE_CXX_COMPILER_VERSION}")
 
+    if (ARCH_IS_ARMV7L)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpu=neon")
+    endif()
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
