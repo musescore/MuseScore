@@ -40,8 +40,7 @@ endif ()
 
 include(GetPlatformInfo)
 if (ARCH_IS_ARMV7L)
-    # Temporary workaround for https://github.com/musescore/MuseScore/issues/24015
-    set(OPUS_FIXED_POINT ON CACHE BOOL "compile as fixed-point (for machines without a fast enough FPU)." FORCE)
+    target_compile_options(opus PRIVATE -mfpu=neon)
 endif()
 
 set(OPUS_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../opus/opus-1.4)
