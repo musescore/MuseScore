@@ -101,12 +101,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     double chordX           = (item->noteType() == NoteType::NORMAL) ? item->ldata()->pos().x() : 0.0;
 
-    while (item->ledgerLines()) {
-        LedgerLine* l = item->ledgerLines()->next();
-        delete item->ledgerLines();
-        item->setLedgerLine(l);
-    }
-
     double lll    = 0.0;           // space to leave at left of chord
     double rrr    = 0.0;           // space to leave at right of chord
     double lhead  = 0.0;           // amount of notehead to left of chord origin
@@ -169,7 +163,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     //  create ledger lines
     //-----------------------------------------
 
-    item->addLedgerLines();
+    item->updateLedgerLines();
 
     // If item has an arpeggio: mark chords which are part of the arpeggio
     if (item->arpeggio()) {
@@ -335,12 +329,6 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         layoutTablature(c, ctx);
     }
 
-    while (item->ledgerLines()) {
-        LedgerLine* l = item->ledgerLines()->next();
-        delete item->ledgerLines();
-        item->setLedgerLine(l);
-    }
-
     double lll         = 0.0;                    // space to leave at left of chord
     double rrr         = 0.0;                    // space to leave at right of chord
     Note* upnote       = item->upNote();
@@ -425,20 +413,16 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     // create ledger lines, if required (in some historic styles)
     if (ledgerLines > 0) {
-// there seems to be no need for widening 'ledger lines' beyond fret mark widths; more 'on the field'
-// tests and usage will show if this depends on the metrics of the specific fonts used or not.
-//            double extraLen    = style().styleS(Sid::ledgerLineLength).val() * _spatium;
+        item->resizeLedgerLinesTo(ledgerLines);
         double extraLen    = 0;
         double llX         = stemX - (headWidth + extraLen) * 0.5;
         for (int i = 0; i < ledgerLines; i++) {
-            LedgerLine* ldgLin = new LedgerLine(ctx.mutDom().dummyParent());
+            LedgerLine* ldgLin = item->ledgerLines()[i];
             ldgLin->setParent(item);
             ldgLin->setTrack(item->track());
             ldgLin->setVisible(item->visible());
             ldgLin->setLen(headWidth + extraLen);
             ldgLin->setPos(llX, llY);
-            ldgLin->setNext(item->ledgerLines());
-            item->setLedgerLine(ldgLin);
             TLayout::layoutLedgerLine(ldgLin, ctx);
             llY += lineDist / ledgerLines;
         }
@@ -3499,8 +3483,9 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             e->mutldata()->setMag(item->mag());
             Shape noteShape = item->shape();
             noteShape.remove_if([e](ShapeElement& s) { return s.item() == e || s.item()->isBend(); });
-            LedgerLine* ledger = item->line() < -1 || item->line() > item->staff()->lines(item->tick())
-                                 ? item->chord()->ledgerLines() : nullptr;
+            LedgerLine* ledger = (item->line() < -1 || item->line() > item->staff()->lines(item->tick()))
+                                 && !item->chord()->ledgerLines().empty()
+                                 ? item->chord()->ledgerLines().front() : nullptr;
             if (ledger) {
                 noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
             }
@@ -3729,7 +3714,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
 
     shape.add(chordRestShape(item, conf));      // add lyrics
 
-    for (const LedgerLine* l = item->ledgerLines(); l; l = l->next()) {
+    for (const LedgerLine* l : item->ledgerLines()) {
         shape.add(l->shape().translate(l->pos()));
     }
 

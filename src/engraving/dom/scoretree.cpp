@@ -403,10 +403,8 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(m_stemSlash);
     }
 
-    LedgerLine* ledgerLines = m_ledgerLines;
-    while (ledgerLines) {
-        children.push_back(ledgerLines);
-        ledgerLines = ledgerLines->next();
+    for (LedgerLine* ledg : m_ledgerLines) {
+        children.push_back(ledg);
     }
 
     for (EngravingObject* child : ChordRest::scanChildren()) {
