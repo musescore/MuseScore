@@ -993,6 +993,27 @@ StringList String::search(const std::regex& re, std::initializer_list<int> match
     return out;
 }
 
+StringList String::search(const std::wregex& re, std::initializer_list<int> matches, SplitBehavior behavior) const
+{
+    std::wstring ws = toStdWString();
+
+    std::wsregex_token_iterator iter(ws.begin(), ws.end(), re, matches);
+    std::wsregex_token_iterator end;
+    std::vector<std::wstring> vec = { iter, end };
+
+    StringList out;
+    for (const std::wstring& s : vec) {
+        if (behavior == SplitBehavior::SkipEmptyParts && s.empty()) {
+            // skip
+            continue;
+        }
+        String sub = String::fromStdWString(s);
+        out.push_back(std::move(sub));
+    }
+
+    return out;
+}
+
 String& String::replace(const String& before, const String& after)
 {
     if (before == after) {
@@ -1033,6 +1054,25 @@ String& String::replace(const std::regex& re, const String& after)
     std::u16string& sefl = h.s;
     sefl.clear();
     UtfCodec::utf8to16(std::string_view(replasedU8), sefl);
+    return *this;
+}
+
+String& String::replace(const std::wregex& re, const String& after)
+{
+    std::wstring afterw;
+    afterw = after.toStdWString();
+
+    std::wstring originw;
+    originw = toStdWString();
+    std::wstring replacedw = std::regex_replace(originw, re, afterw);
+
+    mutStr().clear();
+    mutStr().resize(replacedw.size());
+
+    for (size_t i = 0; i < replacedw.size(); ++i) {
+        mutStr()[i] = static_cast<char16_t>(replacedw.at(i));
+    }
+
     return *this;
 }
 

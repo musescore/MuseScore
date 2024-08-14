@@ -961,6 +961,16 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
         bool found = false;
         for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), elTick.ticks())) {
             if (el->type() == existingEl->type()) {
+                if (el->isTextBase()) {
+                    TextBase* elText = toTextBase(el);
+                    TextBase* existingText = toTextBase(existingEl);
+                    if (elText->xmlText() == existingText->xmlText()) {
+                        found = true;
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
                 found = true;
                 break;
             }
@@ -3224,7 +3234,6 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
     }
 
-    handleTempo();
     handleRepeats(measure, tick + m_offset, measureHasCoda, segnos, delayedDirections);
     handleNmiCmi(measure, tick + m_offset, delayedDirections);
     handleFraction();
@@ -3743,13 +3752,16 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         if (m_e.name() == "metronome") {
             m_metroText = metronome(m_tpoMetro);
         } else if (m_e.name() == "words") {
-            m_enclosure      = m_e.attribute("enclosure");
+            m_enclosure = m_e.attribute("enclosure");
+            m_fontFamily = m_e.attribute("font-family");
             String nextPart = xmlpass2::nextPartOfFormattedString(m_e);
+
             textToDynamic(nextPart);
             textToCrescLine(nextPart);
+            handleTempo(nextPart);
             m_wordsText += nextPart;
         } else if (m_e.name() == "rehearsal") {
-            m_enclosure      = m_e.attribute("enclosure");
+            m_enclosure = m_e.attribute("enclosure");
             if (m_enclosure.empty()) {
                 m_enclosure = u"square";          // note different default
             }
@@ -4464,18 +4476,50 @@ void MusicXMLParserDirection::handleChordSym(const Fraction& tick, HarmonyMap& h
     m_wordsText.clear();
 }
 
-void MusicXMLParserDirection::handleTempo()
+void MusicXMLParserDirection::handleTempo(String& wordsString)
 {
     if (!configuration()->inferTextType()) {
         return;
     }
-    // Pick up any tempo markings which may have been exported from Sibelius as <words>
+
+    // Map Sibelius' representation of note types to their SMuFL counterparts and duration types
+    static const MetronomeTextMap sibeliusSyms = {
+        { u"y", { u"<sym>metNote32ndUp</sym>", DurationType::V_32ND } },
+        { u"x", { u"<sym>metNote16thUp</sym>", DurationType::V_16TH } },
+        { u"e", { u"<sym>metNote8thUp</sym>", DurationType::V_EIGHTH } },
+        { u"q", { u"<sym>metNoteQuarterUp</sym>", DurationType::V_QUARTER } },
+        { u"h", { u"<sym>metNoteHalfUp</sym>", DurationType::V_HALF } },
+        { u"w", { u"<sym>metNoteWhole</sym>", DurationType::V_WHOLE } },
+        { u"V", { u"<sym>metNoteDoubleWholeSquare</sym>", DurationType::V_BREVE } },
+        { u"W", { u"<sym>metNoteDoubleWhole</sym>", DurationType::V_BREVE } }
+    };
+
+    static const MetronomeTextMap metTimesSyms = {
+        { u"Œ", { u"<sym>metNoteQuarterUp</sym>", DurationType::V_QUARTER } },
+        { u"Ó", { u"<sym>metNoteHalfUp</sym>", DurationType::V_HALF } },
+    };
+
+    MetronomeTextMap textMap;
+    if (m_pass1.exporterString().contains(u"sibelius")) {
+        textMap = sibeliusSyms;
+    } else if (m_fontFamily == u"MetTimes Plain") {
+        textMap = metTimesSyms;
+    }
+    if (textMap.empty()) {
+        return;
+    }
+    String substitutions;
+    for (auto& entry : textMap) {
+        substitutions.append(entry.first);
+    }
+
+    // Pick up any tempo markings which may have been exported as <words>
     // eg. andante (q = c. 90)
     // Sibelius uses a symbol font with the characters 'yxeqhVwW' each drawn as a different duration
     // which we need to map to SMuFL syms
-    String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
+    String plainWords = MScoreTextToMXML::toPlainText(wordsString.simplified());
 
-    static const std::regex tempo(".*([yxeqhVwW])(\\.?)(?:\\s|\\u00A0)*=[^0-9]*([0-9]+).*");
+    static const std::wregex tempo(L".*([" + substitutions.toStdWString() + L"])(\\.?)(?:\\s|\\u00A0)*=[^0-9]*([0-9]+).*");
     StringList tempoMatches = plainWords.search(tempo, { 1, 2, 3 }, SplitBehavior::SkipEmptyParts);
 
     // Not a tempo
@@ -4488,27 +4532,16 @@ void MusicXMLParserDirection::handleTempo()
     const String val = tempoMatches.at(dot ? 2 : 1);
 
     const String dotStr = dot ? u"<sym>space</sym><sym>metAugmentationDot</sym>" : u"";
-    // Map Sibelius' representation of note types to their SMuFL counterparts and duration types
-    static const std::map<String, std::pair<String, DurationType> > syms = {
-        { u"y", { u"<sym>metNote32ndUp</sym>", DurationType::V_32ND } },
-        { u"x", { u"<sym>metNote16thUp</sym>", DurationType::V_16TH } },
-        { u"e", { u"<sym>metNote8thUp</sym>", DurationType::V_EIGHTH } },
-        { u"q", { u"<sym>metNoteQuarterUp</sym>", DurationType::V_QUARTER } },
-        { u"h", { u"<sym>metNoteHalfUp</sym>", DurationType::V_HALF } },
-        { u"w", { u"<sym>metNoteWhole</sym>", DurationType::V_WHOLE } },
-        { u"V", { u"<sym>metNoteDoubleWholeSquare</sym>", DurationType::V_BREVE } },
-        { u"W", { u"<sym>metNoteDoubleWhole</sym>", DurationType::V_BREVE } }
-    };
 
-    static const std::regex replace("(.*)[yxeqhVwW]\\.?((?:\\s|\\u00A0)*=[^0-9]*[0-9]+.*)");
-    const String newStr = u"$1" + syms.at(dur).first + dotStr + u"$2";
+    static const std::wregex replace(L"(.*)[" + substitutions.toStdWString() + L"]\\.?((?:\\s|\\u00A0)*=[^0-9]*[0-9]+.*)");
+    const String newStr = u"$1" + textMap.at(dur).first + dotStr + u"$2";
     plainWords.replace(replace, newStr);
-    m_wordsText = plainWords;
+    wordsString = plainWords;
 
     if (!val.empty() && !dur.empty()) {
         bool ok;
         double d = val.toDouble(&ok);
-        TDuration duration = TDuration(syms.at(dur).second);
+        TDuration duration = TDuration(textMap.at(dur).second);
         duration.setDots(dot);
 
         if (ok && duration.isValid()) {
