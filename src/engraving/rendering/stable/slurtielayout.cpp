@@ -1766,7 +1766,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Chord* chord, Note* note,
                                           const PointF& chordSystemPos, double padding, double& resultingX)
 {
-    if (tieSegment->tie()->isInside() || !chord->ledgerLines()) {
+    if (tieSegment->tie()->isInside() || chord->ledgerLines().empty()) {
         return;
     }
 
@@ -1777,7 +1777,7 @@ void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Ch
 
     bool ledgersAbove = false;
     bool ledgersBelow = false;
-    for (LedgerLine* ledger = chord->ledgerLines(); ledger; ledger = ledger->next()) {
+    for (LedgerLine* ledger : chord->ledgerLines()) {
         if (ledger->y() < 0.0) {
             ledgersAbove = true;
         } else {
@@ -1812,7 +1812,7 @@ void SlurTieLayout::adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sP
     }
 
     Chord* chord = note->chord();
-    if (!chord->ledgerLines()) {
+    if (chord->ledgerLines().empty()) {
         return;
     }
     PointF chordSystemPos = chord->pos() + chord->segment()->pos() + chord->segment()->measure()->pos();
@@ -1821,7 +1821,7 @@ void SlurTieLayout::adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sP
     int upSign = tie->up() ? -1 : 1;
     double margin = 0.4 * spatium;
 
-    for (LedgerLine* ledger = chord->ledgerLines(); ledger; ledger = ledger->next()) {
+    for (LedgerLine* ledger : chord->ledgerLines()) {
         PointF ledgerPos = ledger->pos() + chordSystemPos;
         double yDiff = upSign * (ledgerPos.y() - tiePoint.y());
         bool collision = yDiff > 0 && yDiff < margin;
