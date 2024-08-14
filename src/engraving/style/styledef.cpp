@@ -891,7 +891,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(harpPedalTextDiagramFrameWidth,             0.1),
     styleDef(harpPedalTextDiagramFrameRound,             0),
     styleDef(harpPedalTextDiagramFrameFgColor,           PropertyValue::fromValue(Color::BLACK)),
-    styleDef(harpPedalTextDiagramFrameFgColor,           PropertyValue::fromValue(Color::transparent)),
+    styleDef(harpPedalTextDiagramFrameBgColor,           PropertyValue::fromValue(Color::transparent)),
     styleDef(harpPedalTextDiagramOffset,                 PointF()),
     styleDef(harpPedalTextDiagramPlacement,              PlacementV::BELOW),
     styleDef(harpPedalTextDiagramPosAbove,               PointF(.0, -1.5)),
