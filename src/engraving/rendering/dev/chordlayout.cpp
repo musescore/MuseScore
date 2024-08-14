@@ -1687,6 +1687,12 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         if (upVoices && downVoices) {
             Note* bottomUpNote = upStemNotes.front();
             Note* topDownNote  = downStemNotes.back();
+            const NoteHeadType topDownHeadType
+                = (topDownNote->headType()
+                   == NoteHeadType::HEAD_AUTO) ? topDownNote->chord()->durationType().headType() : topDownNote->headType();
+            const NoteHeadType bottomUpHeadType
+                = (bottomUpNote->headType()
+                   == NoteHeadType::HEAD_AUTO) ? bottomUpNote->chord()->durationType().headType() : bottomUpNote->headType();
             int separation = topDownNote->stringOrLine() - bottomUpNote->stringOrLine();
 
             std::vector<Note*> overlapNotes;
@@ -1703,8 +1709,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
                         const Stem* topDownStem = topDownNote->chord()->stem();
                         downOffset -= topDownStem->lineWidthMag();
-                    } else if (topDownNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS
-                               && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
+                    } else if (topDownHeadType != NoteHeadType::HEAD_BREVIS && bottomUpHeadType != NoteHeadType::HEAD_BREVIS) {
                         // stemless notes should be aligned as is they were stemmed
                         // (except in case of brevis, cause the notehead has the side bars)
                         downOffset -= ctx.conf().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
@@ -1900,7 +1905,9 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 } else if (conflict && (upDots && !downDots)) {
                     upOffset = maxDownWidth + 0.1 * sp;
                 } else if (conflictUnison && separation == 0 && (!downGrace || upGrace)) {
-                    downOffset = maxUpWidth + 0.15 * sp;
+                    const double gap = topDownHeadType == NoteHeadType::HEAD_WHOLE
+                                       && bottomUpHeadType == NoteHeadType::HEAD_WHOLE ? 0.0 : 0.15 * sp;
+                    downOffset = maxUpWidth + gap;
                 } else if (conflictUnison) {
                     upOffset = maxDownWidth + 0.15 * sp;
                 } else if (conflictSecondUpHigher) {
@@ -2471,8 +2478,6 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
         Stem* stem = chord->stem();
         if (stem) {
             overlapMirror = stem->lineWidthMag();
-        } else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE) {
-            overlapMirror = style.styleMM(Sid::stemWidth) * chord->mag();
         } else {
             overlapMirror = 0.0;
         }
@@ -2484,11 +2489,17 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
                   [](Note* n1, const Note* n2) ->bool { return n1->line() <= n2->line(); });
         for (Note* note : chordNotes) {
             double noteX = 0.0;
+            // Add gap for brevis heads
+            const NoteHeadType headType
+                = (note->headType() == NoteHeadType::HEAD_AUTO) ? chord->durationType().headType() : note->headType();
+            const bool userSetBreveHead = headType == NoteHeadType::HEAD_BREVIS && headType != chord->durationType().headType();
+            const double noteOverlap = overlapMirror > 0
+                                       || !userSetBreveHead ? overlapMirror : -style.styleMM(Sid::stemWidth) * chord->mag();
             if (note->ldata()->mirror()) {
                 if (_up) {
-                    noteX = chord->stemPosX() - overlapMirror;
+                    noteX = chord->stemPosX() - noteOverlap;
                 } else {
-                    noteX = -note->headBodyWidth() + overlapMirror;
+                    noteX = -note->headBodyWidth() + noteOverlap;
                 }
             } else if (_up) {
                 noteX = chord->stemPosX() - note->headBodyWidth();
