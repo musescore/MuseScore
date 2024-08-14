@@ -40,6 +40,7 @@
 #include "api/v1/extapiv1.h"
 
 #include "devtools/devextensionslistmodel.h"
+#include "devtools/apidumpmodel.h"
 
 #include "muse_framework_config.h"
 #ifdef MUSE_MODULE_DIAGNOSTICS
@@ -85,6 +86,7 @@ void ExtensionsModule::registerUiTypes()
     qmlRegisterType<ExtensionsListModel>("Muse.Extensions", 1, 0, "ExtensionsListModel");
     qmlRegisterType<ExtensionBuilder>("Muse.Extensions", 1, 0, "ExtensionBuilder");
     qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
+    qmlRegisterType<ApiDumpModel>("Muse.Extensions", 1, 0, "ApiDumpModel");
 }
 
 void ExtensionsModule::resolveImports()
@@ -92,6 +94,7 @@ void ExtensionsModule::resolveImports()
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
+        ir->registerQmlUri(Uri("muse://extensions/apidump"), "Muse/Extensions/ExtensionsApiDumpDialog.qml");
     }
 
     m_execPointsRegister->reg(moduleName(), { EXEC_DISABLED, TranslatableString("extensions", "Disabled") });

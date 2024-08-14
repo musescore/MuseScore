@@ -49,6 +49,15 @@ ExtApiV1::ExtApiV1(muse::api::IApiEngine* engine, QObject* parent)
 {
 }
 
+ExtApiV1::~ExtApiV1()
+{
+    for (auto& a : m_apis) {
+        if (a.isNeedDelete) {
+            delete a.obj;
+        }
+    }
+}
+
 void ExtApiV1::setup(QJSValue globalObj)
 {
     QJSValue engApiVal = engraving();
@@ -82,8 +91,9 @@ QJSValue ExtApiV1::api(const std::string& name) const
     if (!a.jsval.isUndefined()) {
         return a.jsval;
     }
-
-    a.obj = apiRegister()->createApi(name, m_engine);
+    auto api = apiRegister()->createApi(name, m_engine);
+    a.obj = api.first;
+    a.isNeedDelete = api.second;
     if (!a.obj) {
         LOGW() << "Not allowed api: " << name;
         return QJSValue();
