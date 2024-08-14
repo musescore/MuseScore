@@ -1551,7 +1551,7 @@ Chord* Chord::next() const
 
 void Chord::resizeLedgerLinesTo(size_t newSize)
 {
-    int ledgerLineCountDiff = newSize - m_ledgerLines.size();
+    int ledgerLineCountDiff = static_cast<int>(newSize - m_ledgerLines.size());
     if (ledgerLineCountDiff > 0) {
         for (int i = 0; i < ledgerLineCountDiff; ++i) {
             m_ledgerLines.push_back(new LedgerLine(score()->dummy()));
