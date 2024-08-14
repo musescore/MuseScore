@@ -3126,7 +3126,8 @@ void TDraw::draw(const TremoloBar* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     const TremoloBar::LayoutData* ldata = item->ldata();
-    Pen pen(item->curColor(), item->lineWidth().val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    const double lw = item->absoluteFromSpatium(item->lineWidth());
+    Pen pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(ldata->polygon);
 }
