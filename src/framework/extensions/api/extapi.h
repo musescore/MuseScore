@@ -56,6 +56,7 @@ class ExtApi : public QObject
 
 public:
     ExtApi(muse::api::IApiEngine* engine, QObject* parent);
+    ~ExtApi();
 
     QJSValue log() const { return api("api.log"); }
     QJSValue context() const { return api("api.context"); }
@@ -74,6 +75,7 @@ private:
     struct Api
     {
         muse::api::ApiObject* obj = nullptr;
+        bool isNeedDelete = false;
         QJSValue jsval;
     };
 

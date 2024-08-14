@@ -36,17 +36,37 @@ public:
     struct ICreator {
         virtual ~ICreator() {}
         virtual ApiObject* create(IApiEngine* e) = 0;
+        virtual bool isNeedDelete() const = 0;
     };
 
     virtual void regApiCreator(const std::string& module, const std::string& api, ICreator* c) = 0;
     virtual void regApiSingltone(const std::string& module, const std::string& api, ApiObject* o) = 0;
-    virtual ApiObject* createApi(const std::string& api, IApiEngine* e) const = 0;
+    virtual std::pair<ApiObject*, bool /*is need delete*/> createApi(const std::string& api, IApiEngine* e) const = 0;
+
+    // dev
+    struct Dump
+    {
+        struct Method {
+            std::string sig;
+            std::string doc;
+        };
+
+        struct Api {
+            std::string prefix;
+            std::vector<Method> methods;
+        };
+
+        std::vector<Api> apis;
+    };
+
+    virtual Dump dump() const = 0;
 };
 
 template<class T>
 struct ApiCreator : public IApiRegister::ICreator
 {
-    ApiObject* create(IApiEngine* e) { return new T(e); }
+    ApiObject* create(IApiEngine* e) override { return new T(e); }
+    bool isNeedDelete() const override { return true; }
 };
 }
 

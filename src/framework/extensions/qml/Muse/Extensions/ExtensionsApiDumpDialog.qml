@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_API_INTERACTIVEAPI_H
-#define MUSE_API_INTERACTIVEAPI_H
+import QtQuick 2.15
 
-#include "api/apiobject.h"
+import Muse.UiComponents 1.0
 
-#include "modularity/ioc.h"
-#include "iinteractive.h"
+StyledDialogView {
 
-namespace muse::api {
-class InteractiveApi : public ApiObject
-{
-    Q_OBJECT
+    id: dialog
 
-    Inject<IInteractive> interactive = { this };
+    title: "Extensions: Api dump"
 
-public:
-    explicit InteractiveApi(IApiEngine* e);
+    contentHeight: 800
+    contentWidth: 900
+    resizable: true
 
-    API_DOC(info, "Show information dialog")
-    Q_INVOKABLE void info(const QString& title, const QString& text);
 
-    API_DOC(openUrl, "Open URL in external browser")
-    Q_INVOKABLE void openUrl(const QString& url);
-};
+    ExtensionsApiDump {
+        anchors.fill: parent
+    }
+
 }
-
-#endif // MUSE_API_INTERACTIVEAPI_H
