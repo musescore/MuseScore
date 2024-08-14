@@ -34,7 +34,6 @@ elseif(CC_IS_MSVC)
     set(CMAKE_C_FLAGS_DEBUG             "/MT /Zi /Ob0 /Od /RTC1")
     set(CMAKE_C_FLAGS_RELEASE           "/MT /O2 /Ob2")
     set(CMAKE_C_FLAGS_RELWITHDEBINFO    "/MT /Zi /O2 /Ob1")
-    set(CMAKE_EXE_LINKER_FLAGS          "/DYNAMICBASE:NO")
 
     add_definitions(-DWIN32)
     add_definitions(-D_WINDOWS)
