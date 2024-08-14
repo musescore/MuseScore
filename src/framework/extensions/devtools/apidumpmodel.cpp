@@ -21,6 +21,9 @@
  */
 #include "apidumpmodel.h"
 
+#include "extensions/api/extapi.h"
+#include "autobot/internal/api/scriptapi.h"
+
 #include "log.h"
 
 using namespace muse::extensions;
@@ -40,7 +43,7 @@ QVariant ApiDumpModel::data(const QModelIndex& index, int role) const
     const Item& item = m_list.at(index.row());
     switch (role) {
     case rData: return QVariant::fromValue(item.data);
-    case rGroup: return QVariant::fromValue(item.group);
+    case rGroup: return QVariant::fromValue("api." + item.module);
     default: break;
     }
 
@@ -62,10 +65,41 @@ QHash<int, QByteArray> ApiDumpModel::roleNames() const
     return roles;
 }
 
+static QString moduleFromPrefix(const QString& prefix)
+{
+    if (!prefix.startsWith("api.")) {
+        LOGD() << "Bad prefix: " << prefix;
+        return prefix;
+    }
+
+    QString module = prefix.mid(4); // remove `api.`
+    int idx = module.indexOf('.');
+    if (idx != -1) {
+        module = module.left(idx); // remove `.v...`
+    }
+
+    return module;
+}
+
+bool ApiDumpModel::isAllowByType(const QString& module, ApiType type) const
+{
+    auto hasProperty = [](const QMetaObject& meta, const QString& module) {
+        QByteArray ba = module.toLatin1();
+        int idx = meta.indexOfProperty(ba.constData());
+        return idx != -1;
+    };
+
+    switch (type) {
+    case ApiType::All: return true;
+    case ApiType::Extensions: return hasProperty(api::ExtApi::staticMetaObject, module);
+    case ApiType::Autobot: return hasProperty(autobot::ScriptApi::staticMetaObject, module);
+    }
+
+    return true;
+}
+
 void ApiDumpModel::load()
 {
-    beginResetModel();
-
     m_allList.clear();
 
     IApiRegister::Dump dump = apiRegister()->dump();
@@ -73,31 +107,31 @@ void ApiDumpModel::load()
     for (const IApiRegister::Dump::Api& api : dump.apis) {
         for (const IApiRegister::Dump::Method& me : api.methods) {
             Item item;
-            item.group = QString::fromStdString(api.prefix);
+            item.module = moduleFromPrefix(QString::fromStdString(api.prefix));
             item.data = QString::fromStdString(me.sig + " - " + me.doc);
 
             m_allList.append(std::move(item));
         }
     }
 
-    m_list = m_allList;
-
-    endResetModel();
+    update();
 }
 
-void ApiDumpModel::find(const QString& str)
+void ApiDumpModel::update()
 {
     beginResetModel();
 
-    m_searchText = str;
-
-    if (m_searchText.isEmpty()) {
+    if (m_searchText.isEmpty() && m_apiType == ApiType::All) {
         m_list = m_allList;
     } else {
         m_list.clear();
         for (const Item& item : m_allList) {
+            if (!isAllowByType(item.module, m_apiType)) {
+                continue;
+            }
+
             if (item.data.contains(m_searchText, Qt::CaseInsensitive)
-                || item.group.contains(m_searchText, Qt::CaseInsensitive)) {
+                || item.module.contains(m_searchText, Qt::CaseInsensitive)) {
                 m_list.append(item);
             }
         }
@@ -106,12 +140,39 @@ void ApiDumpModel::find(const QString& str)
     endResetModel();
 }
 
+void ApiDumpModel::find(const QString& str)
+{
+    m_searchText = str;
+    update();
+}
+
+QVariantList ApiDumpModel::apiTypes() const
+{
+    auto makeItem = [](const QString& text, ApiType type) {
+        QVariantMap item = { { "text", text }, { "value", type } };
+        return item;
+    };
+
+    QVariantList types;
+    types << makeItem("All", ApiType::All);
+    types << makeItem("Extensions", ApiType::Extensions);
+    types << makeItem("Autobot", ApiType::Autobot);
+
+    return types;
+}
+
+void ApiDumpModel::setApiType(ApiType type)
+{
+    m_apiType = type;
+    update();
+}
+
 void ApiDumpModel::print()
 {
     QString str;
     QTextStream ts(&str);
     for (const Item& item : m_list) {
-        ts << item.group << "." << item.data << "\r\n";
+        ts << item.module << "." << item.data << "\r\n";
     }
 
     std::cout << str.toStdString() << std::endl;
