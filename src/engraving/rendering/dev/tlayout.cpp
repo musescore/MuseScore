@@ -6310,7 +6310,7 @@ void TLayout::layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* l
     }
     ldata->polygon = polygon;
 
-    double w = item->lineWidth().val();
+    const double w = item->absoluteFromSpatium(item->lineWidth());
     ldata->setBbox(ldata->polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
