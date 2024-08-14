@@ -46,17 +46,34 @@ public:
     // dev
     struct Dump
     {
+        enum class MethodType {
+            Method = 0,
+            Property
+        };
+
+        struct Arg {
+            QString type;
+            QString name;
+        };
+
+        struct Sig {
+            QString name;
+            QString retType;
+            QList<Arg> args;
+        };
+
         struct Method {
-            std::string sig;
-            std::string doc;
+            MethodType type = MethodType::Method;
+            Sig sig;
+            QString doc;
         };
 
         struct Api {
-            std::string prefix;
-            std::vector<Method> methods;
+            QString prefix;
+            QList<Method> methods;
         };
 
-        std::vector<Api> apis;
+        QList<Api> apis;
     };
 
     virtual Dump dump() const = 0;

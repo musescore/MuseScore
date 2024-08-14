@@ -63,8 +63,11 @@ private:
     };
 
     struct Item {
+        QString prefix;
         QString module;
-        QString data;
+        QString sig;
+        QString fullSig; // with prefix `api.module.`
+        QString doc;
     };
 
     void update();
