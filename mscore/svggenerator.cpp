@@ -251,7 +251,7 @@ protected:
 #define SVG_QUOTE    "\""
 #define SVG_COMMA    ","
 #define SVG_GT       ">"
-#define SVG_PX       "px"
+#define SVG_MM       "mm"
 #define SVG_NONE     "none"
 #define SVG_EVENODD  "evenodd"
 #define SVG_BUTT     "butt"
@@ -1033,8 +1033,8 @@ bool SvgPaintEngine::begin(QPaintDevice *)
     stream() << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl << SVG_BEGIN;
     if (d->viewBox.isValid()) {
         // viewBox has floating point values, size width/height is integer
-        stream() << SVG_WIDTH    << d->viewBox.width()  << SVG_PX << SVG_QUOTE
-                 << SVG_HEIGHT   << d->viewBox.height() << SVG_PX << SVG_QUOTE;
+        stream() << SVG_WIDTH    << d->viewBox.width() / Ms::DPMM << SVG_MM << SVG_QUOTE
+                 << SVG_HEIGHT   << d->viewBox.height() / Ms::DPMM << SVG_MM << SVG_QUOTE;
 
         stream() << SVG_VIEW_BOX << d->viewBox.left()
                  << SVG_SPACE    << d->viewBox.top()
