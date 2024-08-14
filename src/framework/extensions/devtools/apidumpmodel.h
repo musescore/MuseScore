@@ -40,8 +40,20 @@ public:
     int rowCount(const QModelIndex& parent) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    enum ApiType {
+        All = 0,
+        Extensions,
+        Autobot
+    };
+    Q_ENUM(ApiType);
+
     Q_INVOKABLE void load();
+
     Q_INVOKABLE void find(const QString& str);
+
+    Q_INVOKABLE QVariantList apiTypes() const;
+    Q_INVOKABLE void setApiType(ApiType type);
+
     Q_INVOKABLE void print();
 
 private:
@@ -51,12 +63,16 @@ private:
     };
 
     struct Item {
-        QString group;
+        QString module;
         QString data;
     };
+
+    void update();
+    bool isAllowByType(const QString& module, ApiType type) const;
 
     QList<Item> m_list;
     QList<Item> m_allList;
     QString m_searchText;
+    ApiType m_apiType = ApiType::Extensions;
 };
 }

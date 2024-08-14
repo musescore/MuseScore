@@ -21,9 +21,26 @@ Rectangle {
         anchors.right: parent.right
         height: 48
 
+        StyledDropdown {
+            id: types
+
+            anchors.left: parent.left
+            anchors.leftMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            width: 200
+
+            currentIndex: 1 // 1 - extensions
+            model: apiModel.apiTypes()
+
+            onActivated: function(index, value) {
+                currentIndex = index
+                apiModel.setApiType(value)
+            }
+        }
+
         TextInputField {
             id: inputItem
-            anchors.left: parent.left
+            anchors.left: types.right
             anchors.right: btnRow.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 16
