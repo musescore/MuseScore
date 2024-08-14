@@ -149,11 +149,11 @@ void AbstractInvoker::removeCallBack(int type, Asyncable* receiver)
 
     {
         std::lock_guard<std::mutex> lock(m_qInvokersMutex);
-        for (auto it = m_qInvokers.begin(); it != m_qInvokers.end(); ++it) {
-            QInvoker* qi = *it;
+        for (auto iter = m_qInvokers.begin(); iter != m_qInvokers.end(); ++iter) {
+            QInvoker* qi = *iter;
             if (qi->call.call == c.call) {
                 qi->invalidate();
-                m_qInvokers.erase(it);
+                m_qInvokers.erase(iter);
                 break;
             }
         }
