@@ -9,44 +9,57 @@ using namespace mu::engraving;
 
 static const QList<QList<DynamicPopupModel::PageItem> > DYN_POPUP_PAGES = {
     {   // Page 1
-        { "dynamicPP",                30, 1.5, DynamicPopupModel::Dynamic,     DynamicType::PP },
-        { "dynamicPiano",             21, 1.0, DynamicPopupModel::Dynamic,     DynamicType::P },
-        { "dynamicMP",                29, 0.5, DynamicPopupModel::Dynamic,     DynamicType::MP },
-        { "dynamicMF",                30, 0.5, DynamicPopupModel::Dynamic,     DynamicType::MF },
-        { "dynamicForte",             23, 2.5, DynamicPopupModel::Dynamic,     DynamicType::F },
-        { "dynamicFF",                30, 2.5, DynamicPopupModel::Dynamic,     DynamicType::FF },
+        { DynamicType::PP,     30, 1.5, DynamicPopupModel::Dynamic, "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+        { DynamicType::P,      21, 1.0, DynamicPopupModel::Dynamic, "<sym>dynamicPiano</sym>" },
+        { DynamicType::MP,     29, 0.5, DynamicPopupModel::Dynamic, "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>" },
+        { DynamicType::MF,     30, 0.5, DynamicPopupModel::Dynamic, "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>" },
+        { DynamicType::F,      23, 2.5, DynamicPopupModel::Dynamic, "<sym>dynamicForte</sym>" },
+        { DynamicType::FF,     30, 2.5, DynamicPopupModel::Dynamic, "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
     },
     {   // Page 2
-        { "dynamicFFF",               38, 2.5, DynamicPopupModel::Dynamic,     DynamicType::FFF },
-        { "dynamicFFFF",              45, 2.5, DynamicPopupModel::Dynamic,     DynamicType::FFFF },
-        { "dynamicFFFFF",             53, 2.5, DynamicPopupModel::Dynamic,     DynamicType::FFFFF },
+        { DynamicType::FFF,    38, 2.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+        { DynamicType::FFFF,   45, 2.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+        { DynamicType::FFFFF,  53, 2.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
     },
     {   // Page 3
-        { "dynamicFortePiano",        30, 2.5, DynamicPopupModel::Dynamic,     DynamicType::FP },
-        { "dynamicPF",                32, 2.0, DynamicPopupModel::Dynamic,     DynamicType::PF },
-        { "dynamicSforzando1",        25, 0.5, DynamicPopupModel::Dynamic,     DynamicType::SF },
-        { "dynamicSforzato",          29, 0.5, DynamicPopupModel::Dynamic,     DynamicType::SFZ },
-        { "dynamicSforzatoFF",        37, 0.5, DynamicPopupModel::Dynamic,     DynamicType::SFFZ },
+        { DynamicType::FP,     30, 2.5, DynamicPopupModel::Dynamic, "<sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
+        { DynamicType::PF,     32, 2.0, DynamicPopupModel::Dynamic, "<sym>dynamicPiano</sym><sym>dynamicForte</sym>" },
+        { DynamicType::SF,     25, 0.5, DynamicPopupModel::Dynamic, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>" },
+        { DynamicType::SFZ,    29, 0.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+        { DynamicType::SFF,    33, 0.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
     },
     {   // Page 4
-        { "dynamicSforzatoPiano",     38, 0.5, DynamicPopupModel::Dynamic,     DynamicType::OTHER },
-        { "dynamicSforzandoPiano",    33, 0.5, DynamicPopupModel::Dynamic,     DynamicType::SFP },
-        { "dynamicRinforzando2",      30, 0.5, DynamicPopupModel::Dynamic,     DynamicType::RFZ },
-        { "dynamicRinforzando1",      26, 0.5, DynamicPopupModel::Dynamic,     DynamicType::RF },
-        { "dynamicForzando",          26, 2.5, DynamicPopupModel::Dynamic,     DynamicType::FZ },
+        { DynamicType::SFFZ,   37, 0.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+        { DynamicType::SFP,    33, 0.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
+        { DynamicType::RFZ,    30, 0.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+        { DynamicType::RF,     26, 0.5, DynamicPopupModel::Dynamic, "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>" },
+        { DynamicType::FZ,     26, 2.5, DynamicPopupModel::Dynamic, "<sym>dynamicForte</sym><sym>dynamicZ</sym>" },
     },
     {   // Page 5
-        { "dynamicPPPPPP",            74, 2.0, DynamicPopupModel::Dynamic,     DynamicType::PPPPPP },
-        { "dynamicFFFFFF",            60, 2.5, DynamicPopupModel::Dynamic,     DynamicType::FFFFFF },
+        { DynamicType::PPPPPP, 74, 2.0, DynamicPopupModel::Dynamic,
+          "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+        { DynamicType::FFFFFF, 60, 2.5, DynamicPopupModel::Dynamic,
+          "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
     },
     {   // Page 6
-        { "dynamicPPPPP",             64, 2.0, DynamicPopupModel::Dynamic,     DynamicType::PPPPP },
-        { "dynamicPPPP",              52, 2.0, DynamicPopupModel::Dynamic,     DynamicType::PPPP },
-        { "dynamicPPP",               44, 2.0, DynamicPopupModel::Dynamic,     DynamicType::PPP },
+        { DynamicType::PPPPP,  64, 2.0, DynamicPopupModel::Dynamic,
+          "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+        { DynamicType::PPPP,   52, 2.0, DynamicPopupModel::Dynamic,
+          "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+        { DynamicType::PPP,    44, 2.0, DynamicPopupModel::Dynamic,
+          "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
     },
     {   // Page 7 - Hairpins
-        { "dynamicCrescendoHairpin",  62, 0.0, DynamicPopupModel::Crescendo,   DynamicType::OTHER },
-        { "dynamicDiminuendoHairpin", 62, 0.0, DynamicPopupModel::Decrescendo, DynamicType::OTHER },
+        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Crescendo, "" },
+        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Decrescendo, "" },
     },
 };
 
@@ -65,6 +78,32 @@ QVariantList DynamicPopupModel::pages() const
     return m_pages;
 }
 
+QString DynamicPopupModel::xmlTextToQString(const std::string text, IEngravingFontPtr engravingFont) const
+{
+    const std::string startTag = "<sym>";
+    const std::string endTag = "</sym>";
+
+    String str;
+    size_t pos = 0;
+
+    while (true) {
+        size_t startPos = text.find(startTag, pos);
+        if (startPos == std::string::npos) {
+            break;
+        }
+        size_t symNameStart = startPos + startTag.length();
+        size_t endPos = text.find(endTag, symNameStart);
+        if (endPos == std::string::npos) {
+            break;
+        }
+        SymId id = SymNames::symIdByName(text.substr(symNameStart, endPos - symNameStart));
+        str += engravingFont->toString(id);
+        pos = endPos + endTag.length();
+    }
+
+    return str.toQString();
+}
+
 void DynamicPopupModel::init()
 {
     AbstractElementPopupModel::init();
@@ -80,9 +119,8 @@ void DynamicPopupModel::init()
     for (const QList<DynamicPopupModel::PageItem>& page : DYN_POPUP_PAGES) {
         QVariantList variantPage;
         for (const DynamicPopupModel::PageItem& item : page) {
-            SymId id = SymNames::symIdByName(item.name);
             QVariantMap variantMap {
-                { "symbol", engravingFont->toString(id).toQString() },
+                { "text", xmlTextToQString(item.text, engravingFont) },
                 { "width", item.width },
                 { "offset", item.offset },
                 { "type", item.itemType },

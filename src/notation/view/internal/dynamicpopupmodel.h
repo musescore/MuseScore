@@ -26,11 +26,11 @@ public:
     Q_ENUM(ItemType)
 
     struct PageItem {
-        QString name;
+        engraving::DynamicType dynType;
         double width;
         double offset;
         ItemType itemType;
-        engraving::DynamicType dynType;
+        const std::string text;
     };
 
     Q_INVOKABLE void init() override;
@@ -49,6 +49,8 @@ signals:
 private:
     // Represents different pages of the popup, each containing dynamic/hairpin symbols as strings, width, offset and ItemType
     QVariantList m_pages;
+
+    QString xmlTextToQString(const std::string text, engraving::IEngravingFontPtr engravingFont) const;
 };
 } // namespace mu::notation
 
