@@ -4,7 +4,7 @@
     <Division>480</Division>
     <Style>
       <defaultsVersion>301</defaultsVersion>
-      <Spatium>1.764</Spatium>
+      <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

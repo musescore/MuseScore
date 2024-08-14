@@ -4,7 +4,7 @@
     <Division>480</Division>
     <Style>
       <defaultsVersion>301</defaultsVersion>
-      <Spatium>1.764</Spatium>
+      <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -809,7 +809,7 @@
       <Division>480</Division>
       <Style>
         <defaultsVersion>301</defaultsVersion>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1257,7 +1257,7 @@
       <Division>480</Division>
       <Style>
         <defaultsVersion>301</defaultsVersion>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

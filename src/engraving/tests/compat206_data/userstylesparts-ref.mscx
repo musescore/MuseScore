@@ -59,7 +59,7 @@
       <user7FramePadding>0</user7FramePadding>
       <user7FrameWidth>0</user7FrameWidth>
       <defaultsVersion>206</defaultsVersion>
-      <Spatium>1.76389</Spatium>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -440,7 +440,7 @@
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -675,7 +675,7 @@
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -933,7 +933,7 @@
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

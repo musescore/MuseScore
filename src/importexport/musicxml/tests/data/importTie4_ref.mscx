@@ -125,7 +125,7 @@
       <user11FontSize>22</user11FontSize>
       <user12FontFace>Palatino,serif</user12FontFace>
       <user12FontSize>22</user12FontSize>
-      <Spatium>1.75</Spatium>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

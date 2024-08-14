@@ -4,7 +4,7 @@
     <Division>480</Division>
     <Style>
       <beamNoSlope>1</beamNoSlope>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
