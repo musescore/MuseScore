@@ -890,6 +890,12 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
+    if (m_shouldStartEditOnLeftClickRelease) {
+        dispatcher()->dispatch("edit-element", ActionData::make_arg1<PointF>(m_logicalBeginPoint));
+        m_shouldStartEditOnLeftClickRelease = false;
+        return;
+    }
+
     const INotationInteraction::HitElementContext& ctx = hitElementContext();
     if (!ctx.element) {
         return;
@@ -953,16 +959,10 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    ActionCode actionCode;
-
     if (hitElement->isMeasure() && event->modifiers() == Qt::NoModifier) {
-        actionCode = "note-input";
+        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_logicalBeginPoint));
     } else if (hitElement->isInstrumentName()) {
-        actionCode = "edit-element";
-    }
-
-    if (!actionCode.empty()) {
-        dispatcher()->dispatch(actionCode, ActionData::make_arg1<PointF>(m_logicalBeginPoint));
+        m_shouldStartEditOnLeftClickRelease = true;
     }
 }
 
