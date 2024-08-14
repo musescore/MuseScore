@@ -456,6 +456,8 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
         return isLineType() ? Sid::hairpinLineDashLineLen : Sid::hairpinDashLineLen;
     case Pid::DASH_GAP_LEN:
         return isLineType() ? Sid::hairpinLineDashGapLen : Sid::hairpinDashGapLen;
+    case Pid::PLACEMENT:
+        return Sid::hairpinPlacement;
     default:
         break;
     }

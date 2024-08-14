@@ -918,6 +918,16 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
     }
 }
 
+Sid Dynamic::getPropertyStyle(Pid pid) const
+{
+    switch (pid) {
+    case Pid::PLACEMENT:
+        return Sid::dynamicsPlacement;
+    default:
+        return TextBase::getPropertyStyle(pid);
+    }
+}
+
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
