@@ -52,7 +52,7 @@ const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
     ManifestList manifests = provider()->manifestList();
     result.reserve(manifests.size() + STATIC_ACTIONS.size());
 
-    for (const Manifest& m : provider()->manifestList()) {
+    for (const Manifest& m : manifests) {
         for (const Action& a : m.actions) {
             UiAction action;
             action.code = makeUriQuery(m.uri, a.code).toString();

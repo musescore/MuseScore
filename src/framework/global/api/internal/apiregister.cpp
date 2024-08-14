@@ -115,39 +115,35 @@ ApiRegister::Dump ApiRegister::dump() const
         "_q_reregisterTimers"
     };
 
-    auto makeSig = [](const QMetaMethod& m) {
+    auto makePropertySig = [](const QMetaProperty& p) {
+        Dump::Sig sig;
+        sig.name = p.name();
+        sig.retType = p.typeName();
+        return sig;
+    };
+
+    auto makeMethodSig = [](const QMetaMethod& m) {
         int pcount = m.parameterCount();
         QList<QByteArray> ptypes = m.parameterTypes();
         QList<QByteArray> pnames = m.parameterNames();
+        QMetaType retType = m.returnMetaType();
 
-        QString sig = m.name();
-        sig += "(";
+        Dump::Sig sig;
+        sig.name = m.name();
+        sig.retType = retType.name();
         for (int i = 0; i < pcount; ++i) {
-            QByteArray type = ptypes.at(i);
-            if (type.size() < 1) {
-                continue;
-            }
-
-            //! NOTE Remove `Q` from Qt types, like QString
-            if (type.at(0) == 'Q') {
-                sig += type.mid(1);
-            } else {
-                sig += type;
-            }
-
-            sig += " ";
-            sig += pnames.at(i);
-            if (i < (pcount - 1)) {
-                sig += ", ";
-            }
+            Dump::Arg a;
+            a.type = ptypes.at(i).constData();
+            a.name = pnames.at(i).constData();
+            sig.args.push_back(std::move(a));
         }
-        sig += ")";
+
         return sig;
     };
 
     for (const auto& p : m_creators) {
         Dump::Api api;
-        api.prefix = p.first; // api, like api.dispatcher
+        api.prefix = QString::fromStdString(p.first); // api, like api.dispatcher
 
         ApiObject* obj = p.second.c->create(&engine);
         const QMetaObject* meta = obj->metaObject();
@@ -158,9 +154,9 @@ ApiRegister::Dump ApiRegister::dump() const
                 continue;
             }
             Dump::Method dm;
-            dm.sig = op.name();
+            dm.type = Dump::MethodType::Property;
+            dm.sig = makePropertySig(op);
             api.methods.push_back(dm);
-            LOGDA() << api.prefix << "." << dm.sig << " - " << dm.doc;
         }
 
         for (int i = 0; i < meta->methodCount(); ++i) {
@@ -174,19 +170,17 @@ ApiRegister::Dump ApiRegister::dump() const
             }
 
             Dump::Method dm;
-            dm.sig = makeSig(om).toStdString();
+            dm.type = Dump::MethodType::Method;
+            dm.sig = makeMethodSig(om);
 
             QByteArray mname_doc = mname + "_doc()";
             int doc_idx = meta->indexOfMethod(mname_doc.constData());
             if (doc_idx != -1) {
                 QMetaMethod docme = meta->method(doc_idx);
-                QString doc;
-                docme.invoke(obj, Q_RETURN_ARG(QString, doc));
-                dm.doc = doc.toStdString();
+                docme.invoke(obj, Q_RETURN_ARG(QString, dm.doc));
             }
 
             api.methods.push_back(dm);
-            LOGDA() << api.prefix << "." << dm.sig << " - " << dm.doc;
         }
 
         if (p.second.c->isNeedDelete()) {

@@ -22,12 +22,24 @@
 #include "apidumpmodel.h"
 
 #include "extensions/api/extapi.h"
+
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_AUTOBOT
 #include "autobot/internal/api/scriptapi.h"
+#endif
 
 #include "log.h"
 
 using namespace muse::extensions;
 using namespace muse::api;
+
+static const QHash<QString, QString> TYPES_MAP = {
+    { "QString", "String" },
+    { "QVariantMap", "Map" },
+    { "QFont", "Font" },
+    { "QColor", "Color" },
+    { "QJSValue", "Value" }
+};
 
 ApiDumpModel::ApiDumpModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -42,8 +54,8 @@ QVariant ApiDumpModel::data(const QModelIndex& index, int role) const
 
     const Item& item = m_list.at(index.row());
     switch (role) {
-    case rData: return QVariant::fromValue(item.data);
-    case rGroup: return QVariant::fromValue("api." + item.module);
+    case rData: return QVariant::fromValue(item.sig + " - " + item.doc);
+    case rGroup: return QVariant::fromValue(item.prefix);
     default: break;
     }
 
@@ -92,10 +104,65 @@ bool ApiDumpModel::isAllowByType(const QString& module, ApiType type) const
     switch (type) {
     case ApiType::All: return true;
     case ApiType::Extensions: return hasProperty(api::ExtApi::staticMetaObject, module);
-    case ApiType::Autobot: return hasProperty(autobot::ScriptApi::staticMetaObject, module);
+    case ApiType::Autobot: {
+#ifdef MUSE_MODULE_AUTOBOT
+        return hasProperty(autobot::ScriptApi::staticMetaObject, module);
+#else
+        return false;
+#endif
+    }
     }
 
     return true;
+}
+
+static QString makeCleanType(const QString& type)
+{
+    QString str = TYPES_MAP.value(type, type);
+    int lastNSIdx = str.lastIndexOf("::");
+    if (lastNSIdx != -1) {
+        str = str.mid(lastNSIdx + 2); // remove namespace
+    }
+    return str;
+}
+
+static QString sigToString(const IApiRegister::Dump::Sig& sig, IApiRegister::Dump::MethodType type, const QString& prefix = QString())
+{
+    switch (type) {
+    case IApiRegister::Dump::MethodType::Property: {
+        QString str = makeCleanType(sig.retType);
+        str += " ";
+        if (!prefix.isEmpty()) {
+            str += prefix + ".";
+        }
+        str += sig.name;
+
+        return str;
+    } break;
+    case IApiRegister::Dump::MethodType::Method: {
+        QString str = makeCleanType(sig.retType);
+        str += " ";
+        if (!prefix.isEmpty()) {
+            str += prefix + ".";
+        }
+        str += sig.name;
+        str += "(";
+        for (const IApiRegister::Dump::Arg& a : sig.args) {
+            str += makeCleanType(a.type);
+            str += " ";
+            str += a.name;
+            str += ", ";
+        }
+
+        if (!sig.args.empty()) {
+            str.chop(2); // remove last `, `
+        }
+
+        str += ")";
+
+        return str;
+    } break;
+    }
 }
 
 void ApiDumpModel::load()
@@ -107,8 +174,11 @@ void ApiDumpModel::load()
     for (const IApiRegister::Dump::Api& api : dump.apis) {
         for (const IApiRegister::Dump::Method& me : api.methods) {
             Item item;
-            item.module = moduleFromPrefix(QString::fromStdString(api.prefix));
-            item.data = QString::fromStdString(me.sig + " - " + me.doc);
+            item.module = moduleFromPrefix(api.prefix);
+            item.prefix = "api." + item.module;   // not api.prefix
+            item.sig = sigToString(me.sig, me.type);
+            item.fullSig = sigToString(me.sig, me.type, item.prefix);
+            item.doc = me.doc;
 
             m_allList.append(std::move(item));
         }
@@ -130,8 +200,8 @@ void ApiDumpModel::update()
                 continue;
             }
 
-            if (item.data.contains(m_searchText, Qt::CaseInsensitive)
-                || item.module.contains(m_searchText, Qt::CaseInsensitive)) {
+            if (item.sig.contains(m_searchText, Qt::CaseInsensitive)
+                || item.prefix.contains(m_searchText, Qt::CaseInsensitive)) {
                 m_list.append(item);
             }
         }
@@ -172,7 +242,7 @@ void ApiDumpModel::print()
     QString str;
     QTextStream ts(&str);
     for (const Item& item : m_list) {
-        ts << item.module << "." << item.data << "\r\n";
+        ts << item.fullSig << "\r\n";
     }
 
     std::cout << str.toStdString() << std::endl;
