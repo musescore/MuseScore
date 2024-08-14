@@ -50,52 +50,6 @@ static const QList<QList<DynamicPopupModel::PageItem> > DYN_POPUP_PAGES = {
     },
 };
 
-static bool isValidDynamic(const Dynamic* dyn)
-{
-    if (dyn == nullptr) {
-        return false;
-    }
-    return dyn->dynamicType() >= DynamicType::PPPPPP && dyn->dynamicType() <= DynamicType::FFFFFF;
-}
-
-static bool isValidHairpin(Hairpin* pin)
-{
-    return pin->hairpinType() == HairpinType::CRESC_HAIRPIN || pin->hairpinType() == HairpinType::DECRESC_HAIRPIN;
-}
-
-static void switchHairpinsType(Dynamic* dyn)
-{
-    if (!isValidDynamic(dyn)) {
-        return;
-    }
-
-    if (dyn->leftHairpin()) {
-        Hairpin* leftHairpin = dyn->leftHairpin();
-        const Dynamic* startDyn = leftHairpin->dynamicSnappedBefore();
-
-        if (isValidDynamic(startDyn) && isValidHairpin(leftHairpin)) {
-            if (int(startDyn->dynamicType()) > int(dyn->dynamicType())) {
-                leftHairpin->setHairpinType(HairpinType::DECRESC_HAIRPIN);
-            } else {
-                leftHairpin->setHairpinType(HairpinType::CRESC_HAIRPIN);
-            }
-        }
-    }
-
-    if (dyn->rightHairpin()) {
-        Hairpin* rightHairpin = dyn->rightHairpin();
-        const Dynamic* endDyn = rightHairpin->dynamicSnappedAfter();
-
-        if (isValidDynamic(endDyn) && isValidHairpin(rightHairpin)) {
-            if (int(endDyn->dynamicType()) > int(dyn->dynamicType())) {
-                rightHairpin->setHairpinType(HairpinType::CRESC_HAIRPIN);
-            } else {
-                rightHairpin->setHairpinType(HairpinType::DECRESC_HAIRPIN);
-            }
-        }
-    }
-}
-
 DynamicPopupModel::DynamicPopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_DYNAMIC, parent)
 {
@@ -157,11 +111,12 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
     endCommand();
 
     if (m_item->flag(ElementFlag::IS_PREVIEW)) {
-        switchHairpinsType(toDynamic(m_item));
         m_item->setFlag(ElementFlag::IS_PREVIEW, false);
     }
 
     INotationInteractionPtr interaction = currentNotation()->interaction();
+
+    interaction->flipHairpinsType(toDynamic(m_item));
 
     // Hide the bounding box which appears when called using Ctrl+D shortcut
     if (interaction->isTextEditingStarted()) {

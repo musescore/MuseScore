@@ -200,6 +200,8 @@ public:
 
     void increaseDecreaseDuration(int steps, bool stepByDots) override;
 
+    void flipHairpinsType(engraving::Dynamic* selDyn) override;
+
     void toggleDynamicPopup() override;
     bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
