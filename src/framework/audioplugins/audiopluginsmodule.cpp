@@ -70,11 +70,3 @@ void AudioPluginsModule::onInit(const IApplication::RunMode&)
         pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
     }
 }
-
-void AudioPluginsModule::onDelayedInit()
-{
-    Ret ret = m_registerAudioPluginsScenario->registerNewPlugins();
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
-}

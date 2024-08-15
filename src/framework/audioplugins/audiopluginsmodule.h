@@ -39,7 +39,6 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
 
 private:
 
