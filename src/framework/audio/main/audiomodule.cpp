@@ -63,14 +63,14 @@ using namespace muse::audio::fx;
 #endif
 
 #ifdef Q_OS_LINUX
-#include "internal/platform/lin/linuxaudiodriver.h"
+#include "internal/platform/lin/alsaaudiodriver.h"
 #ifdef MUSE_PIPEWIRE_AUDIO_DRIVER
 #include "internal/platform/lin/pwaudiodriver.h"
 #endif
 #endif
 
 #ifdef Q_OS_FREEBSD
-#include "internal/platform/lin/linuxaudiodriver.h"
+#include "internal/platform/lin/alsaaudiodriver.h"
 #endif
 #ifdef Q_OS_WIN
 //#include "internal/platform/win/winmmdriver.h"
@@ -122,7 +122,7 @@ std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
         return driver;
     }
 #endif // Q_OS_LINUX && MUSE_PIPEWIRE_AUDIO_DRIVER
-    return std::make_shared<LinuxAudioDriver>();
+    return std::make_shared<AlsaAudioDriver>();
 }
 
 #endif // Q_OS_LINUX || Q_OS_FREEBSD
