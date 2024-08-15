@@ -358,7 +358,7 @@ MeasureBeat NotationPlayback::beat(tick_t tick) const
     return measureBeat;
 }
 
-tick_t NotationPlayback::beatToTick(int measureIndex, int beatIndex) const
+tick_t NotationPlayback::beatToRawTick(int measureIndex, int beatIndex) const
 {
     return score() ? score()->sigmap()->bar2tick(measureIndex, beatIndex) : 0;
 }
