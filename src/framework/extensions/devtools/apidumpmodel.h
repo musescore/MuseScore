@@ -54,7 +54,8 @@ public:
     Q_INVOKABLE QVariantList apiTypes() const;
     Q_INVOKABLE void setApiType(ApiType type);
 
-    Q_INVOKABLE void print();
+    Q_INVOKABLE void copyWiki();
+    Q_INVOKABLE void printWiki();
 
 private:
     enum Roles {
@@ -72,6 +73,8 @@ private:
 
     void update();
     bool isAllowByType(const QString& module, ApiType type) const;
+
+    QString makeWiki() const;
 
     QList<Item> m_list;
     QList<Item> m_allList;

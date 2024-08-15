@@ -35,7 +35,6 @@ class ExtApi : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
-    Q_PROPERTY(QJSValue context READ context CONSTANT)
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
     Q_PROPERTY(QJSValue theme READ theme CONSTANT)
 
@@ -46,6 +45,9 @@ class ExtApi : public QObject
     //Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
     //Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
     //Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
+
+    //! NOTE This is autobot context, should be rework and make general context
+    //Q_PROPERTY(QJSValue context READ context CONSTANT)
 
     //! ATTENTION
     //! Don't add these APIs here.
