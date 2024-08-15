@@ -61,8 +61,14 @@ Rectangle {
 
             FlatButton {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Print"
-                onClicked: apiModel.print()
+                text: "Copy wiki"
+                onClicked: apiModel.copyWiki()
+            }
+
+            FlatButton {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Print wiki"
+                onClicked: apiModel.printWiki()
             }
         }
     }

@@ -21,6 +21,8 @@
  */
 #include "apidumpmodel.h"
 
+#include <QClipboard>
+
 #include "extensions/api/extapi.h"
 
 #include "muse_framework_config.h"
@@ -38,7 +40,8 @@ static const QHash<QString, QString> TYPES_MAP = {
     { "QVariantMap", "Map" },
     { "QFont", "Font" },
     { "QColor", "Color" },
-    { "QJSValue", "Value" }
+    { "QJSValue", "Value" },
+    { "FractionWrapper", "Fraction" }
 };
 
 ApiDumpModel::ApiDumpModel(QObject* parent)
@@ -54,7 +57,7 @@ QVariant ApiDumpModel::data(const QModelIndex& index, int role) const
 
     const Item& item = m_list.at(index.row());
     switch (role) {
-    case rData: return QVariant::fromValue(item.sig + " - " + item.doc);
+    case rData: return QVariant::fromValue(item.sig + " : " + item.doc);
     case rGroup: return QVariant::fromValue(item.prefix);
     default: break;
     }
@@ -118,11 +121,18 @@ bool ApiDumpModel::isAllowByType(const QString& module, ApiType type) const
 
 static QString makeCleanType(const QString& type)
 {
-    QString str = TYPES_MAP.value(type, type);
+    QString str = type;
     int lastNSIdx = str.lastIndexOf("::");
     if (lastNSIdx != -1) {
         str = str.mid(lastNSIdx + 2); // remove namespace
     }
+
+    if (str.endsWith('*')) {
+        str = str.mid(0, str.size() - 1); // remove last * (ptr)
+    }
+
+    str = TYPES_MAP.value(str, str);
+
     return str;
 }
 
@@ -130,21 +140,22 @@ static QString sigToString(const IApiRegister::Dump::Sig& sig, IApiRegister::Dum
 {
     switch (type) {
     case IApiRegister::Dump::MethodType::Property: {
-        QString str = makeCleanType(sig.retType);
-        str += " ";
+        QString str;
         if (!prefix.isEmpty()) {
             str += prefix + ".";
         }
         str += sig.name;
+        str += " → ";
+        str += makeCleanType(sig.retType);
 
         return str;
     } break;
     case IApiRegister::Dump::MethodType::Method: {
-        QString str = makeCleanType(sig.retType);
-        str += " ";
+        QString str;
         if (!prefix.isEmpty()) {
             str += prefix + ".";
         }
+
         str += sig.name;
         str += "(";
         for (const IApiRegister::Dump::Arg& a : sig.args) {
@@ -159,6 +170,11 @@ static QString sigToString(const IApiRegister::Dump::Sig& sig, IApiRegister::Dum
         }
 
         str += ")";
+
+        if (sig.retType != "void") {
+            str += " → ";
+            str += makeCleanType(sig.retType);
+        }
 
         return str;
     } break;
@@ -237,13 +253,37 @@ void ApiDumpModel::setApiType(ApiType type)
     update();
 }
 
-void ApiDumpModel::print()
+QString ApiDumpModel::makeWiki() const
 {
     QString str;
     QTextStream ts(&str);
+
+    QString lastPrefix;
     for (const Item& item : m_list) {
-        ts << item.fullSig << "\r\n";
+        if (lastPrefix != item.prefix) {
+            ts << "  \r\n";
+            ts << "### " << item.prefix << "  \r\n";
+            ts << "  \r\n";
+            lastPrefix = item.prefix;
+        }
+
+        ts << "**" << item.fullSig << "**  \r\n";
+        ts << item.doc << "  \r\n";
+        ts << "  \r\n";
     }
 
+    return str;
+}
+
+void ApiDumpModel::copyWiki()
+{
+    QString str = makeWiki();
+    QClipboard* clipboard = QGuiApplication::clipboard();
+    clipboard->setText(str);
+}
+
+void ApiDumpModel::printWiki()
+{
+    QString str = makeWiki();
     std::cout << str.toStdString() << std::endl;
 }
