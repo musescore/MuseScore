@@ -32,7 +32,6 @@
 #include "containers.h"
 #include "io/buffer.h"
 #include "translation.h"
-#include "types/translatablestring.h"
 
 #include "draw/types/pen.h"
 #include "iengravingfont.h"
@@ -41,9 +40,9 @@
 
 #include "types/typesconv.h"
 
-#include "rendering/dev/autoplace.h"
-#include "rendering/dev/chordlayout.h"
-#include "rendering/dev/tlayout.h"
+#include "rendering/score/autoplace.h"
+#include "rendering/score/chordlayout.h"
+#include "rendering/score/tlayout.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -75,7 +74,7 @@ using namespace mu;
 using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
 EngravingItem* EngravingItemList::at(size_t i) const
@@ -2813,6 +2812,6 @@ PointF EngravingItem::staffOffset() const
 
 void EngravingItem::setOffsetChanged(bool val, bool absolute, const PointF& diff)
 {
-    rendering::dev::Autoplace::setOffsetChanged(this, mutldata(), val, absolute, diff);
+    rendering::score::Autoplace::setOffsetChanged(this, mutldata(), val, absolute, diff);
 }
 }

@@ -30,11 +30,10 @@
 #include <assert.h>
 
 #include "translation.h"
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
-#include "rendering/dev/horizontalspacing.h"
+#include "rendering/score/horizontalspacing.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -79,7 +78,7 @@
 using namespace mu;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
 //---------------------------------------------------------

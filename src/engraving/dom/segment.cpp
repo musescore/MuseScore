@@ -28,15 +28,15 @@
 
 #include "types/typesconv.h"
 
-#include "rendering/dev/tlayout.h"
+#include "rendering/score/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "chordrest.h"
 #include "clef.h"
 #include "engravingitem.h"
-#include "harmony.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
@@ -48,7 +48,6 @@
 #include "part.h"
 #include "rest.h"
 #include "score.h"
-#include "sig.h"
 #include "staff.h"
 #include "staffstate.h"
 #include "system.h"
@@ -2456,8 +2455,8 @@ void Segment::createShape(staff_idx_t staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            rendering::dev::LayoutContext lctx(score());
-            RectF r = rendering::dev::TLayout::layoutRect(bl, lctx);
+            rendering::score::LayoutContext lctx(score());
+            RectF r = rendering::score::TLayout::layoutRect(bl, lctx);
             s.add(r.translated(bl->pos() + bl->staffOffset()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);

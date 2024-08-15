@@ -42,7 +42,7 @@ set(MODULE_BIG_QRC
 
 include(${CMAKE_CURRENT_LIST_DIR}/dom/dom.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/score/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
 
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
@@ -202,14 +202,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
 
-    ${RENDERING_DEV_SRC}
+    ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h

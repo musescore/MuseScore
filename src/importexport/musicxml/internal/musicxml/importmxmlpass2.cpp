@@ -95,14 +95,14 @@
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
-#include "engraving/rendering/dev/tlayout.h"
+#include "engraving/rendering/score/tlayout.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()

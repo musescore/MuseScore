@@ -22,16 +22,13 @@
 
 #include "tremolosinglechord.h"
 
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "style/style.h"
 
-#include "rendering/dev/beamtremololayout.h"
+#include "rendering/score/beamtremololayout.h"
 
 #include "beam.h"
 #include "chord.h"

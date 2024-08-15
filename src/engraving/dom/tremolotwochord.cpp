@@ -22,16 +22,13 @@
 
 #include "tremolotwochord.h"
 
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "style/style.h"
 
-#include "rendering/dev/beamtremololayout.h"
+#include "rendering/score/beamtremololayout.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -114,7 +111,7 @@ double TremoloTwoChord::minHeight() const
 
 PointF TremoloTwoChord::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
-    return rendering::dev::BeamTremoloLayout::chordBeamAnchor(this->ldata(), chord, anchorType);
+    return rendering::score::BeamTremoloLayout::chordBeamAnchor(this->ldata(), chord, anchorType);
 }
 
 //---------------------------------------------------------

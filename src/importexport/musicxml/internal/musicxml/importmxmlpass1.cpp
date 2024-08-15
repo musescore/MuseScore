@@ -33,7 +33,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
-#include "engraving/rendering/dev/tlayout.h"
+#include "engraving/rendering/score/tlayout.h"
 
 #include "engraving/style/style.h"
 #include "engraving/style/textstyle.h"
@@ -53,7 +53,7 @@ using namespace mu;
 using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
