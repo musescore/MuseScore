@@ -39,8 +39,8 @@ if (OS_IS_WIN)
     )
 elseif(OS_IS_LIN OR OS_IS_FBSD)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsaaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsaaudiodriver.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
     )

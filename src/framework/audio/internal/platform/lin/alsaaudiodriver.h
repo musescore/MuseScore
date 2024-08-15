@@ -30,11 +30,11 @@
 #include "audiodeviceslistener.h"
 
 namespace muse::audio {
-class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
+class AlsaAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
-    LinuxAudioDriver();
-    ~LinuxAudioDriver();
+    AlsaAudioDriver();
+    ~AlsaAudioDriver();
 
     void init() override;
 
