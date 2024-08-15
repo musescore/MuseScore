@@ -2040,11 +2040,10 @@ static void createTimeTick(const Score* score, const Fraction& tick, const staff
 static String replacePartNameAccidentals(const String& partName)
 {
     String name = partName;
-    static const std::regex re("((^|\\s|\\u00A0)[ABCDEF][b#]($|\\s|\u00A0))");
+    static const std::wregex re(L"((^|\\s|\\u00A0)[ABCDEF][b#\\u00AF]($|\\s|\\u00A0))");
     StringList res = name.search(re, { 1 }, SplitBehavior::SkipEmptyParts);
-
     if (!res.empty()) {
-        String transp = res.at(0).replace(u"b", u"♭").replace(u"#", u"♯");
+        String transp = res.at(0).replace(u"b", u"♭").replace(u"¯", u"♭").replace(u"#", u"♯");
         name.replace(re, transp);
         return name;
     }
