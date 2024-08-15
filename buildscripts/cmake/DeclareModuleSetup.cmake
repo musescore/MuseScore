@@ -65,6 +65,17 @@ macro(declare_module name)
 endmacro()
 
 
+macro(add_qml_import_path input_var)
+  if (NOT ${${input_var}} STREQUAL "")
+      set(QML_IMPORT_PATH "$CACHE{QML_IMPORT_PATH}")
+      list(APPEND QML_IMPORT_PATH ${${input_var}})
+      list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+      set(QML_IMPORT_PATH "${QML_IMPORT_PATH}" CACHE STRING
+          "QtCreator extra import paths for QML modules" FORCE)
+  endif()
+endmacro()
+
+
 macro(setup_module)
 
     if (MODULE_IS_STUB)
@@ -90,13 +101,8 @@ macro(setup_module)
         QT6_WRAP_UI(ui_headers ${MODULE_UI} )
     endif()
 
-    if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
-        set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QML_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
-    endif()
-
-    if (NOT ${MODULE_QMLAPI_IMPORT} STREQUAL "")
-        set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QMLAPI_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
-    endif()
+    add_qml_import_path(MODULE_QML_IMPORT)
+    add_qml_import_path(MODULE_QMLAPI_IMPORT)
 
     if (CC_IS_EMSCRIPTEN)
         add_library(${MODULE} OBJECT)
