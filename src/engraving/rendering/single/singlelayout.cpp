@@ -90,18 +90,17 @@
 
 #include "dom/utils.h"
 
-#include "rendering/dev/tlayout.h"
-#include "rendering/dev/tremololayout.h"
-#include "rendering/dev/arpeggiolayout.h"
-#include "rendering/dev/chordlayout.h"
-#include "rendering/dev/slurtielayout.h"
+#include "rendering/score/tlayout.h"
+#include "rendering/score/tremololayout.h"
+#include "rendering/score/chordlayout.h"
+#include "rendering/score/slurtielayout.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 using namespace mu::engraving::rendering::single;
 
 void SingleLayout::layoutItem(EngravingItem* item)

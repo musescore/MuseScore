@@ -46,7 +46,7 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/figuredbass.h"
 
-#include "rendering/dev/scorerenderer.h"
+#include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
 
 #include "compat/scoreaccess.h"
@@ -113,7 +113,7 @@ void EngravingModule::registerExports()
 #endif
 
     // internal
-    ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::dev::ScoreRenderer());
+    ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::score::ScoreRenderer());
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
