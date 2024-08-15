@@ -6211,37 +6211,37 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1345"/>
         <source>Lute 5-course</source>
-        <translation>Liuto 5-ordini</translation>
+        <translation>Liuto (5-strunowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1348"/>
         <source>Lute 6-course</source>
-        <translation>Liuto 6-ordini</translation>
+        <translation>Liuto (6-strunowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1351"/>
         <source>Lute 7-course</source>
-        <translation>Liuto 7-ordini</translation>
+        <translation>Liuto (7-strunowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1354"/>
         <source>Lute 8-course</source>
-        <translation>Liuto 8-ordini</translation>
+        <translation>Liuto (8-strunowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1357"/>
         <source>Lute 9-course</source>
-        <translation>Liuto 9-ordini</translation>
+        <translation>Liuto (9-strunowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1360"/>
         <source>Lute 10-course</source>
-        <translation>Liuto 10-ordini</translation>
+        <translation>Liuto (10-strunowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1363"/>
         <source>Lute 13-course</source>
-        <translation>Liuto 13-ordini</translation>
+        <translation>Liuto (13-strunowa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1415"/>
