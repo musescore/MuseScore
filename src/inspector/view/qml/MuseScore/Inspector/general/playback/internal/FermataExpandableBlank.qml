@@ -54,7 +54,7 @@ ExpandableBlank {
         step: 1
         decimals: 0
         maxValue: 10000
-        minValue: 0
+        minValue: 100
         measureUnitsSymbol: "%"
     }
 }
