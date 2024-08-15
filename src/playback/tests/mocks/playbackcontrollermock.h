@@ -64,6 +64,7 @@ public:
     MOCK_METHOD(void, playElements, ((const std::vector<const notation::EngravingItem*>&)), (override));
     MOCK_METHOD(void, playMetronome, (int), (override));
     MOCK_METHOD(void, seekElement, (const notation::EngravingItem*), (override));
+    MOCK_METHOD(void, seekBeat, (int, int), (override));
 
     MOCK_METHOD(bool, actionChecked, (const muse::actions::ActionCode&), (const, override));
     MOCK_METHOD(muse::async::Channel<muse::actions::ActionCode>, actionCheckedChanged, (), (const, override));

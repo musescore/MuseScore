@@ -209,13 +209,18 @@ void PlaybackController::reset()
     stop();
 }
 
-void PlaybackController::seek(const midi::tick_t tick)
+void PlaybackController::seekRawTick(const midi::tick_t tick)
 {
     if (m_currentTick == tick) {
         return;
     }
 
-    seek(tickToSecs(tick));
+    RetVal<midi::tick_t> playedTick = notationPlayback()->playPositionTickByRawTick(tick);
+    if (!playedTick.ret) {
+        return;
+    }
+
+    seek(playedTickToSecs(playedTick.val));
 }
 
 void PlaybackController::seek(const audio::secs_t secs)
@@ -363,7 +368,13 @@ void PlaybackController::seekElement(const notation::EngravingItem* element)
         return;
     }
 
-    seek(tick.val);
+    seek(playedTickToSecs(tick.val));
+}
+
+void PlaybackController::seekBeat(int measureIndex, int beatIndex)
+{
+    secs_t targetSecs = beatToSecs(measureIndex, beatIndex);
+    seek(targetSecs);
 }
 
 void PlaybackController::seekListSelection()
@@ -384,12 +395,7 @@ void PlaybackController::seekRangeSelection()
 
     midi::tick_t startTick = selectionRange()->startTick().ticks();
 
-    RetVal<midi::tick_t> tick = notationPlayback()->playPositionTickByRawTick(startTick);
-    if (!tick.ret) {
-        return;
-    }
-
-    seek(tick.val);
+    seekRawTick(startTick);
 }
 
 void PlaybackController::onAudioResourceChanged(const InstrumentTrackId& trackId,
@@ -637,7 +643,7 @@ secs_t PlaybackController::playbackStartSecs() const
         if (!startTick.ret) {
             return 0;
         }
-        return tickToSecs(startTick.val);
+        return playedTickToSecs(startTick.val);
     }
 
     return 0;
@@ -799,8 +805,8 @@ void PlaybackController::updateLoop()
         return;
     }
 
-    secs_t fromSecs = tickToSecs(playbackTickFrom.val);
-    secs_t toSecs = tickToSecs(playbackTickTo.val);
+    secs_t fromSecs = playedTickToSecs(playbackTickFrom.val);
+    secs_t toSecs = playedTickToSecs(playbackTickTo.val);
     currentPlayer()->setLoop(secsToMilisecs(fromSecs), secsToMilisecs(toSecs));
 
     enableLoop();
@@ -1434,7 +1440,14 @@ MeasureBeat PlaybackController::currentBeat() const
 
 secs_t PlaybackController::beatToSecs(int measureIndex, int beatIndex) const
 {
-    return notationPlayback() ? tickToSecs(notationPlayback()->beatToTick(measureIndex, beatIndex)) : secs_t { 0 };
+    if (!notationPlayback()) {
+        return 0;
+    }
+
+    muse::midi::tick_t rawTick = notationPlayback()->beatToRawTick(measureIndex, beatIndex);
+    muse::midi::tick_t playedTick = notationPlayback()->playPositionTickByRawTick(rawTick).val;
+
+    return playedTickToSecs(playedTick);
 }
 
 double PlaybackController::tempoMultiplier() const
@@ -1456,7 +1469,7 @@ void PlaybackController::setTempoMultiplier(double multiplier)
     }
 
     notationPlayback()->setTempoMultiplier(multiplier);
-    seek(tick);
+    seekRawTick(tick);
     updateLoop();
 
     if (playing) {
@@ -1576,7 +1589,7 @@ bool PlaybackController::canReceiveAction(const ActionCode&) const
     return m_masterNotation != nullptr && m_masterNotation->hasParts();
 }
 
-muse::audio::secs_t PlaybackController::tickToSecs(int tick) const
+muse::audio::secs_t PlaybackController::playedTickToSecs(int tick) const
 {
     return secs_t(notationPlayback()->playedTickToSec(tick));
 }
