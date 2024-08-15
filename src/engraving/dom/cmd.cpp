@@ -2612,7 +2612,7 @@ void Score::cmdResetToDefaultLayout()
         Sid::oddFooterL,
         Sid::oddFooterC,
         Sid::oddFooterR,
-        Sid::tupletOufOfStaff,
+        Sid::tupletOutOfStaff,
         Sid::tupletDirection,
         Sid::tupletBracketType,
         Sid::dynamicsPlacement,
