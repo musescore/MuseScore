@@ -961,6 +961,19 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
     Segment* s = measure->getSegment(SegmentType::ChordRest, elTick);
+
+    if (el->isSticking()) {
+        if (el->propertyFlags(Pid::OFFSET) == PropertyFlags::UNSTYLED) {
+            const EngravingItem* item = s->element(el->track());
+            const Chord* chord = item && item->isChord() ? toChord(item) : nullptr;
+            const bool hasGraceNotes = chord && !chord->graceNotes().empty();
+
+            if (!hasGraceNotes) {
+                el->resetProperty(Pid::OFFSET);
+            }
+        }
+    }
+
     if (el->systemFlag()) {
         Score* score = measure->score();
         Staff* st = score->staff(track2staff(track));
