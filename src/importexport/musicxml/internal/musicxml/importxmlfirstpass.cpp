@@ -169,8 +169,7 @@ int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
 
 bool MusicXmlPart::isVocalStaff() const
 {
-    return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), m_name) != vocalInstrumentNames.end()
-           || m_hasLyrics;
+    return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), m_name) != vocalInstrumentNames.end();
 }
 
 bool MusicXmlPart::isPercussionStaff() const
