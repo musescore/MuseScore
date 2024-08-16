@@ -498,20 +498,20 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
             group = NoteHeadGroup::HEAD_TI_NAME;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
-        QString stepName = QString(tpc2stepName(tpc));
-        if (stepName == "C") {
-           group = NoteHeadGroup::HEAD_DO_NAME;
-        } else if (stepName == "D") {
-           group = NoteHeadGroup::HEAD_RE_NAME;
-        } else if (stepName == "E") {
-           group = NoteHeadGroup::HEAD_MI_NAME;
-        } else if (stepName == "F") {
-           group = NoteHeadGroup::HEAD_FA_NAME;
-        } else if (stepName == "G") {
-           group = NoteHeadGroup::HEAD_SOL_NAME;
-        } else if (stepName == "A") {
+       Char stepName = tpc2stepName(tpc);
+        if (stepName == u'C') {
+            group = NoteHeadGroup::HEAD_DO_NAME;
+        } else if (stepName == u'D') {
+			         group = NoteHeadGroup::HEAD_RE_NAME;
+        } else if (stepName == u'E') {
+		         	group = NoteHeadGroup::HEAD_MI_NAME;
+        } else if (stepName == u'F') {
+			         group = NoteHeadGroup::HEAD_FA_NAME;
+        } else if (stepName == u'G') {
+			         group = NoteHeadGroup::HEAD_SOL_NAME;
+        } else if (stepName == u'A') {
             group = NoteHeadGroup::HEAD_LA_NAME;
-        } else if (stepName == "B") {
+        } else if (stepName == u'B') {
             group = NoteHeadGroup::HEAD_SI_NAME;
         }
     }
