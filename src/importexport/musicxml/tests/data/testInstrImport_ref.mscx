@@ -1414,7 +1414,8 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
+        <height>7.5</height>
+        <boxAutoSize>0</boxAutoSize>
         </VBox>
       <Measure len="1/64">
         <voice>

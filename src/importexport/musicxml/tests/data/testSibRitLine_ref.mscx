@@ -108,7 +108,8 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
+        <height>7.5</height>
+        <boxAutoSize>0</boxAutoSize>
         </VBox>
       <HBox>
         <width>5</width>
