@@ -2,9 +2,7 @@
 
 #include "translation.h"
 
-#include "../importgtp.h"
 #include "gpdommodel.h"
-#include "gpdrumsetresolver.h"
 
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/bend.h"
@@ -49,6 +47,9 @@
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+
+#include "../utils.h"
+#include "../guitarprodrumset.h"
 
 #include "types/symid.h"
 
@@ -1113,10 +1114,10 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
         Staff* staff = part->staff(0);
         StaffTypes type = StaffTypes::PERC_DEFAULT;
-        if (auto it = PERC_STAFF_LINES_FROM_INSTRUMENT.find(tR->name().toStdString());
-            it != PERC_STAFF_LINES_FROM_INSTRUMENT.end()) {
-            GuitarPro::initGuitarProPercussionSet(it->second);
-            GuitarPro::setInstrumentDrumset(part->instrument(), it->second);
+        if (auto it = drumset::PERC_STAFF_LINES_FROM_INSTRUMENT.find(tR->name().toStdString());
+            it != drumset::PERC_STAFF_LINES_FROM_INSTRUMENT.end()) {
+            drumset::initGuitarProPercussionSet(it->second);
+            drumset::setInstrumentDrumset(part->instrument(), it->second);
             switch (it->second.numLines) {
             case 1:
                 type = StaffTypes::PERC_1LINE;
@@ -1132,8 +1133,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
                 break;
             }
         } else {
-            GuitarPro::initGuitarProDrumset();
-            part->instrument()->setDrumset(gpDrumset);
+            drumset::initGuitarProDrumset();
+            part->instrument()->setDrumset(drumset::gpDrumset);
         }
         staff->setStaffType(Fraction(0, 1), *StaffType::preset(type));
     }
@@ -1543,7 +1544,7 @@ void GPConverter::addInstrumentChanges()
             instr.setStringData(*_score->parts()[trackIdx]->instrument()->stringData());
             instr.channel(0)->setProgram(midiProgramm);
             if (track.second->midiChannel() == PERC_CHANNEL) {
-                instr.setDrumset(gpDrumset);
+                instr.setDrumset(drumset::gpDrumset);
             }
 
             InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy()->segment(), instr);
@@ -1856,7 +1857,7 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     Note* harmonicNote = hnote ? hnote : note;
 
     int gproHarmonicType = static_cast<int>(gpnote->harmonic().type);
-    int harmonicFret = GuitarPro::harmonicOvertone(note, gpnote->harmonic().fret, gproHarmonicType);
+    int harmonicFret = utils::harmonicOvertone(note, gpnote->harmonic().fret, gproHarmonicType);
     int string = harmonicNote->string();
     int harmonicPitch = harmonicNote->part()->instrument()->stringData()->getPitch(string,
                                                                                    harmonicFret + harmonicNote->part()->capoFret(),
