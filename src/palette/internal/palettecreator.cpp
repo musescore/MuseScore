@@ -1096,6 +1096,7 @@ PalettePtr PaletteCreator::newGraceNotePalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::GraceNote);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Grace notes"));
+    sp->setMag(1.35);
     sp->setGridSize(45, 40);
     sp->setDrawGrid(true);
     sp->setVisible(false);
