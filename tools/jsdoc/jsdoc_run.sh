@@ -1,0 +1,1 @@
+jsdoc ../../docs/apidocs ../../docs/apidocs/index.md -r -u ../../docs/apidocs/help -c ./conf.json -d ./out
