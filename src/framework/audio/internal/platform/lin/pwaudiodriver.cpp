@@ -53,7 +53,7 @@
 #include <string>
 #include <vector>
 
-//#define DEBUG_AUDIO
+#define DEBUG_AUDIO
 #ifdef DEBUG_AUDIO
 #define LOG_AUDIO LOGD
 #else
@@ -66,7 +66,7 @@ using namespace muse::audio;
 namespace {
 #define DEBUG_PW
 #ifdef DEBUG_PW
-static constexpr enum spa_log_level PW_LOG_LEVEL = SPA_LOG_LEVEL_DEBUG;
+static constexpr enum spa_log_level PW_LOG_LEVEL = SPA_LOG_LEVEL_TRACE;
 #else
 static constexpr enum spa_log_level PW_LOG_LEVEL = SPA_LOG_LEVEL_INFO;
 #endif
@@ -241,18 +241,31 @@ AudioDeviceList PwRegistry::getDevices() const
     m_cond.wait_for(lk, std::chrono::milliseconds(500), [this] { return m_roundtripped; });
 
     LOGD() << "found " << m_pwNodes.size() + 1 << " devices";
+    LOGD() << m_devices[0].id << ": " << m_devices[0].name;
 
     for (const auto& node : m_pwNodes) {
+        LOGD() << "seeking device " << node.deviceId << " for node " << node.name;
+
         const auto dev = std::find_if(
             m_pwDevices.begin(), m_pwDevices.end(),
             [node](const Device& device) { return device.id == node.deviceId; });
 
         const auto devFound = dev != m_pwDevices.end();
+        
+        if (devFound) {
+            LOGD() << "node with device";
+        }
+        else {
+            LOGD() << "node without device";
+        }
+
 
         // pipewire identifies node by the "node.name" property
         // (e.g. "alsa_output.pci-0000_04_00.6.analog-stereo")
         // or by the "object.serial" (which we are not using)
         AudioDeviceID id = node.name;
+
+        LOGD() << "id: " << id;
 
         // priority order for human readable name:
         // - device nickname        (e.g. "HD-Audio Generic")
@@ -263,16 +276,23 @@ AudioDeviceList PwRegistry::getDevices() const
         std::string name;
         if (devFound && !dev->nick.empty()) {
             name = dev->nick;
+            LOGD() << "device nick: " << name;
         } else if (!node.nick.empty()) {
             name = node.nick;
+            LOGD() << "node nick: " << name;
         } else if (devFound == !dev->desc.empty()) {
             name = dev->desc;
+            LOGD() << "device desc: " << name;
         } else if (!node.desc.empty()) {
             name = node.desc;
+            LOGD() << "node desc: " << name;
         } else {
             name = node.name;
+            LOGD() << "node name: " << name;
         }
 
+
+        LOGD() << id << ": " << name;
         m_devices.push_back({ id, name });
     }
 
@@ -323,6 +343,8 @@ void PwRegistry::registerGlobal(uint32_t id, const char* type, const struct spa_
             auto nick = spa_dict_lookup(props, PW_KEY_DEVICE_NICK);
             auto desc = spa_dict_lookup(props, PW_KEY_DEVICE_DESCRIPTION);
 
+            LOGD() << "Registering device: " << name << " (" << id << ")";
+
             std::scoped_lock<std::mutex> lock(m_mutex);
             m_pwDevices.push_back(Device {
                 id,
@@ -340,7 +362,7 @@ void PwRegistry::registerGlobal(uint32_t id, const char* type, const struct spa_
             auto deviceIdStr = spa_dict_lookup(props, PW_KEY_DEVICE_ID);
             auto deviceId = static_cast<uint32_t>(deviceIdStr ? std::strtoul(deviceIdStr, nullptr, 10) : 0);
 
-            LOGI() << "Registering device: " << name << " (" << deviceId << ")";
+            LOGD() << "Registering sink node: " << name << " (device " << deviceId << ")";
 
             std::scoped_lock<std::mutex> lock(m_mutex);
             m_pwNodes.push_back(SinkNode {
@@ -482,6 +504,10 @@ PwStream::PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec
     const spa_pod* param = spa_format_audio_raw_build(&builder, SPA_PARAM_EnumFormat, &formatInfo);
 
     PwLoopLock lk { m_loop };
+
+    pw_log_debug("pw_stream_new with props and params");
+    spa_debug_dict(1, &props->dict);
+    spa_debug_pod(1, NULL, param);
 
     m_stream = pw_stream_new(m_core, "MuseScore", props);
 
@@ -656,7 +682,10 @@ AudioDeviceID PwAudioDriver::outputDevice() const { return m_deviceId; }
 
 bool PwAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 {
+    LOGD() << "Selecting output device: " << deviceId;
+
     if (m_deviceId == deviceId) {
+        LOGD() << "Output device already selected: " << deviceId;
         return true;
     }
 
@@ -670,15 +699,18 @@ bool PwAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
         LOGW() << "Could not find device \"" << m_deviceId << "\". Falling back to \"" << PW_DEFAULT_DEVICE << "\"";
         m_deviceId = PW_DEFAULT_DEVICE;
     } else {
+        LOGI() << "Selecting device \"" << dev->name << "\" (" << dev->id << ")";
         m_deviceId = deviceId;
     }
 
     bool ok = true;
     if (reopen) {
+        LOGD() << "Reopening driver";
         ok = open(m_formatSpec, nullptr);
     }
 
     if (ok) {
+        LOGD() << "Notifying device change";
         m_outputDeviceChanged.notify();
     }
 
