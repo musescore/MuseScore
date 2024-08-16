@@ -498,17 +498,17 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
             group = NoteHeadGroup::HEAD_TI_NAME;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
-       Char stepName = tpc2stepName(tpc);
+        Char stepName = tpc2stepName(tpc);
         if (stepName == u'C') {
             group = NoteHeadGroup::HEAD_DO_NAME;
         } else if (stepName == u'D') {
-			         group = NoteHeadGroup::HEAD_RE_NAME;
+	    group = NoteHeadGroup::HEAD_RE_NAME;
         } else if (stepName == u'E') {
-		         	group = NoteHeadGroup::HEAD_MI_NAME;
+	    group = NoteHeadGroup::HEAD_MI_NAME;
         } else if (stepName == u'F') {
-			         group = NoteHeadGroup::HEAD_FA_NAME;
+	    group = NoteHeadGroup::HEAD_FA_NAME;
         } else if (stepName == u'G') {
-			         group = NoteHeadGroup::HEAD_SOL_NAME;
+	    group = NoteHeadGroup::HEAD_SOL_NAME;
         } else if (stepName == u'A') {
             group = NoteHeadGroup::HEAD_LA_NAME;
         } else if (stepName == u'B') {
