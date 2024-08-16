@@ -249,7 +249,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.0174978"/>

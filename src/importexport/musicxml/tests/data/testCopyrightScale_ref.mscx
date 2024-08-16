@@ -119,8 +119,7 @@ copyright copyright</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>1</height>
-        <boxAutoSize>0</boxAutoSize>
+        <height>10</height>
         <Text>
           <style>title</style>
           <size>2.3</size>

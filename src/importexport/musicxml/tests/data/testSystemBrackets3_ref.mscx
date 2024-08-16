@@ -540,8 +540,7 @@ Gtr.</shortName>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>7.5</height>
-        <boxAutoSize>0</boxAutoSize>
+        <height>10</height>
         <Text>
           <style>title</style>
           <text>Sample</text>

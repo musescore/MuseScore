@@ -401,8 +401,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>17</height>
-        <boxAutoSize>0</boxAutoSize>
+        <height>10</height>
         <Text>
           <style>poet</style>
           <family>Edwin</family>
@@ -432,8 +431,7 @@
           </voice>
         </Measure>
       <VBox>
-        <height>1</height>
-        <boxAutoSize>0</boxAutoSize>
+        <height>10</height>
         <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
         <Text>
           <align>center,top</align>

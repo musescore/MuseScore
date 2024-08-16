@@ -728,68 +728,11 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score, const int miny, const int maxy)
+VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score)
 {
     VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
-    double vboxHeight = 10;                           // default height in tenths
-    double diff = maxy - miny;                       // calculate height in tenths
-    if (diff > vboxHeight) {                         // and size is reasonable
-        vboxHeight = diff;
-    }
-    vboxHeight /= 10;                                // height in spatium
-
-    vbox->setBoxHeight(Spatium(vboxHeight));
-    vbox->setAutoSizeEnabled(false);
     score->measures()->add(vbox);
     return vbox;
-}
-
-//---------------------------------------------------------
-//   reformatHeaderVBox
-//---------------------------------------------------------
-/**
- Due to inconsistencies with spacing and inferred text,
- the header VBox frequently has collisions. This cleans
- those (as a temporary fix for a more robust collision-prevention
- system in Boxes).
- */
-
-void MusicXMLParserPass1::reformatHeaderVBox(MeasureBase* mb)
-{
-    if (!mb->isVBox()) {
-        return;
-    }
-
-    VBox* headerVBox = toVBox(mb);
-    double totalHeight = 0;
-    double offsetHeight = 0;
-    double lineSpacingMultiplier = 0.5;
-
-    for (auto e : headerVBox->el()) {
-        if (!e->isText()) {
-            continue;
-        }
-        Text* t = toText(e);
-        TLayout::layoutText(t, t->mutldata());
-
-        totalHeight += t->height();
-        if (t->align() == AlignV::TOP) {
-            totalHeight += t->lineHeight() * lineSpacingMultiplier;
-            t->setOffset(t->offset().x(), offsetHeight);
-            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-            offsetHeight += t->height();
-            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
-        }
-    }
-
-    // 1mm of
-    static const double VBOX_BOTTOM_PADDING = 1;
-    totalHeight += VBOX_BOTTOM_PADDING;
-    headerVBox->setBottomMargin(VBOX_BOTTOM_PADDING);
-    headerVBox->setPropertyFlags(Pid::BOTTOM_MARGIN, PropertyFlags::UNSTYLED);
-
-    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
-    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
 }
 
 //---------------------------------------------------------
@@ -904,7 +847,7 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
             const Align align = alignForCreditWords(w, pageSize.width(), tid);
             double yoffs = tid == TextStyleType::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
-                vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
+                vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
             }
             addText2(vbox, score, w->words, tid, align, yoffs);
         } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {

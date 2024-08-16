@@ -401,8 +401,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>1</height>
-        <boxAutoSize>0</boxAutoSize>
+        <height>10</height>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.101194"/>
@@ -430,8 +429,7 @@
           </voice>
         </Measure>
       <VBox>
-        <height>17</height>
-        <boxAutoSize>0</boxAutoSize>
+        <height>10</height>
         <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
         <Text>
           <offset x="0" y="-0.0942"/>
