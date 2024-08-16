@@ -37,7 +37,6 @@ class InteractiveApi : public ApiObject
 public:
     explicit InteractiveApi(IApiEngine* e);
 
-    API_DOC(info, "Show information dialog")
     Q_INVOKABLE void info(const QString& title, const QString& text);
 
     API_DOC(openUrl, "Open URL in external browser")
