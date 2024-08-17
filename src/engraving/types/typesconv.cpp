@@ -1932,12 +1932,12 @@ BracketType TConv::fromXml(const AsciiStringView& tag, BracketType def)
 
 //! TODO Add xml names
 static const std::array<Item<ArpeggioType>, 6> ARPEGGIO_TYPES = { {
-    { ArpeggioType::NORMAL,         "0",     muse::TranslatableString("engraving", "Arpeggio") },
-    { ArpeggioType::UP,             "1",     muse::TranslatableString("engraving", "Up arpeggio") },
-    { ArpeggioType::DOWN,           "2",     muse::TranslatableString("engraving", "Down arpeggio") },
-    { ArpeggioType::BRACKET,        "3",     muse::TranslatableString("engraving", "Bracket arpeggio") },
-    { ArpeggioType::UP_STRAIGHT,    "4",     muse::TranslatableString("engraving", "Up arpeggio straight") },
-    { ArpeggioType::DOWN_STRAIGHT,  "5",     muse::TranslatableString("engraving", "Down arpeggio straight") }
+    { ArpeggioType::NORMAL,         "0",     muse::TranslatableString("engraving", "Normal") },
+    { ArpeggioType::UP,             "1",     muse::TranslatableString("engraving", "Up") },
+    { ArpeggioType::DOWN,           "2",     muse::TranslatableString("engraving", "Down") },
+    { ArpeggioType::BRACKET,        "3",     muse::TranslatableString("engraving", "Bracket") },
+    { ArpeggioType::UP_STRAIGHT,    "4",     muse::TranslatableString("engraving", "Up straight") },
+    { ArpeggioType::DOWN_STRAIGHT,  "5",     muse::TranslatableString("engraving", "Down straight") }
 } };
 
 const muse::TranslatableString& TConv::userName(ArpeggioType v)
@@ -2423,8 +2423,8 @@ const char* TConv::userName(DrumNum v)
 
 //! TODO Add xml names
 static const std::array<Item<GlissandoType>, 2> GLISSANDO_TYPES = { {
-    { GlissandoType::STRAIGHT,  "0",     muse::TranslatableString("engraving", "Straight glissando") },
-    { GlissandoType::WAVY,      "1",     muse::TranslatableString("engraving", "Wavy glissando") }
+    { GlissandoType::STRAIGHT,  "0",     muse::TranslatableString("engraving", "Straight") },
+    { GlissandoType::WAVY,      "1",     muse::TranslatableString("engraving", "Wavy") }
 } };
 
 const muse::TranslatableString& TConv::userName(GlissandoType v)
@@ -2580,6 +2580,35 @@ TrillType TConv::fromXml(const AsciiStringView& tag, TrillType def)
     }
 
     return def;
+}
+
+const std::array<Item<PedalType>, 6> PEDAL_TYPES = { {
+    { PedalType::PED_AND_LINE,        "pedAndLine",          muse::TranslatableString("engraving/pedaltype", "Ped and line") },
+    { PedalType::PED_AND_ASTERISK,    "pedAndAsterisk",      muse::TranslatableString("engraving/pedaltype", "Ped and Asterisk") },
+    { PedalType::STRAIGHT_HOOKS,      "straightHooks",       muse::TranslatableString("engraving/pedaltype", "Straight Hooks") },
+    { PedalType::ANGLED_END_HOOK,     "angledEndHook",       muse::TranslatableString("engraving/pedaltype", "Angled End Hook") },
+    { PedalType::BOTH_HOOKS_ANGLED,   "bothHooksAngled",     muse::TranslatableString("engraving/pedaltype", "Both Hooks Angled") },
+    { PedalType::ANGLED_START_HOOK,   "angledStartHook",     muse::TranslatableString("engraving/pedaltype", "Angled Start Hook") },
+} };
+
+const muse::TranslatableString& TConv::userName(PedalType v)
+{
+    return findUserNameByType<PedalType>(PEDAL_TYPES, v);
+}
+
+String TConv::translatedUserName(PedalType v)
+{
+    return findUserNameByType<PedalType>(PEDAL_TYPES, v).translated();
+}
+
+AsciiStringView TConv::toXml(PedalType v)
+{
+    return findXmlTagByType<PedalType>(PEDAL_TYPES, v);
+}
+
+PedalType TConv::fromXml(const AsciiStringView &tag, PedalType def)
+{
+    return findTypeByXmlTag<PedalType>(PEDAL_TYPES, tag, def);
 }
 
 const std::array<Item<VibratoType>, 4> VIBRATO_TYPES = { {

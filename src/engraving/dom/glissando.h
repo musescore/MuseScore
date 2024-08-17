@@ -53,6 +53,9 @@ public:
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
 
     EngravingItem* propertyDelegate(Pid) override;
+
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
 };
 
 //---------------------------------------------------------
@@ -85,8 +88,6 @@ public:
     static Note* guessInitialNote(Chord* chord);
     static Note* guessFinalNote(Chord* chord, Note* startNote);
 
-    const TranslatableString& glissandoTypeName() const;
-
     std::optional<bool> isHarpGliss() const { return m_isHarpGliss; }
     void setIsHarpGliss(std::optional<bool> v) { m_isHarpGliss = v; }
 
@@ -101,6 +102,10 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
     void addLineAttachPoints();
+
+    int subtype() const override { return int(_glissandoType); }
+    TranslatableString subtypeUserName() const override;
+    String accessibleInfo() const override;
 
     static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
 

@@ -218,6 +218,11 @@ public:
     static AsciiStringView toXml(TrillType v);
     static TrillType fromXml(const AsciiStringView& tag, TrillType def);
 
+    static const TranslatableString& userName(PedalType v);
+    static String translatedUserName(PedalType v);
+    static AsciiStringView toXml(PedalType v);
+    static PedalType fromXml(const AsciiStringView& tag, PedalType def);
+
     static const TranslatableString& userName(VibratoType v);
     static String translatedUserName(VibratoType v);
     static AsciiStringView toXml(VibratoType v);

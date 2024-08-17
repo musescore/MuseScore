@@ -29,6 +29,10 @@ namespace mu::engraving {
 class Factory;
 class Segment;
 
+enum class SingleBarlineType : char {
+    SINGLE, SHORT, SHORT2, TICK, TICK2,
+};
+
 static constexpr int MIN_BARLINE_FROMTO_DIST        = 2;
 static constexpr int MIN_BARLINE_SPAN_FROMTO        = -2;
 
@@ -116,6 +120,9 @@ public:
     void setBarLineType(BarLineType i) { m_barLineType = i; }
     BarLineType barLineType() const { return m_barLineType; }
 
+    void setSingleBarLineType(SingleBarlineType i) { m_singleType = i; }
+    SingleBarlineType singleBarLineType() const { return m_singleType; }
+
     bool isTop() const;
     bool isBottom() const;
 
@@ -163,6 +170,7 @@ private:
     int m_spanFrom = 0;         // line number on start and end staves
     int m_spanTo = 0;
     BarLineType m_barLineType = BarLineType::NORMAL;
+    SingleBarlineType m_singleType = SingleBarlineType::SINGLE;
 
     ElementList m_el;          ///< fermata or other articulations
 };

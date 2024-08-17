@@ -333,6 +333,7 @@ BarLine::BarLine(const BarLine& bl)
     m_spanFrom    = bl.m_spanFrom;
     m_spanTo      = bl.m_spanTo;
     m_barLineType = bl.m_barLineType;
+    m_singleType  = bl.m_singleType;
 
     for (EngravingItem* e : bl.m_el) {
         add(e->clone());
@@ -1145,6 +1146,20 @@ muse::TranslatableString BarLine::subtypeUserName() const
 {
     for (const auto& i : barLineTable) {
         if (i.type == barLineType()) {
+            if(i.type == BarLineType::NORMAL) {
+                switch (singleBarLineType()) {
+                case SingleBarlineType::SHORT:
+                    return TranslatableString("engraving/singlebarlinetype", "Short");
+                case SingleBarlineType::SHORT2:
+                    return TranslatableString("engraving/singlebarlinetype", "Short 2");
+                case SingleBarlineType::TICK:
+                    return TranslatableString("engraving/singlebarlinetype", "Tick");
+                case SingleBarlineType::TICK2:
+                    return TranslatableString("engraving/singlebarlinetype", "Tick 2");
+                default:
+                    return TranslatableString("engraving/singlebarlinetype", "Single");
+                }
+            }
             return i.userName;
         }
     }
@@ -1157,7 +1172,7 @@ muse::TranslatableString BarLine::subtypeUserName() const
 
 String BarLine::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::translatedUserTypeName(barLineType()));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 
 //---------------------------------------------------------

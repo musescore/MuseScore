@@ -48,6 +48,9 @@ public:
     Volta* volta() const { return (Volta*)spanner(); }
 
     EngravingItem* propertyDelegate(Pid) override;
+
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
 };
 
 //---------------------------------------------------------
@@ -63,6 +66,10 @@ class Volta final : public TextLineBase
 public:
     enum class Type : char {
         OPEN, CLOSED
+    };
+
+    enum class VoltaTypes : char {
+        PRIMA, SECOND_OPEN, SECOND_CLOSED, TERZA,
     };
 
     static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
@@ -86,11 +93,16 @@ public:
     int firstEnding() const;
     int lastEnding() const;
     void setVoltaType(Volta::Type);       // deprecated
+    void setVoltaTypes(VoltaTypes val);
     Type voltaType() const;               // deprecated
+    VoltaTypes voltaTypes() const { return m_voltaType; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+
+    int subtype() const override { return int(m_voltaType); }
+    TranslatableString subtypeUserName() const override;
 
     String accessibleInfo() const override;
 
@@ -98,6 +110,7 @@ public:
 
 private:
     std::vector<int> m_endings;
+    Volta::VoltaTypes m_voltaType = VoltaTypes::PRIMA;
 };
 } // namespace mu::engraving
 

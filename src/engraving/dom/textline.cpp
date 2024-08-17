@@ -127,6 +127,7 @@ EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
 TextLine::TextLine(EngravingItem* parent, bool system)
     : TextLineBase(ElementType::TEXTLINE, parent)
 {
+    m_textlineType = TextlineType::CUSTOM;
     setSystemFlag(system);
 
     initStyle();
@@ -295,6 +296,11 @@ bool TextLine::setProperty(Pid id, const engraving::PropertyValue& v)
     return true;
 }
 
+void TextLine::setTextLineType(TextlineType val)
+{
+    m_textlineType = val;
+}
+
 //---------------------------------------------------------
 //   undoChangeProperty
 //---------------------------------------------------------
@@ -310,5 +316,42 @@ void TextLine::undoChangeProperty(Pid id, const engraving::PropertyValue& v, Pro
         return;
     }
     TextLineBase::undoChangeProperty(id, v, ps);
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString TextLine::subtypeUserName() const
+{
+    switch (textLineType()) {
+    case TextlineType::STAFF:
+        return TranslatableString("engraving/textlinetype", "Staff");
+    case TextlineType::SYSTEM:
+        return TranslatableString("engraving/textlinetype", "System");
+    case TextlineType::LINE:
+        return TranslatableString("engraving/textlinetype", "Line");
+    default:
+        return TranslatableString("engraving/textlinetype", "Custom");
+    }
+}
+
+muse::TranslatableString TextLineSegment::subtypeUserName() const
+{
+    return textLine()->subtypeUserName();
+}
+
+int TextLineSegment::subtype() const
+{
+    return textLine()->subtype();
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String TextLine::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(TextLineBase::accessibleInfo(), translatedSubtypeUserName());
 }
 } // namespace mu::engraving

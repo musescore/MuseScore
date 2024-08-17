@@ -45,6 +45,9 @@ public:
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     friend class Pedal;
 };
 
@@ -76,7 +79,18 @@ public:
     Pedal* findNextInStaff() const;
     bool connect45HookToNext() const;
 
+    void setPedalType(PedalType pp);
+    PedalType pedalType() const { return m_pedalType; }
+
+    int subtype() const override { return int(m_pedalType); }
+    TranslatableString subtypeUserName() const override;
+    String pedalTypeUserName() const;
+    String accessibleInfo() const override;
+
     friend class PedalLine;
+
+private:
+    PedalType m_pedalType = PedalType::PED_AND_LINE;
 };
 } // namespace mu::engraving
 #endif

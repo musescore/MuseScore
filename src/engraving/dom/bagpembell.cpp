@@ -76,3 +76,17 @@ double BagpipeEmbellishment::mag() const
 {
     return 0.7;
 }
+
+muse::TranslatableString BagpipeEmbellishment::subtypeUserName() const
+{
+    return TConv::userName(embelType());
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String BagpipeEmbellishment::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}

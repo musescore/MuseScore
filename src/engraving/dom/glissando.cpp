@@ -133,11 +133,6 @@ Glissando::Glissando(const Glissando& g)
     m_isHarpGliss   = g.m_isHarpGliss;
 }
 
-const TranslatableString& Glissando::glissandoTypeName() const
-{
-    return TConv::userName(glissandoType());
-}
-
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -551,5 +546,32 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
         break;
     }
     return SLine::propertyDefault(propertyId);
+}
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString GlissandoSegment::subtypeUserName() const
+{
+    return glissando()->subtypeUserName();
+}
+
+muse::TranslatableString Glissando::subtypeUserName() const
+{
+    return TConv::userName(glissandoType());
+}
+
+int GlissandoSegment::subtype() const
+{
+    return glissando()->subtype();
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String Glissando::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 }

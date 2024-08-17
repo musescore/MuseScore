@@ -30,6 +30,8 @@
 #include "system.h"
 #include "text.h"
 
+#include "types/typesconv.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -101,12 +103,26 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 }
 
 //---------------------------------------------------------
+//   setPedalType
+//---------------------------------------------------------
+
+void Pedal::setPedalType(PedalType pp)
+{
+    if(m_pedalType == pp) {
+        return;
+    }
+    m_pedalType = pp;
+    styleChanged();
+}
+
+//---------------------------------------------------------
 //   Pedal
 //---------------------------------------------------------
 
 Pedal::Pedal(EngravingItem* parent)
     : TextLineBase(ElementType::PEDAL, parent)
 {
+    m_pedalType = PedalType::PED_AND_LINE;
     initElementStyle(&pedalStyle);
     setLineVisible(true);
 
@@ -275,5 +291,38 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     x -= (endSeg->isChordRestType() && hasNextRightAfter ? 1.25 : 0.75) * spatium();
 
     return PointF(x, 0.0);
+}
+
+String Pedal::pedalTypeUserName() const
+{
+    return TConv::translatedUserName(pedalType());
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString PedalSegment::subtypeUserName() const
+{
+    return pedal()->subtypeUserName();
+}
+
+muse::TranslatableString Pedal::subtypeUserName() const
+{
+    return TConv::userName(pedalType());
+}
+
+int PedalSegment::subtype() const
+{
+    return pedal()->subtype();
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String Pedal::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), pedalTypeUserName());
 }
 }

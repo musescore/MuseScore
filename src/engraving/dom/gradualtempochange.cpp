@@ -28,6 +28,8 @@
 #include "system.h"
 #include "tempotext.h"
 
+#include "types/typesconv.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -88,6 +90,7 @@ static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_
 GradualTempoChange::GradualTempoChange(EngravingItem* parent)
     : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
+    m_tempoChangeType = GradualTempoChangeType::Undefined;
     initElementStyle(&tempoStyle);
     setAnchor(Anchor::SEGMENT);
 
@@ -409,4 +412,24 @@ void GradualTempoChangeSegment::removed()
     }
 
     tempoChange()->requestToRebuildTempo();
+}
+
+muse::TranslatableString GradualTempoChangeSegment::subtypeUserName() const
+{
+    return tempoChange()->subtypeUserName();
+}
+
+muse::TranslatableString GradualTempoChange::subtypeUserName() const
+{
+    return TConv::userName(tempoChangeType());
+}
+
+int GradualTempoChangeSegment::subtype() const
+{
+    return tempoChange()->subtype();
+}
+
+String GradualTempoChange::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }

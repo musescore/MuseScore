@@ -94,6 +94,7 @@ EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
 Volta::Volta(EngravingItem* parent)
     : TextLineBase(ElementType::VOLTA, parent, ElementFlag::SYSTEM)
 {
+    m_voltaType = VoltaTypes::PRIMA;
     setPlacement(PlacementV::ABOVE);
     initElementStyle(&voltaStyle);
 
@@ -313,7 +314,7 @@ void Volta::setTempo() const
 
 String Volta::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), text());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 
 PointF Volta::linePos(Grip grip, System** system) const
@@ -385,6 +386,18 @@ void Volta::setVoltaType(Type val)
 }
 
 //---------------------------------------------------------
+//   setVoltaTypes
+//---------------------------------------------------------
+
+void Volta::setVoltaTypes(VoltaTypes val)
+{
+    if(m_voltaType == val) {
+        return;
+    }
+    m_voltaType = val;
+}
+
+//---------------------------------------------------------
 //   voltaType
 //    deprecated
 //---------------------------------------------------------
@@ -392,5 +405,33 @@ void Volta::setVoltaType(Type val)
 Volta::Type Volta::voltaType() const
 {
     return endHookType() != HookType::NONE ? Type::CLOSED : Type::OPEN;
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Volta::subtypeUserName() const
+{
+    switch (voltaTypes()) {
+    case VoltaTypes::SECOND_CLOSED:
+        return TranslatableString("engraving/voltatype", "Second Closed");
+    case VoltaTypes::SECOND_OPEN:
+        return TranslatableString("engraving/voltatype", "Second Open");
+    case VoltaTypes::TERZA:
+        return TranslatableString("engraving/voltatype", "Terza");
+    default:
+        return TranslatableString("engraving/voltatype", "Prima");
+    }
+}
+
+muse::TranslatableString VoltaSegment::subtypeUserName() const
+{
+    return volta()->subtypeUserName();
+}
+
+int VoltaSegment::subtype() const
+{
+    return volta()->subtype();
 }
 }

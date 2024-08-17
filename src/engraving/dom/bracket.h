@@ -54,6 +54,8 @@ public:
     int subtype() const override { return int(bracketType()); }
     TranslatableString subtypeUserName() const override;
 
+    String accessibleInfo() const override;
+
     size_t firstStaff() const { return m_firstStaff; }
     size_t lastStaff() const { return m_lastStaff; }
     void setStaffSpan(size_t a, size_t b);

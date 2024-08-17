@@ -354,3 +354,12 @@ void Bracket::setSelected(bool f)
     m_bi->setSelected(f);
     EngravingItem::setSelected(f);
 }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String Bracket::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}

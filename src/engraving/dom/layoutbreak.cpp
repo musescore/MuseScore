@@ -288,6 +288,15 @@ muse::TranslatableString LayoutBreak::subtypeUserName() const
     return TConv::userName(layoutBreakType());
 }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String LayoutBreak::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}
+
 void LayoutBreak::added()
 {
     IF_ASSERT_FAILED(score()) {
