@@ -251,14 +251,12 @@ AudioDeviceList PwRegistry::getDevices() const
             [node](const Device& device) { return device.id == node.deviceId; });
 
         const auto devFound = dev != m_pwDevices.end();
-        
+
         if (devFound) {
             LOGD() << "node with device";
-        }
-        else {
+        } else {
             LOGD() << "node without device";
         }
-
 
         // pipewire identifies node by the "node.name" property
         // (e.g. "alsa_output.pci-0000_04_00.6.analog-stereo")
@@ -290,7 +288,6 @@ AudioDeviceList PwRegistry::getDevices() const
             name = node.name;
             LOGD() << "node name: " << name;
         }
-
 
         LOGD() << id << ": " << name;
         m_devices.push_back({ id, name });
