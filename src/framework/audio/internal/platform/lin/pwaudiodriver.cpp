@@ -278,7 +278,7 @@ AudioDeviceList PwRegistry::getDevices() const
         } else if (!node.nick.empty()) {
             name = node.nick;
             LOGD() << "node nick: " << name;
-        } else if (devFound == !dev->desc.empty()) {
+        } else if (devFound && !dev->desc.empty()) {
             name = dev->desc;
             LOGD() << "device desc: " << name;
         } else if (!node.desc.empty()) {
