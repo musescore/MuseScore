@@ -251,9 +251,6 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
-      <property name="currentIndex">
-       <number>11</number>
-      </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
@@ -5839,19 +5836,39 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout_46">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_15">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+           <item row="2" column="5">
+            <widget class="QToolButton" name="resetMultiMeasureRestMargin">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'H-bar margin within barlines' value</string>
              </property>
              <property name="text">
-              <string>Minimum number of empty measures:</string>
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetMMRestHBarVStrokeThickness">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'H-bar vertical stroke thickness' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_123">
+             <property name="text">
+              <string>H-bar vertical stroke thickness:</string>
              </property>
              <property name="buddy">
-              <cstring>minEmptyMeasures</cstring>
+              <cstring>mmRestHBarVStrokeThickness</cstring>
              </property>
             </widget>
            </item>
@@ -5868,6 +5885,19 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="5">
+            <widget class="QToolButton" name="resetMMRestNumberMaskHBar">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Break H-bar if it collides with number' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="3">
             <widget class="QLabel" name="label_16">
              <property name="sizePolicy">
@@ -5881,6 +5911,32 @@
              </property>
              <property name="buddy">
               <cstring>minMeasureWidth</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="mmRestNumberPos">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_119">
+             <property name="text">
+              <string>H-bar horizontal stroke thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>mmRestHBarThickness</cstring>
              </property>
             </widget>
            </item>
@@ -5916,146 +5972,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="mmRestNumberPos">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="minimum">
-              <double>-99.989999999999995</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetMMRestNumberPos">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Vertical position of number' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3" colspan="2">
-            <widget class="QCheckBox" name="mmRestNumberMaskHBar">
-             <property name="text">
-              <string>Break H-bar if it collides with number</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="5">
-            <widget class="QToolButton" name="resetMMRestNumberMaskHBar">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Break H-bar if it collides with number' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_119">
-             <property name="text">
-              <string>H-bar horizontal stroke thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestHBarThickness</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="mmRestHBarThickness">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="maximum">
-              <double>4.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetMMRestHBarThickness">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'H-bar horizontal stroke thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="3">
-            <widget class="QLabel" name="label_103">
-             <property name="text">
-              <string>H-bar margin within barlines:</string>
-             </property>
-             <property name="buddy">
-              <cstring>multiMeasureRestMargin</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="4">
-            <widget class="QDoubleSpinBox" name="multiMeasureRestMargin">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="5">
-            <widget class="QToolButton" name="resetMultiMeasureRestMargin">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'H-bar margin within barlines' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_123">
-             <property name="text">
-              <string>H-bar vertical stroke thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestHBarVStrokeThickness</cstring>
-             </property>
-            </widget>
-           </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="mmRestHBarVStrokeThickness">
              <property name="keyboardTracking">
@@ -6069,29 +5985,6 @@
              </property>
              <property name="singleStep">
               <double>0.050000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetMMRestHBarVStrokeThickness">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'H-bar vertical stroke thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="3">
-            <widget class="QLabel" name="label_145">
-             <property name="text">
-              <string>H-bar vertical stroke height:</string>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestHBarVStrokeHeight</cstring>
              </property>
             </widget>
            </item>
@@ -6111,16 +6004,39 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="5">
-            <widget class="QToolButton" name="resetMMRestHBarVStrokeHeight">
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetMMRestNumberPos">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'H-bar vertical stroke height' value</string>
+              <string>Reset 'Vertical position of number' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="mmRestHBarThickness">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>4.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3" colspan="2">
+            <widget class="QCheckBox" name="mmRestNumberMaskHBar">
+             <property name="text">
+              <string>Break H-bar if it collides with number</string>
              </property>
             </widget>
            </item>
@@ -6215,6 +6131,87 @@
              </layout>
             </widget>
            </item>
+           <item row="3" column="5">
+            <widget class="QToolButton" name="resetMMRestHBarVStrokeHeight">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'H-bar vertical stroke height' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="4">
+            <widget class="QDoubleSpinBox" name="multiMeasureRestMargin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_15">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Minimum number of empty measures:</string>
+             </property>
+             <property name="buddy">
+              <cstring>minEmptyMeasures</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetMMRestHBarThickness">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'H-bar horizontal stroke thickness' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QLabel" name="label_103">
+             <property name="text">
+              <string>H-bar margin within barlines:</string>
+             </property>
+             <property name="buddy">
+              <cstring>multiMeasureRestMargin</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QLabel" name="label_145">
+             <property name="text">
+              <string>H-bar vertical stroke height:</string>
+             </property>
+             <property name="buddy">
+              <cstring>mmRestHBarVStrokeHeight</cstring>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="5">
             <widget class="QToolButton" name="resetMinMMRestWidth">
              <property name="toolTip">
@@ -6234,7 +6231,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum number of empty measures' value</string>
+              <string>Reset 'Minimum number of empty measures:' value</string>
              </property>
              <property name="text">
               <string/>
@@ -14855,6 +14852,7 @@ first note of the system</string>
   <tabstop>multiMeasureRests</tabstop>
   <tabstop>minEmptyMeasures</tabstop>
   <tabstop>minMeasureWidth</tabstop>
+  <tabstop>resetMinMMRestWidth</tabstop>
   <tabstop>mmRestNumberPos</tabstop>
   <tabstop>resetMMRestNumberPos</tabstop>
   <tabstop>mmRestNumberMaskHBar</tabstop>
