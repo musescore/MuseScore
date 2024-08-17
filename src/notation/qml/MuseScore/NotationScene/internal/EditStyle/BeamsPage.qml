@@ -76,44 +76,16 @@ StyleDialogPage {
         }
     }
 
-    ItemWithTitle {
-        title: qsTrc("notation", "Beam thickness")
-
-        IncrementalPropertyControl {
-            width: 106
-
-            currentValue: beamsPageModel.beamWidth.value
-
-            minValue: 0
-            maxValue: 99
-            step: 0.01
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
-
-            onValueEdited: function(newValue) {
-                beamsPageModel.beamWidth.value = newValue
-            }
-        }
+    BasicStyleSelectorWithSpinboxAndReset {
+        styleItem: beamsPageModel.beamWidth
+        label: qsTrc("notation", "Beam thickness:")
+        suffix: qsTrc("global", "sp")
     }
 
-    ItemWithTitle {
-        title: qsTrc("notation", "Broken beam minimum length")
-
-        IncrementalPropertyControl {
-            width: 106
-
-            currentValue: beamsPageModel.beamMinLen.value
-
-            minValue: 0
-            maxValue: 99
-            step: 0.05
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
-
-            onValueEdited: function(newValue) {
-                beamsPageModel.beamMinLen.value = newValue
-            }
-        }
+    BasicStyleSelectorWithSpinboxAndReset {
+        styleItem: beamsPageModel.beamMinLen
+        label: qsTrc("notation", "Broken beam minimum length:")
+        suffix: qsTrc("global", "sp")
     }
 
     CheckBox {

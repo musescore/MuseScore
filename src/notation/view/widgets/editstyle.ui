@@ -985,8 +985,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>710</height>
+                <width>623</width>
+                <height>559</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2328,7 +2328,7 @@
              <x>0</x>
              <y>0</y>
              <width>737</width>
-             <height>731</height>
+             <height>392</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3970,8 +3970,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>677</width>
-             <height>720</height>
+             <width>561</width>
+             <height>372</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -4190,7 +4190,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>658</width>
+                <width>369</width>
                 <height>882</height>
                </rect>
               </property>
@@ -5052,8 +5052,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>677</width>
-             <height>720</height>
+             <width>375</width>
+             <height>628</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5476,65 +5476,30 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout_40">
-           <item row="1" column="2">
-            <spacer name="horizontalSpacer_20">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_101">
+           <item row="8" column="2">
+            <widget class="QToolButton" name="resetLedgerLineLength">
              <property name="text">
-              <string>Dot size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>dotMag</cstring>
+              <string>...</string>
              </property>
             </widget>
            </item>
-           <item row="7" column="0">
-            <widget class="QLabel" name="label_24">
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_23">
              <property name="text">
-              <string>Ledger line thickness:</string>
+              <string>Dot to dot distance:</string>
              </property>
              <property name="buddy">
-              <cstring>ledgerLineWidth</cstring>
+              <cstring>dotDotDistance</cstring>
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
-            <widget class="QDoubleSpinBox" name="stemWidth">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0">
-            <widget class="QLabel" name="label_34">
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_22">
              <property name="text">
-              <string>Ledger line length:</string>
+              <string>Note to dot distance:</string>
              </property>
              <property name="buddy">
-              <cstring>ledgerLineLength</cstring>
+              <cstring>noteDotDistance</cstring>
              </property>
             </widget>
            </item>
@@ -5557,8 +5522,8 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="1">
-            <widget class="QDoubleSpinBox" name="ledgerLineWidth">
+           <item row="6" column="1">
+            <widget class="QDoubleSpinBox" name="stemWidth">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -5572,9 +5537,69 @@
               <string>sp</string>
              </property>
              <property name="singleStep">
-              <double>0.010000000000000</double>
+              <double>0.100000000000000</double>
              </property>
             </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_43">
+             <property name="text">
+              <string>Accidental to accidental distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>accidentalDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
+            <widget class="QToolButton" name="resetLedgerLineWidth">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_100">
+             <property name="text">
+              <string>Stem thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>stemWidth</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_25">
+             <property name="text">
+              <string>Accidental to note distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>accidentalNoteDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_24">
+             <property name="text">
+              <string>Ledger line thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>ledgerLineWidth</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_20">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="dotDotDistance">
@@ -5595,27 +5620,85 @@
              </property>
             </widget>
            </item>
-           <item row="8" column="1">
-            <widget class="QDoubleSpinBox" name="ledgerLineLength">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetNoteDotDistance">
+             <property name="text">
+              <string>...</string>
              </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QSpinBox" name="dotMag">
              <property name="keyboardTracking">
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string>sp</string>
+              <string notr="true">%</string>
+             </property>
+             <property name="minimum">
+              <number>50</number>
+             </property>
+             <property name="maximum">
+              <number>200</number>
              </property>
              <property name="singleStep">
-              <double>0.100000000000000</double>
+              <number>10</number>
+             </property>
+             <property name="value">
+              <number>100</number>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="noteDotDistance">
+           <item row="5" column="2">
+            <widget class="QToolButton" name="resetDotDotDistance">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_101">
+             <property name="text">
+              <string>Dot size:</string>
+             </property>
+             <property name="buddy">
+              <cstring>dotMag</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetStemWidth">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetAccidentalDistance">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetAccidentalNoteDistance">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_34">
+             <property name="text">
+              <string>Ledger line length:</string>
+             </property>
+             <property name="buddy">
+              <cstring>ledgerLineLength</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QDoubleSpinBox" name="ledgerLineLength">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -5652,65 +5735,29 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_22">
-             <property name="text">
-              <string>Note to dot distance:</string>
+           <item row="7" column="1">
+            <widget class="QDoubleSpinBox" name="ledgerLineWidth">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-             <property name="buddy">
-              <cstring>noteDotDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_100">
-             <property name="text">
-              <string>Stem thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>stemWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_23">
-             <property name="text">
-              <string>Dot to dot distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>dotDotDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_43">
-             <property name="text">
-              <string>Accidental to accidental distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>accidentalDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QSpinBox" name="dotMag">
              <property name="keyboardTracking">
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string notr="true">%</string>
-             </property>
-             <property name="minimum">
-              <number>50</number>
-             </property>
-             <property name="maximum">
-              <number>200</number>
+              <string>sp</string>
              </property>
              <property name="singleStep">
-              <number>10</number>
+              <double>0.010000000000000</double>
              </property>
-             <property name="value">
-              <number>100</number>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetDotMag">
+             <property name="text">
+              <string>...</string>
              </property>
             </widget>
            </item>
@@ -5723,16 +5770,6 @@
               <bool>true</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout_37">
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_47">
-                <property name="text">
-                 <string>Shortest stem:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>shortestStem</cstring>
-                </property>
-               </widget>
-              </item>
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="shortestStem">
                 <property name="suffix">
@@ -5746,16 +5783,42 @@
                 </property>
                </widget>
               </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_47">
+                <property name="text">
+                 <string>Shortest stem:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>shortestStem</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetShortestStem">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_25">
-             <property name="text">
-              <string>Accidental to note distance:</string>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="noteDotDistance">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-             <property name="buddy">
-              <cstring>accidentalNoteDistance</cstring>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -7237,6 +7300,26 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout_31">
+           <item row="3" column="0" colspan="4">
+            <widget class="QCheckBox" name="arpeggioHiddenInStdIfTab">
+             <property name="text">
+              <string>Do not show arpeggios in standard notation when displayed in tablature</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <spacer name="horizontalSpacer_35">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_28">
              <property name="text">
@@ -7250,19 +7333,13 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="arpeggioNoteDistance">
-             <property name="keyboardTracking">
-              <bool>false</bool>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_27">
+             <property name="text">
+              <string>Line thickness:</string>
              </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="maximum">
-              <double>99999.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.200000000000000</double>
+             <property name="buddy">
+              <cstring>arpeggioLineWidth</cstring>
              </property>
             </widget>
            </item>
@@ -7282,6 +7359,16 @@
              </property>
             </widget>
            </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_26">
+             <property name="text">
+              <string>Distance to note:</string>
+             </property>
+             <property name="buddy">
+              <cstring>arpeggioNoteDistance</cstring>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="arpeggioLineWidth">
              <property name="keyboardTracking">
@@ -7298,45 +7385,42 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_27">
-             <property name="text">
-              <string>Line thickness:</string>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="arpeggioNoteDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
-             <property name="buddy">
-              <cstring>arpeggioLineWidth</cstring>
+             <property name="suffix">
+              <string>sp</string>
              </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_26">
-             <property name="text">
-              <string>Distance to note:</string>
+             <property name="maximum">
+              <double>99999.000000000000000</double>
              </property>
-             <property name="buddy">
-              <cstring>arpeggioNoteDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0" colspan="3">
-            <widget class="QCheckBox" name="arpeggioHiddenInStdIfTab">
-             <property name="text">
-              <string>Do not show arpeggios in standard notation when displayed in tablature</string>
+             <property name="singleStep">
+              <double>0.200000000000000</double>
              </property>
             </widget>
            </item>
            <item row="0" column="2">
-            <spacer name="horizontalSpacer_35">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+            <widget class="QToolButton" name="resetArpeggioNoteDistance">
+             <property name="text">
+              <string>...</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetArpeggioLineWidth">
+             <property name="text">
+              <string>...</string>
              </property>
-            </spacer>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetArpeggioHookLen">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -11186,7 +11270,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>682</width>
+             <width>696</width>
              <height>665</height>
             </rect>
            </property>
@@ -12403,19 +12487,6 @@ first note of the system</string>
           <layout class="QVBoxLayout" name="verticalLayout_32">
            <item>
             <layout class="QGridLayout" name="gridLayout_16">
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelFBSize">
-               <property name="text">
-                <string>Size:</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::PlainText</enum>
-               </property>
-               <property name="buddy">
-                <cstring>doubleSpinFBSize</cstring>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinFBSize">
                <property name="keyboardTracking">
@@ -12432,33 +12503,6 @@ first note of the system</string>
                </property>
                <property name="value">
                 <double>9.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_98">
-               <property name="text">
-                <string>from top of staff</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer_9">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLabel" name="label_99">
-               <property name="text">
-                <string>of font height</string>
                </property>
               </widget>
              </item>
@@ -12484,16 +12528,10 @@ first note of the system</string>
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="labelFBLineHeight">
+             <item row="3" column="3">
+              <widget class="QLabel" name="label_99">
                <property name="text">
-                <string>Line height:</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::PlainText</enum>
-               </property>
-               <property name="buddy">
-                <cstring>spinFBLineHeight</cstring>
+                <string>of font height</string>
                </property>
               </widget>
              </item>
@@ -12519,23 +12557,36 @@ first note of the system</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelFBFont">
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLabel" name="label_98">
                <property name="text">
-                <string>Font:</string>
+                <string>from top of staff</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelFBLineHeight">
+               <property name="text">
+                <string>Line height:</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::PlainText</enum>
                </property>
                <property name="buddy">
-                <cstring>comboFBFont</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="comboFBFont">
-               <property name="sizeAdjustPolicy">
-                <enum>QComboBox::AdjustToContents</enum>
+                <cstring>spinFBLineHeight</cstring>
                </property>
               </widget>
              </item>
@@ -12549,6 +12600,60 @@ first note of the system</string>
                </property>
                <property name="buddy">
                 <cstring>doubleSpinFBVertPos</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelFBSize">
+               <property name="text">
+                <string>Size:</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::PlainText</enum>
+               </property>
+               <property name="buddy">
+                <cstring>doubleSpinFBSize</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="comboFBFont">
+               <property name="sizeAdjustPolicy">
+                <enum>QComboBox::AdjustToContents</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelFBFont">
+               <property name="text">
+                <string>Font:</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::PlainText</enum>
+               </property>
+               <property name="buddy">
+                <cstring>comboFBFont</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QToolButton" name="resetDoubleSpinFBSize">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QToolButton" name="resetDoubleSpinFBVertPos">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QToolButton" name="resetSpinFBLineHeight">
+               <property name="text">
+                <string>...</string>
                </property>
               </widget>
              </item>
@@ -12652,7 +12757,7 @@ first note of the system</string>
                 <x>0</x>
                 <y>0</y>
                 <width>568</width>
-                <height>551</height>
+                <height>554</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
@@ -13027,65 +13132,6 @@ first note of the system</string>
                   <string>Positioning</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_15">
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_1461">
-                    <property name="text">
-                     <string>Maximum shift below:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxChordShiftBelow</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QToolButton" name="resetMaxChordShiftAbove">
-                    <property name="text">
-                     <string notr="true">…</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_79">
-                    <property name="text">
-                     <string>Distance to fretboard diagram:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>harmonyFretDist</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_1231">
-                    <property name="text">
-                     <string>Maximum shift above:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxChordShiftAbove</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="minimum">
-                     <double>-50.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>50.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>3.000000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_1001">
                     <property name="text">
@@ -13093,6 +13139,22 @@ first note of the system</string>
                     </property>
                     <property name="buddy">
                      <cstring>minHarmonyDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QDoubleSpinBox" name="maxChordShiftAbove">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>0.000000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -13110,6 +13172,33 @@ first note of the system</string>
                    <widget class="QToolButton" name="resetMaxChordShiftBelow">
                     <property name="text">
                      <string notr="true">…</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_1231">
+                    <property name="text">
+                     <string>Maximum shift above:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>maxChordShiftAbove</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="2">
+                   <widget class="QToolButton" name="resetMaxChordShiftAbove">
+                    <property name="text">
+                     <string notr="true">…</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_79">
+                    <property name="text">
+                     <string>Distance to fretboard diagram:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>harmonyFretDist</cstring>
                     </property>
                    </widget>
                   </item>
@@ -13138,6 +13227,28 @@ first note of the system</string>
                     </property>
                    </widget>
                   </item>
+                  <item row="2" column="1">
+                   <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="minimum">
+                     <double>-50.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>50.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>3.000000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="minHarmonyDistance">
                     <property name="keyboardTracking">
@@ -13160,6 +13271,16 @@ first note of the system</string>
                     </property>
                    </widget>
                   </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_1461">
+                    <property name="text">
+                     <string>Maximum shift below:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>maxChordShiftBelow</cstring>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="4" column="1">
                    <widget class="QDoubleSpinBox" name="maxChordShiftBelow">
                     <property name="keyboardTracking">
@@ -13173,19 +13294,24 @@ first note of the system</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="1">
-                   <widget class="QDoubleSpinBox" name="maxChordShiftAbove">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
+                  <item row="2" column="2">
+                   <widget class="QToolButton" name="resetMaxHarmonyBarDistance">
+                    <property name="text">
+                     <string>...</string>
                     </property>
-                    <property name="suffix">
-                     <string>sp</string>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QToolButton" name="resetMinHarmonyDistance">
+                    <property name="text">
+                     <string>...</string>
                     </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.000000000000000</double>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QToolButton" name="resetHarmonyFretDist">
+                    <property name="text">
+                     <string>...</string>
                     </property>
                    </widget>
                   </item>
