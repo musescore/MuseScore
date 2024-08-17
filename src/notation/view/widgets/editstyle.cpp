@@ -408,7 +408,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::allCapsNoteNames,        false, allCapsNoteNames,        0 },
         { StyleId::concertPitch,            false, concertPitch,            0 },
         { StyleId::createMultiMeasureRests, false, multiMeasureRests,       0 },
-        { StyleId::minEmptyMeasures,        false, minEmptyMeasures,        0 },
+        { StyleId::minEmptyMeasures,        false, minEmptyMeasures,        resetMinEmptyMeasures },
         { StyleId::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },
         { StyleId::mmRestNumberPos,         false, mmRestNumberPos,         resetMMRestNumberPos },
         { StyleId::mmRestNumberMaskHBar,    false, mmRestNumberMaskHBar,    resetMMRestNumberMaskHBar },
