@@ -762,8 +762,11 @@ EngravingItem* Score::nextElement()
             if (seg) {
                 Segment* nextSegment = seg->next1();
                 while (nextSegment) {
-                    EngravingItem* nextEl = nextSegment->firstElementOfSegment(staffId);
-                    if (nextEl) {
+                    if (nextSegment->isTimeTickType()) {
+                        if (Spanner* spanner = nextSegment->firstSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                    } else if (EngravingItem* nextEl = nextSegment->firstElementOfSegment(staffId)) {
                         return nextEl;
                     }
                     nextSegment = nextSegment->next1MM();
@@ -924,6 +927,21 @@ EngravingItem* Score::prevElement()
                 return prevSp->spannerSegments().front();
             } else {
                 Segment* startSeg = sp->startSegment();
+                if (startSeg->isTimeTickType()) {
+                    startSeg = startSeg->prev1MMenabled();
+                    for (; startSeg && startSeg->isTimeTickType(); startSeg = startSeg->prev1MMenabled()) {
+                        if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                    }
+                    if (!startSeg) {
+                        break;
+                    }
+                    // Also check for spanners on first non-timeTick segment encountered.
+                    if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                        return spanner->spannerSegments().front();
+                    }
+                }
                 if (!startSeg->annotations().empty()) {
                     EngravingItem* last = startSeg->lastAnnotation(staffId);
                     if (last) {

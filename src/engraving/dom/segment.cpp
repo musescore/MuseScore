@@ -2058,7 +2058,12 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (s) {
             return s->spannerSegments().front();
         }
-        Segment* nextSegment =  seg->next1MMenabled();
+        Segment* nextSegment = seg->next1MMenabled();
+        for (; nextSegment && nextSegment->isTimeTickType(); nextSegment = nextSegment->next1MMenabled()) {
+            if (Spanner* spanner = nextSegment->firstSpanner(activeStaff)) {
+                return spanner->spannerSegments().front();
+            }
+        }
         if (!nextSegment) {
             MeasureBase* mb = measure()->next();
             return mb && mb->isBox() ? mb : score()->lastElement();
@@ -2226,6 +2231,11 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
         Segment* prevSeg = seg->prev1MMenabled();
+        for (; prevSeg && prevSeg->isTimeTickType(); prevSeg = prevSeg->prev1MMenabled()) {
+            if (Spanner* spanner = prevSeg->lastSpanner(activeStaff)) {
+                return spanner->spannerSegments().front();
+            }
+        }
         if (!prevSeg) {
             MeasureBase* mb = measure()->prev();
             return mb && mb->isBox() ? mb : score()->firstElement();
