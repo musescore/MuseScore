@@ -39,9 +39,9 @@ MKDIR %TEMP_DIR%
 :: Install Qt
 ECHO "=== Install Qt ==="
 
-SET "Qt_ARCHIVE=Qt624_msvc2019_64.7z"
-SET "QT_DIR=C:\Qt\6.2.4"
-SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
+SET "Qt_ARCHIVE=Qt-6.2.9-Windows-amd64.zip"
+SET "QT_DIR=C:\Qt\6.2.9"
+SET "QT_URL=https://github.com/cbjeukendrup/musescore_build_qt/releases/download/Qt-6.2.9-a712fa4b1a5bcd89476c10358c692b9055676b4f/%Qt_ARCHIVE%"
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"

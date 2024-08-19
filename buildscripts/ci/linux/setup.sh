@@ -44,7 +44,7 @@ mkdir -p $BUILD_TOOLS
 # Let's remove the file with environment variables to recreate it
 rm -f $ENV_FILE
 
-echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
+echo "echo 'Setup MuseScore build environment'" >>$ENV_FILE
 
 ##########################################################################
 # GET DEPENDENCIES
@@ -62,13 +62,13 @@ apt_packages_basic=(
   software-properties-common # installs `add-apt-repository`
   unzip
   p7zip-full
-  )
+)
 
 # These are the same as on Travis CI
 apt_packages_standard=(
   # Alphabetical order please!
   curl
-  libasound2-dev 
+  libasound2-dev
   libfontconfig1-dev
   libfreetype6-dev
   libfreetype6
@@ -80,7 +80,7 @@ apt_packages_standard=(
   libsndfile1-dev
   make
   wget
-  )
+)
 
 # MuseScore compiles without these but won't run without them
 apt_packages_runtime=(
@@ -107,16 +107,16 @@ apt_packages_runtime=(
   libxcb-xkb-dev
   libxkbcommon-dev
   libvulkan-dev
-  )
+)
 
 apt_packages_ffmpeg=(
   ffmpeg
-  libavcodec-dev 
-  libavformat-dev 
+  libavcodec-dev
+  libavformat-dev
   libswscale-dev
-  )
+)
 
-sudo apt-get update 
+sudo apt-get update
 sudo apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
   "${apt_packages_standard[@]}" \
@@ -128,22 +128,21 @@ sudo apt-get install -y --no-install-recommends \
 ##########################################################################
 
 # Get newer Qt (only used cached version if it is the same)
-qt_version="624"
+qt_version="6.2.9"
 qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
-  wget -q --show-progress -O qt.7z "${qt_url}"
-  7z x -y qt.7z -o"${qt_dir}"
-  rm qt.7z
+  qt_url="https://github.com/cbjeukendrup/musescore_build_qt/releases/download/Qt-${qt_version}-a712fa4b1a5bcd89476c10358c692b9055676b4f/Qt-${qt_version}-Linux-amd64.zip"
+  wget -q --show-progress -O qt.zip "${qt_url}"
+  7z x -y qt.zip -o"${qt_dir}"
+  rm qt.zip
 fi
 
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
-
+echo export PATH="${qt_dir}/bin:\${PATH}" >>${ENV_FILE}
+echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >>${ENV_FILE}
+echo export QT_PATH="${qt_dir}" >>${ENV_FILE}
+echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >>${ENV_FILE}
+echo export QML2_IMPORT_PATH="${qt_dir}/qml" >>${ENV_FILE}
 
 ##########################################################################
 # GET TOOLS
@@ -158,8 +157,8 @@ if [ "$COMPILER" == "gcc" ]; then
     --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
     --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
-  echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
-  echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
+  echo export CC="/usr/bin/gcc-${gcc_version}" >>${ENV_FILE}
+  echo export CXX="/usr/bin/g++-${gcc_version}" >>${ENV_FILE}
 
   gcc-${gcc_version} --version
   g++-${gcc_version} --version
@@ -167,13 +166,13 @@ if [ "$COMPILER" == "gcc" ]; then
 elif [ "$COMPILER" == "clang" ]; then
 
   sudo apt install clang
-  echo export CC="/usr/bin/clang" >> ${ENV_FILE}
-  echo export CXX="/usr/bin/clang++" >> ${ENV_FILE}
+  echo export CC="/usr/bin/clang" >>${ENV_FILE}
+  echo export CXX="/usr/bin/clang++" >>${ENV_FILE}
 
   clang --version
   clang++ --version
 
-else 
+else
   echo "Unknown compiler: $COMPILER"
 fi
 
@@ -183,10 +182,10 @@ cmake_version="3.24.0"
 cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
 if [[ ! -d "$cmake_dir" ]]; then
   mkdir -p "$cmake_dir"
-  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz" 
+  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz"
   wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
 fi
-echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
+echo export PATH="$cmake_dir/bin:\${PATH}" >>${ENV_FILE}
 $cmake_dir/bin/cmake --version
 
 # Ninja
@@ -197,7 +196,7 @@ if [[ ! -d "$ninja_dir" ]]; then
   wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
   chmod +x $ninja_dir/ninja
 fi
-echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
+echo export PATH="${ninja_dir}:\${PATH}" >>${ENV_FILE}
 echo "ninja version"
 $ninja_dir/ninja --version
 

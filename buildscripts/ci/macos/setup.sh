@@ -40,20 +40,20 @@ tar xf musescore_deps_macos.tar.gz -C $HOME/musescore_deps_macos
 rm musescore_deps_macos.tar.gz
 
 # Qt
-export QT_SHORT_VERSION=6.2.4
+export QT_SHORT_VERSION=6.2.9
 echo "Download Qt $QT_SHORT_VERSION"
 export QT_PATH=$HOME/Qt/$QT_SHORT_VERSION/
-export PATH=$PATH:$QT_PATH/macos/bin
-echo "PATH=$PATH" >> $GITHUB_ENV
-wget -nv -O qt.7z https://s3.amazonaws.com/utils.musescore.org/Qt624_mac.7z
+export PATH=$PATH:$QT_PATH/bin
+echo "PATH=$PATH" >>$GITHUB_ENV
+wget -nv -O qt.zip https://github.com/cbjeukendrup/musescore_build_qt/releases/download/Qt-6.2.9-a712fa4b1a5bcd89476c10358c692b9055676b4f/Qt-6.2.9-macOS.zip
 mkdir -p $QT_PATH
-7z x -y qt.7z -o$QT_PATH
-rm qt.7z
+7z x -y qt.zip -o$QT_PATH
+rm qt.zip
 
 # VST SDK
 echo "Download VST SDK"
 wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z"
 7z x -y vst_sdk.7z -o"$HOME/vst"
-echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >> $GITHUB_ENV
+echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >>$GITHUB_ENV
 
 echo "Setup script done"
