@@ -39,10 +39,9 @@ MKDIR %TEMP_DIR%
 :: Install Qt
 ECHO "=== Install Qt ==="
 
-:: r2 - added websocket module
-SET "Qt_ARCHIVE=Qt624_msvc2019_64_r2.7z"
-SET "QT_DIR=C:\Qt\6.2.4"
-SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
+SET "Qt_ARCHIVE=Qt-6.2.9-Windows-amd64.zip"
+SET "QT_DIR=C:\Qt\6.2.9"
+SET "QT_URL=https://github.com/cbjeukendrup/musescore_build_qt/releases/download/Qt-6.2.9-491b27cc6fa2d9b8cc0b37cdb4cd2b9eae6dea57/%Qt_ARCHIVE%"
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
