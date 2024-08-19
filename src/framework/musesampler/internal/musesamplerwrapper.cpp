@@ -45,6 +45,10 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
     m_sequencer.setOnOffStreamFlushed([this]() {
         m_allNotesOffRequested = true;
     });
+
+    config()->samplesToPreallocateChanged().onReceive(this, [this](const samples_t samples) {
+        initSampler(m_samplerSampleRate, samples);
+    });
 }
 
 MuseSamplerWrapper::~MuseSamplerWrapper()
@@ -262,6 +266,14 @@ void MuseSamplerWrapper::setIsActive(bool arg)
 bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const samples_t blockSize)
 {
     TRACEFUNC;
+
+    IF_ASSERT_FAILED(sampleRate != 0 && blockSize != 0) {
+        return false;
+    }
+
+    IF_ASSERT_FAILED(m_samplerLib) {
+        return false;
+    }
 
     const bool isFirstInit = m_sampler == nullptr;
 
