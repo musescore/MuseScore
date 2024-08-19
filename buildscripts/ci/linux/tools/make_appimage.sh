@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+trap 'echo Making AppImage failed; exit 1' ERR
+
 INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
 PACKARCH="$3" # architecture (x86_64, aarch64, armv7l)
