@@ -497,40 +497,21 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
             group = NoteHeadGroup::HEAD_TI_NAME;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
-        if (tpc == Tpc::TPC_C) {
+        Char stepName = tpc2stepName(tpc);
+        if (stepName == u'C') {
             group = NoteHeadGroup::HEAD_DO_NAME;
-        } else if (tpc == Tpc::TPC_C_S) {
-            group = NoteHeadGroup::HEAD_DI_NAME;
-        } else if (tpc == Tpc::TPC_D_B) {
-            group = NoteHeadGroup::HEAD_RA_NAME;
-        } else if (tpc == Tpc::TPC_D) {
+        } else if (stepName == u'D') {
             group = NoteHeadGroup::HEAD_RE_NAME;
-        } else if (tpc == Tpc::TPC_D_S) {
-            group = NoteHeadGroup::HEAD_RI_NAME;
-        } else if (tpc == Tpc::TPC_E_B) {
-            group = NoteHeadGroup::HEAD_ME_NAME;
-        } else if (tpc == Tpc::TPC_E) {
+        } else if (stepName == u'E') {
             group = NoteHeadGroup::HEAD_MI_NAME;
-        } else if (tpc == Tpc::TPC_F) {
+        } else if (stepName == u'F') {
             group = NoteHeadGroup::HEAD_FA_NAME;
-        } else if (tpc == Tpc::TPC_F_S) {
-            group = NoteHeadGroup::HEAD_FI_NAME;
-        } else if (tpc == Tpc::TPC_G_B) {
-            group = NoteHeadGroup::HEAD_SE_NAME;
-        } else if (tpc == Tpc::TPC_G) {
+        } else if (stepName == u'G') {
             group = NoteHeadGroup::HEAD_SOL_NAME;
-        } else if (tpc == Tpc::TPC_G_S) {
-            group = NoteHeadGroup::HEAD_SI_NAME;
-        } else if (tpc == Tpc::TPC_A_B) {
-            group = NoteHeadGroup::HEAD_LE_NAME;
-        } else if (tpc == Tpc::TPC_A) {
+        } else if (stepName == u'A') {
             group = NoteHeadGroup::HEAD_LA_NAME;
-        } else if (tpc == Tpc::TPC_A_S) {
-            group = NoteHeadGroup::HEAD_LI_NAME;
-        } else if (tpc == Tpc::TPC_B_B) {
-            group = NoteHeadGroup::HEAD_TE_NAME;
-        } else if (tpc == Tpc::TPC_B) {
-            group = NoteHeadGroup::HEAD_TI_NAME;
+        } else if (stepName == u'B') {
+            group = NoteHeadGroup::HEAD_SI_NAME;
         }
     }
     return noteHeads[direction][int(group)][int(t)];
