@@ -74,6 +74,12 @@ StyleDialogPage {
                 }
             }
         }
+
+        FlatButton {
+            icon: IconCode.UNDO
+            enabled: !beamsPageModel.useWideBeams.isDefault
+            onClicked: beamsPageModel.useWideBeams.value = beamsPageModel.useWideBeams.defaultValue
+        }
     }
 
     BasicStyleSelectorWithSpinboxAndReset {
