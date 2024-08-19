@@ -3952,6 +3952,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Timbales", "timbales longName"),
 //: shortName for Timbales; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Timb.", "timbales shortName"),
 
+//: description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Taiko.", "taiko description"),
+//: trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Taiko", "taiko trackName"),
+//: longName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Taiko", "taiko longName"),
+//: shortName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Taiko", "taiko shortName"),
+
 //: description for Anvil; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Anvil.", "anvil description"),
 //: trackName for Anvil; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
