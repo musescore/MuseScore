@@ -475,7 +475,7 @@ private:
     Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const Fraction& tick, DelayedDirectionsList& delayedDirections);
     void handleChordSym(const Fraction& tick, HarmonyMap& harmonyMap);
-    void handleTempo();
+    void handleTempo(String& wordsString);
     String matchRepeat(const String& plainWords) const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
@@ -511,6 +511,7 @@ private:
     Hairpin* m_inferredHairpinStart = nullptr;
     GradualTempoChange* m_inferredTempoLineStart = nullptr;
     StringList m_dynamicsList;
+    String m_fontFamily;
     String m_enclosure;
     String m_wordsText;
     String m_metroText;

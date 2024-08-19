@@ -303,9 +303,11 @@ public:
     StringList split(const String& str, SplitBehavior behavior = KeepEmptyParts) const;
     StringList split(const std::regex& re, SplitBehavior behavior = KeepEmptyParts) const;
     StringList search(const std::regex& re, std::initializer_list<int> matches, SplitBehavior behavior = KeepEmptyParts) const;
+    StringList search(const std::wregex& re, std::initializer_list<int> matches, SplitBehavior behavior = KeepEmptyParts) const;
     String& replace(const String& before, const String& after);
     String& replace(char16_t before, char16_t after);
     String& replace(const std::regex& re, const String& after);
+    String& replace(const std::wregex& re, const String& after);
     String& insert(size_t position, const String& str);
     String& remove(const String& str) { return replace(str, String()); }
     String& remove(const std::regex& rx) { return replace(rx, String()); }
