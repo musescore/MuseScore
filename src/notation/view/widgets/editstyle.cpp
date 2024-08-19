@@ -692,6 +692,14 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::parenthesizeTiedFretIfArticulation, false, tabParenthArticulation, 0 },
     };
 
+    //initialize some properties of reset buttons
+    for (const StyleWidget& sw : styleWidgets) {
+        if (sw.reset) {
+            WidgetUtils::setWidgetIcon(sw.reset, IconCode::Code::UNDO);
+            sw.reset->setToolTip("Reset to default");
+        }
+    }
+
     // ====================================================
     // Combo Boxes
     // ====================================================
@@ -983,7 +991,6 @@ EditStyle::EditStyle(QWidget* parent)
         }
 
         if (sw.reset) {
-            WidgetUtils::setWidgetIcon(sw.reset, IconCode::Code::UNDO);
             connect(sw.reset, &QToolButton::clicked, resetSignalMapper, mapFunction);
             resetSignalMapper->setMapping(sw.reset, static_cast<int>(sw.idx));
         }

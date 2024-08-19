@@ -5478,8 +5478,11 @@
           <layout class="QGridLayout" name="gridLayout_40">
            <item row="8" column="2">
             <widget class="QToolButton" name="resetLedgerLineLength">
+             <property name="accessibleName">
+              <string>Reset 'Ledger line length' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5553,8 +5556,11 @@
            </item>
            <item row="7" column="2">
             <widget class="QToolButton" name="resetLedgerLineWidth">
+             <property name="accessibleName">
+              <string>Reset 'Ledger line thickness' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5622,8 +5628,11 @@
            </item>
            <item row="4" column="2">
             <widget class="QToolButton" name="resetNoteDotDistance">
+             <property name="accessibleName">
+              <string>Reset 'Note to dot distance' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5651,8 +5660,11 @@
            </item>
            <item row="5" column="2">
             <widget class="QToolButton" name="resetDotDotDistance">
+             <property name="accessibleName">
+              <string>Reset 'Dot to dot distance' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5668,22 +5680,31 @@
            </item>
            <item row="6" column="2">
             <widget class="QToolButton" name="resetStemWidth">
+             <property name="accessibleName">
+              <string>Reset 'Stem thickness' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetAccidentalDistance">
+             <property name="accessibleName">
+              <string>Reset 'Accidental to accidental distance' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetAccidentalNoteDistance">
+             <property name="accessibleName">
+              <string>Reset 'Accidental to note distance' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5756,8 +5777,11 @@
            </item>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetDotMag">
+             <property name="accessibleName">
+              <string>Reset 'Dot size' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5795,8 +5819,11 @@
               </item>
               <item row="1" column="2">
                <widget class="QToolButton" name="resetShortestStem">
+                <property name="accessibleName">
+                 <string>Reset 'Shortest stem' value</string>
+                </property>
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true"/>
                 </property>
                </widget>
               </item>
@@ -6290,8 +6317,11 @@
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetMinEmptyMeasures">
+             <property name="accessibleName">
+              <string>Reset 'Minimum number of empty measures' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -7410,22 +7440,31 @@
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetArpeggioNoteDistance">
+             <property name="accessibleName">
+              <string>Reset 'Distance to note' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetArpeggioLineWidth">
+             <property name="accessibleName">
+              <string>Reset 'Line thickness' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetArpeggioHookLen">
+             <property name="accessibleName">
+              <string>Reset 'Hook length' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -12645,22 +12684,31 @@ first note of the system</string>
              </item>
              <item row="1" column="2">
               <widget class="QToolButton" name="resetDoubleSpinFBSize">
+               <property name="accessibleName">
+                <string>Reset 'Font size' value</string>
+               </property>
                <property name="text">
-                <string>...</string>
+                <string notr="true"/>
                </property>
               </widget>
              </item>
              <item row="2" column="2">
               <widget class="QToolButton" name="resetDoubleSpinFBVertPos">
+               <property name="accessibleName">
+                <string>Reset 'Vertical position' value</string>
+               </property>
                <property name="text">
-                <string>...</string>
+                <string notr="true"/>
                </property>
               </widget>
              </item>
              <item row="3" column="2">
               <widget class="QToolButton" name="resetSpinFBLineHeight">
+               <property name="accessibleName">
+                <string>Reset 'Line height' value</string>
+               </property>
                <property name="text">
-                <string>...</string>
+                <string notr="true"/>
                </property>
               </widget>
              </item>
@@ -12763,8 +12811,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>568</width>
-                <height>554</height>
+                <width>673</width>
+                <height>710</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
@@ -13303,22 +13351,31 @@ first note of the system</string>
                   </item>
                   <item row="2" column="2">
                    <widget class="QToolButton" name="resetMaxHarmonyBarDistance">
+                    <property name="accessibleName">
+                     <string>Reset 'Maximum barline distance' value</string>
+                    </property>
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="2">
                    <widget class="QToolButton" name="resetMinHarmonyDistance">
+                    <property name="accessibleName">
+                     <string>Reset 'Minimum chord spacing' value</string>
+                    </property>
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
                   <item row="0" column="2">
                    <widget class="QToolButton" name="resetHarmonyFretDist">
+                    <property name="accessibleName">
+                     <string>Reset 'Distance to fretboard diagram' value</string>
+                    </property>
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
