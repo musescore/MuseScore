@@ -277,9 +277,9 @@ Sid HairpinSegment::getPropertyStyle(Pid pid) const
     return TextLineBaseSegment::getPropertyStyle(pid);
 }
 
-EngravingItem* HairpinSegment::findElementToSnapBefore() const
+EngravingItem* HairpinSegment::findElementToSnapBefore(bool ignoreInvisible) const
 {
-    TextBase* startDynOrExpr = findStartDynamicOrExpression();
+    TextBase* startDynOrExpr = findStartDynamicOrExpression(ignoreInvisible);
     if (startDynOrExpr) {
         return startDynOrExpr;
     }
@@ -307,14 +307,14 @@ EngravingItem* HairpinSegment::findElementToSnapBefore() const
     return nullptr;
 }
 
-EngravingItem* HairpinSegment::findElementToSnapAfter() const
+EngravingItem* HairpinSegment::findElementToSnapAfter(bool ignoreInvisible) const
 {
     // Note: we don't need to look for a hairpin after.
     // It is the next hairpin which looks for a hairpin before.
-    return findEndDynamicOrExpression();
+    return findEndDynamicOrExpression(ignoreInvisible);
 }
 
-TextBase* HairpinSegment::findStartDynamicOrExpression() const
+TextBase* HairpinSegment::findStartDynamicOrExpression(bool ignoreInvisible) const
 {
     Fraction refTick = hairpin()->tick();
     Measure* measure = score()->tick2measure(refTick);
@@ -337,7 +337,7 @@ TextBase* HairpinSegment::findStartDynamicOrExpression() const
             if (!item->isDynamic() && !item->isExpression()) {
                 continue;
             }
-            if (!item->visible()) {
+            if (ignoreInvisible && !item->visible()) {
                 continue;
             }
             bool endsMatch = item->track() == hairpin()->track()
@@ -368,7 +368,7 @@ TextBase* HairpinSegment::findStartDynamicOrExpression() const
     return dynamicsAndExpr.back();
 }
 
-TextBase* HairpinSegment::findEndDynamicOrExpression() const
+TextBase* HairpinSegment::findEndDynamicOrExpression(bool ignoreInvisible) const
 {
     Fraction refTick = hairpin()->tick2();
     Measure* measure = score()->tick2measure(refTick - Fraction::eps());
@@ -391,7 +391,7 @@ TextBase* HairpinSegment::findEndDynamicOrExpression() const
             if (!item->isDynamic() && !item->isExpression()) {
                 continue;
             }
-            if (!item->visible()) {
+            if (ignoreInvisible && !item->visible()) {
                 continue;
             }
             bool endsMatch = item->track() == hairpin()->track()
@@ -498,36 +498,6 @@ DynamicType Hairpin::dynamicTypeTo() const
 {
     muse::ByteArray ba = endText().toAscii();
     return TConv::dynamicType(ba.constChar());
-}
-
-const Dynamic* Hairpin::dynamicSnappedBefore() const
-{
-    const LineSegment* seg = frontSegment();
-    if (!seg) {
-        return nullptr;
-    }
-
-    const EngravingItem* item = seg->ldata()->itemSnappedBefore();
-    if (!item || !item->isDynamic()) {
-        return nullptr;
-    }
-
-    return toDynamic(item);
-}
-
-const Dynamic* Hairpin::dynamicSnappedAfter() const
-{
-    const LineSegment* seg = backSegment();
-    if (!seg) {
-        return nullptr;
-    }
-
-    const EngravingItem* item = seg->ldata()->itemSnappedAfter();
-    if (!item || !item->isDynamic()) {
-        return nullptr;
-    }
-
-    return toDynamic(item);
 }
 
 //---------------------------------------------------------
