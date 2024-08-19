@@ -73,12 +73,12 @@ public:
 
     bool hasVoiceAssignmentProperties() const override { return spanner()->hasVoiceAssignmentProperties(); }
 
-    EngravingItem* findElementToSnapBefore() const;
-    EngravingItem* findElementToSnapAfter() const;
+    EngravingItem* findElementToSnapBefore(bool ignoreInvisible = true) const;
+    EngravingItem* findElementToSnapAfter(bool ignoreInvisible = true) const;
 
 private:
-    TextBase* findStartDynamicOrExpression() const;
-    TextBase* findEndDynamicOrExpression() const;
+    TextBase* findStartDynamicOrExpression(bool ignoreInvisible = true) const;
+    TextBase* findEndDynamicOrExpression(bool ignoreInvisible = true) const;
 
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
@@ -112,9 +112,6 @@ public:
 
     DynamicType dynamicTypeFrom() const;
     DynamicType dynamicTypeTo() const;
-
-    const Dynamic* dynamicSnappedBefore() const;
-    const Dynamic* dynamicSnappedAfter() const;
 
     HairpinType hairpinType() const { return m_hairpinType; }
     void setHairpinType(HairpinType val);
