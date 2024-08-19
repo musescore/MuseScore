@@ -378,9 +378,6 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     mmrTimeSig->setParent(mmrSeg);
                     ctx.mutDom().doUndoAddElement(mmrTimeSig);
                 } else {
-                    mmrTimeSig->setSig(underlyingTimeSig->sig(), underlyingTimeSig->timeSigType());
-                    mmrTimeSig->setNumeratorString(underlyingTimeSig->numeratorString());
-                    mmrTimeSig->setDenominatorString(underlyingTimeSig->denominatorString());
                     TLayout::layoutTimeSig(mmrTimeSig, mmrTimeSig->mutldata(), ctx);
                 }
             }
