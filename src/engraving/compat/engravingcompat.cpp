@@ -99,7 +99,7 @@ void EngravingCompat::undoStaffTextExcludeFromPart(MasterScore* masterScore)
 
 void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
 {
-    auto migrateVoiceAssignmentAndPosition = [](EngravingItem* item) {
+    auto migrateVoiceAssignmentAndPosition = [masterScore](EngravingItem* item) {
         if (item->voice() != 0) {
             item->setProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
         }
@@ -107,8 +107,12 @@ void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
         Staff* staff = item->staff();
         Part* part = staff ? staff->part() : nullptr;
         Instrument* instrument = part ? part->instrument() : nullptr;
-        if (instrument && instrument->isVocalInstrument()
-            && item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION)) {
+        const bool isVocalInstrument = instrument && instrument->isVocalInstrument();
+        const bool directionIsDefault = item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION);
+        const PlacementV defaultPlacement = masterScore->style().styleV(item->getPropertyStyle(Pid::PLACEMENT)).value<PlacementV>();
+        const bool defaultIsBelow = defaultPlacement == PlacementV::BELOW;
+
+        if (isVocalInstrument && directionIsDefault && defaultIsBelow) {
             item->setProperty(Pid::DIRECTION, DirectionV::DOWN);
             item->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
         }
