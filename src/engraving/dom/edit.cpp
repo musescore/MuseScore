@@ -595,12 +595,15 @@ Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool force
     };
     Note* referenceNote = chord->notes().at(0);
 
-    while (referenceNote->tieBack()) {
+    while (true) {
+        // don't add note if it is already part of tied notes previously
+        if (referenceNote->chord()->findNote(noteVal.pitch)) {
+            return nullptr;
+        }
+        if (!referenceNote->tieBack()) {
+            break;
+        }
         referenceNote = referenceNote->tieBack()->startNote();
-    }
-    // don't add note if it is already exist
-    if (referenceNote->chord()->findNote(noteVal.pitch)) {
-        return nullptr;
     }
 
     Tie* tie = nullptr;
