@@ -164,7 +164,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     //    calculate bracket start and end point p1 p2
     //
     double maxSlope      = style.styleD(Sid::tupletMaxSlope);
-    bool outOfStaff      = style.styleB(Sid::tupletOufOfStaff);
+    bool outOfStaff      = style.styleB(Sid::tupletOutOfStaff);
     double vHeadDistance = style.styleMM(Sid::tupletVHeadDistance) * item->mag();
     double vStemDistance = style.styleMM(Sid::tupletVStemDistance) * item->mag();
     double stemLeft      = (style.styleMM(Sid::tupletStemLeftDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
@@ -532,7 +532,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     }
     item->setbbox(r);
 
-    if (outOfStaff && !item->cross()) {
+    if (!item->cross()) {
         Autoplace::autoplaceMeasureElement(item, item->mutldata(), item->isUp(), /* add to skyline */ true);
     }
 }

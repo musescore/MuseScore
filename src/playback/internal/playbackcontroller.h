@@ -87,6 +87,7 @@ public:
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;
+    void seekBeat(int measureIndex, int beatIndex) override;
 
     bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
     muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
@@ -111,7 +112,6 @@ public:
     void setIsExportingAudio(bool exporting) override;
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
-
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -125,7 +125,7 @@ private:
 
     void updateCurrentTempo();
 
-    void seek(const muse::midi::tick_t tick);
+    void seekRawTick(const muse::midi::tick_t tick);
     void seek(const muse::audio::secs_t secs);
 
     bool isPaused() const;
@@ -202,7 +202,7 @@ private:
     void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
-    muse::audio::secs_t tickToSecs(int tick) const;
+    muse::audio::secs_t playedTickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;

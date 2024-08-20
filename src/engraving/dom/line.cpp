@@ -155,19 +155,13 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
         return result;
     }
 
-    // note-anchored spanners are relative to the system
-    double y;
-    if (spanner()->anchor() == Spanner::Anchor::NOTE) {
-        y = system()->pos().y();
-    } else {
-        const staff_idx_t stIdx = staffIdx();
-        y = system()->staffYpage(stIdx);
-        if (line()->placement() == PlacementV::BELOW) {
-            y += system()->staff(stIdx)->bbox().height();
-        }
-        // adjust Y to staffType offset
-        y += staffOffsetY();
+    const staff_idx_t stIdx = staffIdx();
+    double y = system()->staffYpage(stIdx);
+    if (line()->placement() == PlacementV::BELOW) {
+        y += system()->staff(stIdx)->bbox().height();
     }
+    // adjust Y to staffType offset
+    y += staffOffsetY();
 
     const Page* p = system()->page();
     const PointF pageOffset = p ? p->pos() : PointF();

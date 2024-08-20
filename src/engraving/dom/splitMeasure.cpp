@@ -20,12 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "factory.h"
 #include "chordrest.h"
 #include "measure.h"
 #include "range.h"
 #include "score.h"
 #include "segment.h"
 #include "spanner.h"
+#include "stafftypechange.h"
 #include "tie.h"
 #include "undo.h"
 #include "utils.h"
@@ -194,6 +196,16 @@ void MasterScore::splitMeasure(const Fraction& tick)
         }
         if (s->ticks() != ticks) {
             s->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
+        }
+    }
+
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        Staff* staff = staves().at(staffIdx);
+        if (staff->isStaffTypeStartFrom(stick)) {
+            StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(m1);
+            stc->setParent(m1);
+            stc->setTrack(staffIdx * VOICES);
+            addElement(stc);
         }
     }
 }

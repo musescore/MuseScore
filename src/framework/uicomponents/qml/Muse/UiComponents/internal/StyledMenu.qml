@@ -33,8 +33,11 @@ MenuView {
     property alias model: view.model
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
+    property bool hasSiblingMenus: loader.hasSiblingMenus
 
     signal handleMenuItem(string itemId)
+    signal openPrevMenu()
+    signal openNextMenu()
 
     property alias width: content.width
     property alias height: content.height
@@ -138,6 +141,10 @@ MenuView {
                 case NavigationEvent.Right:
                     var selectedItem = prv.selectedItem()
                     if (!Boolean(selectedItem) || !selectedItem.hasSubMenu) {
+                       if (root.hasSiblingMenus)  {
+                            root.close(true)
+                            root.openNextMenu()
+                       }
                         return
                     }
 
@@ -160,6 +167,10 @@ MenuView {
                     }
 
                     root.close()
+
+                    if(root.hasSiblingMenus) {
+                        root.openPrevMenu()
+                    }
                     break
                 case NavigationEvent.Up:
                 case NavigationEvent.Down:
@@ -180,6 +191,7 @@ MenuView {
             var menuLoaderComponent = Qt.createComponent("../StyledMenuLoader.qml");
             root.subMenuLoader = menuLoaderComponent.createObject(root)
             root.subMenuLoader.menuAnchorItem = root.anchorItem
+            root.subMenuLoader.hasSiblingMenus = root.hasSiblingMenus
 
             root.subMenuLoader.handleMenuItem.connect(function(itemId) {
                 Qt.callLater(root.handleMenuItem, itemId)
@@ -195,6 +207,7 @@ MenuView {
 
                 if (force) {
                     root.close(true)
+                    root.openNextMenu()
                 }
             })
         }

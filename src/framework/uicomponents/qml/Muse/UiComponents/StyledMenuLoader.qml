@@ -29,11 +29,14 @@ Loader {
     id: loader
 
     signal handleMenuItem(string itemId)
+    signal openPrevMenu()
+    signal openNextMenu()
     signal opened()
     signal closed(bool force)
 
     property alias menu: loader.item
     property var menuAnchorItem: null
+    property bool hasSiblingMenus: false
 
     property alias isMenuOpened: loader.active
 
@@ -60,6 +63,14 @@ Loader {
         onHandleMenuItem: function(itemId) {
             itemMenu.close()
             Qt.callLater(loader.handleMenuItem, itemId)
+        }
+
+        onOpenPrevMenu: {
+           Qt.callLater(loader.openPrevMenu)
+        }  
+
+        onOpenNextMenu: {
+            Qt.callLater(loader.openNextMenu)
         }
 
         onClosed: function(force) {

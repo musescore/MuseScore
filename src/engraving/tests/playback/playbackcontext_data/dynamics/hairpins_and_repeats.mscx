@@ -2,7 +2,7 @@
 <museScore version="4.40">
   <programVersion>4.4.0</programVersion>
   <programRevision></programRevision>
-  <LastEID>3025</LastEID>
+  <LastEID>3251</LastEID>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -184,7 +184,7 @@
               <Segment>
                 <subtype>0</subtype>
                 <offset x="0" y="3.5"/>
-                <off2 x="-6.53595" y="0"/>
+                <off2 x="-0.3776" y="0"/>
                 <eid>7065221201984</eid>
                 </Segment>
               </HairPin>
@@ -225,6 +225,7 @@
             <subtype>fff</subtype>
             <velocity>126</velocity>
             <eid>8774618185763</eid>
+            <visible>0</visible>
             </Dynamic>
           <Spanner type="HairPin">
             <prev>

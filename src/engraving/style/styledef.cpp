@@ -636,7 +636,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(keySigNaturals,                             PropertyValue(int(KeySigNatural::NONE))),
 
     styleDef(tupletMaxSlope,                             PropertyValue(double(0.5))),
-    styleDef(tupletOufOfStaff,                           true),
+    styleDef(tupletOutOfStaff,                           true),
     styleDef(tupletVHeadDistance,                        Spatium(.5)),
     styleDef(tupletVStemDistance,                        Spatium(.5)),
     styleDef(tupletStemLeftDistance,                     Spatium(.5)),
@@ -891,7 +891,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(harpPedalTextDiagramFrameWidth,             0.1),
     styleDef(harpPedalTextDiagramFrameRound,             0),
     styleDef(harpPedalTextDiagramFrameFgColor,           PropertyValue::fromValue(Color::BLACK)),
-    styleDef(harpPedalTextDiagramFrameFgColor,           PropertyValue::fromValue(Color::transparent)),
+    styleDef(harpPedalTextDiagramFrameBgColor,           PropertyValue::fromValue(Color::transparent)),
     styleDef(harpPedalTextDiagramOffset,                 PointF()),
     styleDef(harpPedalTextDiagramPlacement,              PlacementV::BELOW),
     styleDef(harpPedalTextDiagramPosAbove,               PointF(.0, -1.5)),

@@ -44,6 +44,7 @@
 
 #include "barline.h"
 #include "box.h"
+#include "dynamic.h"
 #include "instrumentname.h"
 #include "measure.h"
 #include "mscore.h"
@@ -1058,7 +1059,8 @@ void TextBlock::layout(const TextBase* t)
         for (auto fi = m_fragments.begin(); fi != m_fragments.end(); ++fi) {
             TextFragment& f = *fi;
             f.pos.setX(x);
-            FontMetrics fm(f.font(t));
+            Font fragmentFont = f.font(t);
+            FontMetrics fm(fragmentFont);
             if (f.format.valign() != VerticalAlignment::AlignNormal) {
                 double voffset = fm.xHeight() / subScriptSize;           // use original height
                 if (f.format.valign() == VerticalAlignment::AlignSubScript) {
@@ -1078,7 +1080,20 @@ void TextBlock::layout(const TextBase* t)
                 x += w;
             }
 
-            m_shape.add(fm.tightBoundingRect(f.text).translated(f.pos), t);
+            RectF textBRect = fm.tightBoundingRect(f.text).translated(f.pos);
+            bool useDynamicSymShape = fragmentFont.type() == Font::Type::MusicSymbol && t->isDynamic();
+            if (useDynamicSymShape) {
+                const Dynamic* dyn = toDynamic(t);
+                SymId symId = TConv::symId(dyn->dynamicType());
+                if (symId != SymId::noSym) {
+                    m_shape.add(dyn->symShapeWithCutouts(symId).translated(f.pos));
+                } else {
+                    m_shape.add(textBRect, t);
+                }
+            } else {
+                m_shape.add(textBRect, t);
+            }
+
             Font font = f.font(t);
             if (font.type() == Font::Type::MusicSymbol || font.type() == Font::Type::MusicSymbolText) {
                 // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the

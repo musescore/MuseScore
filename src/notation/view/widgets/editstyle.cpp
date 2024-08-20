@@ -535,7 +535,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType },
         { StyleId::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType },
         { StyleId::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope },
-        { StyleId::tupletOufOfStaff,        false, tupletOutOfStaff,        0 },
+        { StyleId::tupletOutOfStaff,        false, tupletOutOfStaff,        0 },
         { StyleId::tupletUseSymbols,        false, tupletUseSymbols,        resetTupletUseSymbols },
 
         { StyleId::repeatBarTips,            false, showRepeatBarTips,            resetShowRepeatBarTips },
@@ -2424,31 +2424,31 @@ void EditStyle::setChordStyle(bool checked)
     if (!checked) {
         return;
     }
-    QVariant val;
-    QString file;
+    String val;
+    String file;
     bool chordsXml;
     if (chordsStandard->isChecked()) {
-        val  = QString("std");
-        file = "chords_std.xml";
+        val  = u"std";
+        file = u"chords_std.xml";
         chordsXml = false;
     } else if (chordsJazz->isChecked()) {
-        val  = QString("jazz");
-        file = "chords_jazz.xml";
+        val  = u"jazz";
+        file = u"chords_jazz.xml";
         chordsXml = false;
     } else {
-        val = QString("custom");
+        val = u"custom";
         chordDescriptionGroup->setEnabled(true);
         file = chordDescriptionFile->text();
         chordsXml = chordsXmlFile->isChecked();
     }
-    if (val != "custom") {
+    if (val != u"custom") {
         chordsXmlFile->setChecked(chordsXml);
         chordDescriptionGroup->setEnabled(false);
         chordDescriptionFile->setText(file);
     }
 
     setStyleValue(StyleId::chordsXmlFile, chordsXml);
-    setStyleQVariantValue(StyleId::chordStyle, val);
+    setStyleValue(StyleId::chordStyle, val);
 
     if (!file.isEmpty()) {
         setStyleValue(StyleId::chordDescriptionFile, file);

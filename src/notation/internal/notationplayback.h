@@ -73,7 +73,7 @@ public:
 
     const Tempo& tempo(muse::midi::tick_t tick) const override;
     MeasureBeat beat(muse::midi::tick_t tick) const override;
-    muse::midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
+    muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;

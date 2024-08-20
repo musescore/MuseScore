@@ -728,6 +728,11 @@ bool Dynamic::nudge(const EditData& ed)
 
 void Dynamic::editDrag(EditData& ed)
 {
+    ElementEditDataPtr eed = ed.getData(this);
+    if (!eed) {
+        return;
+    }
+
     EditTimeTickAnchors::updateAnchors(this, track());
 
     KeyboardModifiers km = ed.modifiers;
@@ -752,7 +757,6 @@ void Dynamic::editDrag(EditData& ed)
             const PointF newOffset = pos1 - pos2;
             setOffset(newOffset);
             setOffsetChanged(true);
-            ElementEditDataPtr eed = ed.getData(this);
             eed->initOffset += newOffset - oldOffset;
         }
     }
@@ -915,6 +919,16 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
         return false;
     default:
         return TextBase::propertyDefault(id);
+    }
+}
+
+Sid Dynamic::getPropertyStyle(Pid pid) const
+{
+    switch (pid) {
+    case Pid::PLACEMENT:
+        return Sid::dynamicsPlacement;
+    default:
+        return TextBase::getPropertyStyle(pid);
     }
 }
 

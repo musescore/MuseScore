@@ -27,6 +27,7 @@
 
 #include "engraving/dom/note.h"
 #include "engraving/dom/text.h"
+#include "engraving/dom/sig.h"
 
 #include "translation.h"
 #include "log.h"
@@ -990,6 +991,39 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
+        if (playbackController()->isPlaying()) {
+            MeasureBeat beat = playbackController()->currentBeat();
+            int targetBeatIdx = beat.beatIndex;
+            int targetMeasureIdx = beat.measureIndex;
+            int increment = (direction == MoveDirection::Right ? 1 : -1);
+
+            if (quickly) {
+                targetBeatIdx = 0;
+                targetMeasureIdx += increment;
+                if (targetMeasureIdx > beat.maxMeasureIndex) {
+                    targetMeasureIdx = beat.maxMeasureIndex;
+                } else if (targetMeasureIdx < 0) {
+                    targetMeasureIdx = 0;
+                }
+            } else {
+                targetBeatIdx += increment;
+                if (targetBeatIdx > beat.maxBeatIndex) {
+                    targetBeatIdx = 0;
+                    targetMeasureIdx += 1;
+                } else if (targetBeatIdx < 0) {
+                    targetMeasureIdx -= 1;
+
+                    // Set target beat to max beat of previous bar
+                    engraving::TimeSigMap* timeSigMap = currentMasterNotation()->masterScore()->sigmap();
+                    int targetBarStartTick = timeSigMap->bar2tick(targetMeasureIdx, 0);
+                    targetBeatIdx = timeSigMap->timesig(Fraction::fromTicks(targetBarStartTick)).timesig().numerator() - 1;
+                }
+            }
+
+            playbackController()->seekBeat(targetMeasureIdx, targetBeatIdx);
+            return;
+        }
+
         if (interaction->isTextEditingStarted() && textNavigationAvailable()) {
             navigateToTextElementInNearMeasure(direction);
             return;

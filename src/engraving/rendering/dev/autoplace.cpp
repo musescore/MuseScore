@@ -24,6 +24,7 @@
 #include "style/style.h"
 
 #include "dom/chordrest.h"
+#include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/spanner.h"
 #include "dom/staff.h"
@@ -142,13 +143,23 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
         Shape sh = item->shape().translate(m->pos() + item->pos() + item->staffOffset());
 
         SkylineLine sk(!above);
+        SkylineLine& staffSkyline = above ? ss->skyline().north() : ss->skyline().south();
+
+        SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
+            const EngravingItem* skylineItem = shapeEl.item();
+            if (!skylineItem) {
+                return false;
+            }
+            return itemsShouldIgnoreEachOther(item, skylineItem);
+        });
+
         double d;
         if (above) {
             sk.add(sh);
-            d = sk.minDistance(ss->skyline().north());
+            d = sk.minDistance(filteredSkyline);
         } else {
             sk.add(sh);
-            d = ss->skyline().south().minDistance(sk);
+            d = filteredSkyline.minDistance(sk);
         }
         minDistance *= item->staff()->staffMag(item);
         if (d > -minDistance) {
@@ -168,7 +179,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
             sh.translateY(yd);
         }
         if (add && item->addToSkyline()) {
-            ss->skyline().add(sh);
+            staffSkyline.add(sh);
         }
     }
     setOffsetChanged(item, ldata, false);
@@ -441,6 +452,13 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         && (type2 == ElementType::DYNAMIC || type2 == ElementType::EXPRESSION)) {
         // Dynamics and expressions should ignore each other if on the same segment
         return itemToAutoplace->parent() == itemInSkyline->parent();
+    }
+
+    if ((type1 == ElementType::TUPLET || type1 == ElementType::STAFF_LINES)
+        && (type2 == ElementType::STAFF_LINES || type2 == ElementType::TUPLET)) {
+        const Score* score = itemToAutoplace->score();
+        const bool outOfStaff = score ? !score->style().styleB(Sid::tupletOutOfStaff) : false;
+        return outOfStaff;
     }
 
     return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;

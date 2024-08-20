@@ -141,9 +141,11 @@ struct GraceNoteLyrics {
 class MusicXMLParserLyric
 {
 public:
-    MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler, muse::XmlStreamReader& e, Score* score, MxmlLogger* logger);
+    MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler, muse::XmlStreamReader& e, Score* score, MxmlLogger* logger,
+                        bool isVoiceStaff);
     std::set<Lyrics*> extendedLyrics() const { return m_extendedLyrics; }
     std::map<int, Lyrics*> numberedLyrics() const { return m_numberedLyrics; }
+    std::vector<Sticking*> inferredStickings() const { return m_inferredStickings; }
     void parse();
 private:
     void skipLogCurrElem();
@@ -154,12 +156,15 @@ private:
     MxmlLogger* m_logger = nullptr;            // Error logger
     std::map<int, Lyrics*> m_numberedLyrics;   // lyrics with valid number
     std::set<Lyrics*> m_extendedLyrics;        // lyrics with the extend flag set
+    std::vector<Sticking*> m_inferredStickings;   // stickings with valid number
     double m_defaultY = 0.0;
     double m_relativeY = 0.0;
     String m_placement;
     String placement() const;
     double totalY() const { return m_defaultY + m_relativeY; }
     bool hasTotalY() const { return !muse::RealIsNull(m_defaultY) || !muse::RealIsNull(m_relativeY); }
+    bool isLikelySticking(const String& text, const LyricsSyllabic syllabic, const bool hasExtend);
+    bool m_isVoiceStaff = true;
 };
 
 //---------------------------------------------------------
@@ -475,7 +480,7 @@ private:
     Jump* findJump(const String& repeat) const;
     void handleNmiCmi(Measure* measure, const Fraction& tick, DelayedDirectionsList& delayedDirections);
     void handleChordSym(const Fraction& tick, HarmonyMap& harmonyMap);
-    void handleTempo();
+    void handleTempo(String& wordsString);
     String matchRepeat(const String& plainWords) const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
@@ -511,6 +516,7 @@ private:
     Hairpin* m_inferredHairpinStart = nullptr;
     GradualTempoChange* m_inferredTempoLineStart = nullptr;
     StringList m_dynamicsList;
+    String m_fontFamily;
     String m_enclosure;
     String m_wordsText;
     String m_metroText;

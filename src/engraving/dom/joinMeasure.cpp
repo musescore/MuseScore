@@ -26,6 +26,7 @@
 #include "range.h"
 #include "score.h"
 #include "spanner.h"
+#include "stafftypechange.h"
 #include "timesig.h"
 #include "undo.h"
 
@@ -66,6 +67,10 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;
         }
+        if (staves().at(staffIdx)->staffTypeRange(tick2).first > tick1.ticks()) {
+            MScore::setError(MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE);
+            return;
+        }
     }
 
     if (m1->isMMRest()) {
@@ -104,12 +109,22 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
     options.ignoreBarLines = true;
-    insertMeasure(next, options);
+    Measure* joinedMeasure = toMeasure(insertMeasure(next, options));
 
     for (Score* s : scoreList()) {
         Measure* sM1 = s->tick2measure(startTick);
         Measure* sM2 = s->tick2measure(m2->tick());
         s->undoRemoveMeasures(sM1, sM2, true, false);
+    }
+
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        Staff* staff = staves().at(staffIdx);
+        if (staff->isStaffTypeStartFrom(tick1)) {
+            StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(joinedMeasure);
+            stc->setParent(joinedMeasure);
+            stc->setTrack(staffIdx * VOICES);
+            addElement(stc);
+        }
     }
 
     const Fraction newTimesig = m1->timesig();

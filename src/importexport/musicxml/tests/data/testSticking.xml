@@ -346,7 +346,7 @@
         </note>
       <direction>
         <direction-type>
-          <words default-y="-40.1" relative-y="-20">L</words>
+          <words default-y="-40.1" relative-y="-20" relative-x='-20'>L</words>
           </direction-type>
         </direction>
       <note default-x="124.7" default-y="-15">
