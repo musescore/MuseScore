@@ -50,5 +50,6 @@ private:
     std::shared_ptr<ExtensionsProvider> m_provider;
     std::shared_ptr<ExtensionsActionController> m_actionController;
     std::shared_ptr<ExtensionsExecPointsRegister> m_execPointsRegister;
+    bool m_extensionsLoaded = false;
 };
 }

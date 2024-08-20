@@ -199,7 +199,7 @@ void ExtensionsListModel::editShortcut(QString codeKey)
 
 void ExtensionsListModel::reloadPlugins()
 {
-    provider()->reloadPlugins();
+    provider()->reloadExtensions();
 }
 
 QVariantList ExtensionsListModel::categories() const

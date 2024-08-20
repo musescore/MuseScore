@@ -38,6 +38,7 @@ struct CmdOptions {
         ScoreTransposeOptions,
         ForceMode,
         SoundProfile,
+        ExtensionUri
 
         // Video
     };
