@@ -7563,7 +7563,7 @@ void MusicXMLParserLyric::parse()
     double relX = m_e.doubleAttribute("relative-x") * 0.1 * DPMM;
     m_relativeY = m_e.doubleAttribute("relative-y") * -0.1 * DPMM;
     m_defaultY = m_e.doubleAttribute("default-y") * -0.1 * DPMM;
-    LyricsSyllabic syllabic;
+    LyricsSyllabic syllabic = LyricsSyllabic::SINGLE;
 
     String extendType;
     String formattedText;
@@ -7612,7 +7612,7 @@ void MusicXMLParserLyric::parse()
         return;
     }
 
-    TextBase* item;
+    TextBase* item = nullptr;
     if (isLikelySticking(formattedText, syllabic, hasExtend)) {
         item = Factory::createSticking(m_score->dummy()->segment());
     } else {
