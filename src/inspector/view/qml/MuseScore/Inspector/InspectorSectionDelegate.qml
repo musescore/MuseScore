@@ -96,7 +96,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -115,7 +115,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -134,7 +134,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -153,7 +153,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -167,7 +167,7 @@ ExpandableBlank {
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -181,7 +181,7 @@ ExpandableBlank {
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -200,7 +200,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -219,7 +219,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }

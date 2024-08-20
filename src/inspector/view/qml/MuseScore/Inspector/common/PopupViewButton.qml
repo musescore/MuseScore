@@ -68,7 +68,9 @@ FlatButton {
         id: popup
 
         anchorItem: root.anchorItem
-        contentWidth: root.popupAvailableWidth - 2 * margins
+
+        contentWidth: contentLoader.width
+        contentHeight: contentLoader.height
 
         closePolicies: PopupView.NoAutoClose
 
@@ -77,7 +79,7 @@ FlatButton {
 
             active: false
 
-            width: popup.contentWidth
+            width: root.popupAvailableWidth - 2 * popup.margins
             height: implicitHeight
 
             sourceComponent: root.popupContent
