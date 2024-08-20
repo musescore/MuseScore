@@ -280,7 +280,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile, extensionUri);
         break;
     case ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile);
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri);
         break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);

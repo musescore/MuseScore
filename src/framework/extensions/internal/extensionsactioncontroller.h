@@ -44,9 +44,9 @@ public:
     void init();
 
 private:
-    void registerPlugins();
+    void registerExtensions();
 
-    void onPluginTriggered(const UriQuery& uri);
+    void onExtensionTriggered(const UriQuery& uri);
     void openUri(const UriQuery& uri, bool isSingle = true);
 
     std::shared_ptr<ExtensionsUiActions> m_uiActions;

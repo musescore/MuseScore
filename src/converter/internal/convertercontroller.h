@@ -56,7 +56,7 @@ public:
     muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
                            const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
                            const muse::String& soundProfile = muse::String(),
-                           const muse::UriQuery& extensionUri = muse::UriQuery()) override;
+                           const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) override;
 
     muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
                                 const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;

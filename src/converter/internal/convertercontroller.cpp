@@ -46,19 +46,33 @@ static const std::string PNG_SUFFIX = "png";
 static const std::string SVG_SUFFIX = "svg";
 
 Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, const muse::io::path_t& stylePath, bool forceMode,
-                                      const String& soundProfile, const muse::UriQuery& extensionUri)
+                                      const String& soundProfile, const muse::UriQuery& extensionUri, muse::ProgressPtr progress)
 {
     TRACEFUNC;
+
+    if (progress) {
+        progress->started.notify();
+    }
 
     RetVal<BatchJob> batchJob = parseBatchJob(batchJobFile);
     if (!batchJob.ret) {
         LOGE() << "failed parse batch job file, err: " << batchJob.ret.toString();
+        if (progress) {
+            progress->finished.send(ProgressResult(batchJob.ret));
+        }
         return batchJob.ret;
     }
 
     StringList errors;
 
+    int64_t current = 0;
+    int64_t total = batchJob.val.size();
     for (const Job& job : batchJob.val) {
+        if (progress) {
+            ++current;
+            progress->progressChanged.send(current, total, job.in.toStdString());
+        }
+
         Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile, extensionUri);
         if (!ret) {
             errors.emplace_back(String(u"failed convert, err: %1, in: %2, out: %3")
@@ -66,11 +80,18 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
         }
     }
 
+    Ret ret;
     if (!errors.empty()) {
-        return make_ret(Err::ConvertFailed, errors.join(u"\n").toStdString());
+        ret = make_ret(Err::ConvertFailed, errors.join(u"\n").toStdString());
+    } else {
+        ret = make_ret(Ret::Code::Ok);
     }
 
-    return make_ret(Ret::Code::Ok);
+    if (progress) {
+        progress->finished.send(ProgressResult(ret));
+    }
+
+    return ret;
 }
 
 Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,

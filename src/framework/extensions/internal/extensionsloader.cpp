@@ -136,6 +136,7 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
             a.modal = ao.value("modal", DEFAULT_MODAL).toBool();
             a.title = ao.value("title").toString();
             a.uiCtx = ao.value("ui_context", uiCtx).toString();
+            a.hidden = ao.value("hidden", a.title.isEmpty()).toBool();
             a.main = ao.value("main").toStdString();
             a.apiversion = m.apiversion;
             m.actions.push_back(std::move(a));

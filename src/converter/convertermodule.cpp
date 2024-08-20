@@ -24,6 +24,9 @@
 #include "modularity/ioc.h"
 #include "internal/convertercontroller.h"
 
+#include "global/api/iapiregister.h"
+#include "api/converterapi.h"
+
 using namespace muse::modularity;
 using namespace mu::converter;
 
@@ -35,4 +38,14 @@ std::string ConverterModule::moduleName() const
 void ConverterModule::registerExports()
 {
     ioc()->registerExport<IConverterController>(moduleName(), new ConverterController(iocContext()));
+}
+
+void ConverterModule::registerApi()
+{
+    using namespace muse::api;
+
+    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    if (api) {
+        api->regApiCreator(moduleName(), "api.converter", new ApiCreator<api::ConverterApi>());
+    }
 }

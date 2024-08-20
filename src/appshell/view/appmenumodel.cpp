@@ -665,6 +665,9 @@ MenuItemList AppMenuModel::makePluginsItems()
         } else {
             MenuItemList sub;
             for (const muse::extensions::Action& a : m.actions) {
+                if (a.hidden) {
+                    continue;
+                }
                 sub << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
             }
             items << makeMenu(TranslatableString::untranslatable(m.title), sub);

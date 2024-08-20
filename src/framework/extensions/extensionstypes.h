@@ -139,6 +139,7 @@ struct Action {
     bool modal = DEFAULT_MODAL;
     String title;
     String uiCtx = DEFAULT_UI_CONTEXT;
+    bool hidden = false; // hidden from menu, can be called programmatically
     io::path_t main;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
