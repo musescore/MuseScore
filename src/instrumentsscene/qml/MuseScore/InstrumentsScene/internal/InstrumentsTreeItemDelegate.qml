@@ -29,6 +29,8 @@ import MuseScore.InstrumentsScene 1.0
 FocusableControl {
     id: root
 
+    required property var originalParent
+
     property var item: null
     property var treeView: undefined
     property var index: styleData.index
@@ -442,6 +444,19 @@ FocusableControl {
                     horizontalCenter: undefined
                 }
             }
+        },
+
+        //! NOTE: Workaround for a bug in Qt 6.2.4 - see PR #24106 comment
+        // https://bugreports.qt.io/browse/QTBUG-99436
+        State {
+            when: !prv.dragged
+            name: "DROPPED"
+
+            ParentChange {
+                target: root
+                parent: root.originalParent
+            }
         }
+
     ]
 }
