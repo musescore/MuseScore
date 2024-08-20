@@ -1,29 +1,51 @@
 name: 'Build: Linux ARM'
 
 on:
+  # pull_request:
+  #   branches:
+  #   - master
+
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-   # - cron: '0 3 */1 */1 *' # At 05:00 on every day-of-month for current release branch
+    # - cron: '0 3 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
-        required: true
         default: 'devel'
+        required: true
       publish:
         description: 'Publish to FTP: on - publish'
-        required: false
         default: 'off'
+        required: false
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
-        required: false
         default: ''
+        required: false
+  workflow_call:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        type: string
+        required: false
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        default: ''
+        type: string
+        required: false
 
 #env:
 #  CURRENT_RELEASE_BRANCH: 4.3.2
 
 jobs:
-  build_armhf:
+
+  linux_arm32:
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
@@ -169,7 +191,7 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/
 
-  build_arm64:
+  linux_arm64:
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
