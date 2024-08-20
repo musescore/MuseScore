@@ -10,6 +10,10 @@ on:
     # - cron: '0 3 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_arm32 linux_arm64'
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -24,6 +28,11 @@ on:
         required: false
   workflow_call:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_arm32 linux_arm64'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -46,6 +55,7 @@ on:
 jobs:
 
   linux_arm32:
+    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm32') }}
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
@@ -192,6 +202,7 @@ jobs:
         path: ./build.artifacts/
 
   linux_arm64:
+    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm64') }}
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs

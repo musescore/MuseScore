@@ -11,6 +11,10 @@ on:
     # - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'windows_x64 windows_portable'
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -25,6 +29,11 @@ on:
         required: false
   workflow_call:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'windows_x64 windows_portable'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -47,6 +56,7 @@ on:
 jobs:
 
   windows_x64:
+    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x64') }}
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
@@ -242,6 +252,8 @@ jobs:
 
 
   windows_portable:
+    # Disable on pull_request
+    if: ${{ github.event_name == 'schedule' || contains(inputs.platforms, 'windows_portable') }}
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
