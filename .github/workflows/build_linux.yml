@@ -7,21 +7,36 @@ on:
   pull_request:
     branches:
     - 3.x
+
   schedule:
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
     inputs:
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
-        required: true
         default: 'devel'
+        required: true
       publish:
         description: 'Publish to FTP: on - publish'
-        required: false
         default: 'off'
+        required: false
+  workflow_call:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        type: string
 
+env:
+  CURRENT_RELEASE_BRANCH: 3.x
+ 
 jobs:
-  build:
+  linux_x64:
     runs-on: ubuntu-20.04
     steps:
     - name: Cancel Previous Runs
@@ -38,10 +53,10 @@ jobs:
         DO_BUILD='true'
 
         DO_PUBLISH='false'
-        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
+        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
-          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
             DO_PUBLISH='false'
           fi  
         fi
