@@ -19,7 +19,7 @@ jobs:
     - name: "Configure workflow"
       run: |
         DO_PUBLISH='false'
-        if [ "${{ github.event.inputs.publish }}" == "on" ]; then 
+        if [ "${{ inputs.publish }}" == "on" ]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.TRANSIFEX_USER }}" ]; then 
             echo "warning: not set TRANSIFEX_USER, publish disabled" 

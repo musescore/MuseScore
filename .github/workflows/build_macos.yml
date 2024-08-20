@@ -37,11 +37,11 @@ jobs:
         fetch-depth: 3
     - name: "Configure workflow"
       run: |
-        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
+        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
