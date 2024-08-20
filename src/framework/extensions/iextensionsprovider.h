@@ -36,7 +36,7 @@ class IExtensionsProvider : MODULE_EXPORT_INTERFACE
 public:
 
     virtual ~IExtensionsProvider() = default;
-    
+
     virtual void reloadExtensions() = 0;
 
     virtual ManifestList manifestList(Filter filter = Filter::All) const = 0;

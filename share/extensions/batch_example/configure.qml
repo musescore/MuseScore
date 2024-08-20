@@ -11,20 +11,73 @@ Rectangle {
 
     color: api.theme.backgroundPrimaryColor
 
-    StyledTextLabel {
-        id: label1
-        text: "Batch example"
-    }
+    property string inputDir: "./input"
+    property string outputDir: "./output"
+    property string processingUri: "musescore://extensions/dev/batch_example?action=processing"
 
-    FlatButton {
-        id: btn1
-        anchors.top: label1.bottom
+    Column {
+        anchors.fill: parent
+        anchors.margins: 16
+        spacing: 16
 
-        text: "Click me"
+        StyledTextLabel {
+            text: "Batch example"
+        }
 
-        onClicked: {
-            api.interactive.info("Ext 1", "Clicked on Btn1")
+        FlatButton {
+            text: "Select input dir: " + root.inputDir
+            onClicked: {
+                root.inputDir = api.converter.selectDir("Input")
+            }
+        }
+
+        FlatButton {
+            text: "Select output dir: " + root.outputDir
+            onClicked: {
+                root.outputDir = api.converter.selectDir("Output")
+            }
+        }
+
+        FlatButton {
+            id: run
+            text: "Run"
+            onClicked: {
+                var inputFiles = api.converter.scanDir(root.inputDir)
+
+                var job = []
+                for (var i in inputFiles) {
+                    var file = inputFiles[i]
+                    var task = {
+                        "in": file,
+                        "out": root.outputDir + "/" + api.converter.basename(file) + ".mscz"
+                    }
+                    job.push(task)
+                }
+
+                status.text = "processing " + inputFiles.length + " files..."
+
+                Qt.callLater(run.processing, job)
+            }
+
+            function processing(job) {
+                var json = JSON.stringify(job);
+                api.log.info(json)
+                var ok = api.converter.batch(root.outputDir, json, root.processingUri, run.progress)
+                status.text = ok ? "success" : "failed"
+            }
+
+            function progress(current, total, info) {
+                status.text = current + " / " + total + " " + info;
+            }
+        }
+
+        StyledTextLabel {
+            id: status
+            text: ""
+
+            onTextChanged: {
+                api.log.info(status.text)
+            }
         }
     }
-
 }

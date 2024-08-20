@@ -40,6 +40,8 @@ class ExtApi : public QObject
 
     Q_PROPERTY(QJSValue engraving READ engraving CONSTANT)
 
+    Q_PROPERTY(QJSValue converter READ converter CONSTANT)
+
     //! NOTE Providing these APIs requires approval
     //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
     //Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
@@ -68,6 +70,8 @@ public:
     QJSValue theme() const { return api("api.theme"); }
 
     QJSValue engraving() const { return api("api.engraving.v1"); }
+
+    QJSValue converter() const { return api("api.converter"); }
 
     QJSValue dispatcher() const { return api("api.dispatcher"); }
     QJSValue navigation() const { return api("api.navigation"); }

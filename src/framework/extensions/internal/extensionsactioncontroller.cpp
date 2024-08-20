@@ -34,14 +34,13 @@ static const muse::UriQuery SHOW_APIDUMP_URI("muse://extensions/apidump?sync=fal
 void ExtensionsActionController::init()
 {
     m_uiActions = std::make_shared<ExtensionsUiActions>();
-    registerPlugins();
 
     provider()->manifestListChanged().onNotify(this, [this](){
-        registerPlugins();
+        registerExtensions();
     });
 }
 
-void ExtensionsActionController::registerPlugins()
+void ExtensionsActionController::registerExtensions()
 {
     dispatcher()->unReg(this);
 
@@ -49,7 +48,7 @@ void ExtensionsActionController::registerPlugins()
         for (const Action& a : m.actions) {
             UriQuery q = makeUriQuery(m.uri, a.code);
             dispatcher()->reg(this, q.toString(), [this, q]() {
-                onPluginTriggered(q);
+                onExtensionTriggered(q);
             });
         }
     }
@@ -59,7 +58,7 @@ void ExtensionsActionController::registerPlugins()
     uiActionsRegister()->reg(m_uiActions);
 }
 
-void ExtensionsActionController::onPluginTriggered(const UriQuery& q)
+void ExtensionsActionController::onExtensionTriggered(const UriQuery& q)
 {
     const Manifest& m = provider()->manifest(q.uri());
     if (!m.isValid()) {

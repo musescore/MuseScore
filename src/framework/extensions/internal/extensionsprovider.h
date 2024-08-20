@@ -40,7 +40,7 @@ class ExtensionsProvider : public IExtensionsProvider, public Injectable, public
 public:
     ExtensionsProvider(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
-    
+
     void reloadExtensions() override;
 
     ManifestList manifestList(Filter filter = Filter::All) const override;
