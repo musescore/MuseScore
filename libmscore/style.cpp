@@ -3599,6 +3599,8 @@ bool MStyle::readProperties440(XmlReader& e, int mscVersion)
             e.skipCurrentElement();
       else if (tag == "tremoloStrokeStyle")                         // pre-4.4 typo
             set(Sid::tremoloStyle, e.readInt());
+      else if (tag == "tupletOutOfStaff")                           // pre-4.4 typo, "tupletOufOfStaff"
+            set(Sid::tupletOutOfStaff, e.readBool());
       else if (tag == "tupletMusicalSymbolsScale"                   // Mu4.4+ only, let's skip
             || tag == "tupletUseSymbols"                            // Mu4.4+ only, let's skip
             || tag == "skylineMinHorizontalClearance"               // Mu4.4+ only, let's skip
@@ -3742,12 +3744,12 @@ bool MStyle::readProperties440(XmlReader& e, int mscVersion)
 
 bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
       {
-      Q_UNUSED(mscVersion);
+      if (mscVersion >= 450) // mscVersion not yet bumped
+            qDebug("Yet unknown version detected");
+
       const QStringRef& tag(e.name());
 
-      if (tag == "tupletOutOfStaff")                                // pre-4.5 typo, "tupletOufOfStaff"
-            set(Sid::tupletOutOfStaff, e.readBool());
-      else if (tag == "defaultsVersion")                            // 4mm -> 4nn, let's skip, i.e. reset to Mu3's 302
+      if (tag == "defaultsVersion")                                 // 4mm -> 4nn, let's skip, i.e. reset to Mu3's 302
             e.skipCurrentElement();
       else if (tag == "spatium")                                    // pre-4.5(?) typo
             set(Sid::spatium, e.readDouble() * DPMM);
