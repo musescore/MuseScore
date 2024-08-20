@@ -8,7 +8,7 @@ on:
         default: 'linux_x64 macos windows_x64 windows_x32 windows_portable'
         required: true
       build_mode:
-        description: 'Build mode: devel,nightly,testing,stable'
+        description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
         required: true
       publish:
@@ -23,7 +23,7 @@ on:
         type: string
         required: true
       build_mode:
-        description: 'Build mode: devel,nightly,testing,stable'
+        description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
         type: string
         required: true
@@ -46,7 +46,6 @@ jobs:
     with:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
-      sentry_project: ${{ inputs.sentry_project }}
 
   macos:
     name: macOS
@@ -55,7 +54,6 @@ jobs:
     with:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
-      sentry_project: ${{ inputs.sentry_project }}
 
   windows:
     name: Windows
@@ -64,7 +62,6 @@ jobs:
       platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
-      sentry_project: ${{ inputs.sentry_project }}
 
   # Dummy build for testing purposes.
   dummy:
