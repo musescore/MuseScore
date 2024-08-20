@@ -198,6 +198,12 @@ public:
     muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;
 
+    bool useNewPercussionPanel() const override;
+    void setUseNewPercussionPanel(bool use) override;
+
+    bool autoShowPercussionPanel() const override;
+    void setAutoShowPercussionPanel(bool autoShow) override;
+
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path) override;
 

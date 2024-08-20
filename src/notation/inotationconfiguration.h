@@ -193,6 +193,13 @@ public:
     virtual muse::ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
 
+    // TODO: Delete when the new percussion panel is finished
+    virtual bool useNewPercussionPanel() const = 0;
+    virtual void setUseNewPercussionPanel(bool use) = 0;
+
+    virtual bool autoShowPercussionPanel() const = 0;
+    virtual void setAutoShowPercussionPanel(bool autoShow) = 0;
+
     virtual muse::io::path_t styleFileImportPath() const = 0;
     virtual void setStyleFileImportPath(const muse::io::path_t& path) = 0;
 

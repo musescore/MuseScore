@@ -465,6 +465,24 @@ void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
 {
 }
 
+bool NotationConfigurationStub::useNewPercussionPanel() const
+{
+    return false
+}
+
+void NotationConfigurationStub::setUseNewPercussionPanel(bool)
+{
+}
+
+bool NotationConfigurationStub::autoShowPercussionPanel() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setAutoShowPercussionPanel(bool)
+{
+}
+
 muse::io::path_t NotationConfigurationStub::styleFileImportPath() const
 {
     return muse::io::path_t();

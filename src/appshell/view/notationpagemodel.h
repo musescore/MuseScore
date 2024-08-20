@@ -30,6 +30,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "iappshellconfiguration.h"
+#include "notation/inotationconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
 #include "dockwindow/idockwindowprovider.h"
 
@@ -41,6 +42,7 @@ class NotationPageModel : public QObject, public muse::async::Asyncable, public 
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(IAppShellConfiguration, configuration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(braille::IBrailleConfiguration, brailleConfiguration)
     INJECT(muse::dock::IDockWindowProvider, dockWindowProvider)
 
@@ -69,6 +71,7 @@ public:
     Q_INVOKABLE QString pianoKeyboardPanelName() const;
     Q_INVOKABLE QString timelinePanelName() const;
     Q_INVOKABLE QString drumsetPanelName() const;
+    Q_INVOKABLE QString percussionPanelName() const;
 
     Q_INVOKABLE QString statusBarName() const;
 
@@ -81,7 +84,8 @@ private:
 
     void toggleDock(const QString& name);
 
-    void updateDrumsetPanelVisibility();
+    void updateDrumsetPanelVisibility(); // TODO: Delete when the new percussion panel is finished
+    void updatePercussionPanelVisibility();
 };
 }
 
