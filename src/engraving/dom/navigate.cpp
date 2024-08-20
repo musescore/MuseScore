@@ -696,7 +696,8 @@ EngravingItem* Score::nextElement()
         case ElementType::NOTE:
         case ElementType::REST:
         case ElementType::MMREST:
-        case ElementType::CHORD: {
+        case ElementType::CHORD:
+        case ElementType::TUPLET: {
             EngravingItem* next = e->nextElement();
             if (next) {
                 return next;
@@ -871,7 +872,8 @@ EngravingItem* Score::prevElement()
         case ElementType::NOTE:
         case ElementType::REST:
         case ElementType::MMREST:
-        case ElementType::CHORD: {
+        case ElementType::CHORD:
+        case ElementType::TUPLET: {
             EngravingItem* prev = e->prevElement();
             if (prev) {
                 return prev;

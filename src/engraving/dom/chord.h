@@ -284,6 +284,8 @@ public:
 
     String accessibleExtraInfo() const override;
 
+    Note* firstGraceOrNote();
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif

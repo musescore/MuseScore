@@ -3272,6 +3272,21 @@ Ornament* Chord::findOrnament(bool forPlayback) const
 }
 
 //---------------------------------
+// firstGraceOrNote
+//---------------------------------
+Note* Chord::firstGraceOrNote()
+{
+    GraceNotesGroup& graceNotesBefore = this->graceNotesBefore();
+    if (!graceNotesBefore.empty()) {
+        if (Chord* graceNotesBeforeFirstChord = graceNotesBefore.front()) {
+            return graceNotesBeforeFirstChord->notes().front();
+        }
+    }
+
+    return this->notes().back();
+}
+
+//---------------------------------
 // GRACE NOTES
 //---------------------------------
 
