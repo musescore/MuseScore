@@ -152,7 +152,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     //
     const MStyle& style = ctx.conf().style();
     double maxSlope      = style.styleD(Sid::tupletMaxSlope);
-    bool outOfStaff      = style.styleB(Sid::tupletOufOfStaff);
+    bool outOfStaff      = style.styleB(Sid::tupletOutOfStaff);
     double vHeadDistance = style.styleMM(Sid::tupletVHeadDistance) * item->mag();
     double vStemDistance = style.styleMM(Sid::tupletVStemDistance) * item->mag();
     double stemLeft      = (style.styleMM(Sid::tupletStemLeftDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
