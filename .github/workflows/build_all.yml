@@ -3,6 +3,10 @@ name: 'Build: All'
 on:
   workflow_dispatch:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
+        required: true
       build_mode:
         description: 'Build mode: devel,nightly,testing,stable'
         default: 'devel'
@@ -17,6 +21,11 @@ on:
         required: false
   workflow_call:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel,nightly,testing,stable'
         default: 'devel'
@@ -41,6 +50,7 @@ jobs:
 
   backend:
     name: Backend
+    if: ${{ contains(inputs.platforms, 'backend') }}
     uses: ./.github/workflows/build_backend.yml
     with:
       build_mode: ${{ inputs.build_mode }}
@@ -50,12 +60,14 @@ jobs:
     name: Linux ARM
     uses: ./.github/workflows/build_linux_arm.yml
     with:
+      platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
 
   linux_x64:
     name: Linux x64
+    if: ${{ contains(inputs.platforms, 'linux_x64') }}
     uses: ./.github/workflows/build_linux.yml
     with:
       build_mode: ${{ inputs.build_mode }}
@@ -64,6 +76,7 @@ jobs:
 
   macos:
     name: macOS
+    if: ${{ contains(inputs.platforms, 'macos') }}
     uses: ./.github/workflows/build_macos.yml
     with:
       build_mode: ${{ inputs.build_mode }}
@@ -74,12 +87,14 @@ jobs:
     name: Windows
     uses: ./.github/workflows/build_windows.yml
     with:
+      platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
 
   # Dummy build for testing purposes.
   dummy:
+    if: ${{ contains(inputs.platforms, 'dummy') }}
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
