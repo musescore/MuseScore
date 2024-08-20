@@ -902,7 +902,7 @@ static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader
                       const std::set<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
 {
-    for (const auto lyricNo : muse::keys(numbrdLyrics)) {
+    for (const int lyricNo : muse::keys(numbrdLyrics)) {
         Lyrics* const lyric = numbrdLyrics.at(lyricNo);
         addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
         if (muse::contains(extLyrics, lyric)) {
@@ -914,13 +914,22 @@ static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader
 static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std::set<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
 {
-    for (const auto lyricNo : muse::keys(numberedLyrics)) {
+    for (const int lyricNo : muse::keys(numberedLyrics)) {
         Lyrics* const lyric = numberedLyrics.at(lyricNo);
         if (lyric) {
             bool extend = muse::contains(extendedLyrics, lyric);
             const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);
             gnLyrics.push_back(gnl);
         }
+    }
+}
+
+static void addInferredStickings(ChordRest* cr, const std::vector<Sticking*>& numberedStickings)
+{
+    for (Sticking* sticking : numberedStickings) {
+        sticking->setParent(cr->segment());
+        sticking->setTrack(cr->track());
+        cr->score()->addElement(sticking);
     }
 }
 
@@ -952,6 +961,19 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
     Segment* s = measure->getSegment(SegmentType::ChordRest, elTick);
+
+    if (el->isSticking()) {
+        if (el->propertyFlags(Pid::OFFSET) == PropertyFlags::UNSTYLED) {
+            const EngravingItem* item = s->element(el->track());
+            const Chord* chord = item && item->isChord() ? toChord(item) : nullptr;
+            const bool hasGraceNotes = chord && !chord->graceNotes().empty();
+
+            if (!hasGraceNotes) {
+                el->resetProperty(Pid::OFFSET);
+            }
+        }
+    }
+
     if (el->systemFlag()) {
         Score* score = measure->score();
         Staff* st = score->staff(track2staff(track));
@@ -3295,7 +3317,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         tempoLine->setBeginText(simplifiedText);
         tempoLine->setContinueText(u"");
         m_inferredTempoLineStart = tempoLine;
-    } else if (isLikelySticking() && isPercussionStaff) {
+    } else if (isLikelySticking()) {
         Sticking* sticking = Factory::createSticking(m_score->dummy()->segment());
         sticking->setXmlText(m_wordsText);
         if (!RealIsNull(m_relativeX)) {
@@ -4557,7 +4579,7 @@ bool MusicXMLParserDirection::isLikelySticking()
     }
 
     String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
-    static const std::wregex sticking(L"^[lrbLRB]$");
+    static const std::wregex sticking(L"^[lrbLRB]+$");
     return plainWords.contains(sticking)
            && m_rehearsalText.empty()
            && m_metroText.empty()
@@ -6493,7 +6515,8 @@ Note* MusicXMLParserPass2::note(const String& partId,
     std::map<int, String> beamTypes;
     String instrumentId;
     String tieType;
-    MusicXMLParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger };
+    MusicXMLParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
+                                m_pass1.isVocalStaff(partId) };
     MusicXMLParserNotations notations { m_e, m_score, m_logger, m_pass1, *this };
 
     MxmlNoteDuration mnd { m_divs, m_logger, &m_pass1 };
@@ -6892,6 +6915,10 @@ Note* MusicXMLParserPass2::note(const String& partId,
             }
         }
         m_graceNoteLyrics.clear();
+    }
+
+    if (cr) {
+        addInferredStickings(cr, lyric.inferredStickings());
     }
 
     // add lyrics found by lyric
@@ -7521,8 +7548,8 @@ void MusicXMLParserPass2::backup(Fraction& dura)
 //---------------------------------------------------------
 
 MusicXMLParserLyric::MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler,
-                                         XmlStreamReader& e, Score* score, MxmlLogger* logger)
-    : m_lyricNumberHandler(lyricNumberHandler), m_e(e), m_score(score), m_logger(logger)
+                                         XmlStreamReader& e, Score* score, MxmlLogger* logger, bool isVoiceStaff)
+    : m_lyricNumberHandler(lyricNumberHandler), m_e(e), m_score(score), m_logger(logger), m_isVoiceStaff(isVoiceStaff)
 {
     // nothing
 }
@@ -7560,9 +7587,6 @@ void MusicXMLParserLyric::readElision(String& formattedText)
 
 void MusicXMLParserLyric::parse()
 {
-    std::unique_ptr<Lyrics> lyric { Factory::createLyrics(m_score->dummy()->chord()) };
-    // TODO in addlyrics: l->setTrack(trk);
-
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
@@ -7571,6 +7595,7 @@ void MusicXMLParserLyric::parse()
     double relX = m_e.doubleAttribute("relative-x") * 0.1 * DPMM;
     m_relativeY = m_e.doubleAttribute("relative-y") * -0.1 * DPMM;
     m_defaultY = m_e.doubleAttribute("default-y") * -0.1 * DPMM;
+    LyricsSyllabic syllabic = LyricsSyllabic::SINGLE;
 
     String extendType;
     String formattedText;
@@ -7585,13 +7610,13 @@ void MusicXMLParserLyric::parse()
         } else if (m_e.name() == "syllabic") {
             String syll = m_e.readText();
             if (syll == "single") {
-                lyric->setSyllabic(LyricsSyllabic::SINGLE);
+                syllabic = LyricsSyllabic::SINGLE;
             } else if (syll == "begin") {
-                lyric->setSyllabic(LyricsSyllabic::BEGIN);
+                syllabic = LyricsSyllabic::BEGIN;
             } else if (syll == "end") {
-                lyric->setSyllabic(LyricsSyllabic::END);
+                syllabic = LyricsSyllabic::END;
             } else if (syll == "middle") {
-                lyric->setSyllabic(LyricsSyllabic::MIDDLE);
+                syllabic = LyricsSyllabic::MIDDLE;
             } else {
                 LOGD("unknown syllabic %s", muPrintable(syll));                      // TODO
             }
@@ -7619,31 +7644,46 @@ void MusicXMLParserLyric::parse()
         return;
     }
 
-    //LOGD("formatted lyric '%s'", muPrintable(formattedText));
-    lyric->setXmlText(formattedText);
-    if (lyricColor.isValid()) {
-        lyric->setProperty(Pid::COLOR, lyricColor);
-        lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+    TextBase* item = nullptr;
+    if (isLikelySticking(formattedText, syllabic, hasExtend)) {
+        item = Factory::createSticking(m_score->dummy()->segment());
+    } else {
+        item = Factory::createLyrics(m_score->dummy()->chord());
     }
-    lyric->setVisible(printLyric);
 
-    lyric->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
-    lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    //LOGD("formatted lyric '%s'", muPrintable(formattedText));
+    item->setXmlText(formattedText);
+    if (lyricColor.isValid()) {
+        item->setProperty(Pid::COLOR, lyricColor);
+        item->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+    }
+    item->setVisible(printLyric);
+
+    item->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+    item->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 
     if (!RealIsNull(relX)) {
-        PointF offset = lyric->offset();
+        PointF offset = item->offset();
         offset.setX(relX);
-        lyric->setOffset(offset);
-        lyric->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+        item->setOffset(offset);
+        item->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
     }
 
-    Lyrics* const l = lyric.release();
-    m_numberedLyrics[lyricNo] = l;
+    if (item->isLyrics()) {
+        // Add lyric
+        Lyrics* l = toLyrics(item);
+        l->setSyllabic(syllabic);
+        m_numberedLyrics[lyricNo] = l;
 
-    if (hasExtend
-        && (extendType.empty() || extendType == "start")
-        && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
-        m_extendedLyrics.insert(l);
+        if (hasExtend
+            && (extendType.empty() || extendType == "start")
+            && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
+            m_extendedLyrics.insert(l);
+        }
+    } else if (item->isSticking()) {
+        // Add sticking
+        Sticking* s = toSticking(item);
+        m_inferredStickings.push_back(s);
     }
 }
 
@@ -7654,6 +7694,16 @@ String MusicXMLParserLyric::placement() const
     } else {
         return m_placement;
     }
+}
+
+bool MusicXMLParserLyric::isLikelySticking(const String& text, const LyricsSyllabic syllabic, const bool hasExtend)
+{
+    if (!configuration()->inferTextType()) {
+        return false;
+    }
+    String plainWords = MScoreTextToMXML::toPlainText(text.simplified());
+    static const std::wregex sticking(L"^[lrbLRB]+$");
+    return plainWords.contains(sticking) && syllabic == LyricsSyllabic::SINGLE && !hasExtend && !m_isVoiceStaff;
 }
 
 //---------------------------------------------------------
