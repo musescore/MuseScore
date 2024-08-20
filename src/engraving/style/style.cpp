@@ -506,6 +506,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::staffTextFrameBgColor, e.readColor());
         } else if (tag == "dymanicsShowTabCommon") { // pre-4.4 typo in gp-style.mss
             set(Sid::dynamicsShowTabCommon, bool(e.readInt()));
+        } else if (tag == "tupletOufOfStaff") {
+            set(Sid::tupletOutOfStaff, bool(e.readInt()));
         } else if (tag == "pedalBeginTextOffset"
                    || tag == "letRingBeginTextOffset"
                    || tag == "palmMuteBeginTextOffset"

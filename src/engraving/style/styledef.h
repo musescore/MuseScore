@@ -648,7 +648,7 @@ enum class Sid {
     keySigNaturals,
 
     tupletMaxSlope,
-    tupletOufOfStaff,
+    tupletOutOfStaff,
     tupletVHeadDistance,
     tupletVStemDistance,
     tupletStemLeftDistance,
