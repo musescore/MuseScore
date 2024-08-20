@@ -246,8 +246,8 @@ Item {
 
                             InstrumentsTreeItemDelegate {
                                 treeView: instrumentsTreeView
-
                                 item: treeItemDelegateLoader.item
+                                originalParent: treeItemDelegateLoader
 
                                 sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
