@@ -48,7 +48,7 @@ KnownCategories ExtensionsProvider::knownCategories() const
     return categories;
 }
 
-void ExtensionsProvider::reloadPlugins()
+void ExtensionsProvider::reloadExtensions()
 {
     ExtensionsLoader loader;
     m_manifests = loader.loadManifestList(configuration()->defaultPath(),

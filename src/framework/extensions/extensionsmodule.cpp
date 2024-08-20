@@ -108,12 +108,17 @@ void ExtensionsModule::registerApi()
 
 void ExtensionsModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
     m_configuration->init();
     m_actionController->init();
+
+    if (mode == IApplication::RunMode::ConsoleApp) {
+        m_provider->reloadExtensions();
+        m_extensionsLoaded = true;
+    }
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
@@ -128,5 +133,8 @@ void ExtensionsModule::onInit(const IApplication::RunMode& mode)
 
 void ExtensionsModule::onDelayedInit()
 {
-    m_provider->reloadPlugins();
+    if (!m_extensionsLoaded) {
+        m_provider->reloadExtensions();
+        m_extensionsLoaded = true;
+    }
 }

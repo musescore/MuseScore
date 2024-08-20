@@ -61,7 +61,7 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
 
     // reload
     if (ret) {
-        provider()->reloadPlugins();
+        provider()->reloadExtensions();
     }
 
     return ret;
