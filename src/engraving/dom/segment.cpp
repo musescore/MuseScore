@@ -1647,16 +1647,17 @@ EngravingItem* Segment::firstElementOfSegment(Segment* s, staff_idx_t activeStaf
 {
     for (auto i: s->elist()) {
         if (i && i->staffIdx() == activeStaff) {
+            if (i->isDurationElement()) {
+                DurationElement* de = toDurationElement(i);
+                Tuplet* tuplet = de->tuplet();
+                if (tuplet && de == tuplet->elements().front()) {
+                    return tuplet;
+                }
+            }
+
             if (i->type() == ElementType::CHORD) {
                 Chord* chord = toChord(i);
-                GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
-                if (!graceNotesBefore.empty()) {
-                    if (Chord* graceNotesBeforeFirstChord = graceNotesBefore.front()) {
-                        return graceNotesBeforeFirstChord->notes().front();
-                    }
-                }
-
-                return toChord(i)->notes().back();
+                return chord->firstGraceOrNote();
             } else {
                 return i;
             }
@@ -1939,7 +1940,8 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::HARP_DIAGRAM:
-    case ElementType::STICKING: {
+    case ElementType::STICKING:
+    case ElementType::TUPLET: {
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
             next = nextAnnotation(e);

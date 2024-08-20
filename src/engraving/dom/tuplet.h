@@ -158,6 +158,10 @@ public:
 
     PointF bracketL[4];
     PointF bracketR[3];
+
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+
 private:
 
     friend class DurationElement;
