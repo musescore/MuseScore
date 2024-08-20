@@ -8,15 +8,27 @@ on:
     inputs:
       build_mode:
         description: 'Build mode: devel, testing, stable'
-        required: true
         default: 'devel'
+        required: true
       publish:
         description: 'Publish: on - publish'
-        required: false
         default: 'off'
+        required: false
+  workflow_call:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish: on - publish'
+        default: 'off'
+        type: string
+        required: false
 
 jobs:
-  build_mu4:
+  backend:
     runs-on: ubuntu-20.04
     steps:
     - name: Cancel Previous Runs
