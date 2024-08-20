@@ -6888,11 +6888,13 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
     }
 
     // delete staffTypeChanges in removed measures
-    for (Measure* m = m1; m && m != m2->nextMeasure(); m = m->nextMeasure()) {
-        for (size_t i = m->el().size(); i > 0; --i) {
-            EngravingItem* el = m->el().at(i - 1);
-            if (el && el->isStaffTypeChange()) {
-                deleteItem(el);
+    if (moveStaffTypeChanges) {
+        for (Measure* m = m1; m && m != m2->nextMeasure(); m = m->nextMeasure()) {
+            for (size_t i = m->el().size(); i > 0; --i) {
+                EngravingItem* el = m->el().at(i - 1);
+                if (el && el->isStaffTypeChange()) {
+                    deleteItem(el);
+                }
             }
         }
     }
