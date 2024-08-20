@@ -98,7 +98,7 @@ public:
 
     QJSValue newArray(size_t length) override
     {
-        return engine.newArray(length);
+        return engine.newArray(static_cast<uint>(length));
     }
 };
 

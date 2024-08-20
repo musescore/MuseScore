@@ -138,20 +138,17 @@ static QString makeCleanType(const QString& type)
 
 static QString sigToString(const IApiRegister::Dump::Sig& sig, IApiRegister::Dump::MethodType type, const QString& prefix = QString())
 {
+    QString str;
     switch (type) {
     case IApiRegister::Dump::MethodType::Property: {
-        QString str;
         if (!prefix.isEmpty()) {
             str += prefix + ".";
         }
         str += sig.name;
         str += " → ";
         str += makeCleanType(sig.retType);
-
-        return str;
     } break;
     case IApiRegister::Dump::MethodType::Method: {
-        QString str;
         if (!prefix.isEmpty()) {
             str += prefix + ".";
         }
@@ -175,10 +172,9 @@ static QString sigToString(const IApiRegister::Dump::Sig& sig, IApiRegister::Dum
             str += " → ";
             str += makeCleanType(sig.retType);
         }
-
-        return str;
     } break;
     }
+    return str;
 }
 
 void ApiDumpModel::load()
