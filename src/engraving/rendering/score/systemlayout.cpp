@@ -1670,7 +1670,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                     Stem* stem = chord->stem();
                     double prevStemLength = stem ? stem->length() : 0.0;
                     ChordLayout::computeUp(chord, ctx);
-                    if (chord->up() != prevUp || (stem && stem->length() != prevStemLength)) {
+                    if (chord->up() != prevUp || (stem && !muse::RealIsEqual(stem->length(), prevStemLength))) {
                         // If the chord has changed direction needs to be re-laid out
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
                         somethingChanged = true;
@@ -2704,7 +2704,7 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
 
 bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system)
 {
-    if (item->offset().y() != item->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
+    if (!muse::RealIsEqual(item->offset().y(), item->propertyDefault(Pid::OFFSET).value<PointF>().y())) {
         // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
         return false;
     }

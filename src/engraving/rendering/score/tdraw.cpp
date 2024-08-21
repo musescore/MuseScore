@@ -2162,7 +2162,7 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
         // TODO: add style settings specific to measure repeats
         // for now, using thickness and margin same as mmrests
         double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness);
-        if (hBarThickness) {     // don't draw at all if 0, QPainter interprets 0 pen width differently
+        if (!RealIsNull(hBarThickness)) {     // don't draw at all if 0, QPainter interprets 0 pen width differently
             Pen pen(painter->pen());
             pen.setCapStyle(PenCapStyle::FlatCap);
             pen.setWidthF(hBarThickness);
@@ -2215,7 +2215,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
 
         // draw horizontal line
         double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness) * mag;
-        if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
+        if (!RealIsNull(hBarThickness)) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
             double halfHBarThickness = hBarThickness * .5;
@@ -2234,7 +2234,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
 
         // draw vertical lines
         double vStrokeThickness = item->style().styleMM(Sid::mmRestHBarVStrokeThickness) * mag;
-        if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
+        if (!RealIsNull(vStrokeThickness)) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(vStrokeThickness);
             painter->setPen(pen);
             double halfVStrokeHeight = item->style().styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;

@@ -291,10 +291,10 @@ void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
     if (drawStaff) {
         xml.tag("staff", drawStaff);
     }
-    if (xoffset) {
+    if (!RealIsNull(xoffset)) {
         xml.tag("xoffset", xoffset);
     }
-    if (yoffset) {
+    if (!RealIsNull(yoffset)) {
         xml.tag("yoffset", yoffset);
     }
     if (!tag.isEmpty()) {

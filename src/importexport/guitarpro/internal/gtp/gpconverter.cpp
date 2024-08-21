@@ -53,6 +53,7 @@
 #include "types/symid.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::engraving;
 
@@ -1555,7 +1556,7 @@ void GPConverter::addInstrumentChanges()
                 instrName = it->second.label;
             }
 
-            if (bar == 0 && pos == 0 && midiProgramm == track.second->programm()) {
+            if (bar == 0 && muse::RealIsNull(pos) && midiProgramm == track.second->programm()) {
                 // skipping the default instrument in the beginning of the track
                 continue;
             }
@@ -1572,7 +1573,7 @@ void GPConverter::addInstrumentChanges()
             instrCh->setTrack(trackIdx * VOICES);
             instrCh->setXmlText(instrName);
 
-            if (position != 0) {
+            if (!muse::RealIsNull(position)) {
                 // searching for correct segment to put instrument change
                 Fraction tick = m->tick() + Fraction::fromTicks(position * Constants::DIVISION);
                 Segment* positionedSegment = m->findSegment(SegmentType::ChordRest, tick);
@@ -2036,7 +2037,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     const GPNote::Bend* gpBend = gpnote->bend();
 
     bool bendHasMiddleValue = true;
-    if (gpBend->middleOffset1 == 12 && gpBend->middleOffset2 == 12) {
+    if (muse::RealIsEqual(gpBend->middleOffset1, 12) && muse::RealIsEqual(gpBend->middleOffset2, 12)) {
         bendHasMiddleValue = false;
     }
 
@@ -2052,13 +2053,15 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         }
 
         if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset2), gpBend->middleValue);
-            gpBend->middleOffset2 >= 0 && gpBend->middleOffset2 != gpBend->middleOffset1
+            gpBend->middleOffset2 >= 0 && !muse::RealIsEqual(gpBend->middleOffset2, gpBend->middleOffset1)
             && gpBend->middleOffset2 < gpBend->destinationOffset
             && value != lastPoint) {
             pitchValues.push_back(std::move(value));
         }
 
-        if (gpBend->middleOffset1 == -1 && gpBend->middleOffset2 == -1 && gpBend->middleValue != -1) {
+        if (muse::RealIsEqual(gpBend->middleOffset1, -1)
+            && muse::RealIsEqual(gpBend->middleOffset2, -1)
+            && !muse::RealIsEqual(gpBend->middleValue, -1)) {
             //!@NOTE It seems when middle point is places exactly in the middle
             //!of bend  GP6 stores this value equal -1
             if (gpBend->destinationOffset > 50) {

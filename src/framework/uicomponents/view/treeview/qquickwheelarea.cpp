@@ -38,6 +38,7 @@
 ****************************************************************************/
 
 #include "qquickwheelarea_p.h"
+#include "realfn.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -141,7 +142,7 @@ void QQuickWheelArea1::wheelEvent(QWheelEvent *we)
 
 void QQuickWheelArea1::setHorizontalMinimumValue(qreal value)
 {
-    if (value == m_horizontalMinimumValue)
+    if (muse::RealIsEqual(value, m_horizontalMinimumValue))
         return;
 
     m_horizontalMinimumValue = value;
@@ -155,7 +156,7 @@ qreal QQuickWheelArea1::horizontalMinimumValue() const
 
 void QQuickWheelArea1::setHorizontalMaximumValue(qreal value)
 {
-    if (value == m_horizontalMaximumValue)
+    if (muse::RealIsEqual(value, m_horizontalMaximumValue))
         return;
 
     m_horizontalMaximumValue = value;
@@ -169,7 +170,7 @@ qreal QQuickWheelArea1::horizontalMaximumValue() const
 
 void QQuickWheelArea1::setVerticalMinimumValue(qreal value)
 {
-    if (value == m_verticalMinimumValue)
+    if (muse::RealIsEqual(value, m_verticalMinimumValue))
         return;
 
     m_verticalMinimumValue = value;
@@ -183,7 +184,7 @@ qreal QQuickWheelArea1::verticalMinimumValue() const
 
 void QQuickWheelArea1::setVerticalMaximumValue(qreal value)
 {
-    if (value == m_verticalMaximumValue)
+    if (muse::RealIsEqual(value, m_verticalMaximumValue))
         return;
 
     m_verticalMaximumValue = value;
@@ -199,7 +200,7 @@ void QQuickWheelArea1::setHorizontalValue(qreal value)
 {
     value = qBound<qreal>(m_horizontalMinimumValue, value, m_horizontalMaximumValue);
 
-    if (value != m_horizontalValue) {
+    if (!muse::RealIsEqual(value, m_horizontalValue)) {
         m_horizontalValue = value;
         emit horizontalValueChanged();
     }
@@ -214,7 +215,7 @@ void QQuickWheelArea1::setVerticalValue(qreal value)
 {
     value = qBound<qreal>(m_verticalMinimumValue, value, m_verticalMaximumValue);
 
-    if (value != m_verticalValue) {
+    if (!muse::RealIsEqual(value, m_verticalValue)) {
         m_verticalValue = value;
         emit verticalValueChanged();
     }
@@ -253,7 +254,7 @@ qreal QQuickWheelArea1::horizontalDelta() const
 
 void QQuickWheelArea1::setScrollSpeed(qreal value)
 {
-    if (value != m_scrollSpeed) {
+    if (!muse::RealIsEqual(value, m_scrollSpeed)) {
         m_scrollSpeed = value;
         emit scrollSpeedChanged();
     }

@@ -327,7 +327,7 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
 
 void PlaybackToolBarModel::setTempoMultiplier(qreal multiplier)
 {
-    if (multiplier == tempoMultiplier()) {
+    if (RealIsEqual(multiplier, tempoMultiplier())) {
         return;
     }
 

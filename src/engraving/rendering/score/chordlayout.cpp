@@ -74,6 +74,8 @@
 #include "tremololayout.h"
 #include "autoplace.h"
 
+#include "realfn.h"
+
 using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -2509,7 +2511,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
             }
 
             double ny = (note->line() + stepOffset) * stepDistance;
-            if (note->ldata()->pos().y() != ny) {
+            if (!RealIsEqual(note->ldata()->pos().y(), ny)) {
                 note->mutldata()->setPosY(ny);
                 if (stem) {
                     TLayout::layoutStem(chord->stem(), chord->stem()->mutldata(), ctx.conf());
@@ -3168,7 +3170,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         double dd = ctx.conf().point(ctx.conf().styleS(Sid::dotDotDistance)) * correctMag;
         double x  = isTabStaff ? chord->dotPosX() - item->pos().x() : chord->dotPosX() - item->pos().x() - chord->pos().x();
         // in case of dots with different size, center-align them
-        if (item->mag() != chord->mag() && chord->notes().size() > 1) {
+        if (!RealIsEqual(item->mag(), chord->mag()) && chord->notes().size() > 1) {
             double relativeMag = item->mag() / chord->mag();
             double centerAlignOffset = item->dot(0)->width() * (1 / relativeMag - 1) / 2;
             x += centerAlignOffset;

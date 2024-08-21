@@ -66,6 +66,7 @@
 #include "dom/volta.h"
 
 #include "log.h"
+#include "realfn.h"
 
 namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
@@ -271,7 +272,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
                 Note* nextNote = toNote(spanner->endElement());
                 double pitchDelta = nextNote->ppitch() - params.pitch;
                 int timeDelta = params.offTime - params.onTime;
-                if (pitchDelta != 0 && timeDelta != 0) {
+                if (!muse::RealIsNull(pitchDelta) && timeDelta != 0) {
                     collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer,
                                      glissando->staffIdx());
                 }
@@ -570,7 +571,7 @@ static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel,
         }
     }
 
-    double CONVERSION_FACTOR = CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+    int CONVERSION_FACTOR = CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
     for (auto& change : multChanges) {
         // Ignore fix events: they are available as cached ramp starts
         // and considering them ends up with multiplying twice effectively
@@ -595,7 +596,7 @@ static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel,
             }
             lastVal = mult;
 
-            double realMult = mult / CONVERSION_FACTOR;
+            double realMult = mult / static_cast<double>(CONVERSION_FACTOR);
             if (velocityMap.find(t) != velocityMap.end()) {
                 lastVelocity = velocityMap[t];
                 velocityMap[t] *= realMult;

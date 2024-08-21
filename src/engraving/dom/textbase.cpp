@@ -56,6 +56,7 @@
 #include "undo.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -121,7 +122,7 @@ bool CharFormat::operator==(const CharFormat& cf) const
 {
     return cf.style() == style()
            && cf.valign() == valign()
-           && cf.fontSize() == fontSize()
+           && muse::RealIsEqual(cf.fontSize(), fontSize())
            && cf.fontFamily() == fontFamily();
 }
 
@@ -402,7 +403,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
                 resultFormat.setFontFamily(TextBase::UNDEFINED_FONT_FAMILY);
             }
 
-            if (resultFormat.fontSize() != format.fontSize()) {
+            if (!muse::RealIsEqual(resultFormat.fontSize(), format.fontSize())) {
                 resultFormat.setFontSize(TextBase::UNDEFINED_FONT_SIZE);
             }
 
@@ -2237,7 +2238,7 @@ String TextBase::genText(const LayoutData* ldata) const
                 }
             }
 
-            if (format.fontSize() != fmt.fontSize()) {
+            if (!muse::RealIsEqual(format.fontSize(), fmt.fontSize())) {
                 text += String(u"<font size=\"%1\"/>").arg(format.fontSize());
             }
             if (format.fontFamily() != "ScoreText" && format.fontFamily() != fmt.fontFamily()) {
@@ -3651,7 +3652,7 @@ bool TextBase::hasCustomFormatting() const
             if (fmt.style() != format.style()) {
                 return true;
             }
-            if (format.fontSize() != fmt.fontSize()) {
+            if (!muse::RealIsEqual(format.fontSize(), fmt.fontSize())) {
                 return true;
             }
             if (format.fontFamily() != fmt.fontFamily()) {
@@ -3762,7 +3763,7 @@ String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) c
                 }
             }
 
-            if (!removeSize && (format.fontSize() != fmt.fontSize())) {
+            if (!removeSize && (!muse::RealIsEqual(format.fontSize(), fmt.fontSize()))) {
                 _txt += String(u"<font size=\"%1\"/>").arg(format.fontSize());
             }
             if (!removeFace && (format.fontFamily() != fmt.fontFamily())) {

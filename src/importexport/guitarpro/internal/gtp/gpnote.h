@@ -9,6 +9,8 @@
 
 #include "inoteproperty.h"
 
+#include "realfn.h"
+
 namespace mu::iex::guitarpro {
 class GPNote
 {
@@ -65,13 +67,13 @@ public:
         float originValue{ -1 };
         bool isEmpty() const
         {
-            return destinationValue == -1
-                   && destinationOffset == -1
-                   && middleValue == -1
-                   && middleOffset1 == -1
-                   && middleOffset2 == -1
-                   && originOffset == -1
-                   && originValue == -1;
+            return muse::RealIsEqual(destinationValue, -1)
+                   && muse::RealIsEqual(destinationOffset, -1)
+                   && muse::RealIsEqual(middleValue, -1)
+                   && muse::RealIsEqual(middleOffset1, -1)
+                   && muse::RealIsEqual(middleOffset2, -1)
+                   && muse::RealIsEqual(originOffset, -1)
+                   && muse::RealIsEqual(originValue, -1);
         }
     };
     struct Trill {

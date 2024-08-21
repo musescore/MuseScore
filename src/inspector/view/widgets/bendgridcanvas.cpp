@@ -30,6 +30,7 @@
 
 #include "translation.h"
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::inspector;
 using namespace muse::ui;
@@ -666,7 +667,7 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
         path.moveTo(lastPoint);
 
         // draw line only if there is a point before the current one
-        if (lastPoint.x()) {
+        if (!muse::RealIsNull(lastPoint.x())) {
             QPointF point = constrainToGrid(frameRectWithoutBorders, QPointF(currentPoint.x(), lastPoint.y()));
 
             path.quadTo(point, currentPoint);

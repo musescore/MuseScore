@@ -80,6 +80,7 @@
 #endif
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -875,7 +876,7 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
     }
 
     String pitchOffset;
-    if (tuning() != 0) {
+    if (!muse::RealIsNull(tuning())) {
         static constexpr size_t bufferSize = 50;
         char buffer[bufferSize];
         snprintf(buffer, bufferSize, "%+.3f", tuning());

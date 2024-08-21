@@ -60,6 +60,7 @@
 #include "verticalgapdata.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -167,7 +168,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
             if (ctx.state().curSystem()->vbox()) {
                 // if the header exists and there is a frame, move the frame downwards
                 // to avoid collisions
-                distance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
+                distance = !muse::RealIsNull(headerExtension) ? headerExtension + headerFooterPadding : 0.0;
             } else {
                 distance = ctx.conf().styleMM(Sid::staffUpperBorder);
                 bool fixedDistance = false;

@@ -410,7 +410,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
             }
             break;
         case Pid::LINE_WIDTH:
-            if (lineWidth != -1.0) {
+            if (!RealIsEqual(lineWidth, -1.0)) {
                 value = Millimetre(lineWidth);
             }
             break;

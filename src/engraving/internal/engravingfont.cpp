@@ -1067,7 +1067,7 @@ void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const Poi
     m_font.setPointSizeF(size);
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);
-    if (angle != 0) {
+    if (!RealIsNull(angle)) {
         const double _width = sym.bbox.width() / 2;
         const double _height = sym.bbox.height() / 2;
         painter->translate(_width, -_height);

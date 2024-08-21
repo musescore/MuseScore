@@ -30,6 +30,8 @@
 
 #include "tlayout.h"
 
+#include "realfn.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
@@ -270,7 +272,7 @@ double ArpeggioLayout::insetDistance(const Arpeggio* item, const LayoutContext& 
     for (const Accidental* accidental : accidentals) {
         if (furthestAccidental) {
             bool currentIsFurtherX = accidental->x() < furthestAccidental->x();
-            bool currentIsSameX = accidental->x() == furthestAccidental->x();
+            bool currentIsSameX = muse::RealIsEqual(accidental->x(), furthestAccidental->x());
             auto accidentalBbox = item->symBbox(accidental->symId());
             double currentTop = accidental->note()->pos().y() + accidentalBbox.top() * mag_;
             double currentBottom = accidental->note()->pos().y() + accidentalBbox.bottom() * mag_;

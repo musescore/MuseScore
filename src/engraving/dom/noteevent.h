@@ -42,7 +42,7 @@ public:
     constexpr static int SLIDE_AMOUNT = 3;
 
     NoteEvent() {}
-    NoteEvent(int a, int b, int c, double d = 1.0, double play = true, int offset = 0)
+    NoteEvent(int a, int b, int c, double d = 1.0, bool play = true, int offset = 0)
         : m_pitch(a), m_ontime(b), m_len(c), m_velocityMultiplier(d), m_play(play), m_offset(offset) {}
 
     int pitch() const { return m_pitch; }

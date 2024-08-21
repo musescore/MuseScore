@@ -24,6 +24,8 @@
 
 #include "translation.h"
 
+#include "realfn.h"
+
 using namespace mu::inspector;
 using namespace mu::engraving;
 
@@ -236,7 +238,7 @@ void BeamSettingsModel::setBeamHeight(const qreal left, const qreal right)
 void BeamSettingsModel::updateFeatheringMode(const qreal left, const qreal right)
 {
     BeamTypes::FeatheringMode newFeathering = BeamTypes::FeatheringMode::FEATHERING_NONE;
-    if (left != right) {
+    if (!muse::RealIsEqual(left, right)) {
         newFeathering = left > right ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
                         : BeamTypes::FeatheringMode::FEATHERED_ACCELERATE;
     } else {

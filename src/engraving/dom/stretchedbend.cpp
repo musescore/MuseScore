@@ -33,6 +33,7 @@
 #include "tie.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -563,7 +564,7 @@ RectF StretchedBend::calculateBoundingRect() const
 
 void StretchedBend::fillArrows(double width)
 {
-    if (m_arrows.width == width) {
+    if (muse::RealIsEqual(m_arrows.width, width)) {
         return;
     }
 

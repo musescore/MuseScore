@@ -74,6 +74,7 @@
 #include "importexport/ove/ioveconfiguration.h"
 
 #include "log.h"
+#include "realfn.h"
 
 namespace ove {
 static std::shared_ptr<mu::iex::ove::IOveConfiguration> configuration()
@@ -963,7 +964,7 @@ void OveToMScore::convertSignatures()
     std::map<int, double>::iterator it;
     int lastTempo = 0;
     for (it=tempos.begin(); it != tempos.end(); ++it) {
-        if (it == tempos.begin() || (*it).second != lastTempo) {
+        if (it == tempos.begin() || !muse::RealIsEqual((*it).second, lastTempo)) {
             double tpo = ((*it).second) / 60.0;
             m_score->setTempo(Fraction::fromTicks((*it).first), tpo);
         }
