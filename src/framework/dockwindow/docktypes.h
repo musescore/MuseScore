@@ -30,6 +30,7 @@
 namespace muse::dock {
 inline const char* CONTEXT_MENU_MODEL_PROPERTY("contextMenuModel");
 inline const char* DOCK_PANEL_PROPERTY("dockPanel");
+inline const char* TITLEBAR_PROPERTY("titleBar");
 
 //! NOTE: need to be synchronized with Window shadow(see DockFloatingWindow margins)
 inline constexpr int DOCK_WINDOW_SHADOW(8);
