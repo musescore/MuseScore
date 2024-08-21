@@ -8,7 +8,7 @@ if (MSVC)
     # either the above or the below, or even both
     #add_compile_options(/wd4996) # disabled warning: C4996, needed for VS 17.8.1 to suppress tons (some 1000) of them in VS' own code
 else()
-    add_compile_options(-Wall -Wextra) #-Wconversion
+    add_compile_options(-Wall -Wextra -Wfloat-equal) #-Wconversion
 endif()
 
 # Target
@@ -22,12 +22,18 @@ function(target_no_warning TARGET WNAME)
 
     if (WNAME STREQUAL "-Wno-multichar")
         set(MSVC_Warning )
+    elseif(WNAME STREQUAL "-Wno-float-equal")
+        set(MSVC_Warning )
+    elseif(WNAME STREQUAL "-Wno-array-parameter")
+        set(MSVC_Warning )
     elseif(WNAME STREQUAL "-Wimplicit-fallthrough=0")
         set(CLANG_Warning "-Wno-implicit-fallthrough")
     elseif(WNAME STREQUAL "-Wno-unused-parameter")
         set(MSVC_Warning /wd4100)
     elseif(WNAME STREQUAL "-Wno-unused-variable")
         set(MSVC_Warning /wd4101 /wd4189)
+    elseif(WNAME STREQUAL "-Wno-unused-but-set-variable")
+        set(MSVC_Warning )
     elseif(WNAME STREQUAL "-Wunused-const-variable=0")
     elseif(WNAME STREQUAL "-Wno-type-limits")
     elseif(WNAME STREQUAL "-Wno-unknown-pragmas")
