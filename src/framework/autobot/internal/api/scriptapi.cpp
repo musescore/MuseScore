@@ -30,6 +30,15 @@ ScriptApi::ScriptApi(muse::api::IApiEngine* engine, QObject* parent)
 {
 }
 
+ScriptApi::~ScriptApi()
+{
+    for (auto& a : m_apis) {
+        if (a.isNeedDelete) {
+            delete a.obj;
+        }
+    }
+}
+
 QJSValue ScriptApi::api(const std::string& name) const
 {
     if (!apiRegister()) {
@@ -41,7 +50,9 @@ QJSValue ScriptApi::api(const std::string& name) const
         return a.jsval;
     }
 
-    a.obj = apiRegister()->createApi(name, m_engine);
+    auto api = apiRegister()->createApi(name, m_engine);
+    a.obj = api.first;
+    a.isNeedDelete = api.second;
     IF_ASSERT_FAILED(a.obj) {
         return QJSValue();
     }

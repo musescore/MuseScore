@@ -24,6 +24,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/guitarpromodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/guitarpromodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iguitarproconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarprodrumset.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarprodrumset.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.h
 
@@ -37,6 +39,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/utils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/utils.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.h

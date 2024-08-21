@@ -32,19 +32,27 @@ using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::extensions;
 
-static UiAction MANAGE_ACTION = UiAction(
-    "manage-plugins",
-    ui::UiCtxAny,
-    shortcuts::CTX_ANY,
-    TranslatableString("action", "&Manage plugins…"),
-    TranslatableString("action", "Manage plugins…")
-    );
+static const UiActionList STATIC_ACTIONS = {
+    UiAction("manage-plugins",
+             ui::UiCtxAny,
+             shortcuts::CTX_ANY,
+             TranslatableString("action", "&Manage plugins…"),
+             TranslatableString("action", "Manage plugins…")
+             ),
+    UiAction("extensions-show-apidump",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Show Api dump")
+             ),
+};
 
 const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
 {
     UiActionList result;
+    ManifestList manifests = provider()->manifestList();
+    result.reserve(manifests.size() + STATIC_ACTIONS.size());
 
-    for (const Manifest& m : provider()->manifestList()) {
+    for (const Manifest& m : manifests) {
         for (const Action& a : m.actions) {
             UiAction action;
             action.code = makeUriQuery(m.uri, a.code).toString();
@@ -57,7 +65,7 @@ const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
         }
     }
 
-    result.push_back(MANAGE_ACTION);
+    result.insert(result.end(), STATIC_ACTIONS.begin(), STATIC_ACTIONS.end());
 
     m_actions = result;
 

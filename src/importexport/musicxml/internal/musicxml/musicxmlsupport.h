@@ -242,6 +242,8 @@ typedef std::vector<InferredPercInstr> InferredPercList;
 
 typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
 
+typedef std::map<String, std::pair<String, DurationType> > MetronomeTextMap;
+
 //---------------------------------------------------------
 //   MxmlSupport -- MusicXML import support functions
 //---------------------------------------------------------

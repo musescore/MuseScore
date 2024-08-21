@@ -33,13 +33,9 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/engravingproject.h"
-#include "engraving/compat/scoreaccess.h"
-#include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
-#include "engraving/style/defaultstyle.h"
-#include "engraving/rendering/dev/beamlayout.h"
 
 #include "iprojectautosaver.h"
 #include "notation/notationerrors.h"

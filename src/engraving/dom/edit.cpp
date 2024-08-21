@@ -595,12 +595,15 @@ Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool force
     };
     Note* referenceNote = chord->notes().at(0);
 
-    while (referenceNote->tieBack()) {
+    while (true) {
+        // don't add note if it is already part of tied notes previously
+        if (referenceNote->chord()->findNote(noteVal.pitch)) {
+            return nullptr;
+        }
+        if (!referenceNote->tieBack()) {
+            break;
+        }
         referenceNote = referenceNote->tieBack()->startNote();
-    }
-    // don't add note if it is already exist
-    if (referenceNote->chord()->findNote(noteVal.pitch)) {
-        return nullptr;
     }
 
     Tie* tie = nullptr;
@@ -4124,7 +4127,7 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
     }
 
     Fraction tick;
-    bool isTitleFrame = type == ElementType::VBOX && beforeMeasure == beforeMeasure->score()->first();
+    bool isTitleFrame = type == ElementType::VBOX && beforeMeasure && beforeMeasure == beforeMeasure->score()->first();
     if (beforeMeasure) {
         if (beforeMeasure->isMeasure()) {
             Measure* m = toMeasure(beforeMeasure);
@@ -6885,11 +6888,13 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
     }
 
     // delete staffTypeChanges in removed measures
-    for (Measure* m = m1; m && m != m2->nextMeasure(); m = m->nextMeasure()) {
-        for (size_t i = m->el().size(); i > 0; --i) {
-            EngravingItem* el = m->el().at(i - 1);
-            if (el && el->isStaffTypeChange()) {
-                deleteItem(el);
+    if (moveStaffTypeChanges) {
+        for (Measure* m = m1; m && m != m2->nextMeasure(); m = m->nextMeasure()) {
+            for (size_t i = m->el().size(); i > 0; --i) {
+                EngravingItem* el = m->el().at(i - 1);
+                if (el && el->isStaffTypeChange()) {
+                    deleteItem(el);
+                }
             }
         }
     }

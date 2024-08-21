@@ -68,6 +68,8 @@
 #include "engraving/dom/volta.h"
 #include "engraving/dom/fretcircle.h"
 
+#include "utils.h"
+
 #include "log.h"
 
 using namespace muse::io;
@@ -605,10 +607,10 @@ bool GuitarPro5::readTracks()
         if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
             clefId = ClefType::PERC;
             StaffTypes type = StaffTypes::PERC_DEFAULT;
-            if (auto it = PERC_STAFF_LINES_FROM_INSTRUMENT.find(name.toStdString());
-                it != PERC_STAFF_LINES_FROM_INSTRUMENT.end()) {
-                initGuitarProPercussionSet(it->second);
-                setInstrumentDrumset(instr, it->second);
+            if (auto it = drumset::PERC_STAFF_LINES_FROM_INSTRUMENT.find(name.toStdString());
+                it != drumset::PERC_STAFF_LINES_FROM_INSTRUMENT.end()) {
+                drumset::initGuitarProPercussionSet(it->second);
+                drumset::setInstrumentDrumset(instr, it->second);
                 switch (it->second.numLines) {
                 case 1:
                     type = StaffTypes::PERC_1LINE;
@@ -624,8 +626,8 @@ bool GuitarPro5::readTracks()
                     break;
                 }
             } else {
-                GuitarPro::initGuitarProDrumset();
-                instr->setDrumset(gpDrumset);
+                drumset::initGuitarProDrumset();
+                instr->setDrumset(drumset::gpDrumset);
             }
             staff->setStaffType(Fraction(0, 1), *StaffType::preset(type));
         } else {
@@ -1250,7 +1252,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
             note->setHarmonic(true);
             float harmonicFret = naturalHarmonicFromFret(fret);
-            int harmonicOvertone = GuitarPro::harmonicOvertone(note, harmonicFret, type);
+            int harmonicOvertone = utils::harmonicOvertone(note, harmonicFret, type);
             note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
             note->setHarmonicFret(harmonicFret);
             auto staff = note->staff();
@@ -1309,7 +1311,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
                 break;
             }
 
-            int overtoneFret = GuitarPro::harmonicOvertone(note, harmonicFret, type);
+            int overtoneFret = utils::harmonicOvertone(note, harmonicFret, type);
             harmonicNote->setString(note->string());
             harmonicNote->setFret(note->fret());
             harmonicNote->setHarmonicFret(harmonicFret + fret);

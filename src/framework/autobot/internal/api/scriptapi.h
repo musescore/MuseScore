@@ -49,6 +49,7 @@ class ScriptApi : public QObject
 
 public:
     ScriptApi(muse::api::IApiEngine* engine, QObject* parent);
+    ~ScriptApi();
 
     QJSValue log() const { return api("api.log"); }
     QJSValue autobot() const { return api("api.autobot"); }
@@ -69,6 +70,7 @@ private:
     struct Api
     {
         muse::api::ApiObject* obj = nullptr;
+        bool isNeedDelete = false;
         QJSValue jsval;
     };
 

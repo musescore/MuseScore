@@ -29,6 +29,8 @@
 
 using namespace muse::extensions;
 
+static const muse::UriQuery SHOW_APIDUMP_URI("muse://extensions/apidump?sync=false&modal=false&floating=true");
+
 void ExtensionsActionController::init()
 {
     m_uiActions = std::make_shared<ExtensionsUiActions>();
@@ -51,6 +53,8 @@ void ExtensionsActionController::registerPlugins()
             });
         }
     }
+
+    dispatcher()->reg(this, "extensions-show-apidump", [this]() { openUri(SHOW_APIDUMP_URI); });
 
     uiActionsRegister()->reg(m_uiActions);
 }
@@ -77,4 +81,13 @@ void ExtensionsActionController::onPluginTriggered(const UriQuery& q)
         provider()->setExecPoint(q.uri(), EXEC_MANUALLY);
         provider()->perform(q);
     }
+}
+
+void ExtensionsActionController::openUri(const UriQuery& uri, bool isSingle)
+{
+    if (isSingle && interactive()->isOpened(uri.uri()).val) {
+        return;
+    }
+
+    interactive()->open(uri);
 }

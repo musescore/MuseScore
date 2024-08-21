@@ -40,7 +40,6 @@ LedgerLine::LedgerLine(EngravingItem* s)
 {
     setSelectable(false);
     m_len        = 0.;
-    m_next       = 0;
 }
 
 LedgerLine::~LedgerLine()

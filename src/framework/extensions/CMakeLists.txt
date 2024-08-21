@@ -75,6 +75,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/apidumpmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/apidumpmodel.h
     )
 
 

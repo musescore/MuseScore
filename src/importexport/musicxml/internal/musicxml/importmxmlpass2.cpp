@@ -95,14 +95,14 @@
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
-#include "engraving/rendering/dev/tlayout.h"
+#include "engraving/rendering/score/tlayout.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
@@ -902,7 +902,7 @@ static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader
                       const std::set<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
 {
-    for (const auto lyricNo : muse::keys(numbrdLyrics)) {
+    for (const int lyricNo : muse::keys(numbrdLyrics)) {
         Lyrics* const lyric = numbrdLyrics.at(lyricNo);
         addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
         if (muse::contains(extLyrics, lyric)) {
@@ -914,13 +914,22 @@ static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader
 static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std::set<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
 {
-    for (const auto lyricNo : muse::keys(numberedLyrics)) {
+    for (const int lyricNo : muse::keys(numberedLyrics)) {
         Lyrics* const lyric = numberedLyrics.at(lyricNo);
         if (lyric) {
             bool extend = muse::contains(extendedLyrics, lyric);
             const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);
             gnLyrics.push_back(gnl);
         }
+    }
+}
+
+static void addInferredStickings(ChordRest* cr, const std::vector<Sticking*>& numberedStickings)
+{
+    for (Sticking* sticking : numberedStickings) {
+        sticking->setParent(cr->segment());
+        sticking->setTrack(cr->track());
+        cr->score()->addElement(sticking);
     }
 }
 
@@ -952,6 +961,19 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
     Segment* s = measure->getSegment(SegmentType::ChordRest, elTick);
+
+    if (el->isSticking()) {
+        if (el->propertyFlags(Pid::OFFSET) == PropertyFlags::UNSTYLED) {
+            const EngravingItem* item = s->element(el->track());
+            const Chord* chord = item && item->isChord() ? toChord(item) : nullptr;
+            const bool hasGraceNotes = chord && !chord->graceNotes().empty();
+
+            if (!hasGraceNotes) {
+                el->resetProperty(Pid::OFFSET);
+            }
+        }
+    }
+
     if (el->systemFlag()) {
         Score* score = measure->score();
         Staff* st = score->staff(track2staff(track));
@@ -961,6 +983,16 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
         bool found = false;
         for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), elTick.ticks())) {
             if (el->type() == existingEl->type()) {
+                if (el->isTextBase()) {
+                    TextBase* elText = toTextBase(el);
+                    TextBase* existingText = toTextBase(existingEl);
+                    if (elText->xmlText() == existingText->xmlText()) {
+                        found = true;
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
                 found = true;
                 break;
             }
@@ -2030,11 +2062,10 @@ static void createTimeTick(const Score* score, const Fraction& tick, const staff
 static String replacePartNameAccidentals(const String& partName)
 {
     String name = partName;
-    static const std::regex re("((^|\\s|\\u00A0)[ABCDEF][b#]($|\\s|\u00A0))");
+    static const std::wregex re(L"((^|\\s|\\u00A0)[ABCDEF][b#\\u00AF]($|\\s|\\u00A0))");
     StringList res = name.search(re, { 1 }, SplitBehavior::SkipEmptyParts);
-
     if (!res.empty()) {
-        String transp = res.at(0).replace(u"b", u"♭").replace(u"#", u"♯");
+        String transp = res.at(0).replace(u"b", u"♭").replace(u"¯", u"♭").replace(u"#", u"♯");
         name.replace(re, transp);
         return name;
     }
@@ -3224,7 +3255,6 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
     }
 
-    handleTempo();
     handleRepeats(measure, tick + m_offset, measureHasCoda, segnos, delayedDirections);
     handleNmiCmi(measure, tick + m_offset, delayedDirections);
     handleFraction();
@@ -3287,7 +3317,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         tempoLine->setBeginText(simplifiedText);
         tempoLine->setContinueText(u"");
         m_inferredTempoLineStart = tempoLine;
-    } else if (isLikelySticking() && isPercussionStaff) {
+    } else if (isLikelySticking()) {
         Sticking* sticking = Factory::createSticking(m_score->dummy()->segment());
         sticking->setXmlText(m_wordsText);
         if (!RealIsNull(m_relativeX)) {
@@ -3743,13 +3773,16 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         if (m_e.name() == "metronome") {
             m_metroText = metronome(m_tpoMetro);
         } else if (m_e.name() == "words") {
-            m_enclosure      = m_e.attribute("enclosure");
+            m_enclosure = m_e.attribute("enclosure");
+            m_fontFamily = m_e.attribute("font-family");
             String nextPart = xmlpass2::nextPartOfFormattedString(m_e);
+
             textToDynamic(nextPart);
             textToCrescLine(nextPart);
+            handleTempo(nextPart);
             m_wordsText += nextPart;
         } else if (m_e.name() == "rehearsal") {
-            m_enclosure      = m_e.attribute("enclosure");
+            m_enclosure = m_e.attribute("enclosure");
             if (m_enclosure.empty()) {
                 m_enclosure = u"square";          // note different default
             }
@@ -4464,18 +4497,50 @@ void MusicXMLParserDirection::handleChordSym(const Fraction& tick, HarmonyMap& h
     m_wordsText.clear();
 }
 
-void MusicXMLParserDirection::handleTempo()
+void MusicXMLParserDirection::handleTempo(String& wordsString)
 {
     if (!configuration()->inferTextType()) {
         return;
     }
-    // Pick up any tempo markings which may have been exported from Sibelius as <words>
+
+    // Map Sibelius' representation of note types to their SMuFL counterparts and duration types
+    static const MetronomeTextMap sibeliusSyms = {
+        { u"y", { u"<sym>metNote32ndUp</sym>", DurationType::V_32ND } },
+        { u"x", { u"<sym>metNote16thUp</sym>", DurationType::V_16TH } },
+        { u"e", { u"<sym>metNote8thUp</sym>", DurationType::V_EIGHTH } },
+        { u"q", { u"<sym>metNoteQuarterUp</sym>", DurationType::V_QUARTER } },
+        { u"h", { u"<sym>metNoteHalfUp</sym>", DurationType::V_HALF } },
+        { u"w", { u"<sym>metNoteWhole</sym>", DurationType::V_WHOLE } },
+        { u"V", { u"<sym>metNoteDoubleWholeSquare</sym>", DurationType::V_BREVE } },
+        { u"W", { u"<sym>metNoteDoubleWhole</sym>", DurationType::V_BREVE } }
+    };
+
+    static const MetronomeTextMap metTimesSyms = {
+        { u"Œ", { u"<sym>metNoteQuarterUp</sym>", DurationType::V_QUARTER } },
+        { u"Ó", { u"<sym>metNoteHalfUp</sym>", DurationType::V_HALF } },
+    };
+
+    MetronomeTextMap textMap;
+    if (m_pass1.exporterString().contains(u"sibelius")) {
+        textMap = sibeliusSyms;
+    } else if (m_fontFamily == u"MetTimes Plain") {
+        textMap = metTimesSyms;
+    }
+    if (textMap.empty()) {
+        return;
+    }
+    String substitutions;
+    for (auto& entry : textMap) {
+        substitutions.append(entry.first);
+    }
+
+    // Pick up any tempo markings which may have been exported as <words>
     // eg. andante (q = c. 90)
     // Sibelius uses a symbol font with the characters 'yxeqhVwW' each drawn as a different duration
     // which we need to map to SMuFL syms
-    String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
+    String plainWords = MScoreTextToMXML::toPlainText(wordsString.simplified());
 
-    static const std::regex tempo(".*([yxeqhVwW])(\\.?)(?:\\s|\\u00A0)*=[^0-9]*([0-9]+).*");
+    static const std::wregex tempo(L".*([" + substitutions.toStdWString() + L"])(\\.?)(?:\\s|\\u00A0)*=[^0-9]*([0-9]+).*");
     StringList tempoMatches = plainWords.search(tempo, { 1, 2, 3 }, SplitBehavior::SkipEmptyParts);
 
     // Not a tempo
@@ -4488,27 +4553,16 @@ void MusicXMLParserDirection::handleTempo()
     const String val = tempoMatches.at(dot ? 2 : 1);
 
     const String dotStr = dot ? u"<sym>space</sym><sym>metAugmentationDot</sym>" : u"";
-    // Map Sibelius' representation of note types to their SMuFL counterparts and duration types
-    static const std::map<String, std::pair<String, DurationType> > syms = {
-        { u"y", { u"<sym>metNote32ndUp</sym>", DurationType::V_32ND } },
-        { u"x", { u"<sym>metNote16thUp</sym>", DurationType::V_16TH } },
-        { u"e", { u"<sym>metNote8thUp</sym>", DurationType::V_EIGHTH } },
-        { u"q", { u"<sym>metNoteQuarterUp</sym>", DurationType::V_QUARTER } },
-        { u"h", { u"<sym>metNoteHalfUp</sym>", DurationType::V_HALF } },
-        { u"w", { u"<sym>metNoteWhole</sym>", DurationType::V_WHOLE } },
-        { u"V", { u"<sym>metNoteDoubleWholeSquare</sym>", DurationType::V_BREVE } },
-        { u"W", { u"<sym>metNoteDoubleWhole</sym>", DurationType::V_BREVE } }
-    };
 
-    static const std::regex replace("(.*)[yxeqhVwW]\\.?((?:\\s|\\u00A0)*=[^0-9]*[0-9]+.*)");
-    const String newStr = u"$1" + syms.at(dur).first + dotStr + u"$2";
+    static const std::wregex replace(L"(.*)[" + substitutions.toStdWString() + L"]\\.?((?:\\s|\\u00A0)*=[^0-9]*[0-9]+.*)");
+    const String newStr = u"$1" + textMap.at(dur).first + dotStr + u"$2";
     plainWords.replace(replace, newStr);
-    m_wordsText = plainWords;
+    wordsString = plainWords;
 
     if (!val.empty() && !dur.empty()) {
         bool ok;
         double d = val.toDouble(&ok);
-        TDuration duration = TDuration(syms.at(dur).second);
+        TDuration duration = TDuration(textMap.at(dur).second);
         duration.setDots(dot);
 
         if (ok && duration.isValid()) {
@@ -4525,7 +4579,7 @@ bool MusicXMLParserDirection::isLikelySticking()
     }
 
     String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
-    static const std::wregex sticking(L"^[lrbLRB]$");
+    static const std::wregex sticking(L"^[lrbLRB]+$");
     return plainWords.contains(sticking)
            && m_rehearsalText.empty()
            && m_metroText.empty()
@@ -6461,7 +6515,8 @@ Note* MusicXMLParserPass2::note(const String& partId,
     std::map<int, String> beamTypes;
     String instrumentId;
     String tieType;
-    MusicXMLParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger };
+    MusicXMLParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
+                                m_pass1.isVocalStaff(partId) };
     MusicXMLParserNotations notations { m_e, m_score, m_logger, m_pass1, *this };
 
     MxmlNoteDuration mnd { m_divs, m_logger, &m_pass1 };
@@ -6860,6 +6915,10 @@ Note* MusicXMLParserPass2::note(const String& partId,
             }
         }
         m_graceNoteLyrics.clear();
+    }
+
+    if (cr) {
+        addInferredStickings(cr, lyric.inferredStickings());
     }
 
     // add lyrics found by lyric
@@ -7489,8 +7548,8 @@ void MusicXMLParserPass2::backup(Fraction& dura)
 //---------------------------------------------------------
 
 MusicXMLParserLyric::MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler,
-                                         XmlStreamReader& e, Score* score, MxmlLogger* logger)
-    : m_lyricNumberHandler(lyricNumberHandler), m_e(e), m_score(score), m_logger(logger)
+                                         XmlStreamReader& e, Score* score, MxmlLogger* logger, bool isVoiceStaff)
+    : m_lyricNumberHandler(lyricNumberHandler), m_e(e), m_score(score), m_logger(logger), m_isVoiceStaff(isVoiceStaff)
 {
     // nothing
 }
@@ -7528,9 +7587,6 @@ void MusicXMLParserLyric::readElision(String& formattedText)
 
 void MusicXMLParserLyric::parse()
 {
-    std::unique_ptr<Lyrics> lyric { Factory::createLyrics(m_score->dummy()->chord()) };
-    // TODO in addlyrics: l->setTrack(trk);
-
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
@@ -7539,6 +7595,7 @@ void MusicXMLParserLyric::parse()
     double relX = m_e.doubleAttribute("relative-x") * 0.1 * DPMM;
     m_relativeY = m_e.doubleAttribute("relative-y") * -0.1 * DPMM;
     m_defaultY = m_e.doubleAttribute("default-y") * -0.1 * DPMM;
+    LyricsSyllabic syllabic = LyricsSyllabic::SINGLE;
 
     String extendType;
     String formattedText;
@@ -7553,13 +7610,13 @@ void MusicXMLParserLyric::parse()
         } else if (m_e.name() == "syllabic") {
             String syll = m_e.readText();
             if (syll == "single") {
-                lyric->setSyllabic(LyricsSyllabic::SINGLE);
+                syllabic = LyricsSyllabic::SINGLE;
             } else if (syll == "begin") {
-                lyric->setSyllabic(LyricsSyllabic::BEGIN);
+                syllabic = LyricsSyllabic::BEGIN;
             } else if (syll == "end") {
-                lyric->setSyllabic(LyricsSyllabic::END);
+                syllabic = LyricsSyllabic::END;
             } else if (syll == "middle") {
-                lyric->setSyllabic(LyricsSyllabic::MIDDLE);
+                syllabic = LyricsSyllabic::MIDDLE;
             } else {
                 LOGD("unknown syllabic %s", muPrintable(syll));                      // TODO
             }
@@ -7587,31 +7644,46 @@ void MusicXMLParserLyric::parse()
         return;
     }
 
-    //LOGD("formatted lyric '%s'", muPrintable(formattedText));
-    lyric->setXmlText(formattedText);
-    if (lyricColor.isValid()) {
-        lyric->setProperty(Pid::COLOR, lyricColor);
-        lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+    TextBase* item = nullptr;
+    if (isLikelySticking(formattedText, syllabic, hasExtend)) {
+        item = Factory::createSticking(m_score->dummy()->segment());
+    } else {
+        item = Factory::createLyrics(m_score->dummy()->chord());
     }
-    lyric->setVisible(printLyric);
 
-    lyric->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
-    lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    //LOGD("formatted lyric '%s'", muPrintable(formattedText));
+    item->setXmlText(formattedText);
+    if (lyricColor.isValid()) {
+        item->setProperty(Pid::COLOR, lyricColor);
+        item->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+    }
+    item->setVisible(printLyric);
+
+    item->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+    item->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 
     if (!RealIsNull(relX)) {
-        PointF offset = lyric->offset();
+        PointF offset = item->offset();
         offset.setX(relX);
-        lyric->setOffset(offset);
-        lyric->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+        item->setOffset(offset);
+        item->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
     }
 
-    Lyrics* const l = lyric.release();
-    m_numberedLyrics[lyricNo] = l;
+    if (item->isLyrics()) {
+        // Add lyric
+        Lyrics* l = toLyrics(item);
+        l->setSyllabic(syllabic);
+        m_numberedLyrics[lyricNo] = l;
 
-    if (hasExtend
-        && (extendType.empty() || extendType == "start")
-        && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
-        m_extendedLyrics.insert(l);
+        if (hasExtend
+            && (extendType.empty() || extendType == "start")
+            && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
+            m_extendedLyrics.insert(l);
+        }
+    } else if (item->isSticking()) {
+        // Add sticking
+        Sticking* s = toSticking(item);
+        m_inferredStickings.push_back(s);
     }
 }
 
@@ -7622,6 +7694,16 @@ String MusicXMLParserLyric::placement() const
     } else {
         return m_placement;
     }
+}
+
+bool MusicXMLParserLyric::isLikelySticking(const String& text, const LyricsSyllabic syllabic, const bool hasExtend)
+{
+    if (!configuration()->inferTextType()) {
+        return false;
+    }
+    String plainWords = MScoreTextToMXML::toPlainText(text.simplified());
+    static const std::wregex sticking(L"^[lrbLRB]+$");
+    return plainWords.contains(sticking) && syllabic == LyricsSyllabic::SINGLE && !hasExtend && !m_isVoiceStaff;
 }
 
 //---------------------------------------------------------

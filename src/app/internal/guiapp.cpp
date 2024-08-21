@@ -167,12 +167,14 @@ void GuiApp::perform()
                 m->onDelayedInit();
             }
 
+            startupScenario()->runOnSplashScreen();
+
             if (splashScreen) {
                 splashScreen->close();
                 delete splashScreen;
             }
 
-            startupScenario()->run();
+            startupScenario()->runAfterSplashScreen();
         }
     }, Qt::QueuedConnection);
 

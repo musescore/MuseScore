@@ -61,8 +61,21 @@ static mu::engraving::DynamicType findEndDynamicType(const Hairpin* hairpin)
         return textDynamicType;
     }
 
-    const Dynamic* snappedDynamic = hairpin->dynamicSnappedAfter();
-    return snappedDynamic ? snappedDynamic->dynamicType() : mu::engraving::DynamicType::OTHER;
+    const LineSegment* seg = hairpin->backSegment();
+    if (!seg) {
+        return mu::engraving::DynamicType::OTHER;
+    }
+
+    // Optimization: first check if there is a cached dynamic
+    const EngravingItem* snappedItem = seg->ldata()->itemSnappedAfter();
+    if (!snappedItem || !snappedItem->isDynamic()) {
+        snappedItem = toHairpinSegment(seg)->findElementToSnapAfter(false /*ignoreInvisible*/);
+        if (!snappedItem || !snappedItem->isDynamic()) {
+            return mu::engraving::DynamicType::OTHER;
+        }
+    }
+
+    return toDynamic(snappedItem)->dynamicType();
 }
 
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const

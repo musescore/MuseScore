@@ -326,15 +326,14 @@
               <tpc>17</tpc>
               </Note>
             </Chord>
+          <Sticking>
+            <text>L</text>
+            </Sticking>
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
               <text>et</text>
-              </Lyrics>
-            <Lyrics>
-              <no>1</no>
-              <text>L</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>

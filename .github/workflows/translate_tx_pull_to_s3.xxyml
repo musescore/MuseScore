@@ -49,10 +49,10 @@ jobs:
             DO_CREATE_PR="${{ github.event.schedule == '0 12 * * Sun'}}"
             DO_PUSH_TO_S3='true'
           else
-            if [[ "${{ github.event.inputs.create_pull_request }}" == "true" ]]; then
+            if [[ "${{ inputs.create_pull_request }}" == "true" ]]; then
               DO_CREATE_PR='true'
             fi
-            if [[ "${{ github.event.inputs.push_to_s3 }}" == "true" ]]; then
+            if [[ "${{ inputs.push_to_s3 }}" == "true" ]]; then
               DO_PUSH_TO_S3='true'
             fi
           fi

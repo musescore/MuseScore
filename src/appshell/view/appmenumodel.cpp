@@ -370,6 +370,12 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 #endif
 
     if (globalConfiguration()->devModeEnabled()) {
+        MenuItemList accessibilityItems {
+            makeMenuItem("diagnostic-show-navigation-tree"),
+            makeMenuItem("diagnostic-show-accessible-tree"),
+            makeMenuItem("diagnostic-accessible-tree-dump"),
+        };
+
         MenuItemList engravingItems {
             makeMenuItem("diagnostic-show-engraving-elements"),
             makeSeparator(),
@@ -382,18 +388,17 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
             makeMenuItem("show-corrupted-measures")
         };
 
+        MenuItemList extensionsItems {
+            makeMenuItem("extensions-show-apidump"),
+        };
+
         MenuItemList autobotItems {
             makeMenuItem("autobot-show-scripts"),
         };
 
-        MenuItemList accessibilityItems {
-            makeMenuItem("diagnostic-show-navigation-tree"),
-            makeMenuItem("diagnostic-show-accessible-tree"),
-            makeMenuItem("diagnostic-accessible-tree-dump"),
-        };
-
         items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving")
+              << makeMenu(TranslatableString("appshell/menu/diagnostic", "E&xtensions"), extensionsItems, "menu-extensions")
               << makeMenu(TranslatableString("appshell/menu/diagnostic", "Auto&bot"), autobotItems, "menu-autobot")
               << makeMenuItem("multiinstances-dev-show-info");
     }

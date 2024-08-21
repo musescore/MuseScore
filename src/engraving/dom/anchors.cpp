@@ -30,9 +30,9 @@
 #include "staff.h"
 #include "system.h"
 
-#include "rendering/dev/measurelayout.h"
+#include "rendering/score/measurelayout.h"
 
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
 /***************************************
