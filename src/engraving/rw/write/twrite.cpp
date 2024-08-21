@@ -528,9 +528,7 @@ void TWrite::write(const ActionIcon* item, XmlWriter& xml, WriteContext&)
 {
     xml.startElement(item);
     xml.tag("subtype", int(item->actionType()));
-    if (!item->actionCode().empty()) {
-        xml.tag("action", String::fromStdString(item->actionCode()));
-    }
+    xml.tag("action", String::fromStdString(item->actionCode()));
     xml.endElement();
 }
 

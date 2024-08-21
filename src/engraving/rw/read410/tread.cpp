@@ -1934,14 +1934,63 @@ void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
     TRead::read(static_cast<Symbol*>(d), e, ctx);
 }
 
+static void setActionIconTypeFromAction(ActionIcon* i, const std::string& actionCode)
+{
+    static const std::map<std::string_view, ActionIconType> map {
+        { "acciaccatura", ActionIconType::ACCIACCATURA },
+        { "appoggiatura", ActionIconType::APPOGGIATURA },
+        { "grace4", ActionIconType::GRACE4 },
+        { "grace16", ActionIconType::GRACE16 },
+        { "grace32", ActionIconType::GRACE32 },
+        { "grace8after", ActionIconType::GRACE8_AFTER },
+        { "grace16after", ActionIconType::GRACE16_AFTER },
+        { "grace32after", ActionIconType::GRACE32_AFTER },
+
+        { "beam-auto", ActionIconType::BEAM_AUTO },
+        { "beam-none", ActionIconType::BEAM_NONE },
+        { "beam-break-left", ActionIconType::BEAM_BREAK_LEFT },
+        { "beam-break-inner-8th", ActionIconType::BEAM_BREAK_INNER_8TH },
+        { "beam-break-inner-16th", ActionIconType::BEAM_BREAK_INNER_16TH },
+        { "beam-join", ActionIconType::BEAM_JOIN },
+
+        { "beam-feathered-decelerate", ActionIconType::BEAM_FEATHERED_DECELERATE },
+        { "beam-feathered-accelerate", ActionIconType::BEAM_FEATHERED_ACCELERATE },
+
+        { "add-parentheses", ActionIconType::PARENTHESES },
+        { "add-brackets", ActionIconType::BRACKETS },
+
+        { "insert-vbox", ActionIconType::VFRAME },
+        { "insert-hbox", ActionIconType::HFRAME },
+        { "insert-textframe", ActionIconType::TFRAME },
+        { "insert-fretframe", ActionIconType::FFRAME },
+        { "insert-staff-type-change", ActionIconType::STAFF_TYPE_CHANGE },
+        { "insert-measure", ActionIconType::MEASURE },
+
+        { "standard-bend", ActionIconType::STANDARD_BEND },
+        { "pre-bend", ActionIconType::PRE_BEND },
+        { "grace-note-bend", ActionIconType::GRACE_NOTE_BEND },
+        { "slight-bend", ActionIconType::SLIGHT_BEND },
+    };
+
+    auto it = map.find(actionCode);
+    if (it != map.end()) {
+        i->setActionType(it->second);
+    }
+}
+
 void TRead::read(ActionIcon* i, XmlReader& e, ReadContext&)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "action") {
-            i->setAction(e.readText().toStdString(), 0);
-        } else if (tag == "subtype") {
+        if (tag == "subtype") {
+            // This is fragile, see https://github.com/musescore/MuseScore/issues/24060#issuecomment-2299665318.
+            // Keeping it here for compatbility in case an ActionIcon from some old version doesn't have an <action> tag.
+            // If the <action> tag is present, it will override this value, see below.
             i->setActionType(static_cast<ActionIconType>(e.readInt()));
+        } else if (tag == "action") {
+            const std::string actionCode = e.readText().toStdString();
+            i->setAction(actionCode, 0);
+            setActionIconTypeFromAction(i, actionCode);
         } else {
             e.unknown();
         }
