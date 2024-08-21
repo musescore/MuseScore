@@ -281,12 +281,13 @@ RectF TextCursor::cursorRect() const
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
     Font _font  = fragment ? fragment->font(m_text) : m_text->font();
-    if (_font.family() == m_text->style().styleSt(Sid::musicalSymbolFont)) {
-        _font.setFamily(m_text->style().styleSt(Sid::musicalTextFont), Font::Type::MusicSymbolText);
-        if (fragment) {
-            _font.setPointSizeF(fragment->format.fontSize());
-        }
+    if (fragment && _font.type() == Font::Type::MusicSymbol) {
+        // Ensure the cursor height matches that of the associated text font
+        String textFontId(_font.family().id() + String(u" Text"));
+        _font.setFamily(textFontId, Font::Type::MusicSymbolText);
+        _font.setPointSizeF(fragment->format.fontSize());
     }
+
     double ascent = FontMetrics::ascent(_font);
     double h = ascent;
     double x = tline.xpos(column(), m_text);
