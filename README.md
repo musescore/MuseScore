@@ -4,14 +4,14 @@ Music notation and composition software
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-MuseScore is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
+MuseScore is an open-source and free music notation software. For support, contributions, and bug reports, visit [MuseScore.org](https://musescore.org). Fork the repository and make pull requests!
 
 ## Features
 
-- WYSIWYG design, notes are entered on a "virtual notepaper"
-- TrueType font(s) for printing & display allows for high quality scaling to all sizes
-- Easy & fast note entry
-- Many editing functions
+- WYSIWYG design: notes are entered on a "virtual notepaper"
+- TrueType font(s) for printing and display, allowing for high-quality scaling to all sizes
+- Easy and fast note entry
+- Extensive editing functions
 - MusicXML import/export
 - MIDI (SMF) import/export
 - MEI import/export
@@ -20,7 +20,7 @@ MuseScore is an open source and free music notation software. For support, contr
 - Integrated sequencer and software synthesizer to play the score
 - Print or create PDF files
 
-## More info
+## More Info
 
 - [MuseScore Homepage](https://musescore.org)
 - [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
@@ -28,24 +28,24 @@ MuseScore is an open source and free music notation software. For support, contr
 
 ## License
 
-MuseScore is licensed under GPL version 3.0. See [license file](https://github.com/musescore/MuseScore/blob/master/LICENSE.txt) in the same directory.
+MuseScore is licensed under GPL version 3.0. See the [license file](https://github.com/musescore/MuseScore/blob/master/LICENSE.txt) for details.
 
 ## Packages
 
-See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStructure)
+See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStructure) for more information.
 
 ## Building
 
 **Read the [Compilation section](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for a complete build walkthrough and a list of dependencies.**
 
-### Getting sources
+### Getting Sources
 
-If using git to download repo of entire code history, type:
+To clone the repository with the entire code history, type:
 
     git clone https://github.com/musescore/MuseScore.git
     cd MuseScore
 
-Otherwise, you can just download the latest source release tarball from the [Releases page](https://github.com/musescore/MuseScore/releases), and then from your download directory type:
+Alternatively, download the latest source release tarball from the [Releases page](https://github.com/musescore/MuseScore/releases), and then from your download directory type:
 
     tar xzf MuseScore-x.x.x.tar.gz
     cd MuseScore-x.x.x
@@ -72,11 +72,9 @@ Or run the compiled executable directly.
 
 ### Debug Build
 
-A debug version can be built and run by replacing `-DCMAKE_BUILD_TYPE=Release`
-with `-DCMAKE_BUILD_TYPE=Debug` in the above commands.
+To build a debug version, replace `-DCMAKE_BUILD_TYPE=Release` with `-DCMAKE_BUILD_TYPE=Debug` in the above commands.
 
-If you omit the `-DCMAKE_BUILD_TYPE` option entirely then `RelWithDebInfo` is
-used by default, as it provides a useful compromise between Release and Debug.
+If you omit the `-DCMAKE_BUILD_TYPE` option entirely, `RelWithDebInfo` is used by default, as it provides a useful compromise between Release and Debug.
 
 ### Testing
 
@@ -84,6 +82,6 @@ See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-te
 
 ### Code Formatting
 
-Run `./hooks/install.sh` to install a pre-commit hook that will format your staged files. Requires that you install `uncrustify`.
+Run `./hooks/install.sh` to install a pre-commit hook that will format your staged files. This requires `uncrustify` to be installed.
 
-If you have problems, please report them. To uninstall, run `./hooks/uninstall.sh`.
+If you encounter problems, please report them. To uninstall the hook, run `./hooks/uninstall.sh`.
