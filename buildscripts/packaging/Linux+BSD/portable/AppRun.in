@@ -22,6 +22,9 @@ done
 # directory because linuxdeploy sets RUNPATH to point to it anyway.
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}${fallback_libs}"
 
+# Default to `xcb`, because `wayland` support is still experimental
+[[ "${QT_QPA_PLATFORM}" ]] || export QT_QPA_PLATFORM=xcb
+
 # Launch MuseScore or an accompanying script
 case "$1" in
   -h|--help|install|update|upgrade|uninstall|remove|man|manual|manpage|check-depends|check-dependencies )
