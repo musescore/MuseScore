@@ -208,7 +208,8 @@ function fallback_library()
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 # or https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues for Qt libs.
 unwanted_files=(
-  # none
+  # https://github.com/musescore/MuseScore/issues/24068#issuecomment-2297823192
+  lib/libwayland-client.so.0
 )
 
 # ADDITIONAL QT COMPONENTS
@@ -242,6 +243,9 @@ additional_libraries=(
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
+
+  # https://github.com/musescore/MuseScore/issues/24068#issuecomment-2297823192
+  libwayland-client.so.0
 )
 
 # PREVIOUSLY EXTRACTED APPIMAGES
