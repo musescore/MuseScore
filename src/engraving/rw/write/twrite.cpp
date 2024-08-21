@@ -2861,7 +2861,7 @@ void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const FSymbol* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    xml.tag("font",     item->font().family());
+    xml.tag("font",     item->font().family().id());
     xml.tag("fontsize", item->font().pointSizeF());
     xml.tag("code",     item->code());
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);

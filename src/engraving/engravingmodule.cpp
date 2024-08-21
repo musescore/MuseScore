@@ -183,48 +183,48 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(moduleName());
 
         // Text
-        fdb->addFont(FontDataKey("Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");
-        fdb->addFont(FontDataKey("Edwin", false, true), ":/fonts/edwin/Edwin-Italic.otf");
-        fdb->addFont(FontDataKey("Edwin", true, false), ":/fonts/edwin/Edwin-Bold.otf");
-        fdb->addFont(FontDataKey("Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
+        fdb->addFont(FontDataKey(u"Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");
+        fdb->addFont(FontDataKey(u"Edwin", false, true), ":/fonts/edwin/Edwin-Italic.otf");
+        fdb->addFont(FontDataKey(u"Edwin", true, false), ":/fonts/edwin/Edwin-Bold.otf");
+        fdb->addFont(FontDataKey(u"Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
 
         // MusicSymbol[Text]
-        auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& family, const muse::io::path_t& filePath){
-            fdb->addFont(FontDataKey(family), filePath);
-            m_engravingfonts->addFont(name, family.family(), filePath);
+        auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
+            fdb->addFont(FontDataKey(fontDataKey), filePath);
+            m_engravingfonts->addFont(name, fontDataKey.family().id().toStdString(), filePath);
         };
 
-        addMusicFont("Bravura", FontDataKey("Bravura"), ":/fonts/bravura/Bravura.otf");
-        fdb->addFont(FontDataKey("Bravura Text"), ":/fonts/bravura/BravuraText.otf");
-        addMusicFont("Leland", FontDataKey("Leland"), ":/fonts/leland/Leland.otf");
-        fdb->addFont(FontDataKey("Leland Text"), ":/fonts/leland/LelandText.otf");
-        addMusicFont("Emmentaler", FontDataKey("MScore"), ":/fonts/mscore/mscore.ttf");
-        fdb->addFont(FontDataKey("MScore Text"), ":/fonts/mscore/MScoreText.ttf");
-        addMusicFont("Gonville", FontDataKey("Gootville"), ":/fonts/gootville/Gootville.otf");
-        fdb->addFont(FontDataKey("Gootville Text"), ":/fonts/gootville/GootvilleText.otf");
-        addMusicFont("MuseJazz", FontDataKey("MuseJazz"), ":/fonts/musejazz/MuseJazz.otf");
-        fdb->addFont(FontDataKey("MuseJazz Text"), ":/fonts/musejazz/MuseJazzText.otf");
-        addMusicFont("Petaluma", FontDataKey("Petaluma"),    ":/fonts/petaluma/Petaluma.otf");
-        fdb->addFont(FontDataKey("Petaluma Text"), ":/fonts/petaluma/PetalumaText.otf");
-        addMusicFont("Finale Maestro", FontDataKey("Finale Maestro"), ":/fonts/finalemaestro/FinaleMaestro.otf");
-        fdb->addFont(FontDataKey("Finale Maestro Text"), ":/fonts/finalemaestro/FinaleMaestroText.otf");
-        addMusicFont("Finale Broadway", FontDataKey("Finale Broadway"), ":/fonts/finalebroadway/FinaleBroadway.otf");
-        fdb->addFont(FontDataKey("Finale Broadway Text"), ":/fonts/finalebroadway/FinaleBroadwayText.otf");
+        addMusicFont("Bravura", FontDataKey(u"Bravura"), ":/fonts/bravura/Bravura.otf");
+        fdb->addFont(FontDataKey(u"Bravura Text"), ":/fonts/bravura/BravuraText.otf");
+        addMusicFont("Leland", FontDataKey(u"Leland"), ":/fonts/leland/Leland.otf");
+        fdb->addFont(FontDataKey(u"Leland Text"), ":/fonts/leland/LelandText.otf");
+        addMusicFont("Emmentaler", FontDataKey(u"MScore"), ":/fonts/mscore/mscore.ttf");
+        fdb->addFont(FontDataKey(u"MScore Text"), ":/fonts/mscore/MScoreText.ttf");
+        addMusicFont("Gonville", FontDataKey(u"Gootville"), ":/fonts/gootville/Gootville.otf");
+        fdb->addFont(FontDataKey(u"Gootville Text"), ":/fonts/gootville/GootvilleText.otf");
+        addMusicFont("MuseJazz", FontDataKey(u"MuseJazz"), ":/fonts/musejazz/MuseJazz.otf");
+        fdb->addFont(FontDataKey(u"MuseJazz Text"), ":/fonts/musejazz/MuseJazzText.otf");
+        addMusicFont("Petaluma", FontDataKey(u"Petaluma"),    ":/fonts/petaluma/Petaluma.otf");
+        fdb->addFont(FontDataKey(u"Petaluma Text"), ":/fonts/petaluma/PetalumaText.otf");
+        addMusicFont("Finale Maestro", FontDataKey(u"Finale Maestro"), ":/fonts/finalemaestro/FinaleMaestro.otf");
+        fdb->addFont(FontDataKey(u"Finale Maestro Text"), ":/fonts/finalemaestro/FinaleMaestroText.otf");
+        addMusicFont("Finale Broadway", FontDataKey(u"Finale Broadway"), ":/fonts/finalebroadway/FinaleBroadway.otf");
+        fdb->addFont(FontDataKey(u"Finale Broadway Text"), ":/fonts/finalebroadway/FinaleBroadwayText.otf");
 
         // Tabulature
-        fdb->addFont(FontDataKey("FreeSerif"), ":/fonts/FreeSerif.ttf");
-        fdb->addFont(FontDataKey("FreeSerif", true, false), ":/fonts/FreeSerifBold.ttf");
-        fdb->addFont(FontDataKey("FreeSerif", false, true), ":/fonts/FreeSerifItalic.ttf");
-        fdb->addFont(FontDataKey("FreeSerif", true, true), ":/fonts/FreeSerifBoldItalic.ttf");
-        fdb->addFont(FontDataKey("FreeSans"), ":/fonts/FreeSans.ttf");
-        fdb->addFont(FontDataKey("MscoreBC"), ":/fonts/mscore-BC.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif"), ":/fonts/FreeSerif.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif", true, false), ":/fonts/FreeSerifBold.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif", false, true), ":/fonts/FreeSerifItalic.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif", true, true), ":/fonts/FreeSerifBoldItalic.ttf");
+        fdb->addFont(FontDataKey(u"FreeSans"), ":/fonts/FreeSans.ttf");
+        fdb->addFont(FontDataKey(u"MscoreBC"), ":/fonts/mscore-BC.ttf");
 
         // Defaults
-        fdb->setDefaultFont(Font::Type::Unknown, FontDataKey("Edwin"));
-        fdb->setDefaultFont(Font::Type::Text, FontDataKey("Edwin"));
-        fdb->setDefaultFont(Font::Type::Tablature, FontDataKey("FreeSerif"));
-        fdb->setDefaultFont(Font::Type::MusicSymbolText, FontDataKey("Bravura Text"));
-        fdb->setDefaultFont(Font::Type::MusicSymbol, FontDataKey("Bravura"));
+        fdb->setDefaultFont(Font::Type::Unknown, FontDataKey(u"Edwin"));
+        fdb->setDefaultFont(Font::Type::Text, FontDataKey(u"Edwin"));
+        fdb->setDefaultFont(Font::Type::Tablature, FontDataKey(u"FreeSerif"));
+        fdb->setDefaultFont(Font::Type::MusicSymbolText, FontDataKey(u"Bravura Text"));
+        fdb->setDefaultFont(Font::Type::MusicSymbol, FontDataKey(u"Bravura"));
         m_engravingfonts->setFallbackFont("Bravura");
 
         //! NOTE Used for Qt font provider
