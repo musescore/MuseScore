@@ -1146,7 +1146,7 @@ muse::TranslatableString BarLine::subtypeUserName() const
 {
     for (const auto& i : barLineTable) {
         if (i.type == barLineType()) {
-            if(i.type == BarLineType::NORMAL) {
+            if (i.type == BarLineType::NORMAL) {
                 switch (singleBarLineType()) {
                 case SingleBarlineType::SHORT:
                     return TranslatableString("engraving/singlebarlinetype", "Short");

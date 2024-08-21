@@ -363,7 +363,7 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
             int from, to;
             SingleBarlineType type;
         } spans[] = {
-            { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO, SingleBarlineType::TICK  },
+            { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO, SingleBarlineType::TICK },
             { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO, SingleBarlineType::TICK2 },  // Not in SMuFL
             { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, SingleBarlineType::SHORT },
             { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, SingleBarlineType::SHORT2 }, // Not in SMuFL

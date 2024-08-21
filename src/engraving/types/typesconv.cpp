@@ -2606,7 +2606,7 @@ AsciiStringView TConv::toXml(PedalType v)
     return findXmlTagByType<PedalType>(PEDAL_TYPES, v);
 }
 
-PedalType TConv::fromXml(const AsciiStringView &tag, PedalType def)
+PedalType TConv::fromXml(const AsciiStringView& tag, PedalType def)
 {
     return findTypeByXmlTag<PedalType>(PEDAL_TYPES, tag, def);
 }

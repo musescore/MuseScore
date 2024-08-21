@@ -391,7 +391,7 @@ void Volta::setVoltaType(Type val)
 
 void Volta::setVoltaTypes(VoltaTypes val)
 {
-    if(m_voltaType == val) {
+    if (m_voltaType == val) {
         return;
     }
     m_voltaType = val;

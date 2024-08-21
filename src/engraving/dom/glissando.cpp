@@ -547,6 +547,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     }
     return SLine::propertyDefault(propertyId);
 }
+
 //---------------------------------------------------------
 //   subtypeUserName
 //---------------------------------------------------------

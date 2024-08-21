@@ -108,7 +108,7 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 
 void Pedal::setPedalType(PedalType pp)
 {
-    if(m_pedalType == pp) {
+    if (m_pedalType == pp) {
         return;
     }
     m_pedalType = pp;
