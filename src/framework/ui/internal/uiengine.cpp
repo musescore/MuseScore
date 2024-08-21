@@ -64,6 +64,11 @@ public:
         return m_engine->newArray(uint(length));
     }
 
+    void registerMetaObject(const QString&, const QMetaObject*) override
+    {
+        // not need
+    }
+
 private:
     QQmlEngine* m_engine = nullptr;
     const modularity::ContextPtr& m_iocContext;

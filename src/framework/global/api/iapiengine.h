@@ -36,6 +36,8 @@ public:
     virtual QJSValue newQObject(QObject* o) = 0;
     virtual QJSValue newObject() = 0;
     virtual QJSValue newArray(size_t length = 0) = 0;
+    
+    virtual void registerMetaObject(const QString& name, const QMetaObject* meta) = 0;
 };
 }
 

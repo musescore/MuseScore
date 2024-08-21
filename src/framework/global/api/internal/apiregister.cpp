@@ -100,6 +100,11 @@ public:
     {
         return engine.newArray(static_cast<uint>(length));
     }
+
+    void registerMetaObject(const QString&, const QMetaObject*) override
+    {
+        NOT_IMPLEMENTED;
+    }
 };
 
 ApiRegister::Dump ApiRegister::dump() const

@@ -72,6 +72,7 @@ public:
     QJSValue newQObject(QObject* o) override;
     QJSValue newObject() override;
     QJSValue newArray(size_t length = 0) override;
+    void registerMetaObject(const QString& name, const QMetaObject* meta) override;
 
     static void dump(const QString& name, const QJSValue& val);
     static Ret jsValueToRet(const QJSValue& val);

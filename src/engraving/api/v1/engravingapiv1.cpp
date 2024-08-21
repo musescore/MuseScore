@@ -26,6 +26,9 @@
 
 #include "qmlpluginapi.h"
 
+#include "cursor.h"
+#include "playevent.h"
+
 #include "log.h"
 
 using namespace mu::engraving::apiv1;
@@ -33,6 +36,8 @@ using namespace mu::engraving::apiv1;
 EngravingApiV1::EngravingApiV1(muse::api::IApiEngine* e)
     : muse::api::ApiObject(e)
 {
+    e->registerMetaObject("Cursor", &Cursor::staticMetaObject);
+    e->registerMetaObject("PlayEvent", &PlayEvent::staticMetaObject);
 }
 
 EngravingApiV1::~EngravingApiV1()

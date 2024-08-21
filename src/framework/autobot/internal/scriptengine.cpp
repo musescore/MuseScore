@@ -259,3 +259,9 @@ QJSValue ScriptEngine::newArray(size_t length)
 {
     return m_engine->newArray(uint(length));
 }
+
+void ScriptEngine::registerMetaObject(const QString& name, const QMetaObject* meta)
+{
+    QJSValue metaVal = m_engine->newQMetaObject(meta);
+    m_engine->globalObject().setProperty(name, metaVal);
+}
