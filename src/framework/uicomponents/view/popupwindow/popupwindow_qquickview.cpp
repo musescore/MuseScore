@@ -75,7 +75,11 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // popup
     else {
         Qt::WindowFlags flags(
+#ifdef Q_OS_LINUX
+            Qt::Popup // Popups can't be Qt::Tool on Linux Wayland, or they can't be relatvely positioned.
+#else
             Qt::Tool
+#endif
             | Qt::FramelessWindowHint            // Without border
             | Qt::NoDropShadowWindowHint         // Without system shadow
             | Qt::BypassWindowManagerHint        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
