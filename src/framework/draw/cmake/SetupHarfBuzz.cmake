@@ -59,6 +59,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../_deps/harfbuzz/harfbuzz harfbuzz)
 target_no_warning(harfbuzz -Wno-conversion)
 target_no_warning(harfbuzz -Wno-unused-parameter)
 target_no_warning(harfbuzz -Wno-unused-variable)
+target_no_warning(harfbuzz -Wno-float-equal)
 target_no_warning(harfbuzz -WMSVC-no-hides-previous)
 target_no_warning(harfbuzz -WMSVC-no-unreachable)
 
