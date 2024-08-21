@@ -763,6 +763,9 @@ EngravingItem* Score::nextElement()
                 Segment* nextSegment = seg->next1();
                 while (nextSegment) {
                     if (nextSegment->isTimeTickType()) {
+                        if (EngravingItem* annotation = nextSegment->firstAnnotation(staffId)) {
+                            return annotation;
+                        }
                         if (Spanner* spanner = nextSegment->firstSpanner(staffId)) {
                             return spanner->spannerSegments().front();
                         }
@@ -927,25 +930,28 @@ EngravingItem* Score::prevElement()
                 return prevSp->spannerSegments().front();
             } else {
                 Segment* startSeg = sp->startSegment();
+                if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                    return annotation;
+                }
                 if (startSeg->isTimeTickType()) {
                     startSeg = startSeg->prev1MMenabled();
                     for (; startSeg && startSeg->isTimeTickType(); startSeg = startSeg->prev1MMenabled()) {
                         if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
                             return spanner->spannerSegments().front();
                         }
+                        if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                            return annotation;
+                        }
                     }
                     if (!startSeg) {
                         break;
                     }
-                    // Also check for spanners on first non-timeTick segment encountered.
+                    // Also check first non-timeTick segment encountered.
                     if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
                         return spanner->spannerSegments().front();
                     }
-                }
-                if (!startSeg->annotations().empty()) {
-                    EngravingItem* last = startSeg->lastAnnotation(staffId);
-                    if (last) {
-                        return last;
+                    if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                        return annotation;
                     }
                 }
                 EngravingItem* el = startSeg->lastElementOfSegment(staffId);
