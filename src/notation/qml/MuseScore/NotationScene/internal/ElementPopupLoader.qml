@@ -53,6 +53,7 @@ Item {
             case Notation.TYPE_CAPO: return capoComp
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
             case Notation.TYPE_SOUND_FLAG: return soundFlagComp
+            case Notation.TYPE_DYNAMIC: return dynamicComp
             case Notation.TYPE_PARTIAL_TIE: return partialTieComp
             }
 
@@ -151,6 +152,12 @@ Item {
     Component {
         id: soundFlagComp
         SoundFlagPopup {
+        }
+    }
+
+    Component {
+        id: dynamicComp
+        DynamicPopup {
         }
     }
 
