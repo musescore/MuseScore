@@ -1867,7 +1867,9 @@ void MuseScore::printFile()
             if ((toPage < 0) || (toPage >= pages))
                   toPage = pages - 1;
 
-            for (int copy = 0; copy < printerDev.copyCount(); ++copy) {
+            // See https://doc.qt.io/qt-5/qprinter.html#supportsMultipleCopies
+            int copyCount = printerDev.supportsMultipleCopies() ? 1 : printerDev.copyCount();
+            for (int copy = 0; copy < copyCount; ++copy) {
                   bool firstPage = true;
                   for (int n = fromPage; n <= toPage; ++n) {
                         if (!firstPage)
@@ -1875,7 +1877,7 @@ void MuseScore::printFile()
                         firstPage = false;
 
                         cs->print(&p, n);
-                        if ((copy + 1) < printerDev.copyCount())
+                        if ((copy + 1) < copyCount)
                               printerDev.newPage();
                         }
                   }
