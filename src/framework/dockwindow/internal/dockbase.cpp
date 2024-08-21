@@ -490,7 +490,7 @@ void DockBase::resize(int width, int height)
 {
     TRACEFUNC;
 
-    if (width == this->width() && height == this->height()) {
+    if (width == static_cast<int>(this->width()) && height == static_cast<int>(this->height())) {
         return;
     }
 

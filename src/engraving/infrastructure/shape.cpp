@@ -55,7 +55,7 @@ Shape::Shape(const std::vector<RectF>& rects, const EngravingItem* p)
 void Shape::addHorizontalSpacing(EngravingItem* item, double leftEdge, double rightEdge)
 {
     constexpr double eps = 100 * std::numeric_limits<double>::epsilon();
-    if (leftEdge == rightEdge) { // HACK zero-width shapes collide with everything currently.
+    if (RealIsEqual(leftEdge, rightEdge)) { // HACK zero-width shapes collide with everything currently.
         rightEdge += eps;
     }
     add(RectF(leftEdge, 0, rightEdge - leftEdge, 0), item);

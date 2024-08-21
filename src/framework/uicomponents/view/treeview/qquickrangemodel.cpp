@@ -48,6 +48,7 @@
     be updated due to the new position range.
 */
 
+#include "realfn.h"
 #include "qquickrangemodel_p.h"
 #include "qquickrangemodel_p_p.h"
 
@@ -92,10 +93,10 @@ qreal QQuickRangeModel1Private::publicPosition(qreal position) const
     const qreal min = effectivePosAtMin();
     const qreal max = effectivePosAtMax();
     const qreal valueRange = maximum - minimum;
-    const qreal positionValueRatio = valueRange ? (max - min) / valueRange : 0;
+    const qreal positionValueRatio = !muse::RealIsNull(valueRange) ? (max - min) / valueRange : 0;
     const qreal positionStep = stepSize * positionValueRatio;
 
-    if (positionStep == 0)
+    if (muse::RealIsNull(positionStep))
         return (min < max) ? qBound(min, position, max) : qBound(max, position, min);
 
     const int stepSizeMultiplier = (position - min) / positionStep;
@@ -134,7 +135,7 @@ qreal QQuickRangeModel1Private::publicValue(qreal pValue) const
     // QML bindings; a position that is initially invalid because it lays
     // outside the range, might become valid later if the range changes.
 
-    if (stepSize == 0)
+    if (muse::RealIsNull(stepSize))
         return qBound(minimum, pValue, maximum);
 
     const int stepSizeMultiplier = (pValue - minimum) / stepSize;

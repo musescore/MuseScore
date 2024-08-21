@@ -1799,7 +1799,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
         t.layout(item);
         const RectF* r = &t.boundingRect();
 
-        if (r->height() == 0) {
+        if (RealIsNull(r->height())) {
             r = &ldata->blocks.at(0).boundingRect();
         }
         y += t.lineSpacing();

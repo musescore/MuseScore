@@ -122,7 +122,7 @@ public:
     /** Sets the target value which is reached after "steps" calls to smoothTick */
     void setTargetValue(const ValueT& val)
     {
-        if (m_targetValue != val) {
+        if (!RealIsEqual(m_targetValue, val)) {
             m_targetValue = val;
             m_deltaValue = ValueT((1.0 / m_currentSteps) * (m_targetValue - m_currentValue));
             m_targetSteps = m_currentSteps;

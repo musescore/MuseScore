@@ -313,7 +313,7 @@ async::Channel<audio::AudioFxParams> ReverbProcessor::paramsChanged() const
 
 void ReverbProcessor::setSampleRate(unsigned int sampleRate)
 {
-    if (m_processor._sampleRate == sampleRate) {
+    if (RealIsEqual(m_processor._sampleRate, sampleRate)) {
         return;
     }
 

@@ -41,6 +41,7 @@
 #include "global/iapplication.h"
 
 #include "log.h"
+#include "realfn.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // FOR GRADIENT FUNCTIONALITY THAT IS NOT IMPLEMENTED (YET):
@@ -532,7 +533,7 @@ public:
             break;
         }
         // Set stroke-width attribute, unless it's zero or 1 (default is 1)
-        if (spen.widthF() > 0 && spen.widthF() != 1) {
+        if (spen.widthF() > 0 && !muse::RealIsEqual(spen.widthF(), 1)) {
             // Formatting for vertical alignment of elements
             qts.setRealNumberPrecision(2); // with DPI=72 only 2 decimals necessary
             qts.setRealNumberNotation(QTextStream::FixedNotation);
@@ -1168,7 +1169,7 @@ void SvgPaintEngine::updateState(const QPaintEngineState& s)
 
 // TBD:  "opacity" attribute: Is it ever used?
 //       Or is opacity determined by fill-opacity & stroke-opacity instead?
-    if (!muse::RealIsNull(s.opacity() - 1)) {
+    if (!muse::RealIsEqual(s.opacity(), 1)) {
         stateStream << SVG_OPACITY << s.opacity() << SVG_QUOTE;
     }
 
@@ -1184,8 +1185,8 @@ void SvgPaintEngine::updateState(const QPaintEngineState& s)
     const qreal m11 = qRound(t.m11() * 1000) / 1000.0;
     const qreal m22 = qRound(t.m22() * 1000) / 1000.0;
 
-    if (m11 == 1 && m22 == 1   // No scaling
-        && t.m12() == t.m21()) { // No rotation, etc.
+    if (muse::RealIsEqual(m11, 1) && muse::RealIsEqual(m22, 1)   // No scaling
+        && muse::RealIsEqual(t.m12(), t.m21())) { // No rotation, etc.
         // No transformation except translation
         _dx = t.m31();
         _dy = t.m32();
