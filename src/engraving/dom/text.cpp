@@ -71,6 +71,7 @@ PropertyValue Text::getProperty(Pid id) const
         if (hasVoiceAssignmentProperties()) {
             return parentItem()->getProperty(id);
         }
+    // fallthrough
     default:
         return TextBase::getProperty(id);
     }

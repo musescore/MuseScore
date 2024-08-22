@@ -405,7 +405,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
             if (Lyrics* l = prevLyrics(this)) {
                 l->setNeedRemoveInvalidSegments();
             }
-            if (Lyrics* l = nextLyrics(this)) {
+            if (nextLyrics(this)) {
                 setNeedRemoveInvalidSegments();
             }
             setPlacement(newVal);
