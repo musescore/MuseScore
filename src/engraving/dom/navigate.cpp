@@ -762,8 +762,14 @@ EngravingItem* Score::nextElement()
             if (seg) {
                 Segment* nextSegment = seg->next1();
                 while (nextSegment) {
-                    EngravingItem* nextEl = nextSegment->firstElementOfSegment(staffId);
-                    if (nextEl) {
+                    if (nextSegment->isTimeTickType()) {
+                        if (EngravingItem* annotation = nextSegment->firstAnnotation(staffId)) {
+                            return annotation;
+                        }
+                        if (Spanner* spanner = nextSegment->firstSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                    } else if (EngravingItem* nextEl = nextSegment->firstElementOfSegment(staffId)) {
                         return nextEl;
                     }
                     nextSegment = nextSegment->next1MM();
@@ -924,10 +930,28 @@ EngravingItem* Score::prevElement()
                 return prevSp->spannerSegments().front();
             } else {
                 Segment* startSeg = sp->startSegment();
-                if (!startSeg->annotations().empty()) {
-                    EngravingItem* last = startSeg->lastAnnotation(staffId);
-                    if (last) {
-                        return last;
+                if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                    return annotation;
+                }
+                if (startSeg->isTimeTickType()) {
+                    startSeg = startSeg->prev1MMenabled();
+                    for (; startSeg && startSeg->isTimeTickType(); startSeg = startSeg->prev1MMenabled()) {
+                        if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                        if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                            return annotation;
+                        }
+                    }
+                    if (!startSeg) {
+                        break;
+                    }
+                    // Also check first non-timeTick segment encountered.
+                    if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                        return spanner->spannerSegments().front();
+                    }
+                    if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                        return annotation;
                     }
                 }
                 EngravingItem* el = startSeg->lastElementOfSegment(staffId);
