@@ -982,6 +982,11 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
     if (interaction->isDragStarted()) {
         interaction->endDrag();
+        // When dragging of hairpin ends on a note or rest, open dynamic popup
+        // Check for note or rest happens in Score::addText which is called through addTextToItem in toggleDynamicPopup
+        if (interaction->selection()->element()->isHairpinSegment()) {
+            interaction->toggleDynamicPopup();
+        }
     }
 
     if (interaction->isOutgoingDragStarted()) {

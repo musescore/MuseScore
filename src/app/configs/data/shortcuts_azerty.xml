@@ -548,6 +548,10 @@
     <seq>S</seq>
     </SC>
   <SC>
+    <key>add-dynamic</key>
+    <seq>Ctrl+D</seq>
+    </SC>
+  <SC>
     <key>add-hairpin</key>
     <seq>Shift+,</seq>
     </SC>
@@ -768,10 +772,6 @@
   <SC>
     <key>staff-text</key>
     <seq>Ctrl+T</seq>
-    </SC>
-  <SC>
-    <key>dynamics</key>
-    <seq>Ctrl+D</seq>
     </SC>
   <SC>
     <key>expression-text</key>

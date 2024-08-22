@@ -5240,6 +5240,100 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
     apply();
 }
 
+void NotationInteraction::flipHairpinsType(Dynamic* selDyn)
+{
+    if (!selDyn) {
+        return;
+    }
+
+    if (selDyn->dynamicType() == DynamicType::OTHER || selDyn->dynamicType() >= DynamicType::FP) {
+        return;
+    }
+
+    selDyn->findAdjacentHairpins();
+
+    startEdit(TranslatableString("undoableAction", "Change hairpin type"));
+
+    if (selDyn->leftHairpin()) {
+        Hairpin* leftHp = selDyn->leftHairpin();
+        const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
+
+        if (!(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP) && !leftHp->isLineType()) {
+            if (int(startDyn->dynamicType()) > int(selDyn->dynamicType())) {
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+            } else {
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+            }
+        }
+    }
+
+    if (selDyn->rightHairpin()) {
+        Hairpin* rightHp = selDyn->rightHairpin();
+        const Dynamic* endDyn = rightHp->dynamicSnappedAfter();
+
+        if (!(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP) && !rightHp->isLineType()) {
+            if (int(endDyn->dynamicType()) > int(selDyn->dynamicType())) {
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+            } else {
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+            }
+        }
+    }
+
+    apply();
+}
+
+void NotationInteraction::toggleDynamicPopup()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    // If multiple selected selection()->element() returns null
+    if (!selection()->element()) {
+        return;
+    }
+
+    EngravingItem* el = selection()->element();
+
+    if (el->isHairpinSegment()) {
+        HairpinSegment* hairpinSeg = toHairpinSegment(el);
+
+        switch (m_editData.curGrip) {
+        case Grip::START: {
+            EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore();
+            if (startDynOrExp != nullptr) {
+                select({ startDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+                if (startDynOrExp->isDynamic()) {
+                    startEditElement(startDynOrExp, false);
+                    flipHairpinsType(toDynamic(startDynOrExp));
+                }
+            } else {
+                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->startCR());
+            }
+        }
+            return;
+        case Grip::END: {
+            EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter();
+            if (endDynOrExp != nullptr) {
+                select({ endDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+                if (endDynOrExp->isDynamic()) {
+                    startEditElement(endDynOrExp, false);
+                    flipHairpinsType(toDynamic(endDynOrExp));
+                }
+            } else {
+                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->endCR());
+            }
+        }
+            return;
+        default:
+            return;
+        }
+    } else {
+        addTextToItem(TextStyleType::DYNAMICS, el);
+    }
+}
+
 bool NotationInteraction::toggleLayoutBreakAvailable() const
 {
     return !selection()->isNone() && !isTextEditingStarted();
