@@ -1,0 +1,130 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable' # TODO: backend
+        required: true
+      release_type:
+        description: 'Release type: alpha,beta,rc,stable, or any label with chars A-Za-z0-9._ for testing'
+        default: 'test'
+        required: true
+      create_tag:
+        description: 'Create tag & release: (if enabled, release type must be alpha,beta,rc,stable)'
+        type: boolean
+        default: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  get_tag_info:
+    name: Get tag info
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.make_tag_info.outputs.TAG_NAME }}
+      release_name: ${{ steps.make_tag_info.outputs.RELEASE_NAME }}
+    steps:
+    - name: Clone repo with history
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # entire history for all branches and tags
+    - id: make_tag_info
+      name: Make tag info
+      env:
+        RELEASE_TYPE: ${{ inputs.release_type }}
+        CREATE_TAG: ${{ inputs.create_tag }}
+      run: |
+        git tag --list | tail -n 20
+        echo ==========
+        buildscripts/ci/release/make_tag_name.sh | tee -a "${GITHUB_OUTPUT}"
+        echo ==========
+        echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+        echo ==========
+        if [[ "${CREATE_TAG}" == 'true' ]]; then
+          echo "Tag will be created."
+        else
+          echo "Tag will not be created."
+        fi
+
+  build:
+    name: Build
+    needs: get_tag_info
+    uses: ./.github/workflows/build_all.yml
+    with:
+      platforms: ${{ inputs.platforms }}
+      build_mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
+      publish: ${{ inputs.create_tag && 'on' || 'off' }}
+      sentry_project: ${{ (inputs.create_tag && inputs.release_type == 'stable') && 'mu4' || 'sandbox' }}
+
+  update_learn_playlists:
+    name: 'Update Home→Learn playlists'
+    if: ${{ github.repository == 'musescore/MuseScore' }}
+    needs: build
+    uses: ./.github/workflows/update_learn_playlists.yml
+    with:
+      mode: ${{ inputs.create_tag && 'stable' || 'testing' }}
+      environment: production # requires approval
+
+  create_release:
+    name: 'Create release: ${{ needs.get_tag_info.outputs.tag_name }}'
+    needs:
+      - get_tag_info # to access outputs
+      - update_learn_playlists
+    if: ${{ ! failure() && ! cancelled() && inputs.create_tag }} # run even if prior jobs were skipped
+    runs-on: ubuntu-latest
+    environment:
+      name: production # requires approval
+      url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.get_tag_info.outputs.tag_name }}
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - name: Download and extract artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+    - name: Collate release binaries
+      run: |
+        buildscripts/ci/release/collate_release_binaries.sh
+    - name: Create tag # do this as late as possible so we're not left with a useless tag if something fails
+      env:
+        TAG_NAME: ${{ needs.get_tag_info.outputs.tag_name }}
+      run: |
+        int="(0|[1-9][0-9]*)"
+        version="${int}\.${int}(\.${int})?"
+        label="(alpha|beta|rc)(\.${int})?"
+        pattern="^v${version}(-${label})?$"
+
+        if [[ ! "${TAG_NAME}" =~ ${pattern} ]]; then
+          echo >&2 "Error: TAG_NAME '${TAG_NAME}' doesn't match required regex: ${pattern}"
+          exit 1
+        fi
+
+        git tag "${TAG_NAME}" "${GITHUB_SHA}"
+        git push origin "${TAG_NAME}"
+    - name: Create draft release
+      uses: softprops/action-gh-release@v2
+      with: # https://github.com/softprops/action-gh-release?tab=readme-ov-file#inputs
+        draft: true
+        prerelease: ${{ inputs.release_type != 'stable' }}
+        files: release/*
+        name: ${{ needs.get_tag_info.outputs.release_name }}
+        tag_name: ${{ needs.get_tag_info.outputs.tag_name }}
+        fail_on_unmatched_files: true
+        generate_release_notes: false
+
+  notify_users:
+    name: Notify users
+    needs:
+      - get_tag_info # to access outputs
+      - create_release
+    if: ${{ github.repository == 'musescore/MuseScore' && ! failure() && ! cancelled() && needs.create_release.result == 'success' }}
+    uses: ./.github/workflows/update_release_info.yml
+    with:
+      mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
+      tag: ${{ needs.get_tag_info.outputs.tag_name }}
+      environment: production # requires approval
