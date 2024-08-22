@@ -121,7 +121,9 @@ enum class ElementFlag {
     ENABLED                = 0x04000000,      // used for segments
     EMPTY                  = 0x08000000,
     WRITTEN                = 0x10000000,
-    END_OF_MEASURE_CHANGE         = 0x20000000
+    END_OF_MEASURE_CHANGE  = 0x20000000,
+
+    IS_PREVIEW             = 0x40000000,      // used for hover preview in dynamics popup
 };
 
 typedef muse::Flags<ElementFlag> ElementFlags;
