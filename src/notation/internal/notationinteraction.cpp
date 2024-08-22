@@ -4340,8 +4340,22 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
     m_editData.modifiers = keyboardModifier(event->modifiers());
 
+    bool isHairpinStartEndGrip = m_editData.element->isHairpinSegment() && m_editData.isStartEndGrip();
+
     if (isDragStarted()) {
-        return; // ignore all key strokes while dragging
+        if (isHairpinStartEndGrip && (m_editData.modifiers & ShiftModifier)) {
+            HairpinSegment* seg = toHairpinSegment(m_editData.element);
+            HairpinType type = seg->hairpin()->hairpinType();
+
+            startEdit(TranslatableString("undoableAction", "Change hairpin type"));
+            if (type == HairpinType::CRESC_HAIRPIN) {
+                seg->hairpin()->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+            } else if (type == HairpinType::DECRESC_HAIRPIN) {
+                seg->hairpin()->setHairpinType(HairpinType::CRESC_HAIRPIN);
+            }
+            apply();
+        }
+        return; // ignore all key strokes while dragging except for the shift key functionality on hairpin grips to change type
     }
 
     m_editData.key = event->key();
