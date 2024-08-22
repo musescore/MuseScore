@@ -32,6 +32,14 @@ RowLayout {
     required property string label
     property string suffix: ''
     property bool inPercentage: false
+    property double stepSize: null
+
+    function calculateStep() {
+        if (stepSize) {
+            return stepSize
+        }
+        return (inPercentage ? 1 : 0.01)
+    }
 
     StyledTextLabel {
         Layout.fillWidth: true
@@ -47,7 +55,7 @@ RowLayout {
         currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
         minValue: 0
         maxValue: inPercentage ? 999 : 99
-        step: inPercentage ? 1 : 0.01
+        step: calculateStep()
         decimals: inPercentage ? 0 : 2
 
         measureUnitsSymbol: inPercentage ? '%' : suffix

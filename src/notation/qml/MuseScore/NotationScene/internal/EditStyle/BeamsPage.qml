@@ -92,6 +92,7 @@ StyleDialogPage {
         styleItem: beamsPageModel.beamMinLen
         label: qsTrc("notation", "Broken beam minimum length:")
         suffix: qsTrc("global", "sp")
+        stepSize: 0.05
     }
 
     CheckBox {
