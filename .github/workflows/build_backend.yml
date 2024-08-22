@@ -8,15 +8,27 @@ on:
     inputs:
       build_mode:
         description: 'Build mode: devel, testing, stable'
-        required: true
         default: 'devel'
+        required: true
       publish:
         description: 'Publish: on - publish'
-        required: false
         default: 'off'
+        required: false
+  workflow_call:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish: on - publish'
+        default: 'off'
+        type: string
+        required: false
 
 jobs:
-  build_mu4:
+  backend:
     runs-on: ubuntu-20.04
     steps:
     - name: Cancel Previous Runs
@@ -28,14 +40,14 @@ jobs:
 
     - name: "Configure workflow"
       run: |
-        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [ "${{ github.event.inputs.publish }}" = "on" ]; then DO_PUBLISH='true'; fi
+        if [ "${{ inputs.publish }}" = "on" ]; then DO_PUBLISH='true'; fi
         if [ -z "${{ secrets.S3_KEY_CONVERTER }}" ]; then DO_PUBLISH='false'; fi
         if [ -z "${{ secrets.S3_SECRET_CONVERTER }}" ]; then DO_PUBLISH='false'; fi
 

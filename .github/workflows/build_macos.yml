@@ -5,7 +5,7 @@ on:
     branches:
     - master
     - 4.4.0
-    
+
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
     # - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
@@ -13,23 +13,40 @@ on:
     inputs:
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
-        required: true
         default: 'devel'
+        required: true
       publish:
         description: 'Publish to FTP: on - publish'
+        default: 'off'
         required: false
-        default: 'off' 
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
-        required: false
         default: ''
+        required: false
+  workflow_call:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        type: string
+        required: false
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        default: ''
+        type: string
+        required: false
 
 env:
   # CURRENT_RELEASE_BRANCH: 4.3.2
   DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
 
 jobs:
-  build_mu4:    
+  macos_universal:
     runs-on: macos-latest
     steps:
     - name: Cancel Previous Runs
@@ -63,16 +80,16 @@ jobs:
         pull_request_title: ${{ github.event.pull_request.title }}
         SENTRY_SERVER_MU4_KEY: ${{ secrets.SENTRY_SERVER_MU4_KEY }}
         SENTRY_SERVER_SANDBOX_KEY: ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
-        SENTRY_PROJECT: ${{ github.event.inputs.sentry_project }}
+        SENTRY_PROJECT: ${{ inputs.sentry_project }}
       run: |
-        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
+        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -190,7 +207,7 @@ jobs:
         bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s macos
         bash ./buildscripts/ci/translation/tx_pull.sh
     - name: Build
-      if: env.DO_BUILD == 'true'    
+      if: env.DO_BUILD == 'true'
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         bash ./buildscripts/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL

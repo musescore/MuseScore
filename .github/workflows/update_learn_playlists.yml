@@ -5,56 +5,56 @@ on:
     inputs:
       mode:
         description: 'Mode: stable, testing'
-        required: true
         default: 'testing'
+        required: true
+  workflow_call:
+    inputs:
+      mode:
+        description: 'Mode: stable, testing'
+        default: 'testing'
+        type: string
+        required: true
+      environment:
+        description: "Environment: use 'production' to prompt for approval"
+        default: ''
+        type: string
+        required: false
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  update-get-started-playlist:
-    runs-on: ubuntu-20.04
+  update_playlists:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        playlist:
+          - filename: started_playlist
+            id: PLTYuWi2LmaPEhcwZJwFZqoyQ2xXx_maPa
+          # - filename: advanced_playlist # old playlist no longer used
+          #   id: PL24C760637A625BB6
+    environment:
+      name: ${{ inputs.environment }} # can be empty/blank (if so, URL will not be shown)
+      url: https://www.youtube.com/playlist?list=${{ matrix.playlist.id }} # show on run page
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Update info about the get started playlist in s3
+      - name: Update playlist info on s3
         run: |
-          S3_URL="s3://extensions.musescore.org/4.0/learn/started_playlist.json"
-          if [ ${{ github.event.inputs.mode }} == "testing" ]; then
-            S3_URL="s3://extensions.musescore.org/4.0/learn/started_playlist.test.json"
+          if [ '${{ inputs.mode }}' == 'stable' ]; then
+            S3_URL='s3://extensions.musescore.org/4.0/learn/${{ matrix.playlist.filename }}.json'
+          else
+            S3_URL='s3://extensions.musescore.org/4.0/learn/${{ matrix.playlist.filename }}.test.json'
           fi
 
           sudo bash ./buildscripts/ci/learn/make_playlists_info_file.sh \
-            --youtube_api_key ${{ secrets.YOUTUBE_API_KEY }} \
-            --youtube_playlist_id 'PLTYuWi2LmaPEhcwZJwFZqoyQ2xXx_maPa'
+            --youtube_api_key '${{ secrets.YOUTUBE_API_KEY }}' \
+            --youtube_playlist_id '${{ matrix.playlist.id }}'
 
           sudo bash ./buildscripts/ci/learn/push_file_to_s3.sh \
-            --s3_key ${{ secrets.S3_KEY }} \
-            --s3_secret ${{ secrets.S3_SECRET }} \
-            --s3_url ${S3_URL} \
-            --file_name "playlist.json"
-
-  update-advanced-playlist:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-
-      - name: Update info about the advanced playlist in s3
-        run: |
-          S3_URL="s3://extensions.musescore.org/4.0/learn/advanced_playlist.json"
-          if [ ${{ github.event.inputs.mode }} == "testing" ]; then
-            S3_URL="s3://extensions.musescore.org/4.0/learn/advanced_playlist.test.json"
-          fi
-
-          sudo bash ./buildscripts/ci/learn/make_playlists_info_file.sh \
-            --youtube_api_key ${{ secrets.YOUTUBE_API_KEY }} \
-            --youtube_playlist_id 'PL24C760637A625BB6'
-
-          sudo bash ./buildscripts/ci/learn/push_file_to_s3.sh \
-            --s3_key ${{ secrets.S3_KEY }} \
-            --s3_secret ${{ secrets.S3_SECRET }} \
-            --s3_url ${S3_URL} \
-            --file_name "playlist.json"
+            --s3_key '${{ secrets.S3_KEY }}' \
+            --s3_secret '${{ secrets.S3_SECRET }}' \
+            --s3_url "${S3_URL}" \
+            --file_name 'playlist.json'

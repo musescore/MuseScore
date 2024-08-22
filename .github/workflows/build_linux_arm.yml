@@ -1,29 +1,61 @@
 name: 'Build: Linux ARM'
 
 on:
+  # pull_request:
+  #   branches:
+  #   - master
+
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-   # - cron: '0 3 */1 */1 *' # At 05:00 on every day-of-month for current release branch
+    # - cron: '0 3 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_arm32 linux_arm64'
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
-        required: true
         default: 'devel'
+        required: true
       publish:
         description: 'Publish to FTP: on - publish'
-        required: false
         default: 'off'
+        required: false
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
-        required: false
         default: ''
+        required: false
+  workflow_call:
+    inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_arm32 linux_arm64'
+        type: string
+        required: true
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        type: string
+        required: false
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        default: ''
+        type: string
+        required: false
 
 #env:
 #  CURRENT_RELEASE_BRANCH: 4.3.2
 
 jobs:
-  build_armhf:
+
+  linux_arm32:
+    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm32') }}
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
@@ -52,16 +84,16 @@ jobs:
         pull_request_title: ${{ github.event.pull_request.title }}
         SENTRY_SERVER_MU4_KEY: ${{ secrets.SENTRY_SERVER_MU4_KEY }}
         SENTRY_SERVER_SANDBOX_KEY: ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
-        SENTRY_PROJECT: ${{ github.event.inputs.sentry_project }}
+        SENTRY_PROJECT: ${{ inputs.sentry_project }}
       run: |
-        sudo bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        sudo bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         sudo bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
+        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -169,7 +201,8 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/
 
-  build_arm64:
+  linux_arm64:
+    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm64') }}
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
@@ -192,14 +225,14 @@ jobs:
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
       run: |
-        sudo bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        sudo bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         sudo bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then 
+        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -222,7 +255,7 @@ jobs:
         fi
 
         DO_UPLOAD_SYMBOLS='false'
-        SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
+        SENTRY_PROJECT=${{ inputs.sentry_project }}
         SENTRY_URL=""
         if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
           DO_UPLOAD_SYMBOLS='true'
