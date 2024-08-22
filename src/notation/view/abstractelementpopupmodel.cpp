@@ -21,7 +21,11 @@
  */
 
 #include "abstractelementpopupmodel.h"
+
 #include "internal/partialtiepopupmodel.h"
+
+#include "engraving/dom/dynamic.h"
+
 #include "log.h"
 
 using namespace mu::notation;
@@ -232,7 +236,17 @@ const mu::engraving::ElementTypeSet& AbstractElementPopupModel::dependentElement
 
 void AbstractElementPopupModel::updateItemRect()
 {
-    QRectF rect = m_item ? fromLogical(m_item->canvasBoundingRect()).toQRectF() : QRectF();
+    QRectF rect;
+
+    if (!m_item) {
+        rect = QRect();
+    } else {
+        if (m_item->isDynamic()) {
+            rect = fromLogical(toDynamic(m_item)->adjustedBoundingRect()).toQRectF();
+        } else {
+            rect = fromLogical(m_item->canvasBoundingRect()).toQRectF();
+        }
+    }
 
     if (m_itemRect != rect) {
         m_itemRect = rect;

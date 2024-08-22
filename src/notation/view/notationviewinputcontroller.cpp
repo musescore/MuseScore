@@ -30,6 +30,7 @@
 #include "log.h"
 #include "commonscene/commonscenetypes.h"
 #include "abstractelementpopupmodel.h"
+#include "engraving/dom/dynamic.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -138,7 +139,11 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideElementPopup();
 
         if (AbstractElementPopupModel::supportsPopup(selectedItem)) {
-            m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
+            if (selectedItem->isDynamic()) {
+                m_view->showElementPopup(type, toDynamic(selectedItem)->adjustedBoundingRect());
+            } else {
+                m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
+            }
         }
     });
 }
@@ -1240,7 +1245,11 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     ElementType type = item->type();
 
     if (AbstractElementPopupModel::supportsPopup(item)) {
-        m_view->toggleElementPopup(type, item->canvasBoundingRect());
+        if (item->isDynamic()) {
+            m_view->toggleElementPopup(type, toDynamic(item)->adjustedBoundingRect());
+        } else {
+            m_view->toggleElementPopup(type, item->canvasBoundingRect());
+        }
     }
 }
 
