@@ -51,6 +51,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/dynamic.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
@@ -1122,7 +1123,11 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     score()->update();
 
     if (isGripEditStarted()) {
-        updateGripAnchorLines();
+        if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
+            updateDragAnchorLines();
+        } else {
+            updateGripAnchorLines();
+        }
     } else {
         updateDragAnchorLines();
     }
@@ -2705,6 +2710,11 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     mu::engraving::EngravingItem* editedElement = m_editData.element;
+
+    if (editedElement && editedElement->isDynamic()) {
+        toDynamic(editedElement)->findAdjacentHairpins();
+    }
+
     int gripsCount = editedElement ? editedElement->gripsCount() : 0;
 
     if (gripsCount == 0) {
@@ -3611,6 +3621,7 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
 
     m_editData.element = element;
     m_editData.curGrip = grip;
+    m_editData.editTextualProperties = false;
 
     updateGripAnchorLines();
     m_editData.element->startEdit(m_editData);
@@ -3811,7 +3822,11 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
         if (!isShiftRelease) {
             if (isGripEditStarted()) {
-                updateGripAnchorLines();
+                if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
+                    updateDragAnchorLines();
+                } else {
+                    updateGripAnchorLines();
+                }
             } else if (isElementEditStarted() && !m_editData.editTextualProperties) {
                 updateDragAnchorLines();
             }
