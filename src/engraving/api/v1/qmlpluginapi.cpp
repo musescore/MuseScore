@@ -65,6 +65,7 @@ Enum* PluginAPI::segmentTypeEnum = nullptr;
 Enum* PluginAPI::spannerAnchorEnum = nullptr;
 Enum* PluginAPI::symIdEnum = nullptr;
 Enum* PluginAPI::harmonyTypeEnum = nullptr;
+Enum* PluginAPI::cursorEnum = nullptr;
 
 //---------------------------------------------------------
 //   PluginAPI::registerQmlTypes

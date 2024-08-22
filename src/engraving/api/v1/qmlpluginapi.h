@@ -34,10 +34,7 @@
 
 #include "enums.h"
 #include "apitypes.h"
-
-// #include "engraving/dom/score.h"
-// #include "engraving/dom/types.h"
-// #include "engraving/types/types.h"
+#include "cursor.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -60,6 +57,17 @@ class Score;
     static Enum* get_##cppName() { \
         if (!cppName) \
         cppName = wrapEnum<enumName>(); \
+        return cppName; \
+    }
+
+#define DECLARE_API_ENUM2(qmlName, cppName, enumName1, enumName2) \
+    Q_PROPERTY(mu::engraving::apiv1::Enum * qmlName READ get_##cppName CONSTANT) \
+    static Enum* cppName; \
+    static Enum* get_##cppName() { \
+        if (!cppName) { \
+            cppName = wrapEnum<enumName1>(); \
+            cppName->add(QMetaEnum::fromType<enumName2>()); \
+        } \
         return cppName; \
     }
 
@@ -194,6 +202,8 @@ public:
     /// Contains mu::engraving::HarmonyType enumeration values
     /// \since MuseScore 3.6
     DECLARE_API_ENUM(HarmonyType,      harmonyTypeEnum,        mu::engraving::apiv1::enums::HarmonyType)
+
+    DECLARE_API_ENUM2(Cursor, cursorEnum, Cursor::RewindMode, Cursor::InputStateMode)
 
 signals:
     /// Indicates that the plugin was launched.
