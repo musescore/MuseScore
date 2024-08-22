@@ -1111,6 +1111,10 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
+
+        if (m_editData.element->isDynamic()) {
+            addHairpinOnGripDrag(toDynamic(m_editData.element));
+        }
     } else {
         if (m_editData.element) {
             m_editData.element->editDrag(m_dragData.ed);
@@ -4363,6 +4367,42 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     startEdit(TranslatableString("undoableAction", "Add ottava"));
     score()->cmdAddOttava(type);
     apply();
+}
+
+void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic)
+{
+    const PointF pos = m_dragData.ed.pos;
+    Hairpin* pin = Factory::createHairpin(score()->dummy()->segment());
+
+    // Right grip
+    if (dynamic->rightDragOffset() >= pin->spatium() * 0.8) {
+        pin->setHairpinType(HairpinType::CRESC_HAIRPIN);
+
+        startEdit(TranslatableString("undoableAction", "Add hairpin"));
+        score()->addHairpinOnGripDrag(pin, dynamic, pos, Grip::RIGHT);
+        apply();
+
+        dynamic->resetRightDragOffset(); // Reset grip offset to zero after drawing the hairpin
+
+        LineSegment* segment = pin->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::END);
+    }
+
+    // Left grip
+    if (abs(dynamic->leftDragOffset()) >= pin->spatium() * 0.8) {
+        pin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
+
+        startEdit(TranslatableString("undoableAction", "Add hairpin"));
+        score()->addHairpinOnGripDrag(pin, dynamic, pos, Grip::LEFT);
+        apply();
+
+        dynamic->resetLeftDragOffset(); // Reset grip offset to zero after drawing the hairpin
+
+        LineSegment* segment = pin->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::START);
+    }
 }
 
 void NotationInteraction::addHairpinsToSelection(HairpinType type)
