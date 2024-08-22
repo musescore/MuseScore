@@ -55,6 +55,7 @@ jobs:
     name: Build
     needs: get_tag_info
     uses: ./.github/workflows/build_all.yml
+    secrets: inherit
     with:
       platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
@@ -66,6 +67,7 @@ jobs:
     if: ${{ github.repository == 'musescore/MuseScore' }}
     needs: build
     uses: ./.github/workflows/update_learn_playlists.yml
+    secrets: inherit
     with:
       mode: ${{ inputs.create_tag && 'stable' || 'testing' }}
       environment: production # requires approval
@@ -124,6 +126,7 @@ jobs:
       - create_release
     if: ${{ github.repository == 'musescore/MuseScore' && ! failure() && ! cancelled() && needs.create_release.result == 'success' }}
     uses: ./.github/workflows/update_release_info.yml
+    secrets: inherit
     with:
       mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
       tag: ${{ needs.get_tag_info.outputs.tag_name }}
