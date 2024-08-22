@@ -82,6 +82,7 @@ public:
 
     struct LayoutData : public EngravingItem::LayoutData {
         LineF line;
+        double beamCorrection = 0.0;
     };
     DECLARE_LAYOUTDATA_METHODS(Stem)
 
