@@ -42,7 +42,7 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
 
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
 
-    Q_PROPERTY(QRect iconRect READ iconRect NOTIFY iconRectChanged FINAL)
+    Q_PROPERTY(QRectF iconRect READ iconRect NOTIFY iconRectChanged FINAL)
 
     Q_PROPERTY(QVariantList availablePresets READ availablePresets NOTIFY availablePresetsChanged FINAL)
     Q_PROPERTY(QStringList selectedPresetCodes READ selectedPresetCodes NOTIFY selectedPresetCodesChanged FINAL)
@@ -70,7 +70,7 @@ public:
     QString title() const;
     void setTitle(const QString& title);
 
-    QRect iconRect() const;
+    QRectF iconRect() const;
 
     QVariantList availablePresets() const;
     QStringList selectedPresetCodes() const;
@@ -81,7 +81,7 @@ public:
 signals:
     void initedChanged();
 
-    void iconRectChanged(const QRect& rect);
+    void iconRectChanged(const QRectF& rect);
 
     void titleChanged();
 
