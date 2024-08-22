@@ -65,7 +65,6 @@ jobs:
     name: 'Create release: ${{ needs.get_tag_info.outputs.tag_name }}'
     needs:
       - get_tag_info # to access outputs
-      - update_learn_playlists
     if: ${{ ! failure() && ! cancelled() && inputs.create_tag }} # run even if prior jobs were skipped
     runs-on: ubuntu-latest
     environment:
