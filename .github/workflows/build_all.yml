@@ -43,6 +43,7 @@ jobs:
     name: Linux x64
     if: ${{ contains(inputs.platforms, 'linux_x64') }}
     uses: ./.github/workflows/build_linux.yml
+    secrets: inherit
     with:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
@@ -51,6 +52,7 @@ jobs:
     name: macOS
     if: ${{ contains(inputs.platforms, 'macos') }}
     uses: ./.github/workflows/build_macos.yml
+    secrets: inherit
     with:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
@@ -58,6 +60,7 @@ jobs:
   windows:
     name: Windows
     uses: ./.github/workflows/build_windows.yml
+    secrets: inherit
     with:
       platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.build_mode }}
