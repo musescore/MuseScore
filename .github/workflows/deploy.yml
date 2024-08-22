@@ -51,13 +51,44 @@ jobs:
           echo "Tag will not be created."
         fi
 
+  plan_builds:
+    name: Plan builds
+    runs-on: ubuntu-latest
+    outputs:
+      download_linux_arm32_runid: ${{ steps.plan_builds.outputs.download_linux_arm32_runid }}
+      download_linux_arm64_runid: ${{ steps.plan_builds.outputs.download_linux_arm64_runid }}
+      download_linux_x64_runid: ${{ steps.plan_builds.outputs.download_linux_x64_runid }}
+      download_macos_runid: ${{ steps.plan_builds.outputs.download_macos_runid }}
+      download_windows_x64_runid: ${{ steps.plan_builds.outputs.download_windows_x64_runid }}
+      download_windows_portable_runid: ${{ steps.plan_builds.outputs.download_windows_portable_runid }}
+      platforms_to_build: ${{ steps.plan_builds.outputs.platforms_to_build }}
+    steps:
+      - id: plan_builds
+        name: Plan builds
+        env:
+          PLATFORMS: ${{ inputs.platforms }}
+        run: |
+          platform_regex='(linux_arm32|linux_arm64|linux_x64|macos|windows_x64|windows_portable)'
+          int_regex="(0|[1-9][0-9]*)"
+
+          platforms_to_build=()
+          for platform in ${PLATFORMS}; do
+            if [[ "${platform}" =~ "${platform_regex}@${int_regex}" ]]; then
+              echo "download_${BASH_REMATCH[1]}_runid=${BASH_REMATCH[2]}" | tee -a "${GITHUB_OUTPUT}"
+            else
+              platforms_to_build+=("${platform}")
+            fi
+          done
+
+          echo "platforms_to_build=${platforms_to_build[@]}" | tee -a "${GITHUB_OUTPUT}"
+        
   build:
     name: Build
-    needs: get_tag_info
+    needs: [get_tag_info, plan_builds]
     uses: ./.github/workflows/build_all.yml
     secrets: inherit
     with:
-      platforms: ${{ inputs.platforms }}
+      platforms: ${{ needs.plan_builds.outputs.platforms_to_build }}
       build_mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
       publish: ${{ inputs.create_tag && 'on' || 'off' }}
       sentry_project: ${{ (inputs.create_tag && inputs.release_type == 'stable') && 'mu4' || 'sandbox' }}
@@ -74,8 +105,11 @@ jobs:
 
   create_release:
     name: 'Create release: ${{ needs.get_tag_info.outputs.tag_name }}'
+    permissions: 
+      actions: read
     needs:
       - get_tag_info # to access outputs
+      - plan_builds # to access outputs
       - update_learn_playlists
     if: ${{ ! failure() && ! cancelled() && inputs.create_tag }} # run even if prior jobs were skipped
     runs-on: ubuntu-latest
@@ -85,10 +119,52 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
-    - name: Download and extract artifacts
+    - name: Download and extract built artifacts
       uses: actions/download-artifact@v4
       with:
         path: build.artifacts
+    - name: Download and extract reused linux_arm32 artifacts
+      if: ${{ needs.plan_builds.outputs.download_linux_arm32_runid }}
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+        run-id: ${{ needs.plan_builds.outputs.download_linux_arm32_runid }}
+        github-token: ${{ github.token }}
+    - name: Download and extract reused linux_arm64 artifacts
+      if: ${{ needs.plan_builds.outputs.download_linux_arm64_runid }}
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+        run-id: ${{ needs.plan_builds.outputs.download_linux_arm64_runid }}
+        github-token: ${{ github.token }}
+    - name: Download and extract reused linux_x64 artifacts
+      if: ${{ needs.plan_builds.outputs.download_linux_x64_runid }}
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+        run-id: ${{ needs.plan_builds.outputs.download_linux_x64_runid }}
+        github-token: ${{ github.token }}
+    - name: Download and extract reused macos artifacts
+      if: ${{ needs.plan_builds.outputs.download_macos_runid }}
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+        run-id: ${{ needs.plan_builds.outputs.download_macos_runid }}
+        github-token: ${{ github.token }}
+    - name: Download and extract reused windows_x64 artifacts
+      if: ${{ needs.plan_builds.outputs.download_windows_x64_runid }}
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+        run-id: ${{ needs.plan_builds.outputs.download_windows_x64_runid }}
+        github-token: ${{ github.token }}
+    - name: Download and extract reused windows_portable artifacts
+      if: ${{ needs.plan_builds.outputs.download_windows_portable_runid }}
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+        run-id: ${{ needs.plan_builds.outputs.download_windows_portable_runid }}
+        github-token: ${{ github.token }}
     - name: Collate release binaries
       run: |
         buildscripts/ci/release/collate_release_binaries.sh
