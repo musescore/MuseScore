@@ -5,7 +5,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable' # TODO: backend
+        default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
         required: true
       release_type:
         description: 'Release type: alpha,beta,rc,stable, or any label with chars A-Za-z0-9._ for testing'
