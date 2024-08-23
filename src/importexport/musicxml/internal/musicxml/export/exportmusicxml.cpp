@@ -134,6 +134,9 @@
 #include "global/realfn.h"
 #include "engraving/iengravingconfiguration.h"
 
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
+
 #include "log.h"
 
 using namespace mu;
@@ -8781,16 +8784,57 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         const String textName = h->hTextName();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
-            m_xml.tag("function", h->hFunction());
-            m_xml.tag("kind", { { "text", textName } }, "none");
+            String alter;
+            String functionText = h->hFunction();
+            if (functionText.empty()) {
+                // we just dump the text as deprecated function
+                m_xml.tag("function", h->musicXmlText());
+                break;
+            }
+            m_xml.startElement("numeral");
+            if (!functionText.at(0).isDigit()) {
+                alter = functionText.at(0);
+                functionText = functionText.at(1);
+            }
+            m_xml.tag("numeral-root", functionText);
+            if (alter == u"b") {
+                m_xml.tag("numeral-alter", "-1");
+            } else if (alter == u"#") {
+                m_xml.tag("numeral-alter", "1");
+            }
+            m_xml.endElement();
+            if (!h->xmlKind().isEmpty()) {
+                String s = u"kind";
+                String kindText = h->musicXmlText();
+                if (h->musicXmlText() != "") {
+                    s += u" text=\"" + kindText + u"\"";
+                }
+                if (h->xmlSymbols() == "yes") {
+                    s += u" use-symbols=\"yes\"";
+                }
+                if (h->xmlParens() == "yes") {
+                    s += u" parentheses-degrees=\"yes\"";
+                }
+                m_xml.tagRaw(s, h->xmlKind());
+            } else {
+                m_xml.tag("kind", "none");
+            }
         }
         break;
         case HarmonyType::ROMAN: {
-            // TODO: parse?
-            m_xml.tag("function", h->hTextName());   // note: HTML escape done by tag()
-            m_xml.tag("kind", { { "text", "" } }, "none");
+            QRegularExpression romanRegex("[iv]+", QRegularExpression::CaseInsensitiveOption);
+            QRegularExpressionMatch romanMatch = romanRegex.match(textName);
+            if (romanMatch.capturedTexts().size()) {
+                String rootText = romanMatch.capturedTexts()[0];
+                m_xml.startElement("numeral");
+                m_xml.tag("numeral-root", { { "text", rootText } }, "1");
+                m_xml.endElement();
+                // only check for major or minor
+                m_xml.tag("kind", rootText.at(0).isUpper() ? "major" : "minor");
+                break;
+            }
         }
-        break;
+        // fallthrough
         case HarmonyType::STANDARD:
         default: {
             m_xml.startElement("root");
