@@ -100,7 +100,17 @@ jobs:
   # Dummy build for testing purposes.
   dummy:
     if: ${{ contains(inputs.platforms, 'dummy') }}
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Expose edge cases like different command versions, CRLF line endings, etc.
+        # Use same OS versions as used in real build workflows.
+        os:
+        - ubuntu-20.04 # linux_x64, backend
+        - ubuntu-22.04 # linux_arm32, linux_arm64
+        - macos-latest
+        - windows-2022 # windows_x64, windows_portable
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
@@ -130,13 +140,13 @@ jobs:
         buildscripts/ci/tools/make_release_channel_env.sh -c "${MUSE_APP_BUILD_MODE}"
         buildscripts/ci/tools/make_revision_env.sh "$(git rev-parse --short=7 HEAD)"
 
-        buildscripts/ci/tools/make_artifact_name_env.sh "MuseScore-Dummy-${BUILD_VERSION}-x86_64.txt"
+        buildscripts/ci/tools/make_artifact_name_env.sh "MuseScore-Dummy-${BUILD_VERSION}-${{ matrix.os }}-${HOSTTYPE}.txt"
         ARTIFACT_NAME="$(<"${ARTIFACTS_DIR}/env/artifact_name.env")"
 
         echo "Hello, world!" >"${ARTIFACTS_DIR}/${ARTIFACT_NAME}"
         buildscripts/ci/tools/checksum.sh
 
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Dummy_${BUILD_BRANCH}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Dummy-${{ matrix.os }}_${BUILD_BRANCH}")"
         echo "UPLOAD_ARTIFACT_NAME=${UPLOAD_ARTIFACT_NAME}" | tee -a "${GITHUB_ENV}"
     - name: Upload artifacts to GitHub
       uses: actions/upload-artifact@v4

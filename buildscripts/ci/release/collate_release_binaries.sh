@@ -50,15 +50,15 @@ echo >&2
 echo >&2 "Old checksums (openssl sha256):"
 for path in "${ARTIFACTS_DIR}/"*"/checksum.txt"; do
     while read -r line; do
+        line="${line%$'\r'}" # openssl output has CRLF line endings on Windows
         printf '%s\n' "${line}" >&2
-        if [[ ! "${line}" =~ ^SHA256\(.*\)=\ [0-9a-f]{64}$ ]]; then
+        # Some versions of openssl output 'SHA2-256' instead of 'SHA256'.
+        if [[ ! "${line}" =~ ^SHA(2-)?256\((.*)\)=\ ([0-9a-f]{64})$ ]]; then
             echo >&2 "$o: Error: openssl line is badly formed: ${line}"
             exit 1
         fi
-        checksum="${line##*)= }"
-        filename="${line%)= *}"
-        filename="${filename#SHA256(}"
-        filename="$(basename "${filename}")"
+        filename="$(basename "${BASH_REMATCH[2]}")"
+        checksum="${BASH_REMATCH[3]}"
         old_checksums["${filename}"]="${checksum}"
     done <"${path}"
 done
@@ -74,12 +74,12 @@ echo >&2
 while read -r line; do
     # sha256sum prepends filenames with space ( ) if opened in text mode
     # or asterisk (*) if opened in binary mode.
-    if [[ ! "${line}" =~ ^[0-9a-f]{64}\ [\ *][^/]+$ ]]; then
+    if [[ ! "${line}" =~ ^([0-9a-f]{64})\ [\ *]([^/]+)$ ]]; then
         echo >&2 "$o: Error: sha256sum line is badly formed: ${line}"
         exit 1
     fi
-    checksum="${line%% *}"
-    filename="${line#* ?}"
+    checksum="${BASH_REMATCH[1]}"
+    filename="${BASH_REMATCH[2]}"
     new_checksums["${filename}"]="${checksum}"
 done <"${CHECKSUMS_FILE}"
 
