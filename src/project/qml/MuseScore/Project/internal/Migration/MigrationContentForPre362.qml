@@ -136,7 +136,7 @@ ColumnLayout {
         CheckBox {
             id: percussionOption
             text: qsTrc("project/migration", "Our new notation and sound mapping for <a href=\"%1\">MDL percussion</a>")
-                  .arg("https://musescore.org/en/handbook/4") // TODO: Replace with link to page about MDL migration.
+                  .arg("https://musescore.org/node/367337") // non-'/en' URL should redirect to translated version, if available
             checked: root.isRemapPercussion
 
             navigation.panel: root.navigationPanel
