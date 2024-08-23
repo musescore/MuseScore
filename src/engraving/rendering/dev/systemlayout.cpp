@@ -1108,7 +1108,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
-        if (sp->staff() && !sp->staff()->show()) {
+        if (!sp->systemFlag() && sp->staff() && !sp->staff()->show()) {
             continue;
         }
 
