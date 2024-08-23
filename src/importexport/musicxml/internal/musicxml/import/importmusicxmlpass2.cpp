@@ -7534,9 +7534,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     }
 
     const ChordDescription* d = nullptr;
-    if (ha->rootTpc() != Tpc::TPC_INVALID) {
-        d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
-    } else if (!ha->hFunction().empty()) {
+    if (ha->rootTpc() != Tpc::TPC_INVALID || !ha->hFunction().empty()) {
         d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
     }
     if (d) {
