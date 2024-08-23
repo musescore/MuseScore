@@ -270,7 +270,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
             // Pass through the all instruments in the part
             const InstrumentList* il = part->instruments();
-            for(auto j = il->begin(); j!= il->end(); j++) {
+            for (auto j = il->begin(); j!= il->end(); j++) {
                   // Pass through the all channels of the instrument
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
@@ -371,25 +371,32 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                   }
 
             // Export lyrics
-            SegmentType st = SegmentType::ChordRest;
-            for (Segment* seg = cs->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-                  for (int i = part->startTrack(); i < part->endTrack(); ++i) {
-                        ChordRest* cr = toChordRest(seg->element(i));
-                        if (cr) {
-                              for (const auto& lyric : cr->lyrics()) {
-                                    QByteArray lyricText = lyric->plainText().toUtf8();
-                                    size_t len = lyricText.size() + 1;
-                                    unsigned char* data = new unsigned char[len];
+            for (const RepeatSegment* rs : cs->repeatList()) {
+                  int startTick  = rs->tick;
+                  int endTick    = startTick + rs->len();
+                  int tickOffset = rs->utick - rs->tick;
 
-                                    memcpy(data, lyricText.constData(), len);
+                  SegmentType st = SegmentType::ChordRest;
+                  for (Segment* seg = rs->firstMeasure()->first(st); seg && seg->tick().ticks() < endTick; seg = seg->next1(st)) {
+                        for (int i = part->startTrack(); i < part->endTrack(); ++i) {
+                              ChordRest* cr = toChordRest(seg->element(i));
+                              if (cr) {
+                                    for (const auto& lyric : cr->lyrics()) {
+                                          QByteArray lyricText = lyric->plainText().toUtf8();
+                                          size_t len = lyricText.size() + 1;
+                                          unsigned char* data = new unsigned char[len];
 
-                                    MidiEvent ev;
-                                    ev.setType(ME_META);
-                                    ev.setMetaType(META_LYRIC);
-                                    ev.setEData(data);
-                                    ev.setLen(static_cast<int>(len));
+                                          memcpy(data, lyricText.constData(), len);
 
-                                    track.insert(cr->tick().ticks(), ev);
+                                          MidiEvent ev;
+                                          ev.setType(ME_META);
+                                          ev.setMetaType(META_LYRIC);
+                                          ev.setEData(data);
+                                          ev.setLen(static_cast<int>(len));
+
+                                          int tick = cr->tick().ticks() + tickOffset;
+                                          track.insert(tick, ev);
+                                          }
                                     }
                               }
                         }
