@@ -26,14 +26,15 @@ defaults:
 
 jobs:
   update_playlists:
-    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         playlist:
           - filename: started_playlist
             id: PLTYuWi2LmaPEhcwZJwFZqoyQ2xXx_maPa
           # - filename: advanced_playlist # old playlist no longer used
           #   id: PL24C760637A625BB6
+    runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.environment }} # can be empty/blank (if so, URL will not be shown)
       url: https://www.youtube.com/playlist?list=${{ matrix.playlist.id }} # show on run page
