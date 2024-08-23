@@ -21,45 +21,49 @@
  */
 import QtQuick 2.15
 
-import MuseScore.NotationScene 1.0
-
 import "internal"
 
 PinchArea {
-    required default property AbstractNotationPaintView notationView
+    id: root
+
+    required default property var view
+
+    property alias horizontalScrollbarSize: horizontalScrollBar.size
+    property alias startHorizontalScrollPosition: horizontalScrollBar.position
+
+    property alias verticalScrollbarSize: verticalScrollBar.size
+    property alias startVerticalScrollPosition: verticalScrollBar.position
+
+    signal pinchToZoom(real scale, var pos)
+    signal scrollHorizontal(real newPos)
+    signal scrollVertical(real newPos)
 
     onPinchUpdated: function(pinch) {
-        notationView.pinchToZoom(pinch.scale / pinch.previousScale, pinch.center)
+        root.pinchToZoom(pinch.scale / pinch.previousScale, pinch.center)
     }
 
     // A macOS feature which allows double-tapping with two fingers to zoom in or out
     onSmartZoom: function(pinch) {
-        notationView.pinchToZoom(pinch.scale === 0 ? 0.5 : 2, pinch.center)
+        root.pinchToZoom(pinch.scale === 0 ? 0.5 : 2, pinch.center)
     }
 
-    children: [ notationView, horizontalScrollBar, verticalScrollBar ]
+    children: [ view, horizontalScrollBar, verticalScrollBar ]
 
-    NotationScrollBar {
+    ViewScrollBar {
         id: horizontalScrollBar
         orientation: Qt.Horizontal
 
-        size: notationView.horizontalScrollbarSize
-        position: notationView.startHorizontalScrollPosition
-
         onMoved: function(newPosition) {
-            notationView.scrollHorizontal(newPosition)
+            root.scrollHorizontal(newPosition)
         }
     }
 
-    NotationScrollBar {
+    ViewScrollBar {
         id: verticalScrollBar
         orientation: Qt.Vertical
 
-        size: notationView.verticalScrollbarSize
-        position: notationView.startVerticalScrollPosition
-
         onMoved: function(newPosition) {
-            notationView.scrollVertical(newPosition)
+            root.scrollVertical(newPosition)
         }
     }
 }
