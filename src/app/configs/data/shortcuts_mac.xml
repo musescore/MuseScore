@@ -94,11 +94,11 @@
     </SC>
     <SC>
       <key>next-tab</key>
-      <seq>Ctrl+Tab</seq>
+      <seq>Meta+Tab</seq>
     </SC>
     <SC>
       <key>prev-tab</key>
-      <seq>Ctrl+Shift+Tab</seq>
+      <seq>Meta+Shift+Tab</seq>
     </SC>
     <SC>
       <key>first-tab</key>

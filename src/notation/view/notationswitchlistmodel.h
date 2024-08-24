@@ -59,7 +59,7 @@ public:
 
     void navigateToNextTab();
     void navigateToPrevTab();
-    void navigateToSpecificTab(const muse::actions::ActionCode& code);
+    void navigateToSpecificTab(int index);
 
 signals:
     void currentNotationIndexChanged(int index);
