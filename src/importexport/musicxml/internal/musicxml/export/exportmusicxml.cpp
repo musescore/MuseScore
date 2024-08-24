@@ -8788,14 +8788,14 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             String functionText = h->hFunction();
             if (functionText.empty()) {
                 // we just dump the text as deprecated function
-                m_xml.tag("function", h->musicXmlText());
+                m_xml.tag("function", textName);
+                m_xml.tag("kind", "none");
                 break;
-            }
-            m_xml.startElement("numeral");
-            if (!functionText.at(0).isDigit()) {
+            } else if (!functionText.at(0).isDigit()) {
                 alter = functionText.at(0);
                 functionText = functionText.at(1);
             }
+            m_xml.startElement("numeral");
             m_xml.tag("numeral-root", functionText);
             if (alter == u"b") {
                 m_xml.tag("numeral-alter", "-1");
@@ -8817,20 +8817,19 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 }
                 m_xml.tagRaw(s, h->xmlKind());
             } else {
-                m_xml.tag("kind", "none");
+                // default is major
+                m_xml.tag("kind", "major");
             }
         }
         break;
         case HarmonyType::ROMAN: {
-            QRegularExpression romanRegex("[iv]+", QRegularExpression::CaseInsensitiveOption);
-            QRegularExpressionMatch romanMatch = romanRegex.match(textName);
-            if (romanMatch.capturedTexts().size()) {
-                String rootText = romanMatch.capturedTexts()[0];
+            static const std::regex roman("[iv]+|[IV]+");
+            if (std::regex_match(textName.toStdString(), roman)) {
                 m_xml.startElement("numeral");
-                m_xml.tag("numeral-root", { { "text", rootText } }, "1");
+                m_xml.tag("numeral-root", { { "text", textName } }, "1");
                 m_xml.endElement();
                 // only check for major or minor
-                m_xml.tag("kind", rootText.at(0).isUpper() ? "major" : "minor");
+                m_xml.tag("kind", textName.at(0).isUpper() ? "major" : "minor");
                 break;
             }
         }

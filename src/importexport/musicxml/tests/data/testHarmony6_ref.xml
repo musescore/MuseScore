@@ -160,6 +160,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
     <measure number="6">
       <harmony print-frame="no">
         <function>xyz</function>
+        <kind>none</kind>
         </harmony>
       <note>
         <pitch>
@@ -221,6 +222,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
     <measure number="9">
       <harmony print-frame="no">
         <function>&lt;&gt;&amp;&quot;</function>
+        <kind>none</kind>
         </harmony>
       <note>
         <pitch>
