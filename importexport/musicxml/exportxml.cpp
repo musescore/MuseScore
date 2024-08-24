@@ -1122,7 +1122,7 @@ static int lcm(int a, int b)
 static Fraction stretch(Score* score, int st, Fraction tick)
       {
       Staff* staff { score->staff(track2staff(st)) };
-      Fraction res { staff->timeStretch(tick) };
+      Fraction res { staff ? staff->timeStretch(tick) : Fraction()};
 #ifdef DEBUG_TICK
       qDebug() << "track " << st << " tick " << fractionToQString(tick) << " stretch " << fractionToQString(res);
 #endif
@@ -4668,7 +4668,7 @@ void ExportMusicXml::systemText(StaffTextBase const* const text, int staff)
       {
       const int offset = calculateTimeDeltaInDivisions(text->tick(), tick(), div);
 
-      if (text->plainText() == "") {
+      if (text->plainText().isEmpty()) {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -6289,7 +6289,7 @@ static void identification(XmlWriter& xml, Score const* const score)
       QStringList creators;
       // the creator types commonly found in MusicXML
       creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
-      for (const QString &type : qAsConst(creators)) {
+      for (QString &type : creators) {
             QString creator = score->metaTag(type);
             if (!creator.isEmpty())
                   xml.tag(QString("creator type=\"%1\"").arg(type), creator);
@@ -6738,11 +6738,11 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
                               // add grace and non-grace note pitches to the result set
                               const Chord* c = static_cast<const Chord*>(el);
                               if (c) {
-                                    for (const Chord* g : c->graceNotesBefore()) {
+                                    for (Chord*& g : c->graceNotesBefore()) {
                                           addChordPitchesToSet(g, set);
                                           }
                                     addChordPitchesToSet(c, set);
-                                    for (const Chord* g : c->graceNotesAfter()) {
+                                    for (Chord*& g : c->graceNotesAfter()) {
                                           addChordPitchesToSet(g, set);
                                           }
                                     }
@@ -6943,11 +6943,11 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             // ise grace after
             if (c) {
                   const auto ll = &c->lyrics();
-                  for (Chord* g : c->graceNotesBefore()) {
+                  for (Chord*& g : c->graceNotesBefore()) {
                         chord(g, sstaff, ll, useDrumset);
                         }
                   chord(c, sstaff, ll, useDrumset);
-                  for (Chord* g : c->graceNotesAfter()) {
+                  for (Chord*& g : c->graceNotesAfter()) {
                         chord(g, sstaff, ll, useDrumset);
                         }
                   }
@@ -7810,7 +7810,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
-                        for (QString tag : qAsConst(l)) {
+                        for (QString& tag : l) {
                               QString degreeText;
                               if (h->xmlKind().startsWith("suspended")
                                   && tag.startsWith("add") && tag[3].isDigit()
@@ -7879,27 +7879,86 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             // export an unrecognized Chord
             // which may contain arbitrary text
             //
-            const QString textNameEscaped = h->hTextName().toHtmlEscaped();
+            const QString textName = h->hTextName();
             switch (h->harmonyType()) {
                   case HarmonyType::NASHVILLE: {
-                        _xml.tag("function", h->hFunction());
-                        QString k = "kind text=\"" + textNameEscaped + "\"";
-                        _xml.tag(k, "none");
+                        QString alter;
+                        QString functionText = h->hFunction();
+                        if (functionText.isEmpty()) {
+                              // we just dump the text as deprecated function
+                              _xml.tag("function", textName);
+                              _xml.tag("kind", "none");
+                              break;
+                              }
+                        else if (!functionText.at(0).isDigit()) {
+                              alter = functionText.at(0);
+                              functionText = functionText.at(1);
+                              }
+                        _xml.stag("numeral");
+                        _xml.tag("numeral-root", functionText);
+                        if (alter == "b")
+                              _xml.tag("numeral-alter", "-1");
+                        else if (alter == "#")
+                              _xml.tag("numeral-alter", "1");
+                        _xml.etag();
+                        if (!h->xmlKind().isEmpty()) {
+                              QString s = "kind";
+                              QString kindText = h->musicXmlText();
+                              if (!h->musicXmlText().isEmpty())
+                                    s += " text=\"" + kindText + "\"";
+                              if (h->xmlSymbols() == "yes")
+                                    s += " use-symbols=\"yes\"";
+                              if (h->xmlParens() == "yes")
+                                    s += " parentheses-degrees=\"yes\"";
+                              _xml.tag(s, h->xmlKind());
+                              }
+                        else {
+                              // default is major
+                              _xml.tag("kind", "major");
+                              }
                         }
                         break;
                   case HarmonyType::ROMAN: {
-                        // TODO: parse?
-                        _xml.tag("function", h->hTextName());   // note: HTML escape done by tag()
-                        QString k = "kind text=\"\"";
-                        _xml.tag(k, "none");
+                        int alter = 0;
+                        static const QRegularExpression roman("(b|#)?([ivIV]+)");
+                        if (textName.contains(roman)) {
+                              _xml.stag("numeral");
+                              if (textName.at(0) == "b")
+                                    alter = -1;
+                              else if (textName.at(0) == "#")
+                                    alter = 1;
+                              const QString numberStr = textName.mid(alter? 1 : 0);
+                              int harmony = 1;
+                              if (numberStr.contains("v", Qt::CaseInsensitive)) {
+                                    if (numberStr.startsWith("i", Qt::CaseInsensitive))
+                                          harmony = 4;
+                                    else
+                                          harmony = 4 + numberStr.size();
+                                    }
+                              else
+                                    harmony = numberStr.size();
+                              QString k = "numeral-root text=\"" + numberStr + "\"";
+                              _xml.tag(k, harmony);
+                              if (alter)
+                                    _xml.tag("numeral-alter", alter);
+                              _xml.etag();
+                              // simple check for major or minor
+                              _xml.tag("kind", numberStr.at(0).isUpper() ? "major" : "minor");
+                              // infer inversion from ending digits
+                              if (textName.endsWith("64"))
+                                    _xml.tag("inversion", 2);
+                              else if (textName.endsWith("6"))
+                                    _xml.tag("inversion", 1);
+                              break;
+                              }
                         }
-                        break;
+                        // fallthrough
                   case HarmonyType::STANDARD:
                   default: {
                         _xml.stag("root");
                         _xml.tag("root-step text=\"\"", "C");
                         _xml.etag();       // root
-                        QString k = "kind text=\"" + textNameEscaped + "\"";
+                        QString k = "kind text=\"" + textName.toHtmlEscaped() + "\"";
                         _xml.tag(k, "none");
                         }
                         break;

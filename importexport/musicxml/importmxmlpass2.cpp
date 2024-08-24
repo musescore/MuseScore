@@ -6913,7 +6913,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       //QString printStyle = _e.attributes().value("print-style").toString();
       const QColor color { _e.attributes().value("color").toString() };
 
-      QString kind, kindText, functionText, symbols, parens;
+      QString kind, kindText, functionText, inversionText, symbols, parens;
       QList<HDegree> degreeList;
 
       FretDiagram* fd = nullptr;
@@ -6963,8 +6963,37 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   functionText = _e.readElementText();
                   ha->setHarmonyType(HarmonyType::ROMAN);
                   }
-            //else if (_e.name() == "function") { // MusicXML 4.0 replacement for "function"
-            // TODO: parse to decide between ROMAN and NASHVILLE
+            else if (_e.name() == "numeral") {
+                  ha->setRootTpc(Tpc::TPC_INVALID);
+                  ha->setBaseTpc(Tpc::TPC_INVALID);
+                  while (_e.readNextStartElement()) {
+                        if (_e.name() == "numeral-root") {
+                              functionText = _e.attributes().value("text").toString();
+                              const QString numeralRoot = _e.readElementText();
+                              if (functionText.isEmpty() || functionText.at(0).isDigit()) {
+                                    ha->setHarmonyType(HarmonyType::NASHVILLE);
+                                    ha->setFunction(numeralRoot);
+                                    }
+                              else
+                                    ha->setHarmonyType(HarmonyType::ROMAN);
+                              }
+                        else if (_e.name() == "numeral-alter") {
+                              const int alter = _e.readElementText().toInt();
+                              switch (alter) {
+                                    case -1:
+                                          ha->setFunction("b" + ha->hFunction());
+                                          break;
+                                    case 1:
+                                          ha->setFunction("#" + ha->hFunction());
+                                          break;
+                                    default:
+                                          break;
+                                    }
+                              }
+                        else
+                              skipLogCurrElem();
+                        }
+                  }
             else if (_e.name() == "kind") {
                   // attributes: use-symbols  yes-no
                   //             text, stack-degrees, parentheses-degree, bracket-degrees,
@@ -6978,7 +7007,16 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         }
                   }
             else if (_e.name() == "inversion") {
-                  skipLogCurrElem();
+                  const int inversion = _e.readElementText().toInt();
+                  switch (inversion) {
+                        case 1: inversionText = "6";
+                              break;
+                        case 2: inversionText = "64";
+                              break;
+                        default:
+                              inversionText = "";
+                              break;
+                        }
                   }
             else if (_e.name() == "bass") {
                   QString step;
@@ -7051,7 +7089,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             }
 
       const ChordDescription* d = nullptr;
-      if (ha->rootTpc() != Tpc::TPC_INVALID)
+      if (ha->rootTpc() != Tpc::TPC_INVALID || ha->harmonyType() == HarmonyType::NASHVILLE)
             d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
       if (d) {
             ha->setId(d->id);
@@ -7059,7 +7097,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             }
       else {
             ha->setId(-1);
-            QString textName = functionText + kindText;
+            QString textName = functionText + kindText + inversionText;
             ha->setTextName(textName);
             }
       ha->render();

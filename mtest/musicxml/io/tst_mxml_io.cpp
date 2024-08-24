@@ -159,6 +159,7 @@ private slots:
       void harmony6() { mxmlMscxExportTestRef("testHarmony6"); }
       void harmony7() { mxmlMscxExportTestRef("testHarmony7"); }
       void harmony8() { mxmlIoTest("testHarmony8"); }
+      void harmony9() { mxmlIoTest("testHarmony9"); }
       void hello() { mxmlIoTest("testHello"); }
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
@@ -253,6 +254,7 @@ private slots:
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
+      void numerals() { mxmlIoTest("testNumerals"); }
       void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void partNames() { mxmlImportTestRef("testPartNames"); }
       void partNames2() { mxmlIoTest("testPartNames2"); }
