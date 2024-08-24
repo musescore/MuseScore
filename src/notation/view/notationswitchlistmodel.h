@@ -27,11 +27,14 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
+
+#include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "project/inotationproject.h"
 
 namespace mu::notation {
-class NotationSwitchListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class NotationSwitchListModel : public QAbstractListModel, public muse::actions::Actionable, public muse::Injectable,
+    public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -53,6 +56,10 @@ public:
 
     Q_INVOKABLE QVariantList contextMenuItems(int index) const;
     Q_INVOKABLE void handleContextMenuItem(int index, const QString& itemId);
+
+    void navigateToNextTab();
+    void navigateToPrevTab();
+    void navigateToSpecificTab(const muse::actions::ActionCode& code);
 
 signals:
     void currentNotationIndexChanged(int index);

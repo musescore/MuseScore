@@ -92,6 +92,51 @@
       <key>nav-escape</key>
       <seq>Esc</seq>
     </SC>
+    <SC>
+      <key>next-tab</key>
+      <seq>Ctrl+Tab</seq>
+    </SC>
+    <SC>
+      <key>prev-tab</key>
+      <seq>Ctrl+Shift+Tab</seq>
+    </SC>
+    <SC>
+      <key>first-tab</key>
+      <seq>Ctrl+1</seq>
+    </SC>
+    <SC>
+      <key>second-tab</key>
+      <seq>Ctrl+2</seq>
+    </SC>
+    <SC>
+      <key>third-tab</key>
+      <seq>Ctrl+3</seq>
+    </SC>
+    <SC>
+      <key>fourth-tab</key>
+      <seq>Ctrl+4</seq>
+    </SC>
+    <SC>
+      <key>fifth-tab</key>
+      <seq>Ctrl+5</seq>
+    </SC>
+     <SC>
+      <key>sixth-tab</key>
+      <seq>Ctrl+6</seq>
+    </SC>
+    <SC>
+      <key>seventh-tab</key>
+      <seq>Ctrl+7</seq>
+    </SC>
+    <SC>
+      <key>eighth-tab</key>
+      <seq>Ctrl+8</seq>
+    </SC>
+    <SC>
+      <key>last-tab</key>
+      <seq>Ctrl+9</seq>
+    </SC>
+
 <!-- end Keyboard navigation -->
 
   <SC>

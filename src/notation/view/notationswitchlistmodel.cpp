@@ -37,6 +37,18 @@ void NotationSwitchListModel::load()
 {
     TRACEFUNC;
 
+    dispatcher()->reg(this, "next-tab",    [this]() { navigateToNextTab(); });
+    dispatcher()->reg(this, "prev-tab",    [this]() { navigateToPrevTab(); });
+    dispatcher()->reg(this, "first-tab",   [this]() { navigateToSpecificTab("first-tab"); });
+    dispatcher()->reg(this, "second-tab",  [this]() { navigateToSpecificTab("second-tab"); });
+    dispatcher()->reg(this, "third-tab",   [this]() { navigateToSpecificTab("third-tab"); });
+    dispatcher()->reg(this, "fourth-tab",  [this]() { navigateToSpecificTab("fourth-tab"); });
+    dispatcher()->reg(this, "fifth-tab",   [this]() { navigateToSpecificTab("fifth-tab"); });
+    dispatcher()->reg(this, "sixth-tab",   [this]() { navigateToSpecificTab("sixth-tab"); });
+    dispatcher()->reg(this, "seventh-tab", [this]() { navigateToSpecificTab("seventh-tab"); });
+    dispatcher()->reg(this, "eighth-tab",  [this]() { navigateToSpecificTab("eighth-tab"); });
+    dispatcher()->reg(this, "last-tab",    [this]() { navigateToSpecificTab("last-tab"); });
+
     onCurrentProjectChanged();
     context()->currentProjectChanged().onNotify(m_notationChangedReceiver.get(), [this]() {
         onCurrentProjectChanged();
@@ -326,4 +338,70 @@ bool NotationSwitchListModel::isIndexValid(int index) const
 bool NotationSwitchListModel::isMasterNotation(const INotationPtr notation) const
 {
     return currentMasterNotation()->notation() == notation;
+}
+
+void NotationSwitchListModel::navigateToNextTab()
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    int currentNotationIndex = m_notations.indexOf(notation);
+    if (currentNotationIndex == m_notations.size() - 1) {
+        currentNotationIndex = -1;
+    }
+
+    setCurrentNotation(currentNotationIndex + 1);
+    emit currentNotationIndexChanged(currentNotationIndex + 1);
+}
+
+void NotationSwitchListModel::navigateToPrevTab()
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    int currentNotationIndex = m_notations.indexOf(notation);
+    if (currentNotationIndex == 0) {
+        currentNotationIndex = m_notations.size();
+    }
+
+    setCurrentNotation(currentNotationIndex - 1);
+    emit currentNotationIndexChanged(currentNotationIndex - 1);
+}
+
+void NotationSwitchListModel::navigateToSpecificTab(const muse::actions::ActionCode& code)
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    int currentNotationIndex = m_notations.indexOf(notation);
+
+    static const std::map<std::string, int> tabMap = {
+        { "first-tab",  0 },
+        { "second-tab", 1 },
+        { "third-tab",  2 },
+        { "fourth-tab", 3 },
+        { "fifth-tab",  4 },
+        { "sixth-tab",  5 },
+        { "seventh-tab", 6 },
+        { "eighth-tab", 7 },
+        { "last-tab", m_notations.size() - 1 }
+    };
+
+    auto it = tabMap.find(code);
+    if (it != tabMap.end()) {
+        if (code == "last-tab") {
+            currentNotationIndex = m_notations.size() - 1;
+        } else {
+            currentNotationIndex = it->second;
+        }
+    }
+
+    setCurrentNotation(currentNotationIndex);
+    emit currentNotationIndexChanged(currentNotationIndex);
 }
