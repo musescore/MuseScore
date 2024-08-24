@@ -30,6 +30,7 @@
 
 #include "global/types/string.h"
 #include "global/logstream.h"
+#include "global/realfn.h"
 
 #include "../types/types.h"
 #include "../types/symid.h"
@@ -466,7 +467,11 @@ private:
             assert(a);
             const Arg<T>* at = dynamic_cast<const Arg<T>*>(a);
             assert(at);
-            return at ? at->v == v : false;
+            if constexpr (std::is_floating_point_v<T>) {
+                return at ? muse::RealIsEqual(at->v, v) : false;
+            } else {
+                return at ? at->v == v : false;
+            }
         }
 
         //! HACK Temporary hack for enum to int
