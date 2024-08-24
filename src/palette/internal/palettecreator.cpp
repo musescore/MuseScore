@@ -256,22 +256,23 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         sp->appendElement(dynamic, TConv::userName(dynamic->dynamicType()));
     }
 
-    std::pair<HairpinType, const char*> hairpins[] = {
-        { HairpinType::CRESC_LINE,       QT_TRANSLATE_NOOP("palette", "Crescendo line") },
-        { HairpinType::DECRESC_LINE,     QT_TRANSLATE_NOOP("palette", "Diminuendo line") },
-        { HairpinType::CRESC_HAIRPIN,    QT_TRANSLATE_NOOP("palette", "Crescendo hairpin") },
-        { HairpinType::DECRESC_HAIRPIN,  QT_TRANSLATE_NOOP("palette", "Diminuendo hairpin") }
+    static const std::vector<HairpinType> hairpins {
+        HairpinType::CRESC_LINE,
+        HairpinType::DECRESC_LINE,
+        HairpinType::CRESC_HAIRPIN,
+        HairpinType::DECRESC_HAIRPIN,
     };
 
-    qreal w = gpaletteScore->style().spatium() * 8;
-    for (std::pair<HairpinType, const char*> pair : hairpins) {
+    const qreal w = gpaletteScore->style().spatium() * 8;
+
+    for (HairpinType hairpinType : hairpins) {
         auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-        hairpin->setHairpinType(pair.first);
+        hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
-        qreal mag = (pair.first == HairpinType::CRESC_LINE || pair.first == HairpinType::DECRESC_LINE) ? 1 : 0.9;
-        const QPointF offset = (pair.first == HairpinType::CRESC_LINE || pair.first == HairpinType::DECRESC_LINE)
+        qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DECRESC_LINE) ? 1 : 0.9;
+        const QPointF offset = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DECRESC_LINE)
                                ? QPointF(1, 0.25) : QPointF(0, 0);
-        sp->appendElement(hairpin, pair.second, mag, offset);
+        sp->appendElement(hairpin, hairpin->subtypeUserName(), mag, offset);
     }
 
     return sp;
@@ -393,11 +394,11 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         int measuresCount = 0;
     };
 
-    std::vector<MeasureRepeatInfo> defaultMeasureRepeats {
+    const std::vector<MeasureRepeatInfo> defaultMeasureRepeats {
         { SymId::repeat1Bar, 1 }
     };
 
-    std::vector<MeasureRepeatInfo> masterMeasureRepeats {
+    const std::vector<MeasureRepeatInfo> masterMeasureRepeats {
         { SymId::repeat1Bar, 1 },
         { SymId::repeat2Bars, 2 },
         { SymId::repeat4Bars, 4 }
@@ -1707,7 +1708,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         { 9,  8, TimeSigType::CUT_TRIPLE, QT_TRANSLATE_NOOP("engraving/timesig", "Cut triple time (9/8)") }
     };
 
-    for (TS timeSignatureType : defaultPalette ? defaultTimeSignatureList : masterTimeSignatureList) {
+    for (const TS& timeSignatureType : defaultPalette ? defaultTimeSignatureList : masterTimeSignatureList) {
         auto timeSignature = Factory::makeTimeSig(gpaletteScore->dummy()->segment());
         timeSignature->setSig(Fraction(timeSignatureType.numerator, timeSignatureType.denominator), timeSignatureType.type);
         sp->appendElement(timeSignature, timeSignatureType.name);
@@ -1760,7 +1761,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
         { u"X212O2", u"B7", muse::TranslatableString("palette", "B7") }
     };
 
-    for (FretDiagramInfo fretboardDiagram : fretboardDiagrams) {
+    for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
         auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
         sp->appendElement(fret, fretboardDiagram.userName);
@@ -1873,7 +1874,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         { muse::TranslatableString("palette", "normal"),    PlayingTechniqueType::Natural },
     };
 
-    for (PlayTechAnnotationInfo playTechAnnotation : playTechAnnotations) {
+    for (const PlayTechAnnotationInfo& playTechAnnotation : playTechAnnotations) {
         auto pta = makeElement<PlayTechAnnotation>(gpaletteScore);
         pta->setXmlText(playTechAnnotation.xmlText.translated());
         pta->setTechniqueType(playTechAnnotation.playTechType);
