@@ -134,9 +134,6 @@
 #include "global/realfn.h"
 #include "engraving/iengravingconfiguration.h"
 
-#include <QRegularExpression>
-#include <QRegularExpressionMatch>
-
 #include "log.h"
 
 using namespace mu;
