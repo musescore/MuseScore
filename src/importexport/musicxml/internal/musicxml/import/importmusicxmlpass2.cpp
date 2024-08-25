@@ -7459,12 +7459,12 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "inversion") {
             const int inversion = m_e.readText().toInt();
             switch (inversion) {
-            case 1: inversionText = "6";
+            case 1: inversionText = u"6";
                 break;
-            case 2: inversionText = "64";
+            case 2: inversionText = u"64";
                 break;
             default:
-                inversionText = "";
+                inversionText = u"";
                 break;
             }
         } else if (m_e.name() == "bass") {
