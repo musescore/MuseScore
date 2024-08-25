@@ -2985,9 +2985,10 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
         beamMode = BeamMode::MID;
     } else if (beat->beamMode() == GPBeat::BeamMode::BROKEN2 || beat->beamMode() == GPBeat::BeamMode::BROKEN2_JOINED) {
         int measureDenom = measure->ticks().denominator();
-        double fract = (double)tick.numerator() / tick.denominator() * measureDenom;
+        Fraction frac = tick * measureDenom;
+        bool isInteger = frac.numerator() % frac.denominator() == 0;
 
-        if ((int)fract == fract && beat->beamMode() != GPBeat::BeamMode::BROKEN2_JOINED) {
+        if (isInteger && beat->beamMode() != GPBeat::BeamMode::BROKEN2_JOINED) {
             /// keep auto direction for some beams, so BEGIN16/BEGIN32 modes work properly
             /// (forcing divide of beam groups, TODO-gp: make possible to show broken2 type from guitar pro
             beamMode = BeamMode::AUTO;
