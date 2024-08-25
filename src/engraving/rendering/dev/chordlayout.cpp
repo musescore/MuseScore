@@ -3493,6 +3493,11 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
     bool useParens = isTabStaff && !item->fixed() && item->tieBack()
                      && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
+
+    if (item->harmonic() && item->displayFret() != Note::DisplayFretOption::NaturalHarmonic) {
+        useParens = false;
+    }
+
     if (useParens) {
         double widthWithoutParens = item->tabHeadWidth(staffType);
         item->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
