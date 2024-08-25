@@ -165,13 +165,13 @@ void QQuickRangeModel1Private::emitValueAndPositionIfChanged(const qreal oldValu
     const qreal newPosition = q->position();
 
     if (isComplete) {
-        if (!qFuzzyCompare(newValue, oldValue))
+        if (!muse::RealIsEqual(newValue, oldValue))
             emit q->valueChanged(newValue);
-        if (!qFuzzyCompare(newPosition, oldPosition))
+        if (!muse::RealIsEqual(newPosition, oldPosition))
             emit q->positionChanged(newPosition);
     } else {
-        positionChanged |= qFuzzyCompare(oldPosition, newPosition);
-        valueChanged |= !qFuzzyCompare(oldValue, newValue);
+        positionChanged |= muse::RealIsEqual(oldPosition, newPosition);
+        valueChanged |= !muse::RealIsEqual(oldValue, newValue);
     }
 }
 
@@ -218,8 +218,8 @@ void QQuickRangeModel1::setPositionRange(qreal min, qreal max)
 {
     Q_PD(QQuickRangeModel1);
 
-    bool emitPosAtMinChanged = !qFuzzyCompare(min, pd->posatmin);
-    bool emitPosAtMaxChanged = !qFuzzyCompare(max, pd->posatmax);
+    bool emitPosAtMinChanged = !muse::RealIsEqual(min, pd->posatmin);
+    bool emitPosAtMaxChanged = !muse::RealIsEqual(max, pd->posatmax);
 
     if (!(emitPosAtMinChanged || emitPosAtMaxChanged))
         return;
@@ -253,8 +253,8 @@ void QQuickRangeModel1::setRange(qreal min, qreal max)
 {
     Q_PD(QQuickRangeModel1);
 
-    bool emitMinimumChanged = !qFuzzyCompare(min, pd->minimum);
-    bool emitMaximumChanged = !qFuzzyCompare(max, pd->maximum);
+    bool emitMinimumChanged = !muse::RealIsEqual(min, pd->minimum);
+    bool emitMaximumChanged = !muse::RealIsEqual(max, pd->maximum);
 
     if (!(emitMinimumChanged || emitMaximumChanged))
         return;
@@ -329,7 +329,7 @@ void QQuickRangeModel1::setStepSize(qreal stepSize)
     Q_PD(QQuickRangeModel1);
 
     stepSize = qMax(qreal(0.0), stepSize);
-    if (qFuzzyCompare(stepSize, pd->stepSize))
+    if (muse::RealIsEqual(stepSize, pd->stepSize))
         return;
 
     const qreal oldValue = value();
@@ -399,7 +399,7 @@ void QQuickRangeModel1::setPosition(qreal newPosition)
 {
     Q_PD(QQuickRangeModel1);
 
-    if (qFuzzyCompare(newPosition, pd->pos))
+    if (muse::RealIsEqual(newPosition, pd->pos))
         return;
 
     const qreal oldPosition = position();
@@ -486,7 +486,7 @@ void QQuickRangeModel1::setValue(qreal newValue)
 {
     Q_PD(QQuickRangeModel1);
 
-    if (qFuzzyCompare(newValue, pd->value))
+    if (muse::RealIsEqual(newValue, pd->value))
         return;
 
     const qreal oldValue = value();
@@ -549,7 +549,7 @@ void QQuickRangeModel1::toMaximum()
 void QQuickRangeModel1::increaseSingleStep()
 {
     Q_PD(const QQuickRangeModel1);
-    if (qFuzzyIsNull(pd->stepSize))
+    if (muse::RealIsNull(pd->stepSize))
         setValue(value() + (pd->maximum - pd->minimum)/10.0);
     else
         setValue(value() + pd->stepSize);
@@ -558,7 +558,7 @@ void QQuickRangeModel1::increaseSingleStep()
 void QQuickRangeModel1::decreaseSingleStep()
 {
     Q_PD(const QQuickRangeModel1);
-    if (qFuzzyIsNull(pd->stepSize))
+    if (muse::RealIsNull(pd->stepSize))
         setValue(value() - (pd->maximum - pd->minimum)/10.0);
     else
         setValue(value() - pd->stepSize);

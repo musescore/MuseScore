@@ -1168,9 +1168,7 @@ void SvgPaintEngine::updateState(const QPaintEngineState& s)
 
 // TBD:  "opacity" attribute: Is it ever used?
 //       Or is opacity determined by fill-opacity & stroke-opacity instead?
-// PLUS: qFuzzyIsNull() is not officially supported in Qt.
-//       Should probably use QFuzzyCompare() instead.
-    if (!qFuzzyIsNull(s.opacity() - 1)) {
+    if (!muse::RealIsNull(s.opacity() - 1)) {
         stateStream << SVG_OPACITY << s.opacity() << SVG_QUOTE;
     }
 

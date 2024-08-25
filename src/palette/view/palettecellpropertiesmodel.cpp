@@ -21,6 +21,7 @@
  */
 
 #include "palettecellpropertiesmodel.h"
+#include "realfn.h"
 
 #include <QJsonDocument>
 
@@ -91,7 +92,7 @@ void PaletteCellPropertiesModel::setName(const QString& name)
 
 void PaletteCellPropertiesModel::setXOffset(double xOffset)
 {
-    if (qFuzzyCompare(this->xOffset(), xOffset)) {
+    if (muse::RealIsEqual(this->xOffset(), xOffset)) {
         return;
     }
 
@@ -101,7 +102,7 @@ void PaletteCellPropertiesModel::setXOffset(double xOffset)
 
 void PaletteCellPropertiesModel::setYOffset(double yOffset)
 {
-    if (qFuzzyCompare(this->yOffset(), yOffset)) {
+    if (muse::RealIsEqual(this->yOffset(), yOffset)) {
         return;
     }
 
@@ -111,7 +112,7 @@ void PaletteCellPropertiesModel::setYOffset(double yOffset)
 
 void PaletteCellPropertiesModel::setScaleFactor(double scale)
 {
-    if (qFuzzyCompare(scaleFactor(), scale)) {
+    if (muse::RealIsEqual(scaleFactor(), scale)) {
         return;
     }
 

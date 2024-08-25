@@ -77,22 +77,22 @@ QQuickWheelArea1::~QQuickWheelArea1()
 
 bool QQuickWheelArea1::isAtXEnd() const
 {
-    return qFuzzyCompare(m_horizontalMaximumValue, m_horizontalValue);
+    return muse::RealIsEqual(m_horizontalMaximumValue, m_horizontalValue);
 }
 
 bool QQuickWheelArea1::isAtXBeginning() const
 {
-    return qFuzzyCompare(m_horizontalMinimumValue, m_horizontalValue);
+    return muse::RealIsEqual(m_horizontalMinimumValue, m_horizontalValue);
 }
 
 bool QQuickWheelArea1::isAtYEnd() const
 {
-    return qFuzzyCompare(m_verticalMaximumValue, m_verticalValue);
+    return muse::RealIsEqual(m_verticalMaximumValue, m_verticalValue);
 }
 
 bool QQuickWheelArea1::isAtYBeginning() const
 {
-    return qFuzzyCompare(m_verticalMinimumValue, m_verticalValue);
+    return muse::RealIsEqual(m_verticalMinimumValue, m_verticalValue);
 }
 
 bool QQuickWheelArea1::isInverted() const
