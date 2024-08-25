@@ -270,7 +270,7 @@ double Fermata::mag() const
 void Fermata::setSymIdAndTimeStretch(SymId id)
 {
     m_symId = id;
-    m_timeStretch = muse::RealIsEqual(m_timeStretch, -1) ? propertyDefault(Pid::TIME_STRETCH).value<double>() : -1;
+    m_timeStretch = m_timeStretch < 0 ? propertyDefault(Pid::TIME_STRETCH).value<double>() : -1;
 }
 
 FermataType Fermata::fermataType() const
