@@ -403,7 +403,7 @@ void MixerChannelItem::setTitle(QString title)
 
 void MixerChannelItem::setLeftChannelPressure(float leftChannelPressure)
 {
-    if (qFuzzyCompare(m_leftChannelPressure, leftChannelPressure)) {
+    if (RealIsEqual(m_leftChannelPressure, leftChannelPressure)) {
         return;
     }
 
@@ -413,7 +413,7 @@ void MixerChannelItem::setLeftChannelPressure(float leftChannelPressure)
 
 void MixerChannelItem::setRightChannelPressure(float rightChannelPressure)
 {
-    if (qFuzzyCompare(m_rightChannelPressure, rightChannelPressure)) {
+    if (RealIsEqual(m_rightChannelPressure, rightChannelPressure)) {
         return;
     }
 
@@ -423,7 +423,7 @@ void MixerChannelItem::setRightChannelPressure(float rightChannelPressure)
 
 void MixerChannelItem::setVolumeLevel(float volumeLevel)
 {
-    if (qFuzzyCompare(m_outParams.volume, volumeLevel)) {
+    if (RealIsEqual(m_outParams.volume, volumeLevel)) {
         return;
     }
 
