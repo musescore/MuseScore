@@ -1204,7 +1204,7 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
     }
     for (const auto& spp : *textStyle(item->textStyleType())) {
         if (item->isStyled(spp.pid)
-            || (spp.pid == Pid::FONT_SIZE && RealIsEqual(item->getProperty(spp.pid).toDouble(), TextBase::UNDEFINED_FONT_SIZE))
+            || (spp.pid == Pid::FONT_SIZE && item->getProperty(spp.pid).toDouble() < 0)
             || (spp.pid == Pid::FONT_FACE && item->getProperty(spp.pid).value<String>() == TextBase::UNDEFINED_FONT_FAMILY)) {
             continue;
         }
