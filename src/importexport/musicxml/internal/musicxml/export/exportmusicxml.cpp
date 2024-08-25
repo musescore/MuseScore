@@ -5946,35 +5946,35 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     bool isDaCapo = false;
     bool isDalSegno = false;
     if (jtp == JumpType::DC) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.C.";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
     } else if (jtp == JumpType::DC_AL_FINE) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.C. al Fine";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
     } else if (jtp == JumpType::DC_AL_CODA) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.C. al Coda";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
     } else if (jtp == JumpType::DS_AL_CODA) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.S. al Coda";
         } else {
             words = jp->xmlText();
         }
         isDalSegno = true;
     } else if (jtp == JumpType::DS_AL_FINE) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.S. al Fine";
         } else {
             words = jp->xmlText();
@@ -5996,7 +5996,7 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     if (isDaCapo) {
         sound = u"dacapo=\"yes\"";
     } else if (isDalSegno) {
-        if (jp->jumpTo() == "") {
+        if (jp->xmlText().empty()) {
             sound = u"dalsegno=\"1\"";
         } else {
             sound = u"dalsegno=\"" + jp->jumpTo() + u"\"";
@@ -8683,7 +8683,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         if (!h->xmlKind().isEmpty()) {
             String s = u"kind";
             String kindText = h->musicXmlText();
-            if (h->musicXmlText() != u"") {
+            if (!h->musicXmlText().empty()) {
                 s += u" text=\"" + kindText + u"\"";
             }
             if (h->xmlSymbols() == u"yes") {
@@ -8803,7 +8803,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             if (!h->xmlKind().isEmpty()) {
                 String s = u"kind";
                 String kindText = h->musicXmlText();
-                if (h->musicXmlText() != "") {
+                if (!h->musicXmlText().empty()) {
                     s += u" text=\"" + kindText + u"\"";
                 }
                 if (h->xmlSymbols() == "yes") {
