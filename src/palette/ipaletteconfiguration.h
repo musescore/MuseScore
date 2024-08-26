@@ -49,6 +49,9 @@ public:
     virtual muse::ValCh<bool> isSingleClickToOpenPalette() const = 0;
     virtual void setIsSingleClickToOpenPalette(bool isSingleClick) = 0;
 
+    virtual muse::ValCh<bool> isPaletteDragEnabled() const = 0;
+    virtual void setIsPaletteDragEnabled(bool enabled) = 0;
+
     virtual QColor elementsBackgroundColor() const = 0;
     virtual QColor elementsColor() const = 0;
     virtual QColor gridColor() const = 0;
