@@ -610,9 +610,12 @@ void Selection::updateSelectedElements()
             return;
         }
 
-        if (s2 && s2 == s2->measure()->first() && !(s2->measure()->prevMeasure() && s2->measure()->prevMeasure()->coveringMMRestOrThis())) {
+        if (s2 && s2 == s2->measure()->first()) {
             // we want the last segment of the previous measure (unless it's part of a MMrest)
-            s2 = s2->prev1();
+            Measure* prevMeasure = s2->measure()->prevMeasure();
+            if (!(prevMeasure && prevMeasure != prevMeasure->coveringMMRestOrThis())) {
+                s2 = s2->prev1();
+            }
         }
 
         setRange(s1, s2, staffStart, staffEnd);
