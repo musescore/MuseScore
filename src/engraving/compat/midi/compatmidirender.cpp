@@ -2,6 +2,7 @@
 
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
+#include "dom/navigate.h"
 
 namespace mu::engraving {
 void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx, bool expandRepeats)
@@ -78,7 +79,10 @@ void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start
                 }
 
                 Chord* chord = toChord(item);
-                Chord* nextChord = CompatMidiRender::getChordFromSegment(seg->next(st), track);
+                Chord* nextChord = nullptr;
+                if (ChordRest* chr = nextChordRest(chord, true); chr && chr->isChord()) {
+                    nextChord = static_cast<Chord*>(chr);
+                }
 
                 if (!nextChord) {
                     // check if next chord is in next measure
