@@ -76,6 +76,7 @@
 #include "dom/layoutbreak.h"
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
+#include "dom/lyrics.h"
 
 #include "dom/marker.h"
 #include "dom/measurenumber.h"
@@ -99,6 +100,7 @@
 #include "dom/score.h"
 #include "dom/shadownote.h"
 #include "dom/slur.h"
+#include "dom/soundflag.h"
 #include "dom/spacer.h"
 #include "dom/stafflines.h"
 #include "dom/staffstate.h"
@@ -107,12 +109,11 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
-#include "dom/stringtunings.h"
 #include "dom/stretchedbend.h"
+#include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
-#include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
 #include "dom/text.h"
@@ -234,6 +235,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::LEDGER_LINE:  draw(item_cast<const LedgerLine*>(item), painter);
         break;
     case ElementType::LET_RING_SEGMENT:     draw(item_cast<const LetRingSegment*>(item), painter);
+        break;
+    case ElementType::LYRICS:       draw(item_cast<const Lyrics*>(item), painter);
         break;
 
     case ElementType::MARKER:               draw(item_cast<const Marker*>(item), painter);
@@ -1968,6 +1971,12 @@ void SingleDraw::draw(const LetRingSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const Lyrics* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void SingleDraw::draw(const Marker* item, Painter* painter)
