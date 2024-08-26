@@ -2422,7 +2422,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio vil endre stilen for å passe skrifttypen bedre</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1039"/>
@@ -2723,17 +2723,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3846"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Skjul alle nøkler etter det første systemet de vises i</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3853"/>
         <source>Hide TAB clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Skjul alle TAB-nøkler etter det første systemet de vises i</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3860"/>
         <source>Show courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>Vis hjelpenøkler</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3873"/>
@@ -2758,12 +2758,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3913"/>
         <source>Hide after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Skjul etter det første systemet de vises i</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
         <source>Show courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Vis hjelpemarkeringer av toneart</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3930"/>
@@ -2773,7 +2773,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3936"/>
         <source>Show courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Vis hjelpemarkeringer av taktart</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4006"/>
@@ -2788,7 +2788,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Dynamikk</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="587"/>
@@ -2798,23 +2798,23 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="593"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Skjul hvis det er kun 1 instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="602"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="622"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Langt navn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="612"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill  «Instrumentnavn på påfølgende system»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="632"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>TIlbakestill «Instrumentnavn på første system i en seksjon»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="642"/>
@@ -2825,12 +2825,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="649"/>
         <source>On subsequent systems:</source>
-        <translation type="unfinished"/>
+        <translation>På påfølgende system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="656"/>
         <source>On first system of sections:</source>
-        <translation type="unfinished"/>
+        <translation>På første system i en seksjon:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="663"/>
@@ -2891,7 +2891,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4127"/>
         <source>Multiple accidentals in chords</source>
-        <translation type="unfinished"/>
+        <translation>Akkorder med flere fortegn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4337"/>
@@ -3067,7 +3067,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5384"/>
         <source>Use double barlines before key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Bruk dobbel taktstrek før toneartangivning</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5390"/>
@@ -3084,32 +3084,32 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5404"/>
         <source>Only before courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Kun før hjelpemarkering av toneart</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5414"/>
         <source>Use double barlines before time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Bruk dobbel taktstrek før taktartangivning</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5434"/>
         <source>Only before courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Kun før hjelpemarkering av taktart</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5688"/>
         <source>Accidental to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Avstand mellom fortegn:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5768"/>
         <source>Alignment in chords</source>
-        <translation type="unfinished"/>
+        <translation>Forskyvning i akkorder</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5774"/>
         <source>Combine voices that share the same stem direction</source>
-        <translation type="unfinished"/>
+        <translation>Sett stemmer med samme halsretning sammen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5814"/>
@@ -3171,17 +3171,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7893"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Standard plassering av dynamikk</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7921"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation type="unfinished"/>
+        <translation>Stemme 1 &amp; 3 over notesystem, stemme 2 &amp; 4 under notesystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation type="unfinished"/>
+        <translation>Plasser over notesytem for vokalinstrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7963"/>
@@ -3211,58 +3211,59 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11209"/>
         <source>Edit lyrics text style</source>
-        <translation type="unfinished"/>
+        <translation>Endre sangtekststil</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11244"/>
         <source>Min. gap between lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>Min. avstand mellom stavelser</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
         <source>Min. margin to current staff:</source>
-        <translation type="unfinished"/>
+        <translation>Min. avstand til andre notesystem:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11403"/>
         <source>Min. margin to other staves:</source>
-        <translation type="unfinished"/>
+        <translation>Min. avstand til andre notesystem:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11550"/>
         <source>Line height (% of text size):</source>
-        <translation type="unfinished"/>
+        <translation>Linjehøyde (% av tekststørrelse):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
         <source>Dash</source>
-        <translation>Stiplet</translation>
+        <translation>Bindestrek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11677"/>
         <source>Max. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>Maks. rom rundt bindestrek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11713"/>
         <source>Min. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>Min. rom rundt bindestrek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11893"/>
         <source>Omit dash when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>Utelat bindestrek når det er begrenset rom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
-        <translation type="unfinished"/>
+        <translation>Gjenta bindestrek før stavelser
+på første note i et system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11921"/>
         <source>Dash placement at the start of the system:</source>
-        <translation type="unfinished"/>
+        <translation>Plassering av bindestrek i starten av et system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
@@ -3312,7 +3313,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4917"/>
         <source>System header</source>
-        <translation>Systemoverskrift</translation>
+        <translation>Begynnelsen av system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4949"/>
@@ -4387,28 +4388,29 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill «Rom rundt bindestrek»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11855"/>
         <source>Vertical position (% of 
 text x-height):</source>
-        <translation type="unfinished"/>
+        <translation>Vertikal plassering (% av 
+tekstens x-høyde):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11876"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill  «Vertikal plassering (% av tekstens x-høyde)»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11903"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill «Utelat bindestrek når det er begrenset rom»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11947"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill «Plassering av bindestrek i starten av et system»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11962"/>
@@ -4418,12 +4420,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
         <source>Reset &apos;Min. line length&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill «Min. linjelengde»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12031"/>
         <source>Min. line length:</source>
-        <translation type="unfinished"/>
+        <translation>Min. linjelengde:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12048"/>
@@ -4550,7 +4552,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12890"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12962"/>
         <source>Standard</source>
-        <translation>Engelsk</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12903"/>
@@ -4687,7 +4689,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="750"/>
         <source>Sixteenth note</source>
-        <translation>Sekstendelsnode</translation>
+        <translation>Sekstendelsnote</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3355"/>
@@ -4845,22 +4847,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14436"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation type="unfinished"/>
+        <translation>Bruk skrifttype for musikksymboler til tall</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill «Bruk skrifttype for musikksymboler til tall»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Musical symbols scale:</source>
-        <translation type="unfinished"/>
+        <translation>Skalering av musikksymboler:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill «Skalering av musikksymboler»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14556"/>
@@ -5087,7 +5089,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="143"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>Minimer</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="144"/>
@@ -5112,7 +5114,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Maximize</source>
-        <translation type="unfinished"/>
+        <translation>Maksimer</translation>
     </message>
 </context>
 <context>
@@ -5257,7 +5259,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="286"/>
         <source>Exclude from measure count</source>
-        <translation>Ikke regn med i antall takter</translation>
+        <translation>Ikke tell med i taktnummerering</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="293"/>
@@ -5507,7 +5509,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="492"/>
         <source>First page number:</source>
-        <translation>Første tellbare side</translation>
+        <translation>Første sidetall:</translation>
     </message>
 </context>
 <context>
@@ -5754,7 +5756,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="93"/>
         <source>Sixteenth note</source>
-        <translation>Sekstendelsnode</translation>
+        <translation>Sekstendelsnote</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="112"/>
@@ -7868,7 +7870,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1294"/>
         <source>Add text: fingering</source>
-        <translation>Legg til tekst: Fingersetting</translation>
+        <translation>Legg til tekst: Fingersetning</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
@@ -7943,7 +7945,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1383"/>
         <source>&amp;Nonuplet</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Noneol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
@@ -8845,7 +8847,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="65"/>
         <source>&amp;About MuseScore Studio…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Om MuseScore Studio…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="70"/>
@@ -9615,7 +9617,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1293"/>
         <source>&amp;Fingering</source>
-        <translation>&amp;Fingersetting</translation>
+        <translation>&amp;Fingersetning</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1299"/>
@@ -9675,7 +9677,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1365"/>
         <source>Se&amp;xtuplet</source>
-        <translation>Se&amp;kstol</translation>
+        <translation>&amp;Sekstol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1371"/>
@@ -9685,7 +9687,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1377"/>
         <source>&amp;Octuplet</source>
-        <translation>Okt&amp;ol</translation>
+        <translation>&amp;Oktol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1389"/>
@@ -10176,12 +10178,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation type="unfinished"/>
+        <translation>Vis &amp;tilgjengelighetstre</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Dump tilgjengelighetstre til konsolen</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
@@ -10211,7 +10213,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload Muse Sampler</source>
-        <translation type="unfinished"/>
+        <translation>Last inn Muse Sampler på nytt</translation>
     </message>
 </context>
 <context>
@@ -10349,12 +10351,12 @@ Denne handlingen vil ikke slette noen av partiturene dine.</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="340"/>
         <source>Would you like to restart MuseScore Studio now?</source>
-        <translation type="unfinished"/>
+        <translation>Vil du starte MuseScore Studio på nytt nå?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="341"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio må startes på nytt for at endringene skal tre i kraft.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="346"/>
@@ -10436,7 +10438,7 @@ Denne handlingen vil ikke slette noen av partiturene dine.</translation>
         <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
         <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
         <source>MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -10444,7 +10446,7 @@ Denne handlingen vil ikke slette noen av partiturene dine.</translation>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="33"/>
         <source>About MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Om MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="85"/>
@@ -10476,7 +10478,8 @@ Denne handlingen vil ikke slette noen av partiturene dine.</translation>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
         <source>Copyright © 1999-2024 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Opphavsrett © 1999-2024 MuseScore Limited.
+Publisert under &lt;a href=&quot;%1&quot;&gt;GNU General Public License versjon 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -10552,7 +10555,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Velkommen til MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10847,12 +10850,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation type="unfinished"/>
+        <translation>Sjekk om en ny versjon av MuseScore Studio er tilgjengelig</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>Søk etter oppdateringer krever nettilgang. For å ta vare på ditt personvern lagrer ikke Musescore Studio personlig informasjon. Se vår &lt;a href=&quot;%1&quot;&gt;personvernerklæring&lt;/a&gt; for mer informasjon.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -11538,10 +11541,10 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Du kan tilordne lydbiblioteker til instrumenter i mikserpanelet.</translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="235"/>
-        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="250"/>
-        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="193"/>
-        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="213"/>
+        <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
+        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="255"/>
+        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="196"/>
+        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="218"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
         <source>System default</source>
         <translation>Systemstandard</translation>
@@ -11607,7 +11610,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Innlogging vellykket! Du kan gå tilbake til Musescore Studio</translation>
     </message>
 </context>
 <context>
@@ -11620,7 +11623,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation type="unfinished"/>
+        <translation>Dette vil lage en zip-fil med informasjon om hvordan MuseScore Studio er konfigurert for å hjelpe utviklerne med å diagnotisere problemer du har. Du kan inspisere innholdet før du sender det til noen.</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
@@ -11728,12 +11731,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Begynnelse og slutt på %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3540"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Innholdet i taktene vil bli erstattet</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3542"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Fortsett med innsetting av taktrepetisjon?</translation>
     </message>
@@ -11867,108 +11870,108 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Vers %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="878"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="859"/>
         <source>%1 (sounding as %2%3)</source>
         <translation>%1(klinger som %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2206"/>
         <source>Acciaccatura</source>
         <translation>Acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2208"/>
         <source>Appoggiatura</source>
         <translation>Appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2212"/>
         <source>Grace note after</source>
         <translation>Forslagsnote etter</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2216"/>
         <source>Grace note before</source>
         <translation>Forslagsnote før</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2218"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>Note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3133"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3171"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Stemme: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3141"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(på %1‰ av %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Beat slash</source>
         <translation>Slagstrek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Rhythm slash</source>
         <translation>Rytmestrek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3151"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3180"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; streng: %2; bånd: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3157"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Tone: %2; Varighet: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3186"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 hode %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>Bjelke mellom notesystemer, over</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>Bjelke mellom notesystemer, under</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3194"/>
         <source>too low</source>
         <translation>for lav</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3196"/>
         <source>too high</source>
         <translation>for høy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
         <source>too low for amateurs</source>
         <translation>for lav for amatører</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
         <source>too high for amateurs</source>
         <translation>for høy for amatører</translation>
     </message>
@@ -12024,7 +12027,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1; Varighet: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2377"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
         <source>Annotations:</source>
         <translation>Annotasjoner:</translation>
     </message>
@@ -12032,9 +12035,9 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3226"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
         <source>Start of %1</source>
         <translation>Starten av %1</translation>
     </message>
@@ -12042,16 +12045,16 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3230"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3246"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
         <source>End of %1</source>
         <translation>Slutten av %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1205"/>
         <source>Standard</source>
-        <translation>Engelsk</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1206"/>
@@ -12421,7 +12424,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="211"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1158"/>
         <source>Fingering</source>
-        <translation>Fingersetting</translation>
+        <translation>Fingersetning</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
@@ -13014,7 +13017,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1132"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>Sidetall</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1140"/>
@@ -13049,22 +13052,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1159"/>
         <source>LH guitar fingering</source>
-        <translation>Fingersetting gitar venstre hånd</translation>
+        <translation>Fingersetning gitar venstre hånd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1160"/>
         <source>RH guitar fingering</source>
-        <translation>Fingersetting gitar høyre hånd</translation>
+        <translation>Fingersetning gitar høyre hånd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1164"/>
         <source>Fretboard diagram fingering</source>
-        <translation type="unfinished"/>
+        <translation>Fingersetning på gripebrettsdiagram</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1166"/>
         <source>Fretboard diagram fret number</source>
-        <translation type="unfinished"/>
+        <translation>Båndnummer på gripebrettsdiagram</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1179"/>
@@ -13566,7 +13569,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Filen ble lagret med en nyere versjon av MuseScore Studio. Besøk  &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; for å få tak i den nyeste versjonen.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -15353,27 +15356,27 @@ Bånd %1 på streng %2</translation>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="791"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="763"/>
         <source>Crescendo hairpin</source>
         <translation>Crescendo-hårnål</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="793"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="765"/>
         <source>Decrescendo hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Decrescendo-hårnål</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="795"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="767"/>
         <source>Crescendo line</source>
         <translation>Crescendolinje</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="797"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="769"/>
         <source>Decrescendo line</source>
-        <translation type="unfinished"/>
+        <translation>Decrescendolinje</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="799"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
         <source>Custom</source>
         <translation>Egendefinert</translation>
     </message>
@@ -16045,7 +16048,7 @@ Bånd %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2522"/>
         <source>Standard</source>
-        <translation>Engelsk</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2523"/>
@@ -17508,22 +17511,22 @@ Bånd %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4507"/>
         <source>Right-hand fingering, first finger</source>
-        <translation>Høyre hånd fingersetting, første finger</translation>
+        <translation>Høyre hånd fingersetning, første finger</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4508"/>
         <source>Right-hand fingering, second finger</source>
-        <translation>Høyre hånd fingersetting, andre finger</translation>
+        <translation>Høyre hånd fingersetning, andre finger</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4509"/>
         <source>Right-hand fingering, third finger</source>
-        <translation>Høyre hånd fingersetting, tredje finger</translation>
+        <translation>Høyre hånd fingersetning, tredje finger</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4510"/>
         <source>Right-hand fingering, thumb</source>
-        <translation>Høyre hånd fingersetting, tommel</translation>
+        <translation>Høyre hånd fingersetning, tommel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
@@ -18187,7 +18190,7 @@ Bånd %1 på streng %2</translation>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
         <source>Plugin is not in the correct format</source>
-        <translation type="unfinished"/>
+        <translation>Utvidelsen har ikke rett format</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="72"/>
@@ -18222,7 +18225,7 @@ Bånd %1 på streng %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="53"/>
         <source>Run plugin %1 (%2)</source>
-        <translation type="unfinished"/>
+        <translation>Start utvidelse %1(%2)</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="108"/>
@@ -18244,8 +18247,6 @@ Bånd %1 på streng %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="98"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="251"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="151"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="238"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -18316,7 +18317,6 @@ Bånd %1 på streng %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="204"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="121"/>
         <source>Don’t show this message again</source>
         <translation>Ikke vis denne meldingen igjen</translation>
     </message>
@@ -18672,14 +18672,14 @@ Bånd %1 på streng %2</translation>
         <translation>Ferdig</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="235"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="81"/>
         <source>Collapse</source>
         <extracomment>Collapse a tree item</extracomment>
         <translation>Fold sammen</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="239"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="83"/>
         <source>Expand</source>
         <extracomment>Expand a tree item</extracomment>
@@ -18886,7 +18886,7 @@ Bånd %1 på streng %2</translation>
         <translation>Ukjent</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="223"/>
+        <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
         <source>Don’t ask again</source>
         <translation>Ikke spør igjen</translation>
     </message>
@@ -18899,12 +18899,12 @@ Bånd %1 på streng %2</translation>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2843"/>
         <source>Import Capella</source>
         <translation>Importer Capella</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2844"/>
         <source>Import failed: %1</source>
         <translation>Import mislyktes: %1</translation>
     </message>
@@ -18918,12 +18918,12 @@ Bånd %1 på streng %2</translation>
         <translation>Fri rytme</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1059"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1057"/>
         <source>Music by %1</source>
         <translation>Musikk av %1</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1065"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1063"/>
         <source>Words by %1</source>
         <translation>Tekst av %1</translation>
     </message>
@@ -18971,7 +18971,7 @@ Bånd %1 på streng %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
         <source>MuseScore Studio instrument</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio-instrument</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -19209,12 +19209,12 @@ opptakt</translation>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="52"/>
         <source>Limit MusicXML export for compatibility with MuseScore 3</source>
         <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
-        <translation type="unfinished"/>
+        <translation>Begrens MusicXML-eksport for kompatibilitet med MuseScore 3</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="57"/>
         <source>Export invisible elements to MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>Eksporter usynlige elementer til MusicXML</translation>
     </message>
 </context>
 <context>
@@ -19941,12 +19941,20 @@ opptakt</translation>
         <translation>Etter</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="53"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="55"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/TextFrameSettings.qml" line="54"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
+        <source>Scale with staff size</source>
+        <translation>Skaler med notesystem</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
         <source>Width</source>
         <translation>Bredde</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="76"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="86"/>
         <source>Display brackets, clefs and key signatures in the next measure</source>
         <translation>Vis klammer, nøkler og tonearter i neste takt</translation>
     </message>
@@ -19971,7 +19979,7 @@ opptakt</translation>
         <translation>Avstand under</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="53"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="65"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="120"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml" line="48"/>
         <source>Height</source>
@@ -20450,7 +20458,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="172"/>
         <source>Beam direction</source>
-        <translation type="unfinished"/>
+        <translation>Plassering av bjelke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
@@ -20470,7 +20478,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="52"/>
         <source>Notehead parentheses</source>
-        <translation>Nodehode-parenteser</translation>
+        <translation>Notehode-parenteser</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="59"/>
@@ -20515,12 +20523,12 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="181"/>
         <source>Alignment in chords</source>
-        <translation type="unfinished"/>
+        <translation>Forskyvning i akkorder</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="196"/>
         <source>Combine with voices that share the same stem direction</source>
-        <translation type="unfinished"/>
+        <translation>Sett sammen med stemmer som har samme halsretning</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
@@ -21010,11 +21018,6 @@ opptakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="314"/>
         <source>Insert special characters</source>
         <translation>Sett inn spesialtegn</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
-        <source>Follow staff size</source>
-        <translation>Følg notesystemets størrelse</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="75"/>
@@ -21928,7 +21931,7 @@ opptakt</translation>
         <translation>Velg instrumentene dine ved å legge dem til i denne listen</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="287"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="289"/>
         <source>Settings</source>
         <translation>Innstillinger</translation>
     </message>
@@ -22321,17 +22324,17 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="132"/>
         <source>Beam style</source>
-        <translation type="unfinished"/>
+        <translation>Bjelkestil</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="147"/>
         <source>Draw inner stems through beams</source>
-        <translation type="unfinished"/>
+        <translation>Tegn halsene gjennom bjelkene</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="148"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
-        <translation type="unfinished"/>
+        <translation>Tegn halsene til nærmeste bjelke («Fransk» stil)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
@@ -22487,104 +22490,104 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="863"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
         <source>Note input mode</source>
         <translation>Noteskrivingsmodus</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="868"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
         <source>Normal mode</source>
         <translation>Normalmodus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="866"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Cannot create tuplet</source>
         <translation>Kan ikke opprette -ol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="866"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Note value is too short</source>
         <translation>Noteverdien er for kort</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1263"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1297"/>
         <source>All Supported Files</source>
         <translation>Alle støttede filer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1264"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1298"/>
         <source>Scalable Vector Graphics</source>
         <translation>Skalerbar vektorgrafikk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1265"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1266"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG-bildefil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1267"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>Bitmap</source>
         <translation>Bitmap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1268"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1271"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <source>Insert Image</source>
         <translation>Sett inn bilde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1655"/>
         <source>MuseScore style files</source>
         <translation>MuseScore stil-fil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1622"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1656"/>
         <source>MuseScore style file</source>
         <translation>MuseScore stil-fil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1625"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation>Last inn stil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1626"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1660"/>
         <source>Save style</source>
         <translation>Lagre stil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1636"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1670"/>
         <source>The style file could not be loaded.</source>
         <translation>Stil-filen kunne ikke lastes inn.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1641"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1675"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>Siden denne stil-filen er fra en annen versjon av MuseScore Studio, kan det hende at partituret ikke vises korrekt.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1643"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
         <source>Click OK to load anyway.</source>
         <translation>Klikk OK for å laste likevel.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1691"/>
         <source>The style file could not be saved.</source>
         <translation>Stil-filen kunne ikke lagres.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1692"/>
         <source>An error occurred.</source>
         <translation>Det oppstod en feil.</translation>
     </message>
@@ -22914,7 +22917,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
         <translation>Vis</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1269"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>Alle</translation>
@@ -23043,7 +23046,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="156"/>
         <source>Number only</source>
-        <translation type="unfinished"/>
+        <translation>Kun tall</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
@@ -23053,12 +23056,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="180"/>
         <source>Preview:</source>
-        <translation type="unfinished"/>
+        <translation>Forhåndsvisning:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="188"/>
         <source>Edit fret number text style</source>
-        <translation type="unfinished"/>
+        <translation>Endre båndnummer-tekststil</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="200"/>
@@ -23073,7 +23076,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="220"/>
         <source>Appearance:</source>
-        <translation type="unfinished"/>
+        <translation>Utseende:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="227"/>
@@ -23098,12 +23101,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="270"/>
         <source>Edit fingering text style</source>
-        <translation type="unfinished"/>
+        <translation>Endre fingersetning-tekststil</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="284"/>
         <source>Fretboard style:</source>
-        <translation type="unfinished"/>
+        <translation>Stil på gripebrettsdiagram:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="291"/>
@@ -23412,6 +23415,16 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
         <translation>Erstatt den med en toneart fra palettene i stedet.</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
+        <source>These measures cannot be joined</source>
+        <translation>Disse taktene kan ikke slåes sammen</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
+        <source>Please remove the staff type change and retry.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
         <source>No measure selected</source>
         <translation>Ingen takt er valgt</translation>
@@ -23671,22 +23684,22 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
         <source>Keep accidentals close to offset notes</source>
-        <translation type="unfinished"/>
+        <translation>Hold fortegn nærme forskjøvete noter</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
         <source>Pair accidentals on seconds</source>
-        <translation type="unfinished"/>
+        <translation>Hold fortegn sammen på sekund-intervaller</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation type="unfinished"/>
+        <translation>Sett fortegn på oktaver over hverandre</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
-        <translation type="unfinished"/>
+        <translation>Sett fortegn på forskjøvete oktaver over hverandre </translation>
     </message>
 </context>
 <context>
@@ -23873,7 +23886,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="209"/>
         <source>Based on voice</source>
-        <translation type="unfinished"/>
+        <translation>Basert på stemme</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="232"/>
@@ -23884,17 +23897,17 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="791"/>
         <source>Standard</source>
-        <translation>Engelsk</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="792"/>
         <source>Inside the header</source>
-        <translation type="unfinished"/>
+        <translation>Før første taktslag</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="794"/>
         <source>Under the first note</source>
-        <translation type="unfinished"/>
+        <translation>Under første note</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="914"/>
@@ -24041,12 +24054,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1352"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>Versjonen av MuseScore Studio som dette partituret sist ble lagret med</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>Revisjonen av MuseScore Studio som dette partituret sist ble lagret med</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1356"/>
@@ -25125,12 +25138,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1735"/>
         <source>Cm</source>
-        <translation type="unfinished"/>
+        <translation>Cm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
         <source>C7</source>
-        <translation type="unfinished"/>
+        <translation>C7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
@@ -25140,12 +25153,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1739"/>
         <source>Dm</source>
-        <translation type="unfinished"/>
+        <translation>Dm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
         <source>D7</source>
-        <translation type="unfinished"/>
+        <translation>D7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1742"/>
@@ -25155,12 +25168,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1743"/>
         <source>Em</source>
-        <translation type="unfinished"/>
+        <translation>Em</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
         <source>E7</source>
-        <translation type="unfinished"/>
+        <translation>E7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1746"/>
@@ -25170,12 +25183,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1747"/>
         <source>Fm</source>
-        <translation type="unfinished"/>
+        <translation>Fm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
         <source>F7</source>
-        <translation type="unfinished"/>
+        <translation>F7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1750"/>
@@ -25185,12 +25198,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1751"/>
         <source>Gm</source>
-        <translation type="unfinished"/>
+        <translation>Gm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
         <source>G7</source>
-        <translation type="unfinished"/>
+        <translation>G7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
@@ -25200,12 +25213,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1755"/>
         <source>Am</source>
-        <translation type="unfinished"/>
+        <translation>Am</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
         <source>A7</source>
-        <translation type="unfinished"/>
+        <translation>A7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
@@ -25364,7 +25377,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="902"/>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="905"/>
         <source>MuseScore Studio palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio-palett</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="904"/>
@@ -25395,7 +25408,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="657"/>
         <source>MuseScore Studio may not be able to load this drumset file.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio vil kanskje ikke klare å laste inn denne trommesettfilen.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="688"/>
@@ -27103,17 +27116,17 @@ mislyktes.</translation>
         <translation>Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="878"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="884"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="888"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="894"/>
         <source>Chords</source>
         <translation>Akkorder</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1210"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1216"/>
         <source>Loading audio samples</source>
         <translation>Laster inn lyd-samples</translation>
     </message>
@@ -27191,7 +27204,7 @@ mislyktes.</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="679"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Lydflag på dette instrumentet kan tilbakestilles, men notesystemteksten vil forbli. Denne handlingen kan ikke angres.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -27241,22 +27254,22 @@ mislyktes.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
         <source>Modify sound</source>
-        <translation type="unfinished"/>
+        <translation>Endre lyd</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>
         <source>Playing techniques</source>
-        <translation type="unfinished"/>
+        <translation>Fremføringsteknikk</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
         <source>Sound flag options are not available for this sound.</source>
-        <translation type="unfinished"/>
+        <translation>Lydflagalternativer er ikke tilgjengelig for denne lyden</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
         <source>Ord. (default)</source>
-        <translation type="unfinished"/>
+        <translation>Vanlig (standard)</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="284"/>
@@ -27266,42 +27279,42 @@ mislyktes.</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="296"/>
         <source>Allow multiple selection</source>
-        <translation type="unfinished"/>
+        <translation>Tillat flere samtidig</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="309"/>
         <source>Apply selection to all staves</source>
-        <translation type="unfinished"/>
+        <translation>Bruk på alle notesystem</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
         <source>ordinary</source>
-        <translation type="unfinished"/>
+        <translation>vanlig</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
         <source>Sound flag settings</source>
-        <translation type="unfinished"/>
+        <translation>Lydflaginnstillinger</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="137"/>
         <source>Sound flag menu</source>
-        <translation type="unfinished"/>
+        <translation>Lydflagmeny</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="154"/>
         <source>Change sounds</source>
-        <translation type="unfinished"/>
+        <translation>Endre lyder</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="157"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på at du vil endre lydene?</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Lydflag kan tilbakestilles, men notesystemteksten vil forbli. Denne handlingen kan ikke angres.</translation>
     </message>
 </context>
 <context>
@@ -27435,7 +27448,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Filen ble lagret med en nyere versjon av MuseScore Studio. Besøk  &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; for å få tak i den nyeste versjonen.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
@@ -27544,12 +27557,12 @@ før lukking?</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1684"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
-        <translation type="unfinished"/>
+        <translation>Denne filen inneholder feil som kan føre til at MuseScore Studio ikke fungerer.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1723"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation type="unfinished"/>
+        <translation>Filen kunne ikke åpnes. Sørg for at MuseScore Studio har tillatelse til å lese filen.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1730"/>
@@ -28298,53 +28311,53 @@ før lukking?</translation>
 <context>
     <name>project/migration</name>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="81"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="69"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="78"/>
         <source>This file was last saved in MuseScore %1</source>
         <translation>Denne filen ble sist lagret i MuseScore %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="95"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
         <translation>Vær oppmerksom på at partiturets utseende vil endres på grunn av forbedringer vi har gjort på standardinnstillingene for bjelker, buer, systemobjekter og horisontal avstand.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="104"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="136"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
         <source>Watch video about changes</source>
         <translation>Se en video om endringene</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
         <translation>Velg hvilke graveringsforbedringer du vil ta i bruk på partituret</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="134"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
         <source>Our new notation font, Leland</source>
         <translation>Vår nye skrifttype for notasjon, Leland</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="149"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
         <translation>Vår nye skrifttype for tekst, Edwin</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="164"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="185"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>NB: partituret vil endre utseende etter forbedringene i MuseScore Studio</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="191"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
         <source>Watch video</source>
         <translation>Se video</translation>
     </message>
@@ -28680,7 +28693,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="83"/>
         <source>Not selected</source>
-        <translation type="unfinished"/>
+        <translation>Ikke valgt</translation>
     </message>
 </context>
 <context>
@@ -28693,7 +28706,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation type="unfinished"/>
+        <translation>Versjon av Musescore Studio:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -29252,7 +29265,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
         <source>MuseScore Studio shortcuts file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio-hurtigtastfil</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
@@ -29680,17 +29693,17 @@ før lukking?</translation>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="82"/>
         <source>A new version of MuseScore Studio is available!</source>
-        <translation type="unfinished"/>
+        <translation>En ny versjon av MuseScore Studio  er tilgjengelig!</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="89"/>
         <source>Release notes</source>
-        <translation>Versjonsinformasjon</translation>
+        <translation>Utgivelsesmerknader</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished"/>
+        <translation>Du har allerede den nyeste versjonen av MuseScore Studio. Besøk &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for nyheter om kommende versjoner.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
@@ -29710,7 +29723,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="193"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio må avslutte for å fullføre installasjonen. Om du ikke har lagret alle endringer vil MuseScore Studio minne deg på å lagre før programmet avsluttes.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="198"/>
@@ -29720,28 +29733,28 @@ før lukking?</translation>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation type="unfinished"/>
+        <translation>Les utgivelsesmerknadene fro %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
-        <translation type="unfinished"/>
+        <translation>Nei takk</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
-        <translation type="unfinished"/>
+        <translation>Send meg til Muse Hub</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/appupdateservice.cpp" line="208"/>
         <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Laster ned MuseScore Studio %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/view/updatemodel.cpp" line="36"/>
         <source>Updating MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Oppdaterer MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -29765,7 +29778,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
-        <translation type="unfinished"/>
+        <translation>Bruk arbeidsområder for å lagre ulike oppsett av brukergrensesnittet i MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>

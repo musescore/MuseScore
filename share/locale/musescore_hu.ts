@@ -7981,7 +7981,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1425"/>
         <source>Reset s&amp;hapes and positions</source>
-        <translation type="unfinished"/>
+        <translation>Alak és pozíció alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1426"/>
@@ -7991,7 +7991,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1431"/>
         <source>Reset entire score to &amp;default layout</source>
-        <translation type="unfinished"/>
+        <translation>Az egész kotta visszaállítása az eredeti elrendezésre.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1432"/>
@@ -9773,117 +9773,117 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
         <source>Toggle turn</source>
-        <translation type="unfinished"/>
+        <translation>Kettős ékesítés ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
         <source>Add ornament: turn</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: kettős ékesítés</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
         <source>Toggle inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Fordított kettős ékesítés ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
         <source>Add ornament: inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: fordított kettős ékesítés</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
         <source>Toggle turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>Kettős ékesítés vonással ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
         <source>Add ornament: turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: kettős ékesítés vonással</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1822"/>
         <source>Add ornament: trill</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: trilla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1827"/>
         <source>Toggle short trill</source>
-        <translation type="unfinished"/>
+        <translation>Rövid trilla ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
         <source>Add ornament: short trill</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: rövid trilla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1833"/>
         <source>Toggle mordent</source>
-        <translation type="unfinished"/>
+        <translation>Mordent ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
         <source>Add ornament: mordent</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: mordent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1839"/>
         <source>Toggle tremblement</source>
-        <translation type="unfinished"/>
+        <translation>Trembement ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Add ornament: tremblement</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: tremblement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1845"/>
         <source>Toggle prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>Prall mordent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1846"/>
         <source>Add ornament: prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: prall mordent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1851"/>
         <source>Toggle shake</source>
-        <translation type="unfinished"/>
+        <translation>Shake ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1852"/>
         <source>Add ornament: shake</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: shake</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1857"/>
         <source>Toggle shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <translation>Shake (Muffat) ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1858"/>
         <source>Add ornament: shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: shake  (Muffat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1863"/>
         <source>Toggle tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>Trembelement appuyé (Couperin) ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
         <source>Add ornament: tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: tremblement appuyé (Couprerin)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
         <source>Add bowing: up bow</source>
-        <translation type="unfinished"/>
+        <translation>Vonásjel hozzáadás: felfelé vonás</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1876"/>
         <source>Add bowing: down bow</source>
-        <translation type="unfinished"/>
+        <translation>Vonásjel hozzáadása: lefelé vonás</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1899"/>
@@ -10056,17 +10056,17 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2403"/>
         <source>Use all voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>Minden szólam használata a hangszeren</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
         <source>All voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>Minden szólam a kottasoron</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
         <source>Use all voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>Minden szólam használata a kottasoron</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
@@ -11542,10 +11542,10 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>A keverőpulton lehet a hangmintákat hangszerekhez rendelni.</translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="235"/>
-        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="250"/>
-        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="193"/>
-        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="213"/>
+        <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
+        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="255"/>
+        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="196"/>
+        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="218"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
         <source>System default</source>
         <translation>Rendszer alaphelyzete</translation>
@@ -11732,12 +11732,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1 kezdete és vége</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3540"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Az ütemek jelenlegi tartalma le lesz cserélve</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3542"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Folytassuk az ütemismétlések beszúrását?</translation>
     </message>
@@ -11871,108 +11871,108 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1. versszak</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="878"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="859"/>
         <source>%1 (sounding as %2%3)</source>
         <translation>%1 (hangzás mint %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2206"/>
         <source>Acciaccatura</source>
         <translation>acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2208"/>
         <source>Appoggiatura</source>
         <translation>appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2212"/>
         <source>Grace note after</source>
         <translation>Utóka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2216"/>
         <source>Grace note before</source>
         <translation>Előke</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2218"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>Hangjegy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3133"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3171"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Szólam: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3141"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(be: %1‰ ki: %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Beat slash</source>
         <translation>Ütésvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Rhythm slash</source>
         <translation>Ritmusvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3151"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3180"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Húr: %2; Érintő: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3157"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Hangmagasság: %2; Hossz: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3186"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 kottafej %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>Soron átnyúlás föfelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>Soron átnyúlás lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3194"/>
         <source>too low</source>
         <translation>túl mély</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3196"/>
         <source>too high</source>
         <translation>túl magas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
         <source>too low for amateurs</source>
         <translation>túl mély amatőröknek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
         <source>too high for amateurs</source>
         <translation>túl magas amatőröknek</translation>
     </message>
@@ -12028,7 +12028,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1; Hosszúság: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2377"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
         <source>Annotations:</source>
         <translation>Jegyzetek:</translation>
     </message>
@@ -12036,9 +12036,9 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3226"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
         <source>Start of %1</source>
         <translation>%1 kezdete</translation>
     </message>
@@ -12046,9 +12046,9 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3230"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3246"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
         <source>End of %1</source>
         <translation>%1 vége</translation>
     </message>
@@ -12358,7 +12358,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="95"/>
         <source>Ornament text</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés szövege</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="98"/>
@@ -15358,27 +15358,27 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="791"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="763"/>
         <source>Crescendo hairpin</source>
         <translation>Crescendo villa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="793"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="765"/>
         <source>Decrescendo hairpin</source>
         <translation>Decrescendo villa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="795"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="767"/>
         <source>Crescendo line</source>
         <translation>Crescendo vonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="797"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="769"/>
         <source>Decrescendo line</source>
         <translation>Decrescendo vonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="799"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
         <source>Custom</source>
         <translation>Egyéni</translation>
     </message>
@@ -17643,7 +17643,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5311"/>
         <source>Tremblement</source>
-        <translation>Remegtetés</translation>
+        <translation>Tremblement</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5312"/>
@@ -17668,7 +17668,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5316"/>
         <source>Turn with slash</source>
-        <translation>Kettős ékesítés vonásal</translation>
+        <translation>Kettős ékesítés vonással</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5614"/>
@@ -18249,8 +18249,6 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="98"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="251"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="151"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="238"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -18321,7 +18319,6 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="204"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="121"/>
         <source>Don’t show this message again</source>
         <translation>Ne mutassa többet ezt az üzenetet</translation>
     </message>
@@ -18677,14 +18674,14 @@ Fret %1 on strings %2</source>
         <translation>Kész</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="235"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="81"/>
         <source>Collapse</source>
         <extracomment>Collapse a tree item</extracomment>
         <translation>Összecsukás</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="239"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="83"/>
         <source>Expand</source>
         <extracomment>Expand a tree item</extracomment>
@@ -18891,7 +18888,7 @@ Fret %1 on strings %2</source>
         <translation>Ismeretlen</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="223"/>
+        <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
         <source>Don’t ask again</source>
         <translation>Ne kérdezze többet</translation>
     </message>
@@ -18904,12 +18901,12 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2843"/>
         <source>Import Capella</source>
         <translation>Kíséret importálása</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2844"/>
         <source>Import failed: %1</source>
         <translation>Sikertelen importálás: %1</translation>
     </message>
@@ -18923,12 +18920,12 @@ Fret %1 on strings %2</source>
         <translation>Szabad metrum</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1059"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1057"/>
         <source>Music by %1</source>
         <translation>Zeneszerző: %1</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1065"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1063"/>
         <source>Words by %1</source>
         <translation>Szövegíró: %1</translation>
     </message>
@@ -19946,12 +19943,20 @@ felismerése</translation>
         <translation>Utána</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="53"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="55"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/TextFrameSettings.qml" line="54"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
+        <source>Scale with staff size</source>
+        <translation>Átméretezés a kottasor méretéhez</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
         <source>Width</source>
         <translation>Szélesség</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="76"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="86"/>
         <source>Display brackets, clefs and key signatures in the next measure</source>
         <translation>Klammer, kulcsok és előjegyzés megjelenítése a következő ütemben</translation>
     </message>
@@ -19976,7 +19981,7 @@ felismerése</translation>
         <translation>Hézag alul</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="53"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="65"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="120"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml" line="48"/>
         <source>Height</source>
@@ -21017,11 +21022,6 @@ felismerése</translation>
         <translation>Speciális karakterek beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
-        <source>Follow staff size</source>
-        <translation>Kövesse a kottasor méretét</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="75"/>
         <source>Subscript</source>
         <translation>Alsó index</translation>
@@ -21933,7 +21933,7 @@ felismerése</translation>
         <translation>A hangszereket adja ehhez a listához</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="287"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="289"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
@@ -22424,7 +22424,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this staff</source>
-        <translation type="unfinished"/>
+        <translation>Ezen a kottasoron látható szólamok</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -22492,104 +22492,104 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="863"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
         <source>Note input mode</source>
         <translation>Hangjegybevitel mód</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="868"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
         <source>Normal mode</source>
         <translation>Normál mód</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="866"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Cannot create tuplet</source>
         <translation>Nem lehet n-olát létrehozni</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="866"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Note value is too short</source>
         <translation>A hang értéke túl rövid</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1263"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1297"/>
         <source>All Supported Files</source>
         <translation>Minden támogatott fájl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1264"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1298"/>
         <source>Scalable Vector Graphics</source>
         <translation>Skálázható vektorgrafika (SVG)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1265"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1266"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG grafika fájl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1267"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>Bitmap</source>
         <translation>Bitkép</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1268"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1271"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <source>Insert Image</source>
         <translation>Kép beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1655"/>
         <source>MuseScore style files</source>
         <translation>MuseScore stílusfájlok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1622"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1656"/>
         <source>MuseScore style file</source>
         <translation>MuseScore stílusfájl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1625"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation>Stílus betöltése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1626"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1660"/>
         <source>Save style</source>
         <translation>Stílus mentése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1636"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1670"/>
         <source>The style file could not be loaded.</source>
         <translation>A stílusfájlt nem lehetett betölteni.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1641"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1675"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation>Mivel ez a stílusfájl a MuseScore Studio egy másik verziójából származik, nem biztos, hogy a kotta tökéletesen jelenik meg.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1643"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
         <source>Click OK to load anyway.</source>
         <translation>Nyomja meg az OK gombot, ha mégis szeretné betölteni.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1691"/>
         <source>The style file could not be saved.</source>
         <translation>A stílusfájlt nem lehetett elmenteni.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1692"/>
         <source>An error occurred.</source>
         <translation>Hiba történt.</translation>
     </message>
@@ -22919,7 +22919,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Nézet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1269"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>Mind</translation>
@@ -23415,6 +23415,16 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="151"/>
         <source>Please replace it with a key signature from the palettes instead.</source>
         <translation>Használja a palettákon szereplő előjegyzések valamelyikét.</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
+        <source>These measures cannot be joined</source>
+        <translation>Ezeket az ütemeket nem lehet egyesíteni</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
+        <source>Please remove the staff type change and retry.</source>
+        <translation>Törölje a kottasortípus-váltást és próbálja újra.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -27107,17 +27117,17 @@ palettafájl írása sikertelen:</translation>
         <translation>Segéd %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="878"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="884"/>
         <source>Metronome</source>
         <translation>Metronóm</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="888"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="894"/>
         <source>Chords</source>
         <translation>Akkordok</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1210"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1216"/>
         <source>Loading audio samples</source>
         <translation>Hangminták betöltése</translation>
     </message>
@@ -28301,53 +28311,53 @@ palettafájl írása sikertelen:</translation>
 <context>
     <name>project/migration</name>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="81"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="69"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="78"/>
         <source>This file was last saved in MuseScore %1</source>
         <translation>A fájlt utoljára MuseScore %1 verzióval mentették</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="95"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
         <translation>Felhívjuk a figyelmet, hogy a kotta megjelenése meg fog változni, mivel több funkció is tovább lett fejlesztve a gerendák, kötőívek, legato-ívek, rendszerelemek és vízszintes elrendezés tekintetében.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="104"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Használja az új kottaképet és hangminta hozzárendeléseket az &lt;a href=&quot;%1&quot;&gt;MDL ütőhangszerekhez&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="136"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
         <source>Watch video about changes</source>
         <translation>Nézzen meg egy videót a változásokról</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
         <translation>Válassza ki azokat a kottagrafikai fejlesztéseket, amelyeket szeretne alkalmazni a kottán</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="134"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
         <source>Our new notation font, Leland</source>
         <translation>Új kottagrafikai betűtípusunk, a Leland</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="149"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
         <translation>Új szöveg betűtípusunk, az Edwin</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="164"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Új kottakép és hangminta hozzárendelések az &lt;a href=&quot;%1&quot;&gt;MDL ütőhangszerekhz&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="185"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
         <translation>Megjegyzés: a MuseScore Studio fejlesztései befolyásolni fogják a kotta elrendezését</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="191"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
         <source>Watch video</source>
         <translation>Videó megtekintése</translation>
     </message>

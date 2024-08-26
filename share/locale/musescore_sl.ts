@@ -11541,10 +11541,10 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <translation>Zvok lahko glasbilom dodelite s pomočjo mešalnika.</translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="235"/>
-        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="250"/>
-        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="193"/>
-        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="213"/>
+        <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
+        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="255"/>
+        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="196"/>
+        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="218"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
         <source>System default</source>
         <translation>Privzeto v sistemu</translation>
@@ -11731,12 +11731,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <translation>Začetek in konec %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3540"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Trenutna vsebina taktov bo nadomeščena</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3542"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Ali želite nadaljevati z vstavljanjem taktnega ponavljaja?</translation>
     </message>
@@ -11870,108 +11870,108 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <translation>%1. kitica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="878"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="859"/>
         <source>%1 (sounding as %2%3)</source>
         <translation>%1 (zveni kot %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2206"/>
         <source>Acciaccatura</source>
         <translation>Kratki predložek (acciaccatura)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2208"/>
         <source>Appoggiatura</source>
         <translation>Dolgi predložek (appoggiatura)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2212"/>
         <source>Grace note after</source>
         <translation>Doložek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2216"/>
         <source>Grace note before</source>
         <translation>Predložek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2218"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="187"/>
         <source>Note</source>
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3152"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3133"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3171"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Glas: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3141"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(prižgano %1‰ ugasnjeno %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Beat slash</source>
         <translation>Dobna poševnica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3166"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Rhythm slash</source>
         <translation>Ritmična poševnica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3151"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3180"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Struna: %2; Prečka: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3157"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Višina tona: %2; Trajanje: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3205"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3186"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%2 glavica %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3207"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation>Med črtovji zgoraj</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3209"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation>Med črtovji spodaj</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3213"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3194"/>
         <source>too low</source>
         <translation>prenizko</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3215"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3196"/>
         <source>too high</source>
         <translation>previsoko</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3217"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
         <source>too low for amateurs</source>
         <translation>prenizko za začetnike</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
         <source>too high for amateurs</source>
         <translation>previsoko za začetnike</translation>
     </message>
@@ -12027,7 +12027,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <translation>%1; Trajanje: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2377"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
         <source>Annotations:</source>
         <translation>Pripisi:</translation>
     </message>
@@ -12035,9 +12035,9 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2403"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3226"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
         <source>Start of %1</source>
         <translation>Začetek %1</translation>
     </message>
@@ -12045,9 +12045,9 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3265"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3230"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3246"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
         <source>End of %1</source>
         <translation>Konec %1</translation>
     </message>
@@ -15356,27 +15356,27 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="791"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="763"/>
         <source>Crescendo hairpin</source>
         <translation>Vilice naraščanja (crescendo)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="793"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="765"/>
         <source>Decrescendo hairpin</source>
         <translation>Vilice pojemanja (decrescendo)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="795"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="767"/>
         <source>Crescendo line</source>
-        <translation>Oklepaj naraščanja (crescendo)</translation>
+        <translation>Vilice naraščanja</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="797"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="769"/>
         <source>Decrescendo line</source>
         <translation>Črta pojemanja (decrescendo)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="799"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
         <source>Custom</source>
         <translation>Po meri</translation>
     </message>
@@ -16002,22 +16002,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="419"/>
         <source>Solid</source>
-        <translation>zvezno</translation>
+        <translation>Neprekinjeno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="421"/>
         <source>Dotted</source>
-        <translation>Pikčasta</translation>
+        <translation>Pikčasto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="423"/>
         <source>Dashed</source>
-        <translation>Črtkana</translation>
+        <translation>Črtkano</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="425"/>
         <source>Wide dashed</source>
-        <translation>Črtkana s presledki</translation>
+        <translation>Redko črtkano</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="427"/>
@@ -18247,8 +18247,6 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="98"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="251"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="151"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="238"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>OK</source>
         <translation>V redu</translation>
@@ -18319,7 +18317,6 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="204"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="121"/>
         <source>Don’t show this message again</source>
         <translation>Ne prikaži več tega sporočila</translation>
     </message>
@@ -18675,14 +18672,14 @@ Fret %1 on strings %2</source>
         <translation>Končano</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="235"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="81"/>
         <source>Collapse</source>
         <extracomment>Collapse a tree item</extracomment>
         <translation>Strni</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="239"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="83"/>
         <source>Expand</source>
         <extracomment>Expand a tree item</extracomment>
@@ -18889,7 +18886,7 @@ Fret %1 on strings %2</source>
         <translation>Neznano</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="223"/>
+        <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
         <source>Don’t ask again</source>
         <translation>Ne sprajšuj več</translation>
     </message>
@@ -18902,12 +18899,12 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2845"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2843"/>
         <source>Import Capella</source>
         <translation>Uvozi zapis Capella</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2846"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2844"/>
         <source>Import failed: %1</source>
         <translation>Uvoz ni uspel: %1</translation>
     </message>
@@ -18921,12 +18918,12 @@ Fret %1 on strings %2</source>
         <translation>Prosti taktovski način</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1059"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1057"/>
         <source>Music by %1</source>
         <translation>Skladatelj: %1</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1065"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1063"/>
         <source>Words by %1</source>
         <translation>Besedilopisec: %1</translation>
     </message>
@@ -19944,12 +19941,20 @@ predtakt</translation>
         <translation>Po</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="53"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="55"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/TextFrameSettings.qml" line="54"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
+        <source>Scale with staff size</source>
+        <translation>Prevelikosti s črtovjem</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
         <source>Width</source>
         <translation>Širina</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="76"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="86"/>
         <source>Display brackets, clefs and key signatures in the next measure</source>
         <translation>Prikaži oklepaje, ključe in predznake tonalitete v naslednjem taktu</translation>
     </message>
@@ -19974,7 +19979,7 @@ predtakt</translation>
         <translation>Odmik pod</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="53"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="65"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="120"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml" line="48"/>
         <source>Height</source>
@@ -21015,11 +21020,6 @@ predtakt</translation>
         <translation>Vstavi posebne znake</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
-        <source>Follow staff size</source>
-        <translation>Prilagodi velikosti črtovja</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="75"/>
         <source>Subscript</source>
         <translation>Podpisano</translation>
@@ -21931,7 +21931,7 @@ predtakt</translation>
         <translation>Izberite glasbila tako, da jih dodate na ta seznam</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="287"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="289"/>
         <source>Settings</source>
         <translation>Nastavitve</translation>
     </message>
@@ -22490,104 +22490,104 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="863"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
         <source>Note input mode</source>
         <translation>Način vnašanja not</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="868"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
         <source>Normal mode</source>
         <translation>Običajni način</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="866"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Cannot create tuplet</source>
         <translation>Poddelitve ni mogoče ustvariti</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="866"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Note value is too short</source>
         <translation>Nota je prekratka</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1263"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1297"/>
         <source>All Supported Files</source>
         <translation>Vsi podprti zapisi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1264"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1298"/>
         <source>Scalable Vector Graphics</source>
         <translation>Povečljive vektorske grafike (SVG)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1265"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1266"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG točkovna grafika</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1267"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>Bitmap</source>
         <translation>Točkovna grafika</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1268"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1271"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <source>Insert Image</source>
         <translation>Vstavi sliko</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1621"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1655"/>
         <source>MuseScore style files</source>
         <translation>Datoteke slogov MuseScora</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1622"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1656"/>
         <source>MuseScore style file</source>
         <translation>Datoteka sloga MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1625"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation>Naloži slog</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1626"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1660"/>
         <source>Save style</source>
         <translation>Shrani slog</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1636"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1670"/>
         <source>The style file could not be loaded.</source>
         <translation>Datoteke sloga ni bilo mogoče naložiti.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1641"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1675"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation>Ker je ta datoteka sloga iz druge različice MuseScore studia, ni zagotovila, da bo vaš zapis prikazan pravilno.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1643"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
         <source>Click OK to load anyway.</source>
         <translation>Kliknite V redu,  če želite vseeno naložiti.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1691"/>
         <source>The style file could not be saved.</source>
         <translation>Datoteke sloga ni bilo mogoče shraniti.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1692"/>
         <source>An error occurred.</source>
         <translation>Prišlo je do napake.</translation>
     </message>
@@ -22917,7 +22917,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <translation>Pogled</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1269"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>Vse</translation>
@@ -23413,6 +23413,16 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="151"/>
         <source>Please replace it with a key signature from the palettes instead.</source>
         <translation>Namesto tega jih nadomestite s predznaki tonalitete iz palete.</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
+        <source>These measures cannot be joined</source>
+        <translation>Teh taktov ni mogoče združiti</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
+        <source>Please remove the staff type change and retry.</source>
+        <translation>Povrnite spremembo črtovja in poskusite ponovno.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -27106,17 +27116,17 @@ je spodletelo.</translation>
         <translation>Aux. %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="878"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="884"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="888"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="894"/>
         <source>Chords</source>
         <translation>Akordi</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1210"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1216"/>
         <source>Loading audio samples</source>
         <translation>Nalaganje zvočnih posnetkov</translation>
     </message>
@@ -28300,53 +28310,53 @@ je spodletelo.</translation>
 <context>
     <name>project/migration</name>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="81"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="69"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="78"/>
         <source>This file was last saved in MuseScore %1</source>
         <translation>Datoteka je bila nazadnje shranjena z MuseScore %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="95"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
         <translation>Opozoriti vas moramo, da se bo videz vašega notnega zapisa zaradi izboljšav, ki so bile narejene na privzetih nastavitvah prečk, lokov, vezajev, vrstičnih predmetov in vodoravnih razmikov, spremenil.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="104"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
         <translation>Uporabi novo notacijo in preslikavo zvoka za &lt;a href=&quot;%1&quot;&gt;tolkala MDL&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="136"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
         <source>Watch video about changes</source>
         <translation>Oglejte si posnetek o spremembah</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
         <translation>Izberite izboljšave zapisa, ki jih želite uporabiti v svojem notnem zapisu</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="134"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
         <source>Our new notation font, Leland</source>
         <translation>Naša nova pisava za glasbeno notacijo, Leland</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="149"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
         <translation>Naša nova pisava za besedilo, Edwin</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="164"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
         <translation>Naša nova notacija in preslikava zvoka za &lt;a href=&quot;%1&quot;&gt;tolkala MDL&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="185"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
         <translation>Opomba: izboljšave v MuseScoru studiu bodo vplivale na razporeditev notnega zapisa</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="191"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
         <source>Watch video</source>
         <translation>Glej video</translation>
     </message>
