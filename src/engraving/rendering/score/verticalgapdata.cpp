@@ -246,7 +246,7 @@ double VerticalGapDataList::smallest(double limit) const
         if (vgd->isFixedHeight()) {
             continue;
         }
-        if (muse::RealIsEqual(std::ceil(limit), std::ceil(vgd->spacing()))) {
+        if (((int)std::ceil(limit) == (int)std::ceil(vgd->spacing()))) {
             continue;
         }
         if (!vdp || (vgd->spacing() < vdp->spacing())) {
