@@ -12235,7 +12235,7 @@
         <source>Tam</source>
         <comment>tam-tam shortName</comment>
         <extracomment>shortName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ттм.</translation>
+        <translation>Т-т.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4127"/>

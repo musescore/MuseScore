@@ -12578,21 +12578,21 @@
         <source>Orchestral percussion drumset.</source>
         <comment>percussion description</comment>
         <extracomment>description for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Orchester Schlagwerk</translation>
+        <translation>Orchesterschlagzeug.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4237"/>
         <source>Percussion</source>
         <comment>percussion trackName</comment>
         <extracomment>trackName for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Schlagwerk</translation>
+        <translation>Schlagzeug</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4239"/>
         <source>Percussion</source>
         <comment>percussion longName</comment>
         <extracomment>longName for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Schlagwerk</translation>
+        <translation>Schlagzeug</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4241"/>

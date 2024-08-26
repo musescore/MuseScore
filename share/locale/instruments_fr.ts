@@ -8861,7 +8861,7 @@
         <source>Medieval wind instrument, consisting of a conical wooden pipe covered in leather. The soprano is the most common cornett.</source>
         <comment>soprano-cornett description</comment>
         <extracomment>description for Soprano Cornett; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument à vent médiéval, composé d&apos;un tuyau conique en bois recouvert de cuir. la soprano est le cornet le plus courant.</translation>
+        <translation>Instrument à vent médiéval, composé d&apos;un tuyau conique en bois recouvert de cuir. le soprano est le cornet le plus courant.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3022"/>
@@ -11808,7 +11808,7 @@
         <source>Inverted metal bowls nested on a vertical rod in order of pitch. The pitches are indefinite.</source>
         <comment>bell-tree description</comment>
         <extracomment>description for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bols métalliques inversés emboîtés sur une tige verticale dans l&apos;ordre de hauteur de note. Les hauteurs de notes dont indéfinies</translation>
+        <translation>Bols métalliques inversés emboîtés sur une tige verticale dans l&apos;ordre de hauteur de note. Les hauteurs de notes sont indéfinies</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3976"/>
@@ -11829,7 +11829,7 @@
         <source>Be. Tr.</source>
         <comment>bell-tree shortName</comment>
         <extracomment>shortName for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Be. Tr.</translation>
+        <translation>Arb. Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3983"/>
@@ -12116,28 +12116,28 @@
         <source>Metal wind chimes.</source>
         <comment>metal-wind-chimes description</comment>
         <extracomment>description for Metal Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en métal.</translation>
+        <translation>Carillon à vent en métal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4084"/>
         <source>Metal Wind Chimes</source>
         <comment>metal-wind-chimes trackName</comment>
         <extracomment>trackName for Metal Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en métal</translation>
+        <translation>Carillon à vent en métal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4086"/>
         <source>Metal Wind Chimes</source>
         <comment>metal-wind-chimes longName</comment>
         <extracomment>longName for Metal Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en métal</translation>
+        <translation>Carillon à vent en métal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4088"/>
         <source>Met. Wn Ch.</source>
         <comment>metal-wind-chimes shortName</comment>
         <extracomment>shortName for Metal Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Car. mét.</translation>
+        <translation>Car. Vt. Mét.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4091"/>
@@ -12242,28 +12242,28 @@
         <source>Thundersheet.</source>
         <comment>thundersheet description</comment>
         <extracomment>description for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tonnerre.</translation>
+        <translation>Plaque à Tonnerre.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4129"/>
         <source>Thundersheet</source>
         <comment>thundersheet trackName</comment>
         <extracomment>trackName for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tonnerre </translation>
+        <translation>Plaque-Tonnerre</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4131"/>
         <source>Thundersheet</source>
         <comment>thundersheet longName</comment>
         <extracomment>longName for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tonnerre </translation>
+        <translation>Plaque-Tonnerre</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4133"/>
         <source>Thu.</source>
         <comment>thundersheet shortName</comment>
         <extracomment>shortName for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ton.</translation>
+        <translation>Pl. Ton.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4136"/>
@@ -12298,28 +12298,28 @@
         <source>Bamboo wind chimes.</source>
         <comment>bamboo-wind-chimes description</comment>
         <extracomment>description for Bamboo Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en bambou.</translation>
+        <translation>Carillon à vent en bambou.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4147"/>
         <source>Bamboo Wind Chimes</source>
         <comment>bamboo-wind-chimes trackName</comment>
         <extracomment>trackName for Bamboo Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en bambou</translation>
+        <translation>Carillon à vent en bambou</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4149"/>
         <source>Bamboo Wind Chimes</source>
         <comment>bamboo-wind-chimes longName</comment>
         <extracomment>longName for Bamboo Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en bambou</translation>
+        <translation>Carillon à vent en bambou</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4151"/>
         <source>Bam. Wn. Ch.</source>
         <comment>bamboo-wind-chimes shortName</comment>
         <extracomment>shortName for Bamboo Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Car. bam.</translation>
+        <translation>Car. Vt. Bam.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4154"/>
@@ -12410,21 +12410,21 @@
         <source>Temple blocks, sometimes known as Chinese temple blocks or wooden bells.</source>
         <comment>temple-blocks description</comment>
         <extracomment>description for Temple Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Blocs du temple, parfois appelés blocs de temple chinois ou cloches en bois.</translation>
+        <translation>Blocs de temple, parfois appelés blocs de temple chinois ou cloches en bois.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4183"/>
         <source>Temple Blocks</source>
         <comment>temple-blocks trackName</comment>
         <extracomment>trackName for Temple Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bloc du temple</translation>
+        <translation>Temple Blocks</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4185"/>
         <source>Temple Blocks</source>
         <comment>temple-blocks longName</comment>
         <extracomment>longName for Temple Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bloc du temple</translation>
+        <translation>Temple Blocks</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4187"/>
@@ -12466,28 +12466,28 @@
         <source>Wooden wind chimes.</source>
         <comment>wooden-wind-chimes description</comment>
         <extracomment>description for Wooden Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en bois.</translation>
+        <translation>Carillon à vent en bois.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4201"/>
         <source>Wooden Wind Chimes</source>
         <comment>wooden-wind-chimes trackName</comment>
         <extracomment>trackName for Wooden Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en bois</translation>
+        <translation>Carillon à vent en bois</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4203"/>
         <source>Wooden Wind Chimes</source>
         <comment>wooden-wind-chimes longName</comment>
         <extracomment>longName for Wooden Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en bois</translation>
+        <translation>Carillon à vent en bois</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4205"/>
         <source>Wd. Wn. Ch.</source>
         <comment>wooden-wind-chimes shortName</comment>
         <extracomment>shortName for Wooden Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Car. bo.</translation>
+        <translation>Car. Vt. Bo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4208"/>
@@ -12522,28 +12522,28 @@
         <source>Glass wind chimes.</source>
         <comment>glass-wind-chimes description</comment>
         <extracomment>description for Glass Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en verre.</translation>
+        <translation>Carillon à vent en verre.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4219"/>
         <source>Glass Wind Chimes</source>
         <comment>glass-wind-chimes trackName</comment>
         <extracomment>trackName for Glass Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en verre</translation>
+        <translation>Carillon à vent en verre</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4221"/>
         <source>Glass Wind Chimes</source>
         <comment>glass-wind-chimes longName</comment>
         <extracomment>longName for Glass Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en verre</translation>
+        <translation>Carillon à vent en verre</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4223"/>
         <source>Gl. Wn Ch.</source>
         <comment>glass-wind-chimes shortName</comment>
         <extracomment>shortName for Glass Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Car. ver.</translation>
+        <translation>Car. Vt. Ver.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4226"/>
@@ -12669,21 +12669,21 @@
         <source>Sandpaper Blocks</source>
         <comment>sandpaper-blocks trackName</comment>
         <extracomment>trackName for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Papiers sablés</translation>
+        <translation>Sandpaper Blocks</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4266"/>
         <source>Sandpaper Blocks</source>
         <comment>sandpaper-blocks longName</comment>
         <extracomment>longName for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Papiers sablés</translation>
+        <translation>Sandpaper Blocks</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4268"/>
         <source>Sa. Bl.</source>
         <comment>sandpaper-blocks shortName</comment>
         <extracomment>shortName for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pap. Sab.</translation>
+        <translation>Sa. Bl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4271"/>
@@ -12718,28 +12718,28 @@
         <source>Shell wind chimes.</source>
         <comment>shell-wind-chimes description</comment>
         <extracomment>description for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en coquillages.</translation>
+        <translation>Carillon à vent en coquillages.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4282"/>
         <source>Shell Wind Chimes</source>
         <comment>shell-wind-chimes trackName</comment>
         <extracomment>trackName for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en coquillages</translation>
+        <translation>Carillon à vent en coquillages</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4284"/>
         <source>Shell Wind Chimes</source>
         <comment>shell-wind-chimes longName</comment>
         <extracomment>longName for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Carillon en coquillages</translation>
+        <translation>Carillon à vent en coquillages</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4286"/>
         <source>Sh. Wn Ch.</source>
         <comment>shell-wind-chimes shortName</comment>
         <extracomment>shortName for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Car. coq.</translation>
+        <translation>Car. Vt. Coq.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4289"/>
@@ -12886,7 +12886,7 @@
         <source>Marching snare drum.</source>
         <comment>marching-snare description</comment>
         <extracomment>description for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Caisse claire de marche.</translation>
+        <translation>Caisse claire de défilé.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4341"/>
@@ -12900,35 +12900,35 @@
         <source>S.D.</source>
         <comment>marching-snare shortName</comment>
         <extracomment>shortName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>S.D.</translation>
+        <translation>Cs. Clai.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4346"/>
         <source>Marching tenor drums.</source>
         <comment>marching-tenor-drums description</comment>
         <extracomment>description for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tambour ténor de marche.</translation>
+        <translation>Tambours Ténor de défilé.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4350"/>
         <source>Tenor Drums</source>
         <comment>marching-tenor-drums longName</comment>
         <extracomment>longName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tambours ténor</translation>
+        <translation>Tambours Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4352"/>
         <source>T.D.</source>
         <comment>marching-tenor-drums shortName</comment>
         <extracomment>shortName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>T.D.</translation>
+        <translation>Tmb. T.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4355"/>
         <source>Marching bass drums.</source>
         <comment>marching-bass-drums description</comment>
         <extracomment>description for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Grosse caisse de marche.</translation>
+        <translation>Grosse caisse de défilé</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4359"/>
@@ -12942,7 +12942,7 @@
         <source>B.D.</source>
         <comment>marching-bass-drums shortName</comment>
         <extracomment>shortName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B.D.</translation>
+        <translation>Gr. Cai.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4364"/>
@@ -13054,63 +13054,63 @@
         <source>Foot stamp.</source>
         <comment>stamp description</comment>
         <extracomment>description for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Timbre.</translation>
+        <translation>Foot stomp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4405"/>
         <source>Stamp</source>
         <comment>stamp trackName</comment>
         <extracomment>trackName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Timbre</translation>
+        <translation>Stomp</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4407"/>
         <source>Stamp</source>
         <comment>stamp longName</comment>
         <extracomment>longName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Timbre</translation>
+        <translation>Stomp</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4409"/>
         <source>Sta.</source>
         <comment>stamp shortName</comment>
         <extracomment>shortName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tim.</translation>
+        <translation>Sto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4415"/>
         <source>Boy soprano voice.</source>
         <comment>boy-soprano description</comment>
         <extracomment>description for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de soprano de garçon.</translation>
+        <translation>Voix de garçon Soprano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4417"/>
         <source>Boy Soprano</source>
         <comment>boy-soprano trackName</comment>
         <extracomment>trackName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Garçon soprano</translation>
+        <translation>Garçon Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4419"/>
         <source>Boy Soprano</source>
         <comment>boy-soprano longName</comment>
         <extracomment>longName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Garçon soprano</translation>
+        <translation>Garçon Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4421"/>
         <source>B. S.</source>
         <comment>boy-soprano shortName</comment>
         <extracomment>shortName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>S. G.</translation>
+        <translation>G. S.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4424"/>
         <source>Soprano voice.</source>
         <comment>soprano description</comment>
         <extracomment>description for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de soprano.</translation>
+        <translation>Voix de Soprano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4426"/>
@@ -13138,7 +13138,7 @@
         <source>Soprano voice (notated in C clef).</source>
         <comment>soprano-c-clef description</comment>
         <extracomment>description for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de soprano (écrit en Clef d&apos;Ut).</translation>
+        <translation>Voix de Soprano (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4435"/>
@@ -13152,35 +13152,35 @@
         <source>Soprano</source>
         <comment>soprano-c-clef longName</comment>
         <extracomment>longName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprano</translation>
+        <translation>Soprano (Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4439"/>
         <source>S.</source>
         <comment>soprano-c-clef shortName</comment>
         <extracomment>shortName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>S.</translation>
+        <translation>S. Ut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4442"/>
         <source>Mezzo-soprano voice.</source>
         <comment>mezzo-soprano description</comment>
         <extracomment>description for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de mezzo-soprano.</translation>
+        <translation>Voix de Mezzo-Soprano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4444"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano trackName</comment>
         <extracomment>trackName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano</translation>
+        <translation>Mezzo-Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4446"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano longName</comment>
         <extracomment>longName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano</translation>
+        <translation>Mezzo-Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4448"/>
@@ -13194,49 +13194,49 @@
         <source>Mezzo-soprano voice (notated in C clef).</source>
         <comment>mezzo-soprano-c-clef description</comment>
         <extracomment>description for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de mezzo-soprano (écrit en Clef d&apos;Ut).</translation>
+        <translation>Voix de Mezzo-Soprano (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4453"/>
         <source>Mezzo-soprano (C clef)</source>
         <comment>mezzo-soprano-c-clef trackName</comment>
         <extracomment>trackName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano (Clef d&apos;Ut)</translation>
+        <translation>Mezzo-Soprano (Clef d&apos;Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4455"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano-c-clef longName</comment>
         <extracomment>longName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano</translation>
+        <translation>Mezzo-Soprano (Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4457"/>
         <source>Mzs.</source>
         <comment>mezzo-soprano-c-clef shortName</comment>
         <extracomment>shortName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mzs.</translation>
+        <translation>Mzs. Ut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4460"/>
         <source>Counter tenor or male alto voice.</source>
         <comment>countertenor description</comment>
         <extracomment>description for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Contre-ténor ou voix alto d&apos;hommes.</translation>
+        <translation>Contre-Ténor ou voix Alto d&apos;hommes.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4462"/>
         <source>Countertenor</source>
         <comment>countertenor trackName</comment>
         <extracomment>trackName for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Contre-ténor</translation>
+        <translation>Contre-Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4464"/>
         <source>Countertenor</source>
         <comment>countertenor longName</comment>
         <extracomment>longName for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Contre-ténor</translation>
+        <translation>Contre-Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4466"/>
@@ -13250,7 +13250,7 @@
         <source>Alto voice.</source>
         <comment>alto description</comment>
         <extracomment>description for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix d&apos;alto.</translation>
+        <translation>Voix d&apos;Alto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4471"/>
@@ -13278,7 +13278,7 @@
         <source>Alto voice (notated in C clef).</source>
         <comment>alto-c-clef description</comment>
         <extracomment>description for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix d&apos;alto (écrit en Clef d&apos;Ut)</translation>
+        <translation>Voix d&apos;Alto (écrit en Clef d&apos;Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4480"/>
@@ -13292,21 +13292,21 @@
         <source>Alto</source>
         <comment>alto-c-clef longName</comment>
         <extracomment>longName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alto</translation>
+        <translation>Alto (Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4484"/>
         <source>A.</source>
         <comment>alto-c-clef shortName</comment>
         <extracomment>shortName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A.</translation>
+        <translation>A. Ut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4487"/>
         <source>Female alto voice.</source>
         <comment>contralto description</comment>
         <extracomment>description for Contralto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix d&apos;alto de femmes.</translation>
+        <translation>Voix d&apos;Alto de femmes.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4489"/>
@@ -13334,7 +13334,7 @@
         <source>Tenor voice.</source>
         <comment>tenor description</comment>
         <extracomment>description for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de ténor.</translation>
+        <translation>Voix de Ténor.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4498"/>
@@ -13362,7 +13362,7 @@
         <source>Tenor voice (notated in C clef).</source>
         <comment>tenor-c-clef description</comment>
         <extracomment>description for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de ténor (écrit en Clef d&apos;Ut).</translation>
+        <translation>Voix de Ténor (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4507"/>
@@ -13376,21 +13376,21 @@
         <source>Tenor</source>
         <comment>tenor-c-clef longName</comment>
         <extracomment>longName for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ténor</translation>
+        <translation>Ténor (Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4511"/>
         <source>T.</source>
         <comment>tenor-c-clef shortName</comment>
         <extracomment>shortName for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>T.</translation>
+        <translation>T. Ut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4514"/>
         <source>Baritone voice.</source>
         <comment>baritone description</comment>
         <extracomment>description for Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de baryton.</translation>
+        <translation>Voix de Baryton.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4516"/>
@@ -13418,7 +13418,7 @@
         <source>Baritone voice (notated in C clef).</source>
         <comment>baritone-c-clef description</comment>
         <extracomment>description for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de baryton (écrit en Clef d&apos;Ut).</translation>
+        <translation>Voix de Baryton (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4525"/>
@@ -13432,14 +13432,14 @@
         <source>Baritone</source>
         <comment>baritone-c-clef longName</comment>
         <extracomment>longName for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Baryton</translation>
+        <translation>Baryton (Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4529"/>
         <source>Bar.</source>
         <comment>baritone-c-clef shortName</comment>
         <extracomment>shortName for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bar.</translation>
+        <translation>Bar. Ut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4532"/>
@@ -13474,7 +13474,7 @@
         <source>Bass voice.</source>
         <comment>bass description</comment>
         <extracomment>description for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de basse.</translation>
+        <translation>Voix de Basse.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4543"/>
@@ -13810,7 +13810,7 @@
         <source>Honky-tonk (very out of tune) piano.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Piano honky-tonk (très désaccordé).</translation>
+        <translation>Piano Honky-Tonk (très désaccordé).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4653"/>
@@ -14510,7 +14510,7 @@
         <source>brightness</source>
         <comment>effect-synth channel</comment>
         <extracomment>channel for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>luminosité</translation>
+        <translation>brillance</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4878"/>
@@ -14909,14 +14909,14 @@
         <source>Square Synthesizer</source>
         <comment>square-synth trackName</comment>
         <extracomment>trackName for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Synthétiseur de créneaux</translation>
+        <translation>Synthétiseur de signal carré</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5004"/>
         <source>Square Synthesizer</source>
         <comment>square-synth longName</comment>
         <extracomment>longName for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Synthétiseur de créneaux</translation>
+        <translation>Synthétiseur de signal carré</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5006"/>
@@ -15035,14 +15035,14 @@
         <source>Warm Synthesizer</source>
         <comment>warm-synth trackName</comment>
         <extracomment>trackName for Warm Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Synthétiseur chaud</translation>
+        <translation>Synthétiseur Warm</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5044"/>
         <source>Warm Synthesizer</source>
         <comment>warm-synth longName</comment>
         <extracomment>longName for Warm Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Synthétiseur chaud</translation>
+        <translation>Synthétiseur Warm</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5046"/>
@@ -15133,7 +15133,7 @@
         <source>Cavaquinho (tablature)</source>
         <comment>cavaquinho-tablature trackName</comment>
         <extracomment>trackName for Cavaquinho (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cavaquinho (tablature)</translation>
+        <translation>Cavaquinho (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5078"/>
@@ -15588,7 +15588,7 @@
         <source>Marching Tenor Drums</source>
         <comment>marching-tenor-drums trackName</comment>
         <extracomment>trackName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tambour ténor de défilé</translation>
+        <translation>Tambour Ténor de défilé</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
@@ -15735,14 +15735,14 @@
         <source>Electric guitar (tablature).</source>
         <comment>electric-guitar-tablature description</comment>
         <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitare électrique (tablature).</translation>
+        <translation>Guitare électrique (Tablature).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5189"/>
         <source>Electric Guitar (tablature)</source>
         <comment>electric-guitar-tablature trackName</comment>
         <extracomment>trackName for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitare électrique (tablature)</translation>
+        <translation>Guitare électrique (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5191"/>
@@ -15763,7 +15763,7 @@
         <source>Classical Guitar (tablature)</source>
         <comment>guitar-nylon-tablature trackName</comment>
         <extracomment>trackName for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitare Classique (tablature)</translation>
+        <translation>Guitare Classique (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5198"/>
@@ -15784,7 +15784,7 @@
         <source>Acoustic Guitar (tablature)</source>
         <comment>guitar-steel-tablature trackName</comment>
         <extracomment>trackName for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitare Acoustique (tablature)</translation>
+        <translation>Guitare Acoustique (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5205"/>
@@ -15896,7 +15896,7 @@
         <source>C. Guit.</source>
         <comment>contra-guitar shortName</comment>
         <extracomment>shortName for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guit. do</translation>
+        <translation>Guit. Co.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5240"/>
@@ -15945,14 +15945,14 @@
         <source>7-string guitar (tablature).</source>
         <comment>7-string-guitar-tablature description</comment>
         <extracomment>description for 7-string Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitare à 7 cordes (tablature).</translation>
+        <translation>Guitare à 7 cordes (Tablature).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5256"/>
         <source>7-string Guitar (tablature)</source>
         <comment>7-string-guitar-tablature trackName</comment>
         <extracomment>trackName for 7-string Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitare à 7 cordes (tablature)</translation>
+        <translation>Guitare à 7 cordes (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5258"/>
@@ -16085,7 +16085,7 @@
         <source>slap</source>
         <comment>5-string-electric-bass channel</comment>
         <extracomment>channel for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5299"/>
@@ -16127,7 +16127,7 @@
         <source>slap</source>
         <comment>5-string-electric-bass-high-c channel</comment>
         <extracomment>channel for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5312"/>
@@ -16148,7 +16148,7 @@
         <source>5-str. Electric Bass (tablature)</source>
         <comment>5-string-electric-bass-tab trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basse électrique à 5 cordes (tablature)</translation>
+        <translation>Basse électrique à 5 cordes (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5319"/>
@@ -16169,7 +16169,7 @@
         <source>5-str. Electric Bass (high C/tenor) (tablature)</source>
         <comment>5-string-electric-bass-tab-high-c trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass (high C/tenor) (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basse électrique à 5 cordes (do aigu / ténor) (tablature).</translation>
+        <translation>Basse électrique à 5 cordes (do aigu / ténor) (Tablature).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5326"/>
@@ -16211,7 +16211,7 @@
         <source>slap</source>
         <comment>6-string-electric-bass channel</comment>
         <extracomment>channel for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5339"/>
@@ -16232,7 +16232,7 @@
         <source>6-str. Electric Bass (tablature)</source>
         <comment>6-string-electric-bass-tab trackName</comment>
         <extracomment>trackName for 6-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basse électrique à 6 cordes (tablature)</translation>
+        <translation>Basse électrique à 6 cordes (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5346"/>
@@ -16274,7 +16274,7 @@
         <source>slap</source>
         <comment>bass-guitar channel</comment>
         <extracomment>channel for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5359"/>
@@ -16316,7 +16316,7 @@
         <source>slap</source>
         <comment>electric-bass channel</comment>
         <extracomment>channel for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5372"/>
@@ -16344,7 +16344,7 @@
         <source>Fretless Electric Bass</source>
         <comment>fretless-electric-bass longName</comment>
         <extracomment>longName for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basse électrique fretless</translation>
+        <translation>Basse électrique sans frettes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5381"/>
@@ -16358,7 +16358,7 @@
         <source>slap</source>
         <comment>fretless-electric-bass channel</comment>
         <extracomment>channel for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5385"/>
@@ -16400,7 +16400,7 @@
         <source>slap</source>
         <comment>acoustic-bass channel</comment>
         <extracomment>channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5398"/>
@@ -16463,7 +16463,7 @@
         <source>Electric Bass (tablature)</source>
         <comment>electric-bass-4-str-tab trackName</comment>
         <extracomment>trackName for Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basse électrique (tablature)</translation>
+        <translation>Basse électrique (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5418"/>
@@ -16477,7 +16477,7 @@
         <source>5-string banjo (staff notation).</source>
         <comment>banjo description</comment>
         <extracomment>description for Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo à 5 cordes (notation).</translation>
+        <translation>Banjo à 5 cordes (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5423"/>
@@ -16512,14 +16512,14 @@
         <source>Tenor Banjo</source>
         <comment>tenor-banjo trackName</comment>
         <extracomment>trackName for Tenor Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo ténor</translation>
+        <translation>Banjo Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5434"/>
         <source>Tenor Banjo</source>
         <comment>tenor-banjo longName</comment>
         <extracomment>longName for Tenor Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo ténor</translation>
+        <translation>Banjo Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5436"/>
@@ -16540,7 +16540,7 @@
         <source>Banjo (tablature)</source>
         <comment>banjo-tablature trackName</comment>
         <extracomment>trackName for Banjo (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo (tablature)</translation>
+        <translation>Banjo (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5443"/>
@@ -16554,21 +16554,21 @@
         <source>4-string Irish tenor banjo (staff notation).</source>
         <comment>irish-tenor-banjo description</comment>
         <extracomment>description for Irish Tenor Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo irlandais ténor à 4 cordes (notation).</translation>
+        <translation>Banjo irlandais ténor à 4 cordes (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5448"/>
         <source>Irish Tenor Banjo</source>
         <comment>irish-tenor-banjo trackName</comment>
         <extracomment>trackName for Irish Tenor Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo Irlandais ténor</translation>
+        <translation>Banjo Irlandais Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5450"/>
         <source>Irish Tenor Banjo</source>
         <comment>irish-tenor-banjo longName</comment>
         <extracomment>longName for Irish Tenor Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo Irlandais ténor</translation>
+        <translation>Banjo Irlandais Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5452"/>
@@ -16589,35 +16589,35 @@
         <source>Irish Tenor Banjo (tablature)</source>
         <comment>irish-tenor-banjo-tablature trackName</comment>
         <extracomment>trackName for Irish Tenor Banjo (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo Irlandais ténor (tablature)</translation>
+        <translation>Banjo Irlandais Ténor (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5459"/>
         <source>Irish Tenor Banjo</source>
         <comment>irish-tenor-banjo-tablature longName</comment>
         <extracomment>longName for Irish Tenor Banjo (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Banjo Irlandais ténor</translation>
+        <translation>Banjo Irlandais Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5462"/>
         <source>Tenor ukulele with bottom string tuned to G4.</source>
         <comment>tenor-ukulele description</comment>
         <extracomment>description for Tenor Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé ténor avec la corde la plus grave accordée sur sol 4.</translation>
+        <translation>Ukulélé ténor avec la corde la plus grave accordée sur Sol 4.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5464"/>
         <source>Tenor Ukulele</source>
         <comment>tenor-ukulele trackName</comment>
         <extracomment>trackName for Tenor Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé ténor</translation>
+        <translation>Ukulélé Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5466"/>
         <source>Tenor Ukulele</source>
         <comment>tenor-ukulele longName</comment>
         <extracomment>longName for Tenor Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé ténor</translation>
+        <translation>Ukulélé Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5468"/>
@@ -16631,7 +16631,7 @@
         <source>Standard ukulele (staff notation).</source>
         <comment>ukulele description</comment>
         <extracomment>description for Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé standard (notation).</translation>
+        <translation>Ukulélé standard (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5473"/>
@@ -16659,14 +16659,14 @@
         <source>Tenor ukulele with bottom string tuned to G3.</source>
         <comment>ukulele-low-g description</comment>
         <extracomment>description for Ukulele (low G); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé ténor avec la corde la plus grave accordée sur sol 3.</translation>
+        <translation>Ukulélé ténor avec la corde la plus grave accordée sur Sol 3.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5482"/>
         <source>Ukulele (low G)</source>
         <comment>ukulele-low-g trackName</comment>
         <extracomment>trackName for Ukulele (low G); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé (sol grave)</translation>
+        <translation>Ukulélé (Sol grave)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5484"/>
@@ -16694,7 +16694,7 @@
         <source>Ukulele (tablature)</source>
         <comment>ukulele-4-str-tab trackName</comment>
         <extracomment>trackName for Ukulele (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé (tablature)</translation>
+        <translation>Ukulélé (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5493"/>
@@ -16708,21 +16708,21 @@
         <source>Baritone ukulele.</source>
         <comment>baritone-ukulele description</comment>
         <extracomment>description for Baritone Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé baryton.</translation>
+        <translation>Ukulélé Baryton.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5498"/>
         <source>Baritone Ukulele</source>
         <comment>baritone-ukulele trackName</comment>
         <extracomment>trackName for Baritone Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé baryton</translation>
+        <translation>Ukulélé Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5500"/>
         <source>Baritone Ukulele</source>
         <comment>baritone-ukulele longName</comment>
         <extracomment>longName for Baritone Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulélé baryton</translation>
+        <translation>Ukulélé Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5502"/>
@@ -16736,7 +16736,7 @@
         <source>Mandolin (staff notation).</source>
         <comment>mandolin description</comment>
         <extracomment>description for Mandolin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mandoline (notation).</translation>
+        <translation>Mandoline (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5507"/>
@@ -16771,7 +16771,7 @@
         <source>Mandolin (tablature)</source>
         <comment>mandolin-tablature trackName</comment>
         <extracomment>trackName for Mandolin (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mandoline (tablature)</translation>
+        <translation>Mandoline (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5518"/>
@@ -16792,21 +16792,21 @@
         <source>Alto Mandola</source>
         <comment>alto-mandola trackName</comment>
         <extracomment>trackName for Alto Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mandole alto</translation>
+        <translation>Mandole Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5525"/>
         <source>Alto Mandola</source>
         <comment>alto-mandola longName</comment>
         <extracomment>longName for Alto Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mandole alto</translation>
+        <translation>Mandole Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5527"/>
         <source>A. Mda.</source>
         <comment>alto-mandola shortName</comment>
         <extracomment>shortName for Alto Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mde. A.</translation>
+        <translation>Mdn. A.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5530"/>
@@ -16848,14 +16848,14 @@
         <source>Tenor Mandola</source>
         <comment>tenor-mandola trackName</comment>
         <extracomment>trackName for Tenor Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mandole ténor</translation>
+        <translation>Mandole Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5543"/>
         <source>Tenor Mandola</source>
         <comment>tenor-mandola longName</comment>
         <extracomment>longName for Tenor Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mandole ténor</translation>
+        <translation>Mandole Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5545"/>
@@ -16890,7 +16890,7 @@
         <source>OM.</source>
         <comment>octave-mandolin shortName</comment>
         <extracomment>shortName for Octave Mandolin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>OM.</translation>
+        <translation>M. O.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5557"/>
@@ -16925,7 +16925,7 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Staff notation).</source>
         <comment>mtn-dulcimer-std description</comment>
         <extracomment>description for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Aussi connu sous le nom de dulcimer des Appalaches, avec d&apos;autres noms. Instrument à cordes avec des frettes de la famille des cithares. (Notation).</translation>
+        <translation>Aussi connu sous le nom de dulcimer des Appalaches, avec d&apos;autres noms. Instrument à cordes avec des frettes de la famille des cithares. (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5568"/>
@@ -16960,7 +16960,7 @@
         <source>Mtn. Dulcimer (tablature)</source>
         <comment>mtn-dulcimer-std-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer (tablature)</translation>
+        <translation>Mtn. Dulcimer (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5579"/>
@@ -16974,21 +16974,21 @@
         <source>Larger version of the mountain or Appalachian dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-baritone description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Plus grande version du dulcimer des Appalaches ou des montagnes. (Notation).</translation>
+        <translation>Plus grande version du dulcimer des Appalaches ou des montagnes. (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5584"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - baryton</translation>
+        <translation>Mtn. Dulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5586"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - baryton</translation>
+        <translation>Mtn. Dulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5588"/>
@@ -17009,35 +17009,35 @@
         <source>Mtn. Dulcimer - Baritone (tablature)</source>
         <comment>mtn-dulcimer-bartn-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - baryton (tablature)</translation>
+        <translation>Mtn. Dulcimer - Baryton (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5595"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-bartn-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - baryton</translation>
+        <translation>Mtn. Dulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5598"/>
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-bass description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Très grande version du dulcimer des Appalaches ou des montagnes, une octave plus grave que le dulcimer classique. (Notation).</translation>
+        <translation>Très grande version du dulcimer des Appalaches ou des montagnes, une octave plus grave que le dulcimer classique. (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5600"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - basse</translation>
+        <translation>Mtn. Dulcimer - Basse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5602"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - basse</translation>
+        <translation>Mtn. Dulcimer - Basse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5604"/>
@@ -17051,14 +17051,14 @@
         <source>Mtn. Dulcimer - Bass (tablature)</source>
         <comment>mtn-dulcimer-bass-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - basse (tablature)</translation>
+        <translation>Mtn. Dulcimer - Basse (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5611"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - basse</translation>
+        <translation>Mtn. Dulcimer - Basse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5614"/>
@@ -17100,7 +17100,7 @@
         <source>Lute (tablature)</source>
         <comment>lute-tablature trackName</comment>
         <extracomment>trackName for Lute (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Luth (tablature)</translation>
+        <translation>Luth (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5627"/>
@@ -17499,7 +17499,7 @@
         <source>Secunda balalaika, tuned a fifth below the prima.</source>
         <comment>balalaika-secunda description</comment>
         <extracomment>description for Secunda Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka deuxième, accordée une quinte plus grave que la prima.</translation>
+        <translation>Balalaïka secunda accordée une quinte plus grave que la prima.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5754"/>
@@ -17527,21 +17527,21 @@
         <source>Alto balalaika, tuned an octave below the prima.</source>
         <comment>balalaika-alto description</comment>
         <extracomment>description for Alto Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka alto, accordée une octave plus grave que la prima.</translation>
+        <translation>Balalaïka Alto, accordée une octave plus grave que la prima.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5763"/>
         <source>Alto Balalaika</source>
         <comment>balalaika-alto trackName</comment>
         <extracomment>trackName for Alto Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka alto</translation>
+        <translation>Balalaïka Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5765"/>
         <source>Alto Balalaika</source>
         <comment>balalaika-alto longName</comment>
         <extracomment>longName for Alto Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka alto</translation>
+        <translation>Balalaïka Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5767"/>
@@ -17555,21 +17555,21 @@
         <source>Bass balalaika, tuned an octave below the alto.</source>
         <comment>balalaika-bass description</comment>
         <extracomment>description for Bass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka basse, accordée une octave plus grave que l&apos;alto.</translation>
+        <translation>Balalaïka Basse, accordée une octave plus grave que l&apos;alto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5772"/>
         <source>Bass Balalaika</source>
         <comment>balalaika-bass trackName</comment>
         <extracomment>trackName for Bass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka basse</translation>
+        <translation>Balalaïka Basse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5774"/>
         <source>Bass Balalaika</source>
         <comment>balalaika-bass longName</comment>
         <extracomment>longName for Bass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka basse</translation>
+        <translation>Balalaïka Basse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5776"/>
@@ -17583,7 +17583,7 @@
         <source>Contrabass balalaika, tuned an octave below the bass.</source>
         <comment>balalaika-contrabass description</comment>
         <extracomment>description for Contrabass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaïka contrebasse, accordée une octave plus grave que la basse.</translation>
+        <translation>Balalaïka Contrebasse, accordée une octave plus grave que la basse.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5781"/>
@@ -17821,7 +17821,7 @@
         <source>A larger tamburica than the prim, played in a similar way.</source>
         <comment>brac description</comment>
         <extracomment>description for Brač; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Une plus grande tamburica que le premier, jouée de la même manière.</translation>
+        <translation>Une plus grande tamburica que le prim, jouée de la même manière.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5857"/>
@@ -17842,7 +17842,7 @@
         <source>Br.</source>
         <comment>brac shortName</comment>
         <extracomment>shortName for Brač; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cui.</translation>
+        <translation>Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5864"/>
@@ -17870,7 +17870,7 @@
         <source>Bu.</source>
         <comment>bugarija shortName</comment>
         <extracomment>shortName for Bugarija; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cl.</translation>
+        <translation>Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5873"/>
@@ -17898,7 +17898,7 @@
         <source>Be.</source>
         <comment>berda shortName</comment>
         <extracomment>shortName for Berda; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cl.</translation>
+        <translation>Be.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5882"/>
@@ -17933,7 +17933,7 @@
         <source>Spanish folk instrument similar to the mandolin. (Staff notation).</source>
         <comment>bandurria description</comment>
         <extracomment>description for Bandurria; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument folklorique espagnol similaire à la mandoline. (Notation).</translation>
+        <translation>Instrument folklorique espagnol similaire à la mandoline. (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5893"/>
@@ -17968,7 +17968,7 @@
         <source>Bandurria (tablature)</source>
         <comment>bandurria-tablature trackName</comment>
         <extracomment>trackName for Bandurria (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bandurria (tablature)</translation>
+        <translation>Bandurria (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5904"/>
@@ -17982,7 +17982,7 @@
         <source>Spanish lute similar to the bandurria. (Staff notation).</source>
         <comment>laud description</comment>
         <extracomment>description for Laúd; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Luth espagnol semblable au bandurria. (Notation).</translation>
+        <translation>Luth espagnol semblable au bandurria. (portée standard).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5909"/>
@@ -18017,7 +18017,7 @@
         <source>Laúd (tablature)</source>
         <comment>laud-tablature trackName</comment>
         <extracomment>trackName for Laúd (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Laúd (tablature)</translation>
+        <translation>Laúd (Tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5920"/>
@@ -18031,7 +18031,7 @@
         <source>String section notated on a grand staff.</source>
         <comment>strings description</comment>
         <extracomment>description for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instruments à cordes sur un même système.</translation>
+        <translation>Instruments à cordes sur une portée de piano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5928"/>
@@ -18052,7 +18052,7 @@
         <source>St.</source>
         <comment>strings shortName</comment>
         <extracomment>shortName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>St.</translation>
+        <translation>Crd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5934"/>
@@ -18087,28 +18087,28 @@
         <source>Double Bass</source>
         <comment>double-bass trackName</comment>
         <extracomment>trackName for Double Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Double Bass</translation>
+        <translation>Contrebasse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5945"/>
         <source>Double Bass</source>
         <comment>double-bass longName</comment>
         <extracomment>longName for Double Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Double Bass</translation>
+        <translation>Contrebasse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5947"/>
         <source>Db.</source>
         <comment>double-bass shortName</comment>
         <extracomment>shortName for Double Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Db.</translation>
+        <translation>Cbas.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5950"/>
         <source>Solo violin.</source>
         <comment>violin description</comment>
         <extracomment>description for Violin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Violon seul</translation>
+        <translation>Violon Solo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5952"/>
@@ -18206,7 +18206,7 @@
         <source>Solo viola.</source>
         <comment>viola description</comment>
         <extracomment>description for Viola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alto seul</translation>
+        <translation>Alto Solo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5982"/>
@@ -18255,7 +18255,7 @@
         <source>Viola section.</source>
         <comment>violas description</comment>
         <extracomment>description for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Section d&apos;altos</translation>
+        <translation>Section d&apos;Altos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5997"/>
@@ -18353,7 +18353,7 @@
         <source>Violoncello section.</source>
         <comment>violoncellos description</comment>
         <extracomment>description for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Section de violoncelle</translation>
+        <translation>Section de Violoncelle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6027"/>
@@ -18451,7 +18451,7 @@
         <source>Contrabass (double bass) section.</source>
         <comment>contrabasses description</comment>
         <extracomment>description for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Section de contrebasse</translation>
+        <translation>Section de Contrebasse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6057"/>
@@ -18542,14 +18542,14 @@
         <source>Alto Viol</source>
         <comment>alto-viol trackName</comment>
         <extracomment>trackName for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viole de gambe alto</translation>
+        <translation>Viole de gambe Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6089"/>
         <source>Alto Viol</source>
         <comment>alto-viol longName</comment>
         <extracomment>longName for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viole de gambe alto</translation>
+        <translation>Viole de gambe Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6091"/>
@@ -18633,14 +18633,14 @@
         <source>Tenor Viol</source>
         <comment>tenor-viol trackName</comment>
         <extracomment>trackName for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viole de gambe ténor</translation>
+        <translation>Viole de gambe Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6119"/>
         <source>Tenor Viol</source>
         <comment>tenor-viol longName</comment>
         <extracomment>longName for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viole de gambe ténor</translation>
+        <translation>Viole de gambe Ténor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6121"/>
@@ -18745,14 +18745,14 @@
         <source>G Violone</source>
         <comment>violone longName</comment>
         <extracomment>longName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Violone en sol</translation>
+        <translation>Violone en Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6175"/>
         <source>G Vne.</source>
         <comment>violone shortName</comment>
         <extracomment>shortName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Vne. sol</translation>
+        <translation>Vne. Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6177"/>
@@ -19197,7 +19197,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="132"/>
         <source>Posthorns</source>
-        <translation>Cors postal</translation>
+        <translation>Cors Postal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="133"/>
@@ -19227,7 +19227,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="138"/>
         <source>Cornetts</source>
-        <translation>Cornets</translation>
+        <translation>Cornets à bouquin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
@@ -19312,7 +19312,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="155"/>
         <source>Steel Drums</source>
-        <translation>Steeldrum</translation>
+        <translation>Steel Drums</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="156"/>
@@ -19347,7 +19347,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="162"/>
         <source>Klaxon Horns</source>
-        <translation>Klaxon</translation>
+        <translation>Klaxons</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="163"/>
@@ -19512,7 +19512,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>
         <source>Viols</source>
-        <translation>Violons</translation>
+        <translation>Violes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="196"/>
@@ -19628,7 +19628,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4412"/>
         <source>Vocals</source>
-        <translation>Chœurs</translation>
+        <translation>Voix</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4585"/>
@@ -19724,7 +19724,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="27"/>
         <source>Grand Staff</source>
-        <translation>Portées de Piano</translation>
+        <translation>Portée de Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="29"/>
@@ -19744,17 +19744,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="32"/>
         <source>SATB Closed Score</source>
-        <translation>SATB double-portées</translation>
+        <translation>SATB sur deux portées</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
         <source>SATB Closed Score + Organ</source>
-        <translation>SATB double-portées + Orgue</translation>
+        <translation>SATB sur deux portées + Orgue</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="34"/>
         <source>SATB Closed Score + Piano</source>
-        <translation>SATB double-portées + Piano</translation>
+        <translation>SATB sur deux portées + Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="35"/>
