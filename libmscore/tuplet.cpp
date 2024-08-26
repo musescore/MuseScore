@@ -1325,14 +1325,18 @@ void Tuplet::addMissingElements()
       {
       if (tuplet())
             return;     // do not correct nested tuplets
+
       if (voice() == 0)
             return;     // nothing to do for tuplets in voice 1
+
       Fraction missingElementsDuration = ticks() * ratio() - elementsDuration();
       if (missingElementsDuration.isZero())
             return;
       // first, fill in any holes in the middle of the tuplet
       Fraction expectedTick = elements().front()->tick();
-      for (DurationElement* de : elements()) {
+
+      const std::vector<DurationElement*> elementsCopy = elements(); // mofified during loop
+      for (const DurationElement* de : elementsCopy) {
             if (!de)
                   continue;
             if (de->tick() != expectedTick) {
@@ -1342,6 +1346,7 @@ void Tuplet::addMissingElements()
                   }
             expectedTick += de->actualTicks();
             }
+
       // calculate the tick where we would expect a tuplet of this duration to start
       // TODO: check:
       expectedTick = elements().front()->tick() - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
