@@ -59,6 +59,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    bool allowTimeAnchor() const override { return false; }
+
     Note* startNote() const;
     Note* startNoteOfChain() const;
 
@@ -200,6 +202,8 @@ public:
     GuitarBendHold* clone() const override { return new GuitarBendHold(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
+
+    bool allowTimeAnchor() const override { return false; }
 
     Note* startNote() const;
     Note* endNote() const;

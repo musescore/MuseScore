@@ -89,6 +89,8 @@ public:
 
     bool isMelisma() const;
 
+    bool allowTimeAnchor() const override { return false; }
+
     using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const String& txt) override;
 

@@ -95,6 +95,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    bool allowTimeAnchor() const override { return false; }
+
     // property/style methods
     Sid getPropertyStyle(Pid id) const override;
     PropertyValue getProperty(Pid propertyId) const override;

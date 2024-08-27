@@ -279,6 +279,14 @@ engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
+//   allowTimeAnchor
+//---------------------------------------------------------
+bool TextLine::allowTimeAnchor() const
+{
+    return !(anchor() == Spanner::Anchor::NOTE);
+}
+
+//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
