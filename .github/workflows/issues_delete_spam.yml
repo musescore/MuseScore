@@ -1,0 +1,42 @@
+name: Delete spam comments
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  delete_spam_comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Delete spam comment"
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const payload = context.payload;
+            const comment = payload.comment;
+            const commentBody = comment.body;
+            const isSpam = commentBody.includes('Download')
+                           && commentBody.includes('https://www.mediafire.com/file')
+                           && commentBody.includes('password: changeme')
+                           && commentBody.includes('In the installer menu, select "gcc."');
+            if (isSpam) {
+                console.log('Deleting spam comment');
+                await github.rest.issues.deleteComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: comment.id
+                });
+
+                github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    body: 'The previous comment was preventively deleted because it was identified as spam. As long as you have not clicked the link in this comment, you are safe.'
+                });
+            } else {
+                console.log('Comment is not spam');
+            }
