@@ -5072,7 +5072,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         cursor->movePosition(mu::engraving::TextCursor::MoveOperation::Start, mu::engraving::TextCursor::MoveMode::KeepAnchor);
     }
 
-    showItem(nextLyrics, CanvasMoveCause::ExplicitNavigation);
+    showItem(nextLyrics, CanvasMoveCause::InputAction);
 }
 
 void NotationInteraction::navigateToLyrics(MoveDirection direction, bool moveOnly)
@@ -5213,7 +5213,7 @@ void NotationInteraction::navigateToNextSyllable()
     startEditText(toLyrics, PointF());
 
     toLyrics->selectAll(toLyrics->cursor());
-    showItem(toLyrics, CanvasMoveCause::ExplicitNavigation);
+    showItem(toLyrics, CanvasMoveCause::InputAction);
 }
 
 //! NOTE: Copied from ScoreView::lyricsUpDown
@@ -5271,7 +5271,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     score()->update();
 
     lyrics->selectAll(lyrics->cursor());
-    showItem(lyrics, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
+    showItem(lyrics, INotationInteraction::CanvasMoveCause::InputAction);
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
