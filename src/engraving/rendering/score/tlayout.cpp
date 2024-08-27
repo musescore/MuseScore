@@ -5243,11 +5243,8 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     LineF line = LineF(lineX, y1, lineX, y2);
     ldata->line = line;
 
-    // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
-    // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
-    double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * conf.styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
     // compute line and bounding rectangle
-    RectF rect(line.p1(), line.p2() + PointF(0.0, beamCorrection));
+    RectF rect(line.p1(), line.p2() + PointF(0.0, ldata->beamCorrection));
     ldata->setBbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
