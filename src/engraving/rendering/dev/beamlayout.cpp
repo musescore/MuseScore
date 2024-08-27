@@ -1338,12 +1338,18 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
             continue;
         }
 
+        double _up = chord->up() ? -1.0 : 1.0;
+
         if (level == 0) {
             BeamTremoloLayout::extendStem(item->ldata(), chord, 0.0);
+            // HACK: extend the bounding box of the stem (NOT the stem itself) by half beam width.
+            // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
+            chord->stem()->mutldata()->beamCorrection = _up * item->beamWidth() / 2;
         } else {
-            int stemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, cr == startCr || cr == endCr, b->above, frenchStyleBeams,
-                                                                             level, beamsAbove, beamsBelow);
-            if (stemLengthAdjustmentSteps != 0) {
+            bool isStartOrEnd = cr == startCr || cr == endCr;
+            int visualStemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, isStartOrEnd, b->above, frenchStyleBeams,
+                                                                                   level, beamsAbove, beamsBelow);
+            if (visualStemLengthAdjustmentSteps != 0) {
                 double grow = item->growLeft();
                 if (!muse::RealIsEqual(item->growLeft(), item->growRight())) {
                     double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
@@ -1351,9 +1357,18 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
                     grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
                 }
 
-                double stemLengthAdjustment = grow * stemLengthAdjustmentSteps * item->beamDist();
+                double visualStemLengthAdjustment = grow * visualStemLengthAdjustmentSteps * item->beamDist();
 
-                BeamTremoloLayout::extendStem(item->ldata(), chord, stemLengthAdjustment);
+                if (frenchStyleBeams) {
+                    // Even if we visually shorten the stem, we need the 'original' length for collisions.
+                    int bboxStemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, isStartOrEnd, b->above,
+                                                                                         /*frenchStyleBeams*/ false,
+                                                                                         level, beamsAbove, beamsBelow);
+                    chord->stem()->mutldata()->beamCorrection = _up * item->beamWidth() / 2 + _up * grow
+                                                                * (bboxStemLengthAdjustmentSteps - visualStemLengthAdjustmentSteps)
+                                                                * item->beamDist();
+                }
+                BeamTremoloLayout::extendStem(item->ldata(), chord, visualStemLengthAdjustment);
             }
         }
 
