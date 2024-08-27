@@ -59,6 +59,7 @@
 #include "dom/keysig.h"
 #include "dom/letring.h"
 #include "dom/line.h"
+#include "dom/lyrics.h"
 #include "dom/marker.h"
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
@@ -70,20 +71,21 @@
 #include "dom/playtechannotation.h"
 #include "dom/rehearsalmark.h"
 #include "dom/slur.h"
+#include "dom/soundflag.h"
 #include "dom/stafftext.h"
 #include "dom/stafftypechange.h"
+#include "dom/sticking.h"
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemtext.h"
-#include "dom/soundflag.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textline.h"
 #include "dom/textlinebase.h"
 #include "dom/timesig.h"
+#include "dom/tremolobar.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
-#include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/vibrato.h"
 #include "dom/volta.h"
@@ -169,6 +171,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::LET_RING:     layout(toLetRing(item), ctx);
         break;
+    case ElementType::LYRICS:       layout(toLyrics(item), ctx);
+        break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
         break;
     case ElementType::MEASURE_NUMBER: layout(toMeasureNumber(item), ctx);
@@ -196,6 +200,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
         break;
     case ElementType::STAFFTYPE_CHANGE: layout(toStaffTypeChange(item), ctx);
+        break;
+    case ElementType::STICKING:     layout(toSticking(item), ctx);
         break;
     case ElementType::STRING_TUNINGS: layout(toStringTunings(item), ctx);
         break;
@@ -1267,6 +1273,11 @@ void SingleLayout::layout(LetRingSegment* item, const Context& ctx)
     layoutTextLineBaseSegment(item, ctx);
 }
 
+void SingleLayout::layout(Lyrics* item, const Context& ctx)
+{
+    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutldata());
+}
+
 void SingleLayout::layout(NoteHead* item, const Context& ctx)
 {
     layout(static_cast<Symbol*>(item), ctx);
@@ -1485,6 +1496,11 @@ void SingleLayout::layout(Stem* item, const Context& ctx)
 {
     LayoutContext tctx(ctx.dontUseScore());
     TLayout::layoutStem(item, item->mutldata(), tctx.conf());
+}
+
+void SingleLayout::layout(Sticking* item, const Context& ctx)
+{
+    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutldata());
 }
 
 void SingleLayout::layout(TempoText* item, const Context& ctx)
