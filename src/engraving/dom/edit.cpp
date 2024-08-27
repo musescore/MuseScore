@@ -3267,6 +3267,30 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
     }
 }
 
+void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
+                                 const SelectionFilter& filter)
+{
+    auto spanners = m_spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
+    for (auto i : spanners) {
+        Spanner* sp = i.value;
+        Fraction spStartTick = sp->tick();
+        Fraction spEndTick = sp->tick2();
+        if (!sp->isSlur()) {
+            continue;
+        }
+        if (!filter.canSelectVoice(sp->track())) {
+            continue;
+        }
+
+        if (sp->track() >= trackStart && sp->track() < trackEnd) {
+            if ((spStartTick >= t1 && spStartTick < t2)
+                || (spEndTick >= t1 && spEndTick <= t2)) {
+                undoRemoveElement(sp);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   deleteAnnotationsFromRange
 ///   Deletes annotations in the given range that match the

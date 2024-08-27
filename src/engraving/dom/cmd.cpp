@@ -1421,6 +1421,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         // chord symbols can exist without chord/rest so they should not be removed
         constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
         deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
+        deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
 
     return accumulated;
