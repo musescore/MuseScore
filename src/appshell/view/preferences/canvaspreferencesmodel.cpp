@@ -170,7 +170,7 @@ void CanvasPreferencesModel::setAutoPanOtherwise(bool autoPan)
     if (autoPanOtherwise() == autoPan) {
         return;
     }
-    
+
     notationConfiguration()->setIsAutomaticallyPanOtherwiseEnabled(autoPan);
     emit autoPanOtherwiseChanged();
 }

@@ -111,6 +111,7 @@ public:
 
     bool isAutomaticallyPanDuringPlaybackEnabled() const override;
     void setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled)  override;
+    muse::async::Notification isAutomaticallyPanDuringPlaybackChanged() const override;
 
     bool isAutomaticallyPanOtherwiseEnabled() const override;
     void setIsAutomaticallyPanOtherwiseEnabled(bool enabled)  override;

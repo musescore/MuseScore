@@ -90,7 +90,8 @@ void ScoreCallbacks::changeEditElement(mu::engraving::EngravingItem* newElement)
     m_interaction->changeEditElement(newElement);
 }
 
-void ScoreCallbacks::adjustCanvasPosition(const mu::engraving::EngravingItem* el, INotationInteraction::CanvasMoveCause cause, int staffIndex)
+void ScoreCallbacks::adjustCanvasPosition(const mu::engraving::EngravingItem* el, INotationInteraction::CanvasMoveCause cause,
+                                          int staffIndex)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;

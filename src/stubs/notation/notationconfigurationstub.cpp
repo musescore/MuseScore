@@ -276,6 +276,12 @@ void NotationConfigurationStub::setIsAutomaticallyPanDuringPlaybackEnabled(bool)
 {
 }
 
+muse::async::Notification NotationConfigurationStub::isAutomaticallyPanDuringPlaybackChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::isAutomaticallyPanOtherwiseEnabled() const
 {
     return false;

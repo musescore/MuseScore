@@ -130,6 +130,10 @@ void PlaybackController::init()
         });
     });
 
+    notationConfiguration()->isAutomaticallyPanDuringPlaybackChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send(PAN_CODE);
+    });
+
     m_totalPlayTimeChanged.onNotify(this, [this]() {
         updateCurrentTempo();
 

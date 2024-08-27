@@ -296,9 +296,9 @@ public:
     };
 
     enum CanvasMoveCause {
-        InputAction,		// Note or text input
-        SelectionChange,	// E.g. arrow keys
-        ExplicitNavigation	// E.g. Ctrl+End
+        InputAction,          // Note or text input
+        SelectionChange,      // E.g. arrow keys
+        ExplicitNavigation    // E.g. Ctrl+End
     };
     virtual void showItem(const mu::engraving::EngravingItem* item, CanvasMoveCause cause, int staffIndex = -1) = 0;
     virtual muse::async::Channel<ShowItemRequest> showItemRequested() const = 0;

@@ -595,6 +595,12 @@ bool NotationConfiguration::isAutomaticallyPanDuringPlaybackEnabled() const
 void NotationConfiguration::setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_AUTOMATICALLY_PAN_DURING_PLAYBACK_ENABLED, Val(enabled));
+    m_isAutoPanDuringPlaybackChanged.notify();
+}
+
+Notification NotationConfiguration::isAutomaticallyPanDuringPlaybackChanged() const
+{
+    return m_isAutoPanDuringPlaybackChanged;
 }
 
 bool NotationConfiguration::isAutomaticallyPanOtherwiseEnabled() const

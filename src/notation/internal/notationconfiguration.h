@@ -127,6 +127,7 @@ public:
 
     bool isAutomaticallyPanDuringPlaybackEnabled() const override;
     void setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled) override;
+    muse::async::Notification isAutomaticallyPanDuringPlaybackChanged() const override;
 
     bool isAutomaticallyPanOtherwiseEnabled() const override;
     void setIsAutomaticallyPanOtherwiseEnabled(bool enabled) override;
@@ -228,6 +229,7 @@ private:
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Notification m_scoreOrderListPathsChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
+    muse::async::Notification m_isAutoPanDuringPlaybackChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;

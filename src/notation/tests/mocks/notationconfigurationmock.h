@@ -112,6 +112,7 @@ public:
 
     MOCK_METHOD(bool, isAutomaticallyPanDuringPlaybackEnabled, (), (const, override));
     MOCK_METHOD(void, setIsAutomaticallyPanDuringPlaybackEnabled, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, isAutomaticallyPanDuringPlaybackChanged, (), (const, override));
 
     MOCK_METHOD(bool, isAutomaticallyPanOtherwiseEnabled, (), (const, override));
     MOCK_METHOD(void, setIsAutomaticallyPanOtherwiseEnabled, (bool), (override));

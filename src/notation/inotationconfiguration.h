@@ -122,7 +122,8 @@ public:
 
     virtual bool isAutomaticallyPanDuringPlaybackEnabled() const = 0;
     virtual void setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled) = 0;
-    
+    virtual muse::async::Notification isAutomaticallyPanDuringPlaybackChanged() const = 0;
+
     virtual bool isAutomaticallyPanOtherwiseEnabled() const = 0;
     virtual void setIsAutomaticallyPanOtherwiseEnabled(bool enabled) = 0;
 
