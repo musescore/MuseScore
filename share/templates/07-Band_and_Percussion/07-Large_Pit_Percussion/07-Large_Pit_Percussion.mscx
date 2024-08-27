@@ -1991,6 +1991,7 @@
       <Staff id="26">
         <StaffType group="percussion">
           <name>perc1Line</name>
+          <lines>1</lines>
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
@@ -2546,6 +2547,7 @@
       <Staff id="29">
         <StaffType group="percussion">
           <name>perc1Line</name>
+          <lines>1</lines>
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
