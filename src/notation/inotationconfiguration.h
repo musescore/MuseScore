@@ -117,8 +117,14 @@ public:
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
 
-    virtual bool isAutomaticallyPanEnabled() const = 0;
-    virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
+    virtual bool isAutomaticallyPanInInputModeEnabled() const = 0;
+    virtual void setIsAutomaticallyPanInInputModeEnabled(bool enabled) = 0;
+
+    virtual bool isAutomaticallyPanDuringPlaybackEnabled() const = 0;
+    virtual void setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled) = 0;
+    
+    virtual bool isAutomaticallyPanOtherwiseEnabled() const = 0;
+    virtual void setIsAutomaticallyPanOtherwiseEnabled(bool enabled) = 0;
 
     virtual bool isSmoothPanning() const = 0;
     virtual void setIsSmoothPanning(bool value) = 0;

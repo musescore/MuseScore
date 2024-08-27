@@ -75,6 +75,21 @@ bool CanvasPreferencesModel::limitScrollArea() const
     return notationConfiguration()->isLimitCanvasScrollArea();
 }
 
+bool CanvasPreferencesModel::autoPanInInputMode() const
+{
+    return notationConfiguration()->isAutomaticallyPanInInputModeEnabled();
+}
+
+bool CanvasPreferencesModel::autoPanDuringPlayback() const
+{
+    return notationConfiguration()->isAutomaticallyPanDuringPlaybackEnabled();
+}
+
+bool CanvasPreferencesModel::autoPanOtherwise() const
+{
+    return notationConfiguration()->isAutomaticallyPanOtherwiseEnabled();
+}
+
 int CanvasPreferencesModel::selectionProximity() const
 {
     return notationConfiguration()->selectionProximity();
@@ -128,6 +143,36 @@ void CanvasPreferencesModel::setLimitScrollArea(bool limit)
 
     notationConfiguration()->setIsLimitCanvasScrollArea(limit);
     emit limitScrollAreaChanged();
+}
+
+void CanvasPreferencesModel::setAutoPanInInputMode(bool autoPan)
+{
+    if (autoPanInInputMode() == autoPan) {
+        return;
+    }
+
+    notationConfiguration()->setIsAutomaticallyPanInInputModeEnabled(autoPan);
+    emit autoPanInInputModeChanged();
+}
+
+void CanvasPreferencesModel::setAutoPanDuringPlayback(bool autoPan)
+{
+    if (autoPanDuringPlayback() == autoPan) {
+        return;
+    }
+
+    notationConfiguration()->setIsAutomaticallyPanDuringPlaybackEnabled(autoPan);
+    emit autoPanDuringPlaybackChanged();
+}
+
+void CanvasPreferencesModel::setAutoPanOtherwise(bool autoPan)
+{
+    if (autoPanOtherwise() == autoPan) {
+        return;
+    }
+    
+    notationConfiguration()->setIsAutomaticallyPanOtherwiseEnabled(autoPan);
+    emit autoPanOtherwiseChanged();
 }
 
 void CanvasPreferencesModel::setSelectionProximity(int proximity)

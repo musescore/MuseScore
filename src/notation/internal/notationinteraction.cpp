@@ -6162,7 +6162,7 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
         return;
     }
 
-    if (!configuration()->isAutomaticallyPanEnabled()) {
+    if (!configuration()->isAutomaticallyPanDuringPlaybackEnabled()) {
         return;
     }
 

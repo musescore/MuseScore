@@ -42,6 +42,10 @@ class CanvasPreferencesModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(int scrollPagesOrientation READ scrollPagesOrientation WRITE setScrollPagesOrientation NOTIFY scrollPagesOrientationChanged)
     Q_PROPERTY(bool limitScrollArea READ limitScrollArea WRITE setLimitScrollArea NOTIFY limitScrollAreaChanged)
 
+    Q_PROPERTY(bool autoPanInInputMode READ autoPanInInputMode WRITE setAutoPanInInputMode NOTIFY autoPanInInputModeChanged)
+    Q_PROPERTY(bool autoPanDuringPlayback READ autoPanDuringPlayback WRITE setAutoPanDuringPlayback NOTIFY autoPanDuringPlaybackChanged)
+    Q_PROPERTY(bool autoPanOtherwise READ autoPanOtherwise WRITE setAutoPanOtherwise NOTIFY autoPanOtherwiseChanged)
+
     Q_PROPERTY(int selectionProximity READ selectionProximity WRITE setSelectionProximity NOTIFY selectionProximityChanged)
 
 public:
@@ -59,6 +63,10 @@ public:
     int scrollPagesOrientation() const;
     bool limitScrollArea() const;
 
+    bool autoPanInInputMode() const;
+    bool autoPanDuringPlayback() const;
+    bool autoPanOtherwise() const;
+
     int selectionProximity() const;
 
 public slots:
@@ -67,6 +75,10 @@ public slots:
     void setScrollPagesOrientation(int orientation);
     void setLimitScrollArea(bool limit);
 
+    void setAutoPanInInputMode(bool autoPan);
+    void setAutoPanDuringPlayback(bool autoPan);
+    void setAutoPanOtherwise(bool autoPan);
+
     void setSelectionProximity(int proximity);
 
 signals:
@@ -74,6 +86,9 @@ signals:
     void mouseZoomPrecisionChanged();
     void scrollPagesOrientationChanged();
     void limitScrollAreaChanged();
+    void autoPanInInputModeChanged();
+    void autoPanDuringPlaybackChanged();
+    void autoPanOtherwiseChanged();
     void selectionProximityChanged(int selectionProximity);
 
 private:

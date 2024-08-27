@@ -106,8 +106,14 @@ public:
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled)  override;
 
-    bool isAutomaticallyPanEnabled() const override;
-    void setIsAutomaticallyPanEnabled(bool enabled)  override;
+    bool isAutomaticallyPanInEditModeEnabled() const override;
+    void setIsAutomaticallyPanInEditModeEnabled(bool enabled)  override;
+
+    bool isAutomaticallyPanDuringPlaybackEnabled() const override;
+    void setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled)  override;
+
+    bool isAutomaticallyPanOtherwiseEnabled() const override;
+    void setIsAutomaticallyPanOtherwiseEnabled(bool enabled)  override;
 
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled)  override;

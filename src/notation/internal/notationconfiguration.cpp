@@ -59,7 +59,9 @@ static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrec
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
-static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
+static const Settings::Key IS_AUTOMATICALLY_PAN_IN_INPUT_MODE_ENABLED(module_name, "application/misc/panEdit");
+static const Settings::Key IS_AUTOMATICALLY_PAN_DURING_PLAYBACK_ENABLED(module_name, "application/playback/panPlayback");
+static const Settings::Key IS_AUTOMATICALLY_PAN_OTHERWISE_ENABLED(module_name, "application/misc/panGeneral");
 static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
 static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/playback/playRepeats");
 static const Settings::Key IS_PLAY_CHORD_SYMBOLS_ENABLED(module_name, "application/playback/playChordSymbols");
@@ -164,7 +166,9 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
-    settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
+    settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_IN_INPUT_MODE_ENABLED, Val(true));
+    settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_DURING_PLAYBACK_ENABLED, Val(true));
+    settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_OTHERWISE_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
@@ -573,14 +577,34 @@ void NotationConfiguration::setIsMidiInputEnabled(bool enabled)
     settings()->setSharedValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
 }
 
-bool NotationConfiguration::isAutomaticallyPanEnabled() const
+bool NotationConfiguration::isAutomaticallyPanInInputModeEnabled() const
 {
-    return settings()->value(IS_AUTOMATICALLY_PAN_ENABLED).toBool();
+    return settings()->value(IS_AUTOMATICALLY_PAN_IN_INPUT_MODE_ENABLED).toBool();
 }
 
-void NotationConfiguration::setIsAutomaticallyPanEnabled(bool enabled)
+void NotationConfiguration::setIsAutomaticallyPanInInputModeEnabled(bool enabled)
 {
-    settings()->setSharedValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
+    settings()->setSharedValue(IS_AUTOMATICALLY_PAN_IN_INPUT_MODE_ENABLED, Val(enabled));
+}
+
+bool NotationConfiguration::isAutomaticallyPanDuringPlaybackEnabled() const
+{
+    return settings()->value(IS_AUTOMATICALLY_PAN_DURING_PLAYBACK_ENABLED).toBool();
+}
+
+void NotationConfiguration::setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled)
+{
+    settings()->setSharedValue(IS_AUTOMATICALLY_PAN_DURING_PLAYBACK_ENABLED, Val(enabled));
+}
+
+bool NotationConfiguration::isAutomaticallyPanOtherwiseEnabled() const
+{
+    return settings()->value(IS_AUTOMATICALLY_PAN_OTHERWISE_ENABLED).toBool();
+}
+
+void NotationConfiguration::setIsAutomaticallyPanOtherwiseEnabled(bool enabled)
+{
+    settings()->setSharedValue(IS_AUTOMATICALLY_PAN_OTHERWISE_ENABLED, Val(enabled));
 }
 
 bool NotationConfiguration::isSmoothPanning() const
