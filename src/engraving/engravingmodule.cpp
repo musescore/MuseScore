@@ -217,7 +217,12 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         fdb->addFont(FontDataKey(u"FreeSerif", false, true), ":/fonts/FreeSerifItalic.ttf");
         fdb->addFont(FontDataKey(u"FreeSerif", true, true), ":/fonts/FreeSerifBoldItalic.ttf");
         fdb->addFont(FontDataKey(u"FreeSans"), ":/fonts/FreeSans.ttf");
+
+        // Figured Bass
         fdb->addFont(FontDataKey(u"MscoreBC"), ":/fonts/mscore-BC.ttf");
+
+        // Roman Numeral Analysis
+        fdb->addFont(FontDataKey(u"Campania"), ":/fonts/campania/Campania.otf");
 
         // Defaults
         fdb->setDefaultFont(Font::Type::Unknown, FontDataKey(u"Edwin"));
