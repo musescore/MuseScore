@@ -2725,15 +2725,10 @@ void Score::adjustBracketsDel(size_t sidx, size_t eidx)
             } else if (endsOutsideDeletedRange) {
                 if (eidx < m_staves.size()) {
                     // Move the bracket past the end of the deleted range,
-                    // and shorten it by the number of staves deleted that were spanned by it
+                    // and shorten it by the number of staves deleted that were spanned by it.
+                    // That is, add a new bracket; the old one will be removed when removing the staves.
 
-                    // Store these properties, because `bi` will be deleted after the call to RemoveBracket
-                    size_t column = bi->column();
-                    BracketType type = bi->bracketType();
-
-                    undo(new RemoveBracket(staff, column, type, span));
-
-                    undoAddBracket(m_staves.at(eidx), column, type, int(span - (eidx - staffIdx)));
+                    undoAddBracket(m_staves.at(eidx), bi->column(), bi->bracketType(), int(span - (eidx - staffIdx)));
                 }
             }
         }
