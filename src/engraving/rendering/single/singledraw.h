@@ -91,6 +91,7 @@ class LetRing;
 class LetRingSegment;
 class SLine;
 class LineSegment;
+class Lyrics;
 
 class Marker;
 class MeasureNumber;
@@ -117,6 +118,7 @@ class Rest;
 class ShadowNote;
 class Slur;
 class SlurSegment;
+class SoundFlag;
 class Spacer;
 class StaffLines;
 class StaffState;
@@ -124,13 +126,12 @@ class StaffText;
 class StaffTypeChange;
 class Stem;
 class StemSlash;
-class StringTunings;
-class StretchedBend;
 class Sticking;
+class StretchedBend;
+class StringTunings;
 class Symbol;
-class SystemText;
 class SystemDivider;
-class SoundFlag;
+class SystemText;
 
 class TabDurationSymbol;
 class TempoText;
@@ -214,6 +215,7 @@ private:
     static void draw(const LayoutBreak* item, muse::draw::Painter* painter);
     static void draw(const LedgerLine* item, muse::draw::Painter* painter);
     static void draw(const LetRingSegment* item, muse::draw::Painter* painter);
+    static void draw(const Lyrics* item, muse::draw::Painter* painter);
 
     static void draw(const Marker* item, muse::draw::Painter* painter);
     static void draw(const MeasureNumber* item, muse::draw::Painter* painter);
