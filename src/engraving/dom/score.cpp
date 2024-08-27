@@ -2702,15 +2702,39 @@ void Score::removeStaff(Staff* staff)
 
 void Score::adjustBracketsDel(size_t sidx, size_t eidx)
 {
-    for (size_t staffIdx = 0; staffIdx < m_staves.size(); ++staffIdx) {
+    IF_ASSERT_FAILED(sidx < eidx && eidx <= m_staves.size()) {
+        return;
+    }
+
+    for (size_t staffIdx = 0; staffIdx < eidx; ++staffIdx) {
         Staff* staff = m_staves[staffIdx];
+        std::vector<BracketItem*> brackets = staff->brackets(); // create copy because it's modified during loop
         for (BracketItem* bi : staff->brackets()) {
             size_t span = bi->bracketSpan();
-            if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx)) {
+            if ((span == 0) || ((staffIdx + span) <= sidx)) {
                 continue;
             }
-            if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
+            const bool startsOutsideDeletedRange = (staffIdx < sidx);
+            const bool endsOutsideDeletedRange = ((staffIdx + span) > eidx);
+            if (startsOutsideDeletedRange && endsOutsideDeletedRange) {
+                // Shorten the bracket by the number of staves deleted
                 bi->undoChangeProperty(Pid::BRACKET_SPAN, int(span - (eidx - sidx)));
+            } else if (startsOutsideDeletedRange) {
+                // Shorten the bracket by the number of staves deleted that were spanned by it
+                bi->undoChangeProperty(Pid::BRACKET_SPAN, int(staffIdx - sidx));
+            } else if (endsOutsideDeletedRange) {
+                if (eidx < m_staves.size()) {
+                    // Move the bracket past the end of the deleted range,
+                    // and shorten it by the number of staves deleted that were spanned by it
+
+                    // Store these properties, because `bi` will be deleted after the call to RemoveBracket
+                    size_t column = bi->column();
+                    BracketType type = bi->bracketType();
+
+                    undo(new RemoveBracket(staff, column, type, span));
+
+                    undoAddBracket(m_staves.at(eidx), column, type, int(span - (eidx - staffIdx)));
+                }
             }
         }
     }
