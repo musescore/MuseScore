@@ -84,6 +84,7 @@ public:
 
     // color
     QColor selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    bool isSelectColorOpened() const override;
 
     // custom
     RetVal<Val> open(const std::string& uri) const override;
