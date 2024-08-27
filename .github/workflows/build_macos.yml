@@ -41,7 +41,7 @@ on:
         required: false
 
 env:
-  CURRENT_RELEASE_BRANCH: 4.4.0
+  CURRENT_RELEASE_BRANCH: 4.4.1
   DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
 
 jobs:
