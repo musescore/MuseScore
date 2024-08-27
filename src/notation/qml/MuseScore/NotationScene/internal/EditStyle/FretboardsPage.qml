@@ -183,12 +183,10 @@ Rectangle {
                         }
                     }
 
-                    FlatRadioButton {
-                        Layout.preferredWidth: 160
+                    FlatButton {
                         text: qsTrc("notation", "Edit fret number text style")
-                        checked: false
-                        onClicked: function() {
-                            checked = false
+
+                        onClicked: {
                             root.goToTextStylePage("fretboard-diagram-fret-number")
                         }
                     }
@@ -265,12 +263,10 @@ Rectangle {
                 onClicked: fretboardsPage.fretShowFingerings.value = !fretboardsPage.fretShowFingerings.value
             }
 
-            FlatRadioButton {
-                Layout.preferredWidth: 160
+            FlatButton {
                 text: qsTrc("notation", "Edit fingering text style")
-                checked: false
-                onClicked: function() {
-                    checked = false
+
+                onClicked: {
                     root.goToTextStylePage("fretboard-diagram-fingering")
                 }
             }
