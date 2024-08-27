@@ -41,7 +41,7 @@ on:
         required: false
 
 env:
-  CURRENT_RELEASE_BRANCH: 4.4.0
+  CURRENT_RELEASE_BRANCH: 4.4.1
 
 jobs:
   linux_x64:
