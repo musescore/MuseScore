@@ -706,7 +706,7 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
     }
 
     select({ chordElem }, SelectType::SINGLE, chordElem->staffIdx());
-    showItem(chordElem);
+    showItem(chordElem, CanvasMoveCause::SelectionChange);
 }
 
 void NotationInteraction::moveSegmentSelection(MoveDirection d)
@@ -725,7 +725,7 @@ void NotationInteraction::moveSegmentSelection(MoveDirection d)
     }
 
     select({ e }, SelectType::SINGLE);
-    showItem(e);
+    showItem(e, CanvasMoveCause::SelectionChange);
 }
 
 void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
@@ -747,7 +747,7 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
     }
 
     select({ target }, SelectType::SINGLE);
-    showItem(target);
+    showItem(target, CanvasMoveCause::SelectionChange);
 }
 
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
@@ -874,7 +874,7 @@ void NotationInteraction::selectFirstElement(bool frame)
 {
     if (EngravingItem* element = score()->firstElement(frame)) {
         select({ element }, SelectType::SINGLE, element->staffIdx());
-        showItem(element);
+        showItem(element, CanvasMoveCause::ExplicitNavigation);
     }
 }
 
@@ -882,7 +882,7 @@ void NotationInteraction::selectLastElement()
 {
     if (EngravingItem* element = score()->lastElement()) {
         select({ element }, SelectType::SINGLE, element->staffIdx());
-        showItem(element);
+        showItem(element, CanvasMoveCause::ExplicitNavigation);
     }
 }
 
@@ -2708,7 +2708,7 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
 
     if (el) {
         select({ el }, SelectType::RANGE, el->staffIdx());
-        showItem(el);
+        showItem(el, CanvasMoveCause::SelectionChange);
         resetHitElementContext();
     }
 }
@@ -2781,7 +2781,7 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
     resetHitElementContext();
 
     notifyAboutSelectionChangedIfNeed();
-    showItem(item);
+    showItem(item, CanvasMoveCause::SelectionChange);
 
     if (noteInput()->isNoteInputMode()) {
         notifyAboutNoteInputStateChanged();
@@ -2800,7 +2800,7 @@ void NotationInteraction::selectTopStaff()
     }
 
     select({ el }, SelectType::SINGLE, 0);
-    showItem(el);
+    showItem(el, CanvasMoveCause::SelectionChange);
     resetHitElementContext();
 }
 
@@ -3015,7 +3015,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
 
     select({ toEl }, SelectType::REPLACE);
     resetHitElementContext();
-    showItem(toEl);
+    showItem(toEl, CanvasMoveCause::SelectionChange);
 
     if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
         score()->setPlayNote(true);
@@ -3880,7 +3880,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     int indexOfFirstAddedMeasure = beforeBoxIndex >= 0 ? beforeBoxIndex : score()->measures()->size() - count;
     MeasureBase* firstAddedMeasure = score()->measure(indexOfFirstAddedMeasure);
     doSelect({ firstAddedMeasure }, SelectType::REPLACE);
-    showItem(firstAddedMeasure);
+    showItem(firstAddedMeasure, CanvasMoveCause::SelectionChange);
 
     // For other box types, it makes little sense to select them all
     if (boxType == BoxType::Measure) {
@@ -3959,7 +3959,7 @@ Ret NotationInteraction::repeatSelection()
             score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
             apply();
 
-            showItem(cr);
+            showItem(cr, CanvasMoveCause::SelectionChange);
         }
     }
 
@@ -4556,7 +4556,7 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
     }
 
     apply();
-    showItem(text);
+    showItem(text, CanvasMoveCause::InputAction);
 
     if (!text->isInstrumentChange()) {
         startEditText(text);
@@ -5072,7 +5072,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         cursor->movePosition(mu::engraving::TextCursor::MoveOperation::Start, mu::engraving::TextCursor::MoveMode::KeepAnchor);
     }
 
-    showItem(nextLyrics);
+    showItem(nextLyrics, CanvasMoveCause::ExplicitNavigation);
 }
 
 void NotationInteraction::navigateToLyrics(MoveDirection direction, bool moveOnly)
@@ -5213,7 +5213,7 @@ void NotationInteraction::navigateToNextSyllable()
     startEditText(toLyrics, PointF());
 
     toLyrics->selectAll(toLyrics->cursor());
-    showItem(toLyrics);
+    showItem(toLyrics, CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::lyricsUpDown
@@ -5271,7 +5271,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     score()->update();
 
     lyrics->selectAll(lyrics->cursor());
-    showItem(lyrics);
+    showItem(lyrics, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
@@ -5362,7 +5362,7 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
 
     apply();
     startEditText(nextHarmony);
-    showItem(nextHarmony);
+    showItem(nextHarmony, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::harmonyTab
@@ -5408,7 +5408,7 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
     }
 
     startEditText(nextHarmony);
-    showItem(nextHarmony);
+    showItem(nextHarmony, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
@@ -5456,7 +5456,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
 
     apply();
     startEditText(nextHarmony);
-    showItem(nextHarmony);
+    showItem(nextHarmony, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTab
@@ -5501,7 +5501,7 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
     }
 
     startEditText(fbNew);
-    showItem(fbNew);
+    showItem(fbNew, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTab
@@ -5545,7 +5545,7 @@ void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direc
     }
 
     startEditText(fbNew);
-    showItem(fbNew);
+    showItem(fbNew, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTicksTab
@@ -5604,7 +5604,7 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
 
     apply();
     startEditText(fbNew);
-    showItem(fbNew);
+    showItem(fbNew, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::textTab
@@ -6144,7 +6144,7 @@ void NotationInteraction::getLocation()
             score()->setPlayNote(true);
         }
         select({ e }, SelectType::SINGLE);
-        showItem(e);
+        showItem(e, INotationInteraction::CanvasMoveCause::SelectionChange);
     }
 }
 
@@ -6156,13 +6156,25 @@ void NotationInteraction::execute(void (mu::engraving::Score::* function)())
 }
 
 //! NOTE: Copied from ScoreView::adjustCanvasPosition
-void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int staffIndex)
+void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, CanvasMoveCause cause, int staffIndex)
 {
     if (!el) {
         return;
     }
 
-    if (!configuration()->isAutomaticallyPanDuringPlaybackEnabled()) {
+    bool abort = false;
+    switch (cause) {
+    case CanvasMoveCause::InputAction:
+        abort = !configuration()->isAutomaticallyPanInInputModeEnabled();
+        break;
+    case CanvasMoveCause::SelectionChange:
+        abort = !configuration()->isAutomaticallyPanOtherwiseEnabled();
+        break;
+    case CanvasMoveCause::ExplicitNavigation:
+        abort = false;
+        break;
+    }
+    if (abort) {
         return;
     }
 

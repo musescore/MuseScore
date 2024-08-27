@@ -60,7 +60,7 @@ public:
     void layoutChanged() override;
     void dataChanged(const muse::RectF&) override;
     void updateAll() override;
-    void adjustCanvasPosition(const engraving::EngravingItem* el, int staff = -1) override;
+    void adjustCanvasPosition(const engraving::EngravingItem* el, INotationInteraction::CanvasMoveCause cause, int staff = -1) override;
     void setScore(engraving::Score*) override;
     void removeScore() override;
 

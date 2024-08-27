@@ -295,7 +295,12 @@ public:
         muse::RectF showRect;
     };
 
-    virtual void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) = 0;
+    enum CanvasMoveCause {
+        InputAction,		// Note or text input
+        SelectionChange,	// E.g. arrow keys
+        ExplicitNavigation	// E.g. Ctrl+End
+    };
+    virtual void showItem(const mu::engraving::EngravingItem* item, CanvasMoveCause cause, int staffIndex = -1) = 0;
     virtual muse::async::Channel<ShowItemRequest> showItemRequested() const = 0;
 
     virtual void setGetViewRectFunc(const std::function<muse::RectF()>& func) = 0;

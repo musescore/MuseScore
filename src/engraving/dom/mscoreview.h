@@ -26,6 +26,7 @@
 #include <list>
 
 #include "draw/painter.h"
+#include "notation/inotationinteraction.h"
 
 #include "../types/types.h"
 
@@ -67,7 +68,7 @@ public:
 
     const std::vector<EngravingItem*> elementsAt(const PointF&) const;
     EngravingItem* elementNear(const PointF& pos) const;
-    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
+    virtual void adjustCanvasPosition(const EngravingItem*, notation::INotationInteraction::CanvasMoveCause, int /*staffIdx*/ = -1) {}
 
 protected:
     Score* m_score = nullptr;
