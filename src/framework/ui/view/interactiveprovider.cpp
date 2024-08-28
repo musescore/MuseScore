@@ -25,10 +25,12 @@
 #include <QMetaProperty>
 #include <QDialog>
 #include <QFileDialog>
+#include <QColorDialog>
 #include <QGuiApplication>
 #include <QWindow>
 
 #include "containers.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -181,6 +183,41 @@ RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& titl
 RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
 {
     return openFileDialog(FileDialogType::SelectDirectory, title, dir);
+}
+
+RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QString& title)
+{
+    if (m_isSelectColorOpened) {
+        LOGW() << "already opened";
+        return RetVal<QColor>(make_ret(Ret::Code::UnknownError));
+    }
+
+    m_isSelectColorOpened = true;
+
+    QColor selectedColor;
+    {
+        QColorDialog dlg;
+        if (!title.isEmpty()) {
+            dlg.setWindowTitle(title);
+        }
+
+        dlg.setCurrentColor(color);
+        dlg.exec();
+        selectedColor = dlg.selectedColor();
+    }
+
+    m_isSelectColorOpened = false;
+
+    if (!selectedColor.isValid()) {
+        selectedColor = color;
+    }
+
+    return RetVal<QColor>::make_ok(selectedColor);
+}
+
+bool InteractiveProvider::isSelectColorOpened() const
+{
+    return m_isSelectColorOpened;
 }
 
 RetVal<Val> InteractiveProvider::open(const UriQuery& q)
