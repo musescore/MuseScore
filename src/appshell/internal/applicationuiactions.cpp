@@ -187,6 +187,14 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Show/hide piano keyboard"),
              Checkable::Yes
              ),
+    // still in development
+    // UiAction("toggle-percussion-panel",
+    //          mu::context::UiCtxNotationOpened,
+    //          mu::context::CTX_ANY,
+    //          TranslatableString("action", "Percussion"),
+    //          TranslatableString("action", "Show/hide percussion panel"),
+    //          Checkable::Yes
+    //          ),
     UiAction("toggle-scorecmp-tool",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -324,6 +332,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },
         { "toggle-piano-keyboard", PIANO_KEYBOARD_PANEL_NAME },
+        { "toggle-percussion-panel", PERCUSSION_PANEL_NAME },
 
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },
     };

@@ -63,7 +63,9 @@ void NotationPageModel::init()
     });
 
     onNotationChanged();
+
     updateDrumsetPanelVisibility();
+    updatePercussionPanelVisibility();
 }
 
 QString NotationPageModel::notationToolBarName() const
@@ -126,6 +128,11 @@ QString NotationPageModel::drumsetPanelName() const
     return DRUMSET_PANEL_NAME;
 }
 
+QString NotationPageModel::percussionPanelName() const
+{
+    return PERCUSSION_PANEL_NAME;
+}
+
 QString NotationPageModel::statusBarName() const
 {
     return NOTATION_STATUSBAR_NAME;
@@ -138,9 +145,20 @@ void NotationPageModel::onNotationChanged()
         return;
     }
 
-    INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
-    noteInput->stateChanged().onNotify(this, [this]() {
+    // TODO: Delete when the new percussion panel is finished
+    if (!notationConfiguration()->useNewPercussionPanel()) {
+        INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+        noteInput->stateChanged().onNotify(this, [this]() {
+            updateDrumsetPanelVisibility();
+            updatePercussionPanelVisibility();
+        });
+        return;
+    }
+
+    INotationInteractionPtr notationInteraction = notation->interaction();
+    notationInteraction->selectionChanged().onNotify(this, [this]() {
         updateDrumsetPanelVisibility();
+        updatePercussionPanelVisibility();
     });
 }
 
@@ -174,9 +192,14 @@ void NotationPageModel::updateDrumsetPanelVisibility()
         if (open == window->isDockOpen(DRUMSET_PANEL_NAME)) {
             return;
         }
-
         dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, open));
     };
+
+    // This should never be open when the new percussion panel is in use...
+    if (notationConfiguration()->useNewPercussionPanel()) {
+        setDrumsetPanelOpen(false);
+        return;
+    }
 
     const INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -188,4 +211,61 @@ void NotationPageModel::updateDrumsetPanelVisibility()
     bool isNeedOpen = noteInput->isNoteInputMode() && noteInput->state().drumset != nullptr;
 
     setDrumsetPanelOpen(isNeedOpen);
+}
+
+void NotationPageModel::updatePercussionPanelVisibility()
+{
+    TRACEFUNC;
+
+    const muse::dock::IDockWindow* window = dockWindowProvider()->window();
+    if (!window) {
+        return;
+    }
+
+    auto setPercussionPanelOpen = [this, window](bool open) {
+        if (open == window->isDockOpen(PERCUSSION_PANEL_NAME)) {
+            return;
+        }
+        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PERCUSSION_PANEL_NAME, open));
+    };
+
+    // This should never be open when the old drumset panel is in use...
+    // TODO: Delete when the new percussion panel is finished
+    if (!notationConfiguration()->useNewPercussionPanel()) {
+        setPercussionPanelOpen(false);
+        return;
+    }
+
+    const INotationPtr notation = globalContext()->currentNotation();
+    if (!notation || !notation->elements() || !notationConfiguration()->autoShowPercussionPanel()) {
+        return;
+    }
+
+    const mu::engraving::Score* score = notation->elements()->msScore();
+    const INotationSelectionPtr selection = notation->interaction()->selection();
+    if (!score || !selection || selection->isNone()) {
+        return;
+    }
+
+    //! NOTE: Unlike the old drumset panel, this panel shouldn't automatically close when a non-drum staff is selected...
+    if (selection->isRange()) {
+        const INotationSelectionRangePtr rangeSelection = selection->range();
+        if (!rangeSelection) {
+            return;
+        }
+        for (const Part* p : rangeSelection->selectedParts()) {
+            if (!p->hasDrumStaff()) {
+                return;
+            }
+        }
+    } else {
+        for (const EngravingItem* e : selection->elements()) {
+            const Staff* staff = e->staff();
+            if (!staff->isDrumStaff(e->tick())) {
+                return;
+            }
+        }
+    }
+
+    setPercussionPanelOpen(true);
 }

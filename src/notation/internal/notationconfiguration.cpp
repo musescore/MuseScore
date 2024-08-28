@@ -90,6 +90,9 @@ static const Settings::Key NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY(module
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
+static const Settings::Key USE_NEW_PERCUSSION_PANEL_KEY(module_name,  "ui/useNewPercussionPanel");
+static const Settings::Key AUTO_SHOW_PERCUSSION_PANEL_KEY(module_name,  "ui/autoShowPercussionPanel");
+
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
@@ -216,6 +219,9 @@ void NotationConfiguration::init()
     settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
         m_pianoKeyboardNumberOfKeys.set(val.toInt());
     });
+
+    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false));
+    settings()->setDefaultValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(true));
 
     settings()->setDefaultValue(ANCHOR_COLOR, Val(QColor("#C31989")));
     settings()->setDescription(ANCHOR_COLOR, muse::qtrc("notation", "Anchor color").toStdString());
@@ -886,6 +892,26 @@ void NotationConfiguration::setNeedToShowMScoreError(const std::string& errorKey
 ValCh<int> NotationConfiguration::pianoKeyboardNumberOfKeys() const
 {
     return m_pianoKeyboardNumberOfKeys;
+}
+
+bool NotationConfiguration::useNewPercussionPanel() const
+{
+    return settings()->value(USE_NEW_PERCUSSION_PANEL_KEY).toBool();
+}
+
+void NotationConfiguration::setUseNewPercussionPanel(bool use)
+{
+    settings()->setSharedValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(use));
+}
+
+bool NotationConfiguration::autoShowPercussionPanel() const
+{
+    return settings()->value(AUTO_SHOW_PERCUSSION_PANEL_KEY).toBool();
+}
+
+void NotationConfiguration::setAutoShowPercussionPanel(bool autoShow)
+{
+    settings()->setSharedValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(autoShow));
 }
 
 void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
