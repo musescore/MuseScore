@@ -175,7 +175,7 @@ public:
       const CreditWordsList& credits() const { return _credits; }
       bool hasBeamingInfo() const { return _hasBeamingInfo; }
       bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
-      static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
+      static VBox* createAndAddVBoxForCreditWords(Score* const score);
       int maxDiff() const { return _maxDiff; }
       void insertAdjustedDuration(Fraction key, Fraction value) { _adjustedDurations.insert(key, value); }
       QMap<Fraction, Fraction>& adjustedDurations() { return _adjustedDurations; }

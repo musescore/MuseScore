@@ -1626,53 +1626,6 @@ static void cleanFretDiagrams(Measure* measure)
       }
 
 //---------------------------------------------------------
-//   reformatHeaderVBox
-//---------------------------------------------------------
-/**
- Due to inconsistencies with spacing and inferred text,
- the header VBox frequently has collisions. This cleans
- those (as a temporary fix for a more robust collision-prevention
- system in Boxes).
- */
-
-static void reformatHeaderVBox(MeasureBase* mb)
-      {
-      if (!mb->isVBox())
-            return;
-
-      VBox* headerVBox = toVBox(mb);
-      Score* score = mb->score();
-      qreal totalHeight = 0;
-      qreal offsetHeight = 0;
-      qreal lineSpacingMultiplier = 1.2;
-
-      for (auto e : headerVBox->el()) {
-            if (!e->isText())
-                  continue;
-            Text* t = toText(e);
-            t->layout();
-
-            totalHeight += t->height();
-            if (Align(t->align() & Align::VMASK) == Align::TOP) {
-                  totalHeight += t->lineHeight() * lineSpacingMultiplier;
-                  t->setOffset(t->offset().x(), offsetHeight);
-                  t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-                  offsetHeight += t->height();
-                  offsetHeight += t->lineHeight() * lineSpacingMultiplier;
-                  }
-            }
-
-      // 1mm of
-      static const double VBOX_BOTTOM_PADDING = 1;
-      totalHeight += VBOX_BOTTOM_PADDING;
-      headerVBox->setBottomMargin(VBOX_BOTTOM_PADDING);
-      headerVBox->setPropertyFlags(Pid::BOTTOM_MARGIN, PropertyFlags::UNSTYLED);
-
-      headerVBox->setBoxHeight(Spatium(totalHeight / score->spatium()));
-      headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
-      }
-
-//---------------------------------------------------------
 //   initPartState
 //---------------------------------------------------------
 
@@ -2171,11 +2124,6 @@ void MusicXMLParserPass2::scorePartwise()
       cleanUpLayoutBreaks(_score, _logger);
 
       addError(checkAtEndElement(_e, "score-partwise"));
-
-      // This method relies heavily on text metrics which differ from system to system and can be very volatile
-      // To avoid having to update the majority of musicxml tests on every change to engraving, don't run this during testing
-      if (!MScore::testMode)
-            reformatHeaderVBox(_score->measures()->first());
       }
 
 //---------------------------------------------------------

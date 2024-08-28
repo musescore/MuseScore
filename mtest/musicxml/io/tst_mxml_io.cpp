@@ -171,7 +171,7 @@ private slots:
       void inferredDynamicsExpressiont() { mxmlImportTestRef("testInferredDynamicsExpression"); }
       void inferreFractions() { mxmlImportTestRef("testInferFraction"); }
       void inferredFingerings() { mxmlImportTestRef("testInferredFingerings"); }
-      void inferredRights() { mxmlImportTestRef("testInferredFingerings"); }
+      void inferredRights() { mxmlImportTestRef("testInferredRights"); }
       void inferredTempoText() { mxmlImportTestRef("testInferredTempoText"); }
       void inferredTempoText2() { mxmlImportTestRef("testInferredTempoText2"); }
       void inferredTransposition() { mxmlImportTestRef("testInferredRights"); }

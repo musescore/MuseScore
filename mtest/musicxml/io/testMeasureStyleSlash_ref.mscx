@@ -120,7 +120,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.5</height>
+        <height>10</height>
         <Text>
           <style>Title</style>
           <offset x="0" y="-0.0564445"/>

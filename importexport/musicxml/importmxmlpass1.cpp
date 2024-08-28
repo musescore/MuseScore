@@ -672,17 +672,9 @@ static Tid tidForCreditWords(const CreditWords* const word, std::vector<const Cr
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* const score, const int miny, const int maxy)
+VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* const score)
       {
       VBox* vbox = new VBox(score);
-      qreal vboxHeight = 10;                         // default height in tenths
-      double diff = maxy - miny;                     // calculate height in tenths
-      if (diff > vboxHeight)                         // and size is reasonable
-            vboxHeight = diff;
-      vboxHeight /= 10;                              // height in spatium
-      vboxHeight += 2.5;                             // guesstimated correction for last line
-
-      vbox->setBoxHeight(Spatium(vboxHeight));
       score->measures()->add(vbox);
       return vbox;
       }
@@ -764,8 +756,7 @@ static void inferFromTitle(QString& title, QString& inferredSubtitle, QString& i
 //   addCreditWords
 //---------------------------------------------------------
 
-static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
-                            const int pageNr, const QSize pageSize,
+static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords, const QSize pageSize,
                             const bool top, const bool isSibeliusScore)
       {
       VBox* vbox = nullptr;
@@ -773,7 +764,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
       std::vector<const CreditWords*> headerWords;
       std::vector<const CreditWords*> footerWords;
       for (const CreditWords* w : crWords) {
-            if (w->page == pageNr) {
+            if (w->page == 1) {
                   if (w->defaultY > (pageSize.height() / 2))
                         headerWords.push_back(w);
                   else
@@ -782,23 +773,16 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
             }
 
       std::vector<const CreditWords*> words;
-      if (pageNr == 1) {
-            // if there are more credit words in the footer than in header,
-            // swap heaer and footer, assuming this will result in a vertical
-            // frame with the title on top of the page.
-            // Sibelius (direct export) typically exports no header
-            // and puts the title etc. in the footer
-            const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
-            if (top) {
-                  words = doSwap ? footerWords : headerWords;
-                  }
-            else {
-                  words = doSwap ? headerWords : footerWords;
-                  }
-            }
-      else {
-            words = top ? headerWords : footerWords;
-            }
+      // if there are more credit words in the footer than in header,
+      // swap heaer and footer, assuming this will result in a vertical
+      // frame with the title on top of the page.
+      // Sibelius (direct export) typically exports no header
+      // and puts the title etc. in the footer
+      const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
+      if (top)
+            words = doSwap ? footerWords : headerWords;
+      else
+            words = doSwap ? headerWords : footerWords;
 
       int miny = 0;
       int maxy = 0;
@@ -806,11 +790,11 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
 
       for (const CreditWords* w : words) {
             if (mustAddWordToVbox(w->type)) {
-                  const Tid tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
+                  const Tid tid = top ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
                   const Align align = alignForCreditWords(w, pageSize.width(), tid);
                   double yoffs = tid == Tid::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->spatium() / 10;
                   if (!vbox)
-                        vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
+                        vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
                   addText2(vbox, score, w->words, tid, align, yoffs);
                   }
             else if (w->type == "rights" && score->metaTag("copyright").isEmpty()) {
@@ -900,7 +884,11 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* const score,
             // add a header vbox if the this measure is the first in the score or the first on a new page
             if (pageStartMeasureNrs.count(i) || i == 0) {
                   ++pageNr;
-                  vbox = addCreditWords(score, crWords, pageNr, pageSize, true, _exporterString.contains("sibelius"));
+                  if (pageNr == 1) {
+                        vbox = addCreditWords(score, crWords, pageSize, true, _exporterString.contains("sibelius"));
+                        //if (i == 0 && vbox)
+                        //      vbox->setExcludeFromOtherParts(false);
+                        }
                   }
 
             // create and add the measure
@@ -919,8 +907,8 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* const score,
                   addBreakToPreviousMeasureBase(score, mb, LayoutBreak::Type::LINE);
 
             // add a footer vbox if the next measure is on a new page or end of score has been reached
-            if (pageStartMeasureNrs.count(i+1) || i == (ml.size() - 1))
-                  addCreditWords(score, crWords, pageNr, pageSize, false, _exporterString.contains("sibelius"));
+            if ((pageStartMeasureNrs.count(i + 1) || i == (ml.size() - 1)) && pageNr == 1)
+                  addCreditWords(score, crWords, pageSize, false, _exporterString.contains("sibelius"));
             }
       }
 

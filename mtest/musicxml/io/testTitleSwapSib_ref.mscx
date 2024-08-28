@@ -353,7 +353,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>19.5</height>
+        <height>10</height>
         <Text>
           <style>Lyricist</style>
           <align>left,top</align>
@@ -381,7 +381,7 @@
           </voice>
         </Measure>
       <VBox>
-        <height>3.5</height>
+        <height>10</height>
         <Text>
           <align>center,top</align>
           <offset x="0" y="-0.083"/>
