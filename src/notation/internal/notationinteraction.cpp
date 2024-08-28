@@ -5271,7 +5271,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     score()->update();
 
     lyrics->selectAll(lyrics->cursor());
-    showItem(lyrics, INotationInteraction::CanvasMoveCause::InputAction);
+    showItem(lyrics, CanvasMoveCause::InputAction);
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
@@ -5362,7 +5362,7 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
 
     apply();
     startEditText(nextHarmony);
-    showItem(nextHarmony, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
+    showItem(nextHarmony, CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::harmonyTab
@@ -5408,7 +5408,7 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
     }
 
     startEditText(nextHarmony);
-    showItem(nextHarmony, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
+    showItem(nextHarmony, CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
@@ -5456,7 +5456,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
 
     apply();
     startEditText(nextHarmony);
-    showItem(nextHarmony, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
+    showItem(nextHarmony, CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTab
@@ -5501,7 +5501,7 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
     }
 
     startEditText(fbNew);
-    showItem(fbNew, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
+    showItem(fbNew, CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTab
@@ -5545,7 +5545,7 @@ void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direc
     }
 
     startEditText(fbNew);
-    showItem(fbNew, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
+    showItem(fbNew, CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTicksTab
@@ -5604,7 +5604,7 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
 
     apply();
     startEditText(fbNew);
-    showItem(fbNew, INotationInteraction::CanvasMoveCause::ExplicitNavigation);
+    showItem(fbNew, CanvasMoveCause::ExplicitNavigation);
 }
 
 //! NOTE: Copied from ScoreView::textTab
@@ -6144,7 +6144,7 @@ void NotationInteraction::getLocation()
             score()->setPlayNote(true);
         }
         select({ e }, SelectType::SINGLE);
-        showItem(e, INotationInteraction::CanvasMoveCause::SelectionChange);
+        showItem(e, CanvasMoveCause::SelectionChange);
     }
 }
 

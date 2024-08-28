@@ -250,7 +250,7 @@ public:
     MOCK_METHOD(void, getLocation, (), (override));
     MOCK_METHOD(void, execute, (void (mu::engraving::Score::*)()), (override));
 
-    MOCK_METHOD(void, showItem, (const mu::engraving::EngravingItem*, INotationInteraction::CanvasMoveCause, int), (override));
+    MOCK_METHOD(void, showItem, (const mu::engraving::EngravingItem*, CanvasMoveCause, int), (override));
     MOCK_METHOD(muse::async::Channel<ShowItemRequest>, showItemRequested, (), (const, override));
 
     MOCK_METHOD(void, setGetViewRectFunc, (const std::function<muse::RectF()>&), (override));

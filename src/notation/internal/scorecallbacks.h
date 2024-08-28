@@ -45,7 +45,7 @@ public:
     void setDropTarget(const mu::engraving::EngravingItem* dropTarget) override;
     void setDropRectangle(const muse::RectF& rect) override;
     void changeEditElement(mu::engraving::EngravingItem* newElement) override;
-    void adjustCanvasPosition(const mu::engraving::EngravingItem*, INotationInteraction::CanvasMoveCause cause, int staffIdx = -1) override;
+    void adjustCanvasPosition(const mu::engraving::EngravingItem*, CanvasMoveCause cause, int staffIdx = -1) override;
 
     void setSelectionProximity(qreal proximity);
     void setNotationInteraction(INotationInteraction* interaction);

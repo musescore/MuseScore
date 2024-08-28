@@ -2996,7 +2996,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         // adjust views
         Measure* focusOn = startMeasure->prevMeasure() ? startMeasure->prevMeasure() : score->firstMeasure();
         for (MuseScoreView* v : score->m_viewer) {
-            v->adjustCanvasPosition(focusOn, notation::INotationInteraction::SelectionChange);
+            v->adjustCanvasPosition(focusOn, CanvasMoveCause::SelectionChange);
         }
 
         // insert correct timesig after deletion
