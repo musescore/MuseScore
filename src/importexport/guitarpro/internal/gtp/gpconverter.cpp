@@ -2021,7 +2021,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     PitchValues pitchValues;
 
-    pitchValues.push_back(PitchValue(gpTimeToMuTime(0), gpBend->originValue));
+    pitchValues.push_back(PitchValue(gpTimeToMuTime(gpBend->originOffset), gpBend->originValue));
     PitchValue lastPoint = pitchValues.back();
 
     if (bendHasMiddleValue) {
