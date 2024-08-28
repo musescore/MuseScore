@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
+#include "global/iinteractive.h"
 
 Q_MOC_INCLUDE(< QQuickItem >)
 Q_MOC_INCLUDE("uicomponents/view/popupview.h")
@@ -47,7 +48,8 @@ class InspectorPopupController : public QObject
 
     Q_PROPERTY(QQuickItem * notationView READ notationView WRITE setNotationView NOTIFY notationViewChanged)
 
-    INJECT(muse::ui::IMainWindow, mainWindow)
+    muse::Inject<muse::ui::IMainWindow> mainWindow;
+    muse::Inject<muse::IInteractive> interactive;
 
 public:
     explicit InspectorPopupController(QObject* parent = nullptr);
