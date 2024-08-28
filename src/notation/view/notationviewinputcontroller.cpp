@@ -911,7 +911,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
 
     if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditElement(ctx.element);
+        viewInteraction()->startEditElement(ctx.element, /*editTextualProperties*/ false);
         return;
     }
 
