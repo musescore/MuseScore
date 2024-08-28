@@ -236,6 +236,10 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
+    engravingConfiguration()->invisibleColorChanged().onReceive(this, [this](const Color&) {
+        m_foregroundChanged.notify();
+    });
+
     engravingConfiguration()->unlinkedColorChanged().onReceive(this, [this](const Color&) {
         m_foregroundChanged.notify();
     });

@@ -48,6 +48,7 @@ static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColor
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
 static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
 static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/frameColor");
+static const Settings::Key INVISIBLE_COLOR("engraving", "engraving/colors/invisibleColor");
 static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinkedColor");
 
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
@@ -118,6 +119,13 @@ void EngravingConfiguration::init()
     settings()->setCanBeManuallyEdited(FORMATTING_COLOR, true);
     settings()->valueChanged(FORMATTING_COLOR).onReceive(nullptr, [this](const Val& val) {
         m_formattingColorChanged.send(Color::fromQColor(val.toQColor()));
+    });
+
+    settings()->setDefaultValue(INVISIBLE_COLOR, Val(Color("#808080").toQColor()));
+    settings()->setDescription(INVISIBLE_COLOR, muse::trc("engraving", "Invisible color"));
+    settings()->setCanBeManuallyEdited(INVISIBLE_COLOR, true);
+    settings()->valueChanged(INVISIBLE_COLOR).onReceive(nullptr, [this](const Val& val) {
+        m_invisibleColorChanged.send(Color::fromQColor(val.toQColor()));
     });
 
     settings()->setDefaultValue(UNLINKED_COLOR, Val(Color(UNLINKED_ITEM_COLOR).toQColor()));
@@ -205,11 +213,6 @@ Color EngravingConfiguration::scoreInversionColor() const
 {
     // slightly dulled white for less strain on the eyes
     return Color(220, 220, 220);
-}
-
-Color EngravingConfiguration::invisibleColor() const
-{
-    return "#808080";
 }
 
 Color EngravingConfiguration::lassoColor() const
@@ -335,6 +338,16 @@ Color EngravingConfiguration::frameColor() const
 muse::async::Channel<Color> EngravingConfiguration::frameColorChanged() const
 {
     return m_frameColorChanged;
+}
+
+Color EngravingConfiguration::invisibleColor() const
+{
+    return Color::fromQColor(settings()->value(INVISIBLE_COLOR).toQColor());
+}
+
+muse::async::Channel<Color> EngravingConfiguration::invisibleColorChanged() const
+{
+    return m_invisibleColorChanged;
 }
 
 Color EngravingConfiguration::unlinkedColor() const

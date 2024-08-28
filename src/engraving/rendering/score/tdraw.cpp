@@ -2956,7 +2956,7 @@ void TDraw::draw(const SoundFlag* item, Painter* painter)
     f.setPointSizeF(item->spatium() * 2.0);
     painter->setFont(f);
 
-    painter->setPen(!item->selected() ? item->curColor() : Color::WHITE);
+    painter->setPen(!item->selected() ? item->curColor(true) : Color::WHITE);
     painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
 }
 
