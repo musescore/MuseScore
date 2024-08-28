@@ -108,37 +108,39 @@ else()
 
     include(cmake/SetupFreeType.cmake)
 
-    # add harfbuzz
-    # in the future this needs to be moved to some function in a separate file
-    set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
-    set(remote_url ${REMOTE_ROOT_URL}/harfbuzz/7.1.0)
-    set(local_path ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz)
-    if (NOT EXISTS ${local_path}/harfbuzz.cmake)
-        file(MAKE_DIRECTORY ${local_path})
-        file(DOWNLOAD ${remote_url}/harfbuzz.cmake ${local_path}/harfbuzz.cmake
-            HTTPHEADER "Cache-Control: no-cache"
+    if (NOT MUE_COMPILE_USE_SYSTEM_FREETYPE)
+        # add harfbuzz
+        # in the future this needs to be moved to some function in a separate file
+        set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
+        set(remote_url ${REMOTE_ROOT_URL}/harfbuzz/7.1.0)
+        set(local_path ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz)
+        if (NOT EXISTS ${local_path}/harfbuzz.cmake)
+            file(MAKE_DIRECTORY ${local_path})
+            file(DOWNLOAD ${remote_url}/harfbuzz.cmake ${local_path}/harfbuzz.cmake
+                HTTPHEADER "Cache-Control: no-cache"
+            )
+        endif()
+
+        include(${local_path}/harfbuzz.cmake)
+
+        # func from ${name}.cmake)
+        cmake_language(CALL harfbuzz_Populate ${remote_url} ${local_path} "source" "" "")
+
+        add_subdirectory(_deps/harfbuzz/harfbuzz)
+        target_no_warning(harfbuzz -Wno-conversion)
+        target_no_warning(harfbuzz -Wno-unused-parameter)
+        target_no_warning(harfbuzz -Wno-unused-variable)
+        target_no_warning(harfbuzz -WMSVC-no-hides-previous)
+        target_no_warning(harfbuzz -WMSVC-no-unreachable)
+
+        #add_subdirectory(thirdparty/msdfgen)
+
+        set(MODULE_INCLUDE
+            ${FREETYPE_INCLUDE_DIRS}
+            ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz/harfbuzz/harfbuzz/src
+            #${CMAKE_CURRENT_LIST_DIR}/thirdparty/msdfgen/msdfgen-1.4
         )
     endif()
-
-    include(${local_path}/harfbuzz.cmake)
-
-    # func from ${name}.cmake)
-    cmake_language(CALL harfbuzz_Populate ${remote_url} ${local_path} "source" "" "")
-
-    add_subdirectory(_deps/harfbuzz/harfbuzz)
-    target_no_warning(harfbuzz -Wno-conversion)
-    target_no_warning(harfbuzz -Wno-unused-parameter)
-    target_no_warning(harfbuzz -Wno-unused-variable)
-    target_no_warning(harfbuzz -WMSVC-no-hides-previous)
-    target_no_warning(harfbuzz -WMSVC-no-unreachable)
-
-    #add_subdirectory(thirdparty/msdfgen)
-
-    set(MODULE_INCLUDE
-        ${FREETYPE_INCLUDE_DIRS}
-        ${CMAKE_CURRENT_LIST_DIR}/_deps/harfbuzz/harfbuzz/harfbuzz/src
-        #${CMAKE_CURRENT_LIST_DIR}/thirdparty/msdfgen/msdfgen-1.4
-    )
 
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_USE_QTTEXTDRAW)
 
