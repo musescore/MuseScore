@@ -12887,7 +12887,7 @@ first note of the system</string>
                         <string notr="true">A, B♭, B, C, C♯, …</string>
                        </property>
                        <property name="text">
-                        <string>Standard</string>
+                        <string comment="chord symbol spelling">Standard</string>
                        </property>
                        <property name="checked">
                         <bool>true</bool>
@@ -12959,7 +12959,7 @@ first note of the system</string>
                      <item>
                       <widget class="QRadioButton" name="chordsStandard">
                        <property name="text">
-                        <string>Standard</string>
+                        <string comment="chord symbol style">Standard</string>
                        </property>
                        <property name="checked">
                         <bool>true</bool>
