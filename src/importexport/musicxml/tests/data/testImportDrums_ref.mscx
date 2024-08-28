@@ -273,7 +273,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.5</height>
+        <height>10</height>
         <Text>
           <style>title</style>
           <text><font size="24"/>drums</text>

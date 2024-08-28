@@ -2002,12 +2002,6 @@ void MusicXMLParserPass2::scorePartwise()
             }
         }
     }
-
-    // This method relies heavily on text metrics which differ from system to system and can be very volatile
-    // To avoid having to update the majority of musicxml tests on every change to engraving, don't run this during testing
-    if (!MScore::testMode) {
-        m_pass1.reformatHeaderVBox(m_score->measures()->first());
-    }
 }
 
 //---------------------------------------------------------
