@@ -28,7 +28,7 @@ import MuseScore.AppShell 1.0
 ListView {
     id: root
 
-    height: contentItem.childrenRect.height
+    height: 10
     width: contentWidth
 
     property alias appWindow: appMenuModel.appWindow
@@ -73,6 +73,7 @@ ListView {
 
     Component.onCompleted: {
         appMenuModel.load()
+        root.height = root.contentItem.childrenRect.height
     }
 
     QtObject {
