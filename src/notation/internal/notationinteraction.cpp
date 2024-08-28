@@ -1039,6 +1039,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
     PointF delta = toPos - normalizedBegin;
     PointF evtDelta = toPos - m_dragData.ed.pos;
+    PointF moveDelta = delta - m_dragData.elementOffset;
 
     bool constrainDirection = !(isGripEditStarted() && m_editData.element && m_editData.element->isBarLine());
     if (constrainDirection) {
@@ -1047,10 +1048,12 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
             break;
         case DragMode::OnlyX:
             delta.setY(m_dragData.ed.delta.y());
+            moveDelta.setY(m_dragData.ed.moveDelta.y());
             evtDelta.setY(0.0);
             break;
         case DragMode::OnlyY:
             delta.setX(m_dragData.ed.delta.x());
+            moveDelta.setX(m_dragData.ed.moveDelta.x());
             evtDelta.setX(0.0);
             break;
         }
@@ -1061,7 +1064,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.hRaster = configuration()->isSnappedToGrid(muse::Orientation::Horizontal);
     m_dragData.ed.vRaster = configuration()->isSnappedToGrid(muse::Orientation::Vertical);
     m_dragData.ed.delta = delta;
-    m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
+    m_dragData.ed.moveDelta = moveDelta;
     m_dragData.ed.evtDelta = evtDelta;
     m_dragData.ed.pos = toPos;
     m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
@@ -1080,13 +1083,10 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
-    } else if (m_editData.element && !m_editData.element->hasGrips()) {
-        m_dragData.ed.delta = evtDelta;
-        m_editData.element->editDrag(m_dragData.ed);
-        for (auto& group : m_dragData.dragGroups) {
-            score()->addRefresh(group->drag(m_dragData.ed));
-        }
     } else {
+        if (m_editData.element) {
+            m_editData.element->editDrag(m_dragData.ed);
+        }
         for (auto& group : m_dragData.dragGroups) {
             score()->addRefresh(group->drag(m_dragData.ed));
         }
