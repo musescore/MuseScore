@@ -309,6 +309,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                     MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
                 } else {
                     MeasureLayout::createEndBarLines(m, false, ctx);
+                    MeasureLayout::computePreSpacingItems(m, ctx);
                     MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, 1);
                     ww = m->width();
                     MeasureLayout::layoutMeasureElements(m, ctx);
