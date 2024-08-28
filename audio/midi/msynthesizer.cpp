@@ -15,6 +15,7 @@
 #include "msynthesizer.h"
 #include "synthesizergui.h"
 #include "libmscore/xml.h"
+#include "mscore/preferences.h"
 
 #include "midi/event.h"
 #include "midi/midipatch.h"
@@ -351,7 +352,7 @@ bool MasterSynthesizer::setState(const SynthesizerState& ss)
                                     setEffect(1, indexOfEffect(1, v.data));
                                     break;
                               case 2: {
-                                    float f = v.data.toDouble();
+                                    float f = preferences.getDouble(PREF_APP_PLAYBACK_DEFAULT_MASTER_VOLUME);
                                     setGain(f);
                                     }
                                     break;
@@ -443,6 +444,7 @@ void MasterSynthesizer::setGain(float f)
             _gain = f;
             emit gainChanged(_gain);
             }
+      preferences.setPreference(PREF_APP_PLAYBACK_DEFAULT_MASTER_VOLUME, f);
       }
 
 

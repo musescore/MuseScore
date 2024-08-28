@@ -48,6 +48,7 @@
 #define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
 #define PREF_APP_PLAYBACK_SPEEDINCREMENT                    "application/playback/speedIncrement"
 #define PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY             "application/playback/setLoopToSelectionOnPlay"
+#define PREF_APP_PLAYBACK_DEFAULT_MASTER_VOLUME             "application/playback/defaultMasterVolume"
 #define PREF_APP_USESINGLEPALETTE                           "application/useSinglePalette"
 #define PREF_APP_PALETTESCALE                               "application/paletteScale"
 #define PREF_APP_STARTUP_FIRSTSTART                         "application/startup/firstStart"
