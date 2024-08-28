@@ -184,8 +184,7 @@ public:
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
     bool isVocalStaff(const String& partId) const { return m_parts.at(partId).isVocalStaff(); }
     bool isPercussionStaff(const String& partId) const { return m_parts.at(partId).isPercussionStaff(); }
-    static VBox* createAndAddVBoxForCreditWords(Score* score, const int miny = 0, const int maxy = 75);
-    static void reformatHeaderVBox(MeasureBase* mb);
+    static VBox* createAndAddVBoxForCreditWords(Score* score);
     void createDefaultHeader(Score* const score);
     void createMeasuresAndVboxes(Score* const score, const std::vector<Fraction>& ml, const std::vector<Fraction>& ms,
                                  const std::set<int>& systemStartMeasureNrs, const std::set<int>& pageStartMeasureNrs,
