@@ -2709,7 +2709,7 @@ void Score::adjustBracketsDel(size_t sidx, size_t eidx)
     for (size_t staffIdx = 0; staffIdx < eidx; ++staffIdx) {
         Staff* staff = m_staves[staffIdx];
         std::vector<BracketItem*> brackets = staff->brackets(); // create copy because it's modified during loop
-        for (BracketItem* bi : staff->brackets()) {
+        for (BracketItem* bi : brackets) {
             size_t span = bi->bracketSpan();
             if ((span == 0) || ((staffIdx + span) <= sidx)) {
                 continue;
