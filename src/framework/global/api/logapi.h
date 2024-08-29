@@ -31,19 +31,15 @@ class LogApi : public api::ApiObject
 public:
     explicit LogApi(api::IApiEngine* e);
 
-    API_DOC(error, "Write error to console and log")
     Q_INVOKABLE void error(const QString& message);
     Q_INVOKABLE void error(const QString& tag, const QString& message);
 
-    API_DOC(warn, "Write warning to console and log")
     Q_INVOKABLE void warn(const QString& message);
     Q_INVOKABLE void warn(const QString& tag, const QString& message);
 
-    API_DOC(info, "Write info to console and log")
     Q_INVOKABLE void info(const QString& message);
     Q_INVOKABLE void info(const QString& tag, const QString& message);
 
-    API_DOC(debug, "Write debug to console and log")
     Q_INVOKABLE void debug(const QString& message);
     Q_INVOKABLE void debug(const QString& tag, const QString& message);
 };

@@ -38,8 +38,6 @@ public:
     explicit InteractiveApi(IApiEngine* e);
 
     Q_INVOKABLE void info(const QString& title, const QString& text);
-
-    API_DOC(openUrl, "Open URL in external browser")
     Q_INVOKABLE void openUrl(const QString& url);
 };
 }
