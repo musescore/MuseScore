@@ -115,8 +115,7 @@ const char* PaletteCell::translationContext() const
     case ElementType::DYNAMIC:
         return "engraving/dynamictype";
     case ElementType::HAIRPIN:
-        if (!toHairpin(element.get())->beginText().isEmpty()) {
-            // "Dynamic + hairpin"
+        if (name == u"Dynamic + hairpin") {
             return "palette";
         }
         return "engraving/hairpintype";
