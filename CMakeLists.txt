@@ -103,6 +103,7 @@ option(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "Path to precompiled dependencies
 # Important for the maintainers of Linux distributions
 option(MUE_COMPILE_USE_SYSTEM_FLAC "Try use system flac" OFF)
 option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF)
+option(MUE_COMPILE_USE_SYSTEM_HARFBUZZ "Try use system harfbuzz" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
 option(MUE_COMPILE_USE_SYSTEM_TINYXML "Try use system tinyxml" OFF)
