@@ -411,11 +411,13 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
 void MuseSamplerSequencer::addTextArticulation(const String& articulationCode, long long startUs, ms_Track track)
 {
+    std::string str = articulationCode.toStdString();
+
     ms_TextArticulationEvent evt;
     evt._start_us = startUs;
 
     if (articulationCode != ORDINARY_PLAYING_TECHNIQUE_CODE) {
-        evt._articulation = articulationCode.toStdString().c_str();
+        evt._articulation = str.c_str();
     } else {
         evt._articulation = ""; // resets the active articulation
     }
@@ -442,9 +444,11 @@ void MuseSamplerSequencer::addSyllable(const String& syllable, long long positio
         return;
     }
 
+    std::string str = syllable.toStdString();
+
     ms_SyllableEvent evt;
     evt._position_us = positionUs;
-    evt._text = syllable.toStdString().c_str();
+    evt._text = str.c_str();
 
     m_samplerLib->addSyllableEvent(m_sampler, track, evt);
 }
