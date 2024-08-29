@@ -278,6 +278,14 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
     }
 }
 
+PointF TimeSig::staffOffset() const
+{
+    const Fraction tsTick = isCourtesy() ? tick() - Fraction::eps() : tick();
+    const StaffType* st = staff()->constStaffType(tsTick);
+    const double yOffset = st ? st->yoffset().val() * spatium() : 0.0;
+    return PointF(0.0, yOffset);
+}
+
 //---------------------------------------------------------
 //   nextSegmentElement
 //---------------------------------------------------------
