@@ -2073,7 +2073,6 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
       QSizeF size(cs_->styleD(Sid::pageWidth), cs_->styleD(Sid::pageHeight));
       QPageSize ps(size, QPageSize::Inch);
       printer.setPageSize(ps);
-      printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
 #if defined(Q_OS_MAC)
@@ -2160,7 +2159,6 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
       QPageSize ps(size, QPageSize::Inch);
       printer.setPageSize(ps);
-      printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
 #if defined(Q_OS_MAC)
@@ -2208,7 +2206,6 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             QPageSize ps1(size1, QPageSize::Inch);
             const QRect fillRect(0.0, 0.0, size1.width() * DPI, size1.height() * DPI);
             printer.setPageSize(ps1);
-            printer.setPageOrientation(size1.width() > size1.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
             p.setViewport(QRect(0.0, 0.0, size1.width() * printer.logicalDpiX(),
                size1.height() * printer.logicalDpiY()));
             p.setWindow(QRect(0.0, 0.0, size1.width() * DPI, size1.height() * DPI));
