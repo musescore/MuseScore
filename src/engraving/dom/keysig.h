@@ -81,6 +81,9 @@ public:
     void setMode(KeyMode v) { m_sig.setMode(v); }
     void undoSetMode(KeyMode v);
 
+    bool isCourtesy() const { return m_isCourtesy; }
+    void setCourtesy(bool v) { m_isCourtesy = v; }
+
     bool hideNaturals() const { return m_hideNaturals; }
     void setHideNaturals(bool hide) { m_hideNaturals = hide; }
 
@@ -113,6 +116,7 @@ private:
 
     bool m_showCourtesy;
     bool m_hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
+    bool m_isCourtesy = false;
     KeySigEvent m_sig;
 };
 } // namespace mu::engraving
