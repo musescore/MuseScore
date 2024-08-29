@@ -2374,8 +2374,6 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
         if (doAdd) {
             b->add(lb);
             b->cleanupLayoutBreaks(false);
-        } else {
-            delete lb;
         }
     } else if (tag == "StaffTypeChange") {
         StaffTypeChange* stc = Factory::createStaffTypeChange(b);
