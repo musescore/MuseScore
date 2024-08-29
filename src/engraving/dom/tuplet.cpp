@@ -29,11 +29,10 @@
 #include "engravingitem.h"
 #include "factory.h"
 #include "measure.h"
+#include "note.h"
 #include "rest.h"
 #include "score.h"
 #include "text.h"
-#include "segment.h"
-#include "note.h"
 
 #include "log.h"
 
@@ -853,8 +852,6 @@ EngravingItem* Tuplet::nextElement()
     if (firstElement->type() == ElementType::CHORD) {
         Chord* chord = toChord(firstElement);
         return chord->firstGraceOrNote();
-    } else {
-        return toRest(firstElement);
     }
     return firstElement;
 }
