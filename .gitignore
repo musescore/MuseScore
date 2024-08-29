@@ -73,3 +73,6 @@ __pycache__/
 .pdm-python
 
 **/_deps/*
+
+# Stuff from 3.x builds
+/share/sound/MuseScore_General*
