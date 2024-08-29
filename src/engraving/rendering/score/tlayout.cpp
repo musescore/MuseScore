@@ -6136,6 +6136,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     int numOfLines = 0;
     TimeSigType sigType = item->timeSigType();
     const Staff* staff = item->staff();
+    const Fraction tick = item->isCourtesy() ? item->tick() - Fraction::eps() : item->tick();
 
     if (staff) {
         // if staff is without time sig, format as if no text at all
@@ -6151,8 +6152,8 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
             // draw() will anyway skip any drawing if staff type has no time sigs
             return;
         }
-        numOfLines  = staff->lines(item->tick());
-        lineDist    = staff->lineDistance(item->tick());
+        numOfLines  = staff->lines(tick);
+        lineDist    = staff->lineDistance(tick);
     } else {
         // assume dimensions of a standard staff
         lineDist = 1.0;
