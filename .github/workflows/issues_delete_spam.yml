@@ -19,10 +19,8 @@ jobs:
             const payload = context.payload;
             const comment = payload.comment;
             const commentBody = comment.body;
-            const isSpam = commentBody.includes('Download')
-                           && commentBody.includes('https://www.mediafire.com/file')
-                           && commentBody.includes('password: changeme')
-                           && commentBody.includes('In the installer menu, select "gcc."');
+            const isSpam = commentBody.includes('password: changeme')
+                           && commentBody.includes('gcc');
             if (isSpam) {
                 console.log('Deleting spam comment');
                 await github.rest.issues.deleteComment({
