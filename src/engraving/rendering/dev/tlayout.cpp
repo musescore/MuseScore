@@ -1756,7 +1756,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         lines      = st->lines();             // init values from staff type
         lineDist   = st->lineDistance().val();
         stepOffset = st->stepOffset();
-        staffOffsetY = st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
+        staffOffsetY = item->isHeader() ? 0.0 : st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
     }
 
     double _spatium = item->spatium();
@@ -1782,7 +1782,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         break;
     case ClefType::PERC:                                   // percussion clefs
     case ClefType::PERC2:
-        yoff = lineDist * (lines - 1) * 0.5 + staffOffsetY;
+        yoff = lineDist * (lines - 1) * 0.5;
         stepOffset = 0;
         break;
     case ClefType::INVALID:
@@ -1797,7 +1797,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     Shape shape(item->symShapeWithCutouts(ldata->symId));
     bool isMidMeasureClef = item->isMidMeasureClef();
     double x = isMidMeasureClef ? -shape.right() : 0.0;
-    ldata->setPos(PointF(x, yoff * _spatium + (stepOffset * 0.5 * _spatium)));
+    ldata->setPos(PointF(x, (yoff + (stepOffset * 0.5) + staffOffsetY) * _spatium));
     if (item->isMidMeasureClef()) {
         ldata->setShape(shape);
     } else {
@@ -3870,6 +3870,10 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         if (item->staffType()) {
             ldata->setPosY(item->staffType()->stepOffset() * 0.5 * spatium);
         }
+    }
+
+    if (item->isCourtesy()) {
+        ldata->moveY(item->staffOffsetY());
     }
 
     Shape keySigShape;
