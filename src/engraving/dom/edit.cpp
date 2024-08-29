@@ -6743,7 +6743,9 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
     }
     for (Spanner* s : sl) {
         if (len > Fraction(0, 1)) {
-            if (tick > s->tick() && tick < s->tick2()) {
+            if (tick == s->tick() && s->isVolta()) {
+                s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);
+            } else if (tick > s->tick() && tick < s->tick2()) {
                 //
                 //  case a:
                 //  +----spanner--------+
