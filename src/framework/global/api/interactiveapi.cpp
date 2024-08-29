@@ -35,7 +35,7 @@ InteractiveApi::InteractiveApi(IApiEngine* e)
 {
 }
 
-/** APIDOC method: info(title, text)
+/** APIDOC method
  * Show information message
  * @param {String} title Title
  * @param {String} text Message
@@ -46,7 +46,7 @@ void InteractiveApi::info(const QString& title, const QString& text)
     interactive()->info(title.toStdString(), text.toStdString());
 }
 
-/** APIDOC method: openUrl(url)
+/** APIDOC method
  * Open URL in external browser
  * @param {String} url URL
  */
