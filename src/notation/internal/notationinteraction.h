@@ -166,6 +166,7 @@ public:
     bool isEditAllowed(QKeyEvent* event) override;
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
+    const EngravingItem* editedItem() const override;
 
     // Measure
     void splitSelectedMeasure() override;
