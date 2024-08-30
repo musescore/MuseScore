@@ -183,10 +183,11 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 
 Pedal* Pedal::findNextInStaff() const
 {
-    auto spanners = score()->spannerMap().findOverlapping(tick2().ticks(), score()->endTick().ticks());
+    Fraction endTick = tick2();
+    auto spanners = score()->spannerMap().findOverlapping(endTick.ticks(), score()->endTick().ticks());
     for (auto element : spanners) {
         Spanner* spanner = element.value;
-        if (spanner->isPedal() && spanner != this && spanner->staffIdx() == staffIdx()) {
+        if (spanner->isPedal() && spanner != this && spanner->staffIdx() == staffIdx() && spanner->tick() == endTick) {
             return toPedal(spanner);
         }
     }
@@ -243,9 +244,8 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     }
 
     Pedal* nextPedal = findNextInStaff();
-    bool hasNextRightAfter = nextPedal && nextPedal->tick() == tick2();
 
-    if (endHookType() == HookType::HOOK_45 && hasNextRightAfter) {
+    if (nextPedal && endHookType() == HookType::HOOK_45) {
         *sys = endSeg->measure()->system();
         double x = endSeg->x() + endSeg->measure()->x();
         EngravingItem* item = endElement();
@@ -272,7 +272,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         x -= symWidth(SymId::keyboardPedalUp);
     }
 
-    x -= (endSeg->isChordRestType() && hasNextRightAfter ? 1.25 : 0.75) * spatium();
+    x -= (endSeg->isChordRestType() && nextPedal ? 1.25 : 0.75) * spatium();
 
     return PointF(x, 0.0);
 }
