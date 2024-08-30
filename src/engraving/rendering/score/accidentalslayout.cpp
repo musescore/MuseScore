@@ -79,6 +79,14 @@ void AccidentalsLayout::layoutAccidentals(const std::vector<Chord*>& chords, Lay
 
     collectAccidentals(chords, allAccidentals, redundantAccidentals, invisibleAccidentals);
 
+    for (Accidental* acc : invisibleAccidentals) {
+        acc->computeMag();
+        TLayout::layoutAccidental(acc, acc->mutldata(), ctx.conf());
+        double x = -acc->ldata()->bbox().width();
+        x -= acc->note() ? acc->note()->pos().x() : 0.0;
+        acc->setPos(x, 0.0);
+    }
+
     if (allAccidentals.empty()) {
         return;
     }
@@ -86,14 +94,6 @@ void AccidentalsLayout::layoutAccidentals(const std::vector<Chord*>& chords, Lay
     for (Accidental* acc : redundantAccidentals) {
         acc->setPos(0.0, 0.0);
         acc->setbbox(RectF());
-    }
-
-    for (Accidental* acc : invisibleAccidentals) {
-        acc->computeMag();
-        TLayout::layoutAccidental(acc, acc->mutldata(), ctx.conf());
-        double x = -acc->ldata()->bbox().width();
-        x -= acc->note() ? acc->note()->pos().x() : 0.0;
-        acc->setPos(x, 0.0);
     }
 
     for (Accidental* acc : allAccidentals) {
