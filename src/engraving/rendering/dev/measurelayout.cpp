@@ -1856,7 +1856,6 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                         ts = Factory::createTimeSig(s);
                         ts->setTrack(track);
                         ts->setGenerated(true);
-                        ts->setCourtesy(true);
                         ts->setParent(s);
                         ctx.mutDom().undoAddElement(ts);
                         s->setTrailer(true);
@@ -1908,7 +1907,6 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                     keySig = Factory::createKeySig(s);
                     keySig->setTrack(track);
                     keySig->setGenerated(true);
-                    keySig->setCourtesy(true);
                     keySig->setParent(s);
                     s->add(keySig);
                     s->setTrailer(true);

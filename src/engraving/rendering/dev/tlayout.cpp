@@ -6143,7 +6143,9 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     int numOfLines = 0;
     TimeSigType sigType = item->timeSigType();
     const Staff* staff = item->staff();
-    const Fraction tick = item->isCourtesy() ? item->tick() - Fraction::eps() : item->tick();
+    const Segment* seg = item->segment();
+    const Measure* meas = seg ? seg->measure() : nullptr;
+    const Fraction tick = meas ? meas->tick() : item->tick();
 
     if (staff) {
         // if staff is without time sig, format as if no text at all

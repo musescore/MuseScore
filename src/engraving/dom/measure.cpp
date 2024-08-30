@@ -1969,14 +1969,6 @@ bool Measure::isFirstInSystem() const
     return system()->firstMeasure() == this;
 }
 
-bool Measure::isLastInSystem() const
-{
-    IF_ASSERT_FAILED(system()) {
-        return false;
-    }
-    return system()->lastMeasure() == this;
-}
-
 //---------------------------------------------------------
 //   isFirstInSection
 //---------------------------------------------------------
