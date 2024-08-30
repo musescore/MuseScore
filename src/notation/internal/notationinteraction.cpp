@@ -2282,17 +2282,18 @@ bool NotationInteraction::dropCanvas(EngravingItem* e)
 EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) const
 {
     std::vector<EngravingItem*> el = elementsAt(ed.pos);
+    mu::engraving::Measure* fallbackMeasure = nullptr;
     for (EngravingItem* e : el) {
         if (e->isStaffLines()) {
-            if (el.size() > 2) {          // is not first class drop target
-                continue;
-            }
-            e = mu::engraving::toStaffLines(e)->measure();
+            fallbackMeasure = mu::engraving::toStaffLines(e)->measure();
+            continue;
         }
-
         if (e->acceptDrop(ed)) {
             return e;
         }
+    }
+    if (fallbackMeasure && fallbackMeasure->acceptDrop(ed)) {
+        return fallbackMeasure;
     }
     return nullptr;
 }
