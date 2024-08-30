@@ -28,7 +28,7 @@ import MuseScore.AppShell 1.0
 ListView {
     id: root
 
-    height: contentItem.childrenRect.height
+    height: Math.max(1,contentItem.childrenRect.height)
     width: contentWidth
 
     property alias appWindow: appMenuModel.appWindow
