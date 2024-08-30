@@ -237,6 +237,7 @@ public:
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
     double pageX() const;
+    double pageY() const;
     double canvasX() const;
 
     PointF mapFromCanvas(const PointF& p) const { return p - canvasPos(); }

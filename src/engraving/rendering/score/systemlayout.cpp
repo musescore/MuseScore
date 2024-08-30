@@ -2910,7 +2910,7 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
 
     const SkylineLine& skylineOfThisStaff = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
 
-    SkylineLine thisSkyline = skylineOfThisStaff.getFilteredCopy([element](const ShapeElement& shEl) {
+    auto isAssociatedElement = [element](const ShapeElement& shEl) {
         const EngravingItem* shapeItem = shEl.item();
         if (!shapeItem) {
             return false;
@@ -2918,7 +2918,9 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
         return shapeItem == element || shapeItem->parentItem(true) == element || shapeItem->type() == element->type()
                || shapeItem->isAccidental() || shapeItem == element->ldata()->itemSnappedBefore()
                || shapeItem == element->ldata()->itemSnappedAfter();
-    });
+    };
+
+    SkylineLine thisSkyline = skylineOfThisStaff.getFilteredCopy(isAssociatedElement);
 
     double yStaffDiff = nextStaff->y() - thisStaff->y();
     SkylineLine nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
@@ -2931,6 +2933,19 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
                              - elementMinDist;
 
     double yMove = 0.5 * (availSpaceBelow - availSpaceAbove);
+
+    const double elementYInSystemCoord = element->pageY() - system->pageY();
+    elementShape.translateY(elementYInSystemCoord - element->y() + yMove);
+
+    for (const ShapeElement& el : skylineOfThisStaff.elements()) {
+        const bool checkItem = !isAssociatedElement(el);
+        const bool intersects = elementShape.intersects(el);
+
+        if (el.item()->autoplace() && checkItem && intersects) {
+            // The y offset has moved this to collide with or below an element stacked below the dynamic
+            return;
+        }
+    }
 
     element->mutldata()->moveY(yMove);
 

@@ -794,6 +794,15 @@ double EngravingItem::pageX() const
     return xp;
 }
 
+double EngravingItem::pageY() const
+{
+    double yp = y();
+    for (EngravingItem* e = parentItem(); e && e->parentItem(); e = e->parentItem()) {
+        yp += e->y();
+    }
+    return yp;
+}
+
 //---------------------------------------------------------
 //    canvasX
 //---------------------------------------------------------
