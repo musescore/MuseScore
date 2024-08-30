@@ -205,8 +205,9 @@ public:
     void write(const LogMsg& logMsg);
 
     void addDest(LogDest* dest);
-    std::vector<LogDest*> dests() const;
+    void removeDest(LogDest* dest);
     void clearDests();
+    std::vector<LogDest*> dests() const;
 
 private:
     Logger();

@@ -136,7 +136,7 @@ void DockWindow::onQuit()
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(m_currentPage) {
+    if (!m_currentPage) {
         return;
     }
 
