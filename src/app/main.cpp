@@ -99,14 +99,6 @@ int main(int argc, char** argv)
     }
 #endif
 
-#ifdef Q_OS_WIN
-    // NOTE: There are some problems with rendering the application window on some integrated graphics processors
-    //       see https://github.com/musescore/MuseScore/issues/8270
-    if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
-        qputenv("QT_OPENGL_BUGLIST", ":/resources/win_opengl_buglist.json");
-    }
-#endif
-
 //! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
 //!       Because of this, some elements are drawn with a shift on the score.
 //!       Let's make a Linux hack and round values above 0.75(see RoundPreferFloor)
