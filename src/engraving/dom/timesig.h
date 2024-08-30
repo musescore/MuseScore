@@ -118,9 +118,6 @@ public:
 
     PointF staffOffset() const override;
 
-    bool isCourtesy() const { return m_isCourtesy; }
-    void setCourtesy(bool v) { m_isCourtesy = v; }
-
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
@@ -155,7 +152,6 @@ private:
     TimeSigType m_timeSigType = TimeSigType::NORMAL;
     bool m_showCourtesySig = false;
     bool m_largeParentheses = false;
-    bool m_isCourtesy = false;
 };
 } // namespace mu::engraving
 #endif

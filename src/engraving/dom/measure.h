@@ -287,7 +287,6 @@ public:
     bool isFinalMeasureOfSection() const;
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
-    bool isLastInSystem() const;
     bool isFirstInSection() const;
 
     bool breakMultiMeasureRest() const { return m_breakMultiMeasureRest; }

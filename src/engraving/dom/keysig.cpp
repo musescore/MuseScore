@@ -186,6 +186,17 @@ void KeySig::undoSetMode(KeyMode v)
     undoChangeProperty(Pid::KEYSIG_MODE, int(v));
 }
 
+bool KeySig::isCourtesy() const
+{
+    const Segment* seg = segment();
+    const Measure* meas = seg ? seg->measure() : nullptr;
+    if (!meas) {
+        return false;
+    }
+
+    return seg->tick() == meas->endTick();
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
