@@ -261,7 +261,7 @@ void NotationPageModel::updatePercussionPanelVisibility()
     } else {
         for (const EngravingItem* e : selection->elements()) {
             const Staff* staff = e->staff();
-            if (!staff->isDrumStaff(e->tick())) {
+            if (!staff || !staff->isDrumStaff(e->tick())) {
                 return;
             }
         }
