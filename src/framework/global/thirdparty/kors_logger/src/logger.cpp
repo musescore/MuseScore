@@ -376,6 +376,11 @@ void Logger::addDest(LogDest* dest)
     m_dests.push_back(dest);
 }
 
+void Logger::removeDest(LogDest* dest)
+{
+    m_dests.erase(std::remove(m_dests.begin(), m_dests.end(), dest), m_dests.end());
+}
+
 std::vector<LogDest*> Logger::dests() const
 {
     return m_dests;

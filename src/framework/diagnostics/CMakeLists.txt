@@ -31,6 +31,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticutils.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticspathsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticsconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/glproblemsdetector.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/glproblemsdetector.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.h
