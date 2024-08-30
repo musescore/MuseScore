@@ -612,7 +612,11 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
     for (auto ss : spanner->spannerSegments()) {
         ss->setTrack(track);
     }
-    spanner->setTick(startSegment->tick());
+
+    bool isMeasureAnchor = spanner->anchor() == Spanner::Anchor::MEASURE;
+    Fraction tick1 = isMeasureAnchor ? startSegment->measure()->tick() : startSegment->tick();
+    spanner->setTick(tick1);
+
     Fraction tick2;
     if (!endSegment) {
         tick2 = lastSegment()->tick();
@@ -621,6 +625,13 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
     } else {
         tick2 = endSegment->tick();
     }
+    if (isMeasureAnchor) {
+        Measure* endMeasure = tick2measureMM(tick2);
+        if (endMeasure->tick() != tick2) {
+            tick2 = endMeasure->endTick();
+        }
+    }
+
     spanner->setTick2(tick2);
     undoAddElement(spanner, true, ctrlModifier);
 }

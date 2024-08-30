@@ -665,9 +665,11 @@ void NotationActionController::resetState()
         return;
     }
 
-    if (interaction->isElementEditStarted()) {
+    if (interaction->isTextEditingStarted()) {
         interaction->endEditElement();
         return;
+    } else if (interaction->isElementEditStarted()) {
+        interaction->endEditElement();
     }
 
     if (!interaction->selection()->isNone()) {

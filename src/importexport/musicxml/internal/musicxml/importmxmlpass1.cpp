@@ -728,68 +728,11 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score, const int miny, const int maxy)
+VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score)
 {
     VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
-    double vboxHeight = 10;                           // default height in tenths
-    double diff = maxy - miny;                       // calculate height in tenths
-    if (diff > vboxHeight) {                         // and size is reasonable
-        vboxHeight = diff;
-    }
-    vboxHeight /= 10;                                // height in spatium
-    vboxHeight += 2.5;                               // guesstimated correction for last line
-
-    vbox->setBoxHeight(Spatium(vboxHeight));
     score->measures()->add(vbox);
     return vbox;
-}
-
-//---------------------------------------------------------
-//   reformatHeaderVBox
-//---------------------------------------------------------
-/**
- Due to inconsistencies with spacing and inferred text,
- the header VBox frequently has collisions. This cleans
- those (as a temporary fix for a more robust collision-prevention
- system in Boxes).
- */
-
-void MusicXMLParserPass1::reformatHeaderVBox(MeasureBase* mb)
-{
-    if (!mb->isVBox()) {
-        return;
-    }
-
-    VBox* headerVBox = toVBox(mb);
-    double totalHeight = 0;
-    double offsetHeight = 0;
-    double lineSpacingMultiplier = 0.5;
-
-    for (auto e : headerVBox->el()) {
-        if (!e->isText()) {
-            continue;
-        }
-        Text* t = toText(e);
-        TLayout::layoutText(t, t->mutldata());
-
-        totalHeight += t->height();
-        if (t->align() == AlignV::TOP) {
-            totalHeight += t->lineHeight() * lineSpacingMultiplier;
-            t->setOffset(t->offset().x(), offsetHeight);
-            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-            offsetHeight += t->height();
-            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
-        }
-    }
-
-    // 1mm of
-    static const double VBOX_BOTTOM_PADDING = 1;
-    totalHeight += VBOX_BOTTOM_PADDING;
-    headerVBox->setBottomMargin(VBOX_BOTTOM_PADDING);
-    headerVBox->setPropertyFlags(Pid::BOTTOM_MARGIN, PropertyFlags::UNSTYLED);
-
-    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
-    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
 }
 
 //---------------------------------------------------------
@@ -864,8 +807,7 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
 //   addCreditWords
 //---------------------------------------------------------
 
-static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
-                            const int pageNr, const Size& pageSize,
+static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const Size& pageSize,
                             const bool top, const bool isSibeliusScore)
 {
     VBox* vbox = nullptr;
@@ -873,7 +815,7 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
     std::vector<const CreditWords*> headerWords;
     std::vector<const CreditWords*> footerWords;
     for (const CreditWords* w : crWords) {
-        if (w->page == pageNr) {
+        if (w->page == 1) {
             if (w->defaultY > (pageSize.height() / 2)) {
                 headerWords.push_back(w);
             } else {
@@ -883,20 +825,16 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
     }
 
     std::vector<const CreditWords*> words;
-    if (pageNr == 1) {
-        // if there are more credit words in the footer than in header,
-        // swap header and footer, assuming this will result in a vertical
-        // frame with the title on top of the page.
-        // Sibelius (direct export) typically exports no header
-        // and puts the title etc. in the footer
-        const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
-        if (top) {
-            words = doSwap ? footerWords : headerWords;
-        } else {
-            words = doSwap ? headerWords : footerWords;
-        }
+    // if there are more credit words in the footer than in header,
+    // swap header and footer, assuming this will result in a vertical
+    // frame with the title on top of the page.
+    // Sibelius (direct export) typically exports no header
+    // and puts the title etc. in the footer
+    const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
+    if (top) {
+        words = doSwap ? footerWords : headerWords;
     } else {
-        words = top ? headerWords : footerWords;
+        words = doSwap ? headerWords : footerWords;
     }
 
     int miny = 0;
@@ -905,11 +843,11 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
 
     for (const CreditWords* w : words) {
         if (mustAddWordToVbox(w->type)) {
-            const TextStyleType tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
+            const TextStyleType tid = top ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
             const Align align = alignForCreditWords(w, pageSize.width(), tid);
             double yoffs = tid == TextStyleType::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
-                vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
+                vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
             }
             addText2(vbox, score, w->words, tid, align, yoffs);
         } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {
@@ -1011,9 +949,12 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
         // add a header vbox if the this measure is the first in the score or the first on a new page
         if (pageStartMeasureNrs.count(int(i)) || i == 0) {
             ++pageNr;
-            vbox = addCreditWords(score, crWords, pageNr, pageSize, true, m_exporterString.contains(u"sibelius"));
-            if (i == 0 && vbox) {
-                vbox->setExcludeFromOtherParts(false);
+
+            if (pageNr == 1) {
+                vbox = addCreditWords(score, crWords, pageSize, true, m_exporterString.contains(u"sibelius"));
+                if (i == 0 && vbox) {
+                    vbox->setExcludeFromOtherParts(false);
+                }
             }
         }
 
@@ -1036,8 +977,8 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
         }
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
-        if (pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) {
-            addCreditWords(score, crWords, pageNr, pageSize, false, m_exporterString.contains(u"sibelius"));
+        if ((pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) && pageNr == 1) {
+            addCreditWords(score, crWords, pageSize, false, m_exporterString.contains(u"sibelius"));
         }
     }
 }

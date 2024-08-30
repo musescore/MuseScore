@@ -164,6 +164,7 @@ public:
     virtual bool isEditAllowed(QKeyEvent* event) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
     virtual void endEditElement() = 0;
+    virtual const EngravingItem* editedItem() const = 0;
 
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;

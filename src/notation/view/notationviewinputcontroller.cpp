@@ -717,15 +717,14 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 
     INotationSelectionPtr selection = viewInteraction()->selection();
 
-    if (!selection->isRange()) {
-        if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
-            if (ctx.hitElement->hasGrips()) {
-                viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
-            } else {
-                viewInteraction()->startEditElement(ctx.hitElement, false);
-            }
-            return;
+    bool hitElementIsAlreadyBeingEdited = viewInteraction()->isElementEditStarted() && viewInteraction()->editedItem() == ctx.hitElement;
+    if (!selection->isRange() && ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting() && !hitElementIsAlreadyBeingEdited) {
+        if (ctx.hitElement->hasGrips()) {
+            viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
+        } else {
+            viewInteraction()->startEditElement(ctx.hitElement, false);
         }
+        return;
     }
 
     if (!ctx.hitElement) {
@@ -911,7 +910,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
 
     if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditElement(ctx.element);
+        viewInteraction()->startEditElement(ctx.element, /*editTextualProperties*/ false);
         return;
     }
 
