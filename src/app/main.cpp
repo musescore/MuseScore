@@ -165,6 +165,10 @@ int main(int argc, char** argv)
         argsUtf8_с.push_back(arg.data());
     }
 
+    // Don't use the arguments passed to main(), because they're in the local ANSI code page.
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
+
     int argcFinal = argc_utf16;
     char** argvFinal = argsUtf8_с.data();
 #else
